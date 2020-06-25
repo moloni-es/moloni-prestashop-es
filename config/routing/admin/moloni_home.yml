@@ -1,0 +1,19 @@
+moloni_es_home_index:
+  path: /home
+  methods: [GET]
+  defaults:
+    _controller: 'Moloni\ES\Controllers\Start::indexAction'
+    _legacy_controller: 'MoloniHome'
+    _legacy_link: 'MoloniHome'
+
+moloni_es_home_createdocument:
+  path: /home/createDocument
+  methods: [POST]
+  defaults:
+    _controller: 'Moloni\ES\Controllers\Start::createDocument'
+
+moloni_es_home_clearinvoice:
+  path: /home/clearInvoice
+  methods: [GET]
+  defaults:
+    _controller: 'Moloni\ES\Controllers\Start::clearInvoice'

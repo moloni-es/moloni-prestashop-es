@@ -1,0 +1,40 @@
+{% extends '@PrestaShop/Admin/layout.html.twig' %}
+
+{% block content %}
+    {{ form_start(devConnect) }}
+    <div class="card loginForm">
+        <div class="card-header">
+            <a href="https://www.moloni.es/" target="_blank">
+                <img src="{{ img }}" alt="Logo" style="position:relative; width: 230px; margin-bottom: 5px;margin-left: 10px; margin-top: 5px;">
+            </a>
+        </div>
+        <div>
+                {{ form_label(devConnect.developerID) }}
+            <div class="loginInputText">
+                {{ form_widget(devConnect.developerID) }}
+            </div>
+                {{ form_label(devConnect.clientSecret) }}
+            <div class="loginInputText">
+                {{ form_widget(devConnect.clientSecret) }}
+            </div>
+        </div>
+        <div>
+            {{ form_errors(devConnect) }}
+        </div>
+        <div class="card-footer">
+            <span style="display: inline;">
+                {{ form_widget(devConnect.connect) }}
+            </span>
+            <span style="display: inline; margin-left: 10px;">
+                {{ form_widget(devConnect.reset) }}
+            </span>
+        </div>
+    </div>
+    {{ form_end(devConnect) }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script src="{{ asset('themes/new-theme/public/cms_page_form.bundle.js') }}"></script>
+{% endblock %}

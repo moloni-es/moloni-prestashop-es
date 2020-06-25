@@ -1,0 +1,79 @@
+{% extends '@Modules/moloniprestashopes/src/View/Templates/Admin/Settings/Layout.twig' %}
+
+{% block settings %}
+    <div class="card p-4">
+        <div>
+            {{ form_start(settingsForm) }}
+            <h2>{{ 'AREA - DOCUMENTS'|trans({}, 'Modules.Moloniprestashopes.Settings') }}</h2>
+            <br>
+            <div class="form-group">
+                <div>
+                    {{ form_label(settingsForm.Set) }}
+                    {{ form_errors(settingsForm.Set) }}
+                </div>
+                <div class="col-sm-10">
+                    {{ form_widget(settingsForm.Set) }}
+                </div>
+            </div>
+            <div class="form-group">
+                <div>
+                    {{ form_label(settingsForm.Type) }}
+                    {{ form_errors(settingsForm.Type) }}
+                </div>
+                <div class="col-sm-10">
+                    {{ form_widget(settingsForm.Type) }}
+                </div>
+            </div>
+            <div class="form-group">
+                <div>
+                    {{ form_label(settingsForm.Status) }}
+                    {{ form_errors(settingsForm.Status) }}
+                </div>
+                <div class="col-sm-10">
+                    {{ form_widget(settingsForm.Status) }}
+                </div>
+            </div>
+            <div id="showMessage">
+                <p>{{ 'WARNING: CANNOT SAVE "INVOICE + RECEIPT" AND "DRAFT" AT THE SAME TIME!!'|trans({}, 'Modules.Moloniprestashopes.Errors') }} </p>
+            </div>
+            <div class="form-group">
+                <div>
+                    {{ form_label(settingsForm.Send) }}
+                    {{ form_errors(settingsForm.Send) }}
+                </div>
+                <div class="col-sm-10">
+                    {{ form_widget(settingsForm.Send) }}
+                </div>
+            </div>
+            <div class="form-group">
+                <div>
+                    {{ form_label(settingsForm.Transport) }}
+                    {{ form_errors(settingsForm.Transport) }}
+                </div>
+                <div class="col-sm-10">
+                    {{ form_widget(settingsForm.Transport) }}
+                </div>
+            </div>
+            <div id="showMessage2">
+                <p>{{ 'WARNING: CANNOT SAVE "YES" AND "DRAFT" AT THE SAME TIME!!'|trans({}, 'Modules.Moloniprestashopes.Errors') }} </p>
+            </div>
+            <div class="form-group">
+                <div>
+                    {{ form_label(settingsForm.Address) }}
+                    {{ form_errors(settingsForm.Address) }}
+                </div>
+                <div class="col-sm-10">
+                    {{ form_widget(settingsForm.Address) }}
+                </div>
+            </div>
+            {{ form_row(settingsForm.SaveChanges) }}
+            {{ form_end(settingsForm) }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script src="{{ asset('themes/new-theme/public/cms_page_form.bundle.js') }}"></script>
+{% endblock %}

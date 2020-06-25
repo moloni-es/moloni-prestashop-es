@@ -1,0 +1,120 @@
+{% extends '@Modules/moloniprestashopes/src/View/Templates/Admin/Settings/Layout.twig' %}
+
+{% block settings %}
+    <div class="card p-4 toolsSettings">
+        <div>
+            <h2>{{ 'AREA - TOOLS'|trans({}, 'Modules.Moloniprestashopes.Settings') }}</h2>
+            <br>
+        </div>
+        <div class="row p-4 borderMoloni">
+            <div class="col-6">
+                <p class="font-weight-bold labelPS">{{ 'Import categories from Moloni'|trans({}, 'Modules.Moloniprestashopes.Settings') }}</p>
+                <p>
+                    <small>{{ "Import all your categories from Moloni"|trans({}, 'Modules.Moloniprestashopes.Settings') }}</small>
+                </p>
+            </div>
+            <div class="col-6">
+                <a href="{{ path('moloni_es_settings_tools_importC') }}">
+                    <button class="btn btn-outline-primary float-right">{{ 'Import categories'|trans({}, 'Modules.Moloniprestashopes.Settings') }}</button>
+                </a>
+            </div>
+        </div>
+        <div class="row p-4 borderMoloni">
+            <div class="col-6">
+                <p class="font-weight-bold labelPS">{{ 'Import products from Moloni'|trans({}, 'Modules.Moloniprestashopes.Settings') }}</p>
+                <p>
+                    <small>{{ "Import all your products from Moloni"|trans({}, 'Modules.Moloniprestashopes.Settings') }}</small>
+                </p>
+            </div>
+            <div class="col-6">
+                <a href="{{ path('moloni_es_settings_tools_importP') }}">
+                    <button class="btn btn-outline-secondary float-right">{{ 'Import products'|trans({}, 'Modules.Moloniprestashopes.Settings') }}</button>
+                </a>
+            </div>
+        </div>
+        <div class="row p-4 borderMoloni" style="display: none">
+            <div class="col-6">
+                <p class="font-weight-bold labelPS">{{ 'Export translations'|trans({}, 'Modules.Moloniprestashopes.Settings') }}</p>
+                <p>
+                    <small>{{ "Export all translations to csv"|trans({}, 'Modules.Moloniprestashopes.Settings') }}</small>
+                </p>
+            </div>
+            <div class="col-6">
+                <a href="{{ path('moloni_es_settings_tools_export') }}">
+                    <button class="btn btn-outline-secondary float-right">{{ 'Export translations'|trans({}, 'Modules.Moloniprestashopes.Settings') }}</button>
+                </a>
+            </div>
+        </div>
+        <div class="row p-4 borderMoloni">
+            <div class="col-6">
+                <p class="font-weight-bold labelPS">{{ 'Force stock synchronization'|trans({}, 'Modules.Moloniprestashopes.Settings') }}</p>
+                <p>
+                    <small>{{ "Synchronize all product's stocks used in the last 7 days"|trans({}, 'Modules.Moloniprestashopes.Settings') }}</small>
+                </p>
+            </div>
+            <div class="col-6">
+                <a href="{{ path('moloni_es_settings_tools_force') }}">
+                    <button class="btn btn-outline-success float-right">{{ 'Force stock synchronization'|trans({}, 'Modules.Moloniprestashopes.Settings') }}</button>
+                </a>
+            </div>
+        </div>
+        <div class="row p-4 borderMoloni">
+            <div class="col-6">
+                <p class="font-weight-bold labelPS">{{ 'Clean pending orders'|trans({}, 'Modules.Moloniprestashopes.Settings') }}</p>
+                <p>
+                    <small>{{ "Remove all orders from order's list"|trans({}, 'Modules.Moloniprestashopes.Settings') }}</small>
+                </p>
+            </div>
+            <div class="col-6">
+                <a href="{{ path('moloni_es_settings_tools_clean_order') }}">
+                    <button class="btn btn-outline-warning float-right">{{ 'Clean pending orders'|trans({}, 'Modules.Moloniprestashopes.Settings') }}</button>
+                </a>
+            </div>
+        </div>
+        <div class="row p-4 borderMoloni">
+            <div class="col-6">
+                <p class="font-weight-bold labelPS">{{ "Consult logs"|trans({}, 'Modules.Moloniprestashopes.Settings') }}</p>
+                <p>
+                    <small>{{ "Consult logs of this current day"|trans({}, 'Modules.Moloniprestashopes.Settings') }}</small>
+                </p>
+            </div>
+            <div class="col-6">
+                <a href="{{ path('moloni_es_settings_tools_consult_logs') }}">
+                    <button class="btn btn-outline-info float-right">{{ "Consult logs"|trans({}, 'Modules.Moloniprestashopes.Settings') }}</button>
+                </a>
+            </div>
+        </div>
+        <div class="row p-4 borderMoloni">
+            <div class="col-6">
+                <p class="font-weight-bold labelPS">{{ "Delete logs"|trans({}, 'Modules.Moloniprestashopes.Settings') }}</p>
+                <p>
+                    <small>{{ "Delete all logs files from previous days"|trans({}, 'Modules.Moloniprestashopes.Settings') }}</small>
+                </p>
+            </div>
+            <div class="col-6">
+                <a href="{{ path('moloni_es_settings_tools_delete_logs') }}">
+                    <button class="btn btn-outline-secondary float-right">{{ "Delete logs"|trans({}, 'Modules.Moloniprestashopes.Settings') }}</button>
+                </a>
+            </div>
+        </div>
+        <div class="row p-4 borderMoloni">
+            <div class="col-6">
+                <p class="font-weight-bold labelPS">{{ "Logout"|trans({}, 'Modules.Moloniprestashopes.Settings') }}</p>
+                <p>
+                    <small>{{ "We will keep data referring to documents already issued"|trans({}, 'Modules.Moloniprestashopes.Settings') }}</small>
+                </p>
+            </div>
+            <div class="col-6">
+                <a href="{{ path('moloni_es_settings_tools_logout') }}">
+                    <button class="btn btn-outline-danger float-right">{{ "Logout"|trans({}, 'Modules.Moloniprestashopes.Settings') }}</button>
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script src="{{ asset('themes/new-theme/public/cms_page_form.bundle.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,4 @@
+_moloni_es_routes:
+  resource: "routing/admin/"
+  type: directory
+  prefix: /moloni

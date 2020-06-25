@@ -1,0 +1,52 @@
+{
+  "name": "moloni/moloni-prestashop-es",
+  "license": "OSL-3.0",
+  "version": "v1.0.3",
+  "description": "Plugin for Moloni ES - Prestashop",
+  "authors": [
+    {
+      "name": "Moloni",
+      "email": "apoio@moloni.com"
+    }
+  ],
+  "scripts": {
+    "post-install-cmd": [
+      "php -r \"copy('config/pre-commit', '.git/hooks/pre-commit');\""
+    ],
+    "post-update-cmd": [
+      "php -r \"copy('config/pre-commit', '.git/hooks/pre-commit');\""
+    ]
+  },
+  "autoload": {
+    "psr-4": {
+      "Moloni\\ES\\": "src/"
+    }
+  },
+  "require": {
+    "php": ">=7.2",
+    "ext-curl": "*",
+    "ext-json": "*"
+  },
+  "config": {
+    "preferred-install": "dist",
+    "prepend-autoloader": false,
+    "optimize-autoloader": true
+  },
+  "require-dev": {
+    "squizlabs/php_codesniffer": "3.*",
+    "phpmd/phpmd": "@stable",
+    "friendsofphp/php-cs-fixer": "*"
+  },
+  "type": "prestashop-module",
+  "extra": {
+    "changelog": [
+      {
+        "version": "v0.9.0",
+        "title": "Beta Release ",
+        "description": [
+          "Plugin beta release for Moloni ES and Prestashop"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+moloni_es_settings_index:
+  path: /settings/documents
+  methods: [GET, POST]
+  defaults:
+    _controller: 'Moloni\ES\Controllers\Settings\Documents::display'
+    _legacy_controller: 'MoloniSettings'
+    _legacy_link: 'MoloniSettings'
+
+moloni_es_settings_documents_submit:
+  path: /settings/documents/submit
+  methods: [POST]
+  defaults:
+    _controller: 'Moloni\ES\Controllers\Settings\Documents::submitted'

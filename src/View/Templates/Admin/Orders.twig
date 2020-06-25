@@ -1,0 +1,102 @@
+{% extends '@PrestaShop/Admin/layout.html.twig' %}
+
+{% block content %}
+    <div class="card">
+
+        <div class="ml-3 mt-3">
+            <h2>{{ 'Orders'|trans({}, 'Modules.Moloniprestashopes.Orders') }}</h2>
+            <p>{{ 'Here you can generate orders.'|trans({}, 'Modules.Moloniprestashopes.Orders') }}</p>
+        </div>
+
+        <div class="p-3">
+            <table class="table table-striped table-bordered table-sm " style="text-align: center; margin-bottom: -10px;">
+                <thead>
+                    <tr>
+                        <th scope="col">{{ 'Order ID'|trans({}, 'Modules.Moloniprestashopes.Orders') }}</th>
+                        <th scope="col">{{ 'Reference'|trans({}, 'Modules.Moloniprestashopes.Orders') }}</th>
+                        <th scope="col">{{ 'Client'|trans({}, 'Modules.Moloniprestashopes.Orders') }}</th>
+                        <th scope="col">{{ 'Email'|trans({}, 'Modules.Moloniprestashopes.Orders') }}</th>
+                        <th scope="col">{{ 'Status'|trans({}, 'Modules.Moloniprestashopes.Orders') }}</th>
+                        <th scope="col">{{ 'Payment Date'|trans({}, 'Modules.Moloniprestashopes.Orders') }}</th>
+                        <th scope="col">{{ 'Amount'|trans({}, 'Modules.Moloniprestashopes.Orders') }}</th>
+                        <th scope="col">{{ 'Document Type'|trans({}, 'Modules.Moloniprestashopes.Orders') }}</th>
+                        <th scope="col">{{ 'Actions'|trans({}, 'Modules.Moloniprestashopes.Orders') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if orderArray %}
+                        {% for order in orderArray %}
+                            <tr>
+                                <form action="{{ path(createDocumentRoute) }}" method="post">
+                                    <input type="hidden" name="orderId" value="{{  order.id_order }}">
+                                    <input type="hidden" name="page" value="{{ paginator.currentPage }}">
+                                    <th scope="row">{{  order.id_order }}</th>
+                                    <td>{{ order.reference }}</td>
+                                    <td>{{ order.firstname }} {{ order.lastname }}</td>
+                                    <td>{{ order.email }}</td>
+                                    <td>{{ order.state_name }}</td>
+                                    <td>{{ order.invoice_date }}</td>
+                                    <td>{{ order.total_paid_tax_incl|number_format(2, '.', ',') }} {{ order.currency }}</td>
+                                    <td>
+                                        <select name="document_type" style="margin-right: 5px">
+                                            {% for order,key in documetArray %}
+                                                <option value='{{ key }}' {% if documentType == key%} selected {% endif %}>
+                                                    {{ order }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <button type="submit" class="btn btn-primary" title="{{ 'Generate Document'|trans({}, 'Modules.Moloniprestashopes.Orders') }}" onclick="disableButtons(); this.form.submit();">
+                                            <i class="fa fa-plus"></i>
+                                        </button>
+                                        <a class="btn btn-success" title="{{ 'See order'|trans({}, 'Modules.Moloniprestashopes.Orders') }}" href="{{ order.viewURL }}">
+                                            <i class="fa fa-search"></i>
+                                        </a>
+                                        <a class="btn btn-danger" title="{{ 'Discard order'|trans({}, 'Modules.Moloniprestashopes.Orders') }}" href="{{ path(clearInvoiceRoute, {id: order.id_order}) }}" onclick="disableButtons();">
+                                            <i class="fa fa-minus"></i>
+                                        </a>
+                                    </td>
+                                </form>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="9">
+                                {{ 'No information to show!'|trans({}, 'Modules.Moloniprestashopes.Orders') }}
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="d-flex justify-content-end mr-3">
+            <nav aria-label="...">
+                <ul class="pagination">
+                    <li class="page-item {% if paginator.currentPage == 1 %} disabled {% endif %}">
+                        <a class="page-link" href="{{ path(thisRoute, {page: (paginator.currentPage-1)}) }}">
+                            {{ 'Previous'|trans({}, 'Modules.Moloniprestashopes.Orders') }}
+                        </a>
+                    </li>
+                        {% for i in 1..paginator.numberOfTabs %}
+                            <li class="page-item {% if i == paginator.currentPage %} active {% endif %}">
+                                <a class="page-link" href="{{ path(thisRoute, {page: i}) }}">{{ i }}</a>
+                            </li>
+                        {% endfor %}
+                    <li class="page-item {% if paginator.currentPage == paginator.numberOfTabs %} disabled {% endif %}">
+                        <a class="page-link" href="{{ path(thisRoute, {page: (paginator.currentPage+1)}) }}">
+                            {{ 'Next'|trans({}, 'Modules.Moloniprestashopes.Orders') }}
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('themes/new-theme/public/cms_page_form.bundle.js') }}"></script>
+{% endblock %}

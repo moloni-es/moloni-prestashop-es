@@ -1,0 +1,138 @@
+{% extends '@PrestaShop/Admin/layout.html.twig' %}
+
+{% block content %}
+    <div class="card">
+        <div class="ml-3 mt-3">
+
+            <div class="float-left">
+                <h2>{{ 'Documents'|trans({}, 'Modules.Moloniprestashopes.Documents') }}</h2>
+                <p>{{ 'Here you can download the created documents.'|trans({}, 'Modules.Moloniprestashopes.Documents') }}</p>
+            </div>
+
+            <div class="float-right" style="font-size:10px;">
+                <div class="mr-3 mt-1 mb-2 d-flex justify-content-end">
+                    <table class="table-bordered table-sm">
+                        <tr>
+                            <td style="background: red" width="25px"></td>
+                            <td>{{ 'Document value does not match.'|trans({}, 'Modules.Moloniprestashopes.Documents') }}</td>
+                        </tr>
+                        <tr>
+                            <td style="background: green" width="25px"></td>
+                            <td>{{ 'Document value matches.'|trans({}, 'Modules.Moloniprestashopes.Documents') }}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="p-3">
+
+            <table class="table table-striped table-bordered table-sm" style="text-align: center; margin-bottom: -10px;">
+                <thead>
+                <tr>
+                    <th scope="col">{{ 'Order ID'|trans({}, 'Modules.Moloniprestashopes.Documents') }}</th>
+                    <th scope="col">{{ 'Reference'|trans({}, 'Modules.Moloniprestashopes.Documents') }}</th>
+                    <th scope="col">{{ 'Client'|trans({}, 'Modules.Moloniprestashopes.Documents') }}</th>
+                    <th scope="col">{{ 'Email'|trans({}, 'Modules.Moloniprestashopes.Documents') }}</th>
+                    <th scope="col">{{ 'Status'|trans({}, 'Modules.Moloniprestashopes.Documents') }}</th>
+                    <th scope="col">{{ 'Date'|trans({}, 'Modules.Moloniprestashopes.Documents') }}</th>
+                    <th scope="col">{{ 'Amount'|trans({}, 'Modules.Moloniprestashopes.Documents') }}</th>
+                    <th scope="col">{{ 'Document Type'|trans({}, 'Modules.Moloniprestashopes.Documents') }}</th>
+                    <th scope="col">{{ 'Actions'|trans({}, 'Modules.Moloniprestashopes.Documents') }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% if documentArray %}
+                    {% for document in documentArray %}
+                        <tr>
+                                <th scope="row">{{  document.id_order }}</th>
+                                <td>{{ document.reference }}</td>
+                                <td>{{ document.firstname }} {{ document.lastname }}</td>
+                                <td>{{ document.email }}</td>
+                                <td>
+                                    {% if document.invoice_status == 0 %}
+                                        {{ 'Draft'|trans({}, 'Modules.Moloniprestashopes.Documents') }}
+                                    {% elseif document.invoice_status == 1 %}
+                                        {{ 'Closed'|trans({}, 'Modules.Moloniprestashopes.Documents') }}
+                                    {% else %}
+                                        {{ 'Discarted'|trans({}, 'Modules.Moloniprestashopes.Documents') }}
+                                    {% endif %}
+                                </td>
+                                <td>{{ document.invoice_date }}</td>
+                                <td><b {% if document.document_id > 0 %}style="color:{% if document.wrong %} red {% else %} green {% endif %}"{% endif %}>
+                                        {{ document.invoice_total|number_format(2, '.', ',') }} {{ document.currency }}
+                                    </b>
+                                </td>
+                                <td>
+                                    {% if document.invoice_type == '' %}
+                                        ---
+                                    {% endif %}
+
+                                    {% for name, abv in documentTypesArray %}
+                                        {% if document.invoice_type == abv %}
+                                            {{ name }}
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>
+                                <td>
+                                    {% if document.document_id > 0 %}
+                                        <a type="submit" class="btn btn-primary" title="{{ 'Download document'|trans({}, 'Modules.Moloniprestashopes.Documents') }}" href="{{ path(downloadDocumentRoute , {documentId: document.document_id} ) }}" target="_blank">
+                                            <i class="fa fa-download"></i>
+                                        </a>
+                                        <a class="btn btn-warning" title="{{ 'Open in Moloni'|trans({}, 'Modules.Moloniprestashopes.Documents') }}" href="{{ path(moloniViewRoute , {documentId: document.document_id}) }}" target="_blank">
+                                            <i class="fa fa-file"></i>
+                                        </a>
+                                    {% else %}
+                                        <a class="btn btn-danger" title="{{ 'Revert discard'|trans({}, 'Modules.Moloniprestashopes.Documents') }}" href="{{ path(restoreOrderRoute , {orderId: document.id_order}) }}" onclick="disableButtons();">
+                                            <i class="fa fa-history"></i>
+                                        </a>
+                                    {% endif %}
+                                    <a class="btn btn-success" title="{{ 'See order'|trans({}, 'Modules.Moloniprestashopes.Documents') }}" href="{{ document.viewURL }}">
+                                        <i class="fa fa-search"></i>
+                                    </a>
+                                </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="9">
+                            {{ 'No information to show!'|trans({}, 'Modules.Moloniprestashopes.Documents') }}
+                        </td>
+                    </tr>
+                {% endif %}
+                </tbody>
+            </table>
+
+        </div>
+
+        <div class="d-flex justify-content-end mr-3">
+            <nav aria-label="...">
+                <ul class="pagination">
+                    <li class="page-item {% if paginator.currentPage == 1 %} disabled {% endif %}">
+                        <a class="page-link" href="{{ path(thisRoute, {page: (paginator.currentPage-1)}) }}">
+                            {{ 'Previous'|trans({}, 'Modules.Moloniprestashopes.Documents') }}
+                        </a>
+                    </li>
+                    {% for i in 1..paginator.numberOfTabs %}
+                        <li class="page-item {% if i == paginator.currentPage %} active {% endif %}">
+                            <a class="page-link" href="{{ path(thisRoute, {page: i}) }}">{{ i }}</a>
+                        </li>
+                    {% endfor %}
+                    <li class="page-item {% if paginator.currentPage == paginator.numberOfTabs %} disabled {% endif %}">
+                        <a class="page-link" href="{{ path(thisRoute, {page: (paginator.currentPage+1)}) }}">
+                            {{ 'Next'|trans({}, 'Modules.Moloniprestashopes.Documents') }}
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script src="{{ asset('themes/new-theme/public/cms_page_form.bundle.js') }}"></script>
+{% endblock %}
