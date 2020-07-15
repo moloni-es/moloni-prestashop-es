@@ -40,7 +40,7 @@ class Documents
     public $yourReference;
     public $date;
     public $products;
-    public $status = 0;
+    public $status=0;
     public $expirationDate;
     public $maturityDateId;
     public $currencyExchangeId;
@@ -408,14 +408,14 @@ class Documents
         }
 
         $this->documentId = $mutation['documentId'];
-        if ($this->documentType != 'receipts') {
+        if ($this->documentType !== 'receipts') {
             $this->ourReference = $mutation['ourReference'];
         }
         $this->moloniTotal = $mutation['totalValue'];
 
         //if documents are closed (in settings), close document
         //needs to be done after inserting but before saving and create pdf
-        if (modelSettings::get('Status') == 1) {
+        if ((int)modelSettings::get('Status') === 1) {
             $this->closeDocument();
         }
 
@@ -801,7 +801,7 @@ class Documents
                     'value' => $invoiceMutation['totalValue'],
                 ],
                 'notes' => $this->notes,
-                'status' => $this->status,
+                'status' => 0,
                 'totalValue' => $invoiceMutation['totalValue'],
             ],
         ];
@@ -1009,7 +1009,7 @@ class Documents
                 break;
         }
 
-        if (empty($mutation)) {
+        if (!isset($mutation['documentId'])) {
             $this->addError($this->translator->trans(
                 'Error closing document!!',
                 [],
