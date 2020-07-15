@@ -1,7 +1,7 @@
 {
   "name": "moloni/moloni-prestashop-es",
   "license": "OSL-3.0",
-  "version": "v1.0.3",
+  "version": "v1.0.4",
   "description": "Plugin for Moloni ES - Prestashop",
   "authors": [
     {
@@ -40,6 +40,13 @@
   "type": "prestashop-module",
   "extra": {
     "changelog": [
+      {
+        "version": "v1.0.4",
+        "title": "General fixes",
+        "description": [
+          "Fix error 500 when creating a document and fix invoice + receipt throwing error despite creating document as intended"
+        ]
+      },
       {
         "version": "v0.9.0",
         "title": "Beta Release ",
