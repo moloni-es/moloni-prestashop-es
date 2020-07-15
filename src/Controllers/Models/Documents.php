@@ -81,7 +81,7 @@ class Documents
      * @throws \PrestaShopDatabaseException
      * @throws \PrestaShopException
      */
-    public function __construct($orderId, $documentType, DataCollectorTranslator $translator)
+    public function __construct($orderId, $documentType, $translator)
     {
         //gets the translator instance
         $this->translator = $translator;

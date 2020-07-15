@@ -48,7 +48,7 @@ class Customer
      */
     public $translator;
 
-    public function __construct(psCustomer $customer, psOrder $order, DataCollectorTranslator $translator)
+    public function __construct(psCustomer $customer, psOrder $order, $translator)
     {
         $this->psCustomer = $customer;
         $this->psOrder = $order;
