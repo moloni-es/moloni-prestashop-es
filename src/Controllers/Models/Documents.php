@@ -319,7 +319,7 @@ class Documents
                 ));
 
                 //if the document did not close (values did not match), save invoice as draft
-                if ($this->status == 0) {
+                if ((int)$this->status === 0) {
                     $this->saveDatabase();
                     $this->addError($this->translator->trans(
                         'Document saved as draft because values do not match.',
@@ -745,7 +745,7 @@ class Documents
                 'deliveryUnloadZipCode' => $this->deliveryUnloadZipCode,
                 'deliveryUnloadCountryId' => $this->deliveryUnloadCountryId,
                 'notes' => $this->notes,
-                'status' => $this->status,
+                'status' => 0,
                 'products' => $this->products,
             ],
         ];
@@ -973,7 +973,7 @@ class Documents
             'companyId' => (int) modelCompany::get('company_id'),
             'data' => [
                 'documentId' => (int) $this->documentId,
-                'status' => (int) modelSettings::get('Status'),
+                'status' => 1,
             ],
         ];
 
@@ -1019,7 +1019,7 @@ class Documents
             return false;
         }
 
-        $this->status = (int) modelSettings::get('Status');
+        $this->status = 1;
 
         return true;
     }
