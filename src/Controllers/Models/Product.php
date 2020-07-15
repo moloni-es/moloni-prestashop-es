@@ -57,7 +57,7 @@ class Product
      *
      * @param TranslatorComponent $translator
      */
-    public function __construct(psProduct $productPs, DataCollectorTranslator $translator)
+    public function __construct(psProduct $productPs, $translator)
     {
         $this->productPs = $productPs;
         $this->translator = $translator;

@@ -47,7 +47,7 @@ class Fees
      * @param Order $psOrder Order
      * @param TranslatorComponent $translator translator component
      */
-    public function __construct(Order $psOrder, DataCollectorTranslator $translator)
+    public function __construct(Order $psOrder, $translator)
     {
         $this->psOrder = $psOrder;
         $this->translator = $translator;

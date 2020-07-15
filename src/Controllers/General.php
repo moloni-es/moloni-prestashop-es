@@ -273,8 +273,8 @@ class General extends FrameworkBundleAdminController
     /**
      * Returns the pagination data
      *
-     * @param $currentPage number the page where the user is trying to load
-     * @param $entries number number of entries on the database
+     * @param $currentPage int the page where the user is trying to load
+     * @param $entries int number of entries on the database
      *
      * @return array return current page, number of tabs, offSet and lines per page
      */
