@@ -2,7 +2,7 @@
 
 namespace Moloni\ES\Controllers\Api;
 
-class Products extends GeneralAPI
+class Products
 {
     /**
      * Create a new product
@@ -28,7 +28,7 @@ class Products extends GeneralAPI
                     }
                 }';
 
-        return Connector::graphqlClient($query, json_encode($variables));
+        return Curl::simple($query, json_encode($variables));
     }
 
     /**
@@ -58,7 +58,7 @@ class Products extends GeneralAPI
                     }
                 }';
 
-        return Connector::graphqlClient($query, json_encode($variables));
+        return Curl::simple($query, json_encode($variables));
     }
 
     /**
@@ -86,7 +86,7 @@ class Products extends GeneralAPI
                     }
                 }';
 
-        return Connector::graphqlClient($query, json_encode($variables));
+        return Curl::simple($query, json_encode($variables));
     }
 
     /**
@@ -114,7 +114,7 @@ class Products extends GeneralAPI
                     }
                 }';
 
-        return Connector::graphqlClient($query, json_encode($variables));
+        return Curl::simple($query, json_encode($variables));
     }
 
     /**
@@ -152,7 +152,7 @@ class Products extends GeneralAPI
                     }
                 }';
 
-        return self::getApiPaginator($query, $variables, 'productCategories');
+        return Curl::complex($query, $variables, 'productCategories');
     }
 
     /**
@@ -183,7 +183,7 @@ class Products extends GeneralAPI
                     }
                 }';
 
-        return Connector::graphqlClient($query, json_encode($variables));
+        return Curl::simple($query, json_encode($variables));
     }
 
     /**
@@ -224,7 +224,7 @@ class Products extends GeneralAPI
                     }
                 }';
 
-        return Connector::graphqlClient($query, json_encode($variables));
+        return Curl::simple($query, json_encode($variables));
     }
 
     /**
@@ -281,6 +281,6 @@ class Products extends GeneralAPI
                     }
                 }';
 
-        return self::getApiPaginator($query, $variables, 'products');
+        return Curl::complex($query, $variables, 'products');
     }
 }

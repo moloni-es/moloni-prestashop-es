@@ -2,7 +2,7 @@
 
 namespace Moloni\ES\Controllers\Api;
 
-class MaturityDates extends GeneralAPI
+class MaturityDates
 {
     /**
      * Get All Maturity Dates from Moloni ES
@@ -37,6 +37,6 @@ class MaturityDates extends GeneralAPI
             }
         }';
 
-        return self::getApiPaginator($query, $variables, 'maturityDates');
+        return Curl::complex($query, $variables, 'maturityDates');
     }
 }

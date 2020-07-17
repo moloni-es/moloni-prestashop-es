@@ -4,7 +4,7 @@ namespace Moloni\ES\Controllers;
 
 use Db;
 use Moloni\ES\Controllers\Api\Companies;
-use Moloni\ES\Controllers\Api\Connector;
+use Moloni\ES\Controllers\Api\Curl;
 use Moloni\ES\Controllers\Models\Company;
 use Moloni\ES\Controllers\Models\Error;
 use PrestaShop\PrestaShop\Adapter\Entity\Tools;
@@ -226,7 +226,7 @@ class Login extends General
             return $this->redirectLogin();
         }
 
-        $resArray = Connector::login($code);
+        $resArray = Curl::login($code);
 
         if ($resArray != false) {
             $dataBaseId = Company::get('id');

@@ -2,7 +2,7 @@
 
 namespace Moloni\ES\Controllers\Api;
 
-class Stock extends GeneralAPI
+class Stock
 {
     /**
      * Adds stock to an product
@@ -30,7 +30,7 @@ class Stock extends GeneralAPI
                     }
                 }';
 
-        return Connector::graphqlClient($query, json_encode($variables));
+        return Curl::simple($query, json_encode($variables));
     }
 
     /**
@@ -59,6 +59,6 @@ class Stock extends GeneralAPI
                     }
                 }';
 
-        return Connector::graphqlClient($query, json_encode($variables));
+        return Curl::simple($query, json_encode($variables));
     }
 }

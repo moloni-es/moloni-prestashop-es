@@ -2,7 +2,7 @@
 
 namespace Moloni\ES\Controllers\Api;
 
-class MeasurementUnits extends GeneralAPI
+class MeasurementUnits
 {
     /**
      * Gets all measurement units
@@ -40,7 +40,7 @@ class MeasurementUnits extends GeneralAPI
                     }
                 }';
 
-        return self::getApiPaginator($query, $variables, 'measurementUnits');
+        return Curl::complex($query, $variables, 'measurementUnits');
     }
 
     /**
@@ -68,6 +68,6 @@ class MeasurementUnits extends GeneralAPI
                     }
                 }';
 
-        return Connector::graphqlClient($query, json_encode($variables));
+        return Curl::simple($query, json_encode($variables));
     }
 }

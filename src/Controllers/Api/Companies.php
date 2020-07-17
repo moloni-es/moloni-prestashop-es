@@ -2,7 +2,7 @@
 
 namespace Moloni\ES\Controllers\Api;
 
-class Companies extends GeneralAPI
+class Companies
 {
     /**
      * Gets all the companies that the logged in user has access
@@ -27,7 +27,7 @@ class Companies extends GeneralAPI
             }
         }';
 
-        return Connector::graphqlClient($query);
+        return Curl::simple($query);
     }
 
     /**
@@ -60,7 +60,7 @@ class Companies extends GeneralAPI
             }
         }';
 
-        return Connector::graphqlClient($query, $variables);
+        return Curl::simple($query, $variables);
     }
 
     /**
@@ -101,7 +101,7 @@ class Companies extends GeneralAPI
                     }
                 }';
 
-        return Connector::graphqlClient($query, $variables);
+        return Curl::simple($query, $variables);
     }
 
     /**
@@ -132,7 +132,7 @@ class Companies extends GeneralAPI
                     }
                 }';
 
-        return Connector::graphqlClient($query, json_encode($variables));
+        return Curl::simple($query, json_encode($variables));
     }
 
     /**
@@ -172,7 +172,7 @@ class Companies extends GeneralAPI
                     }
                 }';
 
-        return self::getApiPaginator($query, $variables, 'languages');
+        return Curl::complex($query, $variables, 'languages');
     }
 
     /**
@@ -214,7 +214,7 @@ class Companies extends GeneralAPI
                     }
                 }';
 
-        return self::getApiPaginator($query, $variables, 'countries');
+        return Curl::complex($query, $variables, 'countries');
     }
 
     /**
@@ -247,6 +247,6 @@ class Companies extends GeneralAPI
                     }
                 }';
 
-        return Connector::graphqlClient($query, json_encode($variables));
+        return Curl::simple($query, json_encode($variables));
     }
 }

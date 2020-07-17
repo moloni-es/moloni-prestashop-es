@@ -3,7 +3,7 @@
 namespace Moloni\ES\Controllers;
 
 use Db;
-use Moloni\ES\Controllers\Api\Connector;
+use Moloni\ES\Controllers\Api\Curl;
 use Moloni\ES\Controllers\Api\Documents;
 use Moloni\ES\Controllers\Api\Products;
 use Moloni\ES\Controllers\Models\Company;
@@ -156,7 +156,7 @@ class General extends FrameworkBundleAdminController
 
         //if access token is expired or about to (5 minutes), refresh it
         if ($dataArray['access_expire'] < (time() + 300)) {
-            $newDataArray = Connector::refreshTokens();
+            $newDataArray = Curl::refreshTokens();
 
             if (!isset($newDataArray['errors'])) {
                 $dataBase = Db::getInstance();

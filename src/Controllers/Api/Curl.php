@@ -4,8 +4,9 @@ namespace Moloni\ES\Controllers\Api;
 
 use Moloni\ES\Controllers\Models\Company;
 use Moloni\ES\Controllers\Models\Error;
+use Moloni\ES\Controllers\Models\Log;
 
-class Connector extends GeneralAPI
+class Curl
 {
     /**
      * Query the Moloni API
@@ -15,7 +16,7 @@ class Connector extends GeneralAPI
      *
      * @return array returns the Graphql response array or an error array
      */
-    public static function graphqlClient($query = null, $variables = [])
+    public static function simple($query = null, $variables = [])
     {
         $endpoint = 'https://api.moloni.es/v1';
         $authToken = Company::get('access_token');
@@ -57,6 +58,39 @@ class Connector extends GeneralAPI
         curl_close($con);
 
         return $result;
+    }
+
+    /**
+     * Returns all data from an paginated query
+     *
+     * @param $query string query used
+     * @param $variables array variables used
+     * @param $keyString string string of the data query
+     *
+     * @return array|bool information received
+     */
+    public static function complex($query, $variables, $keyString)
+    {
+        //to get all items we need to paginate
+        $pageNumber = 0;
+        $arrayAPI = [];
+        do {
+            ++$pageNumber;
+            $variables['options']['pagination']['qty'] = 50;
+            $variables['options']['pagination']['page'] = $pageNumber;
+            $queryResult = self::simple($query, json_encode($variables));
+
+            if (isset($queryResult['errors'])) {
+                Log::writeLog('Something went wrong with pagination of API!!');
+
+                return false;
+            }
+
+            $querySize = $queryResult['data'][$keyString]['options']['pagination'];
+            $arrayAPI = array_merge($arrayAPI, $queryResult['data'][$keyString]['data']);
+        } while ($querySize['count'] > ($querySize['qty'] * $querySize['page']));
+
+        return $arrayAPI;
     }
 
     /**

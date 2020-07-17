@@ -2,7 +2,7 @@
 
 namespace Moloni\ES\Controllers\Api;
 
-class Customers extends GeneralAPI
+class Customers
 {
     /**
      * Creates an costumer
@@ -31,7 +31,7 @@ class Customers extends GeneralAPI
                     }
                 }';
 
-        return Connector::graphqlClient($query, json_encode($variables));
+        return Curl::simple($query, json_encode($variables));
     }
 
     /**
@@ -67,7 +67,7 @@ class Customers extends GeneralAPI
                     }
                 }';
 
-        return Connector::graphqlClient($query, json_encode($variables));
+        return Curl::simple($query, json_encode($variables));
     }
 
     /**
@@ -121,7 +121,7 @@ class Customers extends GeneralAPI
                     }
                 }';
 
-        return self::getApiPaginator($query, $variables, 'customers');
+        return Curl::complex($query, $variables, 'customers');
     }
 
     /**
@@ -160,6 +160,6 @@ class Customers extends GeneralAPI
                     }
                 }';
 
-        return self::getApiPaginator($query, $variables, 'geographicZones');
+        return Curl::complex($query, $variables, 'geographicZones');
     }
 }

@@ -87,6 +87,9 @@ class Tools extends General
      * Import products from Moloni
      *
      * @return null returns the template
+     *
+     * @throws \PrestaShopDatabaseException
+     * @throws \PrestaShopException
      */
     public function importProducts()
     {
@@ -101,7 +104,7 @@ class Tools extends General
 
         $i = 0;
         foreach ($produtosMoloni as $key => $products) {
-            if ((Product::getIdByReference($products['reference'])) == false && $products['reference'] != 'envio') {
+            if ((Product::getIdByReference($products['reference'])) === false && $products['reference'] !== 'envio') {
                 $productAdd = new Product();
                 $productAdd->name = $products['name'];
                 $productAdd->reference = $products['reference'];
