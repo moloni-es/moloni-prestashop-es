@@ -53,7 +53,7 @@ class MoloniPrestashopEs extends Module
         $this->name = 'moloniprestashopes';
         $this->tab = 'administration';
         $this->need_instance = 1;
-        $this->version = '1.0.4';
+        $this->version = '1.0.6';
         $this->ps_versions_compliancy = ['min' => '1.7.5', 'max' => _PS_VERSION_];
         $this->author = 'Moloni';
 
