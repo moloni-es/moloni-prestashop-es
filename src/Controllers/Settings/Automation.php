@@ -8,9 +8,7 @@ use Db;
 use Moloni\ES\Controllers\General;
 use Moloni\ES\Controllers\Models\Settings;
 use PrestaShopDatabaseException;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -49,19 +47,6 @@ class Automation extends General
      */
     public function buildFormAuto()
     {
-        if (Settings::get('SyncFields') === false) {
-            $fieldsToSync = [
-                $this->trans('Name', 'Modules.Moloniprestashopes.Settings') => true,
-                $this->trans('Price', 'Modules.Moloniprestashopes.Settings') => true,
-                $this->trans('Description', 'Modules.Moloniprestashopes.Settings') => true,
-                $this->trans('Visibility', 'Modules.Moloniprestashopes.Settings') => true,
-                $this->trans('Stock', 'Modules.Moloniprestashopes.Settings') => true,
-                $this->trans('Categories', 'Modules.Moloniprestashopes.Settings') => true,
-            ];
-        } else {
-            $fieldsToSync = unserialize(Settings::get('SyncFields'));
-        }
-
         return $this->createFormBuilder()
             ->add('CreateAuto', ChoiceType::class, [
                 'label' => $this->trans('Create paid documents on Moloni', 'Modules.Moloniprestashopes.Settings'),
@@ -143,14 +128,20 @@ class Automation extends General
                 ],
                 'data' => Settings::get('HooksUpdateStock'),
             ])
-            ->add('SyncFields', CollectionType::class, [
-                'entry_type' => CheckboxType::class,
+            ->add('SyncFields', ChoiceType::class, [
                 'label' => $this->trans('Fields to sync', 'Modules.Moloniprestashopes.Settings'),
                 'label_attr' => ['class' => 'labelPS col-sm-2'],
-                'entry_options' => [
-                    'required' => false,
+                'multiple' => true,
+                'expanded' => true,
+                'choices' => [
+                    $this->trans('Name', 'Modules.Moloniprestashopes.Settings') => 'Name',
+                    $this->trans('Price', 'Modules.Moloniprestashopes.Settings') => 'Price',
+                    $this->trans('Description', 'Modules.Moloniprestashopes.Settings') => 'Description',
+                    $this->trans('Visibility', 'Modules.Moloniprestashopes.Settings') => 'Visibility',
+                    $this->trans('Stock', 'Modules.Moloniprestashopes.Settings') => 'Stock',
+                    $this->trans('Categories', 'Modules.Moloniprestashopes.Settings') => 'Categories',
                 ],
-                'data' => $fieldsToSync,
+                'data' => unserialize(Settings::get('SyncFields')),
             ])
             ->add('SaveChanges', SubmitType::class, [
                 'attr' => ['class' => 'btn-outline-success'],

@@ -290,13 +290,13 @@ class webserviceSpecificManagementMoloniProducts implements WebserviceSpecificMa
             $psProduct = new Product($psId);
         }
 
-        if ($settings['Name'] === true || empty($psProduct->name)) {
+        if (in_array('Name', $settings, true) === true || empty($psProduct->name)) {
             $psProduct->name = $moloniProduct['name'];
         }
 
         $psProduct->reference = $moloniProduct['reference'];
 
-        if ($settings['Price'] === true) {
+        if (in_array('Price', $settings, true) === true) {
             if (Settings::get('Tax') === 'LetPresta') {
                 $psProduct->price = $moloniProduct['price'];
             } else {
@@ -304,12 +304,12 @@ class webserviceSpecificManagementMoloniProducts implements WebserviceSpecificMa
             }
         }
 
-        if ($settings['Description'] === true) {
+        if (in_array('Description', $settings, true) === true) {
             $psProduct->description = $moloniProduct['summary'];
             $psProduct->description_short = $moloniProduct['summary'];
         }
 
-        if ($settings['Visibility'] === true) {
+        if (in_array('Visibility', $settings, true) === true) {
             if ((int) $moloniProduct['visible'] === 1) {
                 $psProduct->visibility = 'both';
             } else {
@@ -317,7 +317,7 @@ class webserviceSpecificManagementMoloniProducts implements WebserviceSpecificMa
             }
         }
 
-        if ($settings['Categories'] === true) {
+        if (in_array('Categories', $settings, true) === true) {
             //all categories ids in an array, ordered from lower to higher
             $categoriesIdArray = $this->setCategories($moloniProduct['productCategory']['productCategoryId']);
             //prestashop products have categories and 1 main category
@@ -333,7 +333,7 @@ class webserviceSpecificManagementMoloniProducts implements WebserviceSpecificMa
 
         $psProduct->save();
 
-        if ($settings['Stock'] === true
+        if (in_array('Stock', $settings, true) === true
             && (bool) $moloniProduct['hasStock'] === true
             && empty($moloniProduct['variants']) === true) {
             StockAvailable::setQuantity($psProduct->id, null, $moloniProduct['stock']);
@@ -397,7 +397,7 @@ class webserviceSpecificManagementMoloniProducts implements WebserviceSpecificMa
 
                 $psProduct->save();
 
-                if ($settings['Stock'] === true && (bool) $variation['hasStock'] === true) {
+                if (in_array('Stock', $settings, true) === true && (bool) $variation['hasStock'] === true) {
                     StockAvailable::setQuantity(
                         $psProduct->id,
                         combination::getIdByReference($psProduct->id, $variation['reference']),
@@ -405,7 +405,7 @@ class webserviceSpecificManagementMoloniProducts implements WebserviceSpecificMa
                     );
                 }
             } else { //update existing combination
-                if ($settings['Price'] === true) {
+                if (in_array('Price', $settings, true) === true) {
                     $oldData = ($psProduct->getAttributeCombinationsById($combinationId, $lang))[0];
 
                     $psProduct->updateAttribute(
@@ -427,7 +427,7 @@ class webserviceSpecificManagementMoloniProducts implements WebserviceSpecificMa
                     );
                 }
 
-                if ($settings['Stock'] === true && (bool) $variation['hasStock'] === true) {
+                if (in_array('Stock', $settings, true) === true && (bool) $variation['hasStock'] === true) {
                     StockAvailable::setQuantity($psProduct->id, $combinationId, $variation['stock']);
                 }
             }
