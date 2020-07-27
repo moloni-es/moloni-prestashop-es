@@ -19,7 +19,7 @@ class LogSync
      *
      * @var int
      */
-    private static $logValidity = 40;
+    private static $logValidity = 20;
 
     /**
      * Procedure to check if an entity has been synced recently

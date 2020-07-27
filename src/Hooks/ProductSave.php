@@ -41,7 +41,7 @@ class ProductSave
     {
         //to prevent infinite loops
         if (LogSync::wasSyncedRecently(1, $productId) === true) {
-            Log::writeLog('Product has already been synced');
+            Log::writeLog('Product has already been synced (prestashop -> moloni)');
 
             return false;
         }

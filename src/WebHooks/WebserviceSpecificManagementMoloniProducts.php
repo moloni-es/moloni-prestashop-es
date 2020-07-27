@@ -172,7 +172,7 @@ class webserviceSpecificManagementMoloniProducts implements WebserviceSpecificMa
 
         //to prevent infinite loops
         if (LogSync::wasSyncedRecently(1, $psProductId)) {
-            Log::writeLog('Product has already been synced');
+            Log::writeLog('Product has already been synced (moloni -> prestashop)');
 
             return false;
         }
