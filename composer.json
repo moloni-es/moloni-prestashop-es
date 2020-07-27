@@ -1,7 +1,7 @@
 {
   "name": "moloni/moloni-prestashop-es",
   "license": "OSL-3.0",
-  "version": "v1.0.6",
+  "version": "v1.0.7",
   "description": "Plugin for Moloni ES - Prestashop",
   "authors": [
     {
@@ -40,6 +40,13 @@
   "type": "prestashop-module",
   "extra": {
     "changelog": [
+      {
+        "version": "v1.0.7",
+        "title": "Added support for WebHooks",
+        "description": [
+          "You can now automate the synchronization of Moloni items and stock to your Prestashop store"
+        ]
+      },
       {
         "version": "v1.0.5",
         "title": "General fixes",
