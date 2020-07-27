@@ -141,7 +141,7 @@ class Automation extends General
                     $this->trans('Stock', 'Modules.Moloniprestashopes.Settings') => 'Stock',
                     $this->trans('Categories', 'Modules.Moloniprestashopes.Settings') => 'Categories',
                 ],
-                'data' => unserialize(Settings::get('SyncFields')),
+                'data' => Settings::get('SyncFields') !== false ? unserialize(Settings::get('SyncFields')) : [],
             ])
             ->add('SaveChanges', SubmitType::class, [
                 'attr' => ['class' => 'btn-outline-success'],
