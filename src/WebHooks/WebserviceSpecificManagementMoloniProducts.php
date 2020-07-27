@@ -9,6 +9,7 @@ use Moloni\ES\Controllers\Api\Products;
 use Moloni\ES\Controllers\General;
 use Moloni\ES\Controllers\Models\Company;
 use Moloni\ES\Controllers\Models\Log;
+use Moloni\ES\Controllers\Models\LogSync;
 use Moloni\ES\Controllers\Models\Settings;
 
 class webserviceSpecificManagementMoloniProducts implements WebserviceSpecificManagementInterface
@@ -168,6 +169,13 @@ class webserviceSpecificManagementMoloniProducts implements WebserviceSpecificMa
         }
 
         $psProductId = Product::getIdByReference($moloniProduct['reference']);
+
+        //to prevent infinite loops
+        if (LogSync::wasSyncedRecently(1, $psProductId)) {
+            Log::writeLog('Product has already been synced');
+
+            return false;
+        }
 
         if ($psProductId > 0) {
             $psProduct = $this->setProduct($moloniProduct, $psProductId);

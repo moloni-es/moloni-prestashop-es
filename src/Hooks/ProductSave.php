@@ -5,6 +5,7 @@ namespace Moloni\ES\Hooks;
 use Configuration;
 use Moloni\ES\Controllers\General;
 use Moloni\ES\Controllers\Models\Log;
+use Moloni\ES\Controllers\Models\LogSync;
 use Moloni\ES\Controllers\Models\Product;
 use PrestaShopDatabaseException;
 use PrestaShopException;
@@ -38,6 +39,13 @@ class ProductSave
      */
     public function hookActionProductSave($productId)
     {
+        //to prevent infinite loops
+        if (LogSync::wasSyncedRecently(1, $productId)) {
+            Log::writeLog('Product has already been synced');
+
+            return false;
+        }
+
         $productPS = new \PrestaShop\PrestaShop\Adapter\Entity\Product(
             $productId,
             1,
