@@ -70,6 +70,7 @@ class WebHooks
     public static function createHooks()
     {
         self::enableWebServices();
+        self::deleteHooks(); //prevent multiple hooks from doing the same
         $key = self::createCredentials();
 
         $variables = [
