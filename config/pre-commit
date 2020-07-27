@@ -44,7 +44,7 @@ done
 
 if [ "$FILES" != "" ]; then
   echo "Running Code Sniffer..."
-  vendor/squizlabs/php_codesniffer/bin/phpcs --standard=PSR1,PSR2 --ignore=tests/ src/WebHooks/* $FILES
+  vendor/squizlabs/php_codesniffer/bin/phpcs --standard=PSR1,PSR2 --ignore=tests/ --ignore=src/WebHooks/* $FILES
   if [ $? != 0 ]; then
     echo "Fix the error before commit."
     exit 1
