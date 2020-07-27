@@ -7,6 +7,7 @@ use Moloni\ES\Controllers\Api\Companies;
 use Moloni\ES\Controllers\Api\Curl;
 use Moloni\ES\Controllers\Models\Company;
 use Moloni\ES\Controllers\Models\Error;
+use Moloni\ES\WebHooks\WebHooks;
 use PrestaShop\PrestaShop\Adapter\Entity\Tools;
 use PrestaShopException as PrestaShopExceptionAlias;
 use Symfony\Component\Form\Extension\Core\Type\ResetType;
@@ -200,6 +201,8 @@ class Login extends General
             ], 'id =' . $dataBaseId, 1, false);
 
             Company::fillCache();
+            //create webhooks after login
+            WebHooks::createHooks();
 
             $this->addFlash('success', $this->trans('Login was successful.', 'Modules.Moloniprestashopes.Success'));
 

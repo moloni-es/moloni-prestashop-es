@@ -127,30 +127,35 @@ class Products
     public static function queryProductCategories($variables = [])
     {
         $query = 'query productCategories($companyId: Int!,$options: ProductCategoryOptions)
+        {
+            productCategories(companyId: $companyId,options: $options)
+            {
+                data
                 {
-                    productCategories(companyId: $companyId,options: $options)
+                    productCategoryId
+                    name
+                    child
                     {
-                        data
-                        {
-                            productCategoryId
-                            name
-                        }
-                        options
-                        {
-                            pagination
-                            {
-                                page
-                                qty
-                                count
-                            }
-                        }
-                        errors
-                        {
-                            field
-                            msg
-                        }
+                        name
+                        productCategoryId
                     }
-                }';
+                }
+                options
+                {
+                    pagination
+                    {
+                        page
+                        qty
+                        count
+                    }
+                }
+                errors
+                {
+                    field
+                    msg
+                }
+            }
+        }';
 
         return Curl::complex($query, $variables, 'productCategories');
     }
@@ -196,33 +201,101 @@ class Products
     public static function queryProduct($variables = [])
     {
         $query = 'query product($companyId: Int!,$productId: Int!)
+        {
+            product(companyId: $companyId,productId: $productId)
+            {
+                data
                 {
-                    product(companyId: $companyId,productId: $productId)
+                    visible
+                    name
+                    productId
+                    type
+                    reference
+                    summary
+                    price
+                    priceWithTaxes
+                    hasStock
+                    stock
+                    minStock
+                    measurementUnit
                     {
-                        data
+                        measurementUnitId
+                        name
+                    }   
+                    warehouse
+                    {
+                        warehouseId
+                    }
+                    productCategory
+                    {
+                        productCategoryId
+                        name
+                    }                
+                    variants
+                    {
+                        visible
+                        productId
+                        name
+                        reference
+                        summary
+                        price
+                        priceWithTaxes
+                        hasStock
+                        stock
+                        propertyPairs
                         {
-                            name
-                            productId
-                            type
-                            reference
-                            summary
-                            price
-                            priceWithTaxes
-                            hasStock
-                            stock
-                            measurementUnit
+                            property
                             {
-                                measurementUnitId
                                 name
                             }
-                        }
-                        errors
-                        {
-                            field
-                            msg
+                            propertyValue
+                            {
+                                code
+                                value
+                            }
                         }
                     }
-                }';
+                    parent
+                    {
+                        productId
+                        name
+                    }
+                    propertyGroup
+                    {
+                        propertyGroupId
+                        name
+                        properties
+                        {
+                            propertyId
+                            name
+                            ordering
+                            values
+                            {
+                                propertyValueId
+                                code
+                                value
+                            }
+                        }
+                    }
+                    taxes
+                    {
+                        tax
+                        {
+                            taxId
+                            value
+                            name
+                        }
+                        value
+                        ordering
+                    }       
+                }
+                errors
+                {
+                    field
+                    msg
+                }
+            }
+        }';
 
         return Curl::simple($query, json_encode($variables));
     }

@@ -9,7 +9,6 @@ use Moloni\ES\Controllers\Api\Products;
 use Moloni\ES\Controllers\Api\Stock;
 use Moloni\ES\Controllers\Api\Taxes;
 use PrestaShop\PrestaShop\Adapter\Entity\Product as psProduct;
-use PrestaShopBundle\Translation\DataCollectorTranslator;
 use PrestaShopBundle\Translation\TranslatorComponent;
 use PrestaShopDatabaseException;
 
@@ -701,7 +700,7 @@ class Product
         $this->price = $cartProduct['unit_price_tax_excl'];
         $this->priceWithTax = $cartProduct['unit_price_tax_incl'];
 
-        if ($cartProduct['unit_price_tax_incl'] != $cartProduct['unit_price_tax_excl']) {
+        if ($cartProduct['unit_price_tax_incl'] !== $cartProduct['unit_price_tax_excl']) {
             $this->taxValue =
                 (100 * ($cartProduct['unit_price_tax_incl']
                         - $cartProduct['unit_price_tax_excl'])) / $cartProduct['unit_price_tax_excl'];
@@ -732,7 +731,7 @@ class Product
         ];
 
         //if the tax is exempt, remove the taxes value to empty
-        if ($this->taxValue == 0) {
+        if ($this->taxValue === 0) {
             $variables['taxes'] = [];
         }
 

@@ -349,6 +349,11 @@ class Installer
         return true;
     }
 
+    /**
+     * Remove login credentials
+     *
+     * @return bool
+     */
     public function removeLogin()
     {
         $dataBase = \Db::getInstance();

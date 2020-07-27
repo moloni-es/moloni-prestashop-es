@@ -59,15 +59,16 @@ class Products extends General
         $taxesData = $taxes;
         $countTaxesData = count($taxesData);
 
-        for ($i = 0; $i < $countTaxesData; ++$i) {
-            $taxKeys = '' . $taxesData[$i]['name'] . ' - ' . $taxesData[$i]['value'] . '';
-            $choicesTax[$taxKeys] = $taxesData[$i]['taxId'];
-        }
         $choicesTax[$this->trans(
             'Use prestashop value (recommended)',
             'Modules.Moloniprestashopes.Settings'
         )] = 'LetPresta';
         $choicesTax[$this->trans('Exempt', 'Modules.Moloniprestashopes.Settings')] = 'isento';
+
+        for ($i = 0; $i < $countTaxesData; ++$i) {
+            $taxKeys = '' . $taxesData[$i]['name'] . ' - ' . $taxesData[$i]['value'] . '';
+            $choicesTax[$taxKeys] = $taxesData[$i]['taxId'];
+        }
 
         $variables = ['companyId' => (int) Company::get('company_id'), 'options' => null];
         $units = MeasurementUnits::queryMeasurementUnits($variables);

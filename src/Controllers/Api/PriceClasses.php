@@ -9,7 +9,7 @@ class PriceClasses
      *
      * @param $variables
      *
-     * @return array|array[]|\string[][]
+     * @return array
      */
     public static function queryPriceClass($variables)
     {
@@ -39,7 +39,7 @@ class PriceClasses
      *
      * @param $variables
      *
-     * @return array|array[]|\string[][]
+     * @return array
      */
     public static function queryPriceClasses($variables)
     {
@@ -69,7 +69,7 @@ class PriceClasses
      *
      * @param $variables
      *
-     * @return array|array[]|\string[][]
+     * @return array
      */
     public static function mutationPriceClassCreate($variables)
     {

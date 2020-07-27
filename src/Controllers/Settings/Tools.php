@@ -35,6 +35,8 @@ class Tools extends General
      * Import categories from Moloni
      *
      * @return null returns the template
+     *
+     * @throws \PrestaShopException
      */
     public function importCategories()
     {
@@ -42,45 +44,32 @@ class Tools extends General
             return $this->redirectLogin();
         }
 
-        $variables = [
-            'companyId' => (int) Company::get('company_id'),
-        ];
+        $arrayCategoryNames = self::getAllCategoriesFromMoloni(null);
+        $result = self::createCategoriesFromMoloni($arrayCategoryNames, 2);
 
-        $categoriasMoloni = (Products::queryProductCategories($variables));
-
-        $dbPresta = Db::getInstance();
-        $sql = 'SELECT MAX(id_category) FROM ' . _DB_PREFIX_ . 'category';
-        $existRes = (int) $dbPresta->executeS($sql)[0]['MAX(id_category)'];
-
-        $i = 0;
-        foreach ($categoriasMoloni as $key => $category) {
-            if (empty(\Category::searchByName(1, $category['name'])) && $category['name'] != 'Envío') {
-                $categoryAdd = new \Category();
-                $categoryAdd->id = ++$existRes;
-                $categoryAdd->name = [1 => $category['name']];
-                $categoryAdd->id_parent = 2;
-                $categoryAdd->link_rewrite = [1 => \Tools::str2url($category['name'])];
-                $categoryAdd->add();
-                ++$i;
-            }
-        }
-        if ($i == 0) {
+        if ($result === false) {
             $this->addFlash('warning', $this->trans(
                 'All categories already imported.',
                 'Modules.Moloniprestashopes.Success'
             ));
-            Log::writeLog('All categories already imported!!');
 
-            return $this->redirectSettingsTools();
+            Log::writeLog($this->trans(
+                'All categories already imported.',
+                'Modules.Moloniprestashopes.Success'
+            ));
         } else {
             $this->addFlash('success', $this->trans(
                 'All categories imported!!',
                 'Modules.Moloniprestashopes.Settings'
             ));
-            Log::writeLog('All categories imported!!');
 
-            return $this->redirectSettingsTools();
+            Log::writeLog($this->trans(
+                'All categories imported!!',
+                'Modules.Moloniprestashopes.Settings'
+            ));
         }
+
+        return $this->redirectSettingsTools();
     }
 
     /**
@@ -225,6 +214,8 @@ class Tools extends General
      * Mark all pending orders as already generated
      *
      * @return null returns the template
+     *
+     * @throws \PrestaShopDatabaseException
      */
     public function cleanPendentOrder()
     {

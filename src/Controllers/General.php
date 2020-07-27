@@ -9,6 +9,7 @@ use Moloni\ES\Controllers\Api\Products;
 use Moloni\ES\Controllers\Models\Company;
 use Moloni\ES\Controllers\Models\Error;
 use Moloni\ES\Controllers\Models\Log;
+use Moloni\ES\WebHooks\WebHooks;
 use PrestaShopBundle\Controller\Admin\FrameworkBundleAdminController;
 
 class General extends FrameworkBundleAdminController
@@ -202,6 +203,8 @@ class General extends FrameworkBundleAdminController
      */
     public function logOut()
     {
+        //delete Webhooks on moloni
+        WebHooks::deleteHooks();
         //deletes all data form the database tables
         $dataBase = Db::getInstance();
         $dataBase->execute('TRUNCATE ' . _DB_PREFIX_ . 'moloni_app');
@@ -262,6 +265,7 @@ class General extends FrameworkBundleAdminController
         $error .= '<div style="display: none;" id="toggleDiv">';
 
         foreach ($request as $key => $value) {
+            /* @noinspection ForgottenDebugOutputInspection */
             $error .= '<br><b>' . $key . ': </b>' . print_r($value) . '<p></p>';
         }
 
@@ -305,5 +309,129 @@ class General extends FrameworkBundleAdminController
             'offSet' => $offSet,
             'linesPerPage' => $linesPerPage,
         ];
+    }
+
+    /**
+     * Checks the validity of the tokens
+     *
+     * @return bool
+     */
+    public static function staticCheckTokens()
+    {
+        //get saved data in moloni_app table
+        $dataArray = Company::getAll();
+
+        if ($dataArray === false || empty($dataArray)) {
+            return false;
+        }
+
+        //if refresh token is expired new login is required
+        if ($dataArray['refresh_expire'] < (time())) {
+            Log::writeLog('Login expired');
+
+            return false;
+        }
+
+        //if access token is expired or about to (5 minutes), refresh it
+        if ($dataArray['access_expire'] < (time() + 300)) {
+            $newDataArray = Curl::refreshTokens();
+
+            if (!isset($newDataArray['errors'])) {
+                $dataBase = Db::getInstance();
+                $dataBase->update('moloni_app', [
+                    'access_token' => pSQL($newDataArray['accessToken']),
+                    'refresh_token' => pSQL($newDataArray['refreshToken']),
+                    'access_expire' => (time() + 3600),
+                    'refresh_expire' => (time() + 864000),
+                ], 'id =' . $dataArray['id'], 1, false);
+
+                Company::fillCache();
+                Log::writeLog('Tokens refreshed');
+
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Gets ALL categories from Moloni, from top to bottom
+     * First call $categoryParentId should be null
+     *
+     * @param $categoryParentId
+     *
+     * @return array
+     */
+    public static function getAllCategoriesFromMoloni($categoryParentId)
+    {
+        $array = [];
+
+        $variables = [
+            'companyId' => (int) Company::get('company_id'),
+            'options' => [
+                'filter' => [
+                    'field' => 'parentId',
+                    'comparison' => 'eq',
+                    'value' => $categoryParentId,
+                ],
+            ],
+        ];
+
+        $categories = (Products::queryProductCategories($variables));
+
+        foreach ($categories as $category) {
+            if ($category['name'] === 'Envío') {
+                continue;
+            }
+
+            if (empty($category['child'])) {
+                $array[$category['name']] = [];
+            } else {
+                $array[$category['name']] = self::getAllCategoriesFromMoloni((string) $category['productCategoryId']);
+            }
+        }
+
+        return $array;
+    }
+
+    /**
+     * Creates all categories fetched form moloni
+     *
+     * @param $arrayCategories
+     * @param $parentId
+     *
+     * @return bool
+     *
+     * @throws \PrestaShopException
+     */
+    public static function createCategoriesFromMoloni($arrayCategories, $parentId)
+    {
+        $lang = (int) \Configuration::get('PS_LANG_DEFAULT');
+        $somethingNew = false;
+
+        foreach ($arrayCategories as $name => $child) {
+            if (\Category::searchByNameAndParentCategoryId($lang, $name, $parentId) === false) {
+                $category = new \Category();
+                $category->name = [$lang => (string) $name];
+                $category->id_parent = $parentId;
+                $category->link_rewrite = [1 => \Tools::str2url((string) $name)];
+                $category->save();
+
+                $currentId = $category->id;
+
+                $somethingNew = true;
+            } else {
+                $currentId = (\Category::searchByNameAndParentCategoryId($lang, $name, $parentId))['id_category'];
+            }
+
+            if (!empty($child)) {
+                self::createCategoriesFromMoloni($child, (int) $currentId);
+            }
+        }
+
+        return $somethingNew;
     }
 }

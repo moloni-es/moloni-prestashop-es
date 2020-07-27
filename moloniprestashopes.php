@@ -75,6 +75,7 @@ class MoloniPrestashopEs extends Module
             'actionPaymentConfirmation',
             'actionProductAdd',
             'actionProductUpdate',
+            'addWebserviceResources',
         ];
     }
 
@@ -213,6 +214,23 @@ class MoloniPrestashopEs extends Module
     }
 
     /**
+     * Add endpoints to Prestashop Webservices
+     *
+     * @return array[]
+     */
+    public function hookAddWebserviceResources()
+    {
+        include_once _PS_MODULE_DIR_ . 'moloniprestashopes/src/WebHooks/WebserviceSpecificManagementMoloniProducts.php';
+
+        return [
+            'moloniproducts' => [
+                'description' => 'My Custom Resource',
+                'specific_management' => true,
+            ],
+        ];
+    }
+
+    /**
      * Add out CSS and JS files to the backend
      */
     public function hookActionAdminControllerSetMedia()
@@ -248,13 +266,15 @@ class MoloniPrestashopEs extends Module
      *
      * @param $params
      *
+     * @return void
+     *
      * @throws PrestaShopDatabaseException
      * @throws PrestaShopException
      */
     public function hookActionProductUpdate($params)
     {
-        if ((Settings::get('UpdateArtigos') == 1)) {
-            if ($params['product']->name[1] != '') {
+        if (((int) Settings::get('UpdateArtigos') === 1)) {
+            if ($params['product']->name[1] !== '') {
                 $productSave = new ProductSave($this->context->getTranslator());
                 $productSave->hookActionProductSave($params['id_product']);
             }
@@ -266,13 +286,13 @@ class MoloniPrestashopEs extends Module
      *
      * @param $params
      *
-     * @return bool
+     * @return void
      *
      * @throws PrestaShopDatabaseException
      */
     public function hookActionPaymentConfirmation($params)
     {
-        if ((Settings::get('CreateAuto') == 1)) {
+        if (((int) Settings::get('CreateAuto') === 1)) {
             $paymentConfirmation = new PaymentConfirmation($this->context->getTranslator());
             $paymentConfirmation->hookActionPaymentConfirmation($params['id_order']);
         }

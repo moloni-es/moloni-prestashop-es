@@ -80,23 +80,28 @@ class Categories
     public static function queryProductCategory($variables = [])
     {
         $query = 'query productCategory($companyId: Int!,$productCategoryId: Int!)
+        {
+            productCategory(companyId: $companyId,productCategoryId: $productCategoryId)
+            {
+                data
                 {
-                    productCategory(companyId: $companyId,productCategoryId: $productCategoryId)
+                    name
+                    posVisible
+                    summary
+                    visible
+                    parent
                     {
-                        data
-                        {
-                            name
-                            posVisible
-                            summary
-                            visible
-                        }
-                        errors
-                        {
-                            field
-                            msg
-                        }
+                        productCategoryId
+                        name
                     }
-                }';
+                }
+                errors
+                {
+                    field
+                    msg
+                }
+            }
+        }';
 
         return Curl::simple($query, json_encode($variables));
     }
