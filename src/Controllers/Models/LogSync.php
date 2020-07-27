@@ -17,9 +17,9 @@ class LogSync
     /**
      * Validity of each log in seconds
      *
-     * @var float
+     * @var int
      */
-    private static $logValidity = 20;
+    private static $logValidity = 40;
 
     /**
      * Procedure to check if an entity has been synced recently
@@ -37,7 +37,7 @@ class LogSync
 
         self::deleteOldLogs(); //delete old logs before checking entry
 
-        if (self::findOne($typeId, $entityId)) {
+        if (self::getOne($typeId, $entityId)) {
             return true; //if an entry was found
         }
 
@@ -54,7 +54,7 @@ class LogSync
      *
      * @return bool
      */
-    public static function findOne($typeId, $entityId)
+    public static function getOne($typeId, $entityId)
     {
         $query = 'SELECT COUNT(*) FROM ' . _DB_PREFIX_ . 'moloni_sync_logs 
             where `type_id` = ' . $typeId . ' AND `entity_id` =' . $entityId;
@@ -66,6 +66,18 @@ class LogSync
         }
 
         return true;
+    }
+
+    /**
+     * Gets all database entries
+     *
+     * @throws PrestaShopDatabaseException
+     */
+    public static function getAll()
+    {
+        $query = 'SELECT * FROM ' . _DB_PREFIX_ . 'moloni_sync_logs';
+
+        return self::$databaseConnection->executeS($query);
     }
 
     /**
@@ -85,7 +97,7 @@ class LogSync
             [
                 'type_id' => $typeId,
                 'entity_id' => $entityId,
-                'sync_date' => time(),
+                'sync_date' => time() + self::$logValidity,
             ]
         );
 
@@ -96,12 +108,14 @@ class LogSync
      * Deletes logs that have more than defined seconds (default 20)
      *
      * @return bool
+     *
+     * @throws PrestaShopDatabaseException
      */
     public static function deleteOldLogs()
     {
         self::$databaseConnection->delete(
             'moloni_sync_logs',
-            'where sync_date < ' . (time() + self::$logValidity)
+            'sync_date < ' . time()
         );
 
         return true;
