@@ -200,46 +200,44 @@ class Products extends General
                 $submitData = $form->getData();
 
                 $dbPresta = Db::getInstance();
-                $sql = 'SELECT * FROM ' . _DB_PREFIX_ . "moloni_settings WHERE label ='Exemption' AND store_id=1";
-                $existRes = $dbPresta->executeS($sql);
-                if (empty($existRes)) {
-                    foreach ($submitData as $label => $value) {
+
+                foreach ($submitData as $label => $value) {
+                    $setting = $dbPresta->getRow(
+                        'SELECT * FROM ' . _DB_PREFIX_ . 'moloni_settings WHERE label = "' . $label
+                        . '" AND store_id=1'
+                    );
+
+                    if (empty($setting)) {
                         $dbPresta->insert('moloni_settings', [
                             'store_id' => (int) '1',
                             'label' => pSQL($label),
                             'value' => pSQL($value),
                         ]);
-                    }
-                    Settings::fillCache();
-                    $this->addFlash('success', $this->trans(
-                        'Settings created.',
-                        'Modules.Moloniprestashopes.Success'
-                    ));
-
-                    return $this->redirectSettingsProducts();
-                } else {
-                    foreach ($submitData as $label => $value) {
+                    } else {
                         $dbPresta->update('moloni_settings', [
                             'value' => pSQL($value),
                         ], 'store_id = 1 AND label="' . $label . '"');
                     }
-                    Settings::fillCache();
-                    $this->addFlash('success', $this->trans(
-                        'Settings updated.',
-                        'Modules.Moloniprestashopes.Success'
-                    ));
-
-                    return $this->redirectSettingsProducts();
                 }
-            } else {
-                $this->addFlash('warning', $this->trans(
-                    'Form not valid!!',
-                    'Modules.Moloniprestashopes.Errors'
+
+                Settings::fillCache();
+
+                $this->addFlash('success', $this->trans(
+                    'Settings updated.',
+                    'Modules.Moloniprestashopes.Success'
                 ));
 
                 return $this->redirectSettingsProducts();
             }
+
+            $this->addFlash('warning', $this->trans(
+                'Form not valid!!',
+                'Modules.Moloniprestashopes.Errors'
+            ));
+
+            return $this->redirectSettingsProducts();
         }
+
         $this->addFlash('warning', $this->trans(
             'Form not correctly sent!!',
             'Modules.Moloniprestashopes.Errors'

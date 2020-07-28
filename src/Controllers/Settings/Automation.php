@@ -169,55 +169,49 @@ class Automation extends General
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
                 $submitData = $form->getData();
-                $dbPresta = Db::getInstance();
-                $sql = 'SELECT * FROM ' . _DB_PREFIX_ . "moloni_settings WHERE label ='CreateAuto' AND store_id=1";
-                $existRes = $dbPresta->executeS($sql);
-                if (!isset($existRes[0])) {
-                    foreach ($submitData as $label => $value) {
-                        if (is_array($value)) {
-                            $value = serialize($value);
-                        }
 
+                $dbPresta = Db::getInstance();
+
+                foreach ($submitData as $label => $value) {
+                    $setting = $dbPresta->getRow(
+                        'SELECT * FROM ' . _DB_PREFIX_ . 'moloni_settings WHERE label = "' . $label
+                        . '" AND store_id=1'
+                    );
+
+                    if (is_array($value)) {
+                        $value = serialize($value);
+                    }
+
+                    if (empty($setting)) {
                         $dbPresta->insert('moloni_settings', [
                             'store_id' => (int) '1',
                             'label' => pSQL($label),
                             'value' => pSQL($value),
                         ]);
-                    }
-                    Settings::fillCache();
-                    $this->addFlash('success', $this->trans(
-                        'Settings created.',
-                        'Modules.Moloniprestashopes.Success'
-                    ));
-
-                    return $this->redirectSettingsAuto();
-                } else {
-                    foreach ($submitData as $label => $value) {
-                        if (is_array($value)) {
-                            $value = serialize($value);
-                        }
-
+                    } else {
                         $dbPresta->update('moloni_settings', [
                             'value' => pSQL($value),
                         ], 'store_id = 1 AND label="' . $label . '"');
                     }
-                    Settings::fillCache();
-                    $this->addFlash('success', $this->trans(
-                        'Settings updated.',
-                        'Modules.Moloniprestashopes.Success'
-                    ));
-
-                    return $this->redirectSettingsAuto();
                 }
-            } else {
-                $this->addFlash('warning', $this->trans(
-                    'Form not valid!!',
-                    'Modules.Moloniprestashopes.Errors'
+
+                Settings::fillCache();
+
+                $this->addFlash('success', $this->trans(
+                    'Settings updated.',
+                    'Modules.Moloniprestashopes.Success'
                 ));
 
                 return $this->redirectSettingsAuto();
             }
+            $this->addFlash('warning', $this->trans(
+                'Form not valid!!',
+                'Modules.Moloniprestashopes.Errors'
+            ));
+
+            return $this->redirectSettingsAuto();
         }
+
         $this->addFlash('warning', $this->trans(
             'Form not correctly sent!!',
             'Modules.Moloniprestashopes.Errors'
