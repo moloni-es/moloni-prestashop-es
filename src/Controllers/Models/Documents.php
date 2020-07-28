@@ -17,7 +17,6 @@ use Moloni\ES\Controllers\Models\Customer as modelCustomer;
 use Moloni\ES\Controllers\Models\Settings as modelSettings;
 use Order;
 use OrderInvoice;
-use PrestaShopBundle\Translation\DataCollectorTranslator;
 use PrestaShopBundle\Translation\TranslatorComponent;
 
 class Documents
@@ -40,7 +39,7 @@ class Documents
     public $yourReference;
     public $date;
     public $products;
-    public $status=0;
+    public $status = 0;
     public $expirationDate;
     public $maturityDateId;
     public $currencyExchangeId;
@@ -92,8 +91,6 @@ class Documents
                 [],
                 'Modules.Moloniprestashopes.Errors'
             ));
-
-            return false;
         }
 
         $this->psOrder = new Order($orderId);
@@ -319,7 +316,7 @@ class Documents
                 ));
 
                 //if the document did not close (values did not match), save invoice as draft
-                if ((int)$this->status === 0) {
+                if ((int) $this->status === 0) {
                     $this->saveDatabase();
                     $this->addError($this->translator->trans(
                         'Document saved as draft because values do not match.',
@@ -415,7 +412,7 @@ class Documents
 
         //if documents are closed (in settings), close document
         //needs to be done after inserting but before saving and create pdf
-        if ((int)modelSettings::get('Status') === 1) {
+        if ((int) modelSettings::get('Status') === 1) {
             $this->closeDocument();
         }
 

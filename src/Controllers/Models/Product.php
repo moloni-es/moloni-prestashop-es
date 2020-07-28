@@ -94,17 +94,6 @@ class Product
         //looks if the product exists in moloni by searching by its reference
         $this->loadByReference();
 
-        //required to know which warehouse to use to add stock
-        if (empty($this->warehouseId)) {
-            $this->addError($this->translator->trans(
-                'Please select an warehouse in settings!!',
-                [],
-                'Modules.Moloniprestashopes.Errors'
-            ));
-
-            return false;
-        }
-
         //reference cannot be empty in moloni
         if (empty($this->reference)) {
             $this->addError($this->translator->trans(
