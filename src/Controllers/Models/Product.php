@@ -250,56 +250,28 @@ class Product
      */
     public function setCategory()
     {
-        $variables = ['companyId' => (int) Company::get('company_id'),
-            'options' => [
-                'search' => [
-                    'field' => 'name',
-                    'value' => $this->productCategoryName,
-                ],
-            ],
-        ];
+        $categoriesArray = self::getCategoryTree($this->productPs->id_category_default);
 
-        $queryResult = (Categories::queryProductCategories($variables));
+        $this->productCategoryId = 0;
+        foreach ($categoriesArray as $category) {
+            $categoryObj = new ProductCategory($category, $this->productCategoryId);
 
-        if ($queryResult === false) {
-            $this->addError($this->translator->trans(
-                'Something went wrong fetching the categories!!',
-                [],
-                'Modules.Moloniprestashopes.Errors'
-            ));
-
-            return false;
-        }
-
-        //if the category exists, sets the id of the first returned category
-        if (!empty($queryResult)) {
-            $this->productCategoryId = (int) $queryResult[0]['productCategoryId'];
-        } else {
-            $variables = ['companyId' => (int) Company::get('company_id'),
-                'data' => [
-                    'name' => $this->productCategoryName,
-                ],
-            ];
-
-            $mutation = Categories::mutationProductCategoryCreate($variables);
-
-            if (isset($mutation['errors'])) {
-                $this->addError($this->translator->trans(
-                    'Something went wrong creating the category!!',
-                    [],
-                    'Modules.Moloniprestashopes.Errors'
-                ));
-
-                return false;
+            if (!$categoryObj->loadByName()) {
+                $categoryObj->create();
             }
 
-            Log::writeLog($this->translator->trans(
-                'Created category ( %categoryName% ) for %name% .',
-                ['%categoryName%' => $this->productCategoryName, '%name%' => $this->name],
-                'Modules.Moloniprestashopes.Success'
-            ));
+            $this->productCategoryId = $categoryObj->categoryId;
+        }
 
-            $this->productCategoryId = (int) ($mutation)['data']['productCategoryCreate']['data']['productCategoryId'];
+        if ($this->productCategoryId === 0) {
+            $categoryName = 'Tienda online'; //todo: use translations
+            $categoryObj = new ProductCategory($categoryName, 0);
+
+            if (!$categoryObj->loadByName()) {
+                $categoryObj->create();
+            }
+
+            $this->productCategoryId = $categoryObj->categoryId;
         }
 
         return true;
@@ -507,16 +479,16 @@ class Product
         }
 
         $variables = ['companyId' => (int) Company::get('company_id'),
-                'data' => [
-                    'name' => $this->taxName,
-                    'fiscalZone' => $queryResult['fiscalZone']['fiscalZone'],
-                    'countryId' => $queryResult['country']['countryId'],
-                    'type' => $this->taxType,
-                    'fiscalZoneFinanceType' => $this->fiscalZoneFinanceType,
-                    'value' => $this->taxValue,
-                    'fiscalZoneFinanceTypeMode' => $this->fiscalZoneFinanceTypeMode,
-                ],
-            ];
+            'data' => [
+                'name' => $this->taxName,
+                'fiscalZone' => $queryResult['fiscalZone']['fiscalZone'],
+                'countryId' => $queryResult['country']['countryId'],
+                'type' => $this->taxType,
+                'fiscalZoneFinanceType' => $this->fiscalZoneFinanceType,
+                'value' => $this->taxValue,
+                'fiscalZoneFinanceTypeMode' => $this->fiscalZoneFinanceTypeMode,
+            ],
+        ];
 
         $queryResult = Taxes::mutationTaxCreate($variables);
 
@@ -618,13 +590,13 @@ class Product
                 'exemptionReason' => $this->exemptionReason,
                 'hasStock' => $this->hasStock,
                 'taxes' => [
-                        [
-                            'taxId' => $this->taxId,
-                            'value' => $this->taxValue,
-                            'ordering' => 1,
-                            'cumulative' => false,
-                        ],
+                    [
+                        'taxId' => $this->taxId,
+                        'value' => $this->taxValue,
+                        'ordering' => 1,
+                        'cumulative' => false,
                     ],
+                ],
             ],
         ];
 
@@ -725,5 +697,31 @@ class Product
         }
 
         return $variables;
+    }
+
+    /**
+     * Returns all prestashop categories above the category received
+     *
+     * @param $categoryId
+     *
+     * @return array
+     */
+    public static function getCategoryTree($categoryId)
+    {
+        $lang = (int) \Configuration::get('PS_LANG_DEFAULT');
+
+        $categories = [];
+        $failsafe = 0;
+        $currentId = $categoryId;
+
+        do {
+            $category = new \Category($currentId, $lang);
+            $currentId = $category->id_parent;
+            array_unshift($categories, $category->name); //order needs to be inverted
+
+            ++$failsafe;
+        } while (!in_array((int) $currentId, [1, 2]) && $failsafe < 100);
+
+        return $categories;
     }
 }
