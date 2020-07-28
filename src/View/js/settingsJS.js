@@ -36,3 +36,10 @@ function onStatusChange2() {
         document.getElementById("showMessage2").style.display = "none";
     }
 }
+
+function clientPrefixChange() {
+    var label = document.getElementById("prefixPreview");
+    var input = document.getElementById("form_ClientPrefix");
+
+    label.innerText = '(Example: ' + input.value + '1)';
+}

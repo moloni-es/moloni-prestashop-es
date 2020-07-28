@@ -125,6 +125,51 @@ class Customers
     }
 
     /**
+     * Gets custom costumers of the company
+     *
+     * @param array $variables variables of the request
+     *
+     * @return array Api data
+     */
+    public static function queryCustomCustomers($variables = [])
+    {
+        $query = 'query customers($companyId: Int!,$options: CustomerOptions)
+                {
+                    customers(companyId: $companyId,options: $options)
+                    {
+                        data
+                        {
+                            customerId
+                            name
+                            number
+                            discount
+                            documentSet
+                            {
+                                documentSetId
+                                name
+                            }
+                            country
+                            {
+                                countryId
+                            }
+                            language
+                            {
+                                languageId
+                            }
+                            vat
+                        }
+                        errors
+                        {
+                            field
+                            msg
+                        }
+                    }
+                }';
+
+        return Curl::simple($query, $variables);
+    }
+
+    /**
      * Gets geographic zones
      *
      * @param array $variables variables of the request

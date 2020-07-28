@@ -9,7 +9,6 @@ use Moloni\ES\Controllers\Api\Customers as apiCostumers;
 use Moloni\ES\Controllers\Api\Customers as apiCustomer;
 use Moloni\ES\Controllers\Api\Documents as apiDocuments;
 use Order as psOrder;
-use PrestaShopBundle\Translation\DataCollectorTranslator;
 
 class Customer
 {
@@ -352,31 +351,29 @@ class Customer
         $variables = [
             'companyId' => (int) Company::get('company_id'),
             'options' => [
-                'order' => [
+                'filter' => [
                     'field' => 'number',
+                    'comparison' => 'like',
+                    'value' => Settings::get('ClientPrefix') . '%',
+                ],
+                'order' => [
+                    'field' => 'createdAt',
                     'sort' => 'DESC',
+                ],
+                'pagination' => [
+                    'page' => 1,
+                    'qty' => 1,
                 ],
             ],
         ];
+        $result = (apiCustomer::queryCustomCustomers($variables))['data']['customers']['data'];
 
-        $query = apiCustomer::queryCustomers($variables);
-
-        if ($query === false) {
-            $this->addError($this->translator->trans(
-                'Something went wrong fetching customers!!',
-                [],
-                'Modules.Moloniprestashopes.Errors'
-            ));
-
-            return false;
-        }
-
-        $nextNumber = 1;
-        foreach ($query as $number) {
-            if (is_numeric($number['number'])) {
-                $nextNumber = (int) $number['number'] + 1;
-                break;
-            }
+        if (empty($result)) {
+            $nextNumber = Settings::get('ClientPrefix') . '1';
+        } else {
+            //go straight for the first result because we only ask for 1
+            $lastNumber = substr($result[0]['number'], strlen(Settings::get('ClientPrefix')));
+            $nextNumber = Settings::get('ClientPrefix') . ((int) $lastNumber + 1);
         }
 
         $this->number = $nextNumber;

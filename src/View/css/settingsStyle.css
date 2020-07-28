@@ -39,7 +39,7 @@
 .selectPS, .textPS{
     height:45px !important;
     width:60% !important;
-    margin: 1% 0px;
+    margin: 3px 0px;
     outline: 0;
     border-width: 0 0 2px !important;
     border-color: dimgray !important;
@@ -56,4 +56,11 @@
 
 .borderMoloni{
     border-bottom: 2px solid lightgray;
+}
+
+.prefixPreview{
+    font-weight:bold;
+    margin-left:1%;
+    margin-top: 10px !important;
+    font-size: 12px;
 }
