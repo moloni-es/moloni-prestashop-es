@@ -5,6 +5,7 @@
 namespace Moloni\ES\WebHooks;
 
 use Configuration;
+use Moloni\ES\Controllers\Api\Companies;
 use Moloni\ES\Controllers\Api\Hooks;
 use Moloni\ES\Controllers\Models\Company;
 use WebserviceKey;
@@ -44,7 +45,7 @@ class WebHooks
         $apiAccess->save();
 
         $permissions = [
-            'moloniproducts' => ['GET' => 0, 'POST' => 1, 'PUT' => 0, 'DELETE' => 0, 'HEAD' => 0],
+            'moloniproducts' => ['POST' => 1],
         ];
 
         WebserviceKey::setPermissionForAccount($apiAccess->id, $permissions);
@@ -53,13 +54,31 @@ class WebHooks
     }
 
     /**
-     * Creates hash key to authenticate in WebService Request
+     * Delete WebService key from prestashop
+     */
+    public static function deleteCredentials()
+    {
+        $dataBase = \Db::getInstance();
+
+        $dataBase->delete(
+            'webservice_account',
+            'description = "Moloni WebHooks key"'
+        );
+    }
+
+    /**
+     * Creates hash key to authenticate in WebService Request (based on company slug)
      *
      * @return string
      */
     public static function createComplexValue()
     {
-        return md5(uniqid(mt_rand(), true));
+        $variables = ['companyId' => (int) Company::get('company_id')];
+
+        $result = Companies::queryCompany($variables);
+        $result = $result['data']['company']['data'];
+
+        return md5($result['slug']);
     }
 
     /**
@@ -98,6 +117,8 @@ class WebHooks
      */
     public static function deleteHooks()
     {
+        self::deleteCredentials();
+
         $ids = [];
 
         $variables = [
@@ -105,7 +126,7 @@ class WebHooks
             'data' => [
                 'search' => [
                     'field' => 'url',
-                    'value' => '/api/moloni',
+                    'value' => self::createComplexValue(),
                 ],
             ],
         ];
