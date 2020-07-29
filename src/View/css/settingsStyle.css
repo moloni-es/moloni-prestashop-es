@@ -64,7 +64,8 @@
     font-size: 13px;
     margin-left: 0px;
     margin-top: 5px;
-    font-weight: bold;
+    font-weight: 600;
+    color: rgba(61, 61, 61, 0.79) !important;
 }
 
 .settingsMainDiv{
