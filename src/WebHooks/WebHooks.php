@@ -59,11 +59,13 @@ class WebHooks
     public static function deleteCredentials()
     {
         $dataBase = \Db::getInstance();
+        $sql = 'SELECT * FROM ' . _DB_PREFIX_ . 'webservice_account WHERE description = "Moloni WebHooks key"';
+        $query = $dataBase->getRow($sql);
 
-        $dataBase->delete(
-            'webservice_account',
-            'description = "Moloni WebHooks key"'
-        );
+        if ($query !== false) {
+            $webserviceObj = new \WebserviceKeyCore($query['id_webservice_account']);
+            $webserviceObj->delete();
+        }
     }
 
     /**
