@@ -84,7 +84,7 @@ class Login extends General
                 ]);
 
                 //url to get back to right action
-                $redirectUri = _PS_BASE_URL_ . $this->generateUrl(
+                $redirectUri = _PS_BASE_URL_SSL_ . $this->generateUrl(
                     'moloni_es_login_retrievecode',
                     [],
                     UrlGeneratorInterface::ABSOLUTE_URL

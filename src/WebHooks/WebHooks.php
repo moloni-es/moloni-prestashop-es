@@ -81,7 +81,8 @@ class WebHooks
         foreach (self::$models as $route => $model) {
             //the authorization key needs to be after http(s):// and before the actual domain
             //(example: http://{key}@domain.com)
-            $url = substr_replace(_PS_BASE_URL_, '://' . $key . '@', strpos(_PS_BASE_URL_, '://'), strlen('://'));
+            $baseUrl = _PS_BASE_URL_SSL_;
+            $url = substr_replace($baseUrl, '://' . $key . '@', strpos($baseUrl, '://'), strlen('://'));
 
             $variables['data'] = [
                 'model' => $model,
