@@ -1,103 +1,99 @@
 {% extends '@Modules/moloniprestashopes/src/View/Templates/Admin/Settings/Layout.twig' %}
 
 {% block settings %}
-    <div class="card p-4">
+    <div class="card">
         <div>
-            {{ form_start(settingsForm) }}
-            <h2>{{ 'AREA - PRODUCTS & CUSTOMERS'|trans({}, 'Modules.Moloniprestashopes.Settings') }}</h2>
+            <h3 class="card-header">{{ 'AREA - PRODUCTS & CUSTOMERS'|trans({}, 'Modules.Moloniprestashopes.Settings') }}</h3>
             <br>
 
-            <div class="form-group">
-                <div>
+            <div class="settingsMainDiv">
+                {{ form_start(settingsForm) }}
+                <div class="form-group row">
                     {{ form_label(settingsForm.Tax) }}
                     {{ form_errors(settingsForm.Tax) }}
+                    <div class="col-sm">
+                        {{ form_widget(settingsForm.Tax) }}
+                        <a class="settingDescription">{{ 'Use if products have no taxes'|trans({}, 'Modules.Moloniprestashopes.Settings') }}</a>
+                    </div>
                 </div>
-                <div class="col-sm-10">
-                    {{ form_widget(settingsForm.Tax) }}
-                </div>
-            </div>
 
-            <div class="form-group">
-                <div>
+                <div class="form-group row">
                     {{ form_label(settingsForm.TaxShipping) }}
                     {{ form_errors(settingsForm.TaxShipping) }}
+                    <div class="col-sm">
+                        {{ form_widget(settingsForm.TaxShipping) }}
+                        <a class="settingDescription">{{ 'Use if shipping has no taxes'|trans({}, 'Modules.Moloniprestashopes.Settings') }}</a>
+                    </div>
                 </div>
-                <div class="col-sm-10">
-                    {{ form_widget(settingsForm.TaxShipping) }}
-                </div>
-            </div>
 
-            <div class="form-group">
-                <div>
+                <div class="form-group row">
                     {{ form_label(settingsForm.Exemption) }}
                     {{ form_errors(settingsForm.Exemption) }}
+                    <div class="col-sm">
+                        {{ form_widget(settingsForm.Exemption) }}
+                        <a class="settingDescription">{{ 'Will be used if product has no taxes'|trans({}, 'Modules.Moloniprestashopes.Settings') }}</a>
+                    </div>
                 </div>
-                <div class="col-sm-10">
-                    {{ form_widget(settingsForm.Exemption) }}
-                </div>
-            </div>
 
-            <div class="form-group">
-                <div>
+                <div class="form-group row">
                     {{ form_label(settingsForm.Shipping) }}
                     {{ form_errors(settingsForm.Shipping) }}
+                    <div class="col-sm">
+                        {{ form_widget(settingsForm.Shipping) }}
+                        <a class="settingDescription">{{ 'Will be used if shipping has no taxes'|trans({}, 'Modules.Moloniprestashopes.Settings') }}</a>
+                    </div>
                 </div>
-                <div class="col-sm-10">
-                    {{ form_widget(settingsForm.Shipping) }}
-                </div>
-            </div>
 
-            <div class="form-group">
-                <div>
+                <div class="form-group row">
                     {{ form_label(settingsForm.Measure) }}
                     {{ form_errors(settingsForm.Measure) }}
+                    <div class="col-sm">
+                        {{ form_widget(settingsForm.Measure) }}
+                        <a class="settingDescription">{{ 'Required'|trans({}, 'Modules.Moloniprestashopes.Settings') }}</a>
+                    </div>
                 </div>
-                <div class="col-sm-10">
-                    {{ form_widget(settingsForm.Measure) }}
-                </div>
-            </div>
 
-            <div class="form-group">
-                <div>
+                <div class="form-group row">
                     {{ form_label(settingsForm.Maturity) }}
                     {{ form_errors(settingsForm.Maturity) }}
+                    <div class="col-sm">
+                        {{ form_widget(settingsForm.Maturity) }}
+                        <a class="settingDescription">{{ 'Required'|trans({}, 'Modules.Moloniprestashopes.Settings') }}</a>
+                    </div>
                 </div>
-                <div class="col-sm-10">
-                    {{ form_widget(settingsForm.Maturity) }}
-                </div>
-            </div>
 
-            <div class="form-group">
-                <div>
+                <div class="form-group row">
                     {{ form_label(settingsForm.Warehouse) }}
                     {{ form_errors(settingsForm.Warehouse) }}
+                    <div class="col-sm">
+                        {{ form_widget(settingsForm.Warehouse) }}
+                        <a class="settingDescription">{{ 'Wharouse where stock is discounted'|trans({}, 'Modules.Moloniprestashopes.Settings') }}</a>
+                    </div>
                 </div>
-                <div class="col-sm-10">
-                    {{ form_widget(settingsForm.Warehouse) }}
-                </div>
-            </div>
 
-            <div class="form-group">
-                <div>
+                <div class="form-group row">
                     {{ form_label(settingsForm.Payment) }}
                     {{ form_errors(settingsForm.Payment) }}
+                    <div class="col-sm">
+                        {{ form_widget(settingsForm.Payment) }}
+                        <a class="settingDescription">{{ 'Required'|trans({}, 'Modules.Moloniprestashopes.Settings') }}</a>
+                    </div>
                 </div>
-                <div class="col-sm-10">
-                    {{ form_widget(settingsForm.Payment) }}
-                </div>
-            </div>
 
-            <div class="form-group">
-                <div>
+                <div class="form-group row">
                     {{ form_label(settingsForm.ClientPrefix) }}
                     {{ form_errors(settingsForm.ClientPrefix) }}
+                    <div class="col-sm">
+                        {{ form_widget(settingsForm.ClientPrefix) }}
+                        <a class="settingDescription">{{ 'Prefix used when creating clients'|trans({}, 'Modules.Moloniprestashopes.Settings') }}</a>
+                        <a class="prefixPreview" id="prefixPreview">(Example: {{ settingsForm.ClientPrefix.vars.value }}
+                            1)</a>
+                    </div>
                 </div>
-                <div class="col-sm-10">
-                    {{ form_widget(settingsForm.ClientPrefix) }}
-                    <a class="prefixPreview" id="prefixPreview">(Example: {{ settingsForm.ClientPrefix.vars.value }}1)</a>
-                </div>
-            </div>
 
+            </div>
+        </div>
+        <div class="card-footer">
             {{ form_row(settingsForm.SaveChanges) }}
             {{ form_end(settingsForm) }}
         </div>

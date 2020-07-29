@@ -50,8 +50,8 @@ class Automation extends General
         return $this->createFormBuilder()
             ->add('CreateAuto', ChoiceType::class, [
                 'label' => $this->trans('Create paid documents on Moloni', 'Modules.Moloniprestashopes.Settings'),
-                'attr' => ['class' => 'selectPS'],
-                'label_attr' => ['class' => 'labelPS col-sm-2'],
+                'attr' => ['class' => ''],
+                'label_attr' => ['class' => 'form-control-label'],
                 'choices' => [
                     $this->trans('Yes', 'Modules.Moloniprestashopes.Settings') => '1',
                     $this->trans('No', 'Modules.Moloniprestashopes.Settings') => '0',
@@ -60,8 +60,8 @@ class Automation extends General
             ])
             ->add('Stocks', ChoiceType::class, [
                 'label' => $this->trans('Synchronize stocks on Moloni', 'Modules.Moloniprestashopes.Settings'),
-                'attr' => ['class' => 'selectPS'],
-                'label_attr' => ['class' => 'labelPS col-sm-2'],
+                'attr' => ['class' => ''],
+                'label_attr' => ['class' => 'form-control-label'],
                 'choices' => [
                     $this->trans('Yes', 'Modules.Moloniprestashopes.Settings') => '1',
                     $this->trans('No', 'Modules.Moloniprestashopes.Settings') => '0',
@@ -70,8 +70,8 @@ class Automation extends General
             ])
             ->add('AddProducts', ChoiceType::class, [
                 'label' => $this->trans('Create products on Moloni', 'Modules.Moloniprestashopes.Settings'),
-                'attr' => ['class' => 'selectPS'],
-                'label_attr' => ['class' => 'labelPS col-sm-2'],
+                'attr' => ['class' => ''],
+                'label_attr' => ['class' => 'form-control-label'],
                 'choices' => [
                     $this->trans('Yes', 'Modules.Moloniprestashopes.Settings') => '1',
                     $this->trans('No', 'Modules.Moloniprestashopes.Settings') => '0',
@@ -80,8 +80,8 @@ class Automation extends General
             ])
             ->add('UpdateArtigos', ChoiceType::class, [
                 'label' => $this->trans('Update products on Moloni', 'Modules.Moloniprestashopes.Settings'),
-                'attr' => ['class' => 'selectPS'],
-                'label_attr' => ['class' => 'labelPS col-sm-2'],
+                'attr' => ['class' => ''],
+                'label_attr' => ['class' => 'form-control-label'],
                 'choices' => [
                     $this->trans('Yes', 'Modules.Moloniprestashopes.Settings') => '1',
                     $this->trans('No', 'Modules.Moloniprestashopes.Settings') => '0',
@@ -90,8 +90,8 @@ class Automation extends General
             ])
             ->add('HooksVariantsUpdate', ChoiceType::class, [
                 'label' => $this->trans('Update products with variants', 'Modules.Moloniprestashopes.Settings'),
-                'attr' => ['class' => 'selectPS'],
-                'label_attr' => ['class' => 'labelPS col-sm-2'],
+                'attr' => ['class' => ''],
+                'label_attr' => ['class' => 'form-control-label'],
                 'choices' => [
                     $this->trans('Yes', 'Modules.Moloniprestashopes.Settings') => '1',
                     $this->trans('No', 'Modules.Moloniprestashopes.Settings') => '0',
@@ -100,8 +100,8 @@ class Automation extends General
             ])
             ->add('HooksAddProducts', ChoiceType::class, [
                 'label' => $this->trans('Add products', 'Modules.Moloniprestashopes.Settings'),
-                'attr' => ['class' => 'selectPS'],
-                'label_attr' => ['class' => 'labelPS col-sm-2'],
+                'attr' => ['class' => ''],
+                'label_attr' => ['class' => 'form-control-label'],
                 'choices' => [
                     $this->trans('Yes', 'Modules.Moloniprestashopes.Settings') => '1',
                     $this->trans('No', 'Modules.Moloniprestashopes.Settings') => '0',
@@ -110,8 +110,8 @@ class Automation extends General
             ])
             ->add('HooksUpdateProducts', ChoiceType::class, [
                 'label' => $this->trans('Update products', 'Modules.Moloniprestashopes.Settings'),
-                'attr' => ['class' => 'selectPS'],
-                'label_attr' => ['class' => 'labelPS col-sm-2'],
+                'attr' => ['class' => ''],
+                'label_attr' => ['class' => 'form-control-label'],
                 'choices' => [
                     $this->trans('Yes', 'Modules.Moloniprestashopes.Settings') => '1',
                     $this->trans('No', 'Modules.Moloniprestashopes.Settings') => '0',
@@ -120,8 +120,8 @@ class Automation extends General
             ])
             ->add('HooksUpdateStock', ChoiceType::class, [
                 'label' => $this->trans('Update stock', 'Modules.Moloniprestashopes.Settings'),
-                'attr' => ['class' => 'selectPS'],
-                'label_attr' => ['class' => 'labelPS col-sm-2'],
+                'attr' => ['class' => ''],
+                'label_attr' => ['class' => 'form-control-label'],
                 'choices' => [
                     $this->trans('Yes', 'Modules.Moloniprestashopes.Settings') => '1',
                     $this->trans('No', 'Modules.Moloniprestashopes.Settings') => '0',
@@ -130,7 +130,7 @@ class Automation extends General
             ])
             ->add('SyncFields', ChoiceType::class, [
                 'label' => $this->trans('Fields to sync', 'Modules.Moloniprestashopes.Settings'),
-                'label_attr' => ['class' => 'labelPS col-sm-2'],
+                'label_attr' => ['class' => 'form-control-label'],
                 'multiple' => true,
                 'expanded' => true,
                 'choices' => [

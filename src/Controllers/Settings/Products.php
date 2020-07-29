@@ -14,7 +14,7 @@ use Moloni\ES\Controllers\Models\Settings;
 use PrestaShopDatabaseException;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -108,66 +108,66 @@ class Products extends General
         }
 
         return $this->createFormBuilder()
-            ->add('Exemption', TextareaType::class, [
+            ->add('Exemption', TextType::class, [
                 'label' => $this->trans('Exemption reason', 'Modules.Moloniprestashopes.Settings'),
-                'label_attr' => ['class' => 'labelPS col-sm-2'],
-                'attr' => ['class' => 'textPS'],
+                'attr' => ['class' => ''],
+                'label_attr' => ['class' => 'form-control-label'],
                 'required' => false,
                 'data' => Settings::get('Exemption') !== false ? Settings::get('Exemption') : null,
             ])
-            ->add('Shipping', TextareaType::class, [
+            ->add('Shipping', TextType::class, [
                 'label' => $this->trans('Shipping exemption reason', 'Modules.Moloniprestashopes.Settings'),
-                'attr' => ['class' => 'textPS'],
-                'label_attr' => ['class' => 'labelPS col-sm-2'],
+                'attr' => ['class' => ''],
+                'label_attr' => ['class' => 'form-control-label'],
                 'required' => false,
                 'data' => Settings::get('Shipping') !== false ? Settings::get('Shipping') : null,
             ])
             ->add('Tax', ChoiceType::class, [
                 'label' => $this->trans('Default Tax', 'Modules.Moloniprestashopes.Settings'),
-                'attr' => ['class' => 'selectPS'],
-                'label_attr' => ['class' => 'labelPS col-sm-2'],
+                'attr' => ['class' => ''],
+                'label_attr' => ['class' => 'form-control-label'],
                 'choices' => $choicesTax,
                 'data' => Settings::get('Tax') !== false ? Settings::get('Tax') : null,
             ])
             ->add('TaxShipping', ChoiceType::class, [
                 'label' => $this->trans('Default Tax Shipping', 'Modules.Moloniprestashopes.Settings'),
-                'attr' => ['class' => 'selectPS'],
-                'label_attr' => ['class' => 'labelPS col-sm-2'],
+                'attr' => ['class' => ''],
+                'label_attr' => ['class' => 'form-control-label'],
                 'choices' => $choicesTax,
                 'data' => Settings::get('TaxShipping') !== false ? Settings::get('TaxShipping') : null,
             ])
             ->add('Measure', ChoiceType::class, [
                 'label' => $this->trans('Measure unit', 'Modules.Moloniprestashopes.Settings'),
-                'attr' => ['class' => 'selectPS'],
-                'label_attr' => ['class' => 'labelPS col-sm-2'],
+                'attr' => ['class' => ''],
+                'label_attr' => ['class' => 'form-control-label'],
                 'choices' => $choicesUnit,
                 'data' => Settings::get('Measure') !== false ? Settings::get('Measure') : null,
             ])
             ->add('Maturity', ChoiceType::class, [
                 'label' => $this->trans('Maturity date', 'Modules.Moloniprestashopes.Settings'),
-                'attr' => ['class' => 'selectPS'],
-                'label_attr' => ['class' => 'labelPS col-sm-2'],
+                'attr' => ['class' => ''],
+                'label_attr' => ['class' => 'form-control-label'],
                 'choices' => $choicesMaturity,
                 'data' => Settings::get('Maturity') !== false ? Settings::get('Maturity') : null,
             ])
             ->add('Warehouse', ChoiceType::class, [
                 'label' => $this->trans('Default warehouse', 'Modules.Moloniprestashopes.Settings'),
-                'attr' => ['class' => 'selectPS'],
-                'label_attr' => ['class' => 'labelPS col-sm-2'],
+                'attr' => ['class' => ''],
+                'label_attr' => ['class' => 'form-control-label'],
                 'choices' => $choicesWarehouse,
                 'data' => Settings::get('Warehouse') !== false ? Settings::get('Warehouse') : null,
             ])
             ->add('Payment', ChoiceType::class, [
                 'label' => $this->trans('Payment method', 'Modules.Moloniprestashopes.Settings'),
-                'attr' => ['class' => 'selectPS'],
-                'label_attr' => ['class' => 'labelPS col-sm-2'],
+                'attr' => ['class' => ''],
+                'label_attr' => ['class' => 'form-control-label'],
                 'choices' => $choicesPaymentMethod,
                 'data' => Settings::get('Payment') !== false ? Settings::get('Payment') : null,
             ])
-            ->add('ClientPrefix', TextareaType::class, [
+            ->add('ClientPrefix', TextType::class, [
                 'label' => $this->trans('Client Prefix', 'Modules.Moloniprestashopes.Settings'),
-                'label_attr' => ['class' => 'labelPS col-sm-2'],
-                'attr' => ['class' => 'textPS', 'onchange' => 'clientPrefixChange()'],
+                'label_attr' => ['class' => 'form-control-label'],
+                'attr' => ['onchange' => 'clientPrefixChange()'],
                 'required' => false,
                 'data' => Settings::get('ClientPrefix') !== false ? Settings::get('ClientPrefix') : 'PS',
             ])

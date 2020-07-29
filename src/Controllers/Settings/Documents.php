@@ -67,34 +67,32 @@ class Documents extends General
         return $this->createFormBuilder()
             ->add('Set', ChoiceType::class, [
                 'label' => $this->trans('Document set', 'Modules.Moloniprestashopes.Settings'),
-                'attr' => ['class' => 'selectPS'],
-                'label_attr' => ['class' => 'labelPS col-sm-2'],
+                'attr' => ['class' => ''],
+                'label_attr' => ['class' => 'form-control-label'],
                 'choices' => $choicesSet,
                 'data' => Settings::get('Set') != false ? Settings::get('Set') : null,
             ])
             ->add('Type', ChoiceType::class, [
                 'label' => $this->trans('Document type', 'Modules.Moloniprestashopes.Settings'),
                 'choices' => $this->getDocumentsTypes(),
-                'label_attr' => ['class' => 'labelPS col-sm-2'],
-                'attr' => ['onchange' => 'onStatusChange()',
-                    'class' => 'selectPS', ],
+                'label_attr' => ['class' => 'form-control-label'],
+                'attr' => ['onchange' => 'onStatusChange()'],
                 'data' => Settings::get('Type') != false ? Settings::get('Type') : null,
             ])
             ->add('Status', ChoiceType::class, [
                 'label' => $this->trans('Document status', 'Modules.Moloniprestashopes.Settings'),
-                'label_attr' => ['class' => 'labelPS col-sm-2'],
+                'label_attr' => ['class' => 'form-control-label'],
                 'choices' => [
                     $this->trans('Draft', 'Modules.Moloniprestashopes.Settings') => '0',
                     $this->trans('Closed', 'Modules.Moloniprestashopes.Settings') => '1',
                 ],
-                'attr' => ['onchange' => 'onStatusChange()',
-                    'class' => 'selectPS', ],
+                'attr' => ['onchange' => 'onStatusChange()'],
                 'data' => Settings::get('Status') != false ? Settings::get('Status') : null,
             ])
             ->add('Send', ChoiceType::class, [
                 'label' => $this->trans('Shipping information', 'Modules.Moloniprestashopes.Settings'),
-                'label_attr' => ['class' => 'labelPS col-sm-2'],
-                'attr' => ['class' => 'selectPS'],
+                'attr' => ['class' => ''],
+                'label_attr' => ['class' => 'form-control-label'],
                 'choices' => [
                     $this->trans('Yes', 'Modules.Moloniprestashopes.Settings') => '1',
                     $this->trans('No', 'Modules.Moloniprestashopes.Settings') => '0',
@@ -103,19 +101,18 @@ class Documents extends General
             ])
             ->add('Transport', ChoiceType::class, [
                 'label' => $this->trans('Document transport', 'Modules.Moloniprestashopes.Settings'),
-                'label_attr' => ['class' => 'labelPS col-sm-2'],
+                'label_attr' => ['class' => 'form-control-label'],
                 'choices' => [
                     $this->trans('Yes', 'Modules.Moloniprestashopes.Settings') => '1',
                     $this->trans('No', 'Modules.Moloniprestashopes.Settings') => '0',
                 ],
-                'attr' => ['onchange' => 'onStatusChange2()',
-                    'class' => 'selectPS', ],
+                'attr' => ['onchange' => 'onStatusChange2()'],
                 'data' => Settings::get('Transport'),
             ])
             ->add('Address', ChoiceType::class, [
                 'label' => $this->trans('Loading address', 'Modules.Moloniprestashopes.Settings'),
-                'label_attr' => ['class' => 'labelPS col-sm-2'],
-                'attr' => ['class' => 'selectPS'],
+                'attr' => ['class' => ''],
+                'label_attr' => ['class' => 'form-control-label'],
                 'choices' => $choicesAddress,
                 'data' => Settings::get('Address') != false ? Settings::get('Address') : null,
             ])
