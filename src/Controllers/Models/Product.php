@@ -9,7 +9,6 @@ use Moloni\ES\Controllers\Api\Products;
 use Moloni\ES\Controllers\Api\Stock;
 use Moloni\ES\Controllers\Api\Taxes;
 use PrestaShop\PrestaShop\Adapter\Entity\Product as psProduct;
-use PrestaShopBundle\Translation\DataCollectorTranslator;
 use PrestaShopBundle\Translation\TranslatorComponent;
 use PrestaShopDatabaseException;
 
@@ -94,17 +93,6 @@ class Product
 
         //looks if the product exists in moloni by searching by its reference
         $this->loadByReference();
-
-        //required to know which warehouse to use to add stock
-        if (empty($this->warehouseId)) {
-            $this->addError($this->translator->trans(
-                'Please select an warehouse in settings!!',
-                [],
-                'Modules.Moloniprestashopes.Errors'
-            ));
-
-            return false;
-        }
 
         //reference cannot be empty in moloni
         if (empty($this->reference)) {
@@ -262,56 +250,28 @@ class Product
      */
     public function setCategory()
     {
-        $variables = ['companyId' => (int) Company::get('company_id'),
-            'options' => [
-                'search' => [
-                    'field' => 'name',
-                    'value' => $this->productCategoryName,
-                ],
-            ],
-        ];
+        $categoriesArray = self::getCategoryTree($this->productPs->id_category_default);
 
-        $queryResult = (Categories::queryProductCategories($variables));
+        $this->productCategoryId = 0;
+        foreach ($categoriesArray as $category) {
+            $categoryObj = new ProductCategory($category, $this->productCategoryId);
 
-        if ($queryResult === false) {
-            $this->addError($this->translator->trans(
-                'Something went wrong fetching the categories!!',
-                [],
-                'Modules.Moloniprestashopes.Errors'
-            ));
-
-            return false;
-        }
-
-        //if the category exists, sets the id of the first returned category
-        if (!empty($queryResult)) {
-            $this->productCategoryId = (int) $queryResult[0]['productCategoryId'];
-        } else {
-            $variables = ['companyId' => (int) Company::get('company_id'),
-                'data' => [
-                    'name' => $this->productCategoryName,
-                ],
-            ];
-
-            $mutation = Categories::mutationProductCategoryCreate($variables);
-
-            if (isset($mutation['errors'])) {
-                $this->addError($this->translator->trans(
-                    'Something went wrong creating the category!!',
-                    [],
-                    'Modules.Moloniprestashopes.Errors'
-                ));
-
-                return false;
+            if (!$categoryObj->loadByName()) {
+                $categoryObj->create();
             }
 
-            Log::writeLog($this->translator->trans(
-                'Created category ( %categoryName% ) for %name% .',
-                ['%categoryName%' => $this->productCategoryName, '%name%' => $this->name],
-                'Modules.Moloniprestashopes.Success'
-            ));
+            $this->productCategoryId = $categoryObj->categoryId;
+        }
 
-            $this->productCategoryId = (int) ($mutation)['data']['productCategoryCreate']['data']['productCategoryId'];
+        if ($this->productCategoryId === 0) {
+            $categoryName = 'Tienda online'; //todo: use translations
+            $categoryObj = new ProductCategory($categoryName, 0);
+
+            if (!$categoryObj->loadByName()) {
+                $categoryObj->create();
+            }
+
+            $this->productCategoryId = $categoryObj->categoryId;
         }
 
         return true;
@@ -519,16 +479,16 @@ class Product
         }
 
         $variables = ['companyId' => (int) Company::get('company_id'),
-                'data' => [
-                    'name' => $this->taxName,
-                    'fiscalZone' => $queryResult['fiscalZone']['fiscalZone'],
-                    'countryId' => $queryResult['country']['countryId'],
-                    'type' => $this->taxType,
-                    'fiscalZoneFinanceType' => $this->fiscalZoneFinanceType,
-                    'value' => $this->taxValue,
-                    'fiscalZoneFinanceTypeMode' => $this->fiscalZoneFinanceTypeMode,
-                ],
-            ];
+            'data' => [
+                'name' => $this->taxName,
+                'fiscalZone' => $queryResult['fiscalZone']['fiscalZone'],
+                'countryId' => $queryResult['country']['countryId'],
+                'type' => $this->taxType,
+                'fiscalZoneFinanceType' => $this->fiscalZoneFinanceType,
+                'value' => $this->taxValue,
+                'fiscalZoneFinanceTypeMode' => $this->fiscalZoneFinanceTypeMode,
+            ],
+        ];
 
         $queryResult = Taxes::mutationTaxCreate($variables);
 
@@ -630,13 +590,13 @@ class Product
                 'exemptionReason' => $this->exemptionReason,
                 'hasStock' => $this->hasStock,
                 'taxes' => [
-                        [
-                            'taxId' => $this->taxId,
-                            'value' => $this->taxValue,
-                            'ordering' => 1,
-                            'cumulative' => false,
-                        ],
+                    [
+                        'taxId' => $this->taxId,
+                        'value' => $this->taxValue,
+                        'ordering' => 1,
+                        'cumulative' => false,
                     ],
+                ],
             ],
         ];
 
@@ -701,7 +661,7 @@ class Product
         $this->price = $cartProduct['unit_price_tax_excl'];
         $this->priceWithTax = $cartProduct['unit_price_tax_incl'];
 
-        if ($cartProduct['unit_price_tax_incl'] != $cartProduct['unit_price_tax_excl']) {
+        if ($cartProduct['unit_price_tax_incl'] !== $cartProduct['unit_price_tax_excl']) {
             $this->taxValue =
                 (100 * ($cartProduct['unit_price_tax_incl']
                         - $cartProduct['unit_price_tax_excl'])) / $cartProduct['unit_price_tax_excl'];
@@ -732,10 +692,36 @@ class Product
         ];
 
         //if the tax is exempt, remove the taxes value to empty
-        if ($this->taxValue == 0) {
+        if ($this->taxValue === 0) {
             $variables['taxes'] = [];
         }
 
         return $variables;
+    }
+
+    /**
+     * Returns all prestashop categories above the category received
+     *
+     * @param $categoryId
+     *
+     * @return array
+     */
+    public static function getCategoryTree($categoryId)
+    {
+        $lang = (int) \Configuration::get('PS_LANG_DEFAULT');
+
+        $categories = [];
+        $failsafe = 0;
+        $currentId = $categoryId;
+
+        do {
+            $category = new \Category($currentId, $lang);
+            $currentId = $category->id_parent;
+            array_unshift($categories, $category->name); //order needs to be inverted
+
+            ++$failsafe;
+        } while (!in_array((int) $currentId, [1, 2]) && $failsafe < 100);
+
+        return $categories;
     }
 }

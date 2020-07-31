@@ -11,13 +11,13 @@
     box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.22);
 }
 
-.loginInputText{
+.loginInputText {
     padding: 5px 15px;
 }
 
-.loginLabel{
+.loginLabel {
     display: inline;
-    border-left:15px;
+    border-left: 15px;
 }
 
 .loginForm {
@@ -27,32 +27,53 @@
     padding: 5px;
 }
 
-#showMessage, #showMessage2{
+#showMessage, #showMessage2 {
     display: none;
-    font-weight:bold;
+    font-weight: bold;
     color: #ff0000;
-    margin-left:1%;
+    margin-left: 1%;
     margin-bottom: 1%;
     font-size: 13px;
 }
 
-.selectPS, .textPS{
-    height:45px !important;
-    width:60% !important;
-    margin: 1% 0px;
+.selectPS, .textPS {
+    height: 45px !important;
+    width: 60% !important;
+    margin: 3px 0px;
     outline: 0;
     border-width: 0 0 2px !important;
     border-color: dimgray !important;
-    -webkit-box-shadow: 0px 4px 9px 0px rgba(0,0,0,0.1);
-    -moz-box-shadow: 0px 4px 9px 0px rgba(0,0,0,0.1);
-    box-shadow: 0px 4px 9px 0px rgba(0,0,0,0.1);
+    -webkit-box-shadow: 0px 4px 9px 0px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: 0px 4px 9px 0px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 4px 9px 0px rgba(0, 0, 0, 0.1);
 }
 
-.labelPS{
-    color: steelblue;
-    font-weight:bold;
-}
-
-.borderMoloni{
+.borderMoloni {
     border-bottom: 2px solid lightgray;
+}
+
+.prefixPreview {
+    font-weight: bold;
+    margin-left: 1%;
+    margin-top: 10px !important;
+    font-size: 12px;
+}
+
+.settingDescription{
+    font-style: italic;
+    font-size: 13px;
+    margin-left: 0px;
+    margin-top: 5px;
+    font-weight: 600;
+    color: rgba(61, 61, 61, 0.79) !important;
+}
+
+.settingsMainDiv{
+    padding: 1.875rem 11.75rem !important;
+}
+
+@media only screen and (max-width: 700px) {
+    .settingsMainDiv{
+        padding: 1.875rem !important;
+    }
 }

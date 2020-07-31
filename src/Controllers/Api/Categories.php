@@ -2,7 +2,7 @@
 
 namespace Moloni\ES\Controllers\Api;
 
-class Categories extends GeneralAPI
+class Categories
 {
     /**
      * Create an category
@@ -29,7 +29,7 @@ class Categories extends GeneralAPI
                     }
                 }';
 
-        return Connector::graphqlClient($query, json_encode($variables));
+        return Curl::simple($query, json_encode($variables));
     }
 
     /**
@@ -67,7 +67,7 @@ class Categories extends GeneralAPI
                     }
                 }';
 
-        return self::getApiPaginator($query, $variables, 'productCategories');
+        return Curl::complex($query, $variables, 'productCategories');
     }
 
     /**
@@ -80,24 +80,29 @@ class Categories extends GeneralAPI
     public static function queryProductCategory($variables = [])
     {
         $query = 'query productCategory($companyId: Int!,$productCategoryId: Int!)
+        {
+            productCategory(companyId: $companyId,productCategoryId: $productCategoryId)
+            {
+                data
                 {
-                    productCategory(companyId: $companyId,productCategoryId: $productCategoryId)
+                    name
+                    posVisible
+                    summary
+                    visible
+                    parent
                     {
-                        data
-                        {
-                            name
-                            posVisible
-                            summary
-                            visible
-                        }
-                        errors
-                        {
-                            field
-                            msg
-                        }
+                        productCategoryId
+                        name
                     }
-                }';
+                }
+                errors
+                {
+                    field
+                    msg
+                }
+            }
+        }';
 
-        return Connector::graphqlClient($query, json_encode($variables));
+        return Curl::simple($query, json_encode($variables));
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Moloni\ES\Controllers\Api;
 
-class Warehouses extends GeneralAPI
+class Warehouses
 {
     /**
      * Get All Warehouses from Moloni ES
@@ -36,6 +36,6 @@ class Warehouses extends GeneralAPI
             }
         }';
 
-        return self::getApiPaginator($query, $variables, 'warehouses');
+        return Curl::complex($query, $variables, 'warehouses');
     }
 }

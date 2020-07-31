@@ -2,7 +2,7 @@
 
 namespace Moloni\ES\Controllers\Api;
 
-class PaymentMethods extends GeneralAPI
+class PaymentMethods
 {
     /**
      * Get payment methods info
@@ -28,7 +28,7 @@ class PaymentMethods extends GeneralAPI
                 }
             }';
 
-        return Connector::graphqlClient($query, $variables);
+        return Curl::simple($query, $variables);
     }
 
     /**
@@ -64,6 +64,6 @@ class PaymentMethods extends GeneralAPI
             }
         }';
 
-        return self::getApiPaginator($query, $variables, 'paymentMethods');
+        return Curl::complex($query, $variables, 'paymentMethods');
     }
 }

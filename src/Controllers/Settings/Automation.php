@@ -1,5 +1,7 @@
 <?php
 
+/** @noinspection ALL */
+
 namespace Moloni\ES\Controllers\Settings;
 
 use Db;
@@ -48,8 +50,8 @@ class Automation extends General
         return $this->createFormBuilder()
             ->add('CreateAuto', ChoiceType::class, [
                 'label' => $this->trans('Create paid documents on Moloni', 'Modules.Moloniprestashopes.Settings'),
-                'attr' => ['class' => 'selectPS'],
-                'label_attr' => ['class' => 'labelPS col-sm-2'],
+                'attr' => ['class' => ''],
+                'label_attr' => ['class' => 'form-control-label'],
                 'choices' => [
                     $this->trans('Yes', 'Modules.Moloniprestashopes.Settings') => '1',
                     $this->trans('No', 'Modules.Moloniprestashopes.Settings') => '0',
@@ -57,9 +59,9 @@ class Automation extends General
                 'data' => Settings::get('CreateAuto'),
             ])
             ->add('Stocks', ChoiceType::class, [
-                'label' => $this->trans('Synchronize stocks', 'Modules.Moloniprestashopes.Settings'),
-                'attr' => ['class' => 'selectPS'],
-                'label_attr' => ['class' => 'labelPS col-sm-2'],
+                'label' => $this->trans('Synchronize stocks on Moloni', 'Modules.Moloniprestashopes.Settings'),
+                'attr' => ['class' => ''],
+                'label_attr' => ['class' => 'form-control-label'],
                 'choices' => [
                     $this->trans('Yes', 'Modules.Moloniprestashopes.Settings') => '1',
                     $this->trans('No', 'Modules.Moloniprestashopes.Settings') => '0',
@@ -68,8 +70,8 @@ class Automation extends General
             ])
             ->add('AddProducts', ChoiceType::class, [
                 'label' => $this->trans('Create products on Moloni', 'Modules.Moloniprestashopes.Settings'),
-                'attr' => ['class' => 'selectPS'],
-                'label_attr' => ['class' => 'labelPS col-sm-2'],
+                'attr' => ['class' => ''],
+                'label_attr' => ['class' => 'form-control-label'],
                 'choices' => [
                     $this->trans('Yes', 'Modules.Moloniprestashopes.Settings') => '1',
                     $this->trans('No', 'Modules.Moloniprestashopes.Settings') => '0',
@@ -78,13 +80,68 @@ class Automation extends General
             ])
             ->add('UpdateArtigos', ChoiceType::class, [
                 'label' => $this->trans('Update products on Moloni', 'Modules.Moloniprestashopes.Settings'),
-                'attr' => ['class' => 'selectPS'],
-                'label_attr' => ['class' => 'labelPS col-sm-2'],
+                'attr' => ['class' => ''],
+                'label_attr' => ['class' => 'form-control-label'],
                 'choices' => [
                     $this->trans('Yes', 'Modules.Moloniprestashopes.Settings') => '1',
                     $this->trans('No', 'Modules.Moloniprestashopes.Settings') => '0',
                 ],
                 'data' => Settings::get('UpdateArtigos'),
+            ])
+            ->add('HooksVariantsUpdate', ChoiceType::class, [
+                'label' => $this->trans('Update products with variants', 'Modules.Moloniprestashopes.Settings'),
+                'attr' => ['class' => ''],
+                'label_attr' => ['class' => 'form-control-label'],
+                'choices' => [
+                    $this->trans('Yes', 'Modules.Moloniprestashopes.Settings') => '1',
+                    $this->trans('No', 'Modules.Moloniprestashopes.Settings') => '0',
+                ],
+                'data' => Settings::get('HooksVariantsUpdate'),
+            ])
+            ->add('HooksAddProducts', ChoiceType::class, [
+                'label' => $this->trans('Add products', 'Modules.Moloniprestashopes.Settings'),
+                'attr' => ['class' => ''],
+                'label_attr' => ['class' => 'form-control-label'],
+                'choices' => [
+                    $this->trans('Yes', 'Modules.Moloniprestashopes.Settings') => '1',
+                    $this->trans('No', 'Modules.Moloniprestashopes.Settings') => '0',
+                ],
+                'data' => Settings::get('HooksAddProducts'),
+            ])
+            ->add('HooksUpdateProducts', ChoiceType::class, [
+                'label' => $this->trans('Update products', 'Modules.Moloniprestashopes.Settings'),
+                'attr' => ['class' => ''],
+                'label_attr' => ['class' => 'form-control-label'],
+                'choices' => [
+                    $this->trans('Yes', 'Modules.Moloniprestashopes.Settings') => '1',
+                    $this->trans('No', 'Modules.Moloniprestashopes.Settings') => '0',
+                ],
+                'data' => Settings::get('HooksUpdateProducts'),
+            ])
+            ->add('HooksUpdateStock', ChoiceType::class, [
+                'label' => $this->trans('Update stock', 'Modules.Moloniprestashopes.Settings'),
+                'attr' => ['class' => ''],
+                'label_attr' => ['class' => 'form-control-label'],
+                'choices' => [
+                    $this->trans('Yes', 'Modules.Moloniprestashopes.Settings') => '1',
+                    $this->trans('No', 'Modules.Moloniprestashopes.Settings') => '0',
+                ],
+                'data' => Settings::get('HooksUpdateStock'),
+            ])
+            ->add('SyncFields', ChoiceType::class, [
+                'label' => $this->trans('Fields to sync', 'Modules.Moloniprestashopes.Settings'),
+                'label_attr' => ['class' => 'form-control-label'],
+                'multiple' => true,
+                'expanded' => true,
+                'choices' => [
+                    $this->trans('Name', 'Modules.Moloniprestashopes.Settings') => 'Name',
+                    $this->trans('Price', 'Modules.Moloniprestashopes.Settings') => 'Price',
+                    $this->trans('Description', 'Modules.Moloniprestashopes.Settings') => 'Description',
+                    $this->trans('Visibility', 'Modules.Moloniprestashopes.Settings') => 'Visibility',
+                    $this->trans('Stock', 'Modules.Moloniprestashopes.Settings') => 'Stock',
+                    $this->trans('Categories', 'Modules.Moloniprestashopes.Settings') => 'Categories',
+                ],
+                'data' => Settings::get('SyncFields') !== false ? unserialize(Settings::get('SyncFields')) : [],
             ])
             ->add('SaveChanges', SubmitType::class, [
                 'attr' => ['class' => 'btn-outline-success'],
@@ -110,51 +167,51 @@ class Automation extends General
 
         if ($request !== null && $request->isMethod('post')) {
             $form->handleRequest($request);
-
             if ($form->isSubmitted() && $form->isValid()) {
                 $submitData = $form->getData();
 
                 $dbPresta = Db::getInstance();
-                $sql = 'SELECT * FROM ' . _DB_PREFIX_ . "moloni_settings WHERE label ='CreateAuto' AND store_id=1";
-                $existRes = $dbPresta->executeS($sql);
-                if (empty($existRes)) {
-                    foreach ($submitData as $label => $value) {
+
+                foreach ($submitData as $label => $value) {
+                    $setting = $dbPresta->getRow(
+                        'SELECT * FROM ' . _DB_PREFIX_ . 'moloni_settings WHERE label = "' . $label
+                        . '" AND store_id=1'
+                    );
+
+                    if (is_array($value)) {
+                        $value = serialize($value);
+                    }
+
+                    if (empty($setting)) {
                         $dbPresta->insert('moloni_settings', [
                             'store_id' => (int) '1',
                             'label' => pSQL($label),
                             'value' => pSQL($value),
                         ]);
-                    }
-                    Settings::fillCache();
-                    $this->addFlash('success', $this->trans(
-                        'Settings created.',
-                        'Modules.Moloniprestashopes.Success'
-                    ));
-
-                    return $this->redirectSettingsAuto();
-                } else {
-                    foreach ($submitData as $label => $value) {
+                    } else {
                         $dbPresta->update('moloni_settings', [
                             'value' => pSQL($value),
                         ], 'store_id = 1 AND label="' . $label . '"');
                     }
-                    Settings::fillCache();
-                    $this->addFlash('success', $this->trans(
-                        'Settings updated.',
-                        'Modules.Moloniprestashopes.Success'
-                    ));
-
-                    return $this->redirectSettingsAuto();
                 }
-            } else {
-                $this->addFlash('warning', $this->trans(
-                    'Form not valid!!',
-                    'Modules.Moloniprestashopes.Errors'
+
+                Settings::fillCache();
+
+                $this->addFlash('success', $this->trans(
+                    'Settings updated.',
+                    'Modules.Moloniprestashopes.Success'
                 ));
 
                 return $this->redirectSettingsAuto();
             }
+            $this->addFlash('warning', $this->trans(
+                'Form not valid!!',
+                'Modules.Moloniprestashopes.Errors'
+            ));
+
+            return $this->redirectSettingsAuto();
         }
+
         $this->addFlash('warning', $this->trans(
             'Form not correctly sent!!',
             'Modules.Moloniprestashopes.Errors'

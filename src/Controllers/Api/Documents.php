@@ -2,7 +2,7 @@
 
 namespace Moloni\ES\Controllers\Api;
 
-class Documents extends GeneralAPI
+class Documents
 {
     /**
      * Get All Documents Set from Moloni ES
@@ -36,7 +36,7 @@ class Documents extends GeneralAPI
             }
         }';
 
-        return self::getApiPaginator($query, $variables, 'documentSets');
+        return Curl::complex($query, $variables, 'documentSets');
     }
 
     /**
@@ -75,7 +75,7 @@ class Documents extends GeneralAPI
         }
     }';
 
-        return self::getApiPaginator($query, $variables, 'currencies');
+        return Curl::complex($query, $variables, 'currencies');
     }
 
     /**
@@ -109,7 +109,7 @@ class Documents extends GeneralAPI
         }
     }';
 
-        return self::getApiPaginator($query, $variables, 'deliveryMethods');
+        return Curl::complex($query, $variables, 'deliveryMethods');
     }
 
     /**
@@ -156,7 +156,7 @@ class Documents extends GeneralAPI
         }
     }';
 
-        return self::getApiPaginator($query, $variables, 'timezones');
+        return Curl::complex($query, $variables, 'timezones');
     }
 
     /**
@@ -195,13 +195,13 @@ class Documents extends GeneralAPI
             }
         }';
 
-        return self::getApiPaginator($query, $variables, 'countries');
+        return Curl::complex($query, $variables, 'countries');
     }
 
     /**
      * Gets invoice information
      *
-     * @param $variables variables of the request
+     * @param $variables array variables of the request
      *
      * @return array Api data
      */
@@ -231,13 +231,13 @@ class Documents extends GeneralAPI
                     }
                 }';
 
-        return Connector::graphqlClient($query, $variables);
+        return Curl::simple($query, $variables);
     }
 
     /**
      * Gets all invoices
      *
-     * @param $variables variables of the request
+     * @param $variables array variables of the request
      *
      * @return array Api data
      */
@@ -276,7 +276,7 @@ class Documents extends GeneralAPI
                     }
                 }';
 
-        return self::getApiPaginator($query, $variables, 'invoices');
+        return Curl::complex($query, $variables, 'invoices');
     }
 
     /**
@@ -305,7 +305,7 @@ class Documents extends GeneralAPI
                 }
             }';
 
-        return Connector::graphqlClient($query, $variables);
+        return Curl::simple($query, $variables);
     }
 
     /**
@@ -334,13 +334,13 @@ class Documents extends GeneralAPI
             }
         }';
 
-        return Connector::graphqlClient($query, $variables);
+        return Curl::simple($query, $variables);
     }
 
     /**
      * Gets receipt information
      *
-     * @param $variables variables of the request
+     * @param $variables array variables of the request
      *
      * @return array Api data
      */
@@ -370,13 +370,13 @@ class Documents extends GeneralAPI
                     }
                 }';
 
-        return Connector::graphqlClient($query, $variables);
+        return Curl::simple($query, $variables);
     }
 
     /**
      * Gets all receipts
      *
-     * @param $variables variables of the request
+     * @param $variables array variables of the request
      *
      * @return array Api data
      */
@@ -415,7 +415,7 @@ class Documents extends GeneralAPI
                     }
                 }';
 
-        return self::getApiPaginator($query, $variables, 'receipts');
+        return Curl::complex($query, $variables, 'receipts');
     }
 
     /**
@@ -449,7 +449,7 @@ class Documents extends GeneralAPI
                     }
                 }';
 
-        return Connector::graphqlClient($query, $variables);
+        return Curl::simple($query, $variables);
     }
 
     /**
@@ -478,13 +478,13 @@ class Documents extends GeneralAPI
             }
         }';
 
-        return Connector::graphqlClient($query, $variables);
+        return Curl::simple($query, $variables);
     }
 
     /**
      * Gets credit note information
      *
-     * @param $variables variables of the request
+     * @param $variables array variables of the request
      *
      * @return array Api data
      */
@@ -514,13 +514,13 @@ class Documents extends GeneralAPI
                     }
                 }';
 
-        return Connector::graphqlClient($query, $variables);
+        return Curl::simple($query, $variables);
     }
 
     /**
      * Gets all credit notes
      *
-     * @param $variables variables of the request
+     * @param $variables array variables of the request
      *
      * @return array Api data
      */
@@ -559,7 +559,7 @@ class Documents extends GeneralAPI
                     }
                 }';
 
-        return self::getApiPaginator($query, $variables, 'creditNotes');
+        return Curl::complex($query, $variables, 'creditNotes');
     }
 
     /**
@@ -595,7 +595,7 @@ class Documents extends GeneralAPI
                     }
                 }';
 
-        return Connector::graphqlClient($query, $variables);
+        return Curl::simple($query, $variables);
     }
 
     /**
@@ -631,13 +631,13 @@ class Documents extends GeneralAPI
                     }
                 }';
 
-        return Connector::graphqlClient($query, $variables);
+        return Curl::simple($query, $variables);
     }
 
     /**
      * Gets all simplified invoices
      *
-     * @param $variables variables of the request
+     * @param $variables array variables of the request
      *
      * @return array Api data
      */
@@ -676,7 +676,7 @@ class Documents extends GeneralAPI
                     }
                 }';
 
-        return self::getApiPaginator($query, $variables, 'simplifiedInvoices');
+        return Curl::complex($query, $variables, 'simplifiedInvoices');
     }
 
     /**
@@ -713,7 +713,7 @@ class Documents extends GeneralAPI
                     }
                 }';
 
-        return Connector::graphqlClient($query, $variables);
+        return Curl::simple($query, $variables);
     }
 
     /**
@@ -742,7 +742,7 @@ class Documents extends GeneralAPI
             }
         }';
 
-        return Connector::graphqlClient($query, $variables);
+        return Curl::simple($query, $variables);
     }
 
     /**
@@ -778,7 +778,7 @@ class Documents extends GeneralAPI
                     }
                 }';
 
-        return Connector::graphqlClient($query, $variables);
+        return Curl::simple($query, $variables);
     }
 
     /**
@@ -823,7 +823,7 @@ class Documents extends GeneralAPI
                     }
                 }';
 
-        return self::getApiPaginator($query, $variables, 'purchaseOrders');
+        return Curl::complex($query, $variables, 'purchaseOrders');
     }
 
     /**
@@ -860,7 +860,7 @@ class Documents extends GeneralAPI
                     }
                 }';
 
-        return Connector::graphqlClient($query, $variables);
+        return Curl::simple($query, $variables);
     }
 
     /**
@@ -889,7 +889,7 @@ class Documents extends GeneralAPI
             }
         }';
 
-        return Connector::graphqlClient($query, $variables);
+        return Curl::simple($query, $variables);
     }
 
     /**
@@ -925,7 +925,7 @@ class Documents extends GeneralAPI
                     }
                 }';
 
-        return Connector::graphqlClient($query, $variables);
+        return Curl::simple($query, $variables);
     }
 
     /**
@@ -970,7 +970,7 @@ class Documents extends GeneralAPI
                     }
                 }';
 
-        return self::getApiPaginator($query, $variables, 'proFormaInvoices');
+        return Curl::complex($query, $variables, 'proFormaInvoices');
     }
 
     /**
@@ -1007,7 +1007,7 @@ class Documents extends GeneralAPI
                     }
                 }';
 
-        return Connector::graphqlClient($query, $variables);
+        return Curl::simple($query, $variables);
     }
 
     /**
@@ -1036,7 +1036,7 @@ class Documents extends GeneralAPI
             }
         }';
 
-        return Connector::graphqlClient($query, $variables);
+        return Curl::simple($query, $variables);
     }
 
     /**
@@ -1066,7 +1066,7 @@ class Documents extends GeneralAPI
                     }
                 }';
 
-        return Connector::graphqlClient($query, $variables);
+        return Curl::simple($query, $variables);
     }
 
     /**
@@ -1096,7 +1096,7 @@ class Documents extends GeneralAPI
                     }
                 }';
 
-        return Connector::graphqlClient($query, $variables);
+        return Curl::simple($query, $variables);
     }
 
     /**
@@ -1126,7 +1126,7 @@ class Documents extends GeneralAPI
                     }
                 }';
 
-        return Connector::graphqlClient($query, $variables);
+        return Curl::simple($query, $variables);
     }
 
     /**
@@ -1156,7 +1156,7 @@ class Documents extends GeneralAPI
                     }
                 }';
 
-        return Connector::graphqlClient($query, $variables);
+        return Curl::simple($query, $variables);
     }
 
     /**
@@ -1186,7 +1186,7 @@ class Documents extends GeneralAPI
                     }
                 }';
 
-        return Connector::graphqlClient($query, $variables);
+        return Curl::simple($query, $variables);
     }
 
     /**
@@ -1216,7 +1216,7 @@ class Documents extends GeneralAPI
                     }
                 }';
 
-        return Connector::graphqlClient($query, $variables);
+        return Curl::simple($query, $variables);
     }
 
     /**
@@ -1233,7 +1233,7 @@ class Documents extends GeneralAPI
                     simplifiedInvoiceGetPDF(companyId: $companyId,documentId: $documentId)
                 }';
 
-        return Connector::graphqlClient($query, $variables);
+        return Curl::simple($query, $variables);
     }
 
     /**
@@ -1250,7 +1250,7 @@ class Documents extends GeneralAPI
                     invoiceGetPDF(companyId: $companyId,documentId: $documentId)
                 }';
 
-        return Connector::graphqlClient($query, $variables);
+        return Curl::simple($query, $variables);
     }
 
     /**
@@ -1267,7 +1267,7 @@ class Documents extends GeneralAPI
                     receiptGetPDF(companyId: $companyId,documentId: $documentId)
                 }';
 
-        return Connector::graphqlClient($query, $variables);
+        return Curl::simple($query, $variables);
     }
 
     /**
@@ -1284,7 +1284,7 @@ class Documents extends GeneralAPI
                     creditNoteGetPDF(companyId: $companyId,documentId: $documentId)
                 }';
 
-        return Connector::graphqlClient($query, $variables);
+        return Curl::simple($query, $variables);
     }
 
     /**
@@ -1301,7 +1301,7 @@ class Documents extends GeneralAPI
                     proFormaInvoiceGetPDF(companyId: $companyId,documentId: $documentId)
                 }';
 
-        return Connector::graphqlClient($query, $variables);
+        return Curl::simple($query, $variables);
     }
 
     /**
@@ -1318,7 +1318,7 @@ class Documents extends GeneralAPI
                     purchaseOrderGetPDF(companyId: $companyId,documentId: $documentId)
                 }';
 
-        return Connector::graphqlClient($query, $variables);
+        return Curl::simple($query, $variables);
     }
 
     /**
@@ -1348,6 +1348,6 @@ class Documents extends GeneralAPI
                 }
             }';
 
-        return Connector::graphqlClient($query, $variables);
+        return Curl::simple($query, $variables);
     }
 }

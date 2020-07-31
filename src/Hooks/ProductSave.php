@@ -5,8 +5,8 @@ namespace Moloni\ES\Hooks;
 use Configuration;
 use Moloni\ES\Controllers\General;
 use Moloni\ES\Controllers\Models\Log;
+use Moloni\ES\Controllers\Models\LogSync;
 use Moloni\ES\Controllers\Models\Product;
-use PrestaShopBundle\Translation\DataCollectorTranslator;
 use PrestaShopDatabaseException;
 use PrestaShopException;
 
@@ -20,9 +20,9 @@ class ProductSave
     /**
      * ProductSave constructor.
      *
-     * @param DataCollectorTranslator $translator translator component
+     * @param $translator
      */
-    public function __construct(DataCollectorTranslator $translator)
+    public function __construct($translator)
     {
         $this->translator = $translator;
     }
@@ -39,13 +39,20 @@ class ProductSave
      */
     public function hookActionProductSave($productId)
     {
+        //to prevent infinite loops
+        if (LogSync::wasSyncedRecently(1, $productId) === true) {
+            Log::writeLog('Product has already been synced (prestashop -> moloni)');
+
+            return false;
+        }
+
         $productPS = new \PrestaShop\PrestaShop\Adapter\Entity\Product(
             $productId,
             1,
             Configuration::get('PS_LANG_DEFAULT')
         );
 
-        if ((new General())->checkTokens() != true) {
+        if (General::staticCheckTokens() !== true) {
             Log::writeLog('Tokens are not valid. Cant create document!!');
 
             return false;

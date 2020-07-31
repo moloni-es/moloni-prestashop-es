@@ -1,7 +1,6 @@
 #!/bin/sh
 
 PROJECT=$(php -r "echo dirname(dirname(dirname(realpath('$0'))));")
-
 echo "Checking files using PHP CS Fixer..."
 # get the list of changed files
 staged_files=$(git diff --cached --name-only)
@@ -45,7 +44,7 @@ done
 
 if [ "$FILES" != "" ]; then
   echo "Running Code Sniffer..."
-  vendor/squizlabs/php_codesniffer/bin/phpcs --standard=PSR1,PSR2 --ignore=tests/ $FILES
+  vendor/squizlabs/php_codesniffer/bin/phpcs --standard=PSR1,PSR2 --ignore=tests/ --ignore=src/WebHooks/* $FILES
   if [ $? != 0 ]; then
     echo "Fix the error before commit."
     exit 1

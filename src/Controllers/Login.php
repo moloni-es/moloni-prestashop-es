@@ -4,9 +4,10 @@ namespace Moloni\ES\Controllers;
 
 use Db;
 use Moloni\ES\Controllers\Api\Companies;
-use Moloni\ES\Controllers\Api\Connector;
+use Moloni\ES\Controllers\Api\Curl;
 use Moloni\ES\Controllers\Models\Company;
 use Moloni\ES\Controllers\Models\Error;
+use Moloni\ES\WebHooks\WebHooks;
 use PrestaShop\PrestaShop\Adapter\Entity\Tools;
 use PrestaShopException as PrestaShopExceptionAlias;
 use Symfony\Component\Form\Extension\Core\Type\ResetType;
@@ -83,7 +84,7 @@ class Login extends General
                 ]);
 
                 //url to get back to right action
-                $redirectUri = _PS_BASE_URL_ . $this->generateUrl(
+                $redirectUri = _PS_BASE_URL_SSL_ . $this->generateUrl(
                     'moloni_es_login_retrievecode',
                     [],
                     UrlGeneratorInterface::ABSOLUTE_URL
@@ -200,6 +201,8 @@ class Login extends General
             ], 'id =' . $dataBaseId, 1, false);
 
             Company::fillCache();
+            //create webhooks after login
+            WebHooks::createHooks();
 
             $this->addFlash('success', $this->trans('Login was successful.', 'Modules.Moloniprestashopes.Success'));
 
@@ -226,7 +229,7 @@ class Login extends General
             return $this->redirectLogin();
         }
 
-        $resArray = Connector::login($code);
+        $resArray = Curl::login($code);
 
         if ($resArray != false) {
             $dataBaseId = Company::get('id');

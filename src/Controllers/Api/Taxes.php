@@ -2,7 +2,7 @@
 
 namespace Moloni\ES\Controllers\Api;
 
-class Taxes extends GeneralAPI
+class Taxes
 {
     /**
      * Gets all the taxes of the company
@@ -47,7 +47,7 @@ class Taxes extends GeneralAPI
                     }
                 }';
 
-        return self::getApiPaginator($query, $variables, 'taxes');
+        return Curl::complex($query, $variables, 'taxes');
     }
 
     /**
@@ -85,7 +85,7 @@ class Taxes extends GeneralAPI
                     }
                 }';
 
-        return Connector::graphqlClient($query, $variables);
+        return Curl::simple($query, $variables);
     }
 
     /**
@@ -115,6 +115,6 @@ class Taxes extends GeneralAPI
                     }
                 }';
 
-        return Connector::graphqlClient($query, $variables);
+        return Curl::simple($query, $variables);
     }
 }

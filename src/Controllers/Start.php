@@ -32,8 +32,9 @@ class Start extends General
 
         //gets number of paid orders not generated
         $dataBase = Db::getInstance();
+
         $sql = 'SELECT COUNT(*) FROM `' . _DB_PREFIX_ . 'orders` o
-                WHERE NOT EXISTS (SELECT 1 FROM `' . _DB_PREFIX_ . 'moloni_documents` t2 WHERE o.id_order = t2.id_order)
+                WHERE NOT EXISTS (SELECT 1 FROM `' . _DB_PREFIX_ . 'moloni_documents` t2 WHERE o.id_order =t2.id_order)
                 AND o.`invoice_number` != 0';
 
         $numberOfOrders = (int) ($dataBase->executeS($sql))[0]['COUNT(*)'];
@@ -49,7 +50,7 @@ class Start extends General
                 ) AS `state_name`, o.`date_add` AS `date_add`, o.`date_upd` AS `date_upd`
                 FROM `' . _DB_PREFIX_ . 'orders` o
                 LEFT JOIN `' . _DB_PREFIX_ . 'customer` c ON (c.`id_customer` = o.`id_customer`)
-                WHERE NOT EXISTS (SELECT 1 FROM `' . _DB_PREFIX_ . 'moloni_documents` t2 WHERE o.id_order = t2.id_order)
+                WHERE NOT EXISTS (SELECT 1 FROM `' . _DB_PREFIX_ . 'moloni_documents` t2 WHERE o.id_order =t2.id_order)
                 AND o.`invoice_number` != 0
                 ORDER BY o.`date_add` DESC
                 LIMIT ' . $paginator['offSet'] . ',' . $paginator['linesPerPage'];
@@ -63,9 +64,9 @@ class Start extends General
             $orderArray[$key]['viewURL'] = $this->getAdminLink(
                 'AdminOrders',
                 [
-                        'vieworder' => '',
-                        'id_order' => $value['id_order'],
-                    ]
+                    'vieworder' => '',
+                    'id_order' => $value['id_order'],
+                ]
             );
         }
 
