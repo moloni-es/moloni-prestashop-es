@@ -1116,7 +1116,7 @@ class Documents
         //check if the id is the create document database
         $db = \Db::getInstance();
         $sql = 'SELECT invoice_type FROM ' . _DB_PREFIX_ . 'moloni_documents ' .
-            'Where document_id = ' . $idDocument;
+            'Where document_id = ' . $idDocument . ' AND invoice_status = 1';
         $sqlQuery = $db->getRow($sql);
 
         if (empty($sqlQuery)) {
