@@ -422,7 +422,7 @@ class Documents
             return false;
         }
 
-        if (!$this->createPDF()) {
+        if ($this->status === 1 && !$this->createPDF()) {
             $this->addError($this->translator->trans(
                 'Error creating PDF',
                 [],
@@ -674,7 +674,6 @@ class Documents
      */
     public function createBills()
     {
-        $this->status = 1;
         $mutation = ApiDocuments::mutationBillsOfLadingCreate($this->setVariables('bills'));
 
         if (isset($mutation['errors'])) {
@@ -688,7 +687,6 @@ class Documents
         }
 
         $mutation = $mutation['data']['billsOfLadingCreate']['data'];
-        $this->status = 0;
 
         $this->billOfLading = $mutation;
 
@@ -732,7 +730,7 @@ class Documents
                 'deliveryUnloadZipCode' => $this->deliveryUnloadZipCode,
                 'deliveryUnloadCountryId' => $this->deliveryUnloadCountryId,
                 'notes' => $this->notes,
-                'status' => 0,
+                'status' => ($bills === null) ? 0 : 1,
                 'products' => $this->products,
             ],
         ];
@@ -981,7 +979,6 @@ class Documents
                 ));
 
                 return false;
-                break;
         }
 
         if (!isset($mutation['documentId'])) {

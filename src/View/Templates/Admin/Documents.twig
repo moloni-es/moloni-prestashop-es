@@ -77,9 +77,11 @@
                                 </td>
                                 <td>
                                     {% if document.document_id > 0 %}
-                                        <a type="submit" class="btn btn-primary" title="{{ 'Download document'|trans({}, 'Modules.Moloniprestashopes.Documents') }}" href="{{ path(downloadDocumentRoute , {documentId: document.document_id} ) }}" target="_blank">
-                                            <i class="fa fa-download"></i>
-                                        </a>
+                                        {% if document.invoice_status == 1 %}
+                                            <a type="submit" class="btn btn-primary" title="{{ 'Download document'|trans({}, 'Modules.Moloniprestashopes.Documents') }}" href="{{ path(downloadDocumentRoute , {documentId: document.document_id} ) }}" target="_blank">
+                                                <i class="fa fa-download"></i>
+                                            </a>
+                                        {% endif %}
                                         <a class="btn btn-warning" title="{{ 'Open in Moloni'|trans({}, 'Modules.Moloniprestashopes.Documents') }}" href="{{ path(moloniViewRoute , {documentId: document.document_id}) }}" target="_blank">
                                             <i class="fa fa-file"></i>
                                         </a>
