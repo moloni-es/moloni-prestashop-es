@@ -1,7 +1,7 @@
 {
   "name": "moloni/moloni-prestashop-es",
   "license": "OSL-3.0",
-  "version": "v1.0.7",
+  "version": "v1.0.8",
   "description": "Plugin for Moloni ES - Prestashop",
   "authors": [
     {
@@ -40,6 +40,13 @@
   "type": "prestashop-module",
   "extra": {
     "changelog": [
+      {
+        "version": "v1.0.8",
+        "title": "Fixed documents payment methods",
+        "description": [
+          "Fixed a bug were the payment method of the order was not the same as the one added to the document."
+        ]
+      },
       {
         "version": "v1.0.7",
         "title": "Added support for WebHooks",
