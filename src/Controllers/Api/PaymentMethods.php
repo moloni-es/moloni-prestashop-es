@@ -66,4 +66,33 @@ class PaymentMethods
 
         return Curl::complex($query, $variables, 'paymentMethods');
     }
+
+    /**
+     * Creates an payment method
+     *
+     * @param $variables
+     *
+     * @return array returns the Graphql response array or an error array
+     */
+    public static function mutationPaymentMethodCreate($variables)
+    {
+        $query = 'mutation paymentMethodCreate($companyId: Int!,$data: PaymentMethodInsert!)
+        {
+            paymentMethodCreate(companyId: $companyId,data: $data)
+            {
+                data
+                {
+                    paymentMethodId
+                    name
+                }
+                errors
+                {
+                    field
+                    msg
+                }
+            }
+        }';
+
+        return Curl::simple($query, $variables);
+    }
 }

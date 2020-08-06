@@ -11,7 +11,6 @@ use Customer;
 use Datetime;
 use Moloni\ES\Controllers\Api\Companies as ApiCompanies;
 use Moloni\ES\Controllers\Api\Documents as ApiDocuments;
-use Moloni\ES\Controllers\Api\PaymentMethods as ApiPaymentMethods;
 use Moloni\ES\Controllers\Models\Company as modelCompany;
 use Moloni\ES\Controllers\Models\Customer as modelCustomer;
 use Moloni\ES\Controllers\Models\Settings as modelSettings;
@@ -56,8 +55,7 @@ class Documents
     public $deliveryUnloadCountryId;
     public $notes;
     public $moloniTotal;
-    public $paymentMethodId;
-    public $paymentMethodName;
+    public $paymentMethod = [];
     public $paymentValue;
     public $percentDiscount;
 
@@ -115,7 +113,7 @@ class Documents
      */
     public function init()
     {
-        $datetime = (new DateTime())->format(Datetime::ISO8601);
+        $datetime = (new DateTime())->format(Datetime::ATOM);
         $this->percentDiscount = (float) $this->getDiscountPercentage($this->psOrder);
         $invoiceDate = new DateTime($this->psOrder->invoice_date);
 
@@ -127,7 +125,7 @@ class Documents
         if ($this->psOrder->invoice_date == '0000-00-00 00:00:00') {
             $this->deliveryLoadDate = $datetime;
         } else {
-            $this->deliveryLoadDate = $invoiceDate->format(Datetime::ISO8601);
+            $this->deliveryLoadDate = $invoiceDate->format(Datetime::ATOM);
         }
 
         $this->deliveryUnloadAddress = $this->psDeliveryAddress->address1 . $this->psDeliveryAddress->address2;
@@ -135,11 +133,9 @@ class Documents
         $this->deliveryUnloadZipCode = $this->psDeliveryAddress->postcode;
         $this->maturityDateId = (int) modelSettings::get('Maturity');
         $this->documentSetId = (int) modelSettings::get('Set');
-        $this->paymentMethodId = (int) modelSettings::get('Payment');
 
         if (empty($this->documentSetId) ||
-            empty($this->maturityDateId) ||
-            empty($this->paymentMethodId)) {
+            empty($this->maturityDateId)) {
             $this->addError($this->translator->trans(
                 'Please configure settings!!',
                 [],
@@ -426,7 +422,7 @@ class Documents
             return false;
         }
 
-        if (!$this->createPDF()) {
+        if ($this->status === 1 && !$this->createPDF()) {
             $this->addError($this->translator->trans(
                 'Error creating PDF',
                 [],
@@ -636,31 +632,25 @@ class Documents
      */
     public function setPaymentMethods()
     {
-        $variables = [
-            'companyId' => (int) modelCompany::get('company_id'),
-            'paymentMethodId' => $this->paymentMethodId,
-        ];
+        $orderPayments = $this->psOrder->getOrderPayments();
 
-        $query = ApiPaymentMethods::queryPaymentMethod($variables);
+        foreach ($orderPayments as $orderPayment) {
+            if (!empty($orderPayment->payment_method)) {
+                $paymentMethod = new Payment($orderPayment->payment_method);
 
-        if (isset($query['errors'])) {
-            $this->addError($this->translator->trans(
-                'Error getting payment methods!!',
-                [],
-                'Modules.Moloniprestashopes.Errors'
-            ));
+                if (!$paymentMethod->loadByName() && !$paymentMethod->create()) {
+                    return false;
+                }
 
-            return false;
+                if ($paymentMethod->paymentMethodId > 0) {
+                    $this->paymentMethod[] = [
+                        'paymentMethodId' => (int) $paymentMethod->paymentMethodId,
+                        'paymentMethodName' => $paymentMethod->name,
+                        'value' => (float) $orderPayment->amount,
+                    ];
+                }
+            }
         }
-
-        $query = $query['data']['paymentMethod']['data'];
-
-        if (empty($query)) {
-            return false;
-        }
-
-        $this->paymentMethodName = $query['name'];
-        $this->paymentValue = $this->psOrder->total_paid_tax_incl;
 
         return true;
     }
@@ -684,7 +674,6 @@ class Documents
      */
     public function createBills()
     {
-        $this->status = 1;
         $mutation = ApiDocuments::mutationBillsOfLadingCreate($this->setVariables('bills'));
 
         if (isset($mutation['errors'])) {
@@ -698,7 +687,6 @@ class Documents
         }
 
         $mutation = $mutation['data']['billsOfLadingCreate']['data'];
-        $this->status = 0;
 
         $this->billOfLading = $mutation;
 
@@ -742,19 +730,13 @@ class Documents
                 'deliveryUnloadZipCode' => $this->deliveryUnloadZipCode,
                 'deliveryUnloadCountryId' => $this->deliveryUnloadCountryId,
                 'notes' => $this->notes,
-                'status' => 0,
+                'status' => ($bills === null) ? 0 : 1,
                 'products' => $this->products,
             ],
         ];
 
         if ($this->documentType == 'simplifiedInvoices') {
-            $variables['data']['payments'] = [
-                [
-                    'paymentMethodId' => (int) $this->paymentMethodId,
-                    'paymentMethodName' => $this->paymentMethodName,
-                    'value' => (float) $this->paymentValue,
-                ],
-            ];
+            $variables['data']['payments'] = $this->paymentMethod;
         }
 
         if (Settings::get('Send') == 0 && empty($bills)) {
@@ -804,13 +786,7 @@ class Documents
         ];
 
         if ($this->documentType == 'receipts') {
-            $variables['data']['payments'] = [
-                [
-                    'paymentMethodId' => (int) $this->paymentMethodId,
-                    'paymentMethodName' => $this->paymentMethodName,
-                    'value' => (float) $this->paymentValue,
-                ],
-            ];
+            $variables['data']['payments'] = $this->paymentMethod;
         }
 
         return $variables;
@@ -1003,7 +979,6 @@ class Documents
                 ));
 
                 return false;
-                break;
         }
 
         if (!isset($mutation['documentId'])) {
@@ -1141,7 +1116,7 @@ class Documents
         //check if the id is the create document database
         $db = \Db::getInstance();
         $sql = 'SELECT invoice_type FROM ' . _DB_PREFIX_ . 'moloni_documents ' .
-            'Where document_id = ' . $idDocument;
+            'Where document_id = ' . $idDocument . ' AND invoice_status = 1';
         $sqlQuery = $db->getRow($sql);
 
         if (empty($sqlQuery)) {
