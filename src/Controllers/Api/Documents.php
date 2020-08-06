@@ -1350,4 +1350,106 @@ class Documents
 
         return Curl::simple($query, $variables);
     }
+
+    /**
+     * Send invoice by mail
+     *
+     * @param $variables
+     *
+     * @return array
+     */
+    public static function mutationInvoiceSendEmail($variables)
+    {
+        $query = 'mutation invoiceSendMail($companyId: Int!,$documents: [Int]!,$mailData: MailData)
+        {
+            invoiceSendMail(companyId: $companyId,documents: $documents,mailData: $mailData)
+        }';
+
+        return Curl::simple($query, $variables);
+    }
+
+    /**
+     * Send pro forma invoice by mail
+     *
+     * @param $variables
+     *
+     * @return array|array[]|\string[][]
+     */
+    public static function mutationProFormaInvoiceSendEmail($variables)
+    {
+        $query = 'mutation proFormaInvoiceSendMail($companyId: Int!,$documents: [Int]!,$mailData: MailData)
+        {
+            proFormaInvoiceSendMail(companyId: $companyId,documents: $documents,mailData: $mailData)
+        }';
+
+        return Curl::simple($query, $variables);
+    }
+
+    /**
+     * Send purchased order by mail
+     *
+     * @param $variables
+     *
+     * @return array|array[]|\string[][]
+     */
+    public static function mutationPurchaseOrderSendEmail($variables)
+    {
+        $query = 'mutation purchaseOrderSendMail($companyId: Int!,$documents: [Int]!,$mailData: MailData)
+        {
+            purchaseOrderSendMail(companyId: $companyId,documents: $documents,mailData: $mailData)
+        }';
+
+        return Curl::simple($query, $variables);
+    }
+
+    /**
+     * Send receipt by mail
+     *
+     * @param $variables
+     *
+     * @return array
+     */
+    public static function mutationReceiptSendEmail($variables)
+    {
+        $query = 'mutation receiptSendMail($companyId: Int!,$documents: [Int]!,$mailData: MailData)
+        {
+            receiptSendMail(companyId: $companyId,documents: $documents,mailData: $mailData)
+        }';
+
+        return Curl::simple($query, $variables);
+    }
+
+    /**
+     * Send simplified invoice by mail
+     *
+     * @param $variables
+     *
+     * @return array
+     */
+    public static function mutationSimplifiedInvoiceSendEmail($variables)
+    {
+        $query = 'mutation simplifiedInvoiceSendMail($companyId: Int!,$documents: [Int]!,$mailData: MailData)
+        {
+            simplifiedInvoiceSendMail(companyId: $companyId,documents: $documents,mailData: $mailData)
+        }';
+
+        return Curl::simple($query, $variables);
+    }
+
+    /**
+     * Send bill of lading by email
+     *
+     * @param $variables
+     *
+     * @return array
+     */
+    public static function mutationBillsOfLadingSendEmail($variables)
+    {
+        $query = 'mutation billsOfLadingSendMail($companyId: Int!,$documents: [Int]!,$mailData: MailData)
+        {
+            billsOfLadingSendMail(companyId: companyId,documents: $documents,mailData: $mailData)
+        }';
+
+        return Curl::simple($query, $variables);
+    }
 }

@@ -422,14 +422,27 @@ class Documents
             return false;
         }
 
-        if ($this->status === 1 && !$this->createPDF()) {
-            $this->addError($this->translator->trans(
-                'Error creating PDF',
-                [],
-                'Modules.Moloniprestashopes.Errors'
-            ));
+        //if document is closed
+        if ($this->status === 1) {
+            //creates pdf
+            if (!$this->createPDF()) {
+                $this->addError($this->translator->trans(
+                    'Error creating PDF',
+                    [],
+                    'Modules.Moloniprestashopes.Errors'
+                ));
 
-            return false;
+                return false;
+            }
+
+            //sends document to customer if set in settings
+            if ((int) modelSettings::get('SendEmail') === 1) {
+                if ($this->sendEmail()) {
+                    Log::writeLog('Document sent to customer.');
+                } else {
+                    Log::writeLog('Error sending document to customer.');
+                }
+            }
         }
 
         Log::writeLog($this->translator->trans(
@@ -1102,6 +1115,63 @@ class Documents
         ));
 
         return true;
+    }
+
+    /**
+     * Sends email to customer
+     *
+     * @return bool
+     */
+    public function sendEmail()
+    {
+        $keyString = '';
+        $mutation = [];
+
+        $variables = [
+            'companyId' => (int) Company::get('company_id'),
+            'documents' => [
+                $this->documentId,
+            ],
+            'mailData' => [
+                'to' => [
+                    'name' => $this->psCustomer->firstname . ' ' . $this->psCustomer->lastname,
+                    'email' => $this->psCustomer->email,
+                ],
+                'message' => '',
+                'attachment' => true,
+            ],
+        ];
+
+        switch ($this->documentType) {
+            case 'invoices':
+                $mutation = ApiDocuments::mutationInvoiceSendEmail($variables);
+                $keyString = 'invoiceSendMail';
+                break;
+            case 'receipts':
+                $mutation = ApiDocuments::mutationReceiptSendEmail($variables);
+                $keyString = 'receiptSendMail';
+                break;
+            case 'purchaseOrders':
+                $mutation = ApiDocuments::mutationPurchaseOrderSendEmail($variables);
+                $keyString = 'purchaseOrderSendMail';
+                break;
+            case 'proFormaInvoices':
+                $mutation = ApiDocuments::mutationProFormaInvoiceSendEmail($variables);
+                $keyString = 'proFormaInvoiceSendMail';
+                break;
+            case 'simplifiedInvoices':
+                $mutation = ApiDocuments::mutationSimplifiedInvoiceSendEmail($variables);
+                $keyString = 'simplifiedInvoiceSendMail';
+                break;
+            default:
+                return false;
+        }
+
+        if (isset($mutation['errors'])) {
+            return false;
+        }
+
+        return $mutation['data'][$keyString];
     }
 
     /**
