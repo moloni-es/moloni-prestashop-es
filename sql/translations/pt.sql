@@ -405,4 +405,6 @@ INSERT INTO PREFIX_translation (`id_lang`,`key`,`translation`,`domain`) VALUES (
 (@idLang,'Description','Descrição','ModulesMoloniprestashopesSettings'),
 (@idLang,'Load address used','Morada de carregamento usada','ModulesMoloniprestashopesSettings'),
 (@idLang,'No country iso for this costumer.','Nenhum país iso para este cliente.','ModulesMoloniprestashopesErrors'),
+(@idLang,'Send e-mail','Enviar e-mail','ModulesMoloniprestashopesSettings'),
+(@idLang,'The document is only sent to the customer if it is inserted as closed','O documento é apenas enviado para o cliente caso seja inserido como fechado','ModulesMoloniprestashopesSettings'),
 (@idLang,'Automatically create document when an order is paid','Criar documento automaticamente quando uma encomenda é paga','ModulesMoloniprestashopesSettings');
