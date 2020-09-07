@@ -70,14 +70,14 @@ class Documents extends General
                 'attr' => ['class' => ''],
                 'label_attr' => ['class' => 'form-control-label'],
                 'choices' => $choicesSet,
-                'data' => Settings::get('Set') != false ? Settings::get('Set') : null,
+                'data' => Settings::get('Set') !== false ? Settings::get('Set') : null,
             ])
             ->add('Type', ChoiceType::class, [
                 'label' => $this->trans('Document type', 'Modules.Moloniprestashopes.Settings'),
                 'choices' => $this->getDocumentsTypes(),
                 'label_attr' => ['class' => 'form-control-label'],
                 'attr' => ['onchange' => 'onStatusChange()'],
-                'data' => Settings::get('Type') != false ? Settings::get('Type') : null,
+                'data' => Settings::get('Type') !== false ? Settings::get('Type') : null,
             ])
             ->add('Status', ChoiceType::class, [
                 'label' => $this->trans('Document status', 'Modules.Moloniprestashopes.Settings'),
@@ -87,7 +87,7 @@ class Documents extends General
                     $this->trans('Closed', 'Modules.Moloniprestashopes.Settings') => '1',
                 ],
                 'attr' => ['onchange' => 'onStatusChange()'],
-                'data' => Settings::get('Status') != false ? Settings::get('Status') : null,
+                'data' => Settings::get('Status') !== false ? Settings::get('Status') : null,
             ])
             ->add('Send', ChoiceType::class, [
                 'label' => $this->trans('Shipping information', 'Modules.Moloniprestashopes.Settings'),
@@ -114,7 +114,17 @@ class Documents extends General
                 'attr' => ['class' => ''],
                 'label_attr' => ['class' => 'form-control-label'],
                 'choices' => $choicesAddress,
-                'data' => Settings::get('Address') != false ? Settings::get('Address') : null,
+                'data' => Settings::get('Address') !== false ? Settings::get('Address') : null,
+            ])
+            ->add('SendEmail', ChoiceType::class, [
+                'label' => $this->trans('Send e-mail', 'Modules.Moloniprestashopes.Settings'),
+                'label_attr' => ['class' => 'form-control-label'],
+                'choices' => [
+                    $this->trans('Yes', 'Modules.Moloniprestashopes.Settings') => '1',
+                    $this->trans('No', 'Modules.Moloniprestashopes.Settings') => '0',
+                ],
+                'attr' => ['onchange' => 'onStatusChange2()'],
+                'data' => Settings::get('SendEmail'),
             ])
             ->add('SaveChanges', SubmitType::class, [
                 'attr' => ['class' => 'btn-outline-success'],

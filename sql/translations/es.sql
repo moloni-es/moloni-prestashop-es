@@ -273,4 +273,6 @@ INSERT INTO PREFIX_translation (`id_lang`,`key`,`translation`,`domain`) VALUES (
 (@idLang,'Stock is up-to-date!!','¡El stock está actualizado!','ModulesMoloniprestashopesSuccess'),
 (@idLang,'Stock updated (old: %oStock% | new: %nStock% ) for %name% .','Stock actualizado (antiguo: %oStock% | nuevo: %nStock% ) para %name% .','ModulesMoloniprestashopesSuccess'),
 (@idLang,'Created fee: %name% | Reference: %reference%','Tarifa creada: %name% | Referencia: %reference%','ModulesMoloniprestashopesSuccess'),
+(@idLang,'Send e-mail','Enviar e-mail','ModulesMoloniprestashopesSettings'),
+(@idLang,'The document is only sent to the customer if it is inserted as closed','El documento solo se envía al cliente cuando el documento está cerrado','ModulesMoloniprestashopesSettings'),
 (@idLang,'Created tax ( %name% ) for %name% .','Impuesto creado ( %name% ) para %name% .','ModulesMoloniprestashopesSuccess');

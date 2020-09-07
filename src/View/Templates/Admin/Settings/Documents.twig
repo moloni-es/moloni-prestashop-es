@@ -70,6 +70,16 @@
                         <a class="settingDescription">{{ 'Load address used'|trans({}, 'Modules.Moloniprestashopes.Settings') }}</a>
                     </div>
                 </div>
+
+                <div class="form-group row">
+                    {{ form_label(settingsForm.SendEmail) }}
+                    {{ form_errors(settingsForm.SendEmail) }}
+                    <div class="col-sm">
+                        {{ form_widget(settingsForm.SendEmail) }}
+                        <a class="settingDescription">{{ 'The document is only sent to the customer if it is inserted as closed'|trans({}, 'Modules.Moloniprestashopes.Settings') }}</a>
+                    </div>
+                </div>
+
             </div>
         </div>
 

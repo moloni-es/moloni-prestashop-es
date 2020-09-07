@@ -7,7 +7,6 @@ use Moloni\ES\Controllers\Api\Companies;
 use Moloni\ES\Controllers\Api\Products;
 use Moloni\ES\Controllers\Api\Taxes;
 use Order;
-use PrestaShopBundle\Translation\DataCollectorTranslator;
 use PrestaShopBundle\Translation\TranslatorComponent;
 use PrestaShopDatabaseException;
 
@@ -316,7 +315,7 @@ class Fees
                 'Modules.Moloniprestashopes.Success'
             ));
 
-            $this->categoryName = (int) ($mutation)['data']['productCategoryCreate']['data']['productCategoryId'];
+            $this->categoryId = (int) ($mutation)['data']['productCategoryCreate']['data']['productCategoryId'];
         }
 
         return true;
