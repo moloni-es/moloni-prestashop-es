@@ -41,16 +41,14 @@ class Curl
 
         $result = json_decode(curl_exec($con), true);
 
-        //add the 'bad' request to the errors class
-        if (isset($result['errors'])) {
-            Error::addRequest(
-                [
-                    'query' => $query,
-                    'variables' => $variables,
-                    'result' => $result,
-                ]
-            );
-        }
+        //always save the last request
+        Error::addRequest(
+            [
+                'query' => $query,
+                'variables' => $variables,
+                'result' => $result,
+            ]
+        );
 
         if (curl_errno($con)) {
             return ['errors' => ['msg' => curl_error($con)]];
