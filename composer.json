@@ -1,7 +1,7 @@
 {
   "name": "moloni/moloni-prestashop-es",
   "license": "OSL-3.0",
-  "version": "v1.0.9",
+  "version": "v1.1.0",
   "description": "Plugin for Moloni ES - Prestashop",
   "authors": [
     {
@@ -40,6 +40,13 @@
   "type": "prestashop-module",
   "extra": {
     "changelog": [
+      {
+        "version": "v1.1.0",
+        "title": "Minor fixes",
+        "description": [
+          "Fixed bug where error request showed empty or with value '1'."
+        ]
+      },
       {
         "version": "v1.0.9",
         "title": "Added email support",
