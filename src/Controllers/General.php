@@ -250,7 +250,7 @@ class General extends FrameworkBundleAdminController
     /**
      * Returns html with request error
      *
-     * @return string
+     * @return string|void
      */
     public function getRequestDump()
     {
@@ -265,8 +265,7 @@ class General extends FrameworkBundleAdminController
         $error .= '<div style="display: none;" id="toggleDiv">';
 
         foreach ($request as $key => $value) {
-            /* @noinspection ForgottenDebugOutputInspection */
-            $error .= '<br><b>' . $key . ': </b>' . print_r($value) . '<p></p>';
+            $error .= '<br><b>' . $key . ': </b>' . print_r($value, true) . '<p></p>';
         }
 
         $error .= '</div>';
