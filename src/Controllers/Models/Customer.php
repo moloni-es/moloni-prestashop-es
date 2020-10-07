@@ -65,10 +65,6 @@ class Customer
     {
         $this->addressCustomer['invoiceAddress'] = new Address($this->psOrder->id_address_invoice);
 
-        $this->vat = !empty($this->addressCustomer['invoiceAddress']->vat_number) ?
-            $this->addressCustomer['invoiceAddress']->vat_number :
-            !empty($this->addressCustomer['invoiceAddress']->dni) ?
-                $this->addressCustomer['invoiceAddress']->dni : null;
         $this->name = $this->psCustomer->firstname . ' ' . $this->psCustomer->lastname;
         $this->address = $this->addressCustomer['invoiceAddress']->
             address1 . $this->addressCustomer['invoiceAddress']->address2;
@@ -103,12 +99,10 @@ class Customer
             return false;
         }
 
-        if (!empty($this->addressCustomer->vat_number)) {
+        $this->setVat();
+
+        if ($this->vat !== null) {
             if (!$this->loadByVat()) {
-                return false;
-            }
-        } elseif (!empty($this->addressCustomer->dni)) {
-            if (!$this->loadByDni()) {
                 return false;
             }
         } else {
@@ -143,9 +137,9 @@ class Customer
             return false;
         }
 
-        $mutation = (apiCustomer::mutationCustomerCreate($this->setVariables()))['data']['customerCreate']['data'];
+        $mutation = apiCustomer::mutationCustomerCreate($this->setVariables());
 
-        if (empty($mutation)) {
+        if (!isset($mutation['data']['customerCreate']['data'])) {
             $this->addError($this->translator->trans(
                 'Something went wrong creating the customer!!',
                 [],
@@ -161,7 +155,7 @@ class Customer
             'Modules.Moloniprestashopes.Success'
         ));
 
-        $this->customerId = $mutation['customerId'];
+        $this->customerId = $mutation['data']['customerCreate']['data']['customerId'];
 
         return true;
     }
@@ -178,7 +172,7 @@ class Customer
             'options' => [
                 'search' => [
                     'field' => 'vat',
-                    'value' => $this->addressCustomer->vat_number,
+                    'value' => $this->vat,
                 ],
             ],
         ];
@@ -197,49 +191,6 @@ class Customer
 
         if (empty($query)) {
             //no costumer with this VAT
-            return true;
-        }
-
-        $this->customerId = $query[0]['customerId'];
-        $this->number = $query[0]['number'];
-        $this->vat = $query[0]['vat'];
-        $this->countryId = $query[0]['country']['countryId'];
-        $this->languageId = $query[0]['language']['languageId'];
-
-        return true;
-    }
-
-    /**
-     * Loads an customer form moloni based on Dni
-     *
-     * @return bool true or false
-     */
-    public function loadByDni()
-    {
-        $variables = [
-            'companyId' => (int) Company::get('company_id'),
-            'options' => [
-                'search' => [
-                    'field' => 'vat',
-                    'value' => $this->addressCustomer->dni,
-                ],
-            ],
-        ];
-
-        $query = apiCostumers::queryCustomers($variables);
-
-        if ($query === false) {
-            $this->addError($this->translator->trans(
-                'Something went wrong fetching customers!!(dni)',
-                [],
-                'Modules.Moloniprestashopes.Errors'
-            ));
-
-            return false;
-        }
-
-        if (empty($query)) {
-            //no costumer with this DNI
             return true;
         }
 
@@ -291,6 +242,24 @@ class Customer
         $this->vat = $query[0]['vat'];
         $this->countryId = $query[0]['country']['countryId'];
         $this->languageId = $query[0]['language']['languageId'];
+
+        return true;
+    }
+
+    /**
+     * Sets costumer VAT
+     *
+     * @return bool
+     */
+    public function setVat()
+    {
+        if ($this->addressCustomer['invoiceAddress']->vat_number !== '') {
+            $this->vat = $this->addressCustomer['invoiceAddress']->vat_number;
+        } elseif ($this->addressCustomer['invoiceAddress']->dni !== '') {
+            $this->vat = $this->addressCustomer['invoiceAddress']->dni;
+        } else {
+            $this->vat = null;
+        }
 
         return true;
     }
