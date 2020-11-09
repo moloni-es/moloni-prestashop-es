@@ -342,7 +342,9 @@ class Customer
         } else {
             //go straight for the first result because we only ask for 1
             $lastNumber = substr($result[0]['number'], strlen(Settings::get('ClientPrefix')));
-            $nextNumber = Settings::get('ClientPrefix') . ((int) $lastNumber + 1);
+
+            $nextNumber = ++$lastNumber;
+            $nextNumber = Settings::get('ClientPrefix') . $nextNumber;
         }
 
         $this->number = $nextNumber;
