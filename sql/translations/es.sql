@@ -54,7 +54,7 @@ INSERT INTO PREFIX_translation (`id_lang`,`key`,`translation`,`domain`) VALUES (
 (@idLang,'Cannot create Invoice + Receipt as draft!!','¡No se puede crear Factura + Cobro de factura como borrador!','ModulesMoloniprestashopesErrors'),
 (@idLang,'Update products with variants','Actualizar productos con variantes','ModulesMoloniprestashopesSettings'),
 (@idLang,'Cannot save "Invoice + Receipt" and "Draft" at the same time!!','¡No se pueden guardar "Factura +  Cobro de factura" y "Borrador" al mismo tiempo!','ModulesMoloniprestashopesErrors'),
-(@idLang,'Add products','Agregar productos','ModulesMoloniprestashopesSettings'),
+(@idLang,'Add products','Añadir productos','ModulesMoloniprestashopesSettings'),
 (@idLang,'Cannot save Transport documents and "Draft" at the same time!!','¡No se pueden guardar "Documento de transporte" y "Borrador" al mismo tiempo!','ModulesMoloniprestashopesErrors'),
 (@idLang,'Update products','Actualizar productos','ModulesMoloniprestashopesSettings'),
 (@idLang,'WARNING: CANNOT SAVE "INVOICE + RECEIPT" AND "DRAFT" AT THE SAME TIME!!','ADVERTENCIA: ¡NO PUEDE GUARDAR "FACTURA + COBRO DE FACTURA" Y "BORRAR" AL MISMO TIEMPO!','ModulesMoloniprestashopesErrors'),
