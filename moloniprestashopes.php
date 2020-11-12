@@ -24,7 +24,7 @@
 use Moloni\ES\Controllers\Models\Settings;
 use Moloni\ES\Hooks\PaymentConfirmation;
 use Moloni\ES\Hooks\ProductSave;
-use Moloni\ES\Installer;
+use Moloni\ES\Install\Installer;
 
 /** @noinspection AutoloadingIssuesInspection */
 
@@ -53,7 +53,7 @@ class MoloniPrestashopEs extends Module
         $this->name = 'moloniprestashopes';
         $this->tab = 'administration';
         $this->need_instance = 1;
-        $this->version = '1.1.05';
+        $this->version = '1.1.06';
         $this->ps_versions_compliancy = ['min' => '1.7.5', 'max' => _PS_VERSION_];
         $this->author = 'Moloni';
 
