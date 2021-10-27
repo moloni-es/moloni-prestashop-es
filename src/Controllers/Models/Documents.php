@@ -15,7 +15,6 @@ use Moloni\ES\Controllers\Models\Company as modelCompany;
 use Moloni\ES\Controllers\Models\Customer as modelCustomer;
 use Moloni\ES\Controllers\Models\Settings as modelSettings;
 use Order;
-use OrderInvoice;
 use PrestaShopBundle\Translation\TranslatorComponent;
 
 class Documents
@@ -26,7 +25,6 @@ class Documents
     private $psDeliveryAddress;
     private $psCustomer;
     private $psCarrierOrder;
-    private $psInvoiceIdOrder;
     private $moloniCustomer;
     private $documentType;
 
@@ -95,9 +93,6 @@ class Documents
         $this->psCoinOrder = new Currency($this->psOrder->id_currency);
         $this->psDeliveryAddress = new Address($this->psOrder->id_address_delivery);
         $this->psCarrierOrder = new Carrier($this->psOrder->id_carrier);
-        $this->psInvoiceIdOrder = OrderInvoice::getInvoiceByNumber(
-            (int) $this->psOrder->getOrderDetailList()[0]['id_order_invoice']
-        );
         $this->psCustomer = new Customer($this->psOrder->id_customer);
         $this->moloniCustomer = new modelCustomer($this->psCustomer, $this->psOrder, $this->translator);
 
@@ -675,7 +670,7 @@ class Documents
      */
     public function setNotes()
     {
-        $this->notes = $this->psInvoiceIdOrder->note;
+        $this->notes = '';
 
         return true;
     }
