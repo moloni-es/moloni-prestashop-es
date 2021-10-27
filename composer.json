@@ -1,7 +1,7 @@
 {
   "name": "moloni/moloni-prestashop-es",
   "license": "OSL-3.0",
-  "version": "v1.1.06",
+  "version": "v1.1.07",
   "description": "Plugin for Moloni ES - Prestashop",
   "authors": [
     {
@@ -40,6 +40,13 @@
   "type": "prestashop-module",
   "extra": {
     "changelog": [
+      {
+        "version": "v1.1.07",
+        "title": "Fix notes.",
+        "description": [
+          "Fix notes."
+        ]
+      },
       {
         "version": "v1.1.06",
         "title": "Fix error on installation.",
