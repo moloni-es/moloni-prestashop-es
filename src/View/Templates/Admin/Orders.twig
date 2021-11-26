@@ -71,27 +71,7 @@
             </table>
         </div>
 
-        <div class="d-flex justify-content-end mr-3">
-            <nav aria-label="...">
-                <ul class="pagination">
-                    <li class="page-item {% if paginator.currentPage == 1 %} disabled {% endif %}">
-                        <a class="page-link" href="{{ path(thisRoute, {page: (paginator.currentPage-1)}) }}">
-                            {{ 'Previous'|trans({}, 'Modules.Moloniprestashopes.Orders') }}
-                        </a>
-                    </li>
-                        {% for i in 1..paginator.numberOfTabs %}
-                            <li class="page-item {% if i == paginator.currentPage %} active {% endif %}">
-                                <a class="page-link" href="{{ path(thisRoute, {page: i}) }}">{{ i }}</a>
-                            </li>
-                        {% endfor %}
-                    <li class="page-item {% if paginator.currentPage == paginator.numberOfTabs %} disabled {% endif %}">
-                        <a class="page-link" href="{{ path(thisRoute, {page: (paginator.currentPage+1)}) }}">
-                            {{ 'Next'|trans({}, 'Modules.Moloniprestashopes.Orders') }}
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
+        {% include '@Modules/moloniprestashopes/src/View/Templates/Admin/Components/Paginator.twig' with {'action': 'Modules.Moloniprestashopes.Orders'} %}
 
     </div>
 {% endblock %}
