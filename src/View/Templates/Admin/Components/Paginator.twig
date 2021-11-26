@@ -1,0 +1,23 @@
+<div class="d-flex justify-content-end mr-3">
+    <nav aria-label="..." style="width: 100%">
+        <ul class="pagination" style="overflow-x: scroll;">
+            <li class="page-item {% if paginator.currentPage == 1 %} disabled {% endif %}">
+                <a class="page-link" href="{{ path(thisRoute, {page: (paginator.currentPage-1)}) }}">
+                    {{ 'Previous'|trans({}, action) }}
+                </a>
+            </li>
+
+            {% for i in 1..paginator.numberOfTabs %}
+                <li class="page-item {% if i == paginator.currentPage %} active {% endif %}">
+                    <a class="page-link" href="{{ path(thisRoute, {page: i}) }}">{{ i }}</a>
+                </li>
+            {% endfor %}
+
+            <li class="page-item {% if paginator.currentPage == paginator.numberOfTabs %} disabled {% endif %}">
+                <a class="page-link" href="{{ path(thisRoute, {page: (paginator.currentPage+1)}) }}">
+                    {{ 'Next'|trans({}, action) }}
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>

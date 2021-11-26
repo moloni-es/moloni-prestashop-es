@@ -53,7 +53,7 @@ class MoloniPrestashopEs extends Module
         $this->name = 'moloniprestashopes';
         $this->tab = 'administration';
         $this->need_instance = 1;
-        $this->version = '1.1.08';
+        $this->version = '1.1.09';
         $this->ps_versions_compliancy = ['min' => '1.7.5', 'max' => _PS_VERSION_];
         $this->author = 'Moloni';
 
@@ -254,10 +254,8 @@ class MoloniPrestashopEs extends Module
     public function hookActionProductAdd($params)
     {
         if ((Settings::get('AddProducts') == 1)) {
-            if ($params['product']->name[1] != '') {
-                $productSave = new ProductSave($this->context->getTranslator());
-                $productSave->hookActionProductSave($params['id_product']);
-            }
+            $productSave = new ProductSave($this->context->getTranslator());
+            $productSave->hookActionProductSave($params['id_product']);
         }
     }
 
@@ -274,10 +272,8 @@ class MoloniPrestashopEs extends Module
     public function hookActionProductUpdate($params)
     {
         if (((int) Settings::get('UpdateArtigos') === 1)) {
-            if ($params['product']->name[1] !== '') {
-                $productSave = new ProductSave($this->context->getTranslator());
-                $productSave->hookActionProductSave($params['id_product']);
-            }
+            $productSave = new ProductSave($this->context->getTranslator());
+            $productSave->hookActionProductSave($params['id_product']);
         }
     }
 
