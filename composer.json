@@ -1,7 +1,7 @@
 {
   "name": "moloni/moloni-prestashop-es",
   "license": "OSL-3.0",
-  "version": "v1.1.10",
+  "version": "v1.1.11",
   "description": "Plugin for Moloni ES - Prestashop",
   "authors": [
     {
@@ -40,6 +40,13 @@
   "type": "prestashop-module",
   "extra": {
     "changelog": [
+      {
+        "version": "v1.1.11",
+        "title": "Fix type casting.",
+        "description": [
+          "Fix type casting."
+        ]
+      },
       {
         "version": "v1.1.10",
         "title": "Fix release.",

@@ -80,7 +80,7 @@ class Product
         }
 
         $this->taxName = $this->productPs->tax_name;
-        $this->taxValue = $this->productPs->tax_rate;
+        $this->taxValue = (float)$this->productPs->tax_rate;
 
         $this->productCategoryName = (new \Category(
             $this->productPs->id_category_default,
@@ -390,7 +390,7 @@ class Product
         }
 
         //if an default tax is set in settings, use its id.
-        if (Settings::get('Tax') != 'LetPresta' && is_numeric(Settings::get('Tax'))) {
+        if (Settings::get('Tax') !== 'LetPresta' && is_numeric(Settings::get('Tax'))) {
             $this->taxId = (int) Settings::get('Tax');
 
             $variables = ['companyId' => (int) Company::get('company_id'),
@@ -410,17 +410,17 @@ class Product
             }
 
             $query = $query['data']['tax']['data']['value'];
-            $this->taxValue = $query;
+            $this->taxValue = (float)$query;
 
             //if the tax is set, calculate the product price
             $this->price = ($this->priceWithTax * 100);
-            $this->price = $this->price / (100 + $this->taxValue);
+            $this->price /= (100 + $this->taxValue);
 
             return true;
         }
 
         //in case tax value is 0 or in settings is the default selected option is "isento"
-        if ($this->taxValue == 0 || Settings::get('Tax') == 'isento') {
+        if ($this->taxValue === 0 || Settings::get('Tax') === 'isento') {
             //set value to 0 because if tax is "isento", in setVariables whe need to send taxes empty
             $this->taxValue = 0;
             //"isento" reasons
@@ -454,7 +454,7 @@ class Product
 
         //Sets the tax percentage to the first entry tax with the same value
         foreach ($queryResult as $tax) {
-            if (round($tax['value'], 2) == round($this->taxValue, 2)) {
+            if (round((float)$tax['value'], 2) === round($this->taxValue, 2)) {
                 $this->taxId = $tax['taxId'];
                 $this->taxValue = $tax['value'];
 
