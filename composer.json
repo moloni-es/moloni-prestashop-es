@@ -1,7 +1,7 @@
 {
   "name": "moloni/moloni-prestashop-es",
   "license": "OSL-3.0",
-  "version": "v1.1.13",
+  "version": "v1.1.14",
   "description": "Plugin for Moloni ES - Prestashop",
   "authors": [
     {
@@ -40,6 +40,13 @@
   "type": "prestashop-module",
   "extra": {
     "changelog": [
+      {
+        "version": "v1.1.14",
+        "title": "Tax rates fix.",
+        "description": [
+          "Adjust decimal places of calculated tax rates."
+        ]
+      },
       {
         "version": "v1.1.13",
         "title": "Fix token validation check.",
