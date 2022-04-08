@@ -456,7 +456,6 @@ class Product
         foreach ($queryResult as $tax) {
             if (round((float)$tax['value'], 2) === round($this->taxValue, 2)) {
                 $this->taxId = $tax['taxId'];
-                $this->taxValue = $tax['value'];
 
                 return true;
             }

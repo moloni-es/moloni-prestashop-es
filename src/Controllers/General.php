@@ -135,7 +135,10 @@ class General extends FrameworkBundleAdminController
     {
         //get saved data in moloni_app table
         $dataArray = Company::getAll();
-        if ($dataArray === false || empty($dataArray)) {
+
+        if (empty($dataArray) ||
+            empty($dataArray['refresh_token']) ||
+            empty($dataArray['access_token'])) {
             Log::writeLog($this->trans('Database is empty!!', 'Modules.Moloniprestashopes.Errors'));
 
             return false;
