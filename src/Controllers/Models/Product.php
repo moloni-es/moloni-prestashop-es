@@ -664,6 +664,8 @@ class Product
             $this->taxValue =
                 (100 * ($cartProduct['unit_price_tax_incl']
                         - $cartProduct['unit_price_tax_excl'])) / $cartProduct['unit_price_tax_excl'];
+
+            $this->taxValue = round((float)$this->taxValue, 2);
         } else {
             $this->taxValue = 0;
         }
