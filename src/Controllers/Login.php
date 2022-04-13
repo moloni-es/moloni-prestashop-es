@@ -32,7 +32,7 @@ class Login extends General
      */
     public function display()
     {
-        //if login is valid, redirect to orders page
+        // if login is valid, redirect to orders page
         if ($this->checkLogin()) {
             Error::addError($this->trans(
                 'User already logged in!!',
@@ -66,7 +66,7 @@ class Login extends General
             if ($form->isSubmitted() && $form->isValid()) {
                 $submittedData = $form->getData();
 
-                //remove spaces and tabs form strings, because copy + paste from moloni has them
+                // remove spaces and tabs form strings, because copy + paste from moloni has them
                 $submittedData['developerID'] = preg_replace('/\s+/', '', $submittedData['developerID']);
                 $submittedData['clientSecret'] = preg_replace('/\s+/', '', $submittedData['clientSecret']);
 
@@ -83,7 +83,7 @@ class Login extends General
                     'refresh_expire' => '',
                 ]);
 
-                //url to get back to right action
+                // url to get back to right action
                 $redirectUri = _PS_BASE_URL_SSL_ . $this->generateUrl(
                     'moloni_es_login_retrievecode',
                     [],
@@ -92,7 +92,7 @@ class Login extends General
 
                 Company::fillCache();
 
-                //url to login in moloni.es
+                // url to login in moloni.es
                 $url = 'https://api.moloni.es/v1/auth/authorize?apiClientId=' .
                     $submittedData['developerID'] .
                     '&redirectUri=' . $redirectUri;
@@ -144,7 +144,7 @@ class Login extends General
 
         $companies = [];
 
-        //fill array with available companies to chose
+        // fill array with available companies to chose
         foreach ($companiesId['data']['me']['data']['userCompanies'] as $aux) {
             $variables = [
                 'companyId' => $aux['company']['companyId'],
@@ -152,7 +152,7 @@ class Login extends General
             ];
             $queryCompaniesInfo = Companies::queryCompany($variables);
 
-            //adds error to log, user view and show last request values
+            // adds error to log, user view and show last request values
             if (isset($queryCompaniesInfo['errors'])) {
                 Error::addError('Error getting company info!!');
                 $this->getUserErrorMessage();
@@ -201,7 +201,7 @@ class Login extends General
             ], 'id =' . $dataBaseId, 1, false);
 
             Company::fillCache();
-            //create webhooks after login
+            // create webhooks after login
             WebHooks::createHooks();
 
             $this->addFlash('success', $this->trans('Login was successful.', 'Modules.Moloniprestashopes.Success'));

@@ -1,0 +1,17 @@
+includes:
+  - bootstrap.php
+  - %currentWorkingDirectory%/vendor/prestashop/php-dev-tools/phpstan/ps-module-extension.neon
+
+parameters:
+  paths:
+    - %currentWorkingDirectory%/
+  excludePaths:
+    analyse:
+      - %currentWorkingDirectory%/vendor
+      - %currentWorkingDirectory%/tests
+  parallel:
+      maximumNumberOfProcesses: 6
+  reportUnmatchedIgnoredErrors: false
+  level: 4
+  editorUrl: 'phpstorm://open?file=%%file%%&line=%%line%%'
+

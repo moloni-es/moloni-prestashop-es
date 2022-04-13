@@ -39,7 +39,7 @@ class ProductSave
      */
     public function hookActionProductSave($productId)
     {
-        //to prevent infinite loops
+        // to prevent infinite loops
         if (LogSync::wasSyncedRecently(1, $productId) === true) {
             Log::writeLog('Product has already been synced (prestashop -> moloni)');
 

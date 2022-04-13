@@ -304,7 +304,7 @@ class Installer
     {
         $database = Db::getInstance();
 
-        //verify if the translations already exist
+        // verify if the translations already exist
         $sql = 'SELECT count(*) FROM ' . _DB_PREFIX_ . 'translation
                 where `domain` like "ModulesMoloniprestashopes%"';
         $count = (int) ($database->executeS($sql))[0]['count(*)'];

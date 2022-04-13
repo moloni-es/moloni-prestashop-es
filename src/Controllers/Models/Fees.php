@@ -32,7 +32,7 @@ class Fees
     public $ordering;
     public $discount = 0;
 
-    //prestashop order
+    // prestashop order
     public $psOrder;
 
     /**
@@ -75,15 +75,15 @@ class Fees
             }
         }
 
-        //looks if the shipping product has already been created
+        // looks if the shipping product has already been created
         $this->loadByReference();
 
-        //updates the taxes to this particular case
+        // updates the taxes to this particular case
         if (!$this->setTaxes()) {
             return false;
         }
 
-        //no need to know the category id if the category already exists
+        // no need to know the category id if the category already exists
         if (empty($this->productId)) {
             if (!$this->setCategory()) {
                 return false;
@@ -151,7 +151,7 @@ class Fees
             return false;
         }
 
-        //if found, set some data
+        // if found, set some data
         if (!empty($queryResult)) {
             $this->productId = $queryResult[0]['productId'];
         }
@@ -194,14 +194,14 @@ class Fees
      */
     public function setDiscount()
     {
-        //no discounts if shipping was free
+        // no discounts if shipping was free
         if ($this->psOrder->total_shipping = 0) {
             $this->price = 0;
 
             return true;
         }
 
-        //if shipping is free
+        // if shipping is free
         if (!empty($this->psOrder->getCartRules())) {
             $freeShipping = false;
             $shippingName = '';
@@ -222,7 +222,7 @@ class Fees
             }
         }
 
-        //calculate price without taxes
+        // calculate price without taxes
         if ($this->psOrder->carrier_tax_rate > 0) {
             $this->price = (($this->psOrder->getShipping())[0]['shipping_cost_tax_incl'] * 100);
             $this->price = $this->price / (100 + $this->psOrder->carrier_tax_rate);
@@ -287,7 +287,7 @@ class Fees
             return false;
         }
 
-        //if the category exists, sets the id of the first returned category
+        // if the category exists, sets the id of the first returned category
         if (!empty($queryResult)) {
             $this->categoryId = (int) $queryResult[0]['productCategoryId'];
         } else {
@@ -340,7 +340,7 @@ class Fees
             return false;
         }
 
-        //if an default Tax shipping is set in settings, use its id.
+        // if an default Tax shipping is set in settings, use its id.
         if (Settings::get('TaxShipping') != 'LetPresta' && is_numeric(Settings::get('TaxShipping'))) {
             $this->taxId = (int) Settings::get('TaxShipping');
 
@@ -362,14 +362,14 @@ class Fees
 
             $this->taxValue = $query['data']['tax']['data']['value'];
 
-            //if the tax is set, calculate the product price
+            // if the tax is set, calculate the product price
             $this->price = ($this->priceWithTax * 100);
             $this->price = round($this->price / (100 + $this->taxValue), 3);
 
             return true;
         }
 
-        //in case tax value is 0 or in settings is the default selected option is "isento"
+        // in case tax value is 0 or in settings is the default selected option is "isento"
         if ($this->taxValue == 0 || Settings::get('TaxShipping') == 'isento') {
             $this->exemptionReason = Settings::get('Shipping');
             $this->price = $this->priceWithTax;
@@ -400,7 +400,7 @@ class Fees
             return false;
         }
 
-        //Sets the tax percentage to the first entry tax with the same value
+        // Sets the tax percentage to the first entry tax with the same value
         foreach ($queryResult as $tax) {
             if ($tax['value'] == $this->taxValue) {
                 $this->taxId = $tax['taxId'];
@@ -408,11 +408,11 @@ class Fees
             }
         }
 
-        //if no equal value tax found, create a new tax in moloni
+        // if no equal value tax found, create a new tax in moloni
         if (empty($queryResult) || empty($this->taxId)) {
             $variables = ['companyId' => (int) Company::get('company_id')];
 
-            //fetch company and financial info
+            // fetch company and financial info
             $queryResult = Companies::queryCompany2($variables);
 
             if (isset($queryResult['errors'])) {
@@ -473,7 +473,7 @@ class Fees
     public function setType()
     {
         if (empty($this->type)) {
-            //its a service (shipping)
+            // its a service (shipping)
             $this->type = 2;
         }
 
@@ -509,7 +509,7 @@ class Fees
             ],
         ];
 
-        //if the tax is exempt, remove the taxes value to empty
+        // if the tax is exempt, remove the taxes value to empty
         if ($this->taxValue == 0) {
             $variables['data']['taxes'] = [];
             $variables['data']['exemptionReason'] = $this->exemptionReason;
@@ -545,7 +545,7 @@ class Fees
                 ],
         ];
 
-        //if the tax is exempt, remove the taxes value to empty
+        // if the tax is exempt, remove the taxes value to empty
         if ($this->taxValue == 0) {
             $variables['taxes'] = [];
             $variables['exemptionReason'] = $this->exemptionReason;

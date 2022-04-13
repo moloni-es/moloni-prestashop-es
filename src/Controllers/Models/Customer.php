@@ -38,7 +38,7 @@ class Customer
     public $paymentMethodId;
     public $documentSetId;
 
-    //pre-defined
+    // pre-defined
     private $addressCustomer;
     private $isDefault;
 
@@ -190,7 +190,7 @@ class Customer
         }
 
         if (empty($query)) {
-            //no costumer with this VAT
+            // no costumer with this VAT
             return true;
         }
 
@@ -233,7 +233,7 @@ class Customer
         }
 
         if (empty($query)) {
-            //no costumer with this Email
+            // no costumer with this Email
             return true;
         }
 
@@ -340,7 +340,7 @@ class Customer
         if (empty($result)) {
             $nextNumber = Settings::get('ClientPrefix') . '1';
         } else {
-            //go straight for the first result because we only ask for 1
+            // go straight for the first result because we only ask for 1
             $lastNumber = substr($result[0]['number'], strlen(Settings::get('ClientPrefix')));
 
             $nextNumber = ++$lastNumber;

@@ -1,0 +1,18 @@
+@use 'assets/vars';
+
+.moloni {
+  background: vars.$black;
+  display: flex;
+}
+
+@include vars.for-phone-only {
+  .moloni {
+    &-cenas {
+      display: flex;
+      background-size: cover;
+      font-size: xx-small;
+    }
+  }
+}
+
+

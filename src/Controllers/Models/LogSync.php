@@ -35,15 +35,15 @@ class LogSync
     {
         self::$databaseConnection = Db::getInstance();
 
-        self::deleteOldLogs(); //delete old logs before checking entry
+        self::deleteOldLogs(); // delete old logs before checking entry
 
         if (self::getOne($typeId, $entityId)) {
-            return true; //if an entry was found
+            return true; // if an entry was found
         }
 
-        self::addLog($typeId, $entityId); //add new entry
+        self::addLog($typeId, $entityId); // add new entry
 
-        return false; //if an entry was NOT found
+        return false; // if an entry was NOT found
     }
 
     /**

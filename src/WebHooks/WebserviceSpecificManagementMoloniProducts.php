@@ -77,11 +77,11 @@ class webserviceSpecificManagementMoloniProducts implements WebserviceSpecificMa
      */
     public function manage()
     {
-        //get post params
+        // get post params
         $request = file_get_contents('php://input');
         $request = json_decode($request, true);
 
-        //model needs to be Product and Tokens need to be valid
+        // model needs to be Product and Tokens need to be valid
         if ($request['model'] !== 'Product' || General::staticCheckTokens() === false) {
             $this->output = 'Bad request.';
 
@@ -111,7 +111,7 @@ class webserviceSpecificManagementMoloniProducts implements WebserviceSpecificMa
                 $this->update($moloniProduct);
                 break;
             case 'stockChanged':
-                //if the changed product was a variant (because stock changes appens at variant level)
+                // if the changed product was a variant (because stock changes appens at variant level)
                 if (empty($moloniProduct['variants'])) {
                     $this->stockUpdate($moloniProduct);
                 } else {
@@ -143,8 +143,8 @@ class webserviceSpecificManagementMoloniProducts implements WebserviceSpecificMa
         if ($psProductId === false) {
             $psProduct = $this->setProduct($moloniProduct, 0);
 
-            //variants need to be added after the parent is added
-            //create variants if the moloni array has them
+            // variants need to be added after the parent is added
+            // create variants if the moloni array has them
             if (!empty($moloniProduct['variants'])) {
                 $this->setVariants($moloniProduct, $psProduct);
             }
@@ -170,7 +170,7 @@ class webserviceSpecificManagementMoloniProducts implements WebserviceSpecificMa
 
         $psProductId = Product::getIdByReference($moloniProduct['reference']);
 
-        //to prevent infinite loops
+        // to prevent infinite loops
         if (LogSync::wasSyncedRecently(1, $psProductId)) {
             Log::writeLog('Product has already been synced (moloni -> prestashop)');
 
@@ -326,16 +326,16 @@ class webserviceSpecificManagementMoloniProducts implements WebserviceSpecificMa
         }
 
         if (in_array('Categories', $settings, true) === true) {
-            //all categories ids in an array, ordered from lower to higher
+            // all categories ids in an array, ordered from lower to higher
             $categoriesIdArray = $this->setCategories($moloniProduct['productCategory']['productCategoryId']);
-            //prestashop products have categories and 1 main category
+            // prestashop products have categories and 1 main category
 
-            //im saving twice beacuse categories only save the second time for some reason
+            // im saving twice beacuse categories only save the second time for some reason
             $psProduct->addToCategories($categoriesIdArray);
             $psProduct->save();
             $psProduct->addToCategories($categoriesIdArray);
 
-            //set product main category
+            // set product main category
             $psProduct->id_category_default = ($categoriesIdArray[0]);
         }
 
@@ -367,7 +367,7 @@ class webserviceSpecificManagementMoloniProducts implements WebserviceSpecificMa
 
         $settings = unserialize(Settings::get('SyncFields'));
 
-        //set this product attributes
+        // set this product attributes
         $this->setAttributes(self::getAttributes($moloniProduct));
 
         foreach ($moloniProduct['variants'] as $variation) {
@@ -380,7 +380,7 @@ class webserviceSpecificManagementMoloniProducts implements WebserviceSpecificMa
                 );
             }
 
-            //set price of this variation
+            // set price of this variation
             if (Settings::get('Tax') === 'LetPresta') {
                 $price = $variation['price'] - $moloniProduct['price'];
             } else {
@@ -389,7 +389,7 @@ class webserviceSpecificManagementMoloniProducts implements WebserviceSpecificMa
 
             $combinationId = Combination::getIdByReference($psProduct->id, $variation['reference']);
 
-            if ($combinationId === false) {//create combination
+            if ($combinationId === false) {// create combination
                 $tempId = $psProduct->addAttribute(
                     $price,
                     0,
@@ -412,7 +412,7 @@ class webserviceSpecificManagementMoloniProducts implements WebserviceSpecificMa
                         ['stock']
                     );
                 }
-            } else { //update existing combination
+            } else { // update existing combination
                 if (in_array('Price', $settings, true) === true) {
                     $oldData = ($psProduct->getAttributeCombinationsById($combinationId, $lang))[0];
 
@@ -498,11 +498,11 @@ class webserviceSpecificManagementMoloniProducts implements WebserviceSpecificMa
      */
     public function setCategories($moloniCategoryId)
     {
-        $namesArray = self::getCategoriesFromMoloni($moloniCategoryId); //all names from category tree
+        $namesArray = self::getCategoriesFromMoloni($moloniCategoryId); // all names from category tree
         $lang = (int) Configuration::get('PS_LANG_DEFAULT');
 
         $categoriesIds = [];
-        //the root of all categories has id = 2
+        // the root of all categories has id = 2
         $parentId = 2;
         foreach ($namesArray as $prodCat) {
             if (Category::searchByNameAndParentCategoryId($lang, $prodCat, $parentId) === false) {
@@ -535,7 +535,7 @@ class webserviceSpecificManagementMoloniProducts implements WebserviceSpecificMa
         return $this->objOutput->getObjectRender()->overrideContent($this->output);
     }
 
-    /////////////////////////// AUXILIARY METHODS ///////////////////////////
+    // ///////////////////////// AUXILIARY METHODS ///////////////////////////
 
     /**
      * Returns product variants attributes
@@ -569,12 +569,12 @@ class webserviceSpecificManagementMoloniProducts implements WebserviceSpecificMa
      */
     public static function getCategoriesFromMoloni($moloniCategoryId)
     {
-        $moloniId = $moloniCategoryId; //current category id
+        $moloniId = $moloniCategoryId; // current category id
         $moloniCategoriesTree = [];
-        $failsafe = 0; //we dont want the while loop to be stuck
+        $failsafe = 0; // we dont want the while loop to be stuck
 
         if ($moloniCategoryId === null) {
-            return $moloniCategoriesTree; //can happen because product can have no category in moloni.es
+            return $moloniCategoriesTree; // can happen because product can have no category in moloni.es
         }
 
         do {
@@ -585,18 +585,18 @@ class webserviceSpecificManagementMoloniProducts implements WebserviceSpecificMa
 
             $query = (apiCategories::queryProductCategory($variables))['data']['productCategory']['data'];
 
-            array_unshift($moloniCategoriesTree, $query['name']); //order needs to be inverted
+            array_unshift($moloniCategoriesTree, $query['name']); // order needs to be inverted
 
             if ($query['parent'] === null) {
-                break 1; //break if category has no parent
+                break; // break if category has no parent
             }
 
-            $moloniId = $query['parent']['productCategoryId']; //next current id is this category parent
+            $moloniId = $query['parent']['productCategoryId']; // next current id is this category parent
 
             ++$failsafe;
         } while ($failsafe < 100);
 
-        return $moloniCategoriesTree; //returns the names of all categories (from this product only)
+        return $moloniCategoriesTree; // returns the names of all categories (from this product only)
     }
 
     /**
