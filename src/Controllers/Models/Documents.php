@@ -19,7 +19,7 @@ use PrestaShopBundle\Translation\TranslatorComponent;
 
 class Documents
 {
-    //prestashop models
+    // prestashop models
     private $psOrder;
     private $psCoinOrder;
     private $psDeliveryAddress;
@@ -78,7 +78,7 @@ class Documents
      */
     public function __construct($orderId, $documentType, $translator)
     {
-        //gets the translator instance
+        // gets the translator instance
         $this->translator = $translator;
 
         if (!is_numeric($orderId) || empty($documentType)) {
@@ -116,7 +116,7 @@ class Documents
         $this->expirationDate = $datetime;
         $this->ourReference = $this->psOrder->reference;
 
-        //check this value because in actionpaymentconfirmation it is empty
+        // check this value because in actionpaymentconfirmation it is empty
         if ($this->psOrder->invoice_date == '0000-00-00 00:00:00') {
             $this->deliveryLoadDate = $datetime;
         } else {
@@ -291,13 +291,13 @@ class Documents
 
                 $mutationInvoice = $mutationInvoice['data']['invoiceCreate']['data'];
 
-                //set some info to close invoice
+                // set some info to close invoice
                 $this->moloniTotal = $mutationInvoice['totalValue'];
                 $this->documentId = $mutationInvoice['documentId'];
                 $this->ourReference = $mutationInvoice['ourReference'];
 
-                $this->documentType = 'invoices'; //temporary modification to close invoice
-                $this->closeDocument(); //close invoice (sets $this->status to 1 if values match, 0 otherwise)
+                $this->documentType = 'invoices'; // temporary modification to close invoice
+                $this->closeDocument(); // close invoice (sets $this->status to 1 if values match, 0 otherwise)
                 $this->createPDF();
 
                 Log::writeLog($this->translator->trans(
@@ -306,7 +306,7 @@ class Documents
                     'Modules.Moloniprestashopes.Success'
                 ));
 
-                //if the document did not close (values did not match), save invoice as draft
+                // if the document did not close (values did not match), save invoice as draft
                 if ((int) $this->status === 0) {
                     $this->saveDatabase();
                     $this->addError($this->translator->trans(
@@ -319,7 +319,7 @@ class Documents
                 }
                 $this->documentType = 'receipts';
 
-                //after creating invoice create receipt in draft
+                // after creating invoice create receipt in draft
                 $mutation = ApiDocuments::mutationReceiptCreate($this->setVariablesReceipt($mutationInvoice));
 
                 if (isset($mutation['errors']) ||
@@ -401,8 +401,8 @@ class Documents
         }
         $this->moloniTotal = $mutation['totalValue'];
 
-        //if documents are closed (in settings), close document
-        //needs to be done after inserting but before saving and create pdf
+        // if documents are closed (in settings), close document
+        // needs to be done after inserting but before saving and create pdf
         if ((int) modelSettings::get('Status') === 1) {
             $this->closeDocument();
         }
@@ -417,9 +417,9 @@ class Documents
             return false;
         }
 
-        //if document is closed
+        // if document is closed
         if ($this->status === 1) {
-            //creates pdf
+            // creates pdf
             if (!$this->createPDF()) {
                 $this->addError($this->translator->trans(
                     'Error creating PDF',
@@ -430,7 +430,7 @@ class Documents
                 return false;
             }
 
-            //sends document to customer if set in settings
+            // sends document to customer if set in settings
             if ((int) modelSettings::get('SendEmail') === 1) {
                 if ($this->sendEmail()) {
                     Log::writeLog('Document sent to customer.');
@@ -446,7 +446,7 @@ class Documents
             'Modules.Moloniprestashopes.Success'
         ));
 
-        //checks if the values match to show the user a msg
+        // checks if the values match to show the user a msg
         $this->checkValues();
 
         return true;
@@ -606,7 +606,7 @@ class Documents
      */
     public function setShipmentFee()
     {
-        //if it had no shipment fees, do nothing
+        // if it had no shipment fees, do nothing
         if ($this->psOrder->total_shipping == 0) {
             return true;
         }
@@ -617,17 +617,17 @@ class Documents
             return false;
         }
 
-        //if the product does not exist in moloni, create it
+        // if the product does not exist in moloni, create it
         if (empty($fee->productId)) {
             if (!$fee->create()) {
                 return false;
             }
         }
 
-        //needs to be the last item
+        // needs to be the last item
         $fee->ordering = count($this->products) + 1;
 
-        //add shipment as product to the end of array
+        // add shipment as product to the end of array
         $this->products[] = $fee->getVariablesForDocuments();
 
         return true;
@@ -819,7 +819,7 @@ class Documents
 
             return false;
         } else {
-            //for each order product
+            // for each order product
             foreach ($this->psOrder->getCartProducts() as $key => $product) {
                 $productPS = new \PrestaShop\PrestaShop\Adapter\Entity\Product(
                     $product['product_id'],
@@ -831,23 +831,23 @@ class Documents
                 $productPurchased->priceWithTax = $product['total_price_tax_incl'];
                 $productPurchased->discount = $this->percentDiscount;
 
-                //see if product exists in moloni
+                // see if product exists in moloni
                 if (!$productPurchased->init()) {
                     return false;
                 }
 
-                //if not create it
+                // if not create it
                 if (empty($productPurchased->productId)) {
                     if (!$productPurchased->create()) {
                         return false;
                     }
                 }
 
-                //information needed only in this case
+                // information needed only in this case
                 $productPurchased->ordering = $key;
                 $productPurchased->qty = $product['product_quantity'];
 
-                //gets all data to add to the products array
+                // gets all data to add to the products array
                 $this->products[] = $productPurchased->setVariablesForDocument($product);
             }
 
@@ -944,8 +944,8 @@ class Documents
      */
     public function closeDocument()
     {
-        //to close a document, values must be the same
-        //otherwise create the document in draft mode
+        // to close a document, values must be the same
+        // otherwise create the document in draft mode
         if (!$this->checkValues()) {
             return false;
         }
@@ -1178,7 +1178,7 @@ class Documents
      */
     public static function downloadPDF($idDocument)
     {
-        //check if the id is the create document database
+        // check if the id is the create document database
         $db = \Db::getInstance();
         $sql = 'SELECT invoice_type FROM ' . _DB_PREFIX_ . 'moloni_documents ' .
             'Where document_id = ' . $idDocument . ' AND invoice_status = 1';
@@ -1292,7 +1292,7 @@ class Documents
         return 'https://ac.moloni.es/' . $result['slug'] . '/' . $sqlQuery['invoice_type'] . '/view/' . $idDocument;
     }
 
-    //***** Copied from MoloniPT and modified ******//
+    // ***** Copied from MoloniPT and modified ******//
 
     /**
      * Calculates the total discount percentage

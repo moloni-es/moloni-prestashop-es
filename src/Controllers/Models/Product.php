@@ -35,11 +35,11 @@ class Product
     public $taxName;
     public $taxValue;
     public $warehouseId;
-    public $discount; //documents variable
-    public $ordering; //documents variable
-    public $qty; //documents variable
+    public $discount; // documents variable
+    public $ordering; // documents variable
+    public $qty; // documents variable
 
-    //Need to be defined like this, in my understanding
+    // Need to be defined like this, in my understanding
     private $fiscalZoneFinanceType = 1;
     private $fiscalZoneFinanceTypeMode = 'NOR';
     private $taxType = 1;
@@ -80,7 +80,7 @@ class Product
         }
 
         $this->taxName = $this->productPs->tax_name;
-        $this->taxValue = (float)$this->productPs->tax_rate;
+        $this->taxValue = (float) $this->productPs->tax_rate;
 
         $this->productCategoryName = (new \Category(
             $this->productPs->id_category_default,
@@ -91,10 +91,10 @@ class Product
         $this->summary = strip_tags($this->productPs->description_short);
         $this->measurementUnitName = $this->productPs->unity;
 
-        //looks if the product exists in moloni by searching by its reference
+        // looks if the product exists in moloni by searching by its reference
         $this->loadByReference();
 
-        //reference cannot be empty in moloni
+        // reference cannot be empty in moloni
         if (empty($this->reference)) {
             $this->addError($this->translator->trans(
                 'Cannot sync product, reference is null!!',
@@ -146,7 +146,7 @@ class Product
             return false;
         }
 
-        //if found, set some data
+        // if found, set some data
         if (!empty($queryResult)) {
             foreach ($queryResult as $query) {
                 if ((int) $query['reference'] == (int) $this->reference) {
@@ -177,7 +177,7 @@ class Product
      */
     public function create()
     {
-        //this value is not null if loadByReference() method found the product on moloni
+        // this value is not null if loadByReference() method found the product on moloni
         if (!empty($this->productId)) {
             $mutation = Products::mutationProductUpdate($this->setVariables());
 
@@ -200,7 +200,7 @@ class Product
                 'Modules.Moloniprestashopes.Success'
             ));
 
-            //if stock sync is enabled in settings, syncs stock
+            // if stock sync is enabled in settings, syncs stock
             if ((Settings::get('Stocks') == 1)) {
                 $this->setStock();
             }
@@ -237,7 +237,7 @@ class Product
      */
     public function setType()
     {
-        //1-Product 2-Service 3-Others
+        // 1-Product 2-Service 3-Others
         $this->type = 1;
 
         return true;
@@ -264,7 +264,7 @@ class Product
         }
 
         if ($this->productCategoryId === 0) {
-            $categoryName = 'Tienda online'; //todo: use translations
+            $categoryName = 'Tienda online'; // todo: use translations
             $categoryObj = new ProductCategory($categoryName, 0);
 
             if (!$categoryObj->loadByName()) {
@@ -296,14 +296,14 @@ class Product
             return false;
         }
 
-        //if a default measurement unit is chosen in settings, use its id
+        // if a default measurement unit is chosen in settings, use its id
         if (Settings::get('Measure') != 'LetPresta') {
             $this->measurementUnitId = (int) Settings::get('Measure');
 
             return true;
         }
 
-        //if the let presta chosen
+        // if the let presta chosen
         if (empty($this->measurementUnitName)) {
             $this->addError($this->translator->trans(
                 'Cannot sync product, measurement unit name is null',
@@ -335,7 +335,7 @@ class Product
             return false;
         }
 
-        //if it already exists, get its id. Otherwise create new measurement unit
+        // if it already exists, get its id. Otherwise create new measurement unit
         if (!empty($queryResult)) {
             $this->measurementUnitId = $queryResult[0]['measurementUnitId'];
         } else {
@@ -389,7 +389,7 @@ class Product
             return false;
         }
 
-        //if an default tax is set in settings, use its id.
+        // if an default tax is set in settings, use its id.
         if (Settings::get('Tax') !== 'LetPresta' && is_numeric(Settings::get('Tax'))) {
             $this->taxId = (int) Settings::get('Tax');
 
@@ -410,20 +410,20 @@ class Product
             }
 
             $query = $query['data']['tax']['data']['value'];
-            $this->taxValue = (float)$query;
+            $this->taxValue = (float) $query;
 
-            //if the tax is set, calculate the product price
+            // if the tax is set, calculate the product price
             $this->price = ($this->priceWithTax * 100);
             $this->price /= (100 + $this->taxValue);
 
             return true;
         }
 
-        //in case tax value is 0 or in settings is the default selected option is "isento"
+        // in case tax value is 0 or in settings is the default selected option is "isento"
         if ($this->taxValue === 0 || Settings::get('Tax') === 'isento') {
-            //set value to 0 because if tax is "isento", in setVariables whe need to send taxes empty
+            // set value to 0 because if tax is "isento", in setVariables whe need to send taxes empty
             $this->taxValue = 0;
-            //"isento" reasons
+            // "isento" reasons
             $this->price = $this->priceWithTax;
             $this->exemptionReason = Settings::get('Exemption');
             if (empty($this->exemptionReason)) {
@@ -452,19 +452,19 @@ class Product
             return false;
         }
 
-        //Sets the tax percentage to the first entry tax with the same value
+        // Sets the tax percentage to the first entry tax with the same value
         foreach ($queryResult as $tax) {
-            if (round((float)$tax['value'], 2) === round($this->taxValue, 2)) {
+            if (round((float) $tax['value'], 2) === round($this->taxValue, 2)) {
                 $this->taxId = $tax['taxId'];
 
                 return true;
             }
         }
 
-        //if no equal value tax found, create a new tax in moloni
+        // if no equal value tax found, create a new tax in moloni
         $variables = ['companyId' => (int) Company::get('company_id')];
 
-        //fetch company and financial info
+        // fetch company and financial info
         $queryResult = (Companies::queryCompany2($variables))['data']['company']['data'];
 
         if (isset($queryResult['errors'])) {
@@ -521,7 +521,7 @@ class Product
      */
     private function setStock()
     {
-        //if the stock is up-to-date do nothing
+        // if the stock is up-to-date do nothing
         if ($this->stock === $this->productPs->quantity) {
             Log::writeLog($this->translator->trans(
                 'Stock is up-to-date!!',
@@ -540,8 +540,8 @@ class Product
             ],
         ];
 
-        //if prestashop stock is higher, create an manual exit movement on moloni with the deference
-        //else create an manual entry movement
+        // if prestashop stock is higher, create an manual exit movement on moloni with the deference
+        // else create an manual entry movement
         if ((int) $this->stock > (int) $this->productPs->quantity) {
             $variables['data']['qty'] = (float) ($this->stock - $this->productPs->quantity);
             $queryResult = Stock::mutationStockMovementManualExitCreate($variables);
@@ -599,11 +599,11 @@ class Product
             ],
         ];
 
-        //if its to update, set the id in the variables
+        // if its to update, set the id in the variables
         if (!empty($this->productId)) {
             $variables['data']['productId'] = $this->productId;
         } else {
-            //its an create, so set the stock in the chosen settings warehouse
+            // its an create, so set the stock in the chosen settings warehouse
             if (!empty($this->warehouseId)) {
                 $variables['data']['warehouseId'] = (int) $this->warehouseId;
                 $variables['data']['warehouses'] = [
@@ -615,7 +615,7 @@ class Product
             }
         }
 
-        //if the tax is exempt, remove the taxes value to empty
+        // if the tax is exempt, remove the taxes value to empty
         if ($this->taxValue == 0) {
             $variables['data']['taxes'] = [];
         }
@@ -665,7 +665,7 @@ class Product
                 (100 * ($cartProduct['unit_price_tax_incl']
                         - $cartProduct['unit_price_tax_excl'])) / $cartProduct['unit_price_tax_excl'];
 
-            $this->taxValue = round((float)$this->taxValue, 2);
+            $this->taxValue = round((float) $this->taxValue, 2);
         } else {
             $this->taxValue = 0;
         }
@@ -692,7 +692,7 @@ class Product
             ],
         ];
 
-        //if the tax is exempt, remove the taxes value to empty
+        // if the tax is exempt, remove the taxes value to empty
         if ($this->taxValue === 0) {
             $variables['taxes'] = [];
         }
@@ -718,7 +718,7 @@ class Product
         do {
             $category = new \Category($currentId, $lang);
             $currentId = $category->id_parent;
-            array_unshift($categories, $category->name); //order needs to be inverted
+            array_unshift($categories, $category->name); // order needs to be inverted
 
             ++$failsafe;
         } while (!in_array((int) $currentId, [1, 2]) && $failsafe < 100);

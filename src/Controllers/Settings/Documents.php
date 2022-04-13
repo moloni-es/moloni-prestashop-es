@@ -154,10 +154,10 @@ class Documents extends General
             if ($form->isSubmitted() && $form->isValid()) {
                 $submitData = $form->getData();
 
-                //invoice + receipt cant be draft
+                // invoice + receipt cant be draft
                 if ($form->get('Status')->getViewData() == 0
                     && $form->get('Type')->getViewData() == 'receipts') {
-                    //maybe trow and error here
+                    // maybe trow and error here
                     $this->addFlash('warning', $this->trans(
                         'Cannot save "Invoice + Receipt" and "Draft" at the same time!!',
                         'Modules.Moloniprestashopes.Errors'
@@ -166,10 +166,10 @@ class Documents extends General
                     return $this->redirectSettingsIndex();
                 }
 
-                //Transport cant be draft
+                // Transport cant be draft
                 if ($form->get('Status')->getViewData() == 0
                     && $form->get('Transport')->getViewData() == 1) {
-                    //maybe trow and error here
+                    // maybe trow and error here
                     $this->addFlash('warning', $this->trans(
                         'Cannot save Transport documents and "Draft" at the same time!!',
                         'Modules.Moloniprestashopes.Errors'

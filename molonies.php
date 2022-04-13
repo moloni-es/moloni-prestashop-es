@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 2020 - Moloni.com
+ * 2022 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -19,20 +19,25 @@
  * @author    Moloni
  * @copyright Moloni
  * @license   https://creativecommons.org/licenses/by-nd/4.0/
+ *
+ * @noinspection PhpMultipleClassDeclarationsInspection
  */
+
+declare(strict_types=1);
+
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
 use Moloni\ES\Controllers\Models\Settings;
 use Moloni\ES\Hooks\PaymentConfirmation;
 use Moloni\ES\Hooks\ProductSave;
 use Moloni\ES\Install\Installer;
 
-/** @noinspection AutoloadingIssuesInspection */
-
-// @codingStandardsIgnoreLine
-class MoloniPrestashopEs extends Module
+class molonies extends Module // phpcs:ignore
 {
     /**
-     * Configuration data
+     * Configuration data teste 2
      *
      * @var string[][]
      */
@@ -43,7 +48,7 @@ class MoloniPrestashopEs extends Module
      *
      * @var string[]
      */
-    private $hooks = [];
+    private $hooks;
 
     /**
      * MoloniPrestashopEs constructor.
@@ -52,6 +57,7 @@ class MoloniPrestashopEs extends Module
     {
         $this->name = 'moloniprestashopes';
         $this->tab = 'administration';
+
         $this->need_instance = 1;
         $this->version = '1.1.14';
         $this->ps_versions_compliancy = ['min' => '1.7.5', 'max' => _PS_VERSION_];
@@ -61,7 +67,7 @@ class MoloniPrestashopEs extends Module
 
         $this->displayName = $this->trans('Moloni ES', [], 'Modules.Moloniprestashopes.Moloniprestashopes');
         $this->description = $this->trans(
-            'Transform all your orders in verified documents 
+            'Transform all your orders in verified documents
         without any effort and focus on selling!',
             [],
             'Modules.Moloniprestashopes.Moloniprestashopes'
@@ -69,7 +75,7 @@ class MoloniPrestashopEs extends Module
 
         $this->autoload();
 
-        //add the needed hooks to the configuration
+        // add the needed hooks to the configuration
         $this->hooks = [
             'actionAdminControllerSetMedia',
             'actionPaymentConfirmation',
@@ -84,7 +90,7 @@ class MoloniPrestashopEs extends Module
      *
      * @return bool
      */
-    public function isUsingNewTranslationSystem()
+    public function isUsingNewTranslationSystem(): bool
     {
         return true;
     }
@@ -94,7 +100,7 @@ class MoloniPrestashopEs extends Module
      *
      * @return bool
      */
-    public function install()
+    public function install(): bool
     {
         try {
             if (!(new Installer($this, $this->configuration))->install()) {
@@ -124,7 +130,7 @@ class MoloniPrestashopEs extends Module
      *
      * @return bool
      */
-    public function uninstall()
+    public function uninstall(): bool
     {
         try {
             if (!(new Installer($this, $this->configuration))->uninstall()) {
@@ -156,7 +162,7 @@ class MoloniPrestashopEs extends Module
      *
      * @return bool
      */
-    public function enable($force_all = false)
+    public function enable($force_all = false): bool
     {
         try {
             if (!(new Installer($this, $this->configuration))->enable()) {
@@ -218,13 +224,13 @@ class MoloniPrestashopEs extends Module
      *
      * @return array[]
      */
-    public function hookAddWebserviceResources()
+    public function hookAddWebserviceResources(): array
     {
         include_once _PS_MODULE_DIR_ . 'moloniprestashopes/src/WebHooks/WebserviceSpecificManagementMoloniProducts.php';
 
         return [
             'moloniproducts' => [
-                'description' => 'My Custom Resource',
+                'description' => 'My Custom Resource 2',
                 'specific_management' => true,
             ],
         ];

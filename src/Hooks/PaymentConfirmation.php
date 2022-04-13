@@ -37,7 +37,7 @@ class PaymentConfirmation
      */
     public function hookActionPaymentConfirmation($orderId)
     {
-        //check if the settings have been set
+        // check if the settings have been set
         if (!Settings::get('Type')) {
             Log::writeLog('Pls set document type in settings!!');
 

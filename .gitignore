@@ -1,5 +1,8 @@
 .idea
-.php_cs.cache
+.dev/node_modules
+
 /vendor/
 /logs/
-/nbproject/private/
+/.php_cs.cache
+/.php-cs-fixer.cache
+/view/compiled/

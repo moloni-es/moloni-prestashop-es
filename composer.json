@@ -1,187 +1,29 @@
 {
-  "name": "moloni/moloni-prestashop-es",
-  "license": "OSL-3.0",
-  "version": "v1.1.14",
-  "description": "Plugin for Moloni ES - Prestashop",
+  "name": "moloni/moloni-es",
+  "description": "Module for Prestashop integration",
+  "type": "prestashop-module",
+  "license": "https://creativecommons.org/licenses/by-nd/4.0/",
   "authors": [
     {
       "name": "Moloni",
-      "email": "apoio@moloni.com"
+      "email": "plugins@moloni.com"
     }
   ],
   "scripts": {
-    "post-install-cmd": [
-      "php -r \"copy('config/pre-commit', '.git/hooks/pre-commit');\""
-    ],
-    "post-update-cmd": [
-      "php -r \"copy('config/pre-commit', '.git/hooks/pre-commit');\""
-    ]
+    "check-phpstan": "php vendor/bin/phpstan analyse --configuration=tests/phpstan/phpstan.neon --memory-limit 10G",
+    "check-phpcs": "vendor/bin/php-cs-fixer fix -vv",
+    "auto-header": "php vendor/bin/header-stamp --license=assets/afl.txt --exclude=vendor,node_modules"
   },
-  "autoload": {
-    "psr-4": {
-      "Moloni\\ES\\": "src/"
-    }
-  },
-  "require": {
-    "php": ">=7.2",
-    "ext-curl": "*",
-    "ext-json": "*"
+  "minimum-stability": "stable",
+  "require-dev": {
+    "prestashop/php-dev-tools": "^4.2",
+    "phpstan/phpstan": "^1.5",
+    "phpunit/phpunit": "5.x",
+    "friendsofphp/php-cs-fixer": "^3.8"
   },
   "config": {
-    "preferred-install": "dist",
-    "prepend-autoloader": false,
-    "optimize-autoloader": true
-  },
-  "require-dev": {
-    "squizlabs/php_codesniffer": "3.*",
-    "phpmd/phpmd": "@stable",
-    "friendsofphp/php-cs-fixer": "*"
-  },
-  "type": "prestashop-module",
-  "extra": {
-    "changelog": [
-      {
-        "version": "v1.1.14",
-        "title": "Tax rates fix.",
-        "description": [
-          "Adjust decimal places of calculated tax rates."
-        ]
-      },
-      {
-        "version": "v1.1.13",
-        "title": "Fix token validation check.",
-        "description": [
-          "Fix type casting."
-        ]
-      },
-      {
-        "version": "v1.1.12",
-        "title": "Fix type casting.",
-        "description": [
-          "Fix type casting."
-        ]
-      },
-      {
-        "version": "v1.1.11",
-        "title": "Fix type casting.",
-        "description": [
-          "Fix type casting."
-        ]
-      },
-      {
-        "version": "v1.1.10",
-        "title": "Fix release.",
-        "description": [
-          "Fix release."
-        ]
-      },
-      {
-        "version": "v1.1.09",
-        "title": "Fix product synchronization.",
-        "description": [
-          "Fix product synchronization.",
-          "Fix paginator."
-        ]
-      },
-      {
-        "version": "v1.1.08",
-        "title": "Fix notes.",
-        "description": [
-          "Fix notes."
-        ]
-      },
-      {
-        "version": "v1.1.07",
-        "title": "Fix notes.",
-        "description": [
-          "Fix notes."
-        ]
-      },
-      {
-        "version": "v1.1.06",
-        "title": "Fix error on installation.",
-        "description": [
-          "Updated classes namespaces."
-        ]
-      },
-      {
-        "version": "v1.1.05",
-        "title": "Updated dependencies.",
-        "description": [
-          "Updated dependencies."
-        ]
-      },
-      {
-        "version": "v1.1.04",
-        "title": "Updated translations.",
-        "description": [
-          "Updated translation strings."
-        ]
-      },
-      {
-        "version": "v1.1.03",
-        "title": "Updated translations.",
-        "description": [
-          "Updated translation strings."
-        ]
-      },
-      {
-        "version": "v1.1.02",
-        "title": "New client numbering system",
-        "description": [
-          "New client numbering system, now working as in client area."
-        ]
-      },
-      {
-        "version": "v1.1.01",
-        "title": "Fixed bug inserting customers",
-        "description": [
-          "Fixed bug where error request showed empty or with value '1'.",
-          "Fixed bug where customer with empty vat would throw error."
-        ]
-      },
-      {
-        "version": "v1.1.0",
-        "title": "Minor fixes",
-        "description": [
-          "Fixed bug where error request showed empty or with value '1'."
-        ]
-      },
-      {
-        "version": "v1.0.9",
-        "title": "Added email support",
-        "description": [
-          "Now documents can be sent to customers by email automatically."
-        ]
-      },
-      {
-        "version": "v1.0.8",
-        "title": "Fixed documents payment methods",
-        "description": [
-          "Fixed a bug were the payment method of the order was not the same as the one added to the document."
-        ]
-      },
-      {
-        "version": "v1.0.7",
-        "title": "Added support for WebHooks",
-        "description": [
-          "You can now automate the synchronization of Moloni items and stock to your Prestashop store"
-        ]
-      },
-      {
-        "version": "v1.0.5",
-        "title": "General fixes",
-        "description": [
-          "Fix error 500 when creating a document and fix invoice + receipt throwing error despite creating document as intended"
-        ]
-      },
-      {
-        "version": "v0.9.0",
-        "title": "Beta Release ",
-        "description": [
-          "Plugin beta release for Moloni ES and Prestashop"
-        ]
-      }
-    ]
+    "platform": {
+      "php": "7.2"
+    }
   }
 }

@@ -25,7 +25,7 @@ class Documents extends General
         }
 
         $dataBase = \Db::getInstance();
-        //get the number of documents created in this company
+        // get the number of documents created in this company
         $sql = 'SELECT COUNT(*) FROM ' . _DB_PREFIX_ . 'moloni_documents
         WHERE `company_id` = ' . Company::get('company_id');
 
@@ -44,10 +44,10 @@ class Documents extends General
         $documentArray = $dataBase->executeS($sql);
 
         foreach ($documentArray as $key => $value) {
-            //sets the order currency symbol and url to see order details
+            // sets the order currency symbol and url to see order details
             $documentArray[$key]['currency'] = (new Currency((new Order($value['id_order']))->id_currency))->symbol;
 
-            //create url to see order information
+            // create url to see order information
             $documentArray[$key]['viewURL'] = $this->getAdminLink(
                 'AdminOrders',
                 [
@@ -56,19 +56,19 @@ class Documents extends General
                     ]
             );
 
-            //to show if the values of the invoices match
+            // to show if the values of the invoices match
             if ($value['invoice_total'] != (new Order($value['id_order']))->total_paid_tax_incl) {
-                $documentArray[$key]['wrong'] = true; //red value
+                $documentArray[$key]['wrong'] = true; // red value
             } else {
-                $documentArray[$key]['wrong'] = false; //green value
+                $documentArray[$key]['wrong'] = false; // green value
             }
         }
 
         return $this->render(
             '@Modules/moloniprestashopes/src/View/Templates/Admin/Documents.twig',
             [
-                'documentArray' => $documentArray, //documents to show
-                'documentTypesArray' => $this->getDocumentsTypes(), //types of documents
+                'documentArray' => $documentArray, // documents to show
+                'documentTypesArray' => $this->getDocumentsTypes(), // types of documents
                 'downloadDocumentRoute' => 'moloni_es_documents_download_document',
                 'moloniViewRoute' => 'moloni_es_documents_view_document',
                 'thisRoute' => 'moloni_es_documents_index',
@@ -184,7 +184,7 @@ class Documents extends General
             return $this->redirectDocuments();
         }
 
-        //0- draft 1-closed 2-discarded
+        // 0- draft 1-closed 2-discarded
         if ($query['invoice_status'] != 2) {
             $this->addFlash('error', $this->trans(
                 'This order was not discarted!!',

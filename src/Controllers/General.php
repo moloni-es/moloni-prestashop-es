@@ -133,7 +133,7 @@ class General extends FrameworkBundleAdminController
      */
     public function checkTokens()
     {
-        //get saved data in moloni_app table
+        // get saved data in moloni_app table
         $dataArray = Company::getAll();
 
         if (empty($dataArray) ||
@@ -144,7 +144,7 @@ class General extends FrameworkBundleAdminController
             return false;
         }
 
-        //if refresh token is expired new login is required
+        // if refresh token is expired new login is required
         if ($dataArray['refresh_expire'] < (time())) {
             Log::writeLog($this->trans('Refresh token has expired', 'Modules.Moloniprestashopes.Errors'));
 
@@ -158,7 +158,7 @@ class General extends FrameworkBundleAdminController
             return false;
         }
 
-        //if access token is expired or about to (5 minutes), refresh it
+        // if access token is expired or about to (5 minutes), refresh it
         if ($dataArray['access_expire'] < (time() + 300)) {
             $newDataArray = Curl::refreshTokens();
 
@@ -206,9 +206,9 @@ class General extends FrameworkBundleAdminController
      */
     public function logOut()
     {
-        //delete Webhooks on moloni
+        // delete Webhooks on moloni
         WebHooks::deleteHooks();
-        //deletes all data form the database tables
+        // deletes all data form the database tables
         $dataBase = Db::getInstance();
         $dataBase->execute('TRUNCATE ' . _DB_PREFIX_ . 'moloni_app');
         $dataBase->execute('TRUNCATE ' . _DB_PREFIX_ . 'moloni_settings');
@@ -286,8 +286,8 @@ class General extends FrameworkBundleAdminController
      */
     public function getPaginator($currentPage, $entries)
     {
-        $linesPerPage = 10; //lines per page
-        $numberOfTabs = 1; //default number or tabs
+        $linesPerPage = 10; // lines per page
+        $numberOfTabs = 1; // default number or tabs
 
         if ($currentPage <= 0 || !isset($currentPage)) {
             $currentPage = 1;
@@ -302,7 +302,7 @@ class General extends FrameworkBundleAdminController
                 $currentPage = $numberOfTabs;
             }
         }
-        //where it starts depending on the page
+        // where it starts depending on the page
         $offSet = ($currentPage * $linesPerPage) - $linesPerPage;
 
         return [
@@ -320,21 +320,21 @@ class General extends FrameworkBundleAdminController
      */
     public static function staticCheckTokens()
     {
-        //get saved data in moloni_app table
+        // get saved data in moloni_app table
         $dataArray = Company::getAll();
 
         if ($dataArray === false || empty($dataArray)) {
             return false;
         }
 
-        //if refresh token is expired new login is required
+        // if refresh token is expired new login is required
         if ($dataArray['refresh_expire'] < (time())) {
             Log::writeLog('Login expired');
 
             return false;
         }
 
-        //if access token is expired or about to (5 minutes), refresh it
+        // if access token is expired or about to (5 minutes), refresh it
         if ($dataArray['access_expire'] < (time() + 300)) {
             $newDataArray = Curl::refreshTokens();
 

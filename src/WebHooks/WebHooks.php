@@ -91,7 +91,7 @@ class WebHooks
     public static function createHooks()
     {
         self::enableWebServices();
-        self::deleteHooks(); //prevent multiple hooks from doing the same
+        self::deleteHooks(); // prevent multiple hooks from doing the same
         $key = self::createCredentials();
 
         $variables = [
@@ -100,8 +100,8 @@ class WebHooks
         ];
 
         foreach (self::$models as $route => $model) {
-            //the authorization key needs to be after http(s):// and before the actual domain
-            //(example: http://{key}@domain.com)
+            // the authorization key needs to be after http(s):// and before the actual domain
+            // (example: http://{key}@domain.com)
             $baseUrl = _PS_BASE_URL_SSL_;
             $url = substr_replace($baseUrl, '://' . $key . '@', strpos($baseUrl, '://'), strlen('://'));
 

@@ -41,7 +41,7 @@ class Curl
 
         $result = json_decode(curl_exec($con), true);
 
-        //always save the last request
+        // always save the last request
         Error::addRequest(
             [
                 'query' => $query,
@@ -69,7 +69,7 @@ class Curl
      */
     public static function complex($query, $variables, $keyString)
     {
-        //to get all items we need to paginate
+        // to get all items we need to paginate
         $pageNumber = 0;
         $arrayAPI = [];
         do {
@@ -129,7 +129,7 @@ class Curl
 
         $res = json_decode($resCurl, true);
 
-        //add the 'bad' request to the errors class
+        // add the 'bad' request to the errors class
         if (isset($res['errors'])) {
             Error::addRequest(
                 [
@@ -183,7 +183,7 @@ class Curl
 
         $res = json_decode($resCurl, true);
 
-        //add the 'bad' request to the errors class
+        // add the 'bad' request to the errors class
         if (isset($res['errors'])) {
             Error::addRequest(
                 [

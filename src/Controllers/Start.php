@@ -30,7 +30,7 @@ class Start extends General
             return $this->redirectLogin();
         }
 
-        //gets number of paid orders not generated
+        // gets number of paid orders not generated
         $dataBase = Db::getInstance();
 
         $sql = 'SELECT COUNT(*) FROM `' . _DB_PREFIX_ . 'orders` o
@@ -58,9 +58,9 @@ class Start extends General
         $orderArray = $dataBase->executeS($sql);
 
         foreach ($orderArray as $key => $value) {
-            //sets the order currency symbol and url to see order details
+            // sets the order currency symbol and url to see order details
             $orderArray[$key]['currency'] = (new Currency($value['id_currency']))->symbol;
-            //creates url to see order
+            // creates url to see order
             $orderArray[$key]['viewURL'] = $this->getAdminLink(
                 'AdminOrders',
                 [
@@ -87,7 +87,7 @@ class Start extends General
     /**
      * Adds an order to the moloni_documents table with a negative id, so it gets discarded
      *
-     * @return null |null
+     * @return null|null
      *
      * @throws PrestaShopDatabaseException
      * @throws PrestaShopException
@@ -102,7 +102,7 @@ class Start extends General
             return $this->redirectOrders();
         }
 
-        //get the min document id to decrement one
+        // get the min document id to decrement one
         $db = Db::getInstance();
         $sql = 'SELECT MIN(document_id) FROM ' . _DB_PREFIX_ . 'moloni_documents';
         $minId = (int) ($db->getRow($sql))['MIN(document_id)'];
@@ -127,12 +127,12 @@ class Start extends General
             return $this->redirectOrders();
         }
 
-        //checks for the existence of an document with the received id
+        // checks for the existence of an document with the received id
         $sql = 'SELECT count(*) FROM ' . _DB_PREFIX_ . 'moloni_documents 
                 where `id_order` = ' . $orderId;
         $count = (int) ($db->getRow($sql))['count(*)'];
 
-        //if found something in database, cant discard this order
+        // if found something in database, cant discard this order
         if ($count != 0) {
             $this->addFlash(
                 'warning',
@@ -143,7 +143,7 @@ class Start extends General
             );
         }
 
-        //adds the order to documents table
+        // adds the order to documents table
         $db->insert('moloni_documents', [
             'document_id' => $minId,
             'reference' => pSQL($order->reference),
@@ -191,13 +191,13 @@ class Start extends General
             return $this->redirectOrders();
         }
 
-        //checks for the existence of an document with the received id
+        // checks for the existence of an document with the received id
         $db = Db::getInstance();
         $sql = 'SELECT count(*) FROM ' . _DB_PREFIX_ . 'moloni_documents 
                 where `id_order` = ' . $request->request->get('orderId');
         $count = (int) ($db->getRow($sql))['count(*)'];
 
-        //if found something in database, cant create document for this order
+        // if found something in database, cant create document for this order
         if ($count != 0) {
             $this->addFlash(
                 'warning',
@@ -208,7 +208,7 @@ class Start extends General
             );
         }
 
-        //Create document model and populates it
+        // Create document model and populates it
         $newDocument = new modelDocuments(
             $request->request->get('orderId'),
             $request->request->get('document_type'),
@@ -221,7 +221,7 @@ class Start extends General
             return $this->redirectOrders();
         }
 
-        //Create document on Moloni ES
+        // Create document on Moloni ES
         if (!$newDocument->create()) {
             $this->getUserErrorMessage();
 
