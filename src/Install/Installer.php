@@ -21,7 +21,7 @@
  * @license   https://creativecommons.org/licenses/by-nd/4.0/
  */
 
-namespace Moloni\ES\Install;
+namespace Moloni\Install;
 
 use Db;
 use Exception;

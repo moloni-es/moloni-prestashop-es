@@ -1,0 +1,6 @@
+services:
+  _defaults:
+    public: true
+
+  imports:
+    - { resource: ./services/admin/_admin.yml }

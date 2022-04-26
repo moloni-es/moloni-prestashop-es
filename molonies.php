@@ -29,60 +29,55 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use Moloni\ES\Controllers\Models\Settings;
-use Moloni\ES\Hooks\PaymentConfirmation;
-use Moloni\ES\Hooks\ProductSave;
-use Moloni\ES\Install\Installer;
+use Moloni\Controllers\Models\Settings;
+use Moloni\Hooks\OrderPaid;
+use Moloni\Hooks\ProductSave;
+use Moloni\Install\Installer;
 
-class molonies extends Module // phpcs:ignore
+class MoloniEs extends Module
 {
     /**
      * Configuration data teste 2
      *
      * @var string[][]
      */
-    private $configuration = [];
+    private array $configuration = [];
 
     /**
      * Hooks list
      *
      * @var string[]
      */
-    private $hooks;
+    private array $hooks = [
+        'actionAdminControllerSetMedia',
+        'actionPaymentConfirmation',
+        'actionProductAdd',
+        'actionProductUpdate',
+        'addWebserviceResources',
+    ];
 
     /**
      * MoloniPrestashopEs constructor.
      */
     public function __construct()
     {
-        $this->name = 'moloniprestashopes';
+        $this->name = 'molonies';
         $this->tab = 'administration';
 
         $this->need_instance = 1;
-        $this->version = '1.1.15';
+        $this->version = '1.0.0';
         $this->ps_versions_compliancy = ['min' => '1.7.5', 'max' => _PS_VERSION_];
         $this->author = 'Moloni';
 
         parent::__construct();
 
-        $this->displayName = $this->trans('Moloni ES', [], 'Modules.Moloniprestashopes.Moloniprestashopes');
+        $this->displayName = $this->trans('Moloni España', [], 'Modules.Moloniprestashopes.Moloniprestashopes');
         $this->description = $this->trans(
             'Transform all your orders in verified documents
         without any effort and focus on selling!',
             [],
             'Modules.Moloniprestashopes.Moloniprestashopes'
         );
-
-        $this->autoload();
-
-        // add the needed hooks to the configuration
-        $this->hooks = [
-            'actionAdminControllerSetMedia',
-            'actionPaymentConfirmation',
-            'actionProductAdd',
-            'actionProductUpdate',
-            'addWebserviceResources',
-        ];
     }
 
     /**
@@ -263,6 +258,8 @@ class molonies extends Module // phpcs:ignore
             $productSave = new ProductSave($this->context->getTranslator());
             $productSave->hookActionProductSave($params['id_product']);
         }
+
+        return true;
     }
 
     /**
@@ -295,16 +292,8 @@ class molonies extends Module // phpcs:ignore
     public function hookActionPaymentConfirmation($params)
     {
         if (((int) Settings::get('CreateAuto') === 1)) {
-            $paymentConfirmation = new PaymentConfirmation($this->context->getTranslator());
+            $paymentConfirmation = new OrderPaid($this->context->getTranslator());
             $paymentConfirmation->hookActionPaymentConfirmation($params['id_order']);
         }
-    }
-
-    /**
-     * Inits Autoload
-     */
-    private function autoload()
-    {
-        require_once __DIR__ . '/vendor/autoload.php';
     }
 }

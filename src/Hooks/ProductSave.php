@@ -1,6 +1,6 @@
 <?php
 
-namespace Moloni\ES\Hooks;
+namespace Moloni\Hooks;
 
 use Configuration;
 use Moloni\ES\Controllers\General;

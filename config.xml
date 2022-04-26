@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<module>
+    <name>molonies</name>
+    <displayName>
+        <![CDATA[Moloni España]]>
+    </displayName>
+    <version><![CDATA[1.0.0]]></version>
+    <description>
+        <![CDATA[Transform all your orders in verified documents without any effort and focus on selling!]]>
+    </description>
+    <author><![CDATA[Moloni]]></author>
+    <tab><![CDATA[administration]]></tab>
+    <is_configurable>0</is_configurable>
+    <need_instance>1</need_instance>
+	<limited_countries></limited_countries>
+</module>
