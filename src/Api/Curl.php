@@ -4,7 +4,7 @@ namespace Moloni\Api;
 
 use Moloni\Helpers\Error;
 use Moloni\Helpers\Log;
-use Moloni\Models\Moloni;
+use Moloni\Helpers\Moloni;
 
 class Curl
 {

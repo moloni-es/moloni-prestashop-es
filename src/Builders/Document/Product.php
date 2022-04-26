@@ -2,15 +2,15 @@
 
 namespace Moloni\Builders\Document;
 
-use Moloni\Api\Companies;
-use Moloni\Api\MeasurementUnits;
-use Moloni\Api\Products;
-use Moloni\Api\Stock;
-use Moloni\Api\Taxes;
+use Moloni\Api\Endpoints\Companies;
+use Moloni\Api\Endpoints\MeasurementUnits;
+use Moloni\Api\Endpoints\Products;
+use Moloni\Api\Endpoints\Stock;
+use Moloni\Api\Endpoints\Taxes;
 use Moloni\Helpers\Error;
 use Moloni\Helpers\Log;
-use Moloni\Models\Moloni;
-use Moloni\Models\Settings;
+use Moloni\Helpers\Moloni;
+use Moloni\Helpers\Settings;
 use PrestaShop\PrestaShop\Adapter\Entity\Product as psProduct;
 use PrestaShopBundle\Translation\TranslatorComponent;
 use PrestaShopDatabaseException;
@@ -102,7 +102,7 @@ class Product
             $this->addError($this->translator->trans(
                 'Cannot sync product, reference is null!!',
                 [],
-                'Modules.Moloniprestashopes.Errors'
+                'Modules.Molonies.Errors'
             ));
 
             return false;
@@ -143,7 +143,7 @@ class Product
             $this->addError($this->translator->trans(
                 'Error fetching products!!',
                 [],
-                'Modules.Moloniprestashopes.Errors'
+                'Modules.Molonies.Errors'
             ));
 
             return false;
@@ -188,7 +188,7 @@ class Product
                 $this->addError($this->translator->trans(
                     'Something went wrong updating the product!!',
                     [],
-                    'Modules.Moloniprestashopes.Errors'
+                    'Modules.Molonies.Errors'
                 ));
 
                 return false;
@@ -200,7 +200,7 @@ class Product
             Log::writeLog($this->translator->trans(
                 'Updated product: %name% | Reference: %reference%',
                 ['%name%' => $this->name, '%reference%' => $this->reference],
-                'Modules.Moloniprestashopes.Success'
+                'Modules.Molonies.Success'
             ));
 
             // if stock sync is enabled in settings, syncs stock
@@ -214,7 +214,7 @@ class Product
                 $this->addError($this->translator->trans(
                     'Something went wrong creating the product!!',
                     [],
-                    'Modules.Moloniprestashopes.Errors'
+                    'Modules.Molonies.Errors'
                 ));
 
                 return false;
@@ -226,7 +226,7 @@ class Product
             Log::writeLog($this->translator->trans(
                 'Created product: %name% | Reference: %reference%',
                 ['%name%' => $this->name, '%reference%' => $this->reference],
-                'Modules.Moloniprestashopes.Success'
+                'Modules.Molonies.Success'
             ));
         }
 
@@ -293,7 +293,7 @@ class Product
             $this->addError($this->translator->trans(
                 'Please select a measurement unit in settings!!',
                 [],
-                'Modules.Moloniprestashopes.Errors'
+                'Modules.Molonies.Errors'
             ));
 
             return false;
@@ -311,7 +311,7 @@ class Product
             $this->addError($this->translator->trans(
                 'Cannot sync product, measurement unit name is null',
                 [],
-                'Modules.Moloniprestashopes.Errors'
+                'Modules.Molonies.Errors'
             ));
 
             return false;
@@ -332,7 +332,7 @@ class Product
             $this->addError($this->translator->trans(
                 'Something went wrong fetching the measurement units!!',
                 [],
-                'Modules.Moloniprestashopes.Errors'
+                'Modules.Molonies.Errors'
             ));
 
             return false;
@@ -355,7 +355,7 @@ class Product
                 $this->addError($this->translator->trans(
                     'Something went wrong, cannot create measurement unit!!',
                     [],
-                    'Modules.Moloniprestashopes.Errors'
+                    'Modules.Molonies.Errors'
                 ));
 
                 return false;
@@ -364,7 +364,7 @@ class Product
             Log::writeLog($this->translator->trans(
                 'Created category ( %measurementUnitName% ) for %name% .',
                 ['%measurementUnitName%' => $this->measurementUnitName, '%name%' => $this->name],
-                'Modules.Moloniprestashopes.Success'
+                'Modules.Molonies.Success'
             ));
 
             $this->measurementUnitId = (int) ($aux)['data']['measurementUnitCreate']['data']['measurementUnitId'];
@@ -386,7 +386,7 @@ class Product
             $this->addError($this->translator->trans(
                 'Please select a tax in settings!!',
                 [],
-                'Modules.Moloniprestashopes.Errors'
+                'Modules.Molonies.Errors'
             ));
 
             return false;
@@ -406,7 +406,7 @@ class Product
                 $this->addError($this->translator->trans(
                     'Something went wrong getting a tax!!',
                     [],
-                    'Modules.Moloniprestashopes.Errors'
+                    'Modules.Molonies.Errors'
                 ));
 
                 return false;
@@ -433,7 +433,7 @@ class Product
                 $this->addError($this->translator->trans(
                     'Please select an exemption reason in settings!!',
                     [],
-                    'Modules.Moloniprestashopes.Errors'
+                    'Modules.Molonies.Errors'
                 ));
 
                 return false;
@@ -449,7 +449,7 @@ class Product
             $this->addError($this->translator->trans(
                 'Something went wrong fetching taxes!!',
                 [],
-                'Modules.Moloniprestashopes.Errors'
+                'Modules.Molonies.Errors'
             ));
 
             return false;
@@ -468,13 +468,13 @@ class Product
         $variables = ['companyId' => (int) Moloni::get('company_id')];
 
         // fetch company and financial info
-        $queryResult = (Companies::queryCompany2($variables))['data']['company']['data'];
+        $queryResult = (Companies::queryCompany($variables))['data']['company']['data'];
 
         if (isset($queryResult['errors'])) {
             $this->addError($this->translator->trans(
                 'Something went fetching company info!!',
                 [],
-                'Modules.Moloniprestashopes.Errors'
+                'Modules.Molonies.Errors'
             ));
 
             return false;
@@ -498,7 +498,7 @@ class Product
             $this->addError($this->translator->trans(
                 'Something went creating tax!!',
                 [],
-                'Modules.Moloniprestashopes.Errors'
+                'Modules.Molonies.Errors'
             ));
 
             return false;
@@ -511,7 +511,7 @@ class Product
         Log::writeLog($this->translator->trans(
             'Created tax ( %taxName% ) for %name% .',
             ['%taxName%' => $this->taxName, '%name%' => $this->name],
-            'Modules.Moloniprestashopes.Success'
+            'Modules.Molonies.Success'
         ));
 
         return true;
@@ -529,7 +529,7 @@ class Product
             Log::writeLog($this->translator->trans(
                 'Stock is up-to-date!!',
                 [],
-                'Modules.Moloniprestashopes.Success'
+                'Modules.Molonies.Success'
             ));
 
             return true;
@@ -557,7 +557,7 @@ class Product
             $this->addError($this->translator->trans(
                 'Error updating stock!!',
                 [],
-                'Modules.Moloniprestashopes.Errors'
+                'Modules.Molonies.Errors'
             ));
 
             return false;
@@ -566,7 +566,7 @@ class Product
         Log::writeLog($this->translator->trans(
             'Stock updated (old: %oStock% | new: %nStock% ) for %name% .',
             ['%oStock%' => (int) $this->stock, '%nStock%' => (int) $this->productPs->quantity, '%name%' => $this->name],
-            'Modules.Moloniprestashopes.Success'
+            'Modules.Molonies.Success'
         ));
 
         return true;
@@ -639,7 +639,7 @@ class Product
         Error::addError($this->translator->trans(
             'Product: %name% Reference: %reference% Message: %msg%',
             ['%name%' => $this->productPs->name, '%reference%' => $this->productPs->reference, '%msg%' => $msg],
-            'Modules.Moloniprestashopes.Errors'
+            'Modules.Molonies.Errors'
         ));
 
         return true;

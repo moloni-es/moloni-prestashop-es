@@ -2,9 +2,9 @@
 
 namespace Moloni\Builders\Document;
 
-use Moloni\Api\Categories;
-use Moloni\Api\Products;
-use Moloni\Models\Moloni;
+use Moloni\Api\Endpoints\Categories;
+use Moloni\Api\Endpoints\Products;
+use Moloni\Helpers\Moloni;
 
 class ProductCategory
 {
@@ -62,7 +62,7 @@ class ProductCategory
             ],
         ];
 
-        $categoriesList = Products::queryProductCategories($variables);
+        $categoriesList = Categories::queryProductCategories($variables);
 
         if (!empty($categoriesList) && is_array($categoriesList)) {
             foreach ($categoriesList as $category) {

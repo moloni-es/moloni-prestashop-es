@@ -5,12 +5,13 @@ namespace Moloni\Builders\Document;
 use Address;
 use Country;
 use Customer as psCustomer;
-use Moloni\Api\Customers as apiCustomer;
-use Moloni\Api\Documents as apiDocuments;
+use Moloni\Api\Endpoints\Customers as apiCustomer;
+use Moloni\Api\Endpoints\GeographicZones as apiGeographicZones;
+use Moloni\Api\Endpoints\Countries as apiCountries;
 use Moloni\Helpers\Error;
 use Moloni\Helpers\Log;
-use Moloni\Models\Moloni;
-use Moloni\Models\Settings;
+use Moloni\Helpers\Moloni;
+use Moloni\Helpers\Settings;
 use Order as psOrder;
 
 class Customer
@@ -96,7 +97,7 @@ class Customer
             $this->addError($this->translator->trans(
                 'Please configure settings!!',
                 [],
-                'Modules.Moloniprestashopes.Errors'
+                'Modules.Molonies.Errors'
             ));
 
             return false;
@@ -146,7 +147,7 @@ class Customer
             $this->addError($this->translator->trans(
                 'Something went wrong creating the customer!!',
                 [],
-                'Modules.Moloniprestashopes.Errors'
+                'Modules.Molonies.Errors'
             ));
 
             return false;
@@ -155,7 +156,7 @@ class Customer
         Log::writeLog($this->translator->trans(
             'Customer ( %name% ) created!!',
             ['%name%' => $this->name],
-            'Modules.Moloniprestashopes.Success'
+            'Modules.Molonies.Success'
         ));
 
         $this->customerId = $mutation['data']['customerCreate']['data']['customerId'];
@@ -186,7 +187,7 @@ class Customer
             $this->addError($this->translator->trans(
                 'Something went wrong fetching customers!!(vat)',
                 [],
-                'Modules.Moloniprestashopes.Errors'
+                'Modules.Molonies.Errors'
             ));
 
             return false;
@@ -229,7 +230,7 @@ class Customer
             $this->addError($this->translator->trans(
                 'Something went wrong fetching customers!!(email)',
                 [],
-                'Modules.Moloniprestashopes.Errors'
+                'Modules.Molonies.Errors'
             ));
 
             return false;
@@ -280,7 +281,7 @@ class Customer
             $this->addError($this->translator->trans(
                 'No country iso for this costumer.',
                 [],
-                'Modules.Moloniprestashopes.Errors'
+                'Modules.Molonies.Errors'
             ));
 
             return false;
@@ -295,13 +296,13 @@ class Customer
             ],
         ];
 
-        $countryLangId = (apiDocuments::queryCountries($variables));
+        $countryLangId = (apiCountries::queryCountries($variables));
 
         if ($countryLangId === false) {
             $this->addError($this->translator->trans(
                 'Something went wrong fetching countries!!',
                 [],
-                'Modules.Moloniprestashopes.Errors'
+                'Modules.Molonies.Errors'
             ));
 
             return false;
@@ -372,13 +373,13 @@ class Customer
             ],
         ];
 
-        $query = apiCustomer::queryGeographicZones($variables);
+        $query = apiGeographicZones::queryGeographicZones($variables);
 
         if ($query === false) {
             $this->addError($this->translator->trans(
                 'Something went wrong fetching geographic zones!!',
                 [],
-                'Modules.Moloniprestashopes.Errors'
+                'Modules.Molonies.Errors'
             ));
 
             return false;
@@ -450,7 +451,7 @@ class Customer
         Error::addError($this->translator->trans(
             'Costumer: %name%  Message: %msg%',
             ['%name%' => $this->psCustomer->firstname, '%msg%' => $msg],
-            'Modules.Moloniprestashopes.Errors'
+            'Modules.Molonies.Errors'
         ));
 
         return true;

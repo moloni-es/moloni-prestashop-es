@@ -1,5 +1,4 @@
 <?php
-
 /**
  * 2020 - Moloni.com
  *
@@ -19,6 +18,7 @@
  * @author    Moloni
  * @copyright Moloni
  * @license   https://creativecommons.org/licenses/by-nd/4.0/
+ * @noinspection PhpMultipleClassDeclarationsInspection
  */
 
 namespace Moloni\Install;
@@ -26,7 +26,6 @@ namespace Moloni\Install;
 use Db;
 use Exception;
 use Language;
-use MoloniPrestashopEs;
 use PrestaShopException;
 use Tab;
 use Tools;
@@ -36,7 +35,7 @@ class Installer
     /**
      * The module data
      *
-     * @var MoloniPrestashopEs
+     * @var MoloniEs
      */
     private $module;
 
@@ -50,7 +49,7 @@ class Installer
     /**
      * Installer constructor.
      */
-    public function __construct(MoloniPrestashopEs $module, array $configuration)
+    public function __construct(MoloniEs $module, array $configuration)
     {
         $this->module = $module;
         $this->configuration = $configuration;
@@ -77,17 +76,17 @@ class Installer
             || !$this->installTab('MoloniHome', 'Moloni', $this->module->getTranslator()->trans(
                 'Orders',
                 [],
-                'Modules.Moloniprestashopes.Moloniprestashopes'
+                'Modules.Molonies.Molonies'
             ), '')
             || !$this->installTab('MoloniDocuments', 'Moloni', $this->module->getTranslator()->trans(
                 'Documents',
                 [],
-                'Modules.Moloniprestashopes.Moloniprestashopes'
+                'Modules.Molonies.Molonies'
             ), '')
             || !$this->installTab('MoloniSettings', 'Moloni', $this->module->getTranslator()->trans(
                 'Settings',
                 [],
-                'Modules.Moloniprestashopes.Moloniprestashopes'
+                'Modules.Molonies.Molonies'
             ), '')) {
             return false;
         }
@@ -112,17 +111,17 @@ class Installer
             || !$this->installTab('MoloniHome', 'Moloni', $this->module->getTranslator()->trans(
                 'Orders',
                 [],
-                'Modules.Moloniprestashopes.Moloniprestashopes'
+                'Modules.Molonies.Molonies'
             ), '')
             || !$this->installTab('MoloniDocuments', 'Moloni', $this->module->getTranslator()->trans(
                 'Documents',
                 [],
-                'Modules.Moloniprestashopes.Moloniprestashopes'
+                'Modules.Molonies.Molonies'
             ), '')
             || !$this->installTab('MoloniSettings', 'Moloni', $this->module->getTranslator()->trans(
                 'Settings',
                 [],
-                'Modules.Moloniprestashopes.Moloniprestashopes'
+                'Modules.Molonies.Molonies'
             ), '')) {
             return false;
         }
@@ -217,7 +216,7 @@ class Installer
                 $tab->name[$lang['id_lang']] = $tabName;
             }
             $tab->id_parent = (int) Tab::getIdFromClassName($parentClassName);
-            $tab->module = 'moloniprestashopes';
+            $tab->module = 'Molonies';
             if ($logo != '') {
                 $tab->icon = $logo;
             }
@@ -267,7 +266,7 @@ class Installer
         $installSqlFiles = glob($this->module->getLocalPath() . 'sql/install/*.sql');
         $arg1 = 'Error loading installation files!';
         $arg2 = [];
-        $arg3 = 'Modules.Moloniprestashopes.Moloniprestashopes';
+        $arg3 = 'Modules.Molonies.Molonies';
 
         if (empty($installSqlFiles)) {
             throw new Exception($this->module->getTranslator()->trans($arg1, $arg2, $arg3));
@@ -284,7 +283,7 @@ class Installer
                 $msg = $this->module->getTranslator()->trans(
                     'Error executing operation from %s!',
                     [],
-                    'Modules.Moloniprestashopes.Moloniprestashopes'
+                    'Modules.Molonies.Molonies'
                 );
                 throw new Exception(sprintf($msg, end($parts)));
             }
@@ -306,7 +305,7 @@ class Installer
 
         // verify if the translations already exist
         $sql = 'SELECT count(*) FROM ' . _DB_PREFIX_ . 'translation
-                where `domain` like "ModulesMoloniprestashopes%"';
+                where `domain` like "ModulesMolonies%"';
         $count = (int) ($database->executeS($sql))[0]['count(*)'];
 
         if ($count != 0) {
@@ -343,7 +342,7 @@ class Installer
         $database = Db::getInstance();
         $database->delete(
             'translation',
-            '`domain` LIKE \'ModulesMoloniprestashopes%\''
+            '`domain` LIKE \'ModulesMolonies%\''
         );
 
         return true;
