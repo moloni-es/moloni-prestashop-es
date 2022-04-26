@@ -1,11 +1,11 @@
 {
-  "name": "moloni/moloni-es",
+  "name": "moloni/molonies",
   "description": "Module for Prestashop integration",
   "type": "prestashop-module",
   "license": "https://creativecommons.org/licenses/by-nd/4.0/",
   "authors": [
     {
-      "name": "Moloni",
+      "name": "Moloni España",
       "email": "plugins@moloni.com"
     }
   ],
@@ -23,7 +23,12 @@
   },
   "config": {
     "platform": {
-      "php": "7.2"
+      "php": "7.4"
+    }
+  },
+  "autoload": {
+    "psr-4": {
+      "Moloni\\": "src/"
     }
   }
 }

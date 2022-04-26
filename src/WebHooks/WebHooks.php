@@ -2,7 +2,7 @@
 
 /** @noinspection ALL */
 
-namespace Moloni\ES\WebHooks;
+namespace Moloni\WebHooks;
 
 use Configuration;
 use Moloni\ES\Controllers\Api\Companies;
