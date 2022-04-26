@@ -2,14 +2,14 @@
 
 namespace Moloni\Builders\Document;
 
-use Moloni\Api\Categories;
-use Moloni\Api\Companies;
-use Moloni\Api\Products;
-use Moloni\Api\Taxes;
+use Moloni\Api\Endpoints\Categories;
+use Moloni\Api\Endpoints\Companies;
+use Moloni\Api\Endpoints\Products;
+use Moloni\Api\Endpoints\Taxes;
 use Moloni\Helpers\Error;
 use Moloni\Helpers\Log;
-use Moloni\Models\Moloni;
-use Moloni\Models\Settings;
+use Moloni\Helpers\Moloni;
+use Moloni\Helpers\Settings;
 use Order;
 use PrestaShopBundle\Translation\TranslatorComponent;
 use PrestaShopDatabaseException;
@@ -110,7 +110,7 @@ class Fees
             $this->addError($this->translator->trans(
                 'Something went wrong creating the product!!',
                 [],
-                'Modules.Moloniprestashopes.Errors'
+                'Modules.Molonies.Errors'
             ));
 
             return false;
@@ -121,7 +121,7 @@ class Fees
         Log::writeLog($this->translator->trans(
             'Created fee: %name% | Reference: %reference%',
             ['%name%' => $this->name, '%reference%' => $this->reference],
-            'Modules.Moloniprestashopes.Success'
+            'Modules.Molonies.Success'
         ));
 
         return true;
@@ -149,7 +149,7 @@ class Fees
             $this->addError($this->translator->trans(
                 'Something went wrong fetching products!!',
                 [],
-                'Modules.Moloniprestashopes.Errors'
+                'Modules.Molonies.Errors'
             ));
 
             return false;
@@ -248,7 +248,7 @@ class Fees
             $this->addError($this->translator->trans(
                 'Please select a measure unit in settings!!',
                 [],
-                'Modules.Moloniprestashopes.Errors'
+                'Modules.Molonies.Errors'
             ));
 
             return false;
@@ -285,7 +285,7 @@ class Fees
             $this->addError($this->translator->trans(
                 'Something went wrong fetching product categories!!',
                 [],
-                'Modules.Moloniprestashopes.Errors'
+                'Modules.Molonies.Errors'
             ));
 
             return false;
@@ -307,7 +307,7 @@ class Fees
                 $this->addError($this->translator->trans(
                     'Something went wrong creating the category!!',
                     [],
-                    'Modules.Moloniprestashopes.Errors'
+                    'Modules.Molonies.Errors'
                 ));
 
                 return false;
@@ -316,7 +316,7 @@ class Fees
             Log::writeLog($this->translator->trans(
                 'Created category ( %categoryName% ) for %name% .',
                 ['%categoryName%' => $this->categoryName, '%name%' => $this->name],
-                'Modules.Moloniprestashopes.Success'
+                'Modules.Molonies.Success'
             ));
 
             $this->categoryId = (int) ($mutation)['data']['productCategoryCreate']['data']['productCategoryId'];
@@ -338,7 +338,7 @@ class Fees
             $this->addError($this->translator->trans(
                 'Please select a tax shipping in settings!!',
                 [],
-                'Modules.Moloniprestashopes.Errors'
+                'Modules.Molonies.Errors'
             ));
 
             return false;
@@ -358,7 +358,7 @@ class Fees
                 $this->addError($this->translator->trans(
                     'Something went wrong fetching tax!!',
                     [],
-                    'Modules.Moloniprestashopes.Errors'
+                    'Modules.Molonies.Errors'
                 ));
 
                 return false;
@@ -382,7 +382,7 @@ class Fees
                 $this->addError($this->translator->trans(
                     'Please select an shipping exemption reason in settings!!',
                     [],
-                    'Modules.Moloniprestashopes.Errors'
+                    'Modules.Molonies.Errors'
                 ));
 
                 return false;
@@ -398,7 +398,7 @@ class Fees
             $this->addError($this->translator->trans(
                 'Something went wrong fetching taxes!!',
                 [],
-                'Modules.Moloniprestashopes.Errors'
+                'Modules.Molonies.Errors'
             ));
 
             return false;
@@ -417,13 +417,13 @@ class Fees
             $variables = ['companyId' => (int) Moloni::get('company_id')];
 
             // fetch company and financial info
-            $queryResult = Companies::queryCompany2($variables);
+            $queryResult = Companies::queryCompany($variables);
 
             if (isset($queryResult['errors'])) {
                 $this->addError($this->translator->trans(
                     'Something went fetching company info!!',
                     [],
-                    'Modules.Moloniprestashopes.Errors'
+                    'Modules.Molonies.Errors'
                 ));
 
                 return false;
@@ -449,7 +449,7 @@ class Fees
                 $this->addError($this->translator->trans(
                     'Something went wrong creating tax!!',
                     [],
-                    'Modules.Moloniprestashopes.Errors'
+                    'Modules.Molonies.Errors'
                 ));
 
                 return false;
@@ -462,7 +462,7 @@ class Fees
             Log::writeLog($this->translator->trans(
                 'Created tax ( %name% ) for %name% .',
                 ['%name%' => $this->name],
-                'Modules.Moloniprestashopes.Success'
+                'Modules.Molonies.Success'
             ));
         }
 
@@ -573,7 +573,7 @@ class Fees
         Error::addError($this->translator->trans(
             'Shippment fee: %msg%',
             ['%msg%' => $msg],
-            'Modules.Moloniprestashopes.Errors'
+            'Modules.Molonies.Errors'
         ));
 
         return true;

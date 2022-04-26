@@ -9,15 +9,18 @@ use Country;
 use Currency;
 use Customer;
 use Datetime;
-use Moloni\Api\Companies as ApiCompanies;
-use Moloni\Api\Documents as ApiDocuments;
+use Moloni\Api\Endpoints\Companies as ApiCompanies;
+use Moloni\Api\Endpoints\Countries as ApiCountries;
+use Moloni\Api\Endpoints\Currencies as ApiCurrencies;
+use Moloni\Api\Endpoints\DeliveryMethods as ApiDeliveryMethods;
+use Moloni\Api\Endpoints\Documents as ApiDocuments;
 use Moloni\Builders\Document\Customer as modelCustomer;
 use Moloni\Controller\Models\Company;
 use Moloni\Controller\Models\Settings;
 use Moloni\Helpers\Error;
 use Moloni\Helpers\Log;
-use Moloni\Models\Moloni as modelCompany;
-use Moloni\Models\Settings as modelSettings;
+use Moloni\Helpers\Moloni as modelCompany;
+use Moloni\Helpers\Settings as modelSettings;
 use Order;
 use PrestaShopBundle\Translation\TranslatorComponent;
 use function Moloni\Controller\Models\count;
@@ -91,7 +94,7 @@ class Documents
             $this->addError($this->translator->trans(
                 'Invalid order id or document type!!',
                 [],
-                'Modules.Moloniprestashopes.Errors'
+                'Modules.Molonies.Errors'
             ));
         }
 
@@ -140,7 +143,7 @@ class Documents
             $this->addError($this->translator->trans(
                 'Please configure settings!!',
                 [],
-                'Modules.Moloniprestashopes.Errors'
+                'Modules.Molonies.Errors'
             ));
 
             return false;
@@ -150,7 +153,7 @@ class Documents
             Log::writeLog($this->translator->trans(
                 'Error setting products!!',
                 [],
-                'Modules.Moloniprestashopes.Errors'
+                'Modules.Molonies.Errors'
             ));
 
             return false;
@@ -160,7 +163,7 @@ class Documents
             Log::writeLog($this->translator->trans(
                 'Error setting shipment fee!!',
                 [],
-                'Modules.Moloniprestashopes.Errors'
+                'Modules.Molonies.Errors'
             ));
 
             return false;
@@ -170,7 +173,7 @@ class Documents
             Log::writeLog($this->translator->trans(
                 'Error setting customer!!',
                 [],
-                'Modules.Moloniprestashopes.Errors'
+                'Modules.Molonies.Errors'
             ));
 
             return false;
@@ -180,7 +183,7 @@ class Documents
             Log::writeLog($this->translator->trans(
                 'Error setting address!!',
                 [],
-                'Modules.Moloniprestashopes.Errors'
+                'Modules.Molonies.Errors'
             ));
 
             return false;
@@ -190,7 +193,7 @@ class Documents
             Log::writeLog($this->translator->trans(
                 'Error setting currency!!',
                 [],
-                'Modules.Moloniprestashopes.Errors'
+                'Modules.Molonies.Errors'
             ));
 
             return false;
@@ -200,7 +203,7 @@ class Documents
             Log::writeLog($this->translator->trans(
                 'Error setting delivery methods!!',
                 [],
-                'Modules.Moloniprestashopes.Errors'
+                'Modules.Molonies.Errors'
             ));
 
             return false;
@@ -210,7 +213,7 @@ class Documents
             Log::writeLog($this->translator->trans(
                 'Error setting delivery address!!',
                 [],
-                'Modules.Moloniprestashopes.Errors'
+                'Modules.Molonies.Errors'
             ));
 
             return false;
@@ -220,7 +223,7 @@ class Documents
             Log::writeLog($this->translator->trans(
                 'Error setting taxes!!',
                 [],
-                'Modules.Moloniprestashopes.Errors'
+                'Modules.Molonies.Errors'
             ));
 
             return false;
@@ -230,7 +233,7 @@ class Documents
             Log::writeLog($this->translator->trans(
                 'Error setting notes!!',
                 [],
-                'Modules.Moloniprestashopes.Errors'
+                'Modules.Molonies.Errors'
             ));
 
             return false;
@@ -240,7 +243,7 @@ class Documents
             Log::writeLog($this->translator->trans(
                 'Error setting payment method!!',
                 [],
-                'Modules.Moloniprestashopes.Errors'
+                'Modules.Molonies.Errors'
             ));
 
             return false;
@@ -273,7 +276,7 @@ class Documents
                     $this->addError($this->translator->trans(
                         'Error creating invoice!!',
                         [],
-                        'Modules.Moloniprestashopes.Errors'
+                        'Modules.Molonies.Errors'
                     ));
 
                     return false;
@@ -289,7 +292,7 @@ class Documents
                     $this->addError($this->translator->trans(
                         'Error creating invoice!!',
                         [],
-                        'Modules.Moloniprestashopes.Errors'
+                        'Modules.Molonies.Errors'
                     ));
 
                     return false;
@@ -309,7 +312,7 @@ class Documents
                 Log::writeLog($this->translator->trans(
                     'Document created with success!! ( %doctype% ) ( %status% )',
                     ['%doctype%' => $this->documentType, '%status%' => $this->status],
-                    'Modules.Moloniprestashopes.Success'
+                    'Modules.Molonies.Success'
                 ));
 
                 // if the document did not close (values did not match), save invoice as draft
@@ -318,7 +321,7 @@ class Documents
                     $this->addError($this->translator->trans(
                         'Document saved as draft because values do not match.',
                         [],
-                        'Modules.Moloniprestashopes.Errors'
+                        'Modules.Molonies.Errors'
                     ));
 
                     return false;
@@ -333,7 +336,7 @@ class Documents
                     $this->addError($this->translator->trans(
                         'Error creating receipt!!',
                         [],
-                        'Modules.Moloniprestashopes.Errors'
+                        'Modules.Molonies.Errors'
                     ));
 
                     return false;
@@ -350,7 +353,7 @@ class Documents
                     $this->addError($this->translator->trans(
                         'Error creating purchase order.',
                         [],
-                        'Modules.Moloniprestashopes.Errors'
+                        'Modules.Molonies.Errors'
                     ));
 
                     return false;
@@ -366,7 +369,7 @@ class Documents
                     $this->addError($this->translator->trans(
                         'Error creating pro forma invoice!!',
                         [],
-                        'Modules.Moloniprestashopes.Errors'
+                        'Modules.Molonies.Errors'
                     ));
 
                     return false;
@@ -382,7 +385,7 @@ class Documents
                     $this->addError($this->translator->trans(
                         'Error creating simplified invoice!!',
                         [],
-                        'Modules.Moloniprestashopes.Errors'
+                        'Modules.Molonies.Errors'
                     ));
 
                     return false;
@@ -394,7 +397,7 @@ class Documents
                 $this->addError($this->translator->trans(
                     'Document type does not exist.',
                     [],
-                    'Modules.Moloniprestashopes.Errors'
+                    'Modules.Molonies.Errors'
                 ));
 
                 return false;
@@ -417,7 +420,7 @@ class Documents
             $this->addError($this->translator->trans(
                 'Error saving to database!!',
                 [],
-                'Modules.Moloniprestashopes.Errors'
+                'Modules.Molonies.Errors'
             ));
 
             return false;
@@ -430,7 +433,7 @@ class Documents
                 $this->addError($this->translator->trans(
                     'Error creating PDF',
                     [],
-                    'Modules.Moloniprestashopes.Errors'
+                    'Modules.Molonies.Errors'
                 ));
 
                 return false;
@@ -449,7 +452,7 @@ class Documents
         Log::writeLog($this->translator->trans(
             'Document created with success!! ( %doctype% ) ( %status% )',
             ['%doctype%' => $this->documentType, '%status%' => $this->status],
-            'Modules.Moloniprestashopes.Success'
+            'Modules.Molonies.Success'
         ));
 
         // checks if the values match to show the user a msg
@@ -474,13 +477,13 @@ class Documents
             ],
         ];
 
-        $query = ApiDocuments::queryCurrencies($variables);
+        $query = ApiCurrencies::queryCurrencies($variables);
 
         if ($query === false) {
             $this->addError($this->translator->trans(
                 'Error fetching currency!!',
                 [],
-                'Modules.Moloniprestashopes.Errors'
+                'Modules.Molonies.Errors'
             ));
 
             return false;
@@ -509,13 +512,13 @@ class Documents
             ],
         ];
 
-        $query = ApiDocuments::queryDeliveryMethods($variables);
+        $query = ApiDeliveryMethods::queryDeliveryMethods($variables);
 
         if ($query === false) {
             $this->addError($this->translator->trans(
                 'Error fetching delivery methods',
                 [],
-                'Modules.Moloniprestashopes.Errors'
+                'Modules.Molonies.Errors'
             ));
 
             return false;
@@ -541,7 +544,7 @@ class Documents
     {
         if (Settings::get('Address') == 'moloni') {
             $variables = ['companyId' => (int) Company::get('company_id'), 'options' => null];
-            $countryId = ApiCompanies::queryCompany2($variables);
+            $countryId = ApiCompanies::queryCompany($variables);
             $companyAddressData = $countryId['data']['company']['data'];
             $this->deliveryLoadCountryId = $companyAddressData['country']['countryId'];
         } else {
@@ -556,7 +559,7 @@ class Documents
                 ],
             ];
 
-            $query = ApiDocuments::queryCountries($variables);
+            $query = ApiCountries::queryCountries($variables);
 
             if (empty($query)) {
                 return false;
@@ -573,13 +576,13 @@ class Documents
             ],
         ];
 
-        $query = ApiDocuments::queryCountries($variables);
+        $query = ApiCountries::queryCountries($variables);
 
         if ($query === false) {
             $this->addError($this->translator->trans(
                 'Error fetching countries!!',
                 [],
-                'Modules.Moloniprestashopes.Errors'
+                'Modules.Molonies.Errors'
             ));
 
             return false;
@@ -694,7 +697,7 @@ class Documents
             $this->addError($this->translator->trans(
                 'Error creating bill of landing',
                 [],
-                'Modules.Moloniprestashopes.Errors'
+                'Modules.Molonies.Errors'
             ));
 
             return false;
@@ -707,7 +710,7 @@ class Documents
         Log::writeLog($this->translator->trans(
             'Created bill of lading.',
             [],
-            'Modules.Moloniprestashopes.Errors'
+            'Modules.Molonies.Errors'
         ));
 
         return true;
@@ -820,7 +823,7 @@ class Documents
             $this->addError($this->translator->trans(
                 'Order has no products!!',
                 [],
-                'Modules.Moloniprestashopes.Errors'
+                'Modules.Molonies.Errors'
             ));
 
             return false;
@@ -901,7 +904,7 @@ class Documents
                 $this->addError($this->translator->trans(
                     'Error getting company addresses!!',
                     [],
-                    'Modules.Moloniprestashopes.Errors'
+                    'Modules.Molonies.Errors'
                 ));
 
                 return false;
@@ -932,7 +935,7 @@ class Documents
             $this->addError($this->translator->trans(
                 'Document saved as draft because values do no match!!',
                 [],
-                'Modules.Moloniprestashopes.Errors'
+                'Modules.Molonies.Errors'
             ));
 
             return false;
@@ -989,7 +992,7 @@ class Documents
                 $this->addError($this->translator->trans(
                     'Document type does not exist.',
                     [],
-                    'Modules.Moloniprestashopes.Errors'
+                    'Modules.Molonies.Errors'
                 ));
 
                 return false;
@@ -999,7 +1002,7 @@ class Documents
             $this->addError($this->translator->trans(
                 'Error closing document!!',
                 [],
-                'Modules.Moloniprestashopes.Errors'
+                'Modules.Molonies.Errors'
             ));
 
             return false;
@@ -1079,7 +1082,7 @@ class Documents
                 $this->addError($this->translator->trans(
                     'Document type does not exist.',
                     [],
-                    'Modules.Moloniprestashopes.Errors'
+                    'Modules.Molonies.Errors'
                 ));
 
                 return false;
@@ -1090,7 +1093,7 @@ class Documents
             $this->addError($this->translator->trans(
                 'Error creating pdf!!',
                 [],
-                'Modules.Moloniprestashopes.Errors'
+                'Modules.Molonies.Errors'
             ));
 
             return false;
@@ -1112,7 +1115,7 @@ class Documents
         Error::addError($this->translator->trans(
             'Order: %reference% | Message: %msg%',
             ['%reference%' => $this->psOrder->reference, '%msg%' => $msg],
-            'Modules.Moloniprestashopes.Errors'
+            'Modules.Molonies.Errors'
         ));
 
         return true;

@@ -5,8 +5,7 @@ CREATE TABLE IF NOT EXISTS PREFIX_moloni_app (
 			    `access_token` varchar(250) CHARACTER SET utf8 NOT null,
 			    `refresh_token` varchar(250) CHARACTER SET utf8 NOT null,
 			    `company_id` int(11) NOT null,
-			    `date_login` varchar(250) CHARACTER SET utf8 NOT null,
-			    `access_expire` varchar(250) CHARACTER SET utf8 NOT null,
-			    `refresh_expire` varchar(250) CHARACTER SET utf8 NOT null,
+			    `login_date` varchar(250) CHARACTER SET utf8 NOT null,
+                `access_time` varchar(250) CHARACTER SET utf8 NOT null,
 			    PRIMARY KEY (`id`)
 			    ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;

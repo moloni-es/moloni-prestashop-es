@@ -2,8 +2,8 @@
 
 namespace Moloni\Builders\Document;
 
-use Moloni\Api\PaymentMethods;
-use Moloni\Models\Moloni;
+use Moloni\Api\Endpoints\PaymentMethods;
+use Moloni\Helpers\Moloni;
 
 class Payment
 {

@@ -29,7 +29,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use Moloni\Controllers\Models\Settings;
+use Moloni\Helpers\Settings;
 use Moloni\Hooks\OrderPaid;
 use Moloni\Hooks\ProductSave;
 use Moloni\Install\Installer;
@@ -41,14 +41,14 @@ class MoloniEs extends Module
      *
      * @var string[][]
      */
-    private array $configuration = [];
+    private $configuration = [];
 
     /**
      * Hooks list
      *
      * @var string[]
      */
-    private array $hooks = [
+    private $hooks = [
         'actionAdminControllerSetMedia',
         'actionPaymentConfirmation',
         'actionProductAdd',
@@ -57,7 +57,7 @@ class MoloniEs extends Module
     ];
 
     /**
-     * MoloniPrestashopEs constructor.
+     * Molonies constructor.
      */
     public function __construct()
     {
@@ -66,17 +66,22 @@ class MoloniEs extends Module
 
         $this->need_instance = 1;
         $this->version = '1.0.0';
-        $this->ps_versions_compliancy = ['min' => '1.7.5', 'max' => _PS_VERSION_];
+        $this->ps_versions_compliancy = ['min' => '1.7.6', 'max' => _PS_VERSION_];
         $this->author = 'Moloni';
 
         parent::__construct();
 
-        $this->displayName = $this->trans('Moloni España', [], 'Modules.Moloniprestashopes.Moloniprestashopes');
+        $this->displayName = $this->trans('Moloni España', [], 'Modules.Molonies.Molonies');
         $this->description = $this->trans(
             'Transform all your orders in verified documents
         without any effort and focus on selling!',
             [],
-            'Modules.Moloniprestashopes.Moloniprestashopes'
+            'Modules.Molonies.Molonies'
+        );
+        $this->confirmUninstall = $this->trans(
+            'Do you want to unnistall module? All information will be deleted!',
+            [],
+            'Modules.Molonies.Molonies'
         );
     }
 
@@ -221,11 +226,11 @@ class MoloniEs extends Module
      */
     public function hookAddWebserviceResources(): array
     {
-        include_once _PS_MODULE_DIR_ . 'moloniprestashopes/src/WebHooks/WebserviceSpecificManagementMoloniProducts.php';
+        include_once _PS_MODULE_DIR_ . 'molonies/src/WebHooks/WebserviceSpecificManagementMoloniProducts.php';
 
         return [
             'moloniproducts' => [
-                'description' => 'My Custom Resource 2',
+                'description' => 'Moloni sync resource',
                 'specific_management' => true,
             ],
         ];

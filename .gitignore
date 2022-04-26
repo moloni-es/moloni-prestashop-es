@@ -1,6 +1,5 @@
 .idea
 .dev/node_modules
-
 /vendor/
 /logs/
 /.php_cs.cache

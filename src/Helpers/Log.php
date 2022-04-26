@@ -2,12 +2,10 @@
 
 namespace Moloni\Helpers;
 
-use Moloni\Models\Moloni;
-
 class Log
 {
     private static $fileName;
-    private static $fileDir = _PS_MODULE_DIR_ . 'moloniprestashopes/logs';
+    private static $fileDir = _PS_MODULE_DIR_ . 'molonies/logs';
 
     /**
      * Logs a message in a log file.
