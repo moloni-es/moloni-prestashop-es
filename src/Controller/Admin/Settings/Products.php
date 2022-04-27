@@ -37,14 +37,12 @@ class Products extends General
 
         $form = $this->buildFormArtigo();
 
-        $aux = 'products';
-
-        $view = '@Modules/molonies/src/View/Templates/Admin/Settings/Products.twig';
-
-        return $this->render($view, [
-            'settingsForm' => $form->createView(),
-            'tabActive' => $aux,
-        ]);
+        return $this->render(
+            '@Modules/molonies/views/templates/admin/settings/Products.twig',
+            [
+                'settingsForm' => $form->createView(),
+                'tabActive' => 'products',
+            ]);
     }
 
     /**

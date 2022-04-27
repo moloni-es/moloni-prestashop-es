@@ -30,9 +30,11 @@ class Tools extends General
 
         $aux = 'tools';
 
-        return $this->render('@Modules/molonies/src/View/Templates/Admin/Settings/Tools.twig', [
-            'tabActive' => $aux,
-        ]);
+        return $this->render(
+            '@Modules/molonies/views/templates/admin/settings/Tools.twig',
+            [
+                'tabActive' => $aux,
+            ]);
     }
 
     /**
@@ -298,6 +300,7 @@ class Tools extends General
         $ficheiro = $pasta . '/' . ((Moloni::get('company_id')) ? Moloni::get('company_id') . '_' : '0_')
             . date('Ymd')
             . '.txt';
+
         if (!file_exists($ficheiro)) {
             $this->addFlash('warning', $this->trans(
                 'No log files!!',
@@ -310,10 +313,12 @@ class Tools extends General
             $logs = fread($fp, filesize($ficheiro));
             fclose($fp);
 
-            return $this->render('@Modules/molonies/src/View/Templates/Admin/Settings/ConsultLogs.twig', [
-                'logs' => $logs,
-                'tabActive' => $aux,
-            ]);
+            return $this->render(
+                '@Modules/molonies/views/templates/admin/settings/ConsultLogs.twig',
+                [
+                    'logs' => $logs,
+                    'tabActive' => $aux,
+                ]);
         }
     }
 

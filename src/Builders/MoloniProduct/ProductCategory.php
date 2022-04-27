@@ -4,7 +4,7 @@ namespace Moloni\Builders\MoloniProduct;
 
 use Moloni\Builders\Interfaces\BuilderItemInterface;
 
-class Product implements BuilderItemInterface
+class ProductCategory implements BuilderItemInterface
 {
 
     public function toArray()

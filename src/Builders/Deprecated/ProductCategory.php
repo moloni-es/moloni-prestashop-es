@@ -1,9 +1,8 @@
 <?php
 
-namespace Moloni\Builders\Document;
+namespace Moloni\Builders\Deprecated;
 
 use Moloni\Api\Endpoints\Categories;
-use Moloni\Api\Endpoints\Products;
 use Moloni\Helpers\Moloni;
 
 class ProductCategory

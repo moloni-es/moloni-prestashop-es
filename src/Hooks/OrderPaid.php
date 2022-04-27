@@ -3,9 +3,9 @@
 namespace Moloni\Hooks;
 
 use Moloni\Controllers\General;
-use Moloni\Controllers\Models\Documents as modelDocuments;
-use Moloni\Controllers\Models\Log;
-use Moloni\Controllers\Models\Settings;
+use Moloni\Helpers\Documents as modelDocuments;
+use Moloni\Helpers\Log;
+use Moloni\Helpers\Settings;
 
 class OrderPaid
 {

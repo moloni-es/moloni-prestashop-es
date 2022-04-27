@@ -23,9 +23,9 @@
 namespace Moloni\Webservice;
 
 use Configuration;
-use Moloni\Controllers\Api\Companies;
-use Moloni\Controllers\Api\Hooks;
-use Moloni\Controllers\Models\Company;
+use Moloni\Api\Endpoints\Hooks;
+use Moloni\Api\Endpoints\Companies;
+use Moloni\Helpers\Moloni;
 use WebserviceKey;
 
 class Webservice
@@ -93,7 +93,7 @@ class Webservice
      */
     public static function createComplexValue()
     {
-        $variables = ['companyId' => (int) Company::get('company_id')];
+        $variables = ['companyId' => (int) Moloni::get('company_id')];
 
         $result = Companies::queryCompany($variables);
         $result = $result['data']['company']['data'];
@@ -113,7 +113,7 @@ class Webservice
         $key = self::createCredentials();
 
         $variables = [
-            'companyId' => (int) Company::get('company_id'),
+            'companyId' => (int) Moloni::get('company_id'),
             'data' => [],
         ];
 
@@ -142,7 +142,7 @@ class Webservice
         $ids = [];
 
         $variables = [
-            'companyId' => (int) Company::get('company_id'),
+            'companyId' => (int) Moloni::get('company_id'),
             'data' => [
                 'search' => [
                     'field' => 'url',

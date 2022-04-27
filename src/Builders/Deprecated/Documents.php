@@ -1,6 +1,6 @@
 <?php
 
-namespace Moloni\Builders\Document;
+namespace Moloni\Builders\Deprecated;
 
 use Address;
 use Carrier;
@@ -14,7 +14,7 @@ use Moloni\Api\Endpoints\Countries as ApiCountries;
 use Moloni\Api\Endpoints\Currencies as ApiCurrencies;
 use Moloni\Api\Endpoints\DeliveryMethods as ApiDeliveryMethods;
 use Moloni\Api\Endpoints\Documents as ApiDocuments;
-use Moloni\Builders\Document\Customer as modelCustomer;
+use Moloni\Builders\Deprecated\Customer as modelCustomer;
 use Moloni\Controller\Models\Company;
 use Moloni\Controller\Models\Settings;
 use Moloni\Helpers\Error;

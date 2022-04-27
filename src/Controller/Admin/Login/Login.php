@@ -49,7 +49,8 @@ class Login extends General
 
         $form = $this->buildForm();
 
-        return $this->render(_PS_MODULE_DIR_ . 'molonies/src/View/Templates/Admin/Login.twig', [
+        return $this->render(
+            '@Modules/molonies/views/templates/admin/login/Login.twig', [
             'devConnect' => $form->createView(),
             'img' => _MODULE_DIR_ . 'molonies/views/img/logoBig.png',
         ]);
@@ -167,10 +168,12 @@ class Login extends General
             $companies[] = $queryCompaniesInfo['data']['company']['data'];
         }
 
-        return $this->render(_PS_MODULE_DIR_ . 'molonies/src/View/Templates/Admin/LoginCompanies.twig', [
-            'arrayCompanies' => $companies,
-            'redirectRoute' => 'moloni_es_login_company',
-        ]);
+        return $this->render(
+            '@Modules/molonies/views/templates/admin/login/LoginCompanies.twig',
+            [
+                'arrayCompanies' => $companies,
+                'redirectRoute' => 'moloni_es_login_company',
+            ]);
     }
 
     /**

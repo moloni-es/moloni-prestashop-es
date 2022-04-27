@@ -36,10 +36,12 @@ class Documents extends General
 
         $aux = 'index';
 
-        return $this->render('@Modules/molonies/src/View/Templates/Admin/Settings/Documents.twig', [
-            'settingsForm' => $form->createView(),
-            'tabActive' => $aux,
-        ]);
+        return $this->render(
+            '@Modules/molonies/views/templates/admin/settings/Documents.twig',
+            [
+                'settingsForm' => $form->createView(),
+                'tabActive' => $aux,
+            ]);
     }
 
     /**
