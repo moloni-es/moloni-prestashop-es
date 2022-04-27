@@ -2,53 +2,53 @@ moloni_es_settings_tools:
   path: /settings/tools
   methods: [GET, POST]
   defaults:
-    _controller: 'Moloni\ES\Controllers\Settings\Tools::display'
+    _controller: 'Moloni\Controllers\Settings\Tools::display'
     _legacy_controller: 'MoloniSettings'
 
 moloni_es_settings_tools_importP:
   path: /settings/tools/importP
   methods: [GET, POST]
   defaults:
-    _controller: 'Moloni\ES\Controllers\Settings\Tools::importProducts'
+    _controller: 'Moloni\Controllers\Settings\Tools::importProducts'
 
 moloni_es_settings_tools_importC:
   path: /settings/tools/importC
   methods: [GET, POST]
   defaults:
-    _controller: 'Moloni\ES\Controllers\Settings\Tools::importCategories'
+    _controller: 'Moloni\Controllers\Settings\Tools::importCategories'
 
 moloni_es_settings_tools_export:
   path: /settings/tools/export
   methods: [GET, POST]
   defaults:
-    _controller: 'Moloni\ES\Controllers\Settings\Tools::exportTranslations'
+    _controller: 'Moloni\Controllers\Settings\Tools::exportTranslations'
 
 moloni_es_settings_tools_force:
   path: /settings/tools/force
   methods: [GET, POST]
   defaults:
-    _controller: 'Moloni\ES\Controllers\Settings\Tools::forceStocksSync'
+    _controller: 'Moloni\Controllers\Settings\Tools::forceStocksSync'
 
 moloni_es_settings_tools_clean_order:
   path: /settings/tools/cleanOrder
   methods: [GET, POST]
   defaults:
-    _controller: 'Moloni\ES\Controllers\Settings\Tools::cleanPendentOrder'
+    _controller: 'Moloni\Controllers\Settings\Tools::cleanPendentOrder'
 
 moloni_es_settings_tools_consult_logs:
   path: /settings/tools/consultLogs
   methods: [GET, POST]
   defaults:
-    _controller: 'Moloni\ES\Controllers\Settings\Tools::consultLogs'
+    _controller: 'Moloni\Controllers\Settings\Tools::consultLogs'
 
 moloni_es_settings_tools_delete_logs:
   path: /settings/tools/deleteLogs
   methods: [GET, POST]
   defaults:
-    _controller: 'Moloni\ES\Controllers\Settings\Tools::deleteLogs'
+    _controller: 'Moloni\Controllers\Settings\Tools::deleteLogs'
 
 moloni_es_settings_tools_logout:
   path: /settings/tools/Logout
   methods: [GET, POST]
   defaults:
-    _controller: 'Moloni\ES\Controllers\Settings\Tools::sair'
+    _controller: 'Moloni\Controllers\Settings\Tools::sair'

@@ -3,14 +3,15 @@
 namespace Moloni\Hooks;
 
 use Configuration;
-use Moloni\ES\Controllers\General;
-use Moloni\ES\Controllers\Models\Log;
-use Moloni\ES\Controllers\Models\LogSync;
-use Moloni\ES\Controllers\Models\Product;
+use Moloni\Controllers\General;
+use Moloni\Controllers\Models\Log;
+use Moloni\Controllers\Models\LogSync;
+use Moloni\Controllers\Models\Product;
+use Moloni\Helpers\Settings;
 use PrestaShopDatabaseException;
 use PrestaShopException;
 
-class ProductSave
+class ProductUpdate
 {
     /**
      * translator component
@@ -39,6 +40,10 @@ class ProductSave
      */
     public function hookActionProductSave($productId)
     {
+        if (((int) Settings::get('UpdateArtigos') === 1)) {
+            return true;
+        }
+
         // to prevent infinite loops
         if (LogSync::wasSyncedRecently(1, $productId) === true) {
             Log::writeLog('Product has already been synced (prestashop -> moloni)');
@@ -60,7 +65,7 @@ class ProductSave
 
         $product = new Product($productPS, $this->translator);
 
-        if ($product->init()) {
+        if ($product->init() == true) {
             $product->create();
         }
 

@@ -209,9 +209,7 @@ class General extends FrameworkBundleAdminController
         // delete Webhooks on moloni
         Webservice::deleteHooks();
         // deletes all data form the database tables
-        $dataBase = Db::getInstance();
-        $dataBase->execute('TRUNCATE ' . _DB_PREFIX_ . 'moloni_app');
-        $dataBase->execute('TRUNCATE ' . _DB_PREFIX_ . 'moloni_settings');
+        Db::getInstance()->execute('TRUNCATE ' . _DB_PREFIX_ . 'moloni_app');
 
         return $this->redirectLogin();
     }
