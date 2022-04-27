@@ -1,5 +1,4 @@
 <?php
-
 /**
  * 2022 - Moloni.com
  *
@@ -31,31 +30,12 @@ if (!defined('_PS_VERSION_')) {
 
 use Moloni\Helpers\Settings;
 use Moloni\Hooks\OrderPaid;
-use Moloni\Hooks\ProductSave;
+use Moloni\Hooks\ProductAdd;
+use Moloni\Hooks\ProductUpdate;
 use Moloni\Install\Installer;
 
 class MoloniEs extends Module
 {
-    /**
-     * Configuration data teste 2
-     *
-     * @var string[][]
-     */
-    private $configuration = [];
-
-    /**
-     * Hooks list
-     *
-     * @var string[]
-     */
-    private $hooks = [
-        'actionAdminControllerSetMedia',
-        'actionPaymentConfirmation',
-        'actionProductAdd',
-        'actionProductUpdate',
-        'addWebserviceResources',
-    ];
-
     /**
      * Molonies constructor.
      */
@@ -103,7 +83,7 @@ class MoloniEs extends Module
     public function install(): bool
     {
         try {
-            if (!(new Installer($this, $this->configuration))->install()) {
+            if (!(new Installer($this))->install()) {
                 return false;
             }
         } catch (Exception $exception) {
@@ -114,12 +94,6 @@ class MoloniEs extends Module
 
         if (!parent::install()) {
             return false;
-        }
-
-        foreach ($this->hooks as $hookName) {
-            if (!$this->registerHook($hookName)) {
-                return false;
-            }
         }
 
         return true;
@@ -133,7 +107,7 @@ class MoloniEs extends Module
     public function uninstall(): bool
     {
         try {
-            if (!(new Installer($this, $this->configuration))->uninstall()) {
+            if (!(new Installer($this))->uninstall()) {
                 return false;
             }
         } catch (Exception $exception) {
@@ -144,12 +118,6 @@ class MoloniEs extends Module
 
         if (!parent::uninstall()) {
             return false;
-        }
-
-        foreach ($this->hooks as $hookName) {
-            if (!$this->unregisterHook(Hook::getIdByName($hookName))) {
-                return false;
-            }
         }
 
         return true;
@@ -165,7 +133,7 @@ class MoloniEs extends Module
     public function enable($force_all = false): bool
     {
         try {
-            if (!(new Installer($this, $this->configuration))->enable()) {
+            if (!(new Installer($this))->enable()) {
                 return false;
             }
         } catch (Exception $exception) {
@@ -178,12 +146,6 @@ class MoloniEs extends Module
             return false;
         }
 
-        foreach ($this->hooks as $hookName) {
-            if (!$this->registerHook($hookName)) {
-                return false;
-            }
-        }
-
         return true;
     }
 
@@ -194,10 +156,10 @@ class MoloniEs extends Module
      *
      * @return bool
      */
-    public function disable($force_all = false)
+    public function disable($force_all = false): bool
     {
         try {
-            if (!(new Installer($this, $this->configuration))->disable()) {
+            if (!(new Installer($this))->disable()) {
                 return false;
             }
         } catch (Exception $exception) {
@@ -210,12 +172,6 @@ class MoloniEs extends Module
             return false;
         }
 
-        foreach ($this->hooks as $hookName) {
-            if (!$this->unregisterHook(Hook::getIdByName($hookName))) {
-                return false;
-            }
-        }
-
         return true;
     }
 
@@ -226,10 +182,10 @@ class MoloniEs extends Module
      */
     public function hookAddWebserviceResources(): array
     {
-        include_once _PS_MODULE_DIR_ . 'molonies/src/WebHooks/WebserviceSpecificManagementMoloniProducts.php';
+        include_once _PS_MODULE_DIR_ . 'molonies/src/WebHooks/WebserviceSpecificManagementMoloniResource.php';
 
         return [
-            'moloniproducts' => [
+            'moloniresource' => [
                 'description' => 'Moloni sync resource',
                 'specific_management' => true,
             ],
@@ -238,8 +194,10 @@ class MoloniEs extends Module
 
     /**
      * Add out CSS and JS files to the backend
+     *
+     * @return void
      */
-    public function hookActionAdminControllerSetMedia()
+    public function hookActionAdminControllerSetMedia(): void
     {
         // Adds your's CSS file from a module's directory
         $this->context->controller->addCSS($this->_path . 'src/View/css/settingsStyle.css');
@@ -254,17 +212,14 @@ class MoloniEs extends Module
      *
      * @param $params
      *
-     * @throws PrestaShopDatabaseException
-     * @throws PrestaShopException
+     * @return void
      */
-    public function hookActionProductAdd($params)
+    public function hookActionProductAdd($params): void
     {
         if ((Settings::get('AddProducts') == 1)) {
-            $productSave = new ProductSave($this->context->getTranslator());
+            $productSave = new ProductAdd($this->context->getTranslator());
             $productSave->hookActionProductSave($params['id_product']);
         }
-
-        return true;
     }
 
     /**
@@ -273,16 +228,11 @@ class MoloniEs extends Module
      * @param $params
      *
      * @return void
-     *
-     * @throws PrestaShopDatabaseException
-     * @throws PrestaShopException
      */
-    public function hookActionProductUpdate($params)
+    public function hookActionProductUpdate($params): void
     {
-        if (((int) Settings::get('UpdateArtigos') === 1)) {
-            $productSave = new ProductSave($this->context->getTranslator());
-            $productSave->hookActionProductSave($params['id_product']);
-        }
+        $productSave = new ProductUpdate($this->context->getTranslator());
+        $productSave->hookActionProductSave($params['id_product']);
     }
 
     /**
@@ -291,14 +241,10 @@ class MoloniEs extends Module
      * @param $params
      *
      * @return void
-     *
-     * @throws PrestaShopDatabaseException
      */
-    public function hookActionPaymentConfirmation($params)
+    public function hookActionPaymentConfirmation($params): void
     {
-        if (((int) Settings::get('CreateAuto') === 1)) {
-            $paymentConfirmation = new OrderPaid($this->context->getTranslator());
-            $paymentConfirmation->hookActionPaymentConfirmation($params['id_order']);
-        }
+        $paymentConfirmation = new OrderPaid($this->context->getTranslator());
+        $paymentConfirmation->hookActionPaymentConfirmation($params['id_order']);
     }
 }

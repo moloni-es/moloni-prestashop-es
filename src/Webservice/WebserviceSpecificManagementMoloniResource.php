@@ -1,18 +1,49 @@
 <?php
-
 /**
- *  @codingStandardsIgnoreStart
+ * 2022 - Moloni.com
+ *
+ * NOTICE OF LICENSE
+ *
+ * This file is licenced under the Software License Agreement.
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * You must not modify, adapt or create derivative works of this source code
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+ * versions in the future. If you wish to customize PrestaShop for your
+ * needs please refer to http://www.prestashop.com for more information.
+ *
+ * @author    Moloni
+ * @copyright Moloni
+ * @license   https://creativecommons.org/licenses/by-nd/4.0/
+ * @noinspection PhpMultipleClassDeclarationsInspection
  */
 
-use Moloni\ES\Controllers\Api\Categories as apiCategories;
-use Moloni\ES\Controllers\Api\Products;
-use Moloni\ES\Controllers\General;
-use Moloni\ES\Controllers\Models\Company;
-use Moloni\ES\Controllers\Models\Log;
-use Moloni\ES\Controllers\Models\LogSync;
-use Moloni\ES\Controllers\Models\Settings;
+namespace Moloni\Webservice;
 
-class webserviceSpecificManagementMoloniProducts implements WebserviceSpecificManagementInterface
+use Attribute;
+use AttributeGroup;
+use Category;
+use Combination;
+use Configuration;
+use Moloni\Controllers\Api\Categories as apiCategories;
+use Moloni\Controllers\Api\Products;
+use Moloni\Controllers\General;
+use Moloni\Controllers\Models\Company;
+use Moloni\Controllers\Models\Log;
+use Moloni\Controllers\Models\LogSync;
+use Moloni\Controllers\Models\Settings;
+use Product;
+use StockAvailable;
+use WebserviceOutputBuilder;
+use WebserviceOutputBuilderCore;
+use WebserviceRequest;
+use WebserviceRequestCore;
+use WebserviceSpecificManagementInterface;
+
+class WebserviceSpecificManagementMoloniResource implements WebserviceSpecificManagementInterface
 {
     // @codingStandardsIgnoreEnd
 
@@ -129,8 +160,6 @@ class webserviceSpecificManagementMoloniProducts implements WebserviceSpecificMa
      * Create new product
      *
      * @param $moloniProduct
-     *
-     * @throws PrestaShopDatabaseException|PrestaShopException
      */
     public function create($moloniProduct)
     {
@@ -159,13 +188,11 @@ class webserviceSpecificManagementMoloniProducts implements WebserviceSpecificMa
      * Update product
      *
      * @param $moloniProduct
-     *
-     * @throws PrestaShopDatabaseException
      */
     public function update($moloniProduct)
     {
         if ((int) Settings::get('HooksUpdateProducts') !== 1) {
-            return;
+            return false;
         }
 
         $psProductId = Product::getIdByReference($moloniProduct['reference']);
@@ -191,15 +218,14 @@ class webserviceSpecificManagementMoloniProducts implements WebserviceSpecificMa
             $this->create($moloniProduct);
             Log::writeLog('Product not found in Prestashop to update:' . $moloniProduct['reference']);
         }
+
+        return true;
     }
 
     /**
      * Update product stock
      *
      * @param $moloniProduct
-     *
-     * @throws PrestaShopDatabaseException
-     * @throws PrestaShopException
      */
     public function stockUpdate($moloniProduct)
     {
@@ -235,9 +261,6 @@ class webserviceSpecificManagementMoloniProducts implements WebserviceSpecificMa
      * Update variants stock
      *
      * @param $moloniProduct
-     *
-     * @throws PrestaShopDatabaseException
-     * @throws PrestaShopException
      */
     public function stockUpdateVariants($moloniProduct)
     {
@@ -284,9 +307,6 @@ class webserviceSpecificManagementMoloniProducts implements WebserviceSpecificMa
      * @param $psId
      *
      * @return Product
-     *
-     * @throws PrestaShopDatabaseException
-     * @throws PrestaShopException
      */
     public function setProduct($moloniProduct, $psId)
     {
@@ -355,8 +375,6 @@ class webserviceSpecificManagementMoloniProducts implements WebserviceSpecificMa
      *
      * @param $moloniProduct
      * @param $psProduct Product
-     *
-     * @throws PrestaShopException
      */
     public function setVariants($moloniProduct, $psProduct)
     {
@@ -493,8 +511,6 @@ class webserviceSpecificManagementMoloniProducts implements WebserviceSpecificMa
      * @param $moloniCategoryId
      *
      * @return array
-     *
-     * @throws PrestaShopException
      */
     public function setCategories($moloniCategoryId)
     {

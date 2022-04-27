@@ -25,8 +25,13 @@ namespace Moloni\Install;
 
 use Db;
 use Exception;
+use Hook;
 use Language;
+use MoloniEs;
+use PrestaShopBundle\Entity\Repository\TabRepository;
+use PrestaShopDatabaseException;
 use PrestaShopException;
+use RuntimeException;
 use Tab;
 use Tools;
 
@@ -40,19 +45,53 @@ class Installer
     private $module;
 
     /**
-     * Configuration data
+     * Hooks list
      *
-     * @var array
+     * @var string[]
      */
-    private $configuration;
+    private $hooks = [
+        'actionAdminControllerSetMedia',
+        'actionPaymentConfirmation',
+        'actionProductAdd',
+        'actionProductUpdate',
+        'addWebserviceResources',
+    ];
+
+    /**
+     * Tabs list
+     *
+     * @var array[]
+     */
+    private $tabs = [
+        [
+            'name' => 'Moloni',
+            'parent' => 'SELL',
+            'tabName' => 'Moloni',
+            'logo' => 'logo',
+        ], [
+            'name' => 'MoloniHome',
+            'parent' => 'Moloni',
+            'tabName' => 'Orders',
+            'logo' => '',
+        ], [
+            'name' => 'MoloniDocuments',
+            'parent' => 'Moloni',
+            'tabName' => 'Documents',
+            'logo' => '',
+        ], [
+            'name' => 'MoloniSettings',
+            'parent' => 'Moloni',
+            'tabName' => 'Settings',
+            'logo' => '',
+        ],
+    ];
 
     /**
      * Installer constructor.
      */
-    public function __construct(MoloniEs $module, array $configuration)
+    public function __construct(MoloniEs $module)
     {
         $this->module = $module;
-        $this->configuration = $configuration;
     }
 
     /**
@@ -62,36 +101,13 @@ class Installer
      *
      * @throws Exception
      */
-    public function install()
+    public function install(): bool
     {
         if (!$this->installTranslations()) {
             return false;
         }
 
-        if (!$this->installDb()) {
-            return false;
-        }
-
-        if (!$this->installTab('Moloni', 'SELL', 'Moloni', 'logo')
-            || !$this->installTab('MoloniHome', 'Moloni', $this->module->getTranslator()->trans(
-                'Orders',
-                [],
-                'Modules.Molonies.Molonies'
-            ), '')
-            || !$this->installTab('MoloniDocuments', 'Moloni', $this->module->getTranslator()->trans(
-                'Documents',
-                [],
-                'Modules.Molonies.Molonies'
-            ), '')
-            || !$this->installTab('MoloniSettings', 'Moloni', $this->module->getTranslator()->trans(
-                'Settings',
-                [],
-                'Modules.Molonies.Molonies'
-            ), '')) {
-            return false;
-        }
-
-        return true;
+        return $this->createCommon();
     }
 
     /**
@@ -101,32 +117,9 @@ class Installer
      *
      * @throws Exception
      */
-    public function enable()
+    public function enable(): bool
     {
-        if (!$this->installDb()) {
-            return false;
-        }
-
-        if (!$this->installTab('Moloni', 'SELL', 'Moloni', 'logo')
-            || !$this->installTab('MoloniHome', 'Moloni', $this->module->getTranslator()->trans(
-                'Orders',
-                [],
-                'Modules.Molonies.Molonies'
-            ), '')
-            || !$this->installTab('MoloniDocuments', 'Moloni', $this->module->getTranslator()->trans(
-                'Documents',
-                [],
-                'Modules.Molonies.Molonies'
-            ), '')
-            || !$this->installTab('MoloniSettings', 'Moloni', $this->module->getTranslator()->trans(
-                'Settings',
-                [],
-                'Modules.Molonies.Molonies'
-            ), '')) {
-            return false;
-        }
-
-        return true;
+        return $this->createCommon();
     }
 
     /**
@@ -136,22 +129,13 @@ class Installer
      *
      * @throws Exception
      */
-    public function uninstall()
+    public function uninstall(): bool
     {
         if (!$this->uninstallTranslations()) {
             return false;
         }
 
-        if (!$this->uninstallTab('Moloni')
-            || !$this->uninstallTab('MoloniHome')
-            || !$this->uninstallTab('MoloniDocuments')
-            || !$this->uninstallTab('MoloniSettings')) {
-            return false;
-        }
-
-        $this->removeLogin();
-
-        return true;
+        return $this->destroyCommon();
     }
 
     /**
@@ -161,13 +145,68 @@ class Installer
      *
      * @throws Exception
      */
-    public function disable()
+    public function disable(): bool
     {
-        if (!$this->uninstallTab('Moloni')
-            || !$this->uninstallTab('MoloniHome')
-            || !$this->uninstallTab('MoloniDocuments')
-            || !$this->uninstallTab('MoloniSettings')) {
+        return $this->destroyCommon();
+    }
+
+    //        Privates        //
+
+    /**
+     * Common actions when installing and enabling plugin
+     *
+     * @return bool
+     */
+    private function createCommon(): bool
+    {
+        if (!$this->installDb()) {
             return false;
+        }
+
+        foreach ($this->tabs as $tab) {
+            $tabName = $this->module->getTranslator()->trans(
+                $tab['tabName'],
+                [],
+                'Modules.Molonies.Molonies'
+            );
+
+            if (!$this->installTab($tab['name'], $tab['parent'], $tabName, $tab['logo'])) {
+                return false;
+            }
+        }
+
+        foreach ($this->hooks as $hookName) {
+            if (!$this->module->registerHook($hookName)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Common actions when uninstalling and disabling plugin
+     *
+     * @return bool
+     */
+    private function destroyCommon(): bool
+    {
+        foreach ($this->tabs as $tab) {
+            if (!$this->uninstallTab($tab['name'])) {
+                return false;
+            }
+        }
+
+        foreach ($this->hooks as $hookName) {
+            try {
+                $name = Hook::getIdByName($hookName);
+            } catch (PrestaShopDatabaseException $e) {
+                continue;
+            }
+
+            if (!$this->module->unregisterHook($name)) {
+                return false;
+            }
         }
 
         $this->removeLogin();
@@ -178,16 +217,15 @@ class Installer
     /**
      * Loads databases query´s
      *
-     * @param $fileName
+     * @param string $fileName
      *
-     * @return bool|string|string[]
+     * @return string
      */
-    public function getSqlStatements($fileName)
+    private function getSqlStatements(string $fileName): string
     {
         $sqlStatements = Tools::file_get_contents($fileName);
-        $sqlStatements = str_replace(['PREFIX_', 'ENGINE_TYPE'], [_DB_PREFIX_, _MYSQL_ENGINE_], $sqlStatements);
 
-        return $sqlStatements;
+        return str_replace(['PREFIX_', 'ENGINE_TYPE'], [_DB_PREFIX_, _MYSQL_ENGINE_], $sqlStatements);
     }
 
     /**
@@ -196,10 +234,11 @@ class Installer
      * @param string $className
      * @param string $parentClassName
      * @param string $tabName
+     * @param string $logo
      *
      * @return bool
      */
-    private function installTab($className, $parentClassName, $tabName, $logo)
+    private function installTab(string $className, string $parentClassName, string $tabName, string $logo): bool
     {
         try {
             $tabId = (int) Tab::getIdFromClassName($className);
@@ -209,15 +248,18 @@ class Installer
             }
 
             $tab = new Tab($tabId);
-            $tab->active = 1;
+            $tab->active = true;
             $tab->class_name = $className;
             $tab->name = [];
+
             foreach (Language::getLanguages() as $lang) {
                 $tab->name[$lang['id_lang']] = $tabName;
             }
+
             $tab->id_parent = (int) Tab::getIdFromClassName($parentClassName);
             $tab->module = 'Molonies';
-            if ($logo != '') {
+
+            if (!empty($logo)) {
                 $tab->icon = $logo;
             }
 
@@ -228,40 +270,11 @@ class Installer
     }
 
     /**
-     * Deletes an tab
-     *
-     * @param string $className
-     *
-     * @return bool
-     *
-     * @throws PrestaShopException
-     */
-    private function uninstallTab($className)
-    {
-        try {
-            $tabId = (int) Tab::getIdFromClassName($className);
-            if (!$tabId) {
-                return true;
-            }
-
-            $tab = new Tab($tabId);
-
-            return $tab->delete();
-        } catch (PrestaShopException $exception) {
-            return false;
-        }
-    }
-
-    /**
      * Reads sql files and executes
      *
      * @return bool
-     *
-     * @throws Exception
-     *
-     * @SuppressWarnings(PHPMD)
      */
-    private function installDb()
+    private function installDb(): bool
     {
         $installSqlFiles = glob($this->module->getLocalPath() . 'sql/install/*.sql');
         $arg1 = 'Error loading installation files!';
@@ -269,7 +282,7 @@ class Installer
         $arg3 = 'Modules.Molonies.Molonies';
 
         if (empty($installSqlFiles)) {
-            throw new Exception($this->module->getTranslator()->trans($arg1, $arg2, $arg3));
+            throw new RuntimeException($this->module->getTranslator()->trans($arg1, $arg2, $arg3));
         }
 
         $database = Db::getInstance();
@@ -285,7 +298,8 @@ class Installer
                     [],
                     'Modules.Molonies.Molonies'
                 );
-                throw new Exception(sprintf($msg, end($parts)));
+
+                throw new RuntimeException(sprintf($msg, end($parts)));
             }
         }
 
@@ -296,29 +310,38 @@ class Installer
      * Install translations
      *
      * @return bool
-     *
-     * @throws \PrestaShopDatabaseException
      */
-    private function installTranslations()
+    private function installTranslations(): bool
     {
         $database = Db::getInstance();
 
         // verify if the translations already exist
         $sql = 'SELECT count(*) FROM ' . _DB_PREFIX_ . 'translation
                 where `domain` like "ModulesMolonies%"';
-        $count = (int) ($database->executeS($sql))[0]['count(*)'];
 
-        if ($count != 0) {
+        try {
+            $count = (int) ($database->executeS($sql))[0]['count(*)'];
+        } catch (PrestaShopDatabaseException $e) {
+            return true;
+        }
+
+        if ($count === 0) {
             return true;
         }
 
         $langs = ['PT', 'ES'];
 
         foreach ($langs as $lang) {
-            if (\Language::getIdByIso($lang) != false) {
+            try {
+                $langId = Language::getIdByIso($lang);
+            } catch (PrestaShopException $e) {
+                return true;
+            }
+
+            if ($langId) {
                 $sqlFile = glob($this->module->getLocalPath() . 'sql/translations/' . strtolower($lang) . '.sql');
 
-                $sqlStatement = 'SET @idLang = ' . \Language::getIdByIso($lang) . ';' . PHP_EOL;
+                $sqlStatement = 'SET @idLang = ' . $langId . ';' . PHP_EOL;
                 $sqlStatement .= $this->getSqlStatements($sqlFile[0]);
 
                 try {
@@ -333,11 +356,33 @@ class Installer
     }
 
     /**
+     * Deletes an tab
+     *
+     * @param string $className
+     *
+     * @return bool
+     */
+    private function uninstallTab(string $className): bool
+    {
+        try {
+            $tabId = (int) Tab::getIdFromClassName($className);
+
+            if ($tabId) {
+                (new Tab($tabId))->delete();
+            }
+        } catch (PrestaShopException $exception) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Uninstalls translations
      *
      * @return bool
      */
-    private function uninstallTranslations()
+    private function uninstallTranslations(): bool
     {
         $database = Db::getInstance();
         $database->delete(
@@ -351,13 +396,11 @@ class Installer
     /**
      * Remove login credentials
      *
-     * @return bool
+     * @return void
      */
-    public function removeLogin()
+    private function removeLogin(): void
     {
         $dataBase = \Db::getInstance();
         $dataBase->execute('TRUNCATE ' . _DB_PREFIX_ . 'moloni_app');
-
-        return true;
     }
 }

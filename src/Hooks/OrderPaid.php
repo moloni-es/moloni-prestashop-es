@@ -2,10 +2,10 @@
 
 namespace Moloni\Hooks;
 
-use Moloni\ES\Controllers\General;
-use Moloni\ES\Controllers\Models\Documents as modelDocuments;
-use Moloni\ES\Controllers\Models\Log;
-use Moloni\ES\Controllers\Models\Settings;
+use Moloni\Controllers\General;
+use Moloni\Controllers\Models\Documents as modelDocuments;
+use Moloni\Controllers\Models\Log;
+use Moloni\Controllers\Models\Settings;
 
 class OrderPaid
 {
@@ -37,6 +37,10 @@ class OrderPaid
      */
     public function hookActionPaymentConfirmation($orderId)
     {
+        if (((int) Settings::get('CreateAuto') === 1)) {
+            return true;
+        }
+
         // check if the settings have been set
         if (!Settings::get('Type')) {
             Log::writeLog('Pls set document type in settings!!');
