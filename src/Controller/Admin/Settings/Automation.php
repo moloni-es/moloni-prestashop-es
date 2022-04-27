@@ -33,10 +33,12 @@ class Automation extends General
 
         $aux = 'auto';
 
-        return $this->render('@Modules/molonies/src/View/Templates/Admin/Settings/Automation.twig', [
-            'settingsForm' => $form->createView(),
-            'tabActive' => $aux,
-        ]);
+        return $this->render(
+            '@Modules/molonies/views/templates/admin/settings/Automation.twig',
+            [
+                'settingsForm' => $form->createView(),
+                'tabActive' => $aux,
+            ]);
     }
 
     /**

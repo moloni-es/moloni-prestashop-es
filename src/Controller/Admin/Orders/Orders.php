@@ -4,7 +4,7 @@ namespace Moloni\Controller\Admin\Orders;
 
 use Currency;
 use Db;
-use Moloni\Builders\Document\Documents as modelDocuments;
+use Moloni\Builders\Deprecated\Documents as modelDocuments;
 use Moloni\Controller\Admin\General;
 use Moloni\Helpers\Error;
 use Moloni\Helpers\Moloni;
@@ -73,7 +73,7 @@ class Orders extends General
         }
 
         return $this->render(
-            '@Modules/molonies/src/View/Templates/Admin/Orders.twig',
+            '@Modules/molonies/views/templates/admin/orders/Orders.twig',
             [
                 'orderArray' => $orderArray,
                 'documetArray' => $this->getDocumentsTypes(),

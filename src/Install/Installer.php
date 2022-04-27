@@ -28,7 +28,6 @@ use Exception;
 use Hook;
 use Language;
 use MoloniEs;
-use PrestaShopBundle\Entity\Repository\TabRepository;
 use PrestaShopDatabaseException;
 use PrestaShopException;
 use RuntimeException;
@@ -69,7 +68,7 @@ class Installer
             'tabName' => 'Moloni',
             'logo' => 'logo',
         ], [
-            'name' => 'MoloniHome',
+            'name' => 'MoloniOrders',
             'parent' => 'Moloni',
             'tabName' => 'Orders',
             'logo' => '',

@@ -4,9 +4,9 @@ namespace Moloni\Hooks;
 
 use Configuration;
 use Moloni\Controllers\General;
-use Moloni\Controllers\Models\Log;
-use Moloni\Controllers\Models\LogSync;
-use Moloni\Controllers\Models\Product;
+use Moloni\Helpers\Log;
+use Moloni\Helpers\LogSync;
+use Moloni\Helpers\Product;
 use PrestaShopDatabaseException;
 use PrestaShopException;
 

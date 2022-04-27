@@ -1,10 +1,10 @@
 <?php
 
-namespace Moloni\Builders\MoloniProduct;
+namespace Moloni\Builders\Document;
 
 use Moloni\Builders\Interfaces\BuilderItemInterface;
 
-class Product implements BuilderItemInterface
+class OrderShipping implements BuilderItemInterface
 {
 
     public function toArray()

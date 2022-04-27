@@ -1,13 +1,13 @@
 <?php
 
-namespace Moloni\Builders\Document;
+namespace Moloni\Builders\Deprecated;
 
 use Address;
 use Country;
 use Customer as psCustomer;
+use Moloni\Api\Endpoints\Countries as apiCountries;
 use Moloni\Api\Endpoints\Customers as apiCustomer;
 use Moloni\Api\Endpoints\GeographicZones as apiGeographicZones;
-use Moloni\Api\Endpoints\Countries as apiCountries;
 use Moloni\Helpers\Error;
 use Moloni\Helpers\Log;
 use Moloni\Helpers\Moloni;

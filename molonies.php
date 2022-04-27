@@ -63,6 +63,8 @@ class MoloniEs extends Module
             [],
             'Modules.Molonies.Molonies'
         );
+
+        $this->autoload();
     }
 
     /**
@@ -200,11 +202,11 @@ class MoloniEs extends Module
     public function hookActionAdminControllerSetMedia(): void
     {
         // Adds your's CSS file from a module's directory
-        $this->context->controller->addCSS($this->_path . 'src/View/css/settingsStyle.css');
-        $this->context->controller->addCSS($this->_path . 'src/View/css/all.min.css');
-        $this->context->controller->addCSS($this->_path . 'src/View/css/moloni-icons.css');
+        $this->context->controller->addCSS($this->_path . 'views/css/settingsStyle.css');
+        $this->context->controller->addCSS($this->_path . 'views/css/all.min.css');
+        $this->context->controller->addCSS($this->_path . 'views/css/moloni-icons.css');
         // Adds your's JavaScript file from a module's directory
-        $this->context->controller->addJS($this->_path . 'src/View/js/settingsJS.js');
+        $this->context->controller->addJS($this->_path . 'views/js/settingsJS.js');
     }
 
     /**
@@ -246,5 +248,13 @@ class MoloniEs extends Module
     {
         $paymentConfirmation = new OrderPaid($this->context->getTranslator());
         $paymentConfirmation->hookActionPaymentConfirmation($params['id_order']);
+    }
+
+    /**
+     * Inits Autoload
+     */
+    private function autoload(): void
+    {
+        require_once __DIR__ . '/vendor/autoload.php';
     }
 }

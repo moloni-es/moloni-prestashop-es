@@ -3,7 +3,7 @@
 namespace Moloni\Controller\Admin\Documents;
 
 use Currency;
-use Moloni\Builders\Document\Documents as modelDocuments;
+use Moloni\Builders\Deprecated\Documents as modelDocuments;
 use Moloni\Controller\Admin\General;
 use Moloni\Helpers\Log;
 use Moloni\Helpers\Moloni;
@@ -66,7 +66,7 @@ class Documents extends General
         }
 
         return $this->render(
-            '@Modules/molonies/src/View/Templates/Admin/Documents.twig',
+            '@Modules/molonies/views/templates/admin/documents/Documents.twig',
             [
                 'documentArray' => $documentArray, // documents to show
                 'documentTypesArray' => $this->getDocumentsTypes(), // types of documents

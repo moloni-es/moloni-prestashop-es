@@ -15,13 +15,10 @@
     "auto-header": "php vendor/bin/header-stamp --license=assets/afl.txt --exclude=vendor,node_modules"
   },
   "minimum-stability": "stable",
-  "require-dev": {
-    "prestashop/php-dev-tools": "^4.2",
-    "phpstan/phpstan": "^1.5",
-    "phpunit/phpunit": "5.x",
-    "friendsofphp/php-cs-fixer": "^3.8"
-  },
   "config": {
+    "preferred-install": "dist",
+    "prepend-autoloader": false,
+    "optimize-autoloader": true,
     "platform": {
       "php": "7.4"
     }
