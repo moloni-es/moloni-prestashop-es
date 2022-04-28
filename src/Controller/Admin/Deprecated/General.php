@@ -45,7 +45,7 @@ class General extends FrameworkBundleAdminController
     {
         $this->resetCompany();
 
-        return $this->redirectToRoute('moloni_es_login_index');
+        return $this->redirectToRoute('moloni_es_login_home');
     }
 
     /**
@@ -85,7 +85,7 @@ class General extends FrameworkBundleAdminController
      */
     public function redirectSettingsTools()
     {
-        return $this->redirectToRoute('moloni_es_settings_tools');
+        return $this->redirectToRoute('moloni_es_tools_home');
     }
 
     /**
@@ -95,7 +95,7 @@ class General extends FrameworkBundleAdminController
      */
     public function redirectDocuments()
     {
-        return $this->redirectToRoute('moloni_es_documents_index');
+        return $this->redirectToRoute('moloni_es_documents_home');
     }
 
     /**
@@ -105,7 +105,7 @@ class General extends FrameworkBundleAdminController
      */
     public function redirectOrders()
     {
-        return $this->redirectToRoute('moloni_es_home_index');
+        return $this->redirectToRoute('moloni_es_orders_home');
     }
 
     /**
@@ -211,7 +211,7 @@ class General extends FrameworkBundleAdminController
         // deletes all data form the database tables
         Db::getInstance()->execute('TRUNCATE ' . _DB_PREFIX_ . 'moloni_app');
 
-        return $this->redirectLogin();
+         return $this->redirectLogin();
     }
 
     /**

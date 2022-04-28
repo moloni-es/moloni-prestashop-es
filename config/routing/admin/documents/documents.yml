@@ -1,25 +1,25 @@
-moloni_es_documents_index:
+moloni_es_documents_home:
   path: /documents
   methods: [GET]
   defaults:
-    _controller: 'Moloni\Controllers\Documents::display'
+    _controller: 'Moloni\Controllers\Admin\Documents::home'
     _legacy_controller: 'MoloniDocuments'
     _legacy_link: 'MoloniDocuments'
 
-moloni_es_documents_download_document:
+moloni_es_documents_download:
   path: /documents/download/{documentId}
   methods: [GET]
   defaults:
-    _controller: 'Moloni\Controllers\Documents::downloadDocument'
+    _controller: 'Moloni\Controllers\Admin\Documents::download'
 
-moloni_es_documents_restore_order:
+moloni_es_documents_restore:
   path: /documents/restore/{orderId}
   methods: [GET]
   defaults:
-    _controller: 'Moloni\Controllers\Documents::restoreOrder'
+    _controller: 'Moloni\Controllers\Admin\Documents::restore'
 
-moloni_es_documents_view_document:
-  path: /documents/view/{documentId}
+moloni_es_documents_open:
+  path: /documents/open/{documentId}
   methods: [GET]
   defaults:
-    _controller: 'Moloni\Controllers\Documents::viewDocument'
+    _controller: 'Moloni\Controllers\Admin\Documents::open'

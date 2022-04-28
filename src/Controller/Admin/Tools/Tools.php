@@ -22,33 +22,66 @@
  * @noinspection PhpMultipleClassDeclarationsInspection
  */
 
-namespace Moloni\Controller\Admin\Settings;
+namespace Moloni\Controller\Admin\Tools;
 
 use Moloni\Controller\Admin\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class Automation extends Controller
+class Tools extends Controller
 {
     public function home(Request $request): Response
     {
         // todo: this
 
-        $form = $this->createFormBuilder()
-            ->getForm();
+        return $this->render('@Modules/molonies/views/templates/admin/settings/Tools.twig');
+    }
+
+    public function importProducts(Request $request): RedirectResponse
+    {
+        // todo: this
+
+        return $this->redirectToTools();
+    }
+
+    public function importCategories(Request $request): RedirectResponse
+    {
+        // todo: this
+
+        return $this->redirectToTools();
+    }
+
+    public function discardOrders(Request $request): RedirectResponse
+    {
+        // todo: this
+
+        return $this->redirectToTools();
+    }
+
+    public function openLogs(Request $request): Response
+    {
+        // todo: this
 
         return $this->render(
-            '@Modules/molonies/views/templates/admin/settings/Automation.twig',
+            '@Modules/molonies/views/templates/admin/settings/ConsultLogs.twig',
             [
-                'settingsForm' => $form->createView(),
-                'tabActive' => 'auto',
+                'logs' => '',
             ]
         );
     }
 
-    public function save(Request $request): RedirectResponse
+    public function deleteLogs(Request $request): RedirectResponse
     {
-        return $this->redirectToSettingsAutomation();
+        // todo: this
+
+        return $this->redirectToTools();
+    }
+
+    public function logout(Request $request): RedirectResponse
+    {
+        // todo: this
+
+        return $this->redirectToLogin();
     }
 }

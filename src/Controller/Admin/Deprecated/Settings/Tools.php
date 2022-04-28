@@ -4,7 +4,7 @@ namespace Moloni\Controller\Admin\Settings;
 
 use Db;
 use Moloni\Api\Endpoints\Products;
-use Moloni\Controller\Admin\General;
+use Moloni\Controller\Admin\Controller;
 use Moloni\Helpers\Log;
 use Moloni\Helpers\Moloni;
 use Order;
@@ -15,7 +15,7 @@ use function Moloni\Controller\Settings\pSQL;
 use const Moloni\Controller\Settings\_PS_MODULE_DIR_;
 use const Moloni\Controller\Settings\PHP_EOL;
 
-class Tools extends General
+class Tools extends Controller
 {
     /**
      * Checks for valid token and login, and displays template
@@ -25,7 +25,7 @@ class Tools extends General
     public function display()
     {
         if (!$this->checkTokenRedirect()) {
-            return $this->redirectLogin();
+            return $this->redirectToLogin();
         }
 
         $aux = 'tools';
@@ -47,7 +47,7 @@ class Tools extends General
     public function importCategories()
     {
         if (!$this->checkTokenRedirect()) {
-            return $this->redirectLogin();
+            return $this->redirectToLogin();
         }
 
         $arrayCategoryNames = self::getAllCategoriesFromMoloni(null);
@@ -75,7 +75,7 @@ class Tools extends General
             ));
         }
 
-        return $this->redirectSettingsTools();
+        return $this->redirectToTools();
     }
 
     /**
@@ -89,7 +89,7 @@ class Tools extends General
     public function importProducts()
     {
         if (!$this->checkTokenRedirect()) {
-            return $this->redirectLogin();
+            return $this->redirectToLogin();
         }
 
         $variables = [
@@ -120,7 +120,7 @@ class Tools extends General
             ));
             Log::writeLog('All products already imported!!');
 
-            return $this->redirectSettingsTools();
+            return $this->redirectToTools();
         } else {
             $this->addFlash('success', $this->trans(
                 'All products imported.',
@@ -128,7 +128,7 @@ class Tools extends General
             ));
             Log::writeLog('All products imported!!');
 
-            return $this->redirectSettingsTools();
+            return $this->redirectToTools();
         }
     }
 
@@ -140,7 +140,7 @@ class Tools extends General
     public function forceStocksSync()
     {
         if (!$this->checkTokenRedirect()) {
-            return $this->redirectLogin();
+            return $this->redirectToLogin();
         }
 
         $lastWeek = date('Y-m-d', strtotime('-1 week'));
@@ -192,7 +192,7 @@ class Tools extends General
                 ));
                 Log::writeLog('All stocks are already synchronized!!');
 
-                return $this->redirectSettingsTools();
+                return $this->redirectToTools();
             } else {
                 for ($i = 0; $i < $countIdPSproductsClean; ++$i) {
                     StockAvailable::setQuantity($idPSproductsClean[$i]['ID'], '', $idPSproductsClean[$i]['stock']);
@@ -204,7 +204,7 @@ class Tools extends General
             ));
             Log::writeLog('All stocks synchronized!!');
 
-            return $this->redirectSettingsTools();
+            return $this->redirectToTools();
         } else {
             $this->addFlash('warning', $this->trans(
                 'No stock to synchronize!!',
@@ -212,7 +212,7 @@ class Tools extends General
             ));
             Log::writeLog('No stock to synchronize!!');
 
-            return $this->redirectSettingsTools();
+            return $this->redirectToTools();
         }
     }
 
@@ -277,14 +277,14 @@ class Tools extends General
                 'Modules.Molonies.Success'
             ));
 
-            return $this->redirectSettingsTools();
+            return $this->redirectToTools();
         } else {
             $this->addFlash('warning', $this->trans(
                 'No pendente orders to clear!!',
                 'Modules.Molonies.Errors'
             ));
 
-            return $this->redirectSettingsTools();
+            return $this->redirectToTools();
         }
     }
 
@@ -307,7 +307,7 @@ class Tools extends General
                 'Modules.Molonies.Errors'
             ));
 
-            return $this->redirectSettingsTools();
+            return $this->redirectToTools();
         } else {
             $fp = fopen($ficheiro, 'r');
             $logs = fread($fp, filesize($ficheiro));
@@ -335,7 +335,7 @@ class Tools extends General
             'Modules.Molonies.Success'
         ));
 
-        return $this->redirectSettingsTools();
+        return $this->redirectToTools();
     }
 
     /**
@@ -395,7 +395,7 @@ class Tools extends General
             'Modules.Molonies.Success'
         ));
 
-        return $this->redirectSettingsTools();
+        return $this->redirectToTools();
     }
 
     /**

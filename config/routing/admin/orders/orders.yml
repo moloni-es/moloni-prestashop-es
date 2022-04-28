@@ -1,19 +1,19 @@
-moloni_es_orders_index:
+moloni_es_orders_home:
   path: /orders
   methods: [GET]
   defaults:
-    _controller: 'Moloni\Controllers\Start::indexAction'
+    _controller: 'Moloni\Controllers\Admin\Start::home'
     _legacy_controller: 'MoloniOrders'
     _legacy_link: 'MoloniOrders'
 
-moloni_es_orders_createdocument:
+moloni_es_orders_create:
   path: /orders/createDocument
   methods: [POST]
   defaults:
-    _controller: 'Moloni\Controllers\Start::createDocument'
+    _controller: 'Moloni\Controllers\Admin\Start::create'
 
-moloni_es_orders_clearinvoice:
+moloni_es_orders_discard:
   path: /orders/clearInvoice
   methods: [GET]
   defaults:
-    _controller: 'Moloni\Controllers\Start::clearInvoice'
+    _controller: 'Moloni\Controllers\Admin\Start::discard'

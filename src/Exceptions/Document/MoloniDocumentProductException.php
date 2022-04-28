@@ -1,10 +1,10 @@
 <?php
 
-namespace Moloni\Exceptions;
+namespace Moloni\Exceptions\Document;
 
 use Exception;
 
-class MoloniDocumentException extends Exception
+class MoloniDocumentProductException extends Exception
 {
     protected $data;
     protected $identifiers;

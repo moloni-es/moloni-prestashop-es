@@ -1,12 +1,12 @@
 moloni_es_settings_automation:
   path: /settings/automation
-  methods: [GET, POST]
+  methods: [GET]
   defaults:
-    _controller: 'Moloni\Controllers\Settings\Automation::display'
+    _controller: 'Moloni\Controllers\Admin\Settings\Automation::home'
     _legacy_controller: 'MoloniSettings'
 
-moloni_es_settings_automation_submit:
-  path: /settings/automation/submit
+moloni_es_settings_automation_save:
+  path: /settings/automation/save
   methods: [POST]
   defaults:
-    _controller: 'Moloni\Controllers\Settings\Automation::submitted'
+    _controller: 'Moloni\Controllers\Admin\Settings\Automation::save'
