@@ -1,13 +1,13 @@
-moloni_es_settings_index:
+moloni_es_settings_documents:
   path: /settings/documents
-  methods: [GET, POST]
+  methods: [GET]
   defaults:
-    _controller: 'Moloni\Controllers\Settings\Documents::display'
+    _controller: 'Moloni\Controllers\Admin\Settings\Documents::display'
     _legacy_controller: 'MoloniSettings'
     _legacy_link: 'MoloniSettings'
 
-moloni_es_settings_documents_submit:
-  path: /settings/documents/submit
+moloni_es_settings_documents_save:
+  path: /settings/documents/save
   methods: [POST]
   defaults:
-    _controller: 'Moloni\Controllers\Settings\Documents::submitted'
+    _controller: 'Moloni\Controllers\Admin\Settings\Documents::save'

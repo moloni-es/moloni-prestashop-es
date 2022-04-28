@@ -30,7 +30,7 @@ use Combination;
 use Configuration;
 use Moloni\Api\Endpoints\Categories as apiCategories;
 use Moloni\Api\Endpoints\Products;
-use Moloni\Controller\Admin\General;
+use Moloni\Controller\Admin\Controller;
 use Moloni\Helpers\Log;
 use Moloni\Helpers\LogSync;
 use Moloni\Helpers\Settings;
@@ -62,7 +62,7 @@ class WebserviceSpecificManagementMoloniResource implements WebserviceSpecificMa
      *
      * @return $this
      */
-    public function setObjectOutput(WebserviceOutputBuilderCore $obj)
+    public function setObjectOutput(WebserviceOutputBuilderCore $obj): WebserviceSpecificManagementMoloniResource
     {
         $this->objOutput = $obj;
 
@@ -74,7 +74,7 @@ class WebserviceSpecificManagementMoloniResource implements WebserviceSpecificMa
      *
      * @return WebserviceOutputBuilder
      */
-    public function getObjectOutput()
+    public function getObjectOutput(): WebserviceOutputBuilder
     {
         return $this->objOutput;
     }
@@ -84,7 +84,7 @@ class WebserviceSpecificManagementMoloniResource implements WebserviceSpecificMa
      *
      * @return $this
      */
-    public function setWsObject(WebserviceRequestCore $obj)
+    public function setWsObject(WebserviceRequestCore $obj): WebserviceSpecificManagementMoloniResource
     {
         $this->wsObject = $obj;
 
@@ -96,7 +96,7 @@ class WebserviceSpecificManagementMoloniResource implements WebserviceSpecificMa
      *
      * @return WebserviceRequest
      */
-    public function getWsObject()
+    public function getWsObject(): WebserviceRequest
     {
         return $this->wsObject;
     }
@@ -112,7 +112,7 @@ class WebserviceSpecificManagementMoloniResource implements WebserviceSpecificMa
         $request = json_decode($request, true);
 
         // model needs to be Product and Tokens need to be valid
-        if ($request['model'] !== 'Product' || General::staticCheckTokens() === false) {
+        if ($request['model'] !== 'Product' || Controller::staticCheckTokens() === false) {
             $this->output = 'Bad request.';
 
             return;

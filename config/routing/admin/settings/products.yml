@@ -2,11 +2,11 @@ moloni_es_settings_products:
   path: /settings/products
   methods: [GET, POST]
   defaults:
-    _controller: 'Moloni\Controllers\Settings\Products::display'
+    _controller: 'Moloni\Controllers\Admin\Settings\Products::home'
     _legacy_controller: 'MoloniSettings'
 
-moloni_es_settings_products_submit:
-  path: /settings/products/submit
+moloni_es_settings_products_save:
+  path: /settings/products/save
   methods: [POST]
   defaults:
-    _controller: 'Moloni\Controllers\Settings\Products::submitted'
+    _controller: 'Moloni\Controllers\Admin\Settings\Products::save'
