@@ -2,18 +2,20 @@
 
 namespace Moloni\Api\Endpoints;
 
-use Moloni\Api\Curl;
+use Moloni\Exceptions\MoloniApiException;
 
 class PaymentMethods extends Endpoint
 {
     /**
      * Get payment methods info
      *
-     * @param $variables
+     * @param array|null $variables
      *
      * @return array returns the Graphql response array or an error array
+     *
+     * @throws MoloniApiException
      */
-    public static function queryPaymentMethod($variables)
+    public function queryPaymentMethod(?array $variables = []): array
     {
         $query = 'query paymentMethod($companyId: Int!,$paymentMethodId: Int!){
                 paymentMethod(companyId: $companyId,paymentMethodId: $paymentMethodId) {
@@ -30,17 +32,19 @@ class PaymentMethods extends Endpoint
                 }
             }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 
     /**
      * Get All Payment Methods from Moloni ES
      *
-     * @param $variables
+     * @param array|null $variables
      *
      * @return array returns the Graphql response array or an error array
+     *
+     * @throws MoloniApiException
      */
-    public static function queryPaymentMethods($variables)
+    public function queryPaymentMethods(?array $variables = []): array
     {
         $query = 'query paymentMethods($companyId: Int!,$options: PaymentMethodOptions){
             paymentMethods(companyId: $companyId, options: $options) {
@@ -66,17 +70,19 @@ class PaymentMethods extends Endpoint
             }
         }';
 
-        return Curl::complex($query, $variables, 'paymentMethods');
+        return $this->paginatedPost($query, $variables, 'paymentMethods');
     }
 
     /**
      * Creates an payment method
      *
-     * @param $variables
+     * @param array|null $variables
      *
      * @return array returns the Graphql response array or an error array
+     *
+     * @throws MoloniApiException
      */
-    public static function mutationPaymentMethodCreate($variables)
+    public function mutationPaymentMethodCreate(?array $variables = []): array
     {
         $query = 'mutation paymentMethodCreate($companyId: Int!,$data: PaymentMethodInsert!)
         {
@@ -95,6 +101,6 @@ class PaymentMethods extends Endpoint
             }
         }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 }

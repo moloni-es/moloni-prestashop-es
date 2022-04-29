@@ -2,18 +2,20 @@
 
 namespace Moloni\Api\Endpoints;
 
-use Moloni\Api\Curl;
+use Moloni\Exceptions\MoloniApiException;
 
 class PriceClasses extends Endpoint
 {
     /**
      * Get a price class
      *
-     * @param $variables
+     * @param array|null $variables
      *
      * @return array
+     *
+     * @throws MoloniApiException
      */
-    public static function queryPriceClass($variables)
+    public function queryPriceClass(?array $variables = []): array
     {
         $query = 'query priceClass($companyId: Int!,$priceClassId: Int!)
         {
@@ -33,17 +35,19 @@ class PriceClasses extends Endpoint
             }
         }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 
     /**
      * Get all price classes
      *
-     * @param $variables
+     * @param array|null $variables
      *
      * @return array
+     *
+     * @throws MoloniApiException
      */
-    public static function queryPriceClasses($variables)
+    public function queryPriceClasses(?array $variables = []): array
     {
         $query = 'query priceClasses($companyId: Int!,$options: PriceClassOptions)
         {
@@ -63,17 +67,19 @@ class PriceClasses extends Endpoint
             }
         }';
 
-        return Curl::complex($query, $variables, 'priceClasses');
+        return $this->paginatedPost($query, $variables, 'priceClasses');
     }
 
     /**
      * Create a price class
      *
-     * @param $variables
+     * @param array|null $variables
      *
      * @return array
+     *
+     * @throws MoloniApiException
      */
-    public static function mutationPriceClassCreate($variables)
+    public function mutationPriceClassCreate(?array $variables = []): array
     {
         $query = 'mutation priceClassCreate($companyId: Int!,$data: PriceClassInsert!)
         {
@@ -93,6 +99,6 @@ class PriceClasses extends Endpoint
             }
         }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 }

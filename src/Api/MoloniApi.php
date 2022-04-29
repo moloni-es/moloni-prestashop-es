@@ -26,13 +26,15 @@ namespace Moloni\Api;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\BadResponseException;
+use Moloni\Entity\MoloniApp;
 use Moloni\Enums\Domains;
 use Moloni\Exceptions\MoloniApiException;
+use Moloni\Exceptions\MoloniLoginException;
 
 class MoloniApi
 {
     /**
-     * @var array|null
+     * @var MoloniApp
      */
     private static $appSession;
     /**
@@ -40,40 +42,148 @@ class MoloniApi
      */
     private static $client;
 
-    public static function loadSession(array $appSession): void
+    /**
+     * Load session
+     *
+     * @param MoloniApp $appSession
+     *
+     * @return void
+     */
+    public static function loadSession(MoloniApp $appSession): void
     {
         self::$appSession = $appSession;
     }
 
-    public static function getSession(): array
+    /**
+     * Get session
+     *
+     * @return MoloniApp
+     */
+    public static function getSession(): MoloniApp
     {
         return self::$appSession;
     }
 
-    public static function login(): void
+    /**
+     * Login action
+     *
+     * @param string $code
+     *
+     * @return bool
+     *
+     * @throws MoloniLoginException
+     */
+    public function login(string $code): bool
     {
-    }
+        if (empty($code)) {
+            throw new MoloniLoginException('Code missing');
+        }
 
-    public static function refreshTokens(): void
-    {
-    }
+        if (!self::$client) {
+            self::$client = new Client();
+        }
 
-    public static function isValid(): bool
-    {
+        $url = Domains::MOLONI_API . '/auth/grant';
+        $params = [
+            'grantType' => 'authorization_code',
+            'apiClientId' => self::$appSession->getClientId(),
+            'clientSecret' => self::$appSession->getClientSecret(),
+            'code' => $code,
+        ];
+
+        try {
+            $request = self::$client->post($url, ['body' => $params]);
+
+            if ($request === null) {
+                throw new MoloniLoginException('Request error');
+            }
+
+            $body = json_decode($request->json(), false);
+
+            if (empty($body['accessToken']) || empty($body['refreshToken'])) {
+                throw new MoloniLoginException('Error fetching tokens', [], ['response' => $body]);
+            }
+
+            self::$appSession->setAccessToken($body['accessToken']);
+            self::$appSession->setRefreshToken($body['refreshToken']);
+            self::$appSession->setLoginDate(time());
+            self::$appSession->setAccessTime(time());
+        } catch (BadResponseException | MoloniLoginException $e) {
+            // todo: save this
+            return false;
+        }
+
         return true;
     }
 
     /**
+     * Refresh tokens action
+     *
+     * @return bool
+     */
+    public static function refreshTokens(): bool
+    {
+        if (!self::$client) {
+            self::$client = new Client();
+        }
+
+        $url = Domains::MOLONI_API . '/auth/grant';
+        $params = [
+            'grantType' => 'refresh_token',
+            'apiClientId' => self::$appSession->getClientId(),
+            'clientSecret' => self::$appSession->getClientSecret(),
+            'refreshToken' => self::$appSession->getRefreshToken(),
+        ];
+
+        try {
+            $request = self::$client->post($url, ['body' => $params]);
+
+            if ($request === null) {
+                throw new MoloniLoginException('Request error');
+            }
+
+            $body = json_decode($request->json(), false);
+
+            if (empty($body['accessToken']) || empty($body['refreshToken'])) {
+                throw new MoloniLoginException('Error fetching tokens', [], ['response' => $body]);
+            }
+
+            self::$appSession->setAccessToken($body['accessToken']);
+            self::$appSession->setRefreshToken($body['refreshToken']);
+            self::$appSession->setAccessTime(time());
+        } catch (BadResponseException|MoloniLoginException $e) {
+            // todo: save this
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Verifies Moloni tokens validity
+     *
+     * @return bool
+     */
+    public static function isValid(): bool
+    {
+        return self::$appSession->isValidAccessToken() ||
+            (self::$appSession->isValidRefreshToken() && self::refreshTokens());
+    }
+
+    /**
+     * Make authenticated request
+     *
      * @throws MoloniApiException
      */
-    public static function post(array $data = [])
+    public static function post(array $data = []): array
     {
         if (!self::$client) {
             self::$client = new Client();
         }
 
         try {
-            return self::$client->post(
+            $response = [];
+            $request = self::$client->post(
                 Domains::MOLONI_API, [
                     'headers' => [
                         'Authorization' => 'bearer ' . self::$appSession['access_token'],
@@ -82,6 +192,12 @@ class MoloniApi
                     'body' => json_encode($data),
                 ]
             );
+
+            if ($request !== null && $request->json()) {
+                $response = json_decode($request->json(), false);
+            }
+
+            return $response;
         } catch (BadResponseException $e) {
             $response = $e->getResponse() ? $e->getResponse()->json() : [];
 

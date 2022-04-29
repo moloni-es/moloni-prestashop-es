@@ -66,6 +66,26 @@ class MoloniApp
     private $accessTime;
 
     /**
+     * Verifies access token based on date
+     *
+     * @return bool
+     */
+    public function isValidAccessToken(): bool
+    {
+        return strtotime('+13 days', $this->accessTime) > time();
+    }
+
+    /**
+     * Verifies refresh token based on date
+     *
+     * @return bool
+     */
+    public function isValidRefreshToken(): bool
+    {
+        return strtotime('+40 minutes', $this->accessTime) > time();
+    }
+
+    /**
      * @return int
      */
     public function getId()

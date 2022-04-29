@@ -2,18 +2,20 @@
 
 namespace Moloni\Api\Endpoints;
 
-use Moloni\Api\Curl;
+use Moloni\Exceptions\MoloniApiException;
 
 class Currencies extends Endpoint
 {
     /**
      * Get All Currencies from Moloni ES
      *
-     * @param array $variables
+     * @param array|null $variables
      *
      * @return array returns the Graphql response array or an error array
+     *
+     * @throws MoloniApiException
      */
-    public static function queryCurrencies(array $variables = []): array
+    public function queryCurrencies(?array $variables = []): array
     {
         $query = 'query currencies($options: CurrencyOptions)
         {
@@ -46,17 +48,19 @@ class Currencies extends Endpoint
             }
         }';
 
-        return Curl::complex($query, $variables, 'currencies');
+        return $this->paginatedPost($query, $variables, 'currencies');
     }
 
     /**
      * Get All Currencies exchanges from Moloni ES
      *
-     * @param array $variables
+     * @param array|null $variables
      *
      * @return array returns the Graphql response array or an error array
+     *
+     * @throws MoloniApiException
      */
-    public static function queryCurrencyExchanges(array $variables = []): array
+    public function queryCurrencyExchanges(?array $variables = []): array
     {
         $query = 'query currencyExchanges($options: CurrencyExchangeOptions)
         {
@@ -86,6 +90,6 @@ class Currencies extends Endpoint
             }
         }';
 
-        return Curl::complex($query, $variables, 'currencyExchanges');
+        return $this->paginatedPost($query, $variables, 'currencyExchanges');
     }
 }

@@ -2,18 +2,20 @@
 
 namespace Moloni\Api\Endpoints;
 
-use Moloni\Api\Curl;
+use Moloni\Exceptions\MoloniApiException;
 
 class DeliveryMethods extends Endpoint
 {
     /**
      * Create a new delivery methods
      *
-     * @param array $variables Request variables
+     * @param array|null $variables Request variables
      *
      * @return array
+     *
+     * @throws MoloniApiException
      */
-    public static function mutationDeliveryMethodCreate(array $variables = []): array
+    public function mutationDeliveryMethodCreate(?array $variables = []): array
     {
         $query = 'mutation deliveryMethodCreate($companyId: Int!,$data: DeliveryMethodInsert!)
         {
@@ -32,17 +34,19 @@ class DeliveryMethods extends Endpoint
             }
         }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 
     /**
      * Get All DeliveryMethods from Moloni ES
      *
-     * @param array $variables Request variables
+     * @param array|null $variables Request variables
      *
      * @return array returns the Graphql response array or an error array
+     *
+     * @throws MoloniApiException
      */
-    public static function queryDeliveryMethods(array $variables = []): array
+    public function queryDeliveryMethods(?array $variables = []): array
     {
         $query = 'query deliveryMethods($companyId: Int!,$options: DeliveryMethodOptions)
         {
@@ -71,6 +75,6 @@ class DeliveryMethods extends Endpoint
             }
         }';
 
-        return Curl::complex($query, $variables, 'deliveryMethods');
+        return $this->paginatedPost($query, $variables, 'deliveryMethods');
     }
 }

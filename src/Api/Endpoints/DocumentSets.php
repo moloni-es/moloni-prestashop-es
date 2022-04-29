@@ -2,18 +2,20 @@
 
 namespace Moloni\Api\Endpoints;
 
-use Moloni\Api\Curl;
+use Moloni\Exceptions\MoloniApiException;
 
 class DocumentSets extends Endpoint
 {
     /**
      * Get All Documents Set from Moloni ES
      *
-     * @param array $variables
+     * @param array|null $variables
      *
      * @return array returns the Graphql response array or an error array
+     *
+     * @throws MoloniApiException
      */
-    public static function queryDocumentSets(array $variables = []): array
+    public function queryDocumentSets(?array $variables = []): array
     {
         $query = 'query documentSets($companyId: Int!,$options: DocumentSetOptions){
             documentSets(companyId: $companyId, options: $options) {
@@ -38,6 +40,6 @@ class DocumentSets extends Endpoint
             }
         }';
 
-        return Curl::complex($query, $variables, 'documentSets');
+        return $this->paginatedPost($query, $variables, 'documentSets');
     }
 }

@@ -2,18 +2,20 @@
 
 namespace Moloni\Api\Endpoints;
 
-use Moloni\Api\Curl;
+use Moloni\Exceptions\MoloniApiException;
 
 class Languages extends Endpoint
 {
     /**
      * Gets languages.
      *
-     * @param array $variables variables of the request
+     * @param array|null $variables variables of the request
      *
      * @return array Api data
+     *
+     * @throws MoloniApiException
      */
-    public static function queryLanguage(array $variables = []): array
+    public function queryLanguage(?array $variables = []): array
     {
         $query = 'query language($languageId: Int!)
         {
@@ -34,17 +36,19 @@ class Languages extends Endpoint
             }
         }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 
     /**
      * Gets language info
      *
-     * @param array $variables variables of the request
+     * @param array|null $variables variables of the request
      *
      * @return array Api data
+     *
+     * @throws MoloniApiException
      */
-    public static function queryLanguages(array $variables = []): array
+    public function queryLanguages(?array $variables = []): array
     {
         $query = 'query languages($options: LanguageOptions)
         {
@@ -74,6 +78,6 @@ class Languages extends Endpoint
             }
         }';
 
-        return Curl::complex($query, $variables, 'languages');
+        return $this->paginatedPost($query, $variables, 'languages');
     }
 }

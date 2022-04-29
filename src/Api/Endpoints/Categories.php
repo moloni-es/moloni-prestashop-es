@@ -2,46 +2,50 @@
 
 namespace Moloni\Api\Endpoints;
 
-use Moloni\Api\Curl;
+use Moloni\Exceptions\MoloniApiException;
 
 class Categories extends Endpoint
 {
     /**
-     * Create an category
+     * Create a category
      *
-     * @param array $variables variables of the query
+     * @param array|null $variables variables of the query
      *
      * @return array returns some data of the created category
+     *
+     * @throws MoloniApiException
      */
-    public static function mutationProductCategoryCreate(array $variables = []): array
+    public function mutationProductCategoryCreate(?array $variables = []): array
     {
         $query = 'mutation productCategoryCreate($companyId: Int!,$data: ProductCategoryInsert!)
+        {
+            productCategoryCreate(companyId: $companyId,data: $data)
+            {
+                data
                 {
-                    productCategoryCreate(companyId: $companyId,data: $data)
-                    {
-                        data
-                        {
-                            productCategoryId
-                        }
-                        errors
-                        {
-                            field
-                            msg
-                        }
-                    }
-                }';
+                    productCategoryId
+                }
+                errors
+                {
+                    field
+                    msg
+                }
+            }
+        }';
 
-        return Curl::simple($query, json_encode($variables));
+        return $this->simplePost($query, $variables);
     }
 
     /**
      * Gets all categories
      *
-     * @param array $variables variables of the query
+     * @param array|null $variables variables of the query
      *
      * @return array returns data of the categories
+     *
+     * @throws MoloniApiException
      */
-    public static function queryProductCategories($variables = [])
+    public function queryProductCategories(?array $variables = []): array
     {
         $query = 'query productCategories($companyId: Int!,$options: ProductCategoryOptions)
                 {
@@ -74,17 +78,19 @@ class Categories extends Endpoint
                     }
                 }';
 
-        return Curl::complex($query, $variables, 'productCategories');
+        return $this->paginatedPost($query, $variables, 'productCategories');
     }
 
     /**
      * Get the category of a product
      *
-     * @param array $variables variables of the query
+     * @param array|null $variables variables of the query
      *
      * @return array returns category data
+     *
+     * @throws MoloniApiException
      */
-    public static function queryProductCategory($variables = [])
+    public function queryProductCategory(?array $variables = []): array
     {
         $query = 'query productCategory($companyId: Int!,$productCategoryId: Int!)
         {
@@ -110,6 +116,6 @@ class Categories extends Endpoint
             }
         }';
 
-        return Curl::simple($query, json_encode($variables));
+        return $this->simplePost($query, $variables);
     }
 }

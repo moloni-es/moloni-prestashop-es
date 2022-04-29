@@ -2,18 +2,20 @@
 
 namespace Moloni\Api\Endpoints;
 
-use Moloni\Api\Curl;
+use Moloni\Exceptions\MoloniApiException;
 
 class GeographicZones extends Endpoint
 {
     /**
      * Gets geographic zones
      *
-     * @param array $variables variables of the request
+     * @param array|null $variables variables of the request
      *
      * @return array Api data
+     *
+     * @throws MoloniApiException
      */
-    public static function queryGeographicZones(array $variables = []): array
+    public function queryGeographicZones(?array $variables = []): array
     {
         $query = 'query geographicZones($companyId: Int!,$options: GeographicZoneOptions)
         {
@@ -42,6 +44,6 @@ class GeographicZones extends Endpoint
             }
         }';
 
-        return Curl::complex($query, $variables, 'geographicZones');
+        return $this->paginatedPost($query, $variables, 'geographicZones');
     }
 }

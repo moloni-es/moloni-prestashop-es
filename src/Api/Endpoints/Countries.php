@@ -2,18 +2,20 @@
 
 namespace Moloni\Api\Endpoints;
 
-use Moloni\Api\Curl;
+use Moloni\Exceptions\MoloniApiException;
 
 class Countries extends Endpoint
 {
     /**
      * Gets all countries
      *
-     * @param array $variables variables of the request
+     * @param array|null $variables variables of the request
      *
      * @return array Api data
+     *
+     * @throws MoloniApiException
      */
-    public static function queryCountries(array $variables = []): array
+    public function queryCountries(?array $variables = []): array
     {
         $query = 'query countries($options: CountryOptions)
         {
@@ -47,17 +49,19 @@ class Countries extends Endpoint
             }
         }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 
     /**
      * Gets country info
      *
-     * @param array $variables variables of the request
+     * @param array|null $variables variables of the request
      *
      * @return array Api data
+     *
+     * @throws MoloniApiException
      */
-    public static function queryCountry(array $variables = []): array
+    public function queryCountry(?array $variables = []): array
     {
         $query = 'query country($countryId: Int!)
         {
@@ -80,6 +84,6 @@ class Countries extends Endpoint
             }
         }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 }
