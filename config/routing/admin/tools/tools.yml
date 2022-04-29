@@ -2,44 +2,44 @@ moloni_es_tools_home:
   path: /tools
   methods: [GET, POST]
   defaults:
-    _controller: 'Moloni\Controllers\Admin\Tools\Tools::home'
+    _controller: 'Moloni\Controller\Admin\Tools\Tools::home'
     _legacy_controller: 'MoloniSettings'
 
 moloni_es_tools_import_products:
   path: /tools/importProducts
   methods: [GET, POST]
   defaults:
-    _controller: 'Moloni\Controllers\Admin\Tools\Tools::importProducts'
+    _controller: 'Moloni\Controller\Admin\Tools\Tools::importProducts'
 
 moloni_es_tools_import_categories:
   path: /tools/importCategories
   methods: [GET, POST]
   defaults:
-    _controller: 'Moloni\Controllers\Admin\Tools\Tools::importCategories'
+    _controller: 'Moloni\Controller\Admin\Tools\Tools::importCategories'
 
 moloni_es_tools_discard_orders:
   path: /tools/discardOrders
   methods: [GET, POST]
   defaults:
-    _controller: 'Moloni\Controllers\Admin\Tools\Tools::discardOrders'
+    _controller: 'Moloni\Controller\Admin\Tools\Tools::discardOrders'
 
 moloni_es_tools_open_logs:
   path: /tools/openLogs
   methods: [GET, POST]
   defaults:
-    _controller: 'Moloni\Controllers\Admin\Tools\Tools::openLogs'
+    _controller: 'Moloni\Controller\Admin\Tools\Tools::openLogs'
 
 moloni_es_tools_delete_logs:
   path: /tools/deleteLogs
   methods: [GET, POST]
   defaults:
-    _controller: 'Moloni\Controllers\Admin\Tools\Tools::deleteLogs'
+    _controller: 'Moloni\Controller\Admin\Tools\Tools::deleteLogs'
 
 moloni_es_tools_logout:
   path: /tools/logout
   methods: [GET, POST]
   defaults:
-    _controller: 'Moloni\Controllers\Admin\Tools\Tools::logout'
+    _controller: 'Moloni\Controller\Admin\Tools\Tools::logout'
 
 
 
@@ -47,4 +47,4 @@ moloni_es_tools_export:
   path: /tools/export
   methods: [GET, POST]
   defaults:
-    _controller: 'Moloni\Controllers\Admin\Tools\Tools::exportTranslations'
+    _controller: 'Moloni\Controller\Admin\Tools\Tools::exportTranslations'
