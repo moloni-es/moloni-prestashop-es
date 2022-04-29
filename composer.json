@@ -12,7 +12,13 @@
   "scripts": {
     "check-phpstan": "php vendor/bin/phpstan analyse --configuration=tests/phpstan/phpstan.neon --memory-limit 10G",
     "check-phpcs": "vendor/bin/php-cs-fixer fix -vv",
-    "auto-header": "php vendor/bin/header-stamp --license=assets/afl.txt --exclude=vendor,node_modules"
+    "auto-header": "php vendor/bin/header-stamp --license=assets/afl.txt --exclude=vendor,node_modules",
+    "post-install-cmd": [
+      "php -r \"copy('config/pre-commit', '.git/hooks/pre-commit');\""
+    ],
+    "post-update-cmd": [
+      "php -r \"copy('config/pre-commit', '.git/hooks/pre-commit');\""
+    ]
   },
   "minimum-stability": "stable",
   "require-dev": {
@@ -24,6 +30,7 @@
   "config": {
     "preferred-install": "dist",
     "prepend-autoloader": false,
+    "optimize-autoloader": true,
     "platform": {
       "php": "7.4"
     }
@@ -34,6 +41,9 @@
     }
   },
   "require": {
+    "php": ">=7.2",
+    "ext-curl": "*",
     "ext-json": "*"
-  }
+  },
+  "extra": {}
 }
