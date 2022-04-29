@@ -2,18 +2,20 @@
 
 namespace Moloni\Api\Endpoints;
 
-use Moloni\Api\Curl;
+use Moloni\Exceptions\MoloniApiException;
 
 class Taxes extends Endpoint
 {
     /**
      * Gets all the taxes of the company
      *
-     * @param array $variables variables of the query
+     * @param array|null $variables variables of the query
      *
      * @return array returns an array with taxes information
+     *
+     * @throws MoloniApiException
      */
-    public static function queryTaxes($variables)
+    public function queryTaxes(?array $variables = []): array
     {
         $query = 'query taxes($companyId: Int!,$options: TaxOptions)
                 {
@@ -49,17 +51,19 @@ class Taxes extends Endpoint
                     }
                 }';
 
-        return Curl::complex($query, $variables, 'taxes');
+        return $this->paginatedPost($query, $variables, 'taxes');
     }
 
     /**
      * Gets tax info
      *
-     * @param array $variables variables of the query
+     * @param array|null $variables variables of the query
      *
      * @return array returns an array with taxes information
+     *
+     * @throws MoloniApiException
      */
-    public static function queryTax($variables)
+    public function queryTax(?array $variables = []): array
     {
         $query = 'query tax($companyId: Int!,$taxId: Int!)
                 {
@@ -87,17 +91,19 @@ class Taxes extends Endpoint
                     }
                 }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 
     /**
-     * Creates an tax
+     * Creates a tax
      *
-     * @param array $variables variables of the query
+     * @param array|null $variables variables of the query
      *
      * @return array returns data about the created tax
+     *
+     * @throws MoloniApiException
      */
-    public static function mutationTaxCreate($variables)
+    public function mutationTaxCreate(?array $variables = []): array
     {
         $query = 'mutation taxCreate($companyId: Int!,$data: TaxInsert!)
                 {
@@ -117,6 +123,6 @@ class Taxes extends Endpoint
                     }
                 }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 }

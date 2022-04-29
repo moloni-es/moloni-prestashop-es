@@ -2,18 +2,20 @@
 
 namespace Moloni\Api\Endpoints;
 
-use Moloni\Api\Curl;
+use Moloni\Exceptions\MoloniApiException;
 
 class MeasurementUnits extends Endpoint
 {
     /**
      * Gets all measurement units
      *
-     * @param array $variables variables of the query
+     * @param array|null $variables variables of the query
      *
      * @return array returns all measurement units
+     *
+     * @throws MoloniApiException
      */
-    public static function queryMeasurementUnits($variables = [])
+    public function queryMeasurementUnits(?array $variables = []): array
     {
         $query = 'query measurementUnits($companyId: Int!,$options: MeasurementUnitOptions)
                 {
@@ -42,17 +44,19 @@ class MeasurementUnits extends Endpoint
                     }
                 }';
 
-        return Curl::complex($query, $variables, 'measurementUnits');
+        return $this->paginatedPost($query, $variables, 'measurementUnits');
     }
 
     /**
-     * Create an measurement unit
+     * Create a measurement unit
      *
-     * @param array $variables variables of the query
+     * @param array|null $variables variables of the query
      *
      * @return array returns some data of the created measurement data
+     *
+     * @throws MoloniApiException
      */
-    public static function mutationMeasurementUnitCreate($variables = [])
+    public function mutationMeasurementUnitCreate(?array $variables = []): array
     {
         $query = 'mutation measurementUnitCreate($companyId: Int!,$data: MeasurementUnitInsert!)
                 {
@@ -70,6 +74,6 @@ class MeasurementUnits extends Endpoint
                     }
                 }';
 
-        return Curl::simple($query, json_encode($variables));
+        return $this->simplePost($query, $variables);
     }
 }

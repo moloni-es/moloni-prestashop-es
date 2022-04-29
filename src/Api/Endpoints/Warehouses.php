@@ -2,18 +2,20 @@
 
 namespace Moloni\Api\Endpoints;
 
-use Moloni\Api\Curl;
+use Moloni\Exceptions\MoloniApiException;
 
 class Warehouses extends Endpoint
 {
     /**
      * Get All Warehouses from Moloni ES
      *
-     * @param array $variables
+     * @param array|null $variables
      *
      * @return array returns the Graphql response array or an error array
+     *
+     * @throws MoloniApiException
      */
-    public static function queryWarehouses(array $variables = []): array
+    public function queryWarehouses(?array $variables = []): array
     {
         $query = 'query warehouses($companyId: Int!,$options: WarehouseOptions){
             warehouses(companyId: $companyId, options: $options) {
@@ -38,6 +40,6 @@ class Warehouses extends Endpoint
             }
         }';
 
-        return Curl::complex($query, $variables, 'warehouses');
+        return $this->paginatedPost($query, $variables, 'warehouses');
     }
 }

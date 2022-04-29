@@ -2,18 +2,20 @@
 
 namespace Moloni\Api\Endpoints;
 
-use Moloni\Api\Curl;
+use Moloni\Exceptions\MoloniApiException;
 
 class Products extends Endpoint
 {
     /**
      * Create a new product
      *
-     * @param array $variables variables of the query
+     * @param array|null $variables variables of the query
      *
      * @return array returns some data of the created product
+     *
+     * @throws MoloniApiException
      */
-    public static function mutationProductCreate($variables = [])
+    public function mutationProductCreate(?array $variables = []): array
     {
         $query = 'mutation productCreate($companyId: Int!,$data: ProductInsert!)
                 {
@@ -30,17 +32,19 @@ class Products extends Endpoint
                     }
                 }';
 
-        return Curl::simple($query, json_encode($variables));
+        return $this->simplePost($query, $variables);
     }
 
     /**
      * Update a product
      *
-     * @param array $variables variables of the query
+     * @param array|null $variables variables of the query
      *
      * @return array returns some data of the updated product
+     *
+     * @throws MoloniApiException
      */
-    public static function mutationProductUpdate($variables = [])
+    public function mutationProductUpdate(?array $variables = []): array
     {
         $query = 'mutation productUpdate($companyId: Int!,$data: ProductUpdate!)
                 {
@@ -60,17 +64,19 @@ class Products extends Endpoint
                     }
                 }';
 
-        return Curl::simple($query, json_encode($variables));
+        return $this->simplePost($query, $variables);
     }
 
     /**
      * Gets the information of a product
      *
-     * @param array $variables variables of the query
+     * @param array|null $variables variables of the query
      *
      * @return array information of the product
+     *
+     * @throws MoloniApiException
      */
-    public static function queryProduct($variables = [])
+    public function queryProduct(?array $variables = []): array
     {
         $query = 'query product($companyId: Int!,$productId: Int!)
         {
@@ -169,17 +175,19 @@ class Products extends Endpoint
             }
         }';
 
-        return Curl::simple($query, json_encode($variables));
+        return $this->simplePost($query, $variables);
     }
 
     /**
      * Gets all products
      *
-     * @param array $variables variables of the query
+     * @param array|null $variables variables of the query
      *
      * @return array returns all products
+     *
+     * @throws MoloniApiException
      */
-    public static function queryProducts($variables = [])
+    public function queryProducts(?array $variables = []): array
     {
         $query = 'query products($companyId: Int!,$options: ProductOptions)
                 {
@@ -226,6 +234,6 @@ class Products extends Endpoint
                     }
                 }';
 
-        return Curl::complex($query, $variables, 'products');
+        return $this->paginatedPost($query, $variables, 'products');
     }
 }

@@ -2,18 +2,20 @@
 
 namespace Moloni\Api\Endpoints;
 
-use Moloni\Api\Curl;
+use Moloni\Exceptions\MoloniApiException;
 
 class Stock extends Endpoint
 {
     /**
-     * Adds stock to an product
+     * Adds stock to a product
      *
-     * @param array $variables variables of the query
+     * @param array|null $variables variables of the query
      *
      * @return array returns info about the movement
+     *
+     * @throws MoloniApiException
      */
-    public static function mutationStockMovementManualEntryCreate($variables = [])
+    public function mutationStockMovementManualEntryCreate(?array $variables = []): array
     {
         $query = 'mutation stockMovementManualEntryCreate($companyId: Int!,$data: StockMovementManualInsert!)
                 {
@@ -32,17 +34,19 @@ class Stock extends Endpoint
                     }
                 }';
 
-        return Curl::simple($query, json_encode($variables));
+        return $this->simplePost($query, $variables);
     }
 
     /**
-     * Removes stock from an product
+     * Removes stock from a product
      *
-     * @param array $variables variables of the query
+     * @param array|null $variables variables of the query
      *
      * @return array returns info about the movement
+     *
+     * @throws MoloniApiException
      */
-    public static function mutationStockMovementManualExitCreate($variables = [])
+    public function mutationStockMovementManualExitCreate(?array $variables = []): array
     {
         $query = 'mutation stockMovementManualExitCreate($companyId: Int!,$data: StockMovementManualInsert!)
                 {
@@ -61,6 +65,6 @@ class Stock extends Endpoint
                     }
                 }';
 
-        return Curl::simple($query, json_encode($variables));
+        return $this->simplePost($query, $variables);
     }
 }

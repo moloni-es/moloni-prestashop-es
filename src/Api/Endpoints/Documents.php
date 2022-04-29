@@ -2,18 +2,20 @@
 
 namespace Moloni\Api\Endpoints;
 
-use Moloni\Api\Curl;
+use Moloni\Exceptions\MoloniApiException;
 
 class Documents extends Endpoint
 {
     /**
      * Gets invoice information
      *
-     * @param $variables array variables of the request
+     * @param array|null $variables array variables of the request
      *
      * @return array Api data
+     *
+     * @throws MoloniApiException
      */
-    public static function queryInvoice($variables)
+    public function queryInvoice(?array $variables = []): array
     {
         $query = 'query invoice($companyId: Int!,$documentId: Int!,$options: InvoiceOptionsSingle)
                 {
@@ -39,17 +41,19 @@ class Documents extends Endpoint
                     }
                 }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 
     /**
      * Gets all invoices
      *
-     * @param $variables array variables of the request
+     * @param array|null $variables array variables of the request
      *
      * @return array Api data
+     *
+     * @throws MoloniApiException
      */
-    public static function queryInvoices($variables)
+    public function queryInvoices(?array $variables = []): array
     {
         $query = 'query invoices($companyId: Int!,$options: InvoiceOptions)
                 {
@@ -84,17 +88,19 @@ class Documents extends Endpoint
                     }
                 }';
 
-        return Curl::complex($query, $variables, 'invoices');
+        return $this->paginatedPost($query, $variables, 'invoices');
     }
 
     /**
      * Creates an invoice
      *
-     * @param array $variables variables of the request
+     * @param array|null $variables variables of the request
      *
      * @return array Api data
+     *
+     * @throws MoloniApiException
      */
-    public static function mutationInvoiceCreate($variables)
+    public function mutationInvoiceCreate(?array $variables = []): array
     {
         $query = 'mutation invoiceCreate($companyId: Int!,$data: InvoiceInsert!,$options: InvoiceMutateOptions){
                 invoiceCreate(companyId: $companyId,data: $data,options: $options) {
@@ -113,17 +119,19 @@ class Documents extends Endpoint
                 }
             }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 
     /**
      * Update an invoice
      *
-     * @param array $variables variables of the request
+     * @param array|null $variables variables of the request
      *
      * @return array Api data
+     *
+     * @throws MoloniApiException
      */
-    public static function mutationInvoiceUpdate($variables)
+    public function mutationInvoiceUpdate(?array $variables = []): array
     {
         $query = 'mutation invoiceUpdate($companyId: Int!,$data: InvoiceUpdate!)
         {
@@ -142,17 +150,19 @@ class Documents extends Endpoint
             }
         }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 
     /**
      * Gets receipt information
      *
-     * @param $variables array variables of the request
+     * @param array|null $variables array variables of the request
      *
      * @return array Api data
+     *
+     * @throws MoloniApiException
      */
-    public static function queryReceipt($variables)
+    public function queryReceipt(?array $variables = []): array
     {
         $query = 'query receipt($companyId: Int!,$documentId: Int!,$options: ReceiptOptionsSingle)
                 {
@@ -178,17 +188,19 @@ class Documents extends Endpoint
                     }
                 }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 
     /**
      * Gets all receipts
      *
-     * @param $variables array variables of the request
+     * @param array|null $variables array variables of the request
      *
      * @return array Api data
+     *
+     * @throws MoloniApiException
      */
-    public static function queryReceipts($variables)
+    public function queryReceipts(?array $variables = []): array
     {
         $query = 'query receipts($companyId: Int!,$options: ReceiptOptions)
                 {
@@ -223,17 +235,19 @@ class Documents extends Endpoint
                     }
                 }';
 
-        return Curl::complex($query, $variables, 'receipts');
+        return $this->paginatedPost($query, $variables, 'receipts');
     }
 
     /**
      * Creates a receipt
      *
-     * @param array $variables variables of the request
+     * @param array|null $variables variables of the request
      *
      * @return array Api data
+     *
+     * @throws MoloniApiException
      */
-    public static function mutationReceiptCreate($variables)
+    public function mutationReceiptCreate(?array $variables = []): array
     {
         $query = 'mutation receiptCreate($companyId: Int!,$data: ReceiptInsert!,$options: ReceiptMutateOptions)
                 {
@@ -257,17 +271,19 @@ class Documents extends Endpoint
                     }
                 }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 
     /**
      * Update a receipt
      *
-     * @param array $variables variables of the request
+     * @param array|null $variables variables of the request
      *
      * @return array Api data
+     *
+     * @throws MoloniApiException
      */
-    public static function mutationReceiptUpdate($variables)
+    public function mutationReceiptUpdate(?array $variables = []): array
     {
         $query = 'mutation receiptUpdate($companyId: Int!,$data: ReceiptUpdate!)
         {
@@ -286,17 +302,19 @@ class Documents extends Endpoint
             }
         }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 
     /**
      * Gets credit note information
      *
-     * @param $variables array variables of the request
+     * @param array|null $variables array variables of the request
      *
      * @return array Api data
+     *
+     * @throws MoloniApiException
      */
-    public static function queryCreditNote($variables)
+    public function queryCreditNote(?array $variables = []): array
     {
         $query = 'query creditNote($companyId: Int!,$documentId: Int!,$options: CreditNoteOptionsSingle)
                 {
@@ -322,17 +340,19 @@ class Documents extends Endpoint
                     }
                 }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 
     /**
      * Gets all credit notes
      *
-     * @param $variables array variables of the request
+     * @param array|null $variables array variables of the request
      *
      * @return array Api data
+     *
+     * @throws MoloniApiException
      */
-    public static function queryCreditNotes($variables)
+    public function queryCreditNotes(?array $variables = []): array
     {
         $query = 'query creditNotes($companyId: Int!,$options: CreditNoteOptions)
                 {
@@ -367,17 +387,19 @@ class Documents extends Endpoint
                     }
                 }';
 
-        return Curl::complex($query, $variables, 'creditNotes');
+        return $this->paginatedPost($query, $variables, 'creditNotes');
     }
 
     /**
      * Creates a credit note
      *
-     * @param array $variables variables of the request
+     * @param array|null $variables variables of the request
      *
      * @return array Api data
+     *
+     * @throws MoloniApiException
      */
-    public static function mutationCreditNoteCreate($variables)
+    public function mutationCreditNoteCreate(?array $variables = []): array
     {
         $query = 'mutation creditNoteCreate($companyId: Int!,$data: CreditNoteInsert!,$options:CreditNoteMutateOptions)
                 {
@@ -403,17 +425,19 @@ class Documents extends Endpoint
                     }
                 }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 
     /**
      * Gets simplified invoice information
      *
-     * @param $variables variables of the request
+     * @param array|null $variables variables of the request
      *
      * @return array Api data
+     *
+     * @throws MoloniApiException
      */
-    public static function querySimplifiedInvoice($variables)
+    public function querySimplifiedInvoice(?array $variables = []): array
     {
         $query = 'query simplifiedInvoice($companyId: Int!,$documentId: Int!,$options: SimplifiedInvoiceOptionsSingle)
                 {
@@ -439,17 +463,19 @@ class Documents extends Endpoint
                     }
                 }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 
     /**
      * Gets all simplified invoices
      *
-     * @param $variables array variables of the request
+     * @param array|null $variables array variables of the request
      *
      * @return array Api data
+     *
+     * @throws MoloniApiException
      */
-    public static function querySimplifiedInvoices($variables)
+    public function querySimplifiedInvoices(?array $variables = []): array
     {
         $query = 'query simplifiedInvoices($companyId: Int!,$options: SimplifiedInvoiceOptions)
                 {
@@ -484,17 +510,19 @@ class Documents extends Endpoint
                     }
                 }';
 
-        return Curl::complex($query, $variables, 'simplifiedInvoices');
+        return $this->paginatedPost($query, $variables, 'simplifiedInvoices');
     }
 
     /**
      * Creates a simplified invoice
      *
-     * @param array $variables variables of the request
+     * @param array|null $variables variables of the request
      *
      * @return array Api data
+     *
+     * @throws MoloniApiException
      */
-    public static function mutationSimplifiedInvoiceCreate($variables)
+    public function mutationSimplifiedInvoiceCreate(?array $variables = []): array
     {
         $query = 'mutation simplifiedInvoiceCreate($companyId: Int!,$data: 
         SimplifiedInvoiceInsert!,$options: SimplifiedInvoiceMutateOptions)
@@ -521,17 +549,19 @@ class Documents extends Endpoint
                     }
                 }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 
     /**
      * Update a simplified invoice
      *
-     * @param array $variables variables of the request
+     * @param array|null $variables variables of the request
      *
      * @return array Api data
+     *
+     * @throws MoloniApiException
      */
-    public static function mutationSimplifiedInvoiceUpdate($variables)
+    public function mutationSimplifiedInvoiceUpdate(?array $variables = []): array
     {
         $query = 'mutation simplifiedInvoiceUpdate($companyId: Int!,$data: SimplifiedInvoiceUpdate!)
         {
@@ -550,17 +580,19 @@ class Documents extends Endpoint
             }
         }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 
     /**
      * Creates a purchase order
      *
-     * @param array $variables variables of the request
+     * @param array|null $variables variables of the request
      *
      * @return array Api data
+     *
+     * @throws MoloniApiException
      */
-    public static function queryPurchaseOrder($variables)
+    public function queryPurchaseOrder(?array $variables = []): array
     {
         $query = 'query purchaseOrder($companyId: Int!,$documentId: Int!,$options: PurchaseOrderOptionsSingle)
                 {
@@ -586,17 +618,19 @@ class Documents extends Endpoint
                     }
                 }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 
     /**
      * Gets all purchase orders
      *
-     * @param $variables variables of the request
+     * @param array|null $variables variables of the request
      *
      * @return array Api data
+     *
+     * @throws MoloniApiException
      */
-    public static function queryPurchaseOrders($variables)
+    public function queryPurchaseOrders(?array $variables = []): array
     {
         $query = 'query purchaseOrders($companyId: Int!,$options: PurchaseOrderOptions)
                 {
@@ -631,17 +665,19 @@ class Documents extends Endpoint
                     }
                 }';
 
-        return Curl::complex($query, $variables, 'purchaseOrders');
+        return $this->paginatedPost($query, $variables, 'purchaseOrders');
     }
 
     /**
      * Creates a purchase order
      *
-     * @param array $variables variables of the request
+     * @param array|null $variables variables of the request
      *
      * @return array Api data
+     *
+     * @throws MoloniApiException
      */
-    public static function mutationPurchaseOrderCreate($variables)
+    public function mutationPurchaseOrderCreate(?array $variables = []): array
     {
         $query = 'mutation purchaseOrderCreate($companyId: Int!,$data: 
         PurchaseOrderInsert!,$options: PurchaseOrderMutateOptions)
@@ -668,17 +704,19 @@ class Documents extends Endpoint
                     }
                 }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 
     /**
      * Update a purchase order
      *
-     * @param array $variables variables of the request
+     * @param array|null $variables variables of the request
      *
      * @return array Api data
+     *
+     * @throws MoloniApiException
      */
-    public static function mutationPurchaseOrderUpdate($variables)
+    public function mutationPurchaseOrderUpdate(?array $variables = []): array
     {
         $query = 'mutation purchaseOrderUpdate($companyId: Int!,$data: PurchaseOrderUpdate!)
         {
@@ -697,17 +735,19 @@ class Documents extends Endpoint
             }
         }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 
     /**
      * Creates a pro forma invoice
      *
-     * @param array $variables variables of the request
+     * @param array|null $variables variables of the request
      *
      * @return array Api data
+     *
+     * @throws MoloniApiException
      */
-    public static function queryProFormaInvoice($variables)
+    public function queryProFormaInvoice(?array $variables = []): array
     {
         $query = 'query proFormaInvoice($companyId: Int!,$documentId: Int!,$options: ProFormaInvoiceOptionsSingle)
                 {
@@ -733,17 +773,19 @@ class Documents extends Endpoint
                     }
                 }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 
     /**
      * Gets all pro forma invoices
      *
-     * @param $variables variables of the request
+     * @param array|null $variables variables of the request
      *
      * @return array Api data
+     *
+     * @throws MoloniApiException
      */
-    public static function queryProFormaInvoices($variables)
+    public function queryProFormaInvoices(?array $variables = []): array
     {
         $query = 'query proFormaInvoices($companyId: Int!,$options: ProFormaInvoiceOptions)
                 {
@@ -778,17 +820,19 @@ class Documents extends Endpoint
                     }
                 }';
 
-        return Curl::complex($query, $variables, 'proFormaInvoices');
+        return $this->paginatedPost($query, $variables, 'proFormaInvoices');
     }
 
     /**
      * Creates a pro forma invoice
      *
-     * @param array $variables variables of the request
+     * @param array|null $variables variables of the request
      *
      * @return array Api data
+     *
+     * @throws MoloniApiException
      */
-    public static function mutationProFormaInvoiceCreate($variables)
+    public function mutationProFormaInvoiceCreate(?array $variables = []): array
     {
         $query = 'mutation proFormaInvoiceCreate($companyId: Int!,$data: 
         ProFormaInvoiceInsert!,$options: ProFormaInvoiceMutateOptions)
@@ -815,17 +859,19 @@ class Documents extends Endpoint
                     }
                 }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 
     /**
      * Update a pro forma invoice
      *
-     * @param array $variables variables of the request
+     * @param array|null $variables variables of the request
      *
      * @return array Api data
+     *
+     * @throws MoloniApiException
      */
-    public static function mutationProFormaInvoiceUpdate($variables)
+    public function mutationProFormaInvoiceUpdate(?array $variables = []): array
     {
         $query = 'mutation proFormaInvoiceUpdate($companyId: Int!,$data: ProFormaInvoiceUpdate!)
         {
@@ -844,17 +890,19 @@ class Documents extends Endpoint
             }
         }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 
     /**
      * Get document token and path for simplified invoices
      *
-     * @param $variables
+     * @param array|null $variables
      *
      * @return array returns the Graphql response array or an error array
+     *
+     * @throws MoloniApiException
      */
-    public static function querySimplifiedInvoiceGetPDFToken($variables)
+    public function querySimplifiedInvoiceGetPDFToken(?array $variables = []): array
     {
         $query = 'query simplifiedInvoiceGetPDFToken($documentId: Int!)
                 {
@@ -874,17 +922,19 @@ class Documents extends Endpoint
                     }
                 }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 
     /**
      * Get document token and path for invoices
      *
-     * @param $variables
+     * @param array|null $variables
      *
      * @return array returns the Graphql response array or an error array
+     *
+     * @throws MoloniApiException
      */
-    public static function queryInvoiceGetPDFToken($variables)
+    public function queryInvoiceGetPDFToken(?array $variables = []): array
     {
         $query = 'query invoiceGetPDFToken($documentId: Int!)
                 {
@@ -904,17 +954,19 @@ class Documents extends Endpoint
                     }
                 }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 
     /**
      * Get document token and path for receipts
      *
-     * @param $variables
+     * @param array|null $variables
      *
      * @return array returns the Graphql response array or an error array
+     *
+     * @throws MoloniApiException
      */
-    public static function queryReceiptGetPDFToken($variables)
+    public function queryReceiptGetPDFToken(?array $variables = []): array
     {
         $query = 'query receiptGetPDFToken($documentId: Int!)
                 {
@@ -934,17 +986,19 @@ class Documents extends Endpoint
                     }
                 }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 
     /**
      * Get document token and path for credit notes
      *
-     * @param $variables
+     * @param array|null $variables
      *
      * @return array returns the Graphql response array or an error array
+     *
+     * @throws MoloniApiException
      */
-    public static function queryCreditNoteGetPDFToken($variables)
+    public function queryCreditNoteGetPDFToken(?array $variables = []): array
     {
         $query = 'query creditNoteGetPDFToken($documentId: Int!)
                 {
@@ -964,17 +1018,19 @@ class Documents extends Endpoint
                     }
                 }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 
     /**
      * Get document token and path for pro forma invoices
      *
-     * @param $variables
+     * @param array|null $variables
      *
      * @return array returns the Graphql response array or an error array
+     *
+     * @throws MoloniApiException
      */
-    public static function queryProFormaInvoiceGetPDFToken($variables)
+    public function queryProFormaInvoiceGetPDFToken(?array $variables = []): array
     {
         $query = 'query proFormaInvoiceGetPDFToken($documentId: Int!)
                 {
@@ -994,17 +1050,19 @@ class Documents extends Endpoint
                     }
                 }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 
     /**
      * Get document token and path for purchase orders
      *
-     * @param $variables
+     * @param array|null $variables
      *
      * @return array returns the Graphql response array or an error array
+     *
+     * @throws MoloniApiException
      */
-    public static function queryPurchaseOrderGetPDFToken($variables)
+    public function queryPurchaseOrderGetPDFToken(?array $variables = []): array
     {
         $query = 'query purchaseOrderGetPDFToken($documentId: Int!)
                 {
@@ -1024,119 +1082,133 @@ class Documents extends Endpoint
                     }
                 }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 
     /**
      * Creates simplified invoice pdf
      *
-     * @param $variables
+     * @param array|null $variables
      *
      * @return array returns the Graphql response array or an error array
+     *
+     * @throws MoloniApiException
      */
-    public static function mutationSimplifiedInvoiceGetPDF($variables)
+    public function mutationSimplifiedInvoiceGetPDF(?array $variables = []): array
     {
         $query = 'mutation simplifiedInvoiceGetPDF($companyId: Int!,$documentId: Int!)
                 {
                     simplifiedInvoiceGetPDF(companyId: $companyId,documentId: $documentId)
                 }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 
     /**
      * Creates invoice pdf
      *
-     * @param $variables
+     * @param array|null $variables
      *
      * @return array returns the Graphql response array or an error array
+     *
+     * @throws MoloniApiException
      */
-    public static function mutationInvoiceGetPDF($variables)
+    public function mutationInvoiceGetPDF(?array $variables = []): array
     {
         $query = 'mutation invoiceGetPDF($companyId: Int!,$documentId: Int!)
                 {
                     invoiceGetPDF(companyId: $companyId,documentId: $documentId)
                 }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 
     /**
      * Creates receipt pdf
      *
-     * @param $variables
+     * @param array|null $variables
      *
      * @return array returns the Graphql response array or an error array
+     *
+     * @throws MoloniApiException
      */
-    public static function mutationReceiptGetPDF($variables)
+    public function mutationReceiptGetPDF(?array $variables = []): array
     {
         $query = 'mutation receiptGetPDF($companyId: Int!,$documentId: Int!)
                 {
                     receiptGetPDF(companyId: $companyId,documentId: $documentId)
                 }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 
     /**
      * Creates credit notes pdf
      *
-     * @param $variables
+     * @param array|null $variables
      *
      * @return array returns the Graphql response array or an error array
+     *
+     * @throws MoloniApiException
      */
-    public static function mutationCreditNoteGetPDF($variables)
+    public function mutationCreditNoteGetPDF(?array $variables = []): array
     {
         $query = 'mutation creditNoteGetPDF($companyId: Int!,$documentId: Int!)
                 {
                     creditNoteGetPDF(companyId: $companyId,documentId: $documentId)
                 }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 
     /**
      * Creates pro forma invocie pdf
      *
-     * @param $variables
+     * @param array|null $variables
      *
      * @return array returns the Graphql response array or an error array
+     *
+     * @throws MoloniApiException
      */
-    public static function mutationProFormaInvoiceGetPDF($variables)
+    public function mutationProFormaInvoiceGetPDF(?array $variables = []): array
     {
         $query = 'mutation proFormaInvoiceGetPDF($companyId: Int!,$documentId: Int!)
                 {
                     proFormaInvoiceGetPDF(companyId: $companyId,documentId: $documentId)
                 }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 
     /**
      * Creates purchase order pdf
      *
-     * @param $variables
+     * @param array|null $variables
      *
      * @return array returns the Graphql response array or an error array
+     *
+     * @throws MoloniApiException
      */
-    public static function mutationPurchaseOrderGetPDF($variables)
+    public function mutationPurchaseOrderGetPDF(?array $variables = []): array
     {
         $query = 'mutation purchaseOrderGetPDF($companyId: Int!,$documentId: Int!)
                 {
                     purchaseOrderGetPDF(companyId: $companyId,documentId: $documentId)
                 }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 
     /**
      * Creates an bill of lading
      *
-     * @param array $variables variables of the request
+     * @param array|null $variables variables of the request
      *
      * @return array Api data
+     *
+     * @throws MoloniApiException
      */
-    public static function mutationBillsOfLadingCreate($variables)
+    public function mutationBillsOfLadingCreate(?array $variables = []): array
     {
         $query = 'mutation billsOfLadingCreate($companyId: Int!,$data: BillsOfLadingInsert!,
         $options: BillsOfLadingMutateOptions){
@@ -1156,108 +1228,120 @@ class Documents extends Endpoint
                 }
             }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 
     /**
      * Send invoice by mail
      *
-     * @param $variables
+     * @param array|null $variables
      *
      * @return array
+     *
+     * @throws MoloniApiException
      */
-    public static function mutationInvoiceSendEmail($variables)
+    public function mutationInvoiceSendEmail(?array $variables = []): array
     {
         $query = 'mutation invoiceSendMail($companyId: Int!,$documents: [Int]!,$mailData: MailData)
         {
             invoiceSendMail(companyId: $companyId,documents: $documents,mailData: $mailData)
         }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 
     /**
      * Send pro forma invoice by mail
      *
-     * @param $variables
+     * @param array|null $variables
      *
-     * @return array|array[]|\string[][]
+     * @return array
+     *
+     * @throws MoloniApiException
      */
-    public static function mutationProFormaInvoiceSendEmail($variables)
+    public function mutationProFormaInvoiceSendEmail(?array $variables = []): array
     {
         $query = 'mutation proFormaInvoiceSendMail($companyId: Int!,$documents: [Int]!,$mailData: MailData)
         {
             proFormaInvoiceSendMail(companyId: $companyId,documents: $documents,mailData: $mailData)
         }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 
     /**
      * Send purchased order by mail
      *
-     * @param $variables
+     * @param array|null $variables
      *
-     * @return array|array[]|\string[][]
+     * @return array
+     *
+     * @throws MoloniApiException
      */
-    public static function mutationPurchaseOrderSendEmail($variables)
+    public function mutationPurchaseOrderSendEmail(?array $variables = []): array
     {
         $query = 'mutation purchaseOrderSendMail($companyId: Int!,$documents: [Int]!,$mailData: MailData)
         {
             purchaseOrderSendMail(companyId: $companyId,documents: $documents,mailData: $mailData)
         }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 
     /**
      * Send receipt by mail
      *
-     * @param $variables
+     * @param array|null $variables
      *
      * @return array
+     *
+     * @throws MoloniApiException
      */
-    public static function mutationReceiptSendEmail($variables)
+    public function mutationReceiptSendEmail(?array $variables = []): array
     {
         $query = 'mutation receiptSendMail($companyId: Int!,$documents: [Int]!,$mailData: MailData)
         {
             receiptSendMail(companyId: $companyId,documents: $documents,mailData: $mailData)
         }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 
     /**
      * Send simplified invoice by mail
      *
-     * @param $variables
+     * @param array|null $variables
      *
      * @return array
+     *
+     * @throws MoloniApiException
      */
-    public static function mutationSimplifiedInvoiceSendEmail($variables)
+    public function mutationSimplifiedInvoiceSendEmail(?array $variables = []): array
     {
         $query = 'mutation simplifiedInvoiceSendMail($companyId: Int!,$documents: [Int]!,$mailData: MailData)
         {
             simplifiedInvoiceSendMail(companyId: $companyId,documents: $documents,mailData: $mailData)
         }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 
     /**
      * Send bill of lading by email
      *
-     * @param $variables
+     * @param array|null $variables
      *
      * @return array
+     *
+     * @throws MoloniApiException
      */
-    public static function mutationBillsOfLadingSendEmail($variables)
+    public function mutationBillsOfLadingSendEmail(?array $variables = []): array
     {
         $query = 'mutation billsOfLadingSendMail($companyId: Int!,$documents: [Int]!,$mailData: MailData)
         {
             billsOfLadingSendMail(companyId: companyId,documents: $documents,mailData: $mailData)
         }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 }

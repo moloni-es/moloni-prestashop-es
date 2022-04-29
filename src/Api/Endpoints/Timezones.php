@@ -2,18 +2,20 @@
 
 namespace Moloni\Api\Endpoints;
 
-use Moloni\Api\Curl;
+use Moloni\Exceptions\MoloniApiException;
 
 class Timezones extends Endpoint
 {
     /**
      * Get All Timezones from Moloni ES
      *
-     * @param array $variables
+     * @param array|null $variables
      *
      * @return array returns the Graphql response array or an error array
+     *
+     * @throws MoloniApiException
      */
-    public static function queryTimezones(array $variables = []): array
+    public function queryTimezones(?array $variables = []): array
     {
         $query = 'query timezones($options: TimezoneOptions)
         {
@@ -55,6 +57,6 @@ class Timezones extends Endpoint
             }
         }';
 
-        return Curl::complex($query, $variables, 'timezones');
+        return $this->paginatedPost($query, $variables, 'timezones');
     }
 }

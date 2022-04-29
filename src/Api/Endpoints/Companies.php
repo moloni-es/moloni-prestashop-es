@@ -2,7 +2,7 @@
 
 namespace Moloni\Api\Endpoints;
 
-use Moloni\Api\Curl;
+use Moloni\Exceptions\MoloniApiException;
 
 class Companies extends Endpoint
 {
@@ -10,8 +10,10 @@ class Companies extends Endpoint
      * Gets all the companies that the logged-in user has access
      *
      * @return array return and array with all companies Ids
+     *
+     * @throws MoloniApiException
      */
-    public static function queryMe(): array
+    public function queryMe(): array
     {
         $query = 'query {
             me { 
@@ -29,17 +31,19 @@ class Companies extends Endpoint
             }
         }';
 
-        return Curl::simple($query);
+        return $this->simplePost($query, []);
     }
 
     /**
      * Gets the information of the companies that the logged in user has access
      *
-     * @param array $variables variables of the query
+     * @param array|null $variables variables of the query
      *
      * @return array returns an array with the companies information
+     *
+     * @throws MoloniApiException
      */
-    public static function queryCompany(array $variables = []): array
+    public function queryCompany(?array $variables = []): array
     {
         $query = 'query company($companyId: Int!,$options: CompanyOptionsSingle){ 
             company(companyId: $companyId,options: $options) { 
@@ -75,6 +79,6 @@ class Companies extends Endpoint
             }
         }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 }

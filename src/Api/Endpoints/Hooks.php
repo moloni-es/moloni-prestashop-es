@@ -2,18 +2,20 @@
 
 namespace Moloni\Api\Endpoints;
 
-use Moloni\Api\Curl;
+use Moloni\Exceptions\MoloniApiException;
 
 class Hooks extends Endpoint
 {
     /**
      * Gets all hooks
      *
-     * @param $variables
+     * @param array|null $variables
      *
      * @return array
+     *
+     * @throws MoloniApiException
      */
-    public static function queryHooks($variables)
+    public function queryHooks(?array $variables = []): array
     {
         $query = 'query hooks($companyId: Int!,$options: HookOptions)
         {
@@ -42,17 +44,19 @@ class Hooks extends Endpoint
             }
         }';
 
-        return Curl::complex($query, $variables, 'hooks');
+        return $this->paginatedPost($query, $variables, 'hooks');
     }
 
     /**
      * Create a hook
      *
-     * @param $variables
+     * @param array|null $variables
      *
      * @return array
+     *
+     * @throws MoloniApiException
      */
-    public static function mutationHookCreate($variables)
+    public function mutationHookCreate(?array $variables = []): array
     {
         $query = 'mutation hookCreate($companyId: Int!,$data: HookInsert!)
         {
@@ -72,17 +76,19 @@ class Hooks extends Endpoint
             }
         }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 
     /**
      * Delete hooks
      *
-     * @param $variables
+     * @param array|null $variables
      *
      * @return array
+     *
+     * @throws MoloniApiException
      */
-    public static function mutationHookDelete($variables)
+    public function mutationHookDelete(?array $variables = []): array
     {
         $query = 'mutation hookDelete($companyId: Int!,$hookId: [String!]!)
         {
@@ -99,6 +105,6 @@ class Hooks extends Endpoint
             }
         }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 }

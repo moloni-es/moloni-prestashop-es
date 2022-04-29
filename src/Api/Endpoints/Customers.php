@@ -2,172 +2,180 @@
 
 namespace Moloni\Api\Endpoints;
 
-use Moloni\Api\Curl;
+use Moloni\Exceptions\MoloniApiException;
 
 class Customers extends Endpoint
 {
     /**
-     * Creates an costumer
+     * Creates a costumer
      *
-     * @param array $variables variables of the request
+     * @param array|null $variables variables of the request
      *
      * @return array Api data
+     *
+     * @throws MoloniApiException
      */
-    public static function mutationCustomerCreate($variables = [])
+    public function mutationCustomerCreate(?array $variables = []): array
     {
         $query = 'mutation customerCreate($companyId: Int!,$data: CustomerInsert!)
+        {
+            customerCreate(companyId: $companyId,data: $data)
+            {
+                data
                 {
-                    customerCreate(companyId: $companyId,data: $data)
-                    {
-                        data
-                        {
-                            customerId
-                            name
-                            vat
-                        }
-                        errors
-                        {
-                            field
-                            msg
-                        }
-                    }
-                }';
+                    customerId
+                    name
+                    vat
+                }
+                errors
+                {
+                    field
+                    msg
+                }
+            }
+        }';
 
-        return Curl::simple($query, json_encode($variables));
+        return $this->simplePost($query, $variables);
     }
 
     /**
      * Gets costumer information
      *
-     * @param array $variables variables of the request
+     * @param array|null $variables variables of the request
      *
      * @return array Api data
+     *
+     * @throws MoloniApiException
      */
-    public static function queryCustomer($variables = [])
+    public function queryCustomer(?array $variables = []): array
     {
         $query = 'query customer($companyId: Int!,$customerId: Int!,$options: CustomerOptionsSingle)
+        {
+            customer(companyId: $companyId,customerId: $customerId,options: $options)
+            {
+                data
                 {
-                    customer(companyId: $companyId,customerId: $customerId,options: $options)
+                    customerId
+                    name
+                    discount
+                    documentSet
                     {
-                        data
-                        {
-                            customerId
-                            name
-                            discount
-                            documentSet
-                            {
-                                documentSetId
-                                name
-                            }
-                            vat
-                        }
-                        errors
-                        {
-                            field
-                            msg
-                        }
+                        documentSetId
+                        name
                     }
-                }';
+                    vat
+                }
+                errors
+                {
+                    field
+                    msg
+                }
+            }
+        }';
 
-        return Curl::simple($query, json_encode($variables));
+        return $this->simplePost($query, $variables);
     }
 
     /**
      * Gets costumers of the company
      *
-     * @param array $variables variables of the request
+     * @param array|null $variables variables of the request
      *
      * @return array Api data
+     *
+     * @throws MoloniApiException
      */
-    public static function queryCustomers($variables = [])
+    public function queryCustomers(?array $variables = []): array
     {
         $query = 'query customers($companyId: Int!,$options: CustomerOptions)
+        {
+            customers(companyId: $companyId,options: $options)
+            {
+                data
                 {
-                    customers(companyId: $companyId,options: $options)
+                    customerId
+                    name
+                    number
+                    discount
+                    documentSet
                     {
-                        data
-                        {
-                            customerId
-                            name
-                            number
-                            discount
-                            documentSet
-                            {
-                                documentSetId
-                                name
-                            }
-                            country
-                            {
-                                countryId
-                            }
-                            language
-                            {
-                                languageId
-                            }
-                            vat
-                        }
-                        options
-                        {
-                            pagination
-                            {
-                                page
-                                qty
-                                count
-                            }
-                        }
-                        errors
-                        {
-                            field
-                            msg
-                        }
+                        documentSetId
+                        name
                     }
-                }';
+                    country
+                    {
+                        countryId
+                    }
+                    language
+                    {
+                        languageId
+                    }
+                    vat
+                }
+                options
+                {
+                    pagination
+                    {
+                        page
+                        qty
+                        count
+                    }
+                }
+                errors
+                {
+                    field
+                    msg
+                }
+            }
+        }';
 
-        return Curl::complex($query, $variables, 'customers');
+        return $this->paginatedPost($query, $variables, 'customers');
     }
 
     /**
      * Gets custom costumers of the company
      *
-     * @param array $variables variables of the request
+     * @param array|null $variables variables of the request
      *
      * @return array Api data
+     *
+     * @throws MoloniApiException
      */
-    public static function queryCustomCustomers($variables = [])
+    public function queryCustomCustomers(?array $variables = []): array
     {
         $query = 'query customers($companyId: Int!,$options: CustomerOptions)
+        {
+            customers(companyId: $companyId,options: $options)
+            {
+                data
                 {
-                    customers(companyId: $companyId,options: $options)
+                    customerId
+                    name
+                    number
+                    discount
+                    documentSet
                     {
-                        data
-                        {
-                            customerId
-                            name
-                            number
-                            discount
-                            documentSet
-                            {
-                                documentSetId
-                                name
-                            }
-                            country
-                            {
-                                countryId
-                            }
-                            language
-                            {
-                                languageId
-                            }
-                            vat
-                        }
-                        errors
-                        {
-                            field
-                            msg
-                        }
+                        documentSetId
+                        name
                     }
-                }';
+                    country
+                    {
+                        countryId
+                    }
+                    language
+                    {
+                        languageId
+                    }
+                    vat
+                }
+                errors
+                {
+                    field
+                    msg
+                }
+            }
+        }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 }

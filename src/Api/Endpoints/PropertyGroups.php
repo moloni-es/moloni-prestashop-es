@@ -2,16 +2,20 @@
 
 namespace Moloni\Api\Endpoints;
 
-use Moloni\Api\Curl;
+use Moloni\Exceptions\MoloniApiException;
 
 class PropertyGroups extends Endpoint
 {
     /**
      * Get multiple property groups
-     * @param array $variables
+     *
+     * @param array|null $variables
+     *
      * @return array
+     *
+     * @throws MoloniApiException
      */
-    public static function queryPropertyGroups(array $variables = []): array
+    public function queryPropertyGroups(?array $variables = []): array
     {
         $query = 'query propertyGroups($companyId: Int!,$options: PropertyGroupOptions)
         {
@@ -55,15 +59,19 @@ class PropertyGroups extends Endpoint
             }
         }';
 
-        return Curl::complex($query, $variables, 'propertyGroups');
+        return $this->paginatedPost($query, $variables, 'propertyGroups');
     }
 
     /**
      * Get single property group
-     * @param array $variables
+     *
+     * @param array|null $variables
+     *
      * @return array
+     *
+     * @throws MoloniApiException
      */
-    public static function queryPropertyGroup(array $variables = []): array
+    public function queryPropertyGroup(?array $variables = []): array
     {
         $query = 'query propertyGroup($companyId: Int!,$propertyGroupId: String!)
         {
@@ -98,15 +106,19 @@ class PropertyGroups extends Endpoint
             }
         }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 
     /**
      * Update a property group
-     * @param array $variables
+     *
+     * @param array|null $variables
+     *
      * @return array
+     *
+     * @throws MoloniApiException
      */
-    public static function mutationPropertyGroupUpdate(array $variables  = []): array
+    public function mutationPropertyGroupUpdate(array $variables = []): array
     {
         $query = 'mutation propertyGroupUpdate($companyId: Int!,$data: PropertyGroupUpdate!)
         {
@@ -141,15 +153,19 @@ class PropertyGroups extends Endpoint
             }
         }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 
     /**
      * Create a property group
-     * @param array $variables
+     *
+     * @param array|null $variables
+     *
      * @return array
+     *
+     * @throws MoloniApiException
      */
-    public static function mutationPropertyGroupCreate(array $variables = []): array
+    public function mutationPropertyGroupCreate(?array $variables = []): array
     {
         $query = 'mutation propertyGroupCreate($companyId: Int!,$data: PropertyGroupInsert!)
         {
@@ -184,6 +200,6 @@ class PropertyGroups extends Endpoint
             }
         }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 }

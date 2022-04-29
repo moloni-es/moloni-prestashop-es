@@ -2,18 +2,20 @@
 
 namespace Moloni\Api\Endpoints;
 
-use Moloni\Api\Curl;
+use Moloni\Exceptions\MoloniApiException;
 
 class FiscalZone extends Endpoint
 {
     /**
      * Get settings for a fiscal zone
      *
-     * @param array $variables
+     * @param array|null $variables
      *
      * @return array returns the Graphql response array or an error array
+     *
+     * @throws MoloniApiException
      */
-    public static function queryFiscalZoneTaxSettings(array $variables = []): array
+    public function queryFiscalZoneTaxSettings(?array $variables = []): array
     {
         $query = 'query fiscalZoneTaxSettings($companyId: Int!,$fiscalZone: String!)
         {
@@ -42,6 +44,6 @@ class FiscalZone extends Endpoint
             }
         }';
 
-        return Curl::simple($query, $variables);
+        return $this->simplePost($query, $variables);
     }
 }
