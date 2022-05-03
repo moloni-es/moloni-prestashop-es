@@ -18,8 +18,6 @@ class Settings
      * @param string $settingName name of the setting
      *
      * @return bool|string returns the cached string value or false if does not exist
-     *
-     * @throws PrestaShopDatabaseException
      */
     public static function get($settingName)
     {

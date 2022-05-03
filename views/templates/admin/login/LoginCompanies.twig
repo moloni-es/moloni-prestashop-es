@@ -3,7 +3,7 @@
 {% block content %}
     <div class="container">
         <div class="row">
-            {% for aux in arrayCompanies %}
+            {% for aux in companies %}
                 <div class="col-xs-6">
                     <div class="card" style="width: 18rem ;">
                         <div class="card-body">
@@ -12,7 +12,7 @@
                             <p class="card-text">Email: {{ aux.email }}</p>
                             <p class="card-text">{{ 'Address'|trans({}, 'Modules.Moloniprestashopes.Login') }}: {{ aux.address }}</p>
                             <p class="card-text">{{ 'Zip-Code'|trans({}, 'Modules.Moloniprestashopes.Login') }}: {{ aux.zipCode }}</p>
-                            <a href="{{ path(redirectRoute, {id: aux.companyId}) }}" class="btn btn-primary">{{ 'Choose this store'|trans({}, 'Modules.Moloniprestashopes.Login') }}</a>
+                            <a href="{{ path(redirectRoute, {companyId: aux.companyId}) }}" class="btn btn-primary">{{ 'Choose this store'|trans({}, 'Modules.Moloniprestashopes.Login') }}</a>
                         </div>
                     </div>
                 </div>

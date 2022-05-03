@@ -39,7 +39,7 @@
                                     <td>{{ order.total_paid_tax_incl|number_format(2, '.', ',') }} {{ order.currency }}</td>
                                     <td>
                                         <select name="document_type" style="margin-right: 5px">
-                                            {% for order,key in documetArray %}
+                                            {% for order,key in documetTypes %}
                                                 <option value='{{ key }}' {% if documentType == key%} selected {% endif %}>
                                                     {{ order }}
                                                 </option>

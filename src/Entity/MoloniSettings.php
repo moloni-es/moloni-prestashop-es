@@ -12,6 +12,7 @@ class MoloniSettings
      *
      * @ORM\Id
      * @ORM\Column(name="id", type="integer")
+     * @ORM\Entity(repositoryClass="Moloni\Repository\MoloniSettingsRepository")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;

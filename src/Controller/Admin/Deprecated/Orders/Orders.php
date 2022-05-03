@@ -36,7 +36,7 @@ class Orders extends Controller
         $dataBase = Db::getInstance();
 
         $sql = 'SELECT COUNT(*) FROM `' . _DB_PREFIX_ . 'orders` o
-                WHERE NOT EXISTS (SELECT 1 FROM `' . _DB_PREFIX_ . 'moloni_documents` t2 WHERE o.id_order =t2.id_order)
+                WHERE NOT EXISTS (SELECT 1 FROM `' . _DB_PREFIX_ . 'moloni_documents` t2 WHERE o.id_order = t2.id_order)
                 AND o.`invoice_number` != 0';
 
         $numberOfOrders = (int) ($dataBase->executeS($sql))[0]['COUNT(*)'];

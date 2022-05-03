@@ -1,6 +1,7 @@
+imports:
+  - { resource: services/admin/moloni/ }
+
 services:
   _defaults:
-    public: true
-
-  imports:
-    - { resource: ./services/admin/_admin.yml }
+    autowire: true      # Automatically injects dependencies in your services.
+    autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.

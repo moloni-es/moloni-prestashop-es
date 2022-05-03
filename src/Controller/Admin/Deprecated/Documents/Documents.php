@@ -164,7 +164,7 @@ class Documents extends Controller
      */
     public function restoreOrder($orderId)
     {
-        if (empty($orderId)) {
+        if (empty($orderId) || !is_numeric($orderId) || $orderId < 0) {
             $this->addFlash('warning', $this->trans('Received id is empty!!', 'Modules.Molonies.Errors'));
 
             return $this->redirectToDocuments();
