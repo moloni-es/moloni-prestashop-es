@@ -7,14 +7,8 @@ _moloni_es_orders:
 _moloni_es_documents:
   resource: "documents/documents.yml"
 
-_moloni_es_settings_documents:
-  resource: "settings/documents.yml"
+_moloni_es_settings:
+  resource: "settings/settings.yml"
 
-_moloni_es_settings_products:
-  resource: "settings/products.yml"
-
-_moloni_es_settings_automation:
-  resource: "settings/automation.yml"
-
-_moloni_es_settings_tools:
+_moloni_es_tools:
   resource: "tools/tools.yml"

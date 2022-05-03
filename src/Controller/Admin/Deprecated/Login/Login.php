@@ -213,7 +213,7 @@ class Login extends Controller
 
             $this->addFlash('success', $this->trans('Login was successful.', 'Modules.Molonies.Success'));
 
-            return $this->redirectToSettingsDocuments();
+            return $this->redirectToSettings();
         }
 
         $this->addFlash('error', $this->trans('Must be a GET request!!', 'Modules.Molonies.Errors'));

@@ -167,7 +167,7 @@ class Documents extends Controller
                         'Modules.Molonies.Errors'
                     ));
 
-                    return $this->redirectToSettingsDocuments();
+                    return $this->redirectToSettings();
                 }
 
                 // Transport cant be draft
@@ -179,7 +179,7 @@ class Documents extends Controller
                         'Modules.Molonies.Errors'
                     ));
 
-                    return $this->redirectToSettingsDocuments();
+                    return $this->redirectToSettings();
                 }
 
                 $dbPresta = Db::getInstance();
@@ -210,7 +210,7 @@ class Documents extends Controller
                     'Modules.Molonies.Success'
                 ));
 
-                return $this->redirectToSettingsDocuments();
+                return $this->redirectToSettings();
             }
 
             $this->addFlash('warning', $this->trans(
@@ -218,7 +218,7 @@ class Documents extends Controller
                 'Modules.Molonies.Errors'
             ));
 
-            return $this->redirectToSettingsDocuments();
+            return $this->redirectToSettings();
         }
 
         $this->addFlash('warning', $this->trans(
@@ -226,6 +226,6 @@ class Documents extends Controller
             'Modules.Molonies.Errors'
         ));
 
-        return $this->redirectToSettingsDocuments();
+        return $this->redirectToSettings();
     }
 }

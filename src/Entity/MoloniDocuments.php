@@ -12,6 +12,7 @@ class MoloniDocuments
      *
      * @ORM\Id
      * @ORM\Column(name="id", type="integer")
+     * @ORM\Entity(repositoryClass="Moloni\Repository\MoloniDocumentsRepository")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
@@ -29,13 +30,6 @@ class MoloniDocuments
      * @ORM\Column(name="document_id", type="integer")
      */
     private $documentId;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="reference", type="string", length="60")
-     */
-    private $reference;
 
     /**
      * @var int
@@ -103,22 +97,6 @@ class MoloniDocuments
     public function setDocumentId(int $documentId): void
     {
         $this->documentId = $documentId;
-    }
-
-    /**
-     * @return string
-     */
-    public function getReference(): string
-    {
-        return $this->reference;
-    }
-
-    /**
-     * @param string $reference
-     */
-    public function setReference(string $reference): void
-    {
-        $this->reference = $reference;
     }
 
     /**

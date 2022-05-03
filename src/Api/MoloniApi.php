@@ -42,6 +42,13 @@ class MoloniApi
      */
     private static $client;
 
+    public static $test = 'null';
+
+    public function __construct($test)
+    {
+        self::$test = $test;
+    }
+
     /**
      * Load session
      *
@@ -73,7 +80,7 @@ class MoloniApi
      *
      * @throws MoloniLoginException
      */
-    public function login(string $code): bool
+    public static function login(string $code): bool
     {
         if (empty($code)) {
             throw new MoloniLoginException('Code missing');
@@ -94,7 +101,7 @@ class MoloniApi
         try {
             $request = self::$client->post($url, ['body' => $params]);
 
-            if ($request === null) {
+            if (empty($request)) {
                 throw new MoloniLoginException('Request error');
             }
 
@@ -108,9 +115,10 @@ class MoloniApi
             self::$appSession->setRefreshToken($body['refreshToken']);
             self::$appSession->setLoginDate(time());
             self::$appSession->setAccessTime(time());
-        } catch (BadResponseException | MoloniLoginException $e) {
-            // todo: save this
-            return false;
+
+            // todo: how to save here?
+        } catch (BadResponseException $e) {
+            throw new MoloniLoginException($e->getMessage(), [], ['response' => $e->getResponse(), 'request' => $e->getRequest()]);
         }
 
         return true;
@@ -151,8 +159,9 @@ class MoloniApi
             self::$appSession->setAccessToken($body['accessToken']);
             self::$appSession->setRefreshToken($body['refreshToken']);
             self::$appSession->setAccessTime(time());
+
+            // todo: how to save here?
         } catch (BadResponseException|MoloniLoginException $e) {
-            // todo: save this
             return false;
         }
 

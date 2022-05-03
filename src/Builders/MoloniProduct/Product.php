@@ -6,7 +6,6 @@ use Moloni\Builders\Interfaces\BuilderItemInterface;
 
 class Product implements BuilderItemInterface
 {
-
     public function toArray()
     {
         // TODO: Implement toArray() method.

@@ -30,7 +30,7 @@ use Moloni\Api\MoloniApiClient;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Helpers\Moloni;
 
-trait MoloniCategories
+trait MoloniCategoriesTrait
 {
     private function getAllMoloniCategories(int $parentId = 0): array
     {

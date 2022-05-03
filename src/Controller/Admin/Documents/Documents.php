@@ -24,55 +24,95 @@
 
 namespace Moloni\Controller\Admin\Documents;
 
+use Doctrine\ORM\NonUniqueResultException;
 use Moloni\Controller\Admin\Controller;
+use Moloni\Exceptions\MoloniException;
+use Moloni\Repository\MoloniDocumentsRepository;
+use Moloni\Traits\DocumentActionsTrait;
+use Moloni\Traits\DocumentTypesTrait;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class Documents extends Controller
 {
-    public function home(Request $request): Response
+    use DocumentTypesTrait;
+    use DocumentActionsTrait;
+
+    public function home(Request $request, MoloniDocumentsRepository $documentsRepository): Response
     {
-        //todo: this
+        $page = $request->get('page', 1);
+
+        ['documents' => $documents, 'paginator' => $paginator] = $documentsRepository->getAllPaginated($page);
 
         return $this->render(
             '@Modules/molonies/views/templates/admin/documents/Documents.twig',
             [
-                'documentArray' => [], // documents to show
-                'documentTypesArray' => [], // types of documents
+                'documentArray' => $documents,
+                'documentTypes' => $this->getDocumentsTypes(),
                 'downloadDocumentRoute' => 'moloni_es_documents_download',
                 'moloniViewRoute' => 'moloni_es_documents_view_document',
                 'thisRoute' => 'moloni_es_documents_home',
                 'restoreOrderRoute' => 'moloni_es_documents_restore',
-                'paginator' => [
-                    'numberOfTabs' => 1,
-                    'currentPage' => 1,
-                    'offSet' => 1,
-                    'linesPerPage' => 1,
-                ],
+                'paginator' => $paginator,
             ]
         );
     }
 
-    public function download(Request $request): RedirectResponse
+    public function download(?int $documentId): RedirectResponse
     {
-        //todo: this
-        $url = 'www.google.com';
+        if (!is_numeric($documentId) || $documentId <= 0) {
+            $msg = $this->trans('ID is invalid', 'Modules.Molonies.Errors');
+            $this->addErrorMessage($msg);
+
+            return $this->redirectToDocuments();
+        }
+
+        $url = $this->getPdfUrl($documentId);
 
         return $this->redirect($url);
     }
 
-    public function open(Request $request): RedirectResponse
+    public function open(?int $documentId): RedirectResponse
     {
-        //todo: this
-        $url = 'www.google.com';
+        if (!is_numeric($documentId) || $documentId <= 0) {
+            $msg = $this->trans('ID is invalid', 'Modules.Molonies.Errors');
+            $this->addErrorMessage($msg);
+
+            return $this->redirectToDocuments();
+        }
+
+        $url = $this->getDocumentUrl($documentId);
 
         return $this->redirect($url);
     }
 
-    public function restore(Request $request): void
+    public function restore(?int $orderId, MoloniDocumentsRepository $documentsRepository): void
     {
-        //todo: this
+        if (is_numeric($orderId) && $orderId > 0) {
+            try {
+                $document = $documentsRepository
+                    ->createQueryBuilder('d')
+                    ->where('order_id = :order_id')
+                    ->setParameter('order_id', $orderId)
+                    ->getQuery()
+                    ->getOneOrNullResult();
+
+                if (empty($document)) {
+                    throw new MoloniException('Error fetching document');
+                }
+
+                // todo: delete
+            } catch (NonUniqueResultException|MoloniException $e) {
+                $msg = $this->trans('Error fetching document', 'Modules.Molonies.Errors');
+
+                $this->addErrorMessage($msg);
+            }
+        } else {
+            $msg = $this->trans('ID is invalid', 'Modules.Molonies.Errors');
+
+            $this->addErrorMessage($msg);
+        }
 
         $this->redirectToDocuments();
     }

@@ -29,6 +29,14 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 
 abstract class Controller extends FrameworkBundleAdminController
 {
+    protected $authenticatedRoutes = ['all'];
+    protected $freeRoutes = [];
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     /**
      * Adds message to the user
      *
@@ -37,7 +45,7 @@ abstract class Controller extends FrameworkBundleAdminController
      *
      * @return bool
      */
-    private function addMessage(string $message,string $type): bool
+    private function addFlashMessage(string $message, string $type): bool
     {
         if (empty($message) || empty($type)) {
             return false;
@@ -55,9 +63,9 @@ abstract class Controller extends FrameworkBundleAdminController
      *
      * @return bool
      */
-    protected function addSuccess(string $message): bool
+    protected function addSuccessMessage(string $message): bool
     {
-        return $this->addMessage($message,'success');
+        return $this->addFlashMessage($message,'success');
     }
 
     /**
@@ -67,9 +75,9 @@ abstract class Controller extends FrameworkBundleAdminController
      *
      * @return bool
      */
-    protected function addWarning(string $message): bool
+    protected function addWarningMessage(string $message): bool
     {
-        return $this->addMessage($message,'warning');
+        return $this->addFlashMessage($message,'warning');
     }
 
     /**
@@ -79,9 +87,9 @@ abstract class Controller extends FrameworkBundleAdminController
      *
      * @return bool
      */
-    protected function addError(string $message): bool
+    protected function addErrorMessage(string $message): bool
     {
-        return $this->addMessage($message,'error');
+        return $this->addFlashMessage($message,'error');
     }
 
     /**
@@ -107,21 +115,25 @@ abstract class Controller extends FrameworkBundleAdminController
     /**
      * Redirect to document settings page
      *
+     * @param int|null $page
+     *
      * @return RedirectResponse
      */
-    protected function redirectToDocuments(): RedirectResponse
+    protected function redirectToDocuments(?int $page = 1): RedirectResponse
     {
-        return $this->redirectToRoute('moloni_es_documents_home');
+        return $this->redirectToRoute('moloni_es_documents_home', ['page' => $page]);
     }
 
     /**
      * Redirect to Orders page
      *
+     * @param int|null $page
+     *
      * @return RedirectResponse
      */
-    protected function redirectToOrders(): RedirectResponse
+    protected function redirectToOrders(?int $page = 1): RedirectResponse
     {
-        return $this->redirectToRoute('moloni_es_orders_home');
+        return $this->redirectToRoute('moloni_es_orders_home', ['page' => $page]);
     }
 
     /**
@@ -135,32 +147,12 @@ abstract class Controller extends FrameworkBundleAdminController
     }
 
     /**
-     * Redirect to Settings Products page
+     * Redirect to Settings Page
      *
      * @return RedirectResponse
      */
-    protected function redirectToSettingsProducts(): RedirectResponse
+    protected function redirectToSettings(): RedirectResponse
     {
-        return $this->redirectToRoute('moloni_es_settings_products');
-    }
-
-    /**
-     * Redirect to Index Settings Page
-     *
-     * @return RedirectResponse
-     */
-    protected function redirectToSettingsDocuments(): RedirectResponse
-    {
-        return $this->redirectToRoute('moloni_es_settings_documents');
-    }
-
-    /**
-     * Redirect to Automation settings page
-     *
-     * @return RedirectResponse
-     */
-    protected function redirectToSettingsAutomation(): RedirectResponse
-    {
-        return $this->redirectToRoute('moloni_es_settings_automation');
+        return $this->redirectToRoute('moloni_es_settings');
     }
 }
