@@ -1,4 +1,4 @@
-moloni_es_settings:
+moloni_es_settings_home:
   path: /settings/
   methods: [GET]
   defaults:
