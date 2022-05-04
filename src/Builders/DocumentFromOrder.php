@@ -106,7 +106,7 @@ class DocumentFromOrder implements BuilderInterface
     /**
      * Document products
      *
-     * @var OrderProduct[]
+     * @var OrderShipping
      */
     protected $shipping;
 
@@ -324,8 +324,10 @@ class DocumentFromOrder implements BuilderInterface
      */
     protected function setProducts(): DocumentFromOrder
     {
-        foreach ($this->order['line_items'] as $productLine) {
-            $orderProduct = new OrderProduct();
+        $products = $this->order->getCartProducts();
+
+        foreach ($products as $product) {
+            $orderProduct = new OrderProduct($product);
 
             $orderProduct
                 ->search()
@@ -367,21 +369,19 @@ class DocumentFromOrder implements BuilderInterface
      */
     protected function setShipping(): DocumentFromOrder
     {
-        foreach ($this->order['shipping_lines'] as $shippingLine) {
-            if ($shippingLine['price'] > 0) {
-                $orderShipping = new OrderShipping();
+        if ($this->order->total_shipping > 0) {
+            $orderShipping = new OrderShipping($this->order);
 
+            $orderShipping
+                ->search()
+                ->buildData();
+
+            if ($orderShipping->productId === 0) {
                 $orderShipping
-                    ->search()
-                    ->buildData();
-
-                if ($orderShipping->productId === 0) {
-                    $orderShipping
-                        ->insert();
-                }
-
-                $this->shipping[] = $orderShipping;
+                    ->insert();
             }
+
+            $this->shipping = $orderShipping;
         }
 
         return $this;
