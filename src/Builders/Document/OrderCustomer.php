@@ -35,10 +35,13 @@ use Moloni\Exceptions\Document\MoloniDocumentCustomerException;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Helpers\Moloni;
 use Moloni\Helpers\Settings;
+use Moloni\Traits\CountryTrait;
 use Order;
 
 class OrderCustomer implements BuilderItemInterface
 {
+    use CountryTrait;
+
     /**
      * Customer id in Moloni
      *
@@ -282,34 +285,10 @@ class OrderCustomer implements BuilderItemInterface
      */
     protected function setLanguageAndCountryId(): OrderCustomer
     {
-        $countryId = Countries::SPAIN;
-        $languageId = Languages::ES;
-
-        $countryIso = Country::getIsoById($this->billingAddress->id_country);
-
-        if (empty($countryIso)) {
-            throw new MoloniDocumentCustomerException('Costumer has no country');
-        }
-
         try {
-            $variables = [
-                'options' => [
-                    'search' => [
-                        'field' => 'iso3166_1',
-                        'value' => $countryIso,
-                    ],
-                ],
-            ];
-
-            $query = MoloniApiClient::countries()
-                ->queryCountries($variables);
-
-            if (!empty($query)) {
-                $countryId = (int) $query[0]['countryId'];
-                $languageId = (int) $query[0]['language']['languageId'];
-            }
-        } catch (MoloniApiException $e) {
-            throw new MoloniDocumentCustomerException('Costumer has no country');
+            ['countryId' => $countryId, 'languageId' => $languageId] = $this->getMoloniCountryById($this->billingAddress->id_country);
+        } catch (MoloniAPIException $e) {
+            throw new MoloniDocumentCustomerException('Error fetching countries', [], $e->getData());
         }
 
         $this->countryId = $countryId;

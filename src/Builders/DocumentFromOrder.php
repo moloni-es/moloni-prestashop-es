@@ -32,7 +32,6 @@ use Moloni\Builders\Document\OrderShipping;
 use Moloni\Builders\Interfaces\BuilderInterface;
 use Moloni\Exceptions\Document\MoloniDocumentCustomerException;
 use Moloni\Exceptions\Document\MoloniDocumentDeliveryException;
-use Moloni\Exceptions\Document\MoloniDocumentException;
 use Moloni\Exceptions\Document\MoloniDocumentPaymentException;
 use Moloni\Exceptions\Document\MoloniDocumentProductException;
 use Moloni\Exceptions\Document\MoloniDocumentProductTaxException;
@@ -223,6 +222,7 @@ class DocumentFromOrder implements BuilderInterface
      */
     protected function setFicalZone(): DocumentFromOrder
     {
+        // todo: this
         $fiscalZone = 'ES';
 
         $this->fiscalZone = strtoupper($fiscalZone);
@@ -234,11 +234,10 @@ class DocumentFromOrder implements BuilderInterface
      * Defines order exchage info
      *
      * @return DocumentFromOrder
-     *
-     * @throws MoloniDocumentException
      */
     protected function setExchangeRate(): DocumentFromOrder
     {
+        // todo: this
         $this->exchangeRate = [];
 
         return $this;
