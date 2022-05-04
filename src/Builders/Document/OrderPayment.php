@@ -24,11 +24,15 @@
 
 namespace Moloni\Builders\Document;
 
+use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\Interfaces\BuilderItemInterface;
+use Moloni\Exceptions\Document\MoloniDocumentPaymentException;
+use Moloni\Exceptions\MoloniApiException;
+use Moloni\Helpers\Moloni;
+use OrderPayment as PrestashopOrderPayment;
 
 class OrderPayment implements BuilderItemInterface
 {
-
     /**
      * Payment method id
      *
@@ -58,25 +62,18 @@ class OrderPayment implements BuilderItemInterface
     protected $paymentTime;
 
     /**
-     * Payment method notes
-     *
-     * @var string
-     */
-    protected $notes;
-
-    /**
      * Order payment
      *
-     * @var array
+     * @var PrestashopOrderPayment
      */
     protected $orderPayment;
 
     /**
      * Constructor
      *
-     * @param array $order Shopify order data
+     * @param PrestashopOrderPayment $orderPayment Order payment
      */
-    public function __construct(array $orderPayment)
+    public function __construct(PrestashopOrderPayment $orderPayment)
     {
         $this->orderPayment = $orderPayment;
 
@@ -85,16 +82,55 @@ class OrderPayment implements BuilderItemInterface
 
     //          PUBLICS          //
 
+    /**
+     * Exports payment data to array format
+     *
+     * @return array
+     */
     public function toArray(): array
     {
-        return [];
+        return [
+            'paymentMethodId' => $this->paymentMethodId,
+            'paymentMethodName' => $this->name,
+            'value' => $this->value,
+        ];
     }
 
+    /**
+     * Creates a payment method in Moloni
+     *
+     * @throws MoloniDocumentPaymentException
+     */
     public function insert(): OrderPayment
     {
+        try {
+            $params = [
+                'companyId' => (int) Moloni::get('company_id'),
+                'data' => [
+                    'name' => $this->name,
+                ],
+            ];
+
+            $mutation = MoloniApiClient::paymentMethods()
+                ->mutationPaymentMethodCreate($params);
+
+            $paymentMethodId = $mutation['data']['paymentMethodCreate']['data']['paymentMethodId'] ?? 0;
+
+            if ((int) $paymentMethodId > 0) {
+                $this->paymentMethodId = (int) $paymentMethodId;
+            } else {
+                throw new MoloniDocumentPaymentException('Error creating payment method: ({0})', [$this->name], ['params' => $params, 'response' => $mutation]);
+            }
+        } catch (MoloniApiException $e) {
+            throw new MoloniDocumentPaymentException('Error creating payment method: ({0})', [$this->name], $e->getData());
+        }
+
         return $this;
     }
 
+    /**
+     * @throws MoloniDocumentPaymentException
+     */
     public function search(): OrderPayment
     {
         return $this->searchByName();
@@ -102,43 +138,90 @@ class OrderPayment implements BuilderItemInterface
 
     //          PRIVATES          //
 
+    /**
+     * Start initial values
+     *
+     * @return $this
+     */
     protected function init(): OrderPayment
     {
         $this
             ->setName()
             ->setValue()
-            ->setPaymentTime()
-            ->setNotes();
+            ->setPaymentTime();
 
         return $this;
     }
 
     //          SETS          //
 
+    /**
+     * Define payment date
+     *
+     * @return $this
+     */
     protected function setPaymentTime(): OrderPayment
     {
+        // todo: ver o que trás este valor
+        $this->paymentTime = $this->orderPayment->date_add;
+
         return $this;
     }
 
+    /**
+     * Sets payment name
+     *
+     * @return $this
+     */
     protected function setName(): OrderPayment
     {
+        $this->name = $this->orderPayment->payment_method ?? 'Método de pago';
+
         return $this;
     }
 
-    protected function setNotes(): OrderPayment
-    {
-        return $this;
-    }
-
+    /**
+     * Sets payment total
+     *
+     * @return $this
+     */
     protected function setValue(): OrderPayment
     {
+        $this->value = $this->orderPayment->amount ?? 0;
+
         return $this;
     }
 
     //          REQUESTS          //
 
+    /**
+     * Search for payment method by name
+     *
+     * @throws MoloniDocumentPaymentException
+     */
     protected function searchByName(): OrderPayment
     {
+        $variables = [
+            'companyId' => (int) Moloni::get('company_id'),
+            'options' => [
+                'search' => [
+                    'field' => 'name',
+                    'value' => $this->name,
+                ],
+            ],
+        ];
+
+        try {
+            $query = MoloniApiClient::paymentMethods()
+                ->queryPaymentMethods($variables);
+
+            if (!empty($query)) {
+                $this->paymentMethodId = $query[0]['paymentMethodId'];
+            }
+        } catch (MoloniApiException $e) {
+            throw new MoloniDocumentPaymentException('Error fetching payment methods', [], $e->getData());
+        }
+
         return $this;
     }
 }
