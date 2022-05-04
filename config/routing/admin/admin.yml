@@ -1,14 +1,6 @@
-moloni_es_login:
-  resource: "login.yml"
-
-moloni_es_orders:
-  resource: "orders.yml"
-
-moloni_es_documents:
-  resource: "documents.yml"
-
-moloni_es_settings:
-  resource: "settings.yml"
-
-moloni_es_tools:
-  resource: "tools.yml"
+imports:
+  - { resource: "login.yml" }
+  - { resource: "orders.yml" }
+  - { resource: "documents.yml" }
+  - { resource: "settings.yml" }
+  - { resource: "tools.yml" }
