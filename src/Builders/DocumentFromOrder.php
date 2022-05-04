@@ -24,18 +24,23 @@
 
 namespace Moloni\Builders;
 
+use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\Document\OrderCustomer;
 use Moloni\Builders\Document\OrderDelivery;
 use Moloni\Builders\Document\OrderPayment;
 use Moloni\Builders\Document\OrderProduct;
 use Moloni\Builders\Document\OrderShipping;
 use Moloni\Builders\Interfaces\BuilderInterface;
+use Moloni\Enums\DocumentStatus;
+use Moloni\Enums\DocumentTypes;
 use Moloni\Exceptions\Document\MoloniDocumentCustomerException;
 use Moloni\Exceptions\Document\MoloniDocumentDeliveryException;
+use Moloni\Exceptions\Document\MoloniDocumentException;
 use Moloni\Exceptions\Document\MoloniDocumentPaymentException;
 use Moloni\Exceptions\Document\MoloniDocumentProductException;
 use Moloni\Exceptions\Document\MoloniDocumentProductTaxException;
-use Moloni\Enums\DocumentStatus;
+use Moloni\Exceptions\MoloniApiException;
+use Moloni\Helpers\Settings;
 use Order;
 
 class DocumentFromOrder implements BuilderInterface
@@ -159,6 +164,11 @@ class DocumentFromOrder implements BuilderInterface
      */
     protected $company;
 
+    /**
+     * Constructor
+     *
+     * @throws MoloniDocumentException
+     */
     public function __construct(Order $order)
     {
         $this->order = $order;
@@ -168,6 +178,11 @@ class DocumentFromOrder implements BuilderInterface
 
     //          PRIVATES          //
 
+    /**
+     * Start initial values
+     *
+     * @throws MoloniDocumentException
+     */
     protected function init(): DocumentFromOrder
     {
         $this
@@ -187,6 +202,11 @@ class DocumentFromOrder implements BuilderInterface
         return $this;
     }
 
+    /**
+     * Create array of the order document
+     *
+     * @return $this
+     */
     protected function toArray(): DocumentFromOrder
     {
         $this->createProps = [];
@@ -196,13 +216,70 @@ class DocumentFromOrder implements BuilderInterface
 
     //          PUBLICS          //
 
+    /**
+     * Create document in Moloni
+     *
+     * @return $this
+     *
+     * @throws MoloniDocumentException
+     */
     public function createDocument(): DocumentFromOrder
     {
         $this->toArray();
 
+        try {
+            switch (Settings::get('Type')) {
+                case DocumentTypes::INVOICES:
+                    $action = 'mutationInvoiceCreate';
+                    $key = 'invoiceCreate';
+                    break;
+                case DocumentTypes::RECEIPTS:
+                    $action = 'mutationReceiptCreate';
+                    $key = 'receiptCreate';
+                    break;
+                case DocumentTypes::PRO_FORMA_INVOICES:
+                    $action = 'mutationProFormaInvoiceCreate';
+                    $key = 'proFormaInvoiceCreate';
+                    break;
+                case DocumentTypes::PURCHASE_ORDERS:
+                    $action = 'mutationPurchaseOrderCreate';
+                    $key = 'purchaseOrderCreate';
+                    break;
+                case DocumentTypes::SIMPLIFIED_INVOICES:
+                    $action = 'mutationSimplifiedInvoiceCreate';
+                    $key = 'simplifiedInvoiceCreate';
+                    break;
+                default:
+                    throw new MoloniDocumentException('Document type not found');
+            }
+
+            $mutation = MoloniApiClient::documents()
+                ->$action($this->createProps);
+        } catch (MoloniApiException $e) {
+            throw new MoloniDocumentException($e->getMessage(), $e->getIdentifiers(), $e->getData());
+        }
+
+        $documentId = $mutation['data'][$key]['data']['documentId'] ?? 0;
+
+        if ($documentId === 0) {
+            throw new MoloniDocumentException('Error creating document', [], ['document_props' => $this->createProps, 'result' => $mutation]);
+        }
+
+        $this->documentId = $documentId;
+        $this->moloniDocument = $mutation['data'][$key]['data'];
+
+        if ((int)Settings::get('Status') === DocumentStatus::CLOSED) {
+            $this->closeDocument();
+        }
+
         return $this;
     }
 
+    /**
+     * Close document
+     *
+     * @return $this
+     */
     public function closeDocument(): DocumentFromOrder
     {
         $updateProps = [
