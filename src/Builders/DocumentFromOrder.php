@@ -111,7 +111,7 @@ class DocumentFromOrder implements BuilderInterface
     /**
      * Document products
      *
-     * @var OrderShipping
+     * @var OrderShipping[]
      */
     protected $shipping;
 
@@ -268,7 +268,7 @@ class DocumentFromOrder implements BuilderInterface
         $this->documentId = $documentId;
         $this->moloniDocument = $mutation['data'][$key]['data'];
 
-        if ((int)Settings::get('Status') === DocumentStatus::CLOSED) {
+        if ((int) Settings::get('Status') === DocumentStatus::CLOSED) {
             $this->closeDocument();
         }
 
@@ -404,11 +404,10 @@ class DocumentFromOrder implements BuilderInterface
         $products = $this->order->getCartProducts();
 
         foreach ($products as $product) {
-            $orderProduct = new OrderProduct($product);
+            $orderProduct = new OrderProduct($product, $this->fiscalZone);
 
             $orderProduct
-                ->search()
-                ->buildData();
+                ->search();
 
             if ($orderProduct->productId === 0) {
                 $orderProduct
@@ -440,25 +439,25 @@ class DocumentFromOrder implements BuilderInterface
      * Builds documents shipping
      *
      * @return DocumentFromOrder
-     *
-     * @throws MoloniDocumentProductException
-     * @throws MoloniDocumentProductTaxException
      */
     protected function setShipping(): DocumentFromOrder
     {
         if ($this->order->total_shipping > 0) {
-            $orderShipping = new OrderShipping($this->order);
+            $shippingFees = $this->order->getShipping();
 
-            $orderShipping
-                ->search()
-                ->buildData();
+            foreach ($shippingFees as $shippingFee) {
+                $orderShipping = new OrderShipping($shippingFee);
 
-            if ($orderShipping->productId === 0) {
                 $orderShipping
-                    ->insert();
-            }
+                    ->search();
 
-            $this->shipping = $orderShipping;
+                if ($orderShipping->productId === 0) {
+                    $orderShipping
+                        ->insert();
+                }
+
+                $this->shipping[] = $orderShipping;
+            }
         }
 
         return $this;

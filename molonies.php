@@ -53,8 +53,7 @@ class MoloniEs extends Module
 
         $this->displayName = $this->trans('Moloni España', [], 'Modules.Molonies.Molonies');
         $this->description = $this->trans(
-            'Transform all your orders in verified documents
-        without any effort and focus on selling!',
+            'Transform all your orders in verified documents without any effort and focus on selling!',
             [],
             'Modules.Molonies.Molonies'
         );

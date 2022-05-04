@@ -1,4 +1,3 @@
-_moloni_es_routes:
-  resource: "routing/admin/"
-  type: directory
+moloni_es:
+  resource: "routing/admin/admin.yaml"
   prefix: /moloni

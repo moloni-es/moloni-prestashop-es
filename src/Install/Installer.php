@@ -275,7 +275,8 @@ class Installer
      */
     private function installDb(): bool
     {
-        $installSqlFiles = glob($this->module->getLocalPath() . 'sql/install/*.sql');
+        $installSqlFiles = glob($this->module->getLocalPath() . '/src/Install/sql/install/*.sql');
+
         $arg1 = 'Error loading installation files!';
         $arg2 = [];
         $arg3 = 'Modules.Molonies.Molonies';
