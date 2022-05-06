@@ -27,7 +27,7 @@ namespace Moloni\Controller\Admin\Login;
 use Doctrine\Persistence\ManagerRegistry;
 use Moloni\Api\MoloniApi;
 use Moloni\Api\MoloniApiClient;
-use Moloni\Controller\Admin\Controller;
+use Moloni\Controller\Admin\MoloniController;
 use Moloni\Entity\MoloniApp;
 use Moloni\Enums\Domains;
 use Moloni\Exceptions\MoloniException;
@@ -42,24 +42,21 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class Login extends Controller
+class Login extends MoloniController
 {
-    public function __construct()
-    {
-        $this->authenticatedRoutes = ['companySelect', 'companySelectSubmit'];
-
-        parent::__construct();
-    }
-
     public function home(): Response
     {
-        $form = $this->getLoginFormBuilder()->getForm();
+        $form = $this
+            ->getLoginFormBuilder()
+            ->getForm();
 
         return $this->render(
-            '@Modules/molonies/views/templates/admin/login/Login.twig', [
-            'devConnect' => $form->createView(),
-            'img' => _MODULE_DIR_ . 'molonies/views/img/logoBig.png',
-        ]);
+            '@Modules/molonies/views/templates/admin/login/Login.twig',
+            [
+                'form' => $form->createView(),
+                'img' => _MODULE_DIR_ . 'molonies/views/img/logoBig.png',
+            ]
+        );
     }
 
     public function submit(Request $request, ManagerRegistry $doctrine): RedirectResponse
@@ -165,7 +162,7 @@ class Login extends Controller
                 throw new MoloniException('ID is invalid');
             }
 
-            $moloniApp = MoloniApi::getSession();
+            $moloniApp = MoloniApi::getAppEntity();
             $moloniApp->setCompanyId($companyId);
 
             $entityManager = $doctrine->getManager();

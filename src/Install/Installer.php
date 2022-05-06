@@ -65,7 +65,7 @@ class Installer
         [
             'name' => 'Moloni',
             'parent' => 'SELL',
-            'tabName' => 'Moloni',
+            'tabName' => 'Moloni España',
             'logo' => 'logo',
         ], [
             'name' => 'MoloniOrders',
@@ -97,14 +97,12 @@ class Installer
      * Install plugin
      *
      * @return bool
-     *
-     * @throws Exception
      */
     public function install(): bool
     {
-        if (!$this->installTranslations()) {
-            return false;
-        }
+        //if (!$this->installTranslations()) {
+        //    return false;
+        //}
 
         return $this->createCommon();
     }
@@ -113,8 +111,6 @@ class Installer
      * Enable plugin
      *
      * @return bool
-     *
-     * @throws Exception
      */
     public function enable(): bool
     {
@@ -125,8 +121,6 @@ class Installer
      * Uninstall plugin
      *
      * @return bool
-     *
-     * @throws Exception
      */
     public function uninstall(): bool
     {
@@ -141,8 +135,6 @@ class Installer
      * Disable plugin
      *
      * @return bool
-     *
-     * @throws Exception
      */
     public function disable(): bool
     {
@@ -256,7 +248,7 @@ class Installer
             }
 
             $tab->id_parent = (int) Tab::getIdFromClassName($parentClassName);
-            $tab->module = 'Molonies';
+            $tab->module = $this->module->name;
 
             if (!empty($logo)) {
                 $tab->icon = $logo;

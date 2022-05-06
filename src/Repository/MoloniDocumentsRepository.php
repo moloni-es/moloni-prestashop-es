@@ -9,9 +9,10 @@ class MoloniDocumentsRepository extends EntityRepository
 {
     public function getAllPaginated(?int $currentPage = 1): array
     {
-        $query = $this->getEntityManager()
-            ->createQueryBuilder('d')
-            ->orderBy('d.id', 'DESC')
+        $query = $this
+            ->getEntityManager()
+            ->createQueryBuilder()
+            ->orderBy('id', 'DESC')
             ->getQuery();
 
         $pageSize = 10;

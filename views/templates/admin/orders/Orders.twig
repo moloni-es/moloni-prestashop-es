@@ -4,23 +4,22 @@
     <div class="card">
 
         <div class="ml-3 mt-3">
-            <h2>{{ 'Orders'|trans({}, 'Modules.Moloniprestashopes.Orders') }}</h2>
-            <p>{{ 'Here you can generate orders.'|trans({}, 'Modules.Moloniprestashopes.Orders') }}</p>
+            <h2>{{ 'Orders'|trans({}, 'Modules.Molonies.Orders') }}</h2>
+            <p>{{ 'Here you can generate orders.'|trans({}, 'Modules.Molonies.Orders') }}</p>
         </div>
-
         <div class="p-3">
-            <table class="table table-striped table-bordered table-sm " style="text-align: center; margin-bottom: -10px;">
+            <table class="table table-striped tables-bordered table-sm " style="text-align: center; margin-bottom: -10px;">
                 <thead>
                     <tr>
-                        <th scope="col">{{ 'Order ID'|trans({}, 'Modules.Moloniprestashopes.Orders') }}</th>
-                        <th scope="col">{{ 'Reference'|trans({}, 'Modules.Moloniprestashopes.Orders') }}</th>
-                        <th scope="col">{{ 'Client'|trans({}, 'Modules.Moloniprestashopes.Orders') }}</th>
-                        <th scope="col">{{ 'Email'|trans({}, 'Modules.Moloniprestashopes.Orders') }}</th>
-                        <th scope="col">{{ 'Status'|trans({}, 'Modules.Moloniprestashopes.Orders') }}</th>
-                        <th scope="col">{{ 'Payment Date'|trans({}, 'Modules.Moloniprestashopes.Orders') }}</th>
-                        <th scope="col">{{ 'Amount'|trans({}, 'Modules.Moloniprestashopes.Orders') }}</th>
-                        <th scope="col">{{ 'Document Type'|trans({}, 'Modules.Moloniprestashopes.Orders') }}</th>
-                        <th scope="col">{{ 'Actions'|trans({}, 'Modules.Moloniprestashopes.Orders') }}</th>
+                        <th scope="col">{{ 'Order ID'|trans({}, 'Modules.Molonies.Orders') }}</th>
+                        <th scope="col">{{ 'Reference'|trans({}, 'Modules.Molonies.Orders') }}</th>
+                        <th scope="col">{{ 'Client'|trans({}, 'Modules.Molonies.Orders') }}</th>
+                        <th scope="col">{{ 'Email'|trans({}, 'Modules.Molonies.Orders') }}</th>
+                        <th scope="col">{{ 'Status'|trans({}, 'Modules.Molonies.Orders') }}</th>
+                        <th scope="col">{{ 'Payment Date'|trans({}, 'Modules.Molonies.Orders') }}</th>
+                        <th scope="col">{{ 'Amount'|trans({}, 'Modules.Molonies.Orders') }}</th>
+                        <th scope="col">{{ 'Document Type'|trans({}, 'Modules.Molonies.Orders') }}</th>
+                        <th scope="col">{{ 'Actions'|trans({}, 'Modules.Molonies.Orders') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -47,13 +46,13 @@
                                         </select>
                                     </td>
                                     <td>
-                                        <button type="submit" class="btn btn-primary" title="{{ 'Generate Document'|trans({}, 'Modules.Moloniprestashopes.Orders') }}" onclick="disableButtons(); this.form.submit();">
+                                        <button type="submit" class="btn btn-primary" title="{{ 'Generate Document'|trans({}, 'Modules.Molonies.Orders') }}" onclick="disableButtons(); this.form.submit();">
                                             <i class="fa fa-plus"></i>
                                         </button>
-                                        <a class="btn btn-success" title="{{ 'See order'|trans({}, 'Modules.Moloniprestashopes.Orders') }}" href="{{ order.viewURL }}">
+                                        <a class="btn btn-success" title="{{ 'See order'|trans({}, 'Modules.Molonies.Orders') }}" href="{{ order.viewURL }}">
                                             <i class="fa fa-search"></i>
                                         </a>
-                                        <a class="btn btn-danger" title="{{ 'Discard order'|trans({}, 'Modules.Moloniprestashopes.Orders') }}" href="{{ path(clearInvoiceRoute, {id: order.id_order}) }}" onclick="disableButtons();">
+                                        <a class="btn btn-danger" title="{{ 'Discard order'|trans({}, 'Modules.Molonies.Orders') }}" href="{{ path(clearInvoiceRoute, {id: order.id_order}) }}" onclick="disableButtons();">
                                             <i class="fa fa-minus"></i>
                                         </a>
                                     </td>
@@ -63,7 +62,7 @@
                     {% else %}
                         <tr>
                             <td colspan="9">
-                                {{ 'No information to show!'|trans({}, 'Modules.Moloniprestashopes.Orders') }}
+                                {{ 'No information to show!'|trans({}, 'Modules.Molonies.Orders') }}
                             </td>
                         </tr>
                     {% endif %}
@@ -71,8 +70,7 @@
             </table>
         </div>
 
-        {% include '@Modules/moloniprestashopes/src/View/Templates/Admin/Components/Paginator.twig' with {'action': 'Modules.Moloniprestashopes.Orders'} %}
-
+        {% include '@Modules/molonies/views/templates/admin/components/Paginator.twig' %}
     </div>
 {% endblock %}
 

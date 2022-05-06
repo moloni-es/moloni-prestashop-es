@@ -5,6 +5,10 @@ namespace Moloni\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
+/**
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="Moloni\Repository\MoloniSettingsRepository")
+ */
 class MoloniSettings
 {
     /**
@@ -12,7 +16,6 @@ class MoloniSettings
      *
      * @ORM\Id
      * @ORM\Column(name="id", type="integer")
-     * @ORM\Entity(repositoryClass="Moloni\Repository\MoloniSettingsRepository")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;

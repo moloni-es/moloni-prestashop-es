@@ -83,6 +83,10 @@ class MoloniEs extends Module
      */
     public function install(): bool
     {
+        if (!parent::install()) {
+            return false;
+        }
+
         try {
             if (!(new Installer($this))->install()) {
                 return false;
@@ -90,10 +94,6 @@ class MoloniEs extends Module
         } catch (Exception $exception) {
             $this->_errors[] = $exception->getMessage();
 
-            return false;
-        }
-
-        if (!parent::install()) {
             return false;
         }
 
@@ -107,6 +107,10 @@ class MoloniEs extends Module
      */
     public function uninstall(): bool
     {
+        if (!parent::uninstall()) {
+            return false;
+        }
+
         try {
             if (!(new Installer($this))->uninstall()) {
                 return false;
@@ -114,10 +118,6 @@ class MoloniEs extends Module
         } catch (Exception $exception) {
             $this->_errors[] = $exception->getMessage();
 
-            return false;
-        }
-
-        if (!parent::uninstall()) {
             return false;
         }
 
@@ -133,6 +133,10 @@ class MoloniEs extends Module
      */
     public function enable($force_all = false): bool
     {
+        if (!parent::enable($force_all)) {
+            return false;
+        }
+
         try {
             if (!(new Installer($this))->enable()) {
                 return false;
@@ -140,10 +144,6 @@ class MoloniEs extends Module
         } catch (Exception $exception) {
             $this->_errors[] = $exception->getMessage();
 
-            return false;
-        }
-
-        if (!parent::enable($force_all)) {
             return false;
         }
 
@@ -159,6 +159,10 @@ class MoloniEs extends Module
      */
     public function disable($force_all = false): bool
     {
+        if (!parent::disable($force_all)) {
+            return false;
+        }
+
         try {
             if (!(new Installer($this))->disable()) {
                 return false;
@@ -166,10 +170,6 @@ class MoloniEs extends Module
         } catch (Exception $exception) {
             $this->_errors[] = $exception->getMessage();
 
-            return false;
-        }
-
-        if (!parent::disable($force_all)) {
             return false;
         }
 
@@ -200,11 +200,11 @@ class MoloniEs extends Module
      */
     public function hookActionAdminControllerSetMedia(): void
     {
-        // Adds your's CSS file from a module's directory
+        // Adds yours CSS file from a module's directory
         $this->context->controller->addCSS($this->_path . 'views/css/settingsStyle.css');
         $this->context->controller->addCSS($this->_path . 'views/css/all.min.css');
         $this->context->controller->addCSS($this->_path . 'views/css/moloni-icons.css');
-        // Adds your's JavaScript file from a module's directory
+        // Adds yours JavaScript file from a module's directory
         $this->context->controller->addJS($this->_path . 'views/js/settingsJS.js');
     }
 

@@ -1,7 +1,7 @@
 {% extends '@PrestaShop/Admin/layout.html.twig' %}
 
 {% block content %}
-    {{ form_start(devConnect) }}
+    {{ form_start(form) }}
     <div class="card loginForm">
         <div class="card-header">
             <a href="https://www.moloni.es/" target="_blank">
@@ -9,28 +9,28 @@
             </a>
         </div>
         <div>
-                {{ form_label(devConnect.developerID) }}
+                {{ form_label(form.developerID) }}
             <div class="loginInputText">
-                {{ form_widget(devConnect.developerID) }}
+                {{ form_widget(form.developerID) }}
             </div>
-                {{ form_label(devConnect.clientSecret) }}
+                {{ form_label(form.clientSecret) }}
             <div class="loginInputText">
-                {{ form_widget(devConnect.clientSecret) }}
+                {{ form_widget(form.clientSecret) }}
             </div>
         </div>
         <div>
-            {{ form_errors(devConnect) }}
+            {{ form_errors(form) }}
         </div>
         <div class="card-footer">
             <span style="display: inline;">
-                {{ form_widget(devConnect.connect) }}
+                {{ form_widget(form.connect) }}
             </span>
             <span style="display: inline; margin-left: 10px;">
-                {{ form_widget(devConnect.reset) }}
+                {{ form_widget(form.reset) }}
             </span>
         </div>
     </div>
-    {{ form_end(devConnect) }}
+    {{ form_end(form) }}
 {% endblock %}
 
 {% block javascripts %}

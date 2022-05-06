@@ -1,0 +1,14 @@
+moloni_es_login:
+  resource: "login/login.yaml"
+
+moloni_es_orders:
+  resource: "orders/orders.yaml"
+
+moloni_es_documents:
+  resource: "documents/documents.yaml"
+
+moloni_es_settings:
+  resource: "settings/settings.yaml"
+
+moloni_es_tools:
+  resource: "tools/tools.yaml"

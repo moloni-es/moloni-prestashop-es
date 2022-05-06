@@ -1,5 +1,0 @@
-services:
-  Moloni\API:
-    resource: '../src/Api/MoloniApi.php'
-    arguments:
-      - 'superadmin@example.com'

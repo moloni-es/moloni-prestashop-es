@@ -24,6 +24,8 @@
 
 namespace Moloni\Api;
 
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\ORMException;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\BadResponseException;
 use Moloni\Entity\MoloniApp;
@@ -34,41 +36,35 @@ use Moloni\Exceptions\MoloniLoginException;
 class MoloniApi
 {
     /**
-     * @var MoloniApp
+     * EntityManager
+     *
+     * @var EntityManager
      */
-    private static $appSession;
+    private static $entityManager;
+
+    /**
+     * @var MoloniApp|null
+     */
+    private static $app;
     /**
      * @var Client|null
      */
     private static $client;
 
-    public static $test = 'null';
-
-    public function __construct($test)
+    public function __construct(EntityManager $entityManager, ?MoloniApp $app)
     {
-        self::$test = $test;
-    }
-
-    /**
-     * Load session
-     *
-     * @param MoloniApp $appSession
-     *
-     * @return void
-     */
-    public static function loadSession(MoloniApp $appSession): void
-    {
-        self::$appSession = $appSession;
+        self::$app = $app;
+        self::$entityManager = $entityManager;
     }
 
     /**
      * Get session
      *
-     * @return MoloniApp
+     * @return MoloniApp|null
      */
-    public static function getSession(): MoloniApp
+    public static function getAppEntity(): ?MoloniApp
     {
-        return self::$appSession;
+        return self::$app;
     }
 
     /**
@@ -93,8 +89,8 @@ class MoloniApi
         $url = Domains::MOLONI_API . '/auth/grant';
         $params = [
             'grantType' => 'authorization_code',
-            'apiClientId' => self::$appSession->getClientId(),
-            'clientSecret' => self::$appSession->getClientSecret(),
+            'apiClientId' => self::$app->getClientId(),
+            'clientSecret' => self::$app->getClientSecret(),
             'code' => $code,
         ];
 
@@ -111,14 +107,17 @@ class MoloniApi
                 throw new MoloniLoginException('Error fetching tokens', [], ['response' => $body]);
             }
 
-            self::$appSession->setAccessToken($body['accessToken']);
-            self::$appSession->setRefreshToken($body['refreshToken']);
-            self::$appSession->setLoginDate(time());
-            self::$appSession->setAccessTime(time());
+            self::$app->setAccessToken($body['accessToken']);
+            self::$app->setRefreshToken($body['refreshToken']);
+            self::$app->setLoginDate(time());
+            self::$app->setAccessTime(time());
 
-            // todo: how to save here?
+            self::$entityManager->persist(self::$app);
+            self::$entityManager->flush();
         } catch (BadResponseException $e) {
             throw new MoloniLoginException($e->getMessage(), [], ['response' => $e->getResponse(), 'request' => $e->getRequest()]);
+        } catch (ORMException $e) {
+            throw new MoloniLoginException($e->getMessage());
         }
 
         return true;
@@ -138,9 +137,9 @@ class MoloniApi
         $url = Domains::MOLONI_API . '/auth/grant';
         $params = [
             'grantType' => 'refresh_token',
-            'apiClientId' => self::$appSession->getClientId(),
-            'clientSecret' => self::$appSession->getClientSecret(),
-            'refreshToken' => self::$appSession->getRefreshToken(),
+            'apiClientId' => self::$app->getClientId(),
+            'clientSecret' => self::$app->getClientSecret(),
+            'refreshToken' => self::$app->getRefreshToken(),
         ];
 
         try {
@@ -156,27 +155,17 @@ class MoloniApi
                 throw new MoloniLoginException('Error fetching tokens', [], ['response' => $body]);
             }
 
-            self::$appSession->setAccessToken($body['accessToken']);
-            self::$appSession->setRefreshToken($body['refreshToken']);
-            self::$appSession->setAccessTime(time());
+            self::$app->setAccessToken($body['accessToken']);
+            self::$app->setRefreshToken($body['refreshToken']);
+            self::$app->setAccessTime(time());
 
-            // todo: how to save here?
-        } catch (BadResponseException|MoloniLoginException $e) {
+            self::$entityManager->persist(self::$app);
+            self::$entityManager->flush();
+        } catch (BadResponseException|MoloniLoginException|ORMException $e) {
             return false;
         }
 
         return true;
-    }
-
-    /**
-     * Verifies Moloni tokens validity
-     *
-     * @return bool
-     */
-    public static function isValid(): bool
-    {
-        return self::$appSession->isValidAccessToken() ||
-            (self::$appSession->isValidRefreshToken() && self::refreshTokens());
     }
 
     /**
@@ -193,9 +182,10 @@ class MoloniApi
         try {
             $response = [];
             $request = self::$client->post(
-                Domains::MOLONI_API, [
+                Domains::MOLONI_API,
+                [
                     'headers' => [
-                        'Authorization' => 'bearer ' . self::$appSession['access_token'],
+                        'Authorization' => 'bearer ' . self::$app['access_token'],
                         'Content-Type' => 'application/json',
                     ],
                     'body' => json_encode($data),
@@ -212,5 +202,33 @@ class MoloniApi
 
             throw new MoloniApiException('Request error', [], ['data' => $data, 'response' => $response]);
         }
+    }
+
+    /**
+     * Verifies if company is selected
+     *
+     * @return bool
+     */
+    public static function isPendingCompany(): bool
+    {
+        return self::$app && !empty(self::$app->getCompanyId());
+    }
+
+    /**
+     * Verifies Moloni tokens validity
+     *
+     * @return bool
+     */
+    public static function isValid(): bool
+    {
+        if (empty(self::$app) || empty(self::$app->getCompanyId())) {
+            return false;
+        }
+
+        if (self::$app->isValidAccessToken()) {
+            return true;
+        }
+
+        return self::$app->isValidRefreshToken() && self::refreshTokens();
     }
 }

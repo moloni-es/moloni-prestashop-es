@@ -2,106 +2,74 @@
 
 namespace Moloni\Helpers;
 
-use Db;
-use PrestaShopDatabaseException;
-
 class Settings
 {
     /**
+     * Settings
+     *
      * @var array array form: [label => value]
      */
-    private static $cachedSettings;
+    private static $settings;
+
+    /**
+     * Construct
+     *
+     * @param array|null $settings
+     */
+    public function __construct(?array $settings)
+    {
+        self::$settings = $settings;
+    }
+
+    //          GETS          //
 
     /**
      * Returns a settings value from cache
      *
-     * @param string $settingName name of the setting
+     * @param string $setting name of the setting
      *
-     * @return bool|string returns the cached string value or false if does not exist
+     * @return string|null returns the cached string value or null
      */
-    public static function get($settingName)
+    public static function get(string $setting): ?string
     {
-        if (!isset(self::$cachedSettings[$settingName])) {
-            self::checkCache();
-        }
-
-        return isset(self::$cachedSettings[$settingName]) ? self::$cachedSettings[$settingName] : false;
-    }
-
-    /**
-     * Checks if the cache array has values, if not fills it
-     *
-     * @return bool return the value from fillCache() function
-     *
-     * @throws PrestaShopDatabaseException
-     */
-    public static function checkCache()
-    {
-        if (empty(self::$cachedSettings)) {
-            return self::fillCache();
-        }
-
-        return true;
-    }
-
-    /**
-     * Fill the cache array with database values
-     *
-     * @return bool return true or false depending on the database having values
-     *
-     * @throws PrestaShopDatabaseException
-     */
-    public static function fillCache()
-    {
-        $dataBase = Db::getInstance();
-        $query = 'SELECT * FROM ' . _DB_PREFIX_ . 'moloni_settings WHERE store_id=1';
-        $queryResult = $dataBase->executeS($query);
-
-        if (empty($queryResult)) {
-            return false;
-        }
-
-        foreach ($queryResult as $aux) {
-            self::$cachedSettings[$aux['label']] = $aux['value'];
-        }
-
-        return true;
+        return self::$settings[$setting] ?? null;
     }
 
     /**
      * Returns all the values from cache
      * (example): ['Type' => 'Bill', 'Status' => 'Draft', ...]
      *
-     * @return array|bool returns the cached array with settings data or false if empty
-     *
-     * @throws PrestaShopDatabaseException
+     * @return array returns the cached array with settings data or false if empty
      */
-    public static function getAll()
+    public static function getAll(): array
     {
-        if (!isset(self::$cachedSettings)) {
-            self::checkCache();
-        }
-
-        return isset(self::$cachedSettings) ? self::$cachedSettings : false;
+        return self::$settings ?? [];
     }
+
+    //          SETS          //
 
     /**
      * Saves an value in cache
      *
-     * @param array $setting array with the form (example): ['label' => 'Type', 'value' => 'Bill']
+     * @param string $setting Setting name
+     * @param string|int|array $value Setting value
+     *
+     * @return void
      */
-    public static function set($setting)
+    public static function set(string $setting, $value): void
     {
-        self::$cachedSettings[$setting['label']] = $setting['value'];
+        self::$settings[$setting] = $value;
     }
 
     /**
      * Sets the cache with the array from param
      *
-     * @param array $settingsArray array with the form (example): ['Type' => 'Bill', 'Status' => 'Draft', ...]
+     * @param array|null $settingsArray array with the form (example): ['Type' => 'Bill', 'Status' => 'Draft', ...]
+     *
+     * @return void
      */
-    public static function setAll($settingsArray)
+    public static function setAll(?array $settingsArray): void
     {
-        self::$cachedSettings = $settingsArray;
+        self::$settings = $settingsArray;
     }
 }
