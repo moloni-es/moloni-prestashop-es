@@ -26,9 +26,8 @@ namespace Moloni\Controller\Admin\Orders;
 
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
-use Moloni\Api\MoloniApi;
 use Moloni\Builders\DocumentFromOrder;
-use Moloni\Controller\Admin\Controller;
+use Moloni\Controller\Admin\MoloniController;
 use Moloni\Entity\MoloniDocuments;
 use Moloni\Exceptions\MoloniException;
 use Moloni\Repository\MoloniDocumentsRepository;
@@ -40,7 +39,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class Orders extends Controller
+class Orders extends MoloniController
 {
     use DocumentTypesTrait;
 
@@ -48,8 +47,6 @@ class Orders extends Controller
     {
         $orders = [];
         $page = $request->get('page', 1);
-
-        // todo: this
 
         return $this->render(
             '@Modules/molonies/views/templates/admin/orders/Orders.twig',
@@ -106,7 +103,7 @@ class Orders extends Controller
             $document = new MoloniDocuments();
             $document->setStoreId(1);
             $document->setDocumentId($builder->documentId);
-            $document->setCompanyId(MoloniApi::getSession()->getCompanyId());
+            $document->setCompanyId((int)Moloni::get('company_id'));
             $document->setOrderId($orderId);
             $document->setOrderRef($order->reference);
             $document->setCreatedAt(time());
@@ -161,7 +158,7 @@ class Orders extends Controller
             $document = new MoloniDocuments();
             $document->setDocumentId(-1);
             $document->setStoreId(1);
-            $document->setCompanyId(MoloniApi::getSession()->getCompanyId());
+            $document->setCompanyId((int)Moloni::get('company_id'));
             $document->setOrderId($orderId);
             $document->setOrderRef($order->reference);
             $document->setCreatedAt(time());

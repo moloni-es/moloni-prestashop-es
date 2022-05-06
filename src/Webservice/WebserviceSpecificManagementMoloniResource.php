@@ -30,7 +30,7 @@ use Combination;
 use Configuration;
 use Moloni\Api\Endpoints\Categories as apiCategories;
 use Moloni\Api\Endpoints\Products;
-use Moloni\Controller\Admin\Controller;
+use Moloni\Controller\Admin\MoloniController;
 use Moloni\Helpers\Log;
 use Moloni\Helpers\LogSync;
 use Moloni\Helpers\Settings;
@@ -112,7 +112,7 @@ class WebserviceSpecificManagementMoloniResource implements WebserviceSpecificMa
         $request = json_decode($request, true);
 
         // model needs to be Product and Tokens need to be valid
-        if ($request['model'] !== 'Product' || Controller::staticCheckTokens() === false) {
+        if ($request['model'] !== 'Product' || MoloniController::staticCheckTokens() === false) {
             $this->output = 'Bad request.';
 
             return;

@@ -25,7 +25,7 @@
 namespace Moloni\Controller\Admin\Documents;
 
 use Doctrine\ORM\NonUniqueResultException;
-use Moloni\Controller\Admin\Controller;
+use Moloni\Controller\Admin\MoloniController;
 use Moloni\Exceptions\MoloniException;
 use Moloni\Repository\MoloniDocumentsRepository;
 use Moloni\Traits\DocumentActionsTrait;
@@ -34,27 +34,27 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class Documents extends Controller
+class Documents extends MoloniController
 {
     use DocumentTypesTrait;
     use DocumentActionsTrait;
 
-    public function home(Request $request, MoloniDocumentsRepository $documentsRepository): Response
+    public function home(Request $request): Response
     {
         $page = $request->get('page', 1);
 
-        ['documents' => $documents, 'paginator' => $paginator] = $documentsRepository->getAllPaginated($page);
+        //['documents' => $documents, 'paginator' => $paginator] = $documentsRepository->getAllPaginated($page);
 
         return $this->render(
             '@Modules/molonies/views/templates/admin/documents/Documents.twig',
             [
-                'documentArray' => $documents,
+                'documentArray' => $documents ?? [],
                 'documentTypes' => $this->getDocumentsTypes(),
                 'downloadDocumentRoute' => 'moloni_es_documents_download',
                 'moloniViewRoute' => 'moloni_es_documents_view_document',
                 'thisRoute' => 'moloni_es_documents_home',
                 'restoreOrderRoute' => 'moloni_es_documents_restore',
-                'paginator' => $paginator,
+                'paginator' => $paginator ?? [],
             ]
         );
     }

@@ -1,6 +1,0 @@
-imports:
-  - { resource: "login.yml" }
-  - { resource: "orders.yml" }
-  - { resource: "documents.yml" }
-  - { resource: "settings.yml" }
-  - { resource: "tools.yml" }

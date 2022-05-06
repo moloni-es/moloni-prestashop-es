@@ -24,18 +24,36 @@
 
 namespace Moloni\Controller\Admin;
 
+use Moloni\Enums\Route;
+use Moloni\Services\MoloniContext;
 use PrestaShopBundle\Controller\Admin\FrameworkBundleAdminController;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
-abstract class Controller extends FrameworkBundleAdminController
+abstract class MoloniController extends FrameworkBundleAdminController implements MoloniControllerInterface
 {
-    protected $authenticatedRoutes = ['all'];
-    protected $freeRoutes = [];
+    /**
+     * Moloni plugin context
+     *
+     * @var MoloniContext
+     */
+    protected $context;
 
-    public function __construct()
+    /**
+     * Start our service
+     *
+     * @param ContainerInterface|null $container
+     *
+     * @return void
+     */
+    public function setContainer(ContainerInterface $container = null): void
     {
-        parent::__construct();
+        parent::setContainer($container);
+
+        $this->context = $this->get('moloni.services.context');
     }
+
+    //          Messages          //
 
     /**
      * Adds message to the user
@@ -65,7 +83,7 @@ abstract class Controller extends FrameworkBundleAdminController
      */
     protected function addSuccessMessage(string $message): bool
     {
-        return $this->addFlashMessage($message,'success');
+        return $this->addFlashMessage($message, 'success');
     }
 
     /**
@@ -77,7 +95,7 @@ abstract class Controller extends FrameworkBundleAdminController
      */
     protected function addWarningMessage(string $message): bool
     {
-        return $this->addFlashMessage($message,'warning');
+        return $this->addFlashMessage($message, 'warning');
     }
 
     /**
@@ -89,17 +107,19 @@ abstract class Controller extends FrameworkBundleAdminController
      */
     protected function addErrorMessage(string $message): bool
     {
-        return $this->addFlashMessage($message,'error');
+        return $this->addFlashMessage($message, 'error');
     }
+
+    //          Redirects          //
 
     /**
      * Redirect to Log in index Page
      *
      * @return RedirectResponse
      */
-    protected function redirectToLogin(): RedirectResponse
+    public function redirectToLogin(): RedirectResponse
     {
-        return $this->redirectToRoute('moloni_es_login_home');
+        return $this->redirectToRoute(Route::LOGIN);
     }
 
     /**
@@ -107,9 +127,9 @@ abstract class Controller extends FrameworkBundleAdminController
      *
      * @return RedirectResponse
      */
-    protected function redirectToCompanySelect(): RedirectResponse
+    public function redirectToCompanySelect(): RedirectResponse
     {
-        return $this->redirectToRoute('moloni_es_login_company_select');
+        return $this->redirectToRoute(Route::LOGIN_COMPANY_SELECT);
     }
 
     /**
@@ -121,7 +141,7 @@ abstract class Controller extends FrameworkBundleAdminController
      */
     protected function redirectToDocuments(?int $page = 1): RedirectResponse
     {
-        return $this->redirectToRoute('moloni_es_documents_home', ['page' => $page]);
+        return $this->redirectToRoute(Route::DOCUMENTS, ['page' => $page]);
     }
 
     /**
@@ -131,9 +151,9 @@ abstract class Controller extends FrameworkBundleAdminController
      *
      * @return RedirectResponse
      */
-    protected function redirectToOrders(?int $page = 1): RedirectResponse
+    public function redirectToOrders(?int $page = 1): RedirectResponse
     {
-        return $this->redirectToRoute('moloni_es_orders_home', ['page' => $page]);
+        return $this->redirectToRoute(Route::ORDERS, ['page' => $page]);
     }
 
     /**
@@ -143,7 +163,7 @@ abstract class Controller extends FrameworkBundleAdminController
      */
     protected function redirectToTools(): RedirectResponse
     {
-        return $this->redirectToRoute('moloni_es_tools_home');
+        return $this->redirectToRoute(Route::TOOLS);
     }
 
     /**
@@ -153,6 +173,6 @@ abstract class Controller extends FrameworkBundleAdminController
      */
     protected function redirectToSettings(): RedirectResponse
     {
-        return $this->redirectToRoute('moloni_es_settings');
+        return $this->redirectToRoute(Route::SETTINGS);
     }
 }
