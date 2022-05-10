@@ -60,7 +60,7 @@ class ProductSave
 
         $product = new Product($productPS, $this->translator);
 
-        if ($product->init() == true) {
+        if ($product->init()) {
             $product->create();
         }
 

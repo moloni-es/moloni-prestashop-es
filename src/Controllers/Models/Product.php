@@ -149,15 +149,18 @@ class Product
         //if found, set some data
         if (!empty($queryResult)) {
             foreach ($queryResult as $query) {
-                if ((int) $query['reference'] == (int) $this->reference) {
+                if ($query['reference'] === $this->reference) {
                     $this->productId = $query['productId'];
-                    if ($query['hasStock'] == true) {
+
+                    if ($query['hasStock']) {
                         $this->stock = $query['stock'];
                         $this->warehouseId = (int) $query['warehouse']['warehouseId'];
                     } else {
                         $this->stock = $this->productPs->quantity;
                         $this->warehouseId = Settings::get('Warehouse');
                     }
+
+                    break;
                 }
             }
         } else {
@@ -181,7 +184,7 @@ class Product
         if (!empty($this->productId)) {
             $mutation = Products::mutationProductUpdate($this->setVariables());
 
-            if (isset($mutation['errors'])) {
+            if (isset($mutation['data']['productUpdate']['errors']) && !empty($mutation['data']['productUpdate']['errors'])) {
                 $this->addError($this->translator->trans(
                     'Something went wrong updating the product!!',
                     [],
@@ -207,7 +210,7 @@ class Product
         } else {
             $mutation = Products::mutationProductCreate($this->setVariables());
 
-            if (isset($mutation['errors'])) {
+            if (isset($mutation['data']['productCreate']['errors']) && !empty($mutation['data']['productCreate']['errors'])) {
                 $this->addError($this->translator->trans(
                     'Something went wrong creating the product!!',
                     [],
@@ -420,12 +423,14 @@ class Product
         }
 
         //in case tax value is 0 or in settings is the default selected option is "isento"
-        if ($this->taxValue === 0 || Settings::get('Tax') === 'isento') {
+        if ((int)$this->taxValue === 0 || Settings::get('Tax') === 'isento') {
             //set value to 0 because if tax is "isento", in setVariables whe need to send taxes empty
             $this->taxValue = 0;
+
             //"isento" reasons
             $this->price = $this->priceWithTax;
             $this->exemptionReason = Settings::get('Exemption');
+
             if (empty($this->exemptionReason)) {
                 $this->addError($this->translator->trans(
                     'Please select an exemption reason in settings!!',
@@ -532,7 +537,8 @@ class Product
             return true;
         }
 
-        $variables = ['companyId' => (int) Company::get('company_id'),
+        $variables = [
+            'companyId' => (int) Company::get('company_id'),
             'data' => [
                 'productId' => $this->productId,
                 'notes' => 'Prestashop',
@@ -543,10 +549,10 @@ class Product
         //if prestashop stock is higher, create an manual exit movement on moloni with the deference
         //else create an manual entry movement
         if ((int) $this->stock > (int) $this->productPs->quantity) {
-            $variables['data']['qty'] = (float) ($this->stock - $this->productPs->quantity);
+            $variables['data']['qty'] = ($this->stock - $this->productPs->quantity);
             $queryResult = Stock::mutationStockMovementManualExitCreate($variables);
         } else {
-            $variables['data']['qty'] = (float) ($this->productPs->quantity - $this->stock);
+            $variables['data']['qty'] = ($this->productPs->quantity - $this->stock);
             $queryResult = Stock::mutationStockMovementManualEntryCreate($variables);
         }
 
@@ -616,7 +622,7 @@ class Product
         }
 
         //if the tax is exempt, remove the taxes value to empty
-        if ($this->taxValue == 0) {
+        if ((int)$this->taxValue === 0) {
             $variables['data']['taxes'] = [];
         }
 
