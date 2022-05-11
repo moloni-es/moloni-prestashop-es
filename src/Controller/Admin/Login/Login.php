@@ -24,31 +24,30 @@
 
 namespace Moloni\Controller\Admin\Login;
 
-use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\ORMException;
 use Moloni\Api\MoloniApi;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Controller\Admin\MoloniController;
 use Moloni\Entity\MoloniApp;
 use Moloni\Enums\Domains;
+use Moloni\Enums\Languages;
+use Moloni\Enums\MoloniRoutes;
 use Moloni\Exceptions\MoloniException;
-use Symfony\Component\Form\Extension\Core\Type\ResetType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\FormBuilderInterface;
+use Moloni\Form\LoginFormType;
+use Moloni\Repository\MoloniAppRepository;
+use Shop;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Validator\Constraints\Length;
-use Symfony\Component\Validator\Constraints\NotBlank;
 
 class Login extends MoloniController
 {
     public function home(): Response
     {
-        $form = $this
-            ->getLoginFormBuilder()
-            ->getForm();
+        $form = $this->createForm(LoginFormType::class, null, [
+            'url' => $this->generateUrl(MoloniRoutes::LOGIN)
+        ]);
 
         return $this->render(
             '@Modules/molonies/views/templates/admin/login/Login.twig',
@@ -59,11 +58,10 @@ class Login extends MoloniController
         );
     }
 
-    public function submit(Request $request, ManagerRegistry $doctrine): RedirectResponse
+    public function submit(Request $request): RedirectResponse
     {
-        $form = $this->getLoginFormBuilder()
-            ->getForm()
-            ->handleRequest($request);
+        $form = $this->createForm(LoginFormType::class);
+        $form->handleRequest($request);
 
         if (!$form->isSubmitted() || !$form->isValid()) {
             $msg = $this->trans('Form is not valid!!', 'Modules.Molonies.Errors');
@@ -73,24 +71,44 @@ class Login extends MoloniController
             return $this->redirectToLogin();
         }
 
+        /** @var MoloniAppRepository $appRepository */
+        $appRepository = $this
+            ->getDoctrine()
+            ->getManager()
+            ->getRepository(MoloniApp::class);
+
+        $appRepository->deleteApp();
+
         $formData = $form->getData();
 
-        $clientId = preg_replace('/\s+/', '', $formData['clientID']);
-        $clientSecret = preg_replace('/\s+/', '', $formData['clientSecret']);
-
-        $entityManager = $doctrine->getManager();
+        $clientId = trim($formData['clientID']);
+        $clientSecret = trim($formData['clientSecret']);
 
         $moloniApp = new MoloniApp();
         $moloniApp->setClientId($clientId);
         $moloniApp->setClientSecret($clientSecret);
         $moloniApp->setCompanyId(0);
-        $moloniApp->setLoginDate(time());
+        $moloniApp->setShopId(Shop::getContextShopID() ?? 0);
+        $moloniApp->setAccessTime(0);
 
-        $entityManager->persist($moloniApp);
-        $entityManager->flush();
+        try {
+            $entityManager = $this
+                ->getDoctrine()
+                ->getManager();
+            $entityManager->persist($moloniApp);
+            $entityManager->flush();
+        } catch (ORMException $e) {
+            $msg = $this->trans('Error saving information', 'Modules.Molonies.Errors');
+            $this->addErrorMessage($msg);
 
-        $redirectUri = _PS_BASE_URL_SSL_ . $this->generateUrl('moloni_es_login_retrievecode', [], UrlGeneratorInterface::ABSOLUTE_URL);
-        $url = Domains::MOLONI_API . "/auth/authorize?apiClientId=$clientId&redirectUri=$redirectUri";
+            return $this->redirectToLogin();
+        }
+
+        $redirectUri = _PS_BASE_URL_SSL_ ?? '';
+        $redirectUri .= $this->generateUrl(MoloniRoutes::LOGIN_RETRIEVE_CODE, [], UrlGeneratorInterface::ABSOLUTE_URL);
+
+        $url = Domains::MOLONI_API;
+        $url .= "/auth/authorize?apiClientId=$clientId&redirectUri=$redirectUri";
 
         return $this->redirect($url);
     }
@@ -115,28 +133,34 @@ class Login extends MoloniController
         return $this->redirectToCompanySelect();
     }
 
-    public function companySelect(Request $request): Response
+    public function companySelect(Request $request)
     {
         $companies = [];
 
         try {
-            $me = MoloniApiClient::companies()
+            $query = MoloniApiClient::companies()
                 ->queryMe();
 
-            if (empty($me)) {
+            $queryCompanies = $query['data']['me']['data']['userCompanies'] ?? [];
+            $queryLanguageId = $query['data']['me']['data']['language']['languageId'] ?? Languages::EN;
+
+            if (empty($queryCompanies)) {
                 throw new MoloniException('You have no companies!!');
             }
 
-            foreach ($me['data']['me']['data']['userCompanies'] as $userCompany) {
+            foreach ($queryCompanies as $company) {
                 $variables = [
-                    'companyId' => $userCompany['company']['companyId'],
+                    'companyId' => $company['company']['companyId'],
+                    'options' => [
+                        'defaultLanguageId' => $queryLanguageId
+                    ]
                 ];
 
                 $userCompanyInfo = MoloniApiClient::companies()
-                    ->queryCompany($variables);
+                    ->queryCompany($variables)['data']['company']['data'] ?? [];
 
-                if (isset($userCompanyInfo['data']['company']['data'])) {
-                    $companies[] = $userCompanyInfo['data']['company']['data'];
+                if (!empty($userCompanyInfo)) {
+                    $companies[] = $userCompanyInfo;
                 }
             }
         } catch (MoloniException $e) {
@@ -147,15 +171,17 @@ class Login extends MoloniController
         }
 
         return $this->render(
-            '@Modules/molonies/views/templates/admin/login/LoginCompanies.twig',
+            '@Modules/molonies/views/templates/admin/login/Companies.twig',
             [
                 'companies' => $companies,
-                'redirectRoute' => 'moloni_es_login_company_submit',
+                'submit_route' => MoloniRoutes::LOGIN_COMPANY_SUBMIT,
+                'default_img' => _MODULE_DIR_ . 'molonies/views/img/companyDefault.png',
+                'media_api_url' => Domains::MOLONI_MEDIA_API,
             ]
         );
     }
 
-    public function companySelectSubmit(?int $companyId, ManagerRegistry $doctrine): RedirectResponse
+    public function companySelectSubmit(?int $companyId): RedirectResponse
     {
         try {
             if (!is_numeric($companyId) || $companyId < 0) {
@@ -163,9 +189,16 @@ class Login extends MoloniController
             }
 
             $moloniApp = MoloniApi::getAppEntity();
+
+            if (!$moloniApp) {
+                throw new MoloniException('Missing information in database');
+            }
+
             $moloniApp->setCompanyId($companyId);
 
-            $entityManager = $doctrine->getManager();
+            $entityManager = $this
+                ->getDoctrine()
+                ->getManager();
             $entityManager->persist($moloniApp);
             $entityManager->flush();
 
@@ -179,37 +212,5 @@ class Login extends MoloniController
         }
 
         return $this->redirectToSettings();
-    }
-
-    private function getLoginFormBuilder(): FormBuilderInterface
-    {
-        return $this->createFormBuilder()
-            ->add('clientID', TextType::class, [
-                'label' => $this->trans('Developer ID', 'Modules.Molonies.Login'),
-                'required' => true,
-                'label_attr' => ['class' => 'loginLabel'],
-                'constraints' => [
-                    new NotBlank(),
-                ],
-            ])
-            ->add('clientSecret', TextType::class, [
-                'label' => $this->trans('Client Secret', 'Modules.Molonies.Login'),
-                'required' => true,
-                'label_attr' => ['class' => 'loginLabel'],
-                'constraints' => [
-                    new Length(['min' => 3]),
-                    new NotBlank(),
-                ],
-            ])
-            ->add('connect', SubmitType::class, [
-                'attr' => ['class' => 'btn-primary'],
-                'label' => $this->trans('Connect', 'Modules.Molonies.Login'),
-            ])
-            ->add('reset', ResetType::class, [
-                'attr' => ['class' => 'btn-primary'],
-                'label' => $this->trans('Reset', 'Modules.Molonies.Login'),
-            ])
-            ->setAction($this->generateUrl('moloni_es_login_submit'))
-            ->setMethod('POST');
     }
 }

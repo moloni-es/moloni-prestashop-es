@@ -24,33 +24,40 @@
 
 namespace Moloni\Controller\Admin\Settings;
 
-use Doctrine\Persistence\ManagerRegistry;
-use Moloni\Api\MoloniApi;
+use Shop;
+use DateTime;
 use Moloni\Api\MoloniApiClient;
-use Moloni\Controller\Admin\MoloniController;
-use Moloni\Enums\Boolean;
-use Moloni\Enums\DocumentStatus;
 use Moloni\Exceptions\MoloniApiException;
-use Moloni\Helpers\Moloni;
+use Moloni\Form\SettingsFormType;
+use Moloni\Controller\Admin\MoloniController;
+use Moloni\Entity\MoloniSettings;
 use Moloni\Helpers\Settings as helperSettings;
 use Moloni\Repository\MoloniSettingsRepository;
-use Moloni\Traits\DocumentTypesTrait;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class Settings extends MoloniController
 {
-    use DocumentTypesTrait;
-
-    public function home(Request $request): Response
+    public function home(): Response
     {
-        $form = $this->getSettingsFormBuilder(['skip_values' => true])
-            ->getForm();
+        try {
+            $apiData = $this->getRequiredFormData();
+        } catch (MoloniApiException $e) {
+            $apiData = [];
+        }
+
+        $form = $this->createForm(SettingsFormType::class, null, [
+            'url' => $this->generateUrl('moloni_es_settings_save'),
+            'api_data' => $apiData
+        ]);
+        $setting = helperSettings::getAll();
+
+        if (isset($setting['dateCreated'])) {
+            $setting['dateCreated'] = new DateTime($setting['dateCreated']);
+        }
+
+        $form->setData($setting);
 
         return $this->render(
             '@Modules/molonies/views/templates/admin/settings/Settings.twig',
@@ -60,25 +67,27 @@ class Settings extends MoloniController
         );
     }
 
-    public function save(
-        Request $request,
-        MoloniSettingsRepository $settingsRepository,
-        ManagerRegistry $doctrine
-    ): RedirectResponse {
-        $form = $this->getSettingsFormBuilder(['skip_values' => true])
-            ->getForm()
-            ->handleRequest($request);
+    public function save(Request $request): RedirectResponse
+    {
+        try {
+            $apiData = $this->getRequiredFormData();
+        } catch (MoloniApiException $e) {
+            $apiData = [];
+        }
+
+        $form = $this->createForm(SettingsFormType::class, null, ['api_data' => $apiData]);
+        $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $submitData = $form->getData();
+            $shopId = (int)Shop::getContextShopID();
 
-            foreach ($submitData as $label => $value) {
-                if (is_array($value)) {
-                    $value = serialize($value);
-                }
+            /** @var MoloniSettingsRepository $settingsRepository */
+            $settingsRepository = $this
+                ->getDoctrine()
+                ->getRepository(MoloniSettings::class);
 
-                // todo: actually save settings
-            }
+            $settingsRepository->saveSettings($submitData, $shopId);
 
             $msg = $this->trans('Settings saved.', 'Modules.Molonies.Success');
             $this->addSuccessMessage($msg);
@@ -91,257 +100,34 @@ class Settings extends MoloniController
     }
 
     /**
-     * Settings form builder
+     * Fetch required data for settings form
      *
-     * @param array|null $options
-     *
-     * @return FormBuilderInterface
+     * @throws MoloniApiException
      */
-    private function getSettingsFormBuilder(?array $options = []): FormBuilderInterface
+    private function getRequiredFormData(): array
     {
+        $measurementUnits = $warehouses = $documentSets = [];
 
-        $taxes = $addresses = $maturityDates = $paymentMethods = $documentSets = $measurementUnits = $warehouses = [];
+        $measurementUnitsQuery = MoloniApiClient::measurementUnits()->queryMeasurementUnits();
+        $warehousesQuery = MoloniApiClient::warehouses()->queryWarehouses();
+        $documentSetsQuery = MoloniApiClient::documentSets()->queryDocumentSets();
 
-        if (!$options['skip_values']) {
-            try {
-                $variables = ['companyId' => (int)Moloni::get('company_id'), 'options' => null];
-
-                $taxesQuery = MoloniApiClient::taxes()->queryTaxes($variables);
-                $maturityDatesQuery = MoloniApiClient::measurementUnits()->queryMeasurementUnits($variables);
-                $measurementUnitsQuery = MoloniApiClient::maturityDates()->queryMaturityDates($variables);
-                $warehousesQuery = MoloniApiClient::warehouses()->queryWarehouses($variables);
-                $paymentMethodsQuery = MoloniApiClient::paymentMethods()->queryPaymentMethods($variables);
-                $documentSetsQuery = MoloniApiClient::documentSets()->queryDocumentSets($variables);
-
-                foreach ($taxesQuery as $tax) {
-                    $taxes[$tax['name'] . ' - (' . $tax['value'] . ')'] = $tax['taxId'];
-                }
-
-                foreach ($maturityDatesQuery as $maturityDate) {
-                    $maturityDate[$maturityDate['name']] = $maturityDate['maturityDateId'];
-                }
-
-                foreach ($measurementUnitsQuery as $measurementUnit) {
-                    $measurementUnit[$measurementUnit['name']] = $measurementUnit['measurementUnitId'];
-                }
-
-                foreach ($warehousesQuery as $warehouse) {
-                    $warehouse[$warehouse['name']] = $warehouse['warehouseId'];
-                }
-
-                foreach ($paymentMethodsQuery as $paymentMethod) {
-                    $paymentMethod[$paymentMethod['name']] = $paymentMethod['paymentMethodId'];
-                }
-
-                foreach ($documentSetsQuery as $documentSet) {
-                    $documentSet[$documentSet['name']] = $documentSet['documentSetId'];
-                }
-            } catch (MoloniApiException $e) {
-                return $this->createFormBuilder();
-            }
+        foreach ($measurementUnitsQuery as $measurementUnit) {
+            $measurementUnits[$measurementUnit['name']] = $measurementUnit['measurementUnitId'];
         }
 
-        $yesNoOptions = [
-            $this->trans('Yes', 'Modules.Molonies.Settings') => Boolean::YES,
-            $this->trans('No', 'Modules.Molonies.Settings') => Boolean::NO,
-        ];
+        foreach ($warehousesQuery as $warehouse) {
+            $warehouses[$warehouse['name']] = $warehouse['warehouseId'];
+        }
 
-        return $this->createFormBuilder()
-            // automations
-            ->add('CreateAuto', ChoiceType::class, [
-                'label' => $this->trans('Create paid documents on Moloni', 'Modules.Molonies.Settings'),
-                'attr' => ['class' => ''],
-                'label_attr' => ['class' => 'form-control-label'],
-                'choices' => $yesNoOptions,
-                'data' => helperSettings::get('CreateAuto'),
-            ])
-            ->add('Stocks', ChoiceType::class, [
-                'label' => $this->trans('Synchronize stocks on Moloni', 'Modules.Molonies.Settings'),
-                'attr' => ['class' => ''],
-                'label_attr' => ['class' => 'form-control-label'],
-                'choices' => $yesNoOptions,
-                'data' => helperSettings::get('Stocks'),
-            ])
-            ->add('AddProducts', ChoiceType::class, [
-                'label' => $this->trans('Create products on Moloni', 'Modules.Molonies.Settings'),
-                'attr' => ['class' => ''],
-                'label_attr' => ['class' => 'form-control-label'],
-                'choices' => $yesNoOptions,
-                'data' => helperSettings::get('AddProducts'),
-            ])
-            ->add('UpdateArtigos', ChoiceType::class, [
-                'label' => $this->trans('Update products on Moloni', 'Modules.Molonies.Settings'),
-                'attr' => ['class' => ''],
-                'label_attr' => ['class' => 'form-control-label'],
-                'choices' => $yesNoOptions,
-                'data' => helperSettings::get('UpdateArtigos'),
-            ])
-            ->add('HooksVariantsUpdate', ChoiceType::class, [
-                'label' => $this->trans('Update products with variants', 'Modules.Molonies.Settings'),
-                'attr' => ['class' => ''],
-                'label_attr' => ['class' => 'form-control-label'],
-                'choices' => $yesNoOptions,
-                'data' => helperSettings::get('HooksVariantsUpdate'),
-            ])
-            ->add('HooksAddProducts', ChoiceType::class, [
-                'label' => $this->trans('Add products', 'Modules.Molonies.Settings'),
-                'attr' => ['class' => ''],
-                'label_attr' => ['class' => 'form-control-label'],
-                'choices' => $yesNoOptions,
-                'data' => helperSettings::get('HooksAddProducts'),
-            ])
-            ->add('HooksUpdateProducts', ChoiceType::class, [
-                'label' => $this->trans('Update products', 'Modules.Molonies.Settings'),
-                'attr' => ['class' => ''],
-                'label_attr' => ['class' => 'form-control-label'],
-                'choices' => $yesNoOptions,
-                'data' => helperSettings::get('HooksUpdateProducts'),
-            ])
-            ->add('HooksUpdateStock', ChoiceType::class, [
-                'label' => $this->trans('Update stock', 'Modules.Molonies.Settings'),
-                'attr' => ['class' => ''],
-                'label_attr' => ['class' => 'form-control-label'],
-                'choices' => $yesNoOptions,
-                'data' => helperSettings::get('HooksUpdateStock'),
-            ])
-            ->add('SyncFields', ChoiceType::class, [
-                'label' => $this->trans('Fields to sync', 'Modules.Molonies.Settings'),
-                'label_attr' => ['class' => 'form-control-label'],
-                'multiple' => true,
-                'expanded' => true,
-                'choices' => [
-                    $this->trans('Name', 'Modules.Molonies.Settings') => 'Name',
-                    $this->trans('Price', 'Modules.Molonies.Settings') => 'Price',
-                    $this->trans('Description', 'Modules.Molonies.Settings') => 'Description',
-                    $this->trans('Visibility', 'Modules.Molonies.Settings') => 'Visibility',
-                    $this->trans('Stock', 'Modules.Molonies.Settings') => 'Stock',
-                    $this->trans('Categories', 'Modules.Molonies.Settings') => 'Categories',
-                ],
-                'data' => helperSettings::get('SyncFields') ? unserialize(helperSettings::get('SyncFields')) : [],
-            ])
-            // products
-            ->add('Exemption', TextType::class, [
-                'label' => $this->trans('Exemption reason', 'Modules.Molonies.Settings'),
-                'attr' => ['class' => ''],
-                'label_attr' => ['class' => 'form-control-label'],
-                'required' => false,
-                'data' => helperSettings::get('Exemption'),
-            ])
-            ->add('Shipping', TextType::class, [
-                'label' => $this->trans('Shipping exemption reason', 'Modules.Molonies.Settings'),
-                'attr' => ['class' => ''],
-                'label_attr' => ['class' => 'form-control-label'],
-                'required' => false,
-                'data' => helperSettings::get('Shipping'),
-            ])
-            ->add('Tax', ChoiceType::class, [
-                'label' => $this->trans('Default Tax', 'Modules.Molonies.Settings'),
-                'attr' => ['class' => ''],
-                'label_attr' => ['class' => 'form-control-label'],
-                'choices' => $taxes,
-                'data' => helperSettings::get('Tax'),
-            ])
-            ->add('TaxShipping', ChoiceType::class, [
-                'label' => $this->trans('Default Tax Shipping', 'Modules.Molonies.Settings'),
-                'attr' => ['class' => ''],
-                'label_attr' => ['class' => 'form-control-label'],
-                'choices' => $taxes,
-                'data' => helperSettings::get('TaxShipping'),
-            ])
-            ->add('Measure', ChoiceType::class, [
-                'label' => $this->trans('Measure unit', 'Modules.Molonies.Settings'),
-                'attr' => ['class' => ''],
-                'label_attr' => ['class' => 'form-control-label'],
-                'choices' => $measurementUnits,
-                'data' => helperSettings::get('Measure'),
-            ])
-            ->add('Maturity', ChoiceType::class, [
-                'label' => $this->trans('Maturity date', 'Modules.Molonies.Settings'),
-                'attr' => ['class' => ''],
-                'label_attr' => ['class' => 'form-control-label'],
-                'choices' => $maturityDates,
-                'data' => helperSettings::get('Maturity'),
-            ])
-            ->add('Warehouse', ChoiceType::class, [
-                'label' => $this->trans('Default warehouse', 'Modules.Molonies.Settings'),
-                'attr' => ['class' => ''],
-                'label_attr' => ['class' => 'form-control-label'],
-                'choices' => $warehouses,
-                'data' => helperSettings::get('Warehouse'),
-            ])
-            ->add('Payment', ChoiceType::class, [
-                'label' => $this->trans('Payment method', 'Modules.Molonies.Settings'),
-                'attr' => ['class' => ''],
-                'label_attr' => ['class' => 'form-control-label'],
-                'choices' => $paymentMethods,
-                'data' => helperSettings::get('Payment'),
-            ])
-            ->add('ClientPrefix', TextType::class, [
-                'label' => $this->trans('Client Prefix', 'Modules.Molonies.Settings'),
-                'label_attr' => ['class' => 'form-control-label'],
-                'attr' => ['onchange' => 'clientPrefixChange()'],
-                'required' => false,
-                'data' => helperSettings::get('ClientPrefix'),
-            ])
-            // documents
-            ->add('Set', ChoiceType::class, [
-                'label' => $this->trans('Document set', 'Modules.Molonies.Settings'),
-                'attr' => ['class' => ''],
-                'label_attr' => ['class' => 'form-control-label'],
-                'choices' => $documentSets,
-                'data' => helperSettings::get('Set'),
-            ])
-            ->add('Type', ChoiceType::class, [
-                'label' => $this->trans('Document type', 'Modules.Molonies.Settings'),
-                'choices' => $this->getDocumentsTypes(),
-                'label_attr' => ['class' => 'form-control-label'],
-                'attr' => ['onchange' => 'onStatusChange()'],
-                'data' => helperSettings::get('Type'),
-            ])
-            ->add('Status', ChoiceType::class, [
-                'label' => $this->trans('Document status', 'Modules.Molonies.Settings'),
-                'label_attr' => ['class' => 'form-control-label'],
-                'choices' => [
-                    $this->trans('Draft', 'Modules.Molonies.Settings') => DocumentStatus::DRAFT,
-                    $this->trans('Closed', 'Modules.Molonies.Settings') => DocumentStatus::CLOSED,
-                ],
-                'attr' => ['onchange' => 'onStatusChange()'],
-                'data' => helperSettings::get('Status'),
-            ])
-            ->add('Send', ChoiceType::class, [
-                'label' => $this->trans('Shipping information', 'Modules.Molonies.Settings'),
-                'attr' => ['class' => ''],
-                'label_attr' => ['class' => 'form-control-label'],
-                'choices' => $yesNoOptions,
-                'data' => helperSettings::get('Send'),
-            ])
-            ->add('Transport', ChoiceType::class, [
-                'label' => $this->trans('Document transport', 'Modules.Molonies.Settings'),
-                'label_attr' => ['class' => 'form-control-label'],
-                'choices' => $yesNoOptions,
-                'attr' => ['onchange' => 'onStatusChange2()'],
-                'data' => helperSettings::get('Transport'),
-            ])
-            ->add('Address', ChoiceType::class, [
-                'label' => $this->trans('Loading address', 'Modules.Molonies.Settings'),
-                'attr' => ['class' => ''],
-                'label_attr' => ['class' => 'form-control-label'],
-                'choices' => $addresses,
-                'data' => helperSettings::get('Address'),
-            ])
-            ->add('SendEmail', ChoiceType::class, [
-                'label' => $this->trans('Send e-mail', 'Modules.Molonies.Settings'),
-                'label_attr' => ['class' => 'form-control-label'],
-                'choices' => $yesNoOptions,
-                'attr' => ['onchange' => 'onStatusChange2()'],
-                'data' => helperSettings::get('SendEmail'),
-            ])
-            // save
-            ->add('SaveChanges', SubmitType::class, [
-                'attr' => ['class' => 'btn-outline-success'],
-                'label' => $this->trans('Save changes', 'Modules.Molonies.Settings'),
-            ])
-            ->setAction($this->generateUrl('moloni_es_settings_save'))
-            ->setMethod('POST');
+        foreach ($documentSetsQuery as $documentSet) {
+            $documentSets[$documentSet['name']] = $documentSet['documentSetId'];
+        }
+
+        return [
+            'measurementUnits' => $measurementUnits,
+            'warehouses' => $warehouses,
+            'documentSets' => $documentSets
+        ];
     }
 }

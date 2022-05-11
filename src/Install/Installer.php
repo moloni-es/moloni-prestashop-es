@@ -65,7 +65,7 @@ class Installer
         [
             'name' => 'Moloni',
             'parent' => 'SELL',
-            'tabName' => 'Moloni España',
+            'tabName' => 'Moloni Spain',
             'logo' => 'logo',
         ], [
             'name' => 'MoloniOrders',
@@ -81,6 +81,11 @@ class Installer
             'name' => 'MoloniSettings',
             'parent' => 'Moloni',
             'tabName' => 'Settings',
+            'logo' => '',
+        ], [
+            'name' => 'MoloniTools',
+            'parent' => 'Moloni',
+            'tabName' => 'Tools',
             'logo' => '',
         ],
     ];

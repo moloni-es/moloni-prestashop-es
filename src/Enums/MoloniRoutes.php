@@ -2,7 +2,7 @@
 
 namespace Moloni\Enums;
 
-class Route
+class MoloniRoutes
 {
     public const LOGIN = 'moloni_es_login_home';
     public const LOGIN_SUBMIT = 'moloni_es_login_submit';
@@ -51,14 +51,29 @@ class Route
         self::SETTINGS_SAVE,
     ];
 
-    public const ROUTES_SEMI_AUTHENTICATED = [
+    public const ROUTES_PARTIALLY_AUTHENTICATED = [
         self::LOGIN_COMPANY_SELECT,
         self::LOGIN_COMPANY_SUBMIT,
         self::LOGIN_RETRIEVE_CODE,
     ];
 
-    public const ROUTES_NOT_AUTHENTICATED = [
+    public const ROUTES_NON_AUTHENTICATED = [
         self::LOGIN,
         self::LOGIN_SUBMIT,
     ];
+
+    public static function isFullyAuthenticatedRoute(string $route): bool
+    {
+        return in_array($route, self::ROUTES_FULLY_AUTHENTICATED, true);
+    }
+
+    public static function isPartiallyAuthenticatedRoute(string $route): bool
+    {
+        return in_array($route, self::ROUTES_PARTIALLY_AUTHENTICATED, true);
+    }
+
+    public static function isNonAuthenticatedRoute(string $route): bool
+    {
+        return in_array($route, self::ROUTES_NON_AUTHENTICATED, true);
+    }
 }

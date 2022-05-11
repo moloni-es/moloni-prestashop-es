@@ -23,9 +23,9 @@ class MoloniSettings
     /**
      * @var int
      *
-     * @ORM\Column(name="store_id", type="integer")
+     * @ORM\Column(name="shop_id", type="integer")
      */
-    private $storeId;
+    private $shopId;
 
     /**
      * @var string
@@ -52,17 +52,17 @@ class MoloniSettings
     /**
      * @return int
      */
-    public function getStoreId(): int
+    public function getShopId(): int
     {
-        return $this->storeId;
+        return $this->shopId;
     }
 
     /**
-     * @param int $storeId
+     * @param int $shopId
      */
-    public function setStoreId(int $storeId): void
+    public function setShopId(int $shopId): void
     {
-        $this->storeId = $storeId;
+        $this->shopId = $shopId;
     }
 
     /**
@@ -104,7 +104,7 @@ class MoloniSettings
     {
         return [
             'id' => $this->getId(),
-            'store_id' => $this->getStoreId(),
+            'store_id' => $this->getShopId(),
             'label' => $this->getLabel(),
             'value' => $this->getValue(),
         ];

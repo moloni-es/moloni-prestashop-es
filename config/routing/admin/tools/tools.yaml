@@ -1,9 +1,10 @@
 moloni_es_tools_home:
   path: /tools
-  methods: [GET, POST]
+  methods: [GET]
   defaults:
     _controller: 'Moloni\Controller\Admin\Tools\Tools::home'
-    _legacy_controller: 'MoloniSettings'
+    _legacy_controller: 'MoloniTools'
+    _legacy_link: 'MoloniTools'
 
 moloni_es_tools_import_products:
   path: /tools/importProducts

@@ -12,4 +12,12 @@ class MoloniAppRepository extends EntityRepository
         return $this
             ->findOneBy([]);
     }
+
+    public function deleteApp()
+    {
+        return $this->createQueryBuilder('e')
+            ->delete()
+            ->getQuery()
+            ->execute();
+    }
 }

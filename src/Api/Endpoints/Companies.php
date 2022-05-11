@@ -17,9 +17,16 @@ class Companies extends Endpoint
     {
         $query = 'query {
             me { 
-                data { 
-                    userCompanies { 
-                        company { 
+                data {
+                    language
+                    {
+                        languageId
+                        name
+                    }
+                    userCompanies 
+                    {
+                        company 
+                        { 
                             companyId 
                         } 
                     }
@@ -55,6 +62,8 @@ class Companies extends Endpoint
                     city
                     zipCode
                     slug
+                    img1
+                    vat
                     fiscalZone
                     {
                         fiscalZone
@@ -67,6 +76,8 @@ class Companies extends Endpoint
                     country
                     {
                         countryId
+                        iso3166_1
+                        title
                     }
                 }
                 options{
