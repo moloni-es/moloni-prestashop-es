@@ -200,12 +200,16 @@ class MoloniEs extends Module
      */
     public function hookActionAdminControllerSetMedia(): void
     {
-        // Adds yours CSS file from a module's directory
-        $this->context->controller->addCSS($this->_path . 'views/css/settingsStyle.css');
-        $this->context->controller->addCSS($this->_path . 'views/css/all.min.css');
+        // Adds yours CSS files from a module's directory
+        //$this->context->controller->addCSS($this->_path . 'views/css/all.min.css');
+        $this->context->controller->addCSS($this->_path . 'views/css/moloni.css');
         $this->context->controller->addCSS($this->_path . 'views/css/moloni-icons.css');
-        // Adds yours JavaScript file from a module's directory
+
+        // Adds yours JavaScript files from a module's directory
         $this->context->controller->addJS($this->_path . 'views/js/settingsJS.js');
+
+        // Deprecated??
+        // $this->context->controller->addJquery();
     }
 
     /**

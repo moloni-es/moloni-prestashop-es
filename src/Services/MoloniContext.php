@@ -24,6 +24,7 @@
 
 namespace Moloni\Services;
 
+use Db;
 use Doctrine\ORM\EntityManager;
 use Moloni\Api\MoloniApi;
 use Moloni\Entity\MoloniApp;

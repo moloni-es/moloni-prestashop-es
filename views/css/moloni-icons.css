@@ -33,9 +33,3 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
-
-/* Prestashop 1.6*/
-.icon-MoloniTab:before{
-    content: 'logo';
-}
-

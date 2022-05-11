@@ -24,7 +24,9 @@
 
 namespace Moloni\Controller\Admin;
 
-use Moloni\Enums\Route;
+use Moloni\Entity\MoloniApp;
+use Moloni\Enums\MoloniRoutes;
+use Moloni\Repository\MoloniAppRepository;
 use Moloni\Services\MoloniContext;
 use PrestaShopBundle\Controller\Admin\FrameworkBundleAdminController;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -37,7 +39,7 @@ abstract class MoloniController extends FrameworkBundleAdminController implement
      *
      * @var MoloniContext
      */
-    protected $context;
+    protected $moloniContext;
 
     /**
      * Start our service
@@ -50,7 +52,7 @@ abstract class MoloniController extends FrameworkBundleAdminController implement
     {
         parent::setContainer($container);
 
-        $this->context = $this->get('moloni.services.context');
+        $this->moloniContext = $this->get('moloni.services.context');
     }
 
     //          Messages          //
@@ -119,7 +121,15 @@ abstract class MoloniController extends FrameworkBundleAdminController implement
      */
     public function redirectToLogin(): RedirectResponse
     {
-        return $this->redirectToRoute(Route::LOGIN);
+        /** @var MoloniAppRepository $repository */
+        $repository = $this
+            ->getDoctrine()
+            ->getManager()
+            ->getRepository(MoloniApp::class);
+
+        //$repository->deleteApp();
+
+        return $this->redirectToRoute(MoloniRoutes::LOGIN);
     }
 
     /**
@@ -129,7 +139,7 @@ abstract class MoloniController extends FrameworkBundleAdminController implement
      */
     public function redirectToCompanySelect(): RedirectResponse
     {
-        return $this->redirectToRoute(Route::LOGIN_COMPANY_SELECT);
+        return $this->redirectToRoute(MoloniRoutes::LOGIN_COMPANY_SELECT);
     }
 
     /**
@@ -141,7 +151,7 @@ abstract class MoloniController extends FrameworkBundleAdminController implement
      */
     protected function redirectToDocuments(?int $page = 1): RedirectResponse
     {
-        return $this->redirectToRoute(Route::DOCUMENTS, ['page' => $page]);
+        return $this->redirectToRoute(MoloniRoutes::DOCUMENTS, ['page' => $page]);
     }
 
     /**
@@ -153,7 +163,7 @@ abstract class MoloniController extends FrameworkBundleAdminController implement
      */
     public function redirectToOrders(?int $page = 1): RedirectResponse
     {
-        return $this->redirectToRoute(Route::ORDERS, ['page' => $page]);
+        return $this->redirectToRoute(MoloniRoutes::ORDERS, ['page' => $page]);
     }
 
     /**
@@ -163,7 +173,7 @@ abstract class MoloniController extends FrameworkBundleAdminController implement
      */
     protected function redirectToTools(): RedirectResponse
     {
-        return $this->redirectToRoute(Route::TOOLS);
+        return $this->redirectToRoute(MoloniRoutes::TOOLS);
     }
 
     /**
@@ -173,6 +183,6 @@ abstract class MoloniController extends FrameworkBundleAdminController implement
      */
     protected function redirectToSettings(): RedirectResponse
     {
-        return $this->redirectToRoute(Route::SETTINGS);
+        return $this->redirectToRoute(MoloniRoutes::SETTINGS);
     }
 }

@@ -8,6 +8,13 @@ use Moloni\Exceptions\MoloniApiException;
 abstract class Endpoint
 {
     /**
+     * Requests cache
+     *
+     * @var array
+     */
+    protected $cache = [];
+
+    /**
      * Make a simple request
      *
      * @param string $query

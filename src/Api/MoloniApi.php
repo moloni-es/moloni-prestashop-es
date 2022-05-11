@@ -97,25 +97,24 @@ class MoloniApi
         try {
             $request = self::$client->post($url, ['body' => $params]);
 
-            if (empty($request)) {
+            if ($request === null) {
                 throw new MoloniLoginException('Request error');
             }
 
-            $body = json_decode($request->json(), false);
+            $body = json_decode($request->getBody()->getContents(), false);
 
-            if (empty($body['accessToken']) || empty($body['refreshToken'])) {
+            if (!$body->accessToken || !$body->refreshToken) {
                 throw new MoloniLoginException('Error fetching tokens', [], ['response' => $body]);
             }
 
-            self::$app->setAccessToken($body['accessToken']);
-            self::$app->setRefreshToken($body['refreshToken']);
-            self::$app->setLoginDate(time());
+            self::$app->setAccessToken($body->accessToken);
+            self::$app->setRefreshToken($body->refreshToken);
             self::$app->setAccessTime(time());
 
             self::$entityManager->persist(self::$app);
             self::$entityManager->flush();
         } catch (BadResponseException $e) {
-            throw new MoloniLoginException($e->getMessage(), [], ['response' => $e->getResponse(), 'request' => $e->getRequest()]);
+            throw new MoloniLoginException("The client credentials are invalid", [], ['response' => $e->getResponse()->json(), 'params' => $params]);
         } catch (ORMException $e) {
             throw new MoloniLoginException($e->getMessage());
         }
@@ -149,14 +148,14 @@ class MoloniApi
                 throw new MoloniLoginException('Request error');
             }
 
-            $body = json_decode($request->json(), false);
+            $body = json_decode($request->getBody()->getContents(), false);
 
-            if (empty($body['accessToken']) || empty($body['refreshToken'])) {
+            if (!$body->accessToken || !$body->refreshToken) {
                 throw new MoloniLoginException('Error fetching tokens', [], ['response' => $body]);
             }
 
-            self::$app->setAccessToken($body['accessToken']);
-            self::$app->setRefreshToken($body['refreshToken']);
+            self::$app->setAccessToken($body->accessToken);
+            self::$app->setRefreshToken($body->refreshToken);
             self::$app->setAccessTime(time());
 
             self::$entityManager->persist(self::$app);
@@ -171,12 +170,20 @@ class MoloniApi
     /**
      * Make authenticated request
      *
+     * @param array|null $data
+     *
+     * @return array
+     *
      * @throws MoloniApiException
      */
-    public static function post(array $data = []): array
+    public static function post(?array $data = []): array
     {
         if (!self::$client) {
             self::$client = new Client();
+        }
+
+        if (isset($data['variables']) && !isset($data['variables']['companyId'])) {
+            $data['variables']['companyId'] = self::$app->getCompanyId();
         }
 
         try {
@@ -185,15 +192,17 @@ class MoloniApi
                 Domains::MOLONI_API,
                 [
                     'headers' => [
-                        'Authorization' => 'bearer ' . self::$app['access_token'],
+                        'Authorization' => 'bearer ' . self::$app->getAccessToken(),
                         'Content-Type' => 'application/json',
                     ],
                     'body' => json_encode($data),
                 ]
             );
 
-            if ($request !== null && $request->json()) {
-                $response = json_decode($request->json(), false);
+            if ($request !== null) {
+                $json = $request->getBody()->getContents();
+
+                $response = json_decode($json, true);
             }
 
             return $response;
@@ -209,9 +218,13 @@ class MoloniApi
      *
      * @return bool
      */
-    public static function isPendingCompany(): bool
+    public static function hasValidCompany(): bool
     {
-        return self::$app && !empty(self::$app->getCompanyId());
+        if (empty(self::$app)) {
+            return false;
+        }
+
+        return !empty(self::$app->getCompanyId());
     }
 
     /**
@@ -219,9 +232,13 @@ class MoloniApi
      *
      * @return bool
      */
-    public static function isValid(): bool
+    public static function hasValidAuthentication(): bool
     {
-        if (empty(self::$app) || empty(self::$app->getCompanyId())) {
+        if (empty(self::$app)) {
+            return false;
+        }
+
+        if (empty(self::$app->getAccessToken()) || empty(self::$app->getRefreshToken())) {
             return false;
         }
 

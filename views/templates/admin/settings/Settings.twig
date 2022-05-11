@@ -1,11 +1,116 @@
 {% extends '@PrestaShop/Admin/layout.html.twig' %}
 
 {% block content %}
-    <h1>Hello there</h1>
-{% endblock %}
+    {{ form_errors(form) }}
 
-{% block javascripts %}
-    {{ parent() }}
+    <div class="row justify-content-center">
+        <div class="col">
+            <div class="card">
+                {{ form_start(form) }}
+                <div class="card-nav">
+                    <ul class="nav nav-pills" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active"
+                               id="pills-documents-tab"
+                               data-toggle="pill"
+                               href="#pills-documents"
+                               role="tab"
+                               aria-controls="pills-documents"
+                               aria-expanded="true">
+                                {{ 'Documents'|trans({}, 'Modules.Molonies.Common') }}
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               id="pills-automation-tab"
+                               data-toggle="pill"
+                               href="#pills-automation"
+                               role="tab"
+                               aria-controls="pills-automation"
+                               aria-expanded="true">
+                                {{ 'Automation'|trans({}, 'Modules.Molonies.Common') }}
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               id="pills-advanced-tab"
+                               data-toggle="pill"
+                               href="#pills-advanced"
+                               role="tab"
+                               aria-controls="pills-advanced"
+                               aria-expanded="true">
+                                {{ 'Advanced'|trans({}, 'Modules.Molonies.Common') }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-block card-text">
+                    <div class="tab-content" id="pills-tabContent">
+                        <div class="tab-pane fade show active"
+                             id="pills-documents"
+                             role="tabpanel"
+                             aria-labelledby="pills-documents-tab">
+                            {{ form_row(form.documentSet) }}
+                            {{ form_row(form.documentType) }}
+                            {{ form_row(form.documentStatus) }}
+                            {{ form_row(form.shippingInformation) }}
 
-    <script src="{{ asset('themes/new-theme/public/cms_page_form.bundle.js') }}"></script>
+                            <div class="form-group row">
+                                {{ form_label(form.loadAddress) }}
+                                {{ form_label_class(form.loadAddress) }}
+                                {{ form_errors(form.loadAddress) }}
+                                <div class="col-sm">
+                                    {{ form_widget(form.loadAddress) }}
+                                </div>
+                            </div>
+
+                            {{ form_row(form.automaticDocuments) }}
+                            {{ form_row(form.useProductNameAndSummaryFrom) }}
+                            {{ form_row(form.exemptionReasonProduct) }}
+                            {{ form_row(form.exemptionReasonShipping) }}
+                            {{ form_row(form.measurementUnit) }}
+                            {{ form_row(form.documentWarehouse) }}
+                            {{ form_row(form.clientPrefix) }}
+                            {{ form_row(form.sendDocumentByEmail) }}
+                        </div>
+                        <div class="tab-pane fade"
+                             id="pills-automation"
+                             role="tabpanel"
+                             aria-labelledby="pills-automation-tab">
+                            <h3 align="center">(Prestashop -> Moloni)</h3>
+
+                            {{ form_row(form.syncStockToMoloni) }}
+                            {{ form_row(form.syncStockToMoloniWarehouse) }}
+                            {{ form_row(form.addProductsToMoloni) }}
+                            {{ form_row(form.updateProductsToMoloni) }}
+
+                            <h3 align="center">(Moloni -> Prestashop)</h3>
+
+                            {{ form_row(form.syncStockToPrestashop) }}
+                            {{ form_row(form.syncStockToPrestashopWarehouse) }}
+                            {{ form_row(form.addProductsToPrestashop) }}
+                            {{ form_row(form.updateProductsToPrestashop) }}
+
+                            <h3 align="center">(Common)</h3>
+
+                            {{ form_row(form.productSyncFields) }}
+                        </div>
+                        <div class="tab-pane fade"
+                             id="pills-advanced"
+                             role="tabpanel"
+                             aria-labelledby="pills-advanced-tab">
+                            {{ form_row(form.alertEmail) }}
+                            {{ form_row(form.dateCreated) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="d-flex justify-content-end">
+                        {{ form_widget(form.saveChanges) }}
+                    </div>
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
 {% endblock %}

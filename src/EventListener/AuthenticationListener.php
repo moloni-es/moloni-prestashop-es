@@ -27,7 +27,7 @@ namespace Moloni\EventListener;
 use Moloni\Api\MoloniApi;
 use Moloni\Controller\Admin\MoloniController;
 use Moloni\Controller\Admin\MoloniControllerInterface;
-use Moloni\Enums\Route;
+use Moloni\Enums\MoloniRoutes;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 
 class AuthenticationListener
@@ -42,22 +42,30 @@ class AuthenticationListener
             /** @var MoloniController $actionController */
             $actionController = $controller[0];
 
-            if (MoloniApi::isPendingCompany() && !in_array($route, Route::ROUTES_SEMI_AUTHENTICATED, true)) {
-                $event->setController(function () use ($actionController) {
-                    return $actionController->redirectToCompanySelect();
-                });
+            if (!MoloniApi::hasValidCompany()) {
+                if (MoloniApi::hasValidAuthentication() && !MoloniRoutes::isPartiallyAuthenticatedRoute($route)) {
+                    $event->setController(function () use ($actionController) {
+                        return $actionController->redirectToCompanySelect();
+                    });
+
+                    return;
+                }
             }
 
-            if (in_array($route, Route::ROUTES_NOT_AUTHENTICATED, true) && MoloniApi::isValid()) {
-                $event->setController(function () use ($actionController) {
-                    return $actionController->redirectToOrders();
-                });
-            }
-
-            if (in_array($route, Route::ROUTES_FULLY_AUTHENTICATED, true) && !MoloniApi::isValid()) {
+            if (MoloniRoutes::isFullyAuthenticatedRoute($route) && !MoloniApi::hasValidAuthentication()) {
                 $event->setController(function () use ($actionController) {
                     return $actionController->redirectToLogin();
                 });
+
+                return;
+            }
+
+            if (MoloniRoutes::isNonAuthenticatedRoute($route) && MoloniApi::hasValidAuthentication()) {
+                $event->setController(function () use ($actionController) {
+                    return $actionController->redirectToOrders();
+                });
+
+                return;
             }
         }
     }

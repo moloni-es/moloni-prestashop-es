@@ -1,0 +1,58 @@
+{% extends '@PrestaShop/Admin/layout.html.twig' %}
+
+{% block content %}
+
+    {% if companies %}
+        <div class="container">
+            <div class="d-flex flex-row flex-wrap justify-content-center align-items-center moloni-company--wrapper">
+                {% for company in companies %}
+                    <div class="card moloni-company">
+                        <div class="card-header">
+                            {{ company.name }}
+                        </div>
+                        <div class="card-block moloni-company--image">
+                            {% if company.img1 %}
+                                <img src="{{ media_api_url }}{{ company.img1 }}" height="auto" alt="Company logo">
+                            {% else %}
+                                <img src="{{ default_img }}" height="auto" alt="Company logo">
+                            {% endif %}
+                        </div>
+                        <div class="card-block moloni-company--information">
+                            <p>
+                                {{ 'Email'|trans({}, 'Modules.Molonies.Login') }}: {{ company.email|default('') }}
+                            </p>
+                            <p>
+                                {{ 'Address'|trans({}, 'Modules.Molonies.Login') }}: {{ company.address|default('') }}
+                            </p>
+                            <p>
+                                {{ 'Zip-Code'|trans({}, 'Modules.Molonies.Login') }}: {{ company.zipCode|default('') }}
+                            </p>
+                            <p>
+                                {{ 'Country'|trans({}, 'Modules.Molonies.Login') }}: {{ company.country.title|default('') }}
+                            </p>
+                        </div>
+                        <div class="card-footer">
+                            <div class="d-flex justify-content-end">
+                                <a href="{{ path(submit_route, {companyId: company.companyId}) }}" class="btn btn-primary">
+                                    {{ 'Choose this store'|trans({}, 'Modules.Molonies.Login') }}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% else %}
+        <div>
+            Sem resultados a apresentar
+        </div>
+    {% endif %}
+
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script src="{{ asset('themes/new-theme/public/cms_page_form.bundle.js') }}"></script>
+{% endblock %}

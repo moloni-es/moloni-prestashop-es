@@ -28,9 +28,9 @@ class Settings
      *
      * @param string $setting name of the setting
      *
-     * @return string|null returns the cached string value or null
+     * @return string|int|array|null returns the cached string value or null
      */
-    public static function get(string $setting): ?string
+    public static function get(string $setting)
     {
         return self::$settings[$setting] ?? null;
     }

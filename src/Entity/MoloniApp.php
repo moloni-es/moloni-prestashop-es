@@ -21,6 +21,13 @@ class MoloniApp
     private $id;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="shop_id", type="integer")
+     */
+    private $shopId;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="client_id", type="string" , length=250)
@@ -56,13 +63,6 @@ class MoloniApp
     private $companyId;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="login_date", type="integer", length=250)
-     */
-    private $loginDate;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="access_time", type="string", length=250)
@@ -76,7 +76,7 @@ class MoloniApp
      */
     public function isValidAccessToken(): bool
     {
-        return strtotime('+13 days', $this->accessTime) > time();
+        return strtotime('+40 minutes', $this->getAccessTime()) > time();
     }
 
     /**
@@ -86,7 +86,7 @@ class MoloniApp
      */
     public function isValidRefreshToken(): bool
     {
-        return strtotime('+40 minutes', $this->accessTime) > time();
+        return strtotime('+13 days', $this->getAccessTime()) > time();
     }
 
     /**
@@ -98,9 +98,9 @@ class MoloniApp
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getAccessTime(): string
+    public function getAccessTime(): ?string
     {
         return $this->accessTime;
     }
@@ -130,9 +130,9 @@ class MoloniApp
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getClientSecret(): string
+    public function getClientSecret(): ?string
     {
         return $this->clientSecret;
     }
@@ -146,9 +146,9 @@ class MoloniApp
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getAccessToken(): string
+    public function getAccessToken(): ?string
     {
         return $this->accessToken;
     }
@@ -196,17 +196,17 @@ class MoloniApp
     /**
      * @return int
      */
-    public function getLoginDate(): int
+    public function getShopId(): int
     {
-        return $this->loginDate;
+        return $this->shopId;
     }
 
     /**
-     * @param int $loginDate
+     * @param int $shopId
      */
-    public function setLoginDate(int $loginDate): void
+    public function setShopId(int $shopId): void
     {
-        $this->loginDate = $loginDate;
+        $this->shopId = $shopId;
     }
 
     /**
@@ -221,7 +221,6 @@ class MoloniApp
             'access_token' => $this->getAccessToken(),
             'refresh_token' => $this->getRefreshToken(),
             'company_id' => $this->getCompanyId(),
-            'login_date' => $this->getLoginDate(),
             'access_time' => $this->getAccessTime(),
         ];
     }
