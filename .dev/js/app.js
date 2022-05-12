@@ -1,5 +1,7 @@
-const $ = require('jquery');
+import MoloniSettings from './settings/settings'
 
 $(document).ready(() => {
-  $('body').prepend('<h1>Hello World</h1>');
+    console.log('Moloni module loaded');
+
+    window.moloniSettings = new MoloniSettings();
 });

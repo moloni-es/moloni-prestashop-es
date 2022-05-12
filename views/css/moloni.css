@@ -22,3 +22,8 @@
   -ms-flex-pack: center;
   justify-content: center;
 }
+
+.required::before {
+  content:'* ';
+  color: red;
+}

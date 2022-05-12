@@ -2,61 +2,54 @@
 
 {% block content %}
     <div class="card">
-        <div class="ml-3 mt-3">
+        <h3 class="card-header">
+            <i class="material-icons">article</i>
+            {{ 'Created documents'|trans({}, 'Modules.Molonies.Common') }}
+        </h3>
 
-            <div class="float-left">
-                <h2>{{ 'Documents'|trans({}, 'Modules.Molonies.Documents') }}</h2>
-                <p>{{ 'Here you can download the created documents.'|trans({}, 'Modules.Molonies.Documents') }}</p>
+        <div class="float-right" style="font-size:10px;">
+            <div class="mr-3 mt-1 mb-2 d-flex justify-content-end">
+                <table class="table-bordered table-sm">
+                    <tr>
+                        <td style="background: red" width="25px"></td>
+                        <td>{{ 'Document value does not match.'|trans({}, 'Modules.Molonies.Common') }}</td>
+                    </tr>
+                    <tr>
+                        <td style="background: green" width="25px"></td>
+                        <td>{{ 'Document value matches.'|trans({}, 'Modules.Molonies.Common') }}</td>
+                    </tr>
+                </table>
             </div>
-
-            <div class="float-right" style="font-size:10px;">
-                <div class="mr-3 mt-1 mb-2 d-flex justify-content-end">
-                    <table class="table-bordered table-sm">
-                        <tr>
-                            <td style="background: red" width="25px"></td>
-                            <td>{{ 'Document value does not match.'|trans({}, 'Modules.Molonies.Documents') }}</td>
-                        </tr>
-                        <tr>
-                            <td style="background: green" width="25px"></td>
-                            <td>{{ 'Document value matches.'|trans({}, 'Modules.Molonies.Documents') }}</td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-
         </div>
 
-        <div class="p-3">
-
+        <div class="card-block">
             <table class="table table-striped table-bordered table-sm" style="text-align: center; margin-bottom: -10px;">
                 <thead>
                 <tr>
-                    <th scope="col">{{ 'Order ID'|trans({}, 'Modules.Molonies.Documents') }}</th>
-                    <th scope="col">{{ 'Reference'|trans({}, 'Modules.Molonies.Documents') }}</th>
-                    <th scope="col">{{ 'Client'|trans({}, 'Modules.Molonies.Documents') }}</th>
-                    <th scope="col">{{ 'Email'|trans({}, 'Modules.Molonies.Documents') }}</th>
-                    <th scope="col">{{ 'Status'|trans({}, 'Modules.Molonies.Documents') }}</th>
-                    <th scope="col">{{ 'Date'|trans({}, 'Modules.Molonies.Documents') }}</th>
-                    <th scope="col">{{ 'Amount'|trans({}, 'Modules.Molonies.Documents') }}</th>
-                    <th scope="col">{{ 'Document Type'|trans({}, 'Modules.Molonies.Documents') }}</th>
-                    <th scope="col">{{ 'Actions'|trans({}, 'Modules.Molonies.Documents') }}</th>
+                    <th scope="col">{{ 'Reference'|trans({}, 'Modules.Molonies.Common') }}</th>
+                    <th scope="col">{{ 'Client'|trans({}, 'Modules.Molonies.Common') }}</th>
+                    <th scope="col">{{ 'Email'|trans({}, 'Modules.Molonies.Common') }}</th>
+                    <th scope="col">{{ 'Status'|trans({}, 'Modules.Molonies.Common') }}</th>
+                    <th scope="col">{{ 'Date'|trans({}, 'Modules.Molonies.Common') }}</th>
+                    <th scope="col">{{ 'Amount'|trans({}, 'Modules.Molonies.Common') }}</th>
+                    <th scope="col">{{ 'Document Type'|trans({}, 'Modules.Molonies.Common') }}</th>
+                    <th scope="col">{{ 'Actions'|trans({}, 'Modules.Molonies.Common') }}</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% if documentArray %}
                     {% for document in documentArray %}
                         <tr>
-                                <th scope="row">{{  document.id_order }}</th>
                                 <td>{{ document.reference }}</td>
                                 <td>{{ document.firstname }} {{ document.lastname }}</td>
                                 <td>{{ document.email }}</td>
                                 <td>
                                     {% if document.invoice_status == 0 %}
-                                        {{ 'Draft'|trans({}, 'Modules.Molonies.Documents') }}
+                                        {{ 'Draft'|trans({}, 'Modules.Molonies.Common') }}
                                     {% elseif document.invoice_status == 1 %}
-                                        {{ 'Closed'|trans({}, 'Modules.Molonies.Documents') }}
+                                        {{ 'Closed'|trans({}, 'Modules.Molonies.Common') }}
                                     {% else %}
-                                        {{ 'Discarted'|trans({}, 'Modules.Molonies.Documents') }}
+                                        {{ 'Discarted'|trans({}, 'Modules.Molonies.Common') }}
                                     {% endif %}
                                 </td>
                                 <td>{{ document.invoice_date }}</td>
@@ -78,19 +71,19 @@
                                 <td>
                                     {% if document.document_id > 0 %}
                                         {% if document.invoice_status == 1 %}
-                                            <a type="submit" class="btn btn-primary" title="{{ 'Download document'|trans({}, 'Modules.Molonies.Documents') }}" href="{{ path(downloadDocumentRoute , {documentId: document.document_id} ) }}" target="_blank">
+                                            <a type="submit" class="btn btn-primary" title="{{ 'Download document'|trans({}, 'Modules.Molonies.Common') }}" href="{{ path(downloadDocumentRoute , {documentId: document.document_id} ) }}" target="_blank">
                                                 <i class="fa fa-download"></i>
                                             </a>
                                         {% endif %}
-                                        <a class="btn btn-warning" title="{{ 'Open in Moloni'|trans({}, 'Modules.Molonies.Documents') }}" href="{{ path(moloniViewRoute , {documentId: document.document_id}) }}" target="_blank">
+                                        <a class="btn btn-warning" title="{{ 'Open in Moloni'|trans({}, 'Modules.Molonies.Common') }}" href="{{ path(moloniViewRoute , {documentId: document.document_id}) }}" target="_blank">
                                             <i class="fa fa-file"></i>
                                         </a>
                                     {% else %}
-                                        <a class="btn btn-danger" title="{{ 'Revert discard'|trans({}, 'Modules.Molonies.Documents') }}" href="{{ path(restoreOrderRoute , {orderId: document.id_order}) }}" onclick="disableButtons();">
+                                        <a class="btn btn-danger" title="{{ 'Revert discard'|trans({}, 'Modules.Molonies.Common') }}" href="{{ path(restoreOrderRoute , {orderId: document.id_order}) }}" onclick="disableButtons();">
                                             <i class="fa fa-history"></i>
                                         </a>
                                     {% endif %}
-                                    <a class="btn btn-success" title="{{ 'See order'|trans({}, 'Modules.Molonies.Documents') }}" href="{{ document.viewURL }}">
+                                    <a class="btn btn-success" title="{{ 'See order'|trans({}, 'Modules.Molonies.Common') }}" href="{{ document.viewURL }}">
                                         <i class="fa fa-search"></i>
                                     </a>
                                 </td>
@@ -99,7 +92,7 @@
                 {% else %}
                     <tr>
                         <td colspan="9">
-                            {{ 'No information to show!'|trans({}, 'Modules.Molonies.Documents') }}
+                            {{ 'No information to show!'|trans({}, 'Modules.Molonies.Common') }}
                         </td>
                     </tr>
                 {% endif %}
@@ -108,6 +101,14 @@
         </div>
 
         {% include '@Modules/molonies/views/templates/admin/components/Paginator.twig' %}
+
+        <div class="card-footer">
+            <div class="d-flex justify-content-end">
+                <a href="{{ path('moloni_es_documents_home', {page: paginator.currentPage}) }}" class="btn btn-primary">
+                    {{ 'Refresh list'|trans({}, 'Modules.Molonies.Common') }}
+                </a>
+            </div>
+        </div>
     </div>
 {% endblock %}
 

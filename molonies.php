@@ -200,13 +200,18 @@ class MoloniEs extends Module
      */
     public function hookActionAdminControllerSetMedia(): void
     {
-        // Adds yours CSS files from a module's directory
-        //$this->context->controller->addCSS($this->_path . 'views/css/all.min.css');
-        $this->context->controller->addCSS($this->_path . 'views/css/moloni.css');
+        $action = $this->context->controller->php_self;
+
         $this->context->controller->addCSS($this->_path . 'views/css/moloni-icons.css');
 
-        // Adds yours JavaScript files from a module's directory
-        $this->context->controller->addJS($this->_path . 'views/js/settingsJS.js');
+        if ($action === 'MoloniSettings') {
+            $this->context->controller->addJS($this->_path . 'views/compiled/js/app.js');
+            //$this->context->controller->addJS($this->_path . 'views/js/app.js');
+        }
+
+        if (str_starts_with($action, 'Moloni')) {
+            $this->context->controller->addCSS($this->_path . 'views/css/moloni.css');
+        }
 
         // Deprecated??
         // $this->context->controller->addJquery();
@@ -221,7 +226,7 @@ class MoloniEs extends Module
      */
     public function hookActionProductAdd($params): void
     {
-        if ((Settings::get('AddProducts') == 1)) {
+        if ((Settings::get('AddProducts') === 1)) {
             $productSave = new ProductAdd($this->context->getTranslator());
             $productSave->hookActionProductSave($params['id_product']);
         }

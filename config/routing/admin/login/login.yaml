@@ -23,6 +23,7 @@ moloni_es_login_company_select:
   methods: [GET]
   defaults:
     _controller: 'Moloni\Controller\Admin\Login\Login::companySelect'
+    _legacy_controller: 'Moloni'
 
 moloni_es_login_company_submit:
   path: /login/companySubmit/{companyId}

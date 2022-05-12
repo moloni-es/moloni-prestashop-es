@@ -314,7 +314,6 @@ class OrderProduct implements BuilderItemInterface
     protected function getByReference(): OrderProduct
     {
         $variables = [
-            'companyId' => (int) Moloni::get('company_id'),
             'options' => [
                 'search' => [
                     'field' => 'reference',

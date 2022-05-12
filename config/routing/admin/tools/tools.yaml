@@ -8,37 +8,37 @@ moloni_es_tools_home:
 
 moloni_es_tools_import_products:
   path: /tools/importProducts
-  methods: [GET, POST]
+  methods: [POST]
   defaults:
     _controller: 'Moloni\Controller\Admin\Tools\Tools::importProducts'
 
 moloni_es_tools_import_categories:
   path: /tools/importCategories
-  methods: [GET, POST]
+  methods: [POST]
   defaults:
     _controller: 'Moloni\Controller\Admin\Tools\Tools::importCategories'
 
-moloni_es_tools_discard_orders:
-  path: /tools/discardOrders
-  methods: [GET, POST]
-  defaults:
-    _controller: 'Moloni\Controller\Admin\Tools\Tools::discardOrders'
-
 moloni_es_tools_open_logs:
   path: /tools/openLogs
-  methods: [GET, POST]
+  methods: [POST]
   defaults:
     _controller: 'Moloni\Controller\Admin\Tools\Tools::openLogs'
 
+moloni_es_tools_stock_sync:
+  path: /tools/syncStocks
+  methods: [POST]
+  defaults:
+    _controller: 'Moloni\Controller\Admin\Tools\Tools::syncStocks'
+
 moloni_es_tools_delete_logs:
   path: /tools/deleteLogs
-  methods: [GET, POST]
+  methods: [POST]
   defaults:
     _controller: 'Moloni\Controller\Admin\Tools\Tools::deleteLogs'
 
 moloni_es_tools_logout:
   path: /tools/logout
-  methods: [GET, POST]
+  methods: [POST]
   defaults:
     _controller: 'Moloni\Controller\Admin\Tools\Tools::logout'
 
@@ -46,6 +46,6 @@ moloni_es_tools_logout:
 
 moloni_es_tools_export:
   path: /tools/export
-  methods: [GET, POST]
+  methods: [GET]
   defaults:
     _controller: 'Moloni\Controller\Admin\Tools\Tools::exportTranslations'

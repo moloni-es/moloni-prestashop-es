@@ -54,7 +54,12 @@ class Documents extends MoloniController
                 'moloniViewRoute' => 'moloni_es_documents_view_document',
                 'thisRoute' => 'moloni_es_documents_home',
                 'restoreOrderRoute' => 'moloni_es_documents_restore',
-                'paginator' => $paginator ?? [],
+                'paginator' => [
+                    'numberOfTabs' => 1,
+                    'currentPage' => 1,
+                    'offSet' => 1,
+                    'linesPerPage' => 1,
+                ],
             ]
         );
     }
