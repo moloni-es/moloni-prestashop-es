@@ -19,22 +19,22 @@
                         </div>
                         <div class="card-block moloni-company--information">
                             <p>
-                                {{ 'Email'|trans({}, 'Modules.Molonies.Login') }}: {{ company.email|default('') }}
+                                {{ 'Email'|trans({}, 'Modules.Molonies.Common') }}: {{ company.email|default('') }}
                             </p>
                             <p>
-                                {{ 'Address'|trans({}, 'Modules.Molonies.Login') }}: {{ company.address|default('') }}
+                                {{ 'Address'|trans({}, 'Modules.Molonies.Common') }}: {{ company.address|default('') }}
                             </p>
                             <p>
-                                {{ 'Zip-Code'|trans({}, 'Modules.Molonies.Login') }}: {{ company.zipCode|default('') }}
+                                {{ 'Zip-Code'|trans({}, 'Modules.Molonies.Common') }}: {{ company.zipCode|default('') }}
                             </p>
                             <p>
-                                {{ 'Country'|trans({}, 'Modules.Molonies.Login') }}: {{ company.country.title|default('') }}
+                                {{ 'Country'|trans({}, 'Modules.Molonies.Common') }}: {{ company.country.title|default('') }}
                             </p>
                         </div>
                         <div class="card-footer">
                             <div class="d-flex justify-content-end">
                                 <a href="{{ path(submit_route, {companyId: company.companyId}) }}" class="btn btn-primary">
-                                    {{ 'Choose this store'|trans({}, 'Modules.Molonies.Login') }}
+                                    {{ 'Choose this store'|trans({}, 'Modules.Molonies.Common') }}
                                 </a>
                             </div>
                         </div>

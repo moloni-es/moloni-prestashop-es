@@ -48,6 +48,8 @@ class Orders extends MoloniController
         $orders = [];
         $page = $request->get('page', 1);
 
+        $this->getContext()->getTranslator();
+
         return $this->render(
             '@Modules/molonies/views/templates/admin/orders/Orders.twig',
             [

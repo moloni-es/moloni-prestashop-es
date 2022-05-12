@@ -1,1 +1,165 @@
-!function(){"use strict";function t(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}function e(t,e){for(var i=0;i<e.length;i++){var n=e[i];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(t,n.key,n)}}function i(t,i,n){return i&&e(t.prototype,i),n&&e(t,n),Object.defineProperty(t,"prototype",{writable:!1}),t}var n=-1,o=0,s=0,a=1,r="invoiceAndReceipts",l=0,c=function(){function e(){t(this,e),this.settingIdPrefix="MoloniSettings_"}return i(e,[{key:"startObservers",value:function(){this.$loadAddressHolder=$("#settings_form_loadAddress_row"),this.$customLoadAddressHolder=$("#settings_form_custom_loadAddress_row"),this.$sendByEmailHolder=$("#settings_form_sendByEmail_row"),this.$billOfLadingHolder=$("#settings_form_billOfLading_row"),this.$shippingInfo=$("#"+this.settingIdPrefix+"shippingInformation"),this.$loadAddress=$("#"+this.settingIdPrefix+"loadAddress"),this.$documentStatus=$("#"+this.settingIdPrefix+"documentStatus"),this.$documentType=$("#"+this.settingIdPrefix+"documentType"),this.$sendByEmail=$("#"+this.settingIdPrefix+"sendByEmail"),this.$billOfLading=$("#"+this.settingIdPrefix+"billOfLading"),this.$documentStatus.on("change",this.onDocumentStatusChange.bind(this)).trigger("change"),this.$shippingInfo.on("change",this.onShippingInformationChange.bind(this)).trigger("change"),this.$loadAddress.on("change",this.onAddressChange.bind(this)).trigger("change"),this.$documentType.on("change",this.onDocumentTypeChange.bind(this)).trigger("change")}},{key:"onDocumentTypeChange",value:function(t){t.target.value===r?this.$documentStatus.val(a).attr("disabled",!0).trigger("change"):this.$documentStatus.removeAttr("disabled")}},{key:"onDocumentStatusChange",value:function(t){switch(parseInt(t.target.value)){case s:this.$sendByEmailHolder.slideUp(200),this.$billOfLadingHolder.slideUp(200),this.$sendByEmail.val(l),this.$billOfLading.val(l);break;case a:this.$sendByEmailHolder.slideDown(200),this.$billOfLadingHolder.slideDown(200)}}},{key:"onShippingInformationChange",value:function(t){parseInt(t.target.value)>0?this.$loadAddressHolder.slideDown(200):(this.$loadAddressHolder.slideUp(200),this.$loadAddress.val(o).trigger("change"))}},{key:"onAddressChange",value:function(t){parseInt(t.target.value)===n?this.$customLoadAddressHolder.slideDown(200):this.$customLoadAddressHolder.slideUp(200)}}]),e}(),d=function(){function e(){t(this,e),this.startObservers()}return i(e,[{key:"startObservers",value:function(){var t=$('input[name="moloni_paginator"]');t.length&&t.on("focusout",this.onLoseFocus)}},{key:"onLoseFocus",value:function(){var t=$(this),e=parseInt(t.val()),i=parseInt(t.attr("value")),n=t.attr("psurl"),o=parseInt(t.attr("psmax"));e!==i&&(t.attr("disabled",!0),e>o&&(e=o),e<0&&(e=1),t.val(e),n=n+"&page="+e,window.location.href=n)}}]),e}(),u=function(){function e(i){t(this,e),this.action=i,this.startObservers()}return i(e,[{key:"startObservers",value:function(){this.$filtersSearchButton=$("#filters_search"),this.$filtersInputElements=$("[name^=filters]"),this.$filtersSearchButton.on("click",this.doSearch.bind(this)),this.$filtersInputElements.on("keyup",this.enableSearchButton.bind(this)).on("change",this.enableSearchButton.bind(this))}},{key:"enableSearchButton",value:function(){this.$filtersInputElements.off("change").off("keyup"),this.$filtersSearchButton.removeAttr("disabled")}},{key:"doSearch",value:function(){var t=this.$filtersInputElements.serialize();window.location.href=this.action+"&"+t}}]),e}(),h=function(){function e(){t(this,e)}return i(e,[{key:"startObservers",value:function(t){new d,new u(t)}}]),e}(),f=function(){function e(){t(this,e)}return i(e,[{key:"startObservers",value:function(t){new d,new u(t)}}]),e}(),v=async function(t,e){return $.post({url:t,cache:!1,data:e})},g=async function(t){var e=$("#action_overlay_button"),i=$("#action_overlay_modal"),n=i.find("#action_overlay_button"),o=i.find("#action_overlay_spinner"),s=i.find("#action_overlay_content"),a=i.find("#action_overlay_error");s.html("").hide(),n.hide(),a.hide(),o.show(),e.trigger("click");var r=1;try{await async function e(){var n=await v(t,{page:r});if(n=JSON.parse(n),1===r&&o.fadeOut(100,(function(){s.fadeIn(200)})),s.html(n.overlayContent),n.hasMore&&i.is(":visible"))return r+=1,await e()}()}catch(t){o.fadeOut(50),s.fadeOut(50),a.fadeIn(200)}n.show(200)},y=async function(t){var e=$("#action_overlay_button"),i=$("#action_overlay_modal"),n=i.find("#action_overlay_button"),o=i.find("#action_overlay_spinner"),s=i.find("#action_overlay_content"),a=i.find("#action_overlay_error");s.html("").hide(),n.hide(),a.hide(),o.show(),e.trigger("click");var r=1;try{await async function e(){var n=await v(t,{page:r});if(n=JSON.parse(n),1===r&&o.fadeOut(100,(function(){s.fadeIn(200)})),s.html(n.overlayContent),n.hasMore&&i.is(":visible"))return r+=1,await e()}()}catch(t){o.fadeOut(50),s.fadeOut(50),a.fadeIn(200)}n.show(200)},m=async function(t){var e=$("#action_overlay_button"),i=$("#action_overlay_modal"),n=i.find("#action_overlay_button"),o=i.find("#action_overlay_spinner"),s=i.find("#action_overlay_content"),a=i.find("#action_overlay_error");s.html("").hide(),n.hide(),a.hide(),o.show(),e.trigger("click");var r=1;try{await async function e(){var n=await v(t,{page:r});if(n=JSON.parse(n),1===r&&o.fadeOut(100,(function(){s.fadeIn(200)})),s.html(n.overlayContent),n.hasMore&&i.is(":visible"))return r+=1,await e()}()}catch(t){o.fadeOut(50),s.fadeOut(50),a.fadeIn(200)}n.show(200)},p=async function(t){var e=$("#action_overlay_button"),i=$("#action_overlay_modal"),n=i.find("#action_overlay_button"),o=i.find("#action_overlay_spinner"),s=i.find("#action_overlay_content"),a=i.find("#action_overlay_error");s.html("").hide(),n.hide(),a.hide(),o.show(),e.trigger("click");var r=1;try{await async function e(){var n=await v(t,{page:r});if(n=JSON.parse(n),1===r&&o.fadeOut(100,(function(){s.fadeIn(200)})),s.html(n.overlayContent),n.hasMore&&i.is(":visible"))return r+=1,await e()}()}catch(t){o.fadeOut(50),s.fadeOut(50),a.fadeIn(200)}n.show(200)},b=function(){function e(){t(this,e)}return i(e,[{key:"startObservers",value:function(t){var e=t.importProductsAction,i=(t.importStocksAction,t.exportProductsAction),n=t.exportStocksAction;$("#import_products_button").on("click",g.bind(this,e)),$("#import_stocks_button").on("click",y.bind(this,e)),$("#export_products_button").on("click",m.bind(this,i)),$("#export_stocks_button").on("click",p.bind(this,n))}}]),e}(),_=function(){function e(){t(this,e)}return i(e,[{key:"startObservers",value:function(t){new d,new u(t)}}]),e}(),w=function(){function e(){t(this,e)}return i(e,[{key:"startObservers",value:function(){this.loginButton=$("#login_form_connect")}},{key:"enableLogin",value:function(){this.loginButton.removeAttr("disabled")}},{key:"disableLogin",value:function(){this.loginButton.attr("disabled",!0)}}]),e}(),k=function(t){return t.replace(/[^a-zA-Z0-9]/g,"")},O=function(t,e){t=t||{},e=e||"",Object.keys(t).forEach((function(i){var n=$("#"+e+i),o=n.closest("[class^=moloni-registration]").find(".invalid-feedback"),s="";n.addClass("is-invalid"),t[i].forEach((function(t){s+="<li>"+t+"</li>"})),s='<ul class="m-0">'+s+"</ul>",o.html(s).slideDown(200)}))},I=function(){function e(){t(this,e),this.registrationIdPrefix="MoloniRegistration_"}return i(e,[{key:"startObservers",value:function(t){var e=t.verifyFormAction;this.verifyFormAction=e,this.$businessTypeNameHolder=$("#registration_form_businessTypeName_row"),this.$form=$("[name=MoloniRegistration]"),this.$businessType=$("#"+this.registrationIdPrefix+"businessType"),this.$companyName=$("#"+this.registrationIdPrefix+"companyName"),this.$slug=$("#"+this.registrationIdPrefix+"slug"),this.$formButton=$("#"+this.registrationIdPrefix+"register"),this.$verifyButton=$("#verify_registration_form"),this.$businessType.on("change",this.onBusinessChange.bind(this)),this.$companyName.on("keyup",this.onCompanyNameChange.bind(this)),this.$verifyButton.on("click",this.verifyForm.bind(this)),this.onBusinessChange()}},{key:"onCompanyNameChange",value:function(){""!==this.$companyName.val()&&(this.$slug.val(k(event.target.value)),this.$slug.trigger("change"))}},{key:"onBusinessChange",value:function(){"custom"==this.$businessType.val()?this.$businessTypeNameHolder.fadeIn(200):this.$businessTypeNameHolder.fadeOut(200)}},{key:"verifyForm",value:async function(){$(".invalid-feedback").hide().html(""),$(".is-invalid").removeClass("is-invalid"),this.$verifyButton.attr("disabled",!0);var t=await v(this.verifyFormAction,this.$form.serialize());(t=JSON.parse(t)).valid?this.$formButton.trigger("click"):(O(t.errors,this.registrationIdPrefix),this.$verifyButton.removeAttr("disabled"))}}]),e}();$(document).ready((function(){window.moloniSettings=new c,window.moloniOrders=new h,window.moloniDocuments=new f,window.moloniTools=new b,window.moloniLogs=new _,window.moloniLogin=new w,window.moloniRegistration=new I}))}();
+/******/ (function() { // webpackBootstrap
+    /******/ 	"use strict";
+    /******/ 	var __webpack_modules__ = ({
+
+        /***/ "./js/settings/settings.js":
+        /*!*********************************!*\
+          !*** ./js/settings/settings.js ***!
+          \*********************************/
+        /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+                /* harmony export */   "default": function() { return /* binding */ MoloniSettings; }
+                /* harmony export */ });
+            /* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
+            /* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
+
+
+
+            var MoloniSettings = /*#__PURE__*/function () {
+                function MoloniSettings() {
+                    (0,_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__["default"])(this, MoloniSettings);
+
+                    this.settingIdPrefix = 'settings_form_';
+                    this.settingRowHolder = 'settings_row_';
+                }
+
+                (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__["default"])(MoloniSettings, [{
+                    key: "startObservers",
+                    value: function startObservers() {
+                        console.log('oi');
+                    }
+                }, {
+                    key: "onShippingInfoChange",
+                    value: function onShippingInfoChange() {}
+                }, {
+                    key: "onAddressChange",
+                    value: function onAddressChange() {}
+                }]);
+
+                return MoloniSettings;
+            }();
+
+
+
+            /***/ }),
+
+        /***/ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js":
+        /*!*******************************************************************!*\
+          !*** ./node_modules/@babel/runtime/helpers/esm/classCallCheck.js ***!
+          \*******************************************************************/
+        /***/ (function(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+                /* harmony export */   "default": function() { return /* binding */ _classCallCheck; }
+                /* harmony export */ });
+            function _classCallCheck(instance, Constructor) {
+                if (!(instance instanceof Constructor)) {
+                    throw new TypeError("Cannot call a class as a function");
+                }
+            }
+
+            /***/ }),
+
+        /***/ "./node_modules/@babel/runtime/helpers/esm/createClass.js":
+        /*!****************************************************************!*\
+          !*** ./node_modules/@babel/runtime/helpers/esm/createClass.js ***!
+          \****************************************************************/
+        /***/ (function(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+                /* harmony export */   "default": function() { return /* binding */ _createClass; }
+                /* harmony export */ });
+            function _defineProperties(target, props) {
+                for (var i = 0; i < props.length; i++) {
+                    var descriptor = props[i];
+                    descriptor.enumerable = descriptor.enumerable || false;
+                    descriptor.configurable = true;
+                    if ("value" in descriptor) descriptor.writable = true;
+                    Object.defineProperty(target, descriptor.key, descriptor);
+                }
+            }
+
+            function _createClass(Constructor, protoProps, staticProps) {
+                if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+                if (staticProps) _defineProperties(Constructor, staticProps);
+                Object.defineProperty(Constructor, "prototype", {
+                    writable: false
+                });
+                return Constructor;
+            }
+
+            /***/ })
+
+        /******/ 	});
+    /************************************************************************/
+    /******/ 	// The module cache
+    /******/ 	var __webpack_module_cache__ = {};
+    /******/
+    /******/ 	// The require function
+    /******/ 	function __webpack_require__(moduleId) {
+        /******/ 		// Check if module is in cache
+        /******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+        /******/ 		if (cachedModule !== undefined) {
+            /******/ 			return cachedModule.exports;
+            /******/ 		}
+        /******/ 		// Create a new module (and put it into the cache)
+        /******/ 		var module = __webpack_module_cache__[moduleId] = {
+            /******/ 			// no module.id needed
+            /******/ 			// no module.loaded needed
+            /******/ 			exports: {}
+            /******/ 		};
+        /******/
+        /******/ 		// Execute the module function
+        /******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+        /******/
+        /******/ 		// Return the exports of the module
+        /******/ 		return module.exports;
+        /******/ 	}
+    /******/
+    /************************************************************************/
+    /******/ 	/* webpack/runtime/define property getters */
+    /******/ 	!function() {
+        /******/ 		// define getter functions for harmony exports
+        /******/ 		__webpack_require__.d = function(exports, definition) {
+            /******/ 			for(var key in definition) {
+                /******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+                    /******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+                    /******/ 				}
+                /******/ 			}
+            /******/ 		};
+        /******/ 	}();
+    /******/
+    /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+    /******/ 	!function() {
+        /******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
+        /******/ 	}();
+    /******/
+    /******/ 	/* webpack/runtime/make namespace object */
+    /******/ 	!function() {
+        /******/ 		// define __esModule on exports
+        /******/ 		__webpack_require__.r = function(exports) {
+            /******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+                /******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+                /******/ 			}
+            /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+            /******/ 		};
+        /******/ 	}();
+    /******/
+    /************************************************************************/
+    var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+    !function() {
+        /*!*******************!*\
+          !*** ./js/app.js ***!
+          \*******************/
+        __webpack_require__.r(__webpack_exports__);
+        /* harmony import */ var _settings_settings__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./settings/settings */ "./js/settings/settings.js");
+
+        var moloniSettings = new _settings_settings__WEBPACK_IMPORTED_MODULE_0__["default"]();
+    }();
+    /******/ })()
+;

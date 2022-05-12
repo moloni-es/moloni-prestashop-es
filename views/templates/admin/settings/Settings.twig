@@ -6,9 +6,13 @@
     <div class="row justify-content-center">
         <div class="col">
             <div class="card">
+                <h3 class="card-header">
+                    <i class="material-icons">settings</i>
+                    {{ 'Settings'|trans({}, 'Modules.Molonies.Common') }}
+                </h3>
                 {{ form_start(form) }}
                 <div class="card-nav">
-                    <ul class="nav nav-pills" role="tablist">
+                    <ul class="nav nav-pills border-top-0" role="tablist">
                         <li class="nav-item">
                             <a class="nav-link active"
                                id="pills-documents-tab"
@@ -53,14 +57,48 @@
                             {{ form_row(form.documentSet) }}
                             {{ form_row(form.documentType) }}
                             {{ form_row(form.documentStatus) }}
+
+                            <div id="settings_form_sendDocumentByEmail_row">
+                                {{ form_row(form.sendDocumentByEmail) }}
+                            </div>
+
                             {{ form_row(form.shippingInformation) }}
 
-                            <div class="form-group row">
-                                {{ form_label(form.loadAddress) }}
-                                {{ form_label_class(form.loadAddress) }}
-                                {{ form_errors(form.loadAddress) }}
-                                <div class="col-sm">
-                                    {{ form_widget(form.loadAddress) }}
+                            <div id="settings_form_loadAddress_row">
+                                {{ form_row(form.loadAddress) }}
+                            </div>
+
+                            <div id="settings_form_custom_loadAddress_row">
+                                <div class="form-group row">
+                                    {{ form_label(form.customloadAddressAddress) }}
+                                    {{ form_errors(form.customloadAddressAddress) }}
+                                    <div class="col-sm-4">
+                                        {{ form_widget(form.customloadAddressAddress) }}
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    {{ form_label(form.customloadAddressZipCode) }}
+                                    {{ form_errors(form.customloadAddressZipCode) }}
+                                    <div class="col-sm-4">
+                                        {{ form_widget(form.customloadAddressZipCode) }}
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    {{ form_label(form.customloadAddressCity) }}
+                                    {{ form_errors(form.customloadAddressCity) }}
+                                    <div class="col-sm-4">
+                                        {{ form_widget(form.customloadAddressCity) }}
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    {{ form_label(form.customloadAddressCountry) }}
+                                    {{ form_errors(form.customloadAddressCountry) }}
+                                    <div class="col-sm-4">
+                                        {{ form_widget(form.customloadAddressCountry) }}
+                                    </div>
                                 </div>
                             </div>
 
@@ -71,7 +109,6 @@
                             {{ form_row(form.measurementUnit) }}
                             {{ form_row(form.documentWarehouse) }}
                             {{ form_row(form.clientPrefix) }}
-                            {{ form_row(form.sendDocumentByEmail) }}
                         </div>
                         <div class="tab-pane fade"
                              id="pills-automation"
@@ -113,4 +150,14 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $(document).ready(function () {
+            console.log('Moloni settings page loaded');
+
+            window.moloniSettings.startObservers();
+        });
+    </script>
 {% endblock %}

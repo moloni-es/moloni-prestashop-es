@@ -2,13 +2,10 @@
 
 namespace Moloni\Form;
 
-use Moloni\Api\MoloniApiClient;
 use Moloni\Enums\Boolean;
 use Moloni\Enums\DocumentStatus;
 use Moloni\Enums\LoadAddress;
 use Moloni\Enums\ProductInformation;
-use Moloni\Exceptions\MoloniApiException;
-use Moloni\Exceptions\MoloniException;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -54,9 +51,11 @@ class SettingsFormType extends AbstractType
             'Pro Forma Invoice' => 'proFormaInvoices',
             'Simplified invoice' => 'simplifiedInvoices',
         ];
+
         $measurementUnits = $options['api_data']['measurementUnits'] ?? [];
         $warehouses = $options['api_data']['warehouses'] ?? [];
         $documentSets = $options['api_data']['documentSets'] ?? [];
+        $countries = $options['api_data']['countries'] ?? [];
 
         return $builder
             // automations
@@ -178,16 +177,14 @@ class SettingsFormType extends AbstractType
                 ],
                 'required' => true,
                 'choices' => $documentTypes,
-                'attr' => ['onchange' => 'onStatusChange()'],
                 'placeholder' => 'Please select an option',
                 'translation_domain' => 'Modules.Molonies.Common',
                 'choice_translation_domain' => 'Modules.Molonies.Common',
             ])
             ->add('documentStatus', ChoiceType::class, [
                 'label' => 'Document status',
-                'required' => false,
+                'required' => true,
                 'choices' => $status,
-                'attr' => ['onchange' => 'onStatusChange()'],
                 'placeholder' => false,
                 'translation_domain' => 'Modules.Molonies.Common',
                 'choice_translation_domain' => 'Modules.Molonies.Common',
@@ -203,19 +200,49 @@ class SettingsFormType extends AbstractType
             ])
             ->add('loadAddress', ChoiceType::class, [
                 'label' => 'Loading address',
-                'attr' => ['class' => ''],
                 'choices' => $addresses,
                 'help' => 'Load address used',
                 'placeholder' => false,
+                'required' => false,
                 'translation_domain' => 'Modules.Molonies.Common',
                 'choice_translation_domain' => 'Modules.Molonies.Common',
+            ])
+            ->add('customloadAddressAddress', TextType::class, [
+                'label' => false,
+                'required' => false,
+                'translation_domain' => 'Modules.Molonies.Common',
+                'attr' => [
+                    'placeholder' => 'Address',
+                ],
+            ])
+            ->add('customloadAddressZipCode', TextType::class, [
+                'label' => false,
+                'required' => false,
+                'translation_domain' => 'Modules.Molonies.Common',
+                'attr' => [
+                    'placeholder' => 'Zip-code',
+                ],
+            ])
+            ->add('customloadAddressCity', TextType::class, [
+                'label' => false,
+                'required' => false,
+                'translation_domain' => 'Modules.Molonies.Common',
+                'attr' => [
+                    'placeholder' => 'City',
+                ],
+            ])
+            ->add('customloadAddressCountry', ChoiceType::class, [
+                'label' => false,
+                'required' => false,
+                'choices' => $countries,
+                'placeholder' => 'Please select country',
+                'translation_domain' => 'Modules.Molonies.Common',
             ])
             ->add('sendDocumentByEmail', ChoiceType::class, [
                 'label' => 'Send e-mail',
                 'required' => false,
                 'choices' => $yesNoOptions,
-                'attr' => ['onchange' => 'onStatusChange2()'],
-                'help' => 'The document is only sent to the customer if it is inserted as closed',
+                'help' => 'Sends document to customer via email',
                 'placeholder' => false,
                 'translation_domain' => 'Modules.Molonies.Common',
                 'choice_translation_domain' => 'Modules.Molonies.Common',

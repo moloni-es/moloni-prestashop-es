@@ -36,7 +36,7 @@ class Tools extends MoloniController
 
     public function home(Request $request): Response
     {
-        return $this->render('@Modules/molonies/views/templates/admin/settings/Tools.twig');
+        return $this->render('@Modules/molonies/views/templates/admin/tools/Tools.twig');
     }
 
     public function importProducts(Request $request): RedirectResponse
@@ -53,7 +53,7 @@ class Tools extends MoloniController
         return $this->redirectToTools();
     }
 
-    public function discardOrders(Request $request): RedirectResponse
+    public function syncStocks(Request $request): RedirectResponse
     {
         // todo: this
 
