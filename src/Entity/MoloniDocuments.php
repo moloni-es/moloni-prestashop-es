@@ -37,9 +37,9 @@ class MoloniDocuments
     /**
      * @var int
      *
-     * @ORM\Column(name="store_id", type="integer")
+     * @ORM\Column(name="shop_id", type="integer")
      */
-    private $storeId;
+    private $shopId;
 
     /**
      * @var int
@@ -51,14 +51,14 @@ class MoloniDocuments
     /**
      * @var string
      *
-     * @ORM\Column(name="order_ref", type="string", length="60")
+     * @ORM\Column(name="order_reference", type="string", length=60)
      */
-    private $orderRef;
+    private $orderReference;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="created_at", type="string", length="250")
+     * @ORM\Column(name="created_at", type="string", length=250)
      */
     private $createdAt;
 
@@ -105,17 +105,17 @@ class MoloniDocuments
     /**
      * @return int
      */
-    public function getStoreId(): int
+    public function getShopId(): int
     {
-        return $this->storeId;
+        return $this->shopId;
     }
 
     /**
-     * @param int $storeId
+     * @param int $shopId
      */
-    public function setStoreId(int $storeId): void
+    public function setShopId(int $shopId): void
     {
-        $this->storeId = $storeId;
+        $this->shopId = $shopId;
     }
 
     /**
@@ -137,17 +137,17 @@ class MoloniDocuments
     /**
      * @return string
      */
-    public function getOrderRef(): string
+    public function getOrderReference(): string
     {
-        return $this->orderRef;
+        return $this->orderReference;
     }
 
     /**
-     * @param string $orderRef
+     * @param string $orderReference
      */
-    public function setOrderRef(string $orderRef): void
+    public function setOrderReference(string $orderReference): void
     {
-        $this->orderRef = $orderRef;
+        $this->orderReference = $orderReference;
     }
 
     /**
@@ -164,5 +164,21 @@ class MoloniDocuments
     public function setCreatedAt(string $createdAt): void
     {
         $this->createdAt = $createdAt;
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'company_id' => $this->getCompanyId(),
+            'document_id' => $this->getDocumentId(),
+            'order_id' => $this->getOrderId(),
+            'shop_id' => $this->getShopId(),
+            'order_reference' => $this->getOrderReference(),
+            'created_at' => $this->getCreatedAt(),
+        ];
     }
 }

@@ -6,152 +6,70 @@
             <i class="material-icons">plumbing</i>
             {{ 'Tools'|trans({}, 'Modules.Molonies.Common') }}
         </h3>
-        <div class="p-4">
-            <div class="row p-4 borderMoloni">
-                <div class="col-6">
-                    <p class="font-weight-bold labelPS">{{ 'Import categories from Moloni'|trans({}, 'Modules.Molonies.Common') }}</p>
-                    <p>
-                        <small>{{ "Import all your categories from Moloni"|trans({}, 'Modules.Molonies.Common') }}</small>
+        <div class="card-block">
+            <div class="d-flex">
+                <div>
+                    <b>{{ 'Import categories from Moloni'|trans({}, 'Modules.Molonies.Common') }}</b>
+                    <p class="small-text text-muted">
+                        {{ "Import all your categories from Moloni"|trans({}, 'Modules.Molonies.Common') }}
                     </p>
                 </div>
-                <div class="col-6">
-                    <a href="{{ path('moloni_es_tools_import_categories') }}">
-                        <button class="btn btn-outline-primary float-right">{{ 'Import categories'|trans({}, 'Modules.Molonies.Common') }}</button>
+                <div class="d-flex justify-content-center align-items-center ml-auto">
+                    <a class="btn btn-primary" href="{{ path('moloni_es_tools_import_categories') }}">
+                        {{ 'Import categories'|trans({}, 'Modules.Molonies.Common') }}
                     </a>
                 </div>
             </div>
-            <div class="row p-4 borderMoloni">
-                <div class="col-6">
-                    <p class="font-weight-bold labelPS">{{ 'Import products from Moloni'|trans({}, 'Modules.Molonies.Common') }}</p>
-                    <p>
-                        <small>{{ "Import all your products from Moloni"|trans({}, 'Modules.Molonies.Common') }}</small>
+            <div class="d-flex border-top">
+                <div>
+                    <b>{{ 'Import products from Moloni'|trans({}, 'Modules.Molonies.Common') }}</b>
+                    <p class="small-text text-muted">
+                        {{ "Import all your products from Moloni"|trans({}, 'Modules.Molonies.Common') }}
                     </p>
                 </div>
-                <div class="col-6">
-                    <a href="{{ path('moloni_es_tools_import_products') }}">
-                        <button class="btn btn-outline-secondary float-right">{{ 'Import products'|trans({}, 'Modules.Molonies.Common') }}</button>
+                <div class="d-flex justify-content-center align-items-center ml-auto">
+                    <a class="btn btn-primary" href="{{ path('moloni_es_tools_import_products') }}">
+                        {{ 'Import products'|trans({}, 'Modules.Molonies.Common') }}
                     </a>
                 </div>
             </div>
-            <div class="row p-4 borderMoloni" style="display: none">
-                <div class="col-6">
-                    <p class="font-weight-bold labelPS">{{ 'Export translations'|trans({}, 'Modules.Molonies.Common') }}</p>
-                    <p>
-                        <small>{{ "Export all translations to csv"|trans({}, 'Modules.Molonies.Common') }}</small>
+            <div class="d-flex border-top">
+                <div>
+                    <b>{{ 'Force stock synchronization'|trans({}, 'Modules.Molonies.Common') }}</b>
+                    <p class="small-text text-muted">
+                        {{ "Synchronize all product's stocks used in the last 7 days"|trans({}, 'Modules.Molonies.Common') }}
                     </p>
                 </div>
-                <div class="col-6">
-                    <a href="{{ path('moloni_es_tools_export') }}">
-                        <button class="btn btn-outline-secondary float-right">{{ 'Export translations'|trans({}, 'Modules.Molonies.Common') }}</button>
+                <div class="d-flex justify-content-center align-items-center ml-auto">
+                    <a class="btn btn-primary" href="{{ path('moloni_es_tools_stock_sync') }}">
+                        {{ 'Sync stock'|trans({}, 'Modules.Molonies.Common') }}
                     </a>
                 </div>
             </div>
-            <div class="row p-4 borderMoloni">
-                <div class="col-6">
-                    <p class="font-weight-bold labelPS">{{ 'Force stock synchronization'|trans({}, 'Modules.Molonies.Common') }}</p>
-                    <p>
-                        <small>{{ "Synchronize all product's stocks used in the last 7 days"|trans({}, 'Modules.Molonies.Common') }}</small>
+            <div class="d-flex border-top">
+                <div>
+                    <b>{{ "Consult logs"|trans({}, 'Modules.Molonies.Common') }}</b>
+                    <p class="small-text text-muted">
+                        {{ "Consult logs of this current day"|trans({}, 'Modules.Molonies.Common') }}
                     </p>
                 </div>
-                <div class="col-6">
-                    <a href="{{ path('moloni_es_tools_stock_sync') }}">
-                        <button class="btn btn-outline-success float-right">{{ 'Force stock synchronization'|trans({}, 'Modules.Molonies.Common') }}</button>
+                <div class="d-flex justify-content-center align-items-center ml-auto">
+                    <a class="btn btn-primary" href="{{ path('moloni_es_tools_open_logs') }}">
+                        {{ 'View logs'|trans({}, 'Modules.Molonies.Common') }}
                     </a>
                 </div>
             </div>
-            <div class="row p-4 borderMoloni">
-                <div class="col-6">
-                    <p class="font-weight-bold labelPS">{{ "Consult logs"|trans({}, 'Modules.Molonies.Common') }}</p>
-                    <p>
-                        <small>{{ "Consult logs of this current day"|trans({}, 'Modules.Molonies.Common') }}</small>
+            <div class="d-flex border-top">
+                <div>
+                    <b>{{ "Logout"|trans({}, 'Modules.Molonies.Common') }}</b>
+                    <p class="small-text text-muted">
+                        {{ "We will keep data referring to documents already issued"|trans({}, 'Modules.Molonies.Common') }}
                     </p>
                 </div>
-                <div class="col-6">
-                    <a href="{{ path('moloni_es_tools_open_logs') }}">
-                        <button class="btn btn-outline-info float-right">{{ "Consult logs"|trans({}, 'Modules.Molonies.Common') }}</button>
+                <div class="d-flex justify-content-center align-items-center ml-auto">
+                    <a class="btn btn-danger" href="{{ path('moloni_es_tools_logout') }}">
+                        {{ 'Logout'|trans({}, 'Modules.Molonies.Common') }}
                     </a>
-                </div>
-            </div>
-            <div class="row p-4 borderMoloni">
-                <div class="col-6">
-                    <p class="font-weight-bold labelPS">{{ "Delete logs"|trans({}, 'Modules.Molonies.Common') }}</p>
-                    <p>
-                        <small>{{ "Delete all logs files from previous days"|trans({}, 'Modules.Molonies.Common') }}</small>
-                    </p>
-                </div>
-                <div class="col-6">
-                    <a href="{{ path('moloni_es_tools_delete_logs') }}">
-                        <button class="btn btn-outline-secondary float-right">{{ "Delete logs"|trans({}, 'Modules.Molonies.Common') }}</button>
-                    </a>
-                </div>
-            </div>
-            <div class="row p-4 borderMoloni">
-                <div class="col-6">
-                    <p class="font-weight-bold labelPS">{{ "Logout"|trans({}, 'Modules.Molonies.Common') }}</p>
-                    <p>
-                        <small>{{ "We will keep data referring to documents already issued"|trans({}, 'Modules.Molonies.Common') }}</small>
-                    </p>
-                </div>
-                <div class="col-6">
-                    <a href="{{ path('moloni_es_tools_logout') }}">
-                        <button class="btn btn-outline-danger float-right">{{ "Logout"|trans({}, 'Modules.Molonies.Common') }}</button>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <button
-            type="button"
-            class="btn btn-primary"
-            data-toggle="modal"
-            data-target="#exampleModal"
-    >
-        Launch demo modal
-    </button>
-
-    <!-- Modal -->
-    <div
-            class="modal fade"
-            id="exampleModal"
-            tabindex="-1"
-            role="dialog"
-            aria-labelledby="exampleModalLabel"
-            aria-hidden="true"
-    >
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                    <button
-                            type="button"
-                            class="close"
-                            data-dismiss="modal"
-                            aria-label="Close"
-                    >
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec dui
-                        sem, egestas non luctus et, semper sed risus. Etiam vel quam et eros
-                        pharetra volutpat. Sed faucibus hendrerit diam vitae hendrerit.
-                    </p>
-                    <p>
-                        Donec mollis pretium ex luctus molestie. Pellentesque imperdiet libero
-                        eget metus gravida dictum.
-                    </p>
-                </div>
-                <div class="modal-footer">
-                    <button
-                            type="button"
-                            class="btn btn-outline-secondary"
-                            data-dismiss="modal"
-                    >
-                        Close
-                    </button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
                 </div>
             </div>
         </div>
@@ -159,7 +77,9 @@
 {% endblock %}
 
 {% block javascripts %}
-    {{ parent() }}
-
-    <script src="{{ asset('themes/new-theme/public/cms_page_form.bundle.js') }}"></script>
+    <script>
+        $(document).ready(function () {
+            console.log('Moloni tools page loaded');
+        });
+    </script>
 {% endblock %}

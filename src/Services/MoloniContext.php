@@ -106,4 +106,9 @@ class MoloniContext
     {
         return $this->app;
     }
+
+    public function getCompanyId(): int
+    {
+        return $this->app->getCompanyId() ?? 0;
+    }
 }

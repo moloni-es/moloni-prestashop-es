@@ -48,10 +48,6 @@ class MoloniSettingsRepository extends EntityRepository
         $entityManager = $this->getEntityManager();
 
         foreach ($submitData as $label => $value) {
-            if ($value === null) {
-                $value = '';
-            }
-
             if (is_array($value)) {
                 $value = serialize($value);
             }

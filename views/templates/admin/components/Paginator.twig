@@ -1,5 +1,5 @@
 <nav aria-label="navigation">
-    <ul class="pagination justify-content-center">
+    <ul class="pagination justify-content-center mt-2">
         <li class="page-item {% if paginator.currentPage == 1 %} disabled {% endif %}">
             <a class="page-link" href="{{ path(thisRoute, {page: 1}) }}">1</a>
         </li>
@@ -17,10 +17,10 @@
                     type="text"
                     value="{{ paginator.currentPage }}"
                     psurl="{{ path(thisRoute, {page: paginator.currentPage}) }}"
-                    psmax="{{ paginator.numberOfTabs }}"
+                    psmax="{{ paginator.numberOfPages }}"
             />
         </li>
-        <li class="page-item next {% if paginator.currentPage == paginator.numberOfTabs %} disabled {% endif %}">
+        <li class="page-item next {% if paginator.currentPage == paginator.numberOfPages %} disabled {% endif %}">
             <a class="page-link"
                aria-label="Next"
                id="pagination_next_url"
@@ -28,9 +28,9 @@
                 <span class="sr-only">Next</span>
             </a>
         </li>
-        <li class="page-item {% if paginator.currentPage == paginator.numberOfTabs %} disabled {% endif %}">
-            <a class="page-link" href="{{ path(thisRoute, {page: paginator.numberOfTabs}) }}">
-                {{ paginator.numberOfTabs }}
+        <li class="page-item {% if paginator.currentPage == paginator.numberOfPages %} disabled {% endif %}">
+            <a class="page-link" href="{{ path(thisRoute, {page: paginator.numberOfPages}) }}">
+                {{ paginator.numberOfPages }}
             </a>
         </li>
     </ul>

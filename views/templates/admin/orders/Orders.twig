@@ -7,16 +7,15 @@
             {{ 'Pending orders'|trans({}, 'Modules.Molonies.Common') }}
         </h3>
 
-        <div class="card-block">
-            <table class="table table-striped table-bordered table-sm"
-                   style="text-align: center; margin-bottom: -10px;">
+        <div class="card-block overflow-auto">
+            <table class="table table-striped table-bordered">
                 <thead>
                 <tr>
                     <th scope="col">{{ 'Reference'|trans({}, 'Modules.Molonies.Common') }}</th>
-                    <th scope="col">{{ 'Client'|trans({}, 'Modules.Molonies.Common') }}</th>
+                    <th scope="col">{{ 'Customer'|trans({}, 'Modules.Molonies.Common') }}</th>
                     <th scope="col">{{ 'Email'|trans({}, 'Modules.Molonies.Common') }}</th>
                     <th scope="col">{{ 'Status'|trans({}, 'Modules.Molonies.Common') }}</th>
-                    <th scope="col">{{ 'Payment Date'|trans({}, 'Modules.Molonies.Common') }}</th>
+                    <th scope="col">{{ 'Date'|trans({}, 'Modules.Molonies.Common') }}</th>
                     <th scope="col">{{ 'Amount'|trans({}, 'Modules.Molonies.Common') }}</th>
                     <th scope="col">{{ 'Document Type'|trans({}, 'Modules.Molonies.Common') }}</th>
                     <th scope="col">{{ 'Actions'|trans({}, 'Modules.Molonies.Common') }}</th>
@@ -27,60 +26,70 @@
                     {% for order in orderArray %}
                         <tr>
                             <form action="{{ path(createDocumentRoute) }}" method="post">
-                                <input type="hidden" name="orderId" value="{{ order.id_order }}">
-                                <input type="hidden" name="page" value="{{ paginator.currentPage }}">
+                            <input type="hidden" name="orderId" value="{{ order.id_order }}">
+                            <input type="hidden" name="page" value="{{ paginator.currentPage }}">
                                 <td>{{ order.reference }}</td>
                                 <td>{{ order.firstname }} {{ order.lastname }}</td>
                                 <td>{{ order.email }}</td>
                                 <td>{{ order.state_name }}</td>
-                                <td>{{ order.invoice_date }}</td>
-                                <td>{{ order.total_paid_tax_incl|number_format(2, '.', ',') }} {{ order.currency }}</td>
-                                <td>
-                                    <select name="document_type" style="margin-right: 5px">
-                                        {% for order,key in documetTypes %}
-                                            <option value='{{ key }}' {% if documentType == key %} selected {% endif %}>
-                                                {{ order }}
+                                <td>{{ order.date_add }}</td>
+                                <td>{{ order.total_paid_tax_incl|number_format(2, '.', ',') }}{{ order.currency }}</td>
+                                <td class="text-center">
+                                    <select name="document_type">
+                                        {% for typeName,typeId in documetTypes %}
+                                            <option value='{{ typeId }}' {% if documentType == typeId %} selected {% endif %}>
+                                                {{ typeName|trans({}, 'Modules.Molonies.Common') }}
                                             </option>
                                         {% endfor %}
                                     </select>
                                 </td>
-                                <td>
-                                    <button type="submit" class="btn btn-primary"
-                                            title="{{ 'Generate Document'|trans({}, 'Modules.Molonies.Common') }}"
-                                            onclick="disableButtons(); this.form.submit();">
-                                        <i class="fa fa-plus"></i>
-                                    </button>
-                                    <a class="btn btn-success"
-                                       title="{{ 'See order'|trans({}, 'Modules.Molonies.Common') }}"
-                                       href="{{ order.viewURL }}">
-                                        <i class="fa fa-search"></i>
-                                    </a>
-                                    <a class="btn btn-danger"
-                                       title="{{ 'Discard order'|trans({}, 'Modules.Molonies.Common') }}"
-                                       href="{{ path(clearInvoiceRoute, {id: order.id_order}) }}"
-                                       onclick="disableButtons();">
-                                        <i class="fa fa-minus"></i>
-                                    </a>
+                                <td class="text-center">
+                                    <div class="btn-group">
+                                        <button class="btn btn-sm btn-primary" onclick="this.form.submit();">
+                                            <i class="material-icons">article</i>
+                                            {{ 'Create document'|trans({}, 'Modules.Molonies.Common') }}
+                                        </button>
+                                        <button type="button"
+                                                class="btn btn-sm btn-primary dropdown-toggle dropdown-toggle-split"
+                                                data-toggle="dropdown"
+                                                aria-haspopup="true"
+                                                aria-expanded="false">
+                                            <span class="sr-only">Toggle Dropdown</span>
+                                        </button>
+                                        <div class="dropdown-menu menu-sm">
+                                            <a class="dropdown-item" href="{{ order.view_url }}" target="_blank">
+                                                <i class="material-icons">search</i>
+
+                                                {{ 'View order'|trans({}, 'Modules.Molonies.Common') }}
+                                            </a>
+                                            <a class="dropdown-item"
+                                               href="{{ path(discardOrderRoute, {id: order.id_order, page: paginator.currentPage}) }}">
+                                                <i class="material-icons">remove_circle</i>
+
+                                                {{ 'Discard order'|trans({}, 'Modules.Molonies.Common') }}
+                                            </a>
+                                        </div>
+                                    </div>
                                 </td>
                             </form>
                         </tr>
                     {% endfor %}
                 {% else %}
                     <tr>
-                        <td colspan="9">
+                        <td colspan="8">
                             {{ 'No information to show!'|trans({}, 'Modules.Molonies.Common') }}
                         </td>
                     </tr>
                 {% endif %}
                 </tbody>
             </table>
-        </div>
 
-        {% include '@Modules/molonies/views/templates/admin/components/Paginator.twig' %}
+            {% include '@Modules/molonies/views/templates/admin/components/Paginator.twig' %}
+        </div>
 
         <div class="card-footer">
             <div class="d-flex justify-content-end">
-                <a href="{{ path('moloni_es_orders_home', {page: paginator.currentPage}) }}" class="btn btn-primary">
+                <a href="{{ path(thisRoute, {page: paginator.currentPage}) }}" class="btn btn-outline-secondary">
                     {{ 'Refresh list'|trans({}, 'Modules.Molonies.Common') }}
                 </a>
             </div>
@@ -89,6 +98,9 @@
 {% endblock %}
 
 {% block javascripts %}
-    {{ parent() }}
-    <script src="{{ asset('themes/new-theme/public/cms_page_form.bundle.js') }}"></script>
+    <script>
+        $(document).ready(function () {
+            console.log('Moloni orders page loaded');
+        });
+    </script>
 {% endblock %}
