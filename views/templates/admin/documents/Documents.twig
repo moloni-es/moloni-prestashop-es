@@ -6,105 +6,114 @@
             <i class="material-icons">article</i>
             {{ 'Created documents'|trans({}, 'Modules.Molonies.Common') }}
         </h3>
-
-        <div class="float-right" style="font-size:10px;">
-            <div class="mr-3 mt-1 mb-2 d-flex justify-content-end">
-                <table class="table-bordered table-sm">
-                    <tr>
-                        <td style="background: red" width="25px"></td>
-                        <td>{{ 'Document value does not match.'|trans({}, 'Modules.Molonies.Common') }}</td>
-                    </tr>
-                    <tr>
-                        <td style="background: green" width="25px"></td>
-                        <td>{{ 'Document value matches.'|trans({}, 'Modules.Molonies.Common') }}</td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-
-        <div class="card-block">
-            <table class="table table-striped table-bordered table-sm" style="text-align: center; margin-bottom: -10px;">
+        <div class="card-block overflow-auto">
+            <table class="table table-striped table-bordered">
                 <thead>
                 <tr>
                     <th scope="col">{{ 'Reference'|trans({}, 'Modules.Molonies.Common') }}</th>
-                    <th scope="col">{{ 'Client'|trans({}, 'Modules.Molonies.Common') }}</th>
+                    <th scope="col">{{ 'Customer'|trans({}, 'Modules.Molonies.Common') }}</th>
                     <th scope="col">{{ 'Email'|trans({}, 'Modules.Molonies.Common') }}</th>
-                    <th scope="col">{{ 'Status'|trans({}, 'Modules.Molonies.Common') }}</th>
-                    <th scope="col">{{ 'Date'|trans({}, 'Modules.Molonies.Common') }}</th>
                     <th scope="col">{{ 'Amount'|trans({}, 'Modules.Molonies.Common') }}</th>
-                    <th scope="col">{{ 'Document Type'|trans({}, 'Modules.Molonies.Common') }}</th>
+                    <th scope="col">{{ 'Date'|trans({}, 'Modules.Molonies.Common') }}</th>
+                    <th scope="col">{{ 'Status'|trans({}, 'Modules.Molonies.Common') }}</th>
                     <th scope="col">{{ 'Actions'|trans({}, 'Modules.Molonies.Common') }}</th>
                 </tr>
                 </thead>
                 <tbody>
+
                 {% if documentArray %}
                     {% for document in documentArray %}
                         <tr>
-                                <td>{{ document.reference }}</td>
-                                <td>{{ document.firstname }} {{ document.lastname }}</td>
-                                <td>{{ document.email }}</td>
-                                <td>
-                                    {% if document.invoice_status == 0 %}
-                                        {{ 'Draft'|trans({}, 'Modules.Molonies.Common') }}
-                                    {% elseif document.invoice_status == 1 %}
-                                        {{ 'Closed'|trans({}, 'Modules.Molonies.Common') }}
-                                    {% else %}
+                            <td>{{ document.order_reference|default('---') }}</td>
+                            <td>{{ document.order_customer|default('---') }}</td>
+                            <td>{{ document.order_email|default('---') }}</td>
+                            <td>
+                                {% if document.order_not_found is not defined %}
+                                    {{ document.order_total|number_format(2, '.', ',') }}{{ document.order_currency }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {{ document.created_at is empty ? "---" : document.created_at|date("Y-m-d H:i:s", "GMT") }}
+                            </td>
+                            <td class="text-center">
+                                {% if document.order_not_found  is defined %}
+                                    <span class="badge badge-danger">
+                                        {{ 'Not found'|trans({}, 'Modules.Molonies.Errors') }}
+                                    </span>
+                                {% elseif document.order_discarded is defined %}
+                                    <span class="badge badge-warning">
                                         {{ 'Discarted'|trans({}, 'Modules.Molonies.Common') }}
-                                    {% endif %}
-                                </td>
-                                <td>{{ document.invoice_date }}</td>
-                                <td><b {% if document.document_id > 0 %}style="color:{% if document.wrong %} red {% else %} green {% endif %}"{% endif %}>
-                                        {{ document.invoice_total|number_format(2, '.', ',') }} {{ document.currency }}
-                                    </b>
-                                </td>
-                                <td>
-                                    {% if document.invoice_type == '' %}
-                                        ---
-                                    {% endif %}
+                                    </span>
+                                {% elseif document.document_id > 0 %}
+                                    <span class="badge badge-success">
+                                        {{ 'Created'|trans({}, 'Modules.Molonies.Common') }}
+                                    </span>
+                                {% else %}
+                                    ---
+                                {% endif %}
+                            </td>
+                            <td class="text-center">
+                                {% if document.order_not_found is defined %}
+                                    ---
+                                {% else %}
+                                    <div class="btn-group">
+                                        {% if document.document_id > 0 %}
+                                            {% set btn_class = 'btn-success' %}
 
-                                    {% for name, abv in documentTypes %}
-                                        {% if document.invoice_type == abv %}
-                                            {{ name }}
-                                        {% endif %}
-                                    {% endfor %}
-                                </td>
-                                <td>
-                                    {% if document.document_id > 0 %}
-                                        {% if document.invoice_status == 1 %}
-                                            <a type="submit" class="btn btn-primary" title="{{ 'Download document'|trans({}, 'Modules.Molonies.Common') }}" href="{{ path(downloadDocumentRoute , {documentId: document.document_id} ) }}" target="_blank">
-                                                <i class="fa fa-download"></i>
+                                            <a type="button"
+                                               class="btn btn-sm {{ btn_class }}"
+                                               href="{{ path(viewDocumentRoute , {documentId: document.document_id}) }}">
+                                                {{ 'View document'|trans({}, 'Modules.Molonies.Common') }}
                                             </a>
                                         {% endif %}
-                                        <a class="btn btn-warning" title="{{ 'Open in Moloni'|trans({}, 'Modules.Molonies.Common') }}" href="{{ path(moloniViewRoute , {documentId: document.document_id}) }}" target="_blank">
-                                            <i class="fa fa-file"></i>
-                                        </a>
-                                    {% else %}
-                                        <a class="btn btn-danger" title="{{ 'Revert discard'|trans({}, 'Modules.Molonies.Common') }}" href="{{ path(restoreOrderRoute , {orderId: document.id_order}) }}" onclick="disableButtons();">
-                                            <i class="fa fa-history"></i>
-                                        </a>
-                                    {% endif %}
-                                    <a class="btn btn-success" title="{{ 'See order'|trans({}, 'Modules.Molonies.Common') }}" href="{{ document.viewURL }}">
-                                        <i class="fa fa-search"></i>
-                                    </a>
-                                </td>
+
+                                        {% if document.order_discarded is defined %}
+                                            {% set btn_class = 'btn-primary' %}
+
+                                            <a type="button"
+                                               class="btn btn-sm {{ btn_class }}"
+                                               href="{{ path(restoreDocumentRoute , {orderId: document.order_id, page: paginator.currentPage }) }}">
+                                                {{ 'Revert discard'|trans({}, 'Modules.Molonies.Common') }}
+                                            </a>
+                                        {% endif %}
+
+                                        <button type="button"
+                                                class="btn btn-sm {{ btn_class }} dropdown-toggle dropdown-toggle-split"
+                                                data-toggle="dropdown"
+                                                aria-haspopup="true"
+                                                aria-expanded="false">
+                                            <span class="sr-only">Toggle Dropdown</span>
+                                        </button>
+
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item"
+                                               href="{{ document.order_view_url }}"
+                                               target="_blank">
+                                                {{ 'View order'|trans({}, 'Modules.Molonies.Common') }}
+                                            </a>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </td>
                         </tr>
                     {% endfor %}
                 {% else %}
                     <tr>
-                        <td colspan="9">
+                        <td colspan="7">
                             {{ 'No information to show!'|trans({}, 'Modules.Molonies.Common') }}
                         </td>
                     </tr>
                 {% endif %}
                 </tbody>
             </table>
-        </div>
 
-        {% include '@Modules/molonies/views/templates/admin/components/Paginator.twig' %}
+            {% include '@Modules/molonies/views/templates/admin/components/Paginator.twig' %}
+        </div>
 
         <div class="card-footer">
             <div class="d-flex justify-content-end">
-                <a href="{{ path('moloni_es_documents_home', {page: paginator.currentPage}) }}" class="btn btn-primary">
+                <a href="{{ path(thisRoute, {page: paginator.currentPage}) }}"
+                   class="btn btn-outline-secondary">
                     {{ 'Refresh list'|trans({}, 'Modules.Molonies.Common') }}
                 </a>
             </div>
@@ -113,7 +122,9 @@
 {% endblock %}
 
 {% block javascripts %}
-    {{ parent() }}
-
-    <script src="{{ asset('themes/new-theme/public/cms_page_form.bundle.js') }}"></script>
+    <script>
+        $(document).ready(function () {
+            console.log('Moloni documents page loaded');
+        });
+    </script>
 {% endblock %}

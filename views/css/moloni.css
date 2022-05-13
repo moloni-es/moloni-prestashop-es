@@ -25,5 +25,5 @@
 
 .required::before {
   content:'* ';
-  color: red;
+  color: #f54c3e;
 }

@@ -52,7 +52,9 @@
 {% endblock %}
 
 {% block javascripts %}
-    {{ parent() }}
-
-    <script src="{{ asset('themes/new-theme/public/cms_page_form.bundle.js') }}"></script>
+    <script>
+        $(document).ready(function () {
+            console.log('Moloni companies page loaded');
+        });
+    </script>
 {% endblock %}

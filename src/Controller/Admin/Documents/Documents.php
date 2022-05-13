@@ -24,42 +24,92 @@
 
 namespace Moloni\Controller\Admin\Documents;
 
-use Doctrine\ORM\NonUniqueResultException;
+use Order;
+use Currency;
+use Exception;
+use PrestaShopDatabaseException;
+use PrestaShopException;
 use Moloni\Controller\Admin\MoloniController;
+use Moloni\Entity\MoloniDocuments;
+use Moloni\Enums\DocumentTypes;
+use Moloni\Enums\MoloniRoutes;
 use Moloni\Exceptions\MoloniException;
 use Moloni\Repository\MoloniDocumentsRepository;
 use Moloni\Traits\DocumentActionsTrait;
-use Moloni\Traits\DocumentTypesTrait;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class Documents extends MoloniController
 {
-    use DocumentTypesTrait;
     use DocumentActionsTrait;
 
+    /**
+     * Created documents list
+     *
+     * @param Request $request
+     *
+     * @return Response
+     */
     public function home(Request $request): Response
     {
         $page = $request->get('page', 1);
+        $createdDocuments = $paginator = [];
 
-        //['documents' => $documents, 'paginator' => $paginator] = $documentsRepository->getAllPaginated($page);
+        /** @var MoloniDocumentsRepository $moloniDocumentRepository */
+        $moloniDocumentRepository = $this
+            ->getDoctrine()
+            ->getManager()
+            ->getRepository(MoloniDocuments::class);
+
+        try {
+            ['documents' => $createdDocuments, 'paginator' => $paginator] = $moloniDocumentRepository->getAllPaginated($page);
+        } catch (Exception $e) {
+            $this->addErrorMessage($this->trans('Error fetching documents list', 'Modules.Molonies.Common'));
+        }
+
+        foreach ($createdDocuments as &$document) {
+            $orderId = (int)($document['order_id'] ?? 0);
+
+            try {
+                $order = new Order($orderId);
+            } catch (PrestaShopDatabaseException|PrestaShopException $e) {
+                $order = null;
+            }
+
+            if ($order === null || $order->id === null) {
+                $document['order_not_found'] = true;
+                continue;
+            }
+
+            if ($document['document_id'] < 0) {
+                $document['order_discarded'] = true;
+            }
+
+            $document['order_currency'] = (new Currency($order->id_currency))->symbol;
+            $document['order_total'] = $order->total_paid_tax_incl;
+            $document['order_email'] = $order->getCustomer()->email;
+            $document['order_customer'] = $order->getCustomer()->firstname . ' ' . $order->getCustomer()->lastname;
+
+            $document['order_view_url'] = $this->getAdminLink(
+                'AdminOrders',
+                [
+                    'vieworder' => '',
+                    'id_order' => $orderId,
+                ]
+            );
+        }
 
         return $this->render(
             '@Modules/molonies/views/templates/admin/documents/Documents.twig',
             [
-                'documentArray' => $documents ?? [],
-                'documentTypes' => $this->getDocumentsTypes(),
-                'downloadDocumentRoute' => 'moloni_es_documents_download',
-                'moloniViewRoute' => 'moloni_es_documents_view_document',
-                'thisRoute' => 'moloni_es_documents_home',
-                'restoreOrderRoute' => 'moloni_es_documents_restore',
-                'paginator' => [
-                    'numberOfTabs' => 1,
-                    'currentPage' => 1,
-                    'offSet' => 1,
-                    'linesPerPage' => 1,
-                ],
+                'documentArray' => $createdDocuments ?? [],
+                'documentTypes' => DocumentTypes::getDocumentsTypes(),
+                'downloadDocumentRoute' => MoloniRoutes::DOCUMENTS_DOWNLOAD,
+                'viewDocumentRoute' => MoloniRoutes::DOCUMENTS_VIEW,
+                'restoreDocumentRoute' => MoloniRoutes::DOCUMENTS_RESTORE,
+                'thisRoute' => MoloniRoutes::DOCUMENTS,
+                'paginator' => $paginator,
             ]
         );
     }
@@ -78,7 +128,7 @@ class Documents extends MoloniController
         return $this->redirect($url);
     }
 
-    public function open(?int $documentId): RedirectResponse
+    public function view(?int $documentId): RedirectResponse
     {
         if (!is_numeric($documentId) || $documentId <= 0) {
             $msg = $this->trans('ID is invalid', 'Modules.Molonies.Errors');
@@ -92,33 +142,47 @@ class Documents extends MoloniController
         return $this->redirect($url);
     }
 
-    public function restore(?int $orderId, MoloniDocumentsRepository $documentsRepository): void
+    /**
+     * Restore discarded order
+     *
+     * @param Request $request Request data
+     * @param int|null $orderId Order to restore
+     *
+     * @return RedirectResponse
+     */
+    public function restore(Request $request, ?int $orderId): RedirectResponse
     {
-        if (is_numeric($orderId) && $orderId > 0) {
-            try {
-                $document = $documentsRepository
-                    ->createQueryBuilder('d')
-                    ->where('order_id = :order_id')
-                    ->setParameter('order_id', $orderId)
-                    ->getQuery()
-                    ->getOneOrNullResult();
+        $page = $request->get('page', 1);
 
-                if (empty($document)) {
-                    throw new MoloniException('Error fetching document');
-                }
-
-                // todo: delete
-            } catch (NonUniqueResultException|MoloniException $e) {
-                $msg = $this->trans('Error fetching document', 'Modules.Molonies.Errors');
-
-                $this->addErrorMessage($msg);
+        try {
+            if (!is_numeric($orderId) || $orderId < 0) {
+                throw new MoloniException('ID is invalid');
             }
-        } else {
-            $msg = $this->trans('ID is invalid', 'Modules.Molonies.Errors');
+
+            $entityManager = $this
+                ->getDoctrine()
+                ->getManager();
+
+            /** @var MoloniDocumentsRepository $moloniDocumentRepository */
+            $moloniDocumentRepository = $entityManager->getRepository(MoloniDocuments::class);
+
+            /** @var null|MoloniDocuments $document */
+            $document = $moloniDocumentRepository->findOneBy(['orderId' => $orderId, 'documentId' => -1]);
+
+            if ($document === null) {
+                throw new MoloniException('Order document not found');
+            }
+
+            $entityManager->remove($document);
+            $entityManager->flush();
+
+            $this->addSuccessMessage($this->trans('Order restored with success.', 'Modules.Molonies.Common'));
+        } catch (MoloniException $e) {
+            $msg = $this->trans($e->getMessage(), 'Modules.Molonies.Errors');
 
             $this->addErrorMessage($msg);
         }
 
-        $this->redirectToDocuments();
+        return $this->redirectToDocuments($page);
     }
 }

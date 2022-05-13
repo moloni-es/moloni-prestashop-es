@@ -3,12 +3,24 @@ services:
     autowire: true      # Automatically injects dependencies in your services.
     autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
-  moloni.services.authentication:
-    class: Moloni\EventListener\AuthenticationListener
-    tags:
-      - { name: kernel.event_listener, event: kernel.controller }
+  # Moloni repositories
+
+  moloni.repository.orders:
+    class: Moloni\Repository\OrdersRepository
+    arguments:
+      - '@doctrine.dbal.default_connection'
+      - '%database_prefix%'
+
+  # Moloni services
 
   moloni.services.context:
     class: Moloni\Services\MoloniContext
     arguments:
       - "@doctrine.orm.entity_manager"
+
+  # Moloni listeners
+
+  moloni.listener.authentication:
+    class: Moloni\EventListener\AuthenticationListener
+    tags:
+      - { name: kernel.event_listener, event: kernel.controller }

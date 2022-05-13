@@ -58,17 +58,21 @@
                             {{ form_row(form.documentType) }}
                             {{ form_row(form.documentStatus) }}
 
-                            <div id="settings_form_sendDocumentByEmail_row">
-                                {{ form_row(form.sendDocumentByEmail) }}
+                            <div id="settings_form_sendByEmail_row" style="display: none;">
+                                {{ form_row(form.sendByEmail) }}
+                            </div>
+
+                            <div id="settings_form_billOfLanding_row" style="display: none;">
+                                {{ form_row(form.billOfLanding) }}
                             </div>
 
                             {{ form_row(form.shippingInformation) }}
 
-                            <div id="settings_form_loadAddress_row">
+                            <div id="settings_form_loadAddress_row" style="display: none;">
                                 {{ form_row(form.loadAddress) }}
                             </div>
 
-                            <div id="settings_form_custom_loadAddress_row">
+                            <div id="settings_form_custom_loadAddress_row" style="display: none;">
                                 <div class="form-group row">
                                     {{ form_label(form.customloadAddressAddress) }}
                                     {{ form_errors(form.customloadAddressAddress) }}
@@ -116,15 +120,15 @@
                              aria-labelledby="pills-automation-tab">
                             <h3 align="center">(Prestashop -> Moloni)</h3>
 
-                            {{ form_row(form.syncStockToMoloni) }}
                             {{ form_row(form.syncStockToMoloniWarehouse) }}
+                            {{ form_row(form.syncStockToMoloni) }}
                             {{ form_row(form.addProductsToMoloni) }}
                             {{ form_row(form.updateProductsToMoloni) }}
 
                             <h3 align="center">(Moloni -> Prestashop)</h3>
 
-                            {{ form_row(form.syncStockToPrestashop) }}
                             {{ form_row(form.syncStockToPrestashopWarehouse) }}
+                            {{ form_row(form.syncStockToPrestashop) }}
                             {{ form_row(form.addProductsToPrestashop) }}
                             {{ form_row(form.updateProductsToPrestashop) }}
 

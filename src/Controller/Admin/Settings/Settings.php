@@ -24,9 +24,11 @@
 
 namespace Moloni\Controller\Admin\Settings;
 
-use Moloni\Enums\Languages;
 use Shop;
 use DateTime;
+use Exception;
+use Moloni\Enums\Languages;
+use Moloni\Exceptions\MoloniException;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Form\SettingsFormType;
@@ -37,9 +39,18 @@ use Moloni\Repository\MoloniSettingsRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 
 class Settings extends MoloniController
 {
+    /**
+     * Settings form page
+     *
+     * @return Response
+     *
+     * @throws Exception
+     */
     public function home(): Response
     {
         try {
@@ -68,6 +79,13 @@ class Settings extends MoloniController
         );
     }
 
+    /**
+     * Save plugin settings
+     *
+     * @param Request $request
+     *
+     * @return RedirectResponse
+     */
     public function save(Request $request): RedirectResponse
     {
         try {
@@ -79,7 +97,11 @@ class Settings extends MoloniController
         $form = $this->createForm(SettingsFormType::class, null, ['api_data' => $apiData]);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        try {
+            if (!$form->isSubmitted() || !$form->isValid()) {
+                throw new MoloniException('Form not valid!');
+            }
+
             $submitData = $form->getData();
             $shopId = (int)Shop::getContextShopID();
 
@@ -90,11 +112,12 @@ class Settings extends MoloniController
 
             $settingsRepository->saveSettings($submitData, $shopId);
 
-            $msg = $this->trans('Settings saved.', 'Modules.Molonies.Success');
-            $this->addSuccessMessage($msg);
-        } else {
-            $msg = $this->trans('Form not valid!', 'Modules.Molonies.Success');
+            $this->addSuccessMessage($this->trans('Settings saved.', 'Modules.Molonies.Success'));
+        } catch (MoloniException $e) {
+            $msg = $this->trans($e->getMessage(), 'Modules.Molonies.Errors');
             $this->addErrorMessage($msg);
+        } catch (OptimisticLockException|ORMException $e) {
+            $this->addErrorMessage($this->trans('Error saving settings', 'Modules.Molonies.Errors'));
         }
 
         return $this->redirectToSettings();

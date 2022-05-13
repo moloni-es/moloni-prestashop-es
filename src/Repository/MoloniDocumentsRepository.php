@@ -2,40 +2,56 @@
 
 namespace Moloni\Repository;
 
+use Exception;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Moloni\Entity\MoloniDocuments;
 
 class MoloniDocumentsRepository extends EntityRepository
 {
-    public function getAllPaginated(?int $currentPage = 1): array
+    /**
+     * Paginated documents created by plugin
+     *
+     * @throws Exception
+     */
+    public function getAllPaginated(?int $page = 1): array
     {
+        $documents = [];
+        $documentsPerPage = 10;
+
         $query = $this
-            ->getEntityManager()
-            ->createQueryBuilder()
-            ->orderBy('id', 'DESC')
+            ->createQueryBuilder('md')
+            ->orderBy('md.id', 'DESC')
             ->getQuery();
 
-        $pageSize = 10;
-        $documents = [];
+        $paginator = new Paginator($query, false);
 
-        $paginator = new Paginator($query);
-        $totalItems = count($paginator);
-        $offset = $pageSize * ($currentPage - 1);
+        $totalItems = $paginator->count();
+        $totalItems = $totalItems === 0 ? 1 : $totalItems;
+        $numberOfPages = ceil($totalItems / $documentsPerPage);
+        $offset = ($page - 1) * $documentsPerPage;
+
         $paginator
             ->getQuery()
             ->setFirstResult($offset)
-            ->setMaxResults($pageSize);
+            ->setMaxResults($documentsPerPage);
 
-        foreach ($paginator as $document) {
-            $documents[] = $document->toArray();
+        /** @var MoloniDocuments[] $objects */
+        $documentsObjects = $paginator
+            ->getIterator()
+            ->getArrayCopy();
+
+        /** @var MoloniDocuments $object */
+        foreach ($documentsObjects as $object) {
+            $documents[] = $object->toArray();
         }
 
         return [
             'documents' => $documents,
             'paginator' => [
-                'numberOfTabs' => ceil($totalItems / $pageSize),
-                'currentPage' => $currentPage,
-                'linesPerPage' => $pageSize,
+                'numberOfPages' => $numberOfPages,
+                'currentPage' => $page,
+                'linesPerPage' => $documentsPerPage,
                 'offset' => $offset,
             ],
         ];

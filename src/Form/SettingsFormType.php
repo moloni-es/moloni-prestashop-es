@@ -69,13 +69,13 @@ class SettingsFormType extends AbstractType
                 'choice_translation_domain' => 'Modules.Molonies.Common',
             ])
             ->add('syncStockToMoloniWarehouse', ChoiceType::class, [
-                'label' => 'Warehouse',
+                'label' => 'Stock destination',
                 'required' => false,
                 'choices' => [
                     'Default warehouse' => 1,
                     'Warehouses' => $warehouses ?? []
                 ],
-                'help' => 'Warehouse used when synchronizing stock to Moloni',
+                'help' => 'Stock destination when updating stock and creating products in Moloni',
                 'placeholder' => 'Please select an option',
                 'translation_domain' => 'Modules.Molonies.Common',
                 'choice_translation_domain' => 'Modules.Molonies.Common',
@@ -106,13 +106,13 @@ class SettingsFormType extends AbstractType
                 'choice_translation_domain' => 'Modules.Molonies.Common',
             ])
             ->add('syncStockToPrestashopWarehouse', ChoiceType::class, [
-                'label' => 'Warehouse',
+                'label' => 'Stock source',
                 'required' => false,
                 'choices' => [
                     'Accumulated stock' => 1,
                     'Warehouses' => $warehouses?? []
                 ],
-                'help' => 'Warehouse used when synchronizing stock to Prestashop',
+                'help' => 'Stock source used when synchronizing stock and creating products in Prestashop',
                 'placeholder' => 'Please select an option',
                 'translation_domain' => 'Modules.Molonies.Common',
                 'choice_translation_domain' => 'Modules.Molonies.Common',
@@ -198,6 +198,15 @@ class SettingsFormType extends AbstractType
                 'translation_domain' => 'Modules.Molonies.Common',
                 'choice_translation_domain' => 'Modules.Molonies.Common',
             ])
+            ->add('billOfLanding', ChoiceType::class, [
+                'label' => 'Bill of lading',
+                'choices' => $yesNoOptions,
+                'help' => 'Create order document bill of lading',
+                'placeholder' => false,
+                'required' => false,
+                'translation_domain' => 'Modules.Molonies.Common',
+                'choice_translation_domain' => 'Modules.Molonies.Common',
+            ])
             ->add('loadAddress', ChoiceType::class, [
                 'label' => 'Loading address',
                 'choices' => $addresses,
@@ -238,7 +247,7 @@ class SettingsFormType extends AbstractType
                 'placeholder' => 'Please select country',
                 'translation_domain' => 'Modules.Molonies.Common',
             ])
-            ->add('sendDocumentByEmail', ChoiceType::class, [
+            ->add('sendByEmail', ChoiceType::class, [
                 'label' => 'Send e-mail',
                 'required' => false,
                 'choices' => $yesNoOptions,
