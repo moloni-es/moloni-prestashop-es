@@ -24,12 +24,11 @@
 
 namespace Moloni\Builders\Document;
 
+use OrderPayment as PrestashopOrderPayment;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\Interfaces\BuilderItemInterface;
 use Moloni\Exceptions\Document\MoloniDocumentPaymentException;
 use Moloni\Exceptions\MoloniApiException;
-use Moloni\Helpers\Moloni;
-use OrderPayment as PrestashopOrderPayment;
 
 class OrderPayment implements BuilderItemInterface
 {
@@ -105,7 +104,6 @@ class OrderPayment implements BuilderItemInterface
     {
         try {
             $params = [
-                'companyId' => (int) Moloni::get('company_id'),
                 'data' => [
                     'name' => $this->name,
                 ],
@@ -202,7 +200,6 @@ class OrderPayment implements BuilderItemInterface
     protected function searchByName(): OrderPayment
     {
         $variables = [
-            'companyId' => (int) Moloni::get('company_id'),
             'options' => [
                 'search' => [
                     'field' => 'name',

@@ -226,10 +226,10 @@ class MoloniEs extends Module
      */
     public function hookActionProductAdd($params): void
     {
-        if ((Settings::get('AddProducts') === 1)) {
-            $productSave = new ProductAdd($this->context->getTranslator());
-            $productSave->hookActionProductSave($params['id_product']);
-        }
+        // if ((Settings::get('AddProducts') === 1)) {
+        //     $productSave = new ProductAdd($this->context->getTranslator());
+        //     $productSave->hookActionProductSave($params['id_product']);
+        // }
     }
 
     /**
@@ -241,12 +241,12 @@ class MoloniEs extends Module
      */
     public function hookActionProductUpdate($params): void
     {
-        $productSave = new ProductUpdate($this->context->getTranslator());
-        $productSave->hookActionProductSave($params['id_product']);
+        // $productSave = new ProductUpdate($this->context->getTranslator());
+        // $productSave->hookActionProductSave($params['id_product']);
     }
 
     /**
-     * Called after a order is paid
+     * Called after an order is paid
      *
      * @param $params
      *
@@ -254,8 +254,8 @@ class MoloniEs extends Module
      */
     public function hookActionPaymentConfirmation($params): void
     {
-        $paymentConfirmation = new OrderPaid($this->context->getTranslator());
-        $paymentConfirmation->hookActionPaymentConfirmation($params['id_order']);
+        // $paymentConfirmation = new OrderPaid($this->context->getTranslator());
+        // $paymentConfirmation->hookActionPaymentConfirmation($params['id_order']);
     }
 
     /**

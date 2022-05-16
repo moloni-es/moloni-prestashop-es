@@ -7,7 +7,8 @@ use Moloni\Builders\Interfaces\BuilderItemInterface;
 use Moloni\Enums\ProductType;
 use Moloni\Exceptions\Document\MoloniDocumentShippingException;
 use Moloni\Exceptions\MoloniApiException;
-use Moloni\Helpers\Moloni;
+use Moloni\Helpers\Settings;
+use Order;
 
 class OrderShipping implements BuilderItemInterface
 {
@@ -82,6 +83,13 @@ class OrderShipping implements BuilderItemInterface
     protected $exemptionReason;
 
     /**
+     * Measurement unit
+     *
+     * @var int
+     */
+    protected $measurementUnit;
+
+    /**
      * Fiscal Zone
      *
      * @var string
@@ -89,11 +97,11 @@ class OrderShipping implements BuilderItemInterface
     protected $ficalZone;
 
     /**
-     * Warehouse settings
+     * Order data
      *
-     * @var array|null Warehouse settings
+     * @var Order
      */
-    protected $currencyExchange;
+    protected $order;
 
     /**
      * Order product data
@@ -102,10 +110,19 @@ class OrderShipping implements BuilderItemInterface
      */
     protected $orderShipping;
 
-    public function __construct(array $orderShipping, ?string $fiscalZone = 'ES')
+    /**
+     * Constructor
+     *
+     * @param Order $order
+     * @param string|null $fiscalZone
+     */
+    public function __construct(Order $order, ?string $fiscalZone = 'ES')
     {
-        $this->orderShipping = $orderShipping;
+        $this->order = $order;
+        $this->orderShipping = $order->getShipping()[0] ?? [];
         $this->ficalZone = $fiscalZone;
+
+        $this->init();
     }
 
     //          PUBLICS          //
@@ -126,7 +143,10 @@ class OrderShipping implements BuilderItemInterface
 
     public function insert(): void
     {
-
+        $this
+            ->setType()
+            ->setMeasurementUnit()
+            ->setCategory();
     }
 
     /**
@@ -152,9 +172,8 @@ class OrderShipping implements BuilderItemInterface
             ->setReference()
             ->setName()
             ->setQuantity()
-            ->setTaxes()
             ->setPrice()
-            ->setType()
+            ->setTaxes()
             ->setDiscounts();
 
         return $this;
@@ -169,8 +188,13 @@ class OrderShipping implements BuilderItemInterface
      */
     protected function setReference(): OrderShipping
     {
-        $this->reference = 'ENVIO';
+        $this->reference = 'envio';
 
+        return $this;
+    }
+
+    protected function setCategory()
+    {
         return $this;
     }
 
@@ -218,6 +242,16 @@ class OrderShipping implements BuilderItemInterface
      */
     protected function setDiscounts(): OrderShipping
     {
+        $cartRules = $this->order->getCartRules();
+
+        foreach ($cartRules as $cartRule) {
+            if ((int)$cartRule['free_shipping'] === 1) {
+                $this->discount = 100;
+
+                break;
+            }
+        }
+
         return $this;
     }
 
@@ -238,6 +272,19 @@ class OrderShipping implements BuilderItemInterface
      */
     protected function setTaxes(): OrderShipping
     {
+
+        return $this;
+    }
+
+    /**
+     * Set product measurement unit
+     *
+     * @return $this
+     */
+    protected function setMeasurementUnit(): OrderShipping
+    {
+        $this->measurementUnit = Settings::get('measurementUnit') ?? 0;
+
         return $this;
     }
 
@@ -253,7 +300,6 @@ class OrderShipping implements BuilderItemInterface
     protected function getByReference(): OrderShipping
     {
         $variables = [
-            'companyId' => (int) Moloni::get('company_id'),
             'options' => [
                 'search' => [
                     'field' => 'reference',

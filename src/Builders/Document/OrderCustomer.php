@@ -24,19 +24,15 @@
 
 namespace Moloni\Builders\Document;
 
+use Order;
 use Address;
-use Country;
 use Customer;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\Interfaces\BuilderItemInterface;
-use Moloni\Enums\Countries;
-use Moloni\Enums\Languages;
 use Moloni\Exceptions\Document\MoloniDocumentCustomerException;
 use Moloni\Exceptions\MoloniApiException;
-use Moloni\Helpers\Moloni;
 use Moloni\Helpers\Settings;
 use Moloni\Traits\CountryTrait;
-use Order;
 
 class OrderCustomer implements BuilderItemInterface
 {
@@ -127,20 +123,6 @@ class OrderCustomer implements BuilderItemInterface
     protected $website;
 
     /**
-     * Customer maturity date
-     *
-     * @var int
-     */
-    protected $maturityDateId;
-
-    /**
-     * Customer payment method
-     *
-     * @var int
-     */
-    protected $paymentMethodId;
-
-    /**
      * Shopify order data
      *
      * @var Order
@@ -204,16 +186,13 @@ class OrderCustomer implements BuilderItemInterface
             ->setPhone()
             ->setAddress()
             ->setCity()
-            ->setZipCode()
-            ->setMaturityDateId()
-            ->setPaymentMethodId();
+            ->setZipCode();
 
         try {
             $params = [
-                'companyId' => (int) Moloni::get('company_id'),
                 'data' => [
                     'vat' => $this->vat,
-                    'number' => (string) $this->number,
+                    'number' => $this->number,
                     'name' => $this->name,
                     'address' => $this->address,
                     'city' => $this->city,
@@ -223,8 +202,6 @@ class OrderCustomer implements BuilderItemInterface
                     'phone' => $this->phone,
                     'countryId' => $this->countryId,
                     'languageId' => $this->languageId,
-                    'maturityDateId' => $this->maturityDateId,
-                    'paymentMethodId' => $this->paymentMethodId,
                 ],
             ];
 
@@ -236,10 +213,10 @@ class OrderCustomer implements BuilderItemInterface
             if ((int) $costumerId > 0) {
                 $this->customerId = (int) $costumerId;
             } else {
-                throw new MoloniDocumentCustomerException('Error creating customer ({0})', [$this->name], ['params' => $params, 'response' => $mutation]);
+                throw new MoloniDocumentCustomerException('Error creating customer ({0})', ['{0}' => $this->name], ['params' => $params, 'response' => $mutation]);
             }
         } catch (MoloniApiException $e) {
-            throw new MoloniDocumentCustomerException('Error creating customer: ({0})', [$this->name], $e->getData());
+            throw new MoloniDocumentCustomerException('Error creating customer: ({0})', ['{0}' => $this->name], $e->getData());
         }
 
         return $this;
@@ -346,7 +323,6 @@ class OrderCustomer implements BuilderItemInterface
     {
         try {
             $params = [
-                'companyId' => (int) Moloni::get('company_id'),
                 'options' => [
                     'filter' => [
                         'field' => 'number',
@@ -392,7 +368,7 @@ class OrderCustomer implements BuilderItemInterface
      */
     protected function setWebsite(): OrderCustomer
     {
-        $this->website = $this->customer->website ?? '';
+        $this->website = $this->customer->website;
 
         return $this;
     }
@@ -466,7 +442,13 @@ class OrderCustomer implements BuilderItemInterface
      */
     protected function setCity(): OrderCustomer
     {
-        $this->city = $this->billingAddress->city ?? 'Desconocido';
+        $city = $this->billingAddress->city;
+
+        if (empty($city)) {
+            $city = 'Desconocido';
+        }
+
+        $this->city = $city;
 
         return $this;
     }
@@ -478,31 +460,7 @@ class OrderCustomer implements BuilderItemInterface
      */
     protected function setZipCode(): OrderCustomer
     {
-        $this->zipCode = $this->billingAddress->postcode ?? 'Desconocido';
-
-        return $this;
-    }
-
-    /**
-     * Sets customer maturity date
-     *
-     * @return OrderCustomer
-     */
-    protected function setMaturityDateId(): OrderCustomer
-    {
-        $this->maturityDateId = (int) Settings::get('Maturity');
-
-        return $this;
-    }
-
-    /**
-     * Sets customer payment method
-     *
-     * @return OrderCustomer
-     */
-    protected function setPaymentMethodId(): OrderCustomer
-    {
-        $this->paymentMethodId = (int) Settings::get('Payment');
+        $this->zipCode = $this->billingAddress->postcode;
 
         return $this;
     }
@@ -517,7 +475,6 @@ class OrderCustomer implements BuilderItemInterface
     protected function searchByVat(): void
     {
         $variables = [
-            'companyId' => (int) Moloni::get('company_id'),
             'options' => [
                 'search' => [
                     'field' => 'vat',
@@ -546,11 +503,10 @@ class OrderCustomer implements BuilderItemInterface
     protected function searchByEmail(): void
     {
         $variables = [
-            'companyId' => (int) Moloni::get('company_id'),
             'options' => [
                 'search' => [
                     'field' => 'email',
-                    'value' => $this->vat,
+                    'value' => $this->email,
                 ],
             ],
         ];

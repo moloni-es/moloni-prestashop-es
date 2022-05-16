@@ -24,6 +24,9 @@
 
 namespace Moloni\Controller\Admin\Orders;
 
+use Moloni\Api\MoloniApiClient;
+use Moloni\Exceptions\Document\MoloniDocumentException;
+use Moloni\Exceptions\Document\MoloniDocumentWarning;
 use Shop;
 use Order;
 use Currency;
@@ -38,7 +41,6 @@ use Moloni\Enums\DocumentTypes;
 use Moloni\Enums\MoloniRoutes;
 use Moloni\Repository\OrdersRepository;
 use Moloni\Repository\MoloniDocumentsRepository;
-use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -94,8 +96,8 @@ class Orders extends MoloniController
      */
     public function create(Request $request): RedirectResponse
     {
-        $orderId = $request->get('id', 0);
-        $page = $request->get('page', 1);
+        $orderId = $request->get('order_id');
+        $page = $request->get('page');
 
         try {
             if (!is_numeric($orderId) || $orderId < 0) {
@@ -104,43 +106,48 @@ class Orders extends MoloniController
 
             $order = new Order($orderId);
 
-            if (empty($order->invoice_number)) {
+            if (empty($order->id)) {
                 throw new MoloniException('Order does not exist!');
             }
 
-            $document = $documentsRepository
-                ->createQueryBuilder('d')
-                ->where('order_id = :order_id')
-                ->setParameter('order_id', $orderId)
-                ->getQuery()
-                ->getOneOrNullResult();
+            /** @var MoloniDocumentsRepository $moloniDocumentRepository */
+            $moloniDocumentRepository = $this
+                ->getDoctrine()
+                ->getManager()
+                ->getRepository(MoloniDocuments::class);
 
-            if (!empty($document)) {
+            if ($moloniDocumentRepository->findOneBy(['orderId' => $orderId])) {
                 throw new MoloniException('Order already dicarded or created!');
             }
 
-            $builder = new DocumentFromOrder($order);
+            $company = MoloniApiClient::companies()
+                ->queryCompany()['data']['company']['data'] ?? [];
+
+            $builder = new DocumentFromOrder($order, $company);
             $builder->createDocument();
 
             $document = new MoloniDocuments();
             $document->setShopId((int)Shop::getContextShopID());
             $document->setDocumentId($builder->documentId);
-            $document->setCompanyId((int)Moloni::get('company_id'));
+            $document->setCompanyId($this->moloniContext->getCompanyId());
             $document->setOrderId($orderId);
             $document->setOrderReference($order->reference);
             $document->setCreatedAt(time());
 
-            $entityManager = $doctrine->getManager();
+            $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($document);
             $entityManager->flush();
-        } catch (PrestaShopDatabaseException|PrestaShopException $e) {
-            $msg = $this->trans('Error fetching Prestashop order', 'Modules.Molonies.Errors');
-            $this->addErrorMessage($msg);
-        } catch (NonUniqueResultException $e) {
-            $msg = $this->trans('Error fetching created documents', 'Modules.Molonies.Errors');
-            $this->addErrorMessage($msg);
+
+            $this->addSuccessMessage($this->trans('Document created successfully.', 'Modules.Molonies.Common'));
+        } catch (MoloniDocumentWarning $e) {
+
+        } catch (MoloniDocumentException $e) {
+
         } catch (MoloniException $e) {
             $msg = $this->trans($e->getMessage(), 'Modules.Molonies.Errors', $e->getIdentifiers());
+            $this->addErrorMessage($msg);
+        } catch (PrestaShopDatabaseException|PrestaShopException $e) {
+            $msg = $this->trans('Error fetching Prestashop order', 'Modules.Molonies.Errors');
             $this->addErrorMessage($msg);
         }
 
@@ -199,9 +206,6 @@ class Orders extends MoloniController
             $this->addErrorMessage($msg);
         } catch (PrestaShopDatabaseException|PrestaShopException $e) {
             $msg = $this->trans('Error fetching Prestashop order', 'Modules.Molonies.Errors');
-            $this->addErrorMessage($msg);
-        } catch (NonUniqueResultException $e) {
-            $msg = $this->trans('Error fetching created documents', 'Modules.Molonies.Errors');
             $this->addErrorMessage($msg);
         }
 

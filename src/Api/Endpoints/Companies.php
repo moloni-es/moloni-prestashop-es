@@ -64,6 +64,11 @@ class Companies extends Endpoint
                     slug
                     img1
                     vat
+                    currency
+                    {
+                        currencyId
+                        iso4217
+                    }
                     fiscalZone
                     {
                         fiscalZone

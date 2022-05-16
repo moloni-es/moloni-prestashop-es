@@ -49,7 +49,7 @@ class Countries extends Endpoint
             }
         }';
 
-        return $this->simplePost($query, $variables);
+        return $this->paginatedPost($query, $variables, 'countries');
     }
 
     /**

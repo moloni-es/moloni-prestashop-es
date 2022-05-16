@@ -64,8 +64,6 @@ class AuthenticationListener
                 $event->setController(function () use ($actionController) {
                     return $actionController->redirectToOrders();
                 });
-
-                return;
             }
         }
     }

@@ -24,6 +24,14 @@
 
 namespace Moloni\Builders;
 
+use Address;
+use Configuration;
+use Country;
+use Currency;
+use Order;
+use OrderPayment as PrestashopOrderPayment;
+use Moloni\Enums\Boolean;
+use Moloni\Enums\FiscalZone;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\Document\OrderCustomer;
 use Moloni\Builders\Document\OrderDelivery;
@@ -41,7 +49,6 @@ use Moloni\Exceptions\Document\MoloniDocumentProductException;
 use Moloni\Exceptions\Document\MoloniDocumentProductTaxException;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Helpers\Settings;
-use Order;
 
 class DocumentFromOrder implements BuilderInterface
 {
@@ -111,7 +118,7 @@ class DocumentFromOrder implements BuilderInterface
     /**
      * Document products
      *
-     * @var OrderShipping[]
+     * @var OrderShipping
      */
     protected $shipping;
 
@@ -169,9 +176,10 @@ class DocumentFromOrder implements BuilderInterface
      *
      * @throws MoloniDocumentException
      */
-    public function __construct(Order $order)
+    public function __construct(Order $order, array $company)
     {
         $this->order = $order;
+        $this->company = $company;
 
         $this->init();
     }
@@ -268,7 +276,7 @@ class DocumentFromOrder implements BuilderInterface
         $this->documentId = $documentId;
         $this->moloniDocument = $mutation['data'][$key]['data'];
 
-        if ((int) Settings::get('Status') === DocumentStatus::CLOSED) {
+        if ((int) Settings::get('documentStatus') === DocumentStatus::CLOSED) {
             $this->closeDocument();
         }
 
@@ -299,8 +307,26 @@ class DocumentFromOrder implements BuilderInterface
      */
     protected function setFicalZone(): DocumentFromOrder
     {
-        // todo: this
-        $fiscalZone = 'ES';
+        $fiscalZone = '';
+        $id = 0;
+
+        switch (Configuration::get('PS_TAX_ADDRESS_TYPE')) {
+            case FiscalZone::BILLING:
+                $id = $this->order->id_address_invoice;
+                break;
+            case FiscalZone::SHIPPING:
+                $id = $this->order->id_address_delivery;
+                break;
+        }
+
+        if ($id > 0) {
+            $countryId = (new Address($id))->id_country;
+            $fiscalZone = (new Country($countryId))->iso_code;
+        }
+
+        if (empty($fiscalZone)) {
+            $fiscalZone = $this->company['fiscalZone']['fiscalZone'] ?? 'ES';
+        }
 
         $this->fiscalZone = strtoupper($fiscalZone);
 
@@ -311,11 +337,48 @@ class DocumentFromOrder implements BuilderInterface
      * Defines order exchage info
      *
      * @return DocumentFromOrder
+     *
+     * @throws MoloniDocumentException
      */
     protected function setExchangeRate(): DocumentFromOrder
     {
-        // todo: this
-        $this->exchangeRate = [];
+        $exchangeRate = [];
+        $currency = new Currency($this->order->id_currency);
+
+        if ($currency->iso_code !== $this->company['currency']['iso4217']) {
+            $from = $currency->iso_code;
+            $to = $this->company['currency']['iso4217'];
+            $wantedPair = $from . ' ' . $to;
+
+            $variables = [
+                'options' => [
+                    'search' => [
+                        'field' => 'pair',
+                        'value' => $wantedPair,
+                    ],
+                ],
+            ];
+
+            try {
+                $query = MoloniApiClient::currencies()
+                    ->queryCurrencyExchanges($variables);
+            } catch (MoloniApiException $e) {
+                throw new MoloniDocumentException('Error fetching exchange rate: ({0})', ['{0}' => $wantedPair], $e->getData());
+            }
+
+            foreach ($query as $currencyExchange) {
+                if ($currencyExchange['from']['iso4217'] === $from && $currencyExchange['to']['iso4217'] === $to) {
+                    $exchangeRate = $currencyExchange;
+                    break;
+                }
+            }
+
+            if (empty($exchangeRate)) {
+                throw new MoloniDocumentException('Could not find exchange rate: ({0})', ['{0}' => $wantedPair]);
+            }
+        }
+
+        $this->exchangeRate = $exchangeRate;
 
         return $this;
     }
@@ -353,14 +416,8 @@ class DocumentFromOrder implements BuilderInterface
      */
     protected function setDates(): DocumentFromOrder
     {
-        if ($this->order->invoice_date === '0000-00-00 00:00:00') {
-            $date = date('Y-m-d H:i:s');
-        } else {
-            $date = $this->order->invoice_date;
-        }
-
         $this->dates = [
-            'date' => $date,
+            'date' => $this->order->date_add,
             'expiration_date' => date('Y-m-d H:i:s'),
         ];
 
@@ -374,7 +431,7 @@ class DocumentFromOrder implements BuilderInterface
      */
     protected function setOurReference(): DocumentFromOrder
     {
-        $this->ourReference = $this->order->reference ?? '';
+        $this->ourReference = $this->order->reference;
 
         return $this;
     }
@@ -443,21 +500,17 @@ class DocumentFromOrder implements BuilderInterface
     protected function setShipping(): DocumentFromOrder
     {
         if ($this->order->total_shipping > 0) {
-            $shippingFees = $this->order->getShipping();
+            $orderShipping = new OrderShipping($this->order, $this->fiscalZone);
 
-            foreach ($shippingFees as $shippingFee) {
-                $orderShipping = new OrderShipping($shippingFee);
+            $orderShipping
+                ->search();
 
+            if ($orderShipping->productId === 0) {
                 $orderShipping
-                    ->search();
-
-                if ($orderShipping->productId === 0) {
-                    $orderShipping
-                        ->insert();
-                }
-
-                $this->shipping[] = $orderShipping;
+                    ->insert();
             }
+
+            $this->shipping = $orderShipping;
         }
 
         return $this;
@@ -472,8 +525,9 @@ class DocumentFromOrder implements BuilderInterface
      */
     protected function setDelivery(): DocumentFromOrder
     {
-        if ($this->order->id_address_delivery) {
-            $delivery = new OrderDelivery($this->order);
+        if ($this->order->id_address_delivery > 0 &&
+            (int)Settings::get('shippingInformation') === Boolean::YES) {
+            $delivery = new OrderDelivery($this->order, $this->company);
 
             $delivery
                 ->search();
@@ -498,6 +552,7 @@ class DocumentFromOrder implements BuilderInterface
      */
     protected function setPaymentMethod(): DocumentFromOrder
     {
+        /** @var PrestashopOrderPayment[] $orderPayments */
         $orderPayments = $this->order->getOrderPayments();
 
         foreach ($orderPayments as $orderPayment) {
@@ -527,7 +582,7 @@ class DocumentFromOrder implements BuilderInterface
      */
     protected function setNotes(): DocumentFromOrder
     {
-        $this->notes = $this->order->note ?? '';
+        $this->notes = $this->order->note;
 
         return $this;
     }

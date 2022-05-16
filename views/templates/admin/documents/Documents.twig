@@ -73,6 +73,8 @@
                                             <a type="button"
                                                class="btn btn-sm {{ btn_class }}"
                                                href="{{ path(restoreDocumentRoute , {orderId: document.order_id, page: paginator.currentPage }) }}">
+                                                <i class="material-icons">undo</i>
+
                                                 {{ 'Revert discard'|trans({}, 'Modules.Molonies.Common') }}
                                             </a>
                                         {% endif %}
@@ -89,6 +91,8 @@
                                             <a class="dropdown-item"
                                                href="{{ document.order_view_url }}"
                                                target="_blank">
+                                                <i class="material-icons">open_in_new</i>
+
                                                 {{ 'View order'|trans({}, 'Modules.Molonies.Common') }}
                                             </a>
                                         </div>
@@ -125,6 +129,8 @@
     <script>
         $(document).ready(function () {
             console.log('Moloni documents page loaded');
+
+            window.moloniDocuments.startObservers();
         });
     </script>
 {% endblock %}

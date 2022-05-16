@@ -2,6 +2,38 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./js/documents/documents.js":
+/*!***********************************!*\
+  !*** ./js/documents/documents.js ***!
+  \***********************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": function() { return /* binding */ MoloniDocuments; }
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
+
+
+
+var MoloniDocuments = /*#__PURE__*/function () {
+  function MoloniDocuments() {
+    (0,_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__["default"])(this, MoloniDocuments);
+  }
+
+  (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__["default"])(MoloniDocuments, [{
+    key: "startObservers",
+    value: function startObservers() {}
+  }]);
+
+  return MoloniDocuments;
+}();
+
+
+
+/***/ }),
+
 /***/ "./js/enums/Boolean.js":
 /*!*****************************!*\
   !*** ./js/enums/Boolean.js ***!
@@ -74,6 +106,38 @@ var LoadAddress = {
   MOLONI: 2,
   CUSTOM: 3
 };
+
+
+/***/ }),
+
+/***/ "./js/orders/orders.js":
+/*!*****************************!*\
+  !*** ./js/orders/orders.js ***!
+  \*****************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": function() { return /* binding */ MoloniOrders; }
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
+
+
+
+var MoloniOrders = /*#__PURE__*/function () {
+  function MoloniOrders() {
+    (0,_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__["default"])(this, MoloniOrders);
+  }
+
+  (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__["default"])(MoloniOrders, [{
+    key: "startObservers",
+    value: function startObservers() {}
+  }]);
+
+  return MoloniOrders;
+}();
+
 
 
 /***/ }),
@@ -296,10 +360,16 @@ var __webpack_exports__ = {};
   \*******************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _settings_settings__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./settings/settings */ "./js/settings/settings.js");
+/* harmony import */ var _orders_orders__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./orders/orders */ "./js/orders/orders.js");
+/* harmony import */ var _documents_documents__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./documents/documents */ "./js/documents/documents.js");
+
+
 
 $(document).ready(function () {
   console.log('Moloni module loaded');
   window.moloniSettings = new _settings_settings__WEBPACK_IMPORTED_MODULE_0__["default"]();
+  window.moloniOrders = new _orders_orders__WEBPACK_IMPORTED_MODULE_1__["default"]();
+  window.moloniDocuments = new _documents_documents__WEBPACK_IMPORTED_MODULE_2__["default"]();
 });
 }();
 /******/ })()

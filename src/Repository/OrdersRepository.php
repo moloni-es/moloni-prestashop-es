@@ -27,7 +27,7 @@ class OrdersRepository
     {
         $expr = $this->connection->getExpressionBuilder();
 
-        $ordersPerPage = 5;
+        $ordersPerPage = 10;
         $offset = ($page - 1) * $ordersPerPage;
         $orders = $this
             ->connection

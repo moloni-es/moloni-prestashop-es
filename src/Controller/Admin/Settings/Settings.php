@@ -139,7 +139,7 @@ class Settings extends MoloniController
             'options' => [
                 'defaultLanguageId' => Languages::ES
             ]
-        ])['data']['countries']['data'] ?? [];
+        ]) ?? [];
 
         foreach ($countriesQuery as $country) {
             $countries[$country['title']] = $country['countryId'];

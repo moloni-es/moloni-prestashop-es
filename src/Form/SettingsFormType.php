@@ -156,10 +156,7 @@ class SettingsFormType extends AbstractType
             ->add('clientPrefix', TextType::class, [
                 'label' => 'Client Prefix',
                 'required' => false,
-                'help' => 'If set, created customers will have this prefix in their code',
-                'attr' => [
-                    'placeholder' => 'PS',
-                ],
+                'help' => 'If set, created customers will have this prefix in their code (Example: PS)',
                 'translation_domain' => 'Modules.Molonies.Common',
             ])
             ->add('documentSet', ChoiceType::class, [

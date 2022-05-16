@@ -24,6 +24,8 @@
 
 namespace Moloni\Builders\Document;
 
+use Moloni\Enums\LoadAddress;
+use Moloni\Helpers\Settings;
 use Order;
 use Address;
 use Carrier;
@@ -31,7 +33,6 @@ use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\Interfaces\BuilderItemInterface;
 use Moloni\Exceptions\Document\MoloniDocumentDeliveryException;
 use Moloni\Exceptions\MoloniApiException;
-use Moloni\Helpers\Moloni;
 use Moloni\Traits\CountryTrait;
 
 class OrderDelivery implements BuilderItemInterface
@@ -137,11 +138,22 @@ class OrderDelivery implements BuilderItemInterface
     protected $orderCarrier;
 
     /**
-     * Constructor
+     * Moloni company
+     *
+     * @var array
      */
-    public function __construct(Order $order)
+    protected $company;
+
+    /**
+     * Constructor
+     *
+     * @throws MoloniDocumentDeliveryException
+     */
+    public function __construct(Order $order, array $company)
     {
         $this->order = $order;
+        $this->company = $company;
+
         $this->deliveryAddress = new Address($order->id_address_delivery);
         $this->orderCarrier = new Carrier($order->id_carrier);
 
@@ -159,14 +171,15 @@ class OrderDelivery implements BuilderItemInterface
     {
         return [
             'deliveryMethodId' => $this->deliveryMethodId,
-            'delivery_departure_address' => $this->loadAddress,
-            'delivery_departure_city' => $this->loadCity,
-            'delivery_departure_zip_code' => $this->loadZipCode,
-            'delivery_departure_country' => $this->loadCountry,
-            'delivery_destination_address' => $this->destinationAddress,
-            'delivery_destination_city' => $this->destinationCity,
-            'delivery_destination_zip_code' => $this->destinationZipCode,
-            'delivery_destination_country' => $this->destinationCountry,
+            'deliveryLoadDate' => $this->date,
+            'deliveryLoadAddress' => $this->loadAddress,
+            'deliveryLoadCity' => $this->loadCity,
+            'deliveryLoadZipCode' => $this->loadZipCode,
+            'deliveryLoadCountryId' => $this->loadCountry,
+            'deliveryUnloadAddress' => $this->destinationAddress,
+            'deliveryUnloadCity' => $this->destinationCity,
+            'deliveryUnloadZipCode' => $this->destinationZipCode,
+            'deliveryUnloadCountryId' => $this->destinationCountry,
         ];
     }
 
@@ -181,7 +194,6 @@ class OrderDelivery implements BuilderItemInterface
     {
         try {
             $params = [
-                'companyId' => (int) Moloni::get('company_id'),
                 'data' => [
                     'name' => $this->name,
                     'isDefault' => false,
@@ -244,7 +256,7 @@ class OrderDelivery implements BuilderItemInterface
      */
     protected function setName(): OrderDelivery
     {
-        $this->name = $this->orderCarrier->name ?? 'Método de entrega';
+        $this->name = $this->orderCarrier->name;
 
         return $this;
     }
@@ -256,11 +268,24 @@ class OrderDelivery implements BuilderItemInterface
      */
     protected function setLoadAddress(): OrderDelivery
     {
-        // todo: repensar settings
-        $this->loadAddress = '';
-        $this->loadZipCode = '';
-        $this->loadCity = '';
-        $this->loadCountry = 70;
+        switch (Settings::get('loadAddress')) {
+            case LoadAddress::SHOP:
+                // todo: where to get this address
+                break;
+            case LoadAddress::MOLONI:
+                $this->loadAddress = $this->company['address'];
+                $this->loadZipCode = $this->company['zipCode'];
+                $this->loadCity = $this->company['city'];
+                $this->loadCountry = $this->company['country']['countryId'];
+                break;
+            case LoadAddress::CUSTOM:
+                $this->loadAddress = Settings::get('customloadAddressAddress');
+                $this->loadZipCode = Settings::get('customloadAddressZipCode');
+                $this->loadCity = Settings::get('customloadAddressCity');
+                $this->loadCountry = (int)Settings::get('customloadAddressCountry');
+
+                break;
+        }
 
         return $this;
     }
@@ -316,7 +341,6 @@ class OrderDelivery implements BuilderItemInterface
     protected function searchByName(): OrderDelivery
     {
         $variables = [
-            'companyId' => (int) Moloni::get('company_id'),
             'options' => [
                 'search' => [
                     'field' => 'name',
