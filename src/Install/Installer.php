@@ -397,7 +397,7 @@ class Installer
      */
     private function removeLogin(): void
     {
-        $dataBase = \Db::getInstance();
+        $dataBase = Db::getInstance();
         $dataBase->execute('TRUNCATE ' . _DB_PREFIX_ . 'moloni_app');
     }
 }

@@ -82,6 +82,15 @@ class Currencies extends Endpoint
                         iso4217
                     }
                 }
+                options
+                {
+                    pagination
+                    {
+                        page
+                        qty
+                        count
+                    }
+                }
                 errors
                 {
                     field

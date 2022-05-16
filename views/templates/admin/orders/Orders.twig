@@ -26,7 +26,7 @@
                     {% for order in orderArray %}
                         <tr>
                             <form action="{{ path(createDocumentRoute) }}" method="post">
-                            <input type="hidden" name="orderId" value="{{ order.id_order }}">
+                            <input type="hidden" name="order_id" value="{{ order.id_order }}">
                             <input type="hidden" name="page" value="{{ paginator.currentPage }}">
                                 <td>{{ order.reference }}</td>
                                 <td>{{ order.firstname }} {{ order.lastname }}</td>
@@ -49,6 +49,7 @@
                                             <i class="material-icons">article</i>
                                             {{ 'Create document'|trans({}, 'Modules.Molonies.Common') }}
                                         </button>
+
                                         <button type="button"
                                                 class="btn btn-sm btn-primary dropdown-toggle dropdown-toggle-split"
                                                 data-toggle="dropdown"
@@ -56,9 +57,10 @@
                                                 aria-expanded="false">
                                             <span class="sr-only">Toggle Dropdown</span>
                                         </button>
+
                                         <div class="dropdown-menu menu-sm">
                                             <a class="dropdown-item" href="{{ order.view_url }}" target="_blank">
-                                                <i class="material-icons">search</i>
+                                                <i class="material-icons">open_in_new</i>
 
                                                 {{ 'View order'|trans({}, 'Modules.Molonies.Common') }}
                                             </a>
@@ -101,6 +103,8 @@
     <script>
         $(document).ready(function () {
             console.log('Moloni orders page loaded');
+
+            window.moloniOrders.startObservers();
         });
     </script>
 {% endblock %}

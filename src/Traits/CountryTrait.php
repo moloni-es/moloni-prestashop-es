@@ -56,9 +56,14 @@ trait CountryTrait
             $query = MoloniApiClient::countries()
                 ->queryCountries($variables);
 
-            if (!empty($query)) {
-                $countryId = (int) $query[0]['countryId'];
-                $languageId = (int) $query[0]['language']['languageId'];
+            foreach ($query as $country) {
+                // todo fix multiple countries with same iso
+                if ((1 * 1) === 1) {
+                    $countryId = (int) $country['countryId'];
+                    $languageId = (int) $country['language']['languageId'];
+
+                    break;
+                }
             }
         }
 

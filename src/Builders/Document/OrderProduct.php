@@ -24,15 +24,17 @@
 
 namespace Moloni\Builders\Document;
 
+use Product;
 use Configuration;
+use Moloni\Enums\ProductInformation;
+use Moloni\Helpers\Settings;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\Interfaces\BuilderItemInterface;
 use Moloni\Builders\ProductFromObject;
 use Moloni\Enums\ProductType;
 use Moloni\Exceptions\Document\MoloniDocumentProductException;
 use Moloni\Exceptions\MoloniApiException;
-use Moloni\Helpers\Moloni;
-use Product;
+use TaxCalculator;
 
 class OrderProduct implements BuilderItemInterface
 {
@@ -118,14 +120,14 @@ class OrderProduct implements BuilderItemInterface
      *
      * @var string
      */
-    protected $exemptionReason;
+    protected $exemptionReason = '';
 
     /**
      * Fiscal Zone
      *
      * @var string
      */
-    protected $ficalZone;
+    protected $fiscalZone;
 
     /**
      * Warehouse settings
@@ -144,7 +146,9 @@ class OrderProduct implements BuilderItemInterface
     public function __construct(array $orderProduct, ?string $fiscalZone = 'ES')
     {
         $this->orderProduct = $orderProduct;
-        $this->ficalZone = $fiscalZone;
+        $this->fiscalZone = $fiscalZone;
+
+        $this->init();
     }
 
     //          PUBLICS          //
@@ -158,6 +162,8 @@ class OrderProduct implements BuilderItemInterface
      */
     public function toArray(?int $order = 0): array
     {
+        $this->setName();
+
         return [
             'ordering' => $order,
         ];
@@ -169,14 +175,14 @@ class OrderProduct implements BuilderItemInterface
      */
     public function insert(): void
     {
-        $psProduct = new Product($this->orderProduct['product_id'] ?? 0, 1, Configuration::get('PS_LANG_DEFAULT'));
+        //$psProduct = new Product($this->orderProduct['product_id'], 1, Configuration::get('PS_LANG_DEFAULT'));
 
-        $moloniProduct = new ProductFromObject($psProduct);
-        $moloniProduct->insert();
+        //$moloniProduct = new ProductFromObject($psProduct);
+        //$moloniProduct->insert();
 
-        if ($moloniProduct->productId === 0) {
-            throw new MoloniDocumentProductException('Error creating product: ({0})', ['{0}' => $this->reference]);
-        }
+        //if ($moloniProduct->productId === 0) {
+        //    throw new MoloniDocumentProductException('Error creating product: ({0})', ['{0}' => $this->reference]);
+        //}
     }
 
     /**
@@ -200,7 +206,6 @@ class OrderProduct implements BuilderItemInterface
     {
         $this
             ->setReference()
-            ->setName()
             ->setQuantity()
             ->setWarehouseId()
             ->setTaxes()
@@ -232,7 +237,18 @@ class OrderProduct implements BuilderItemInterface
      */
     protected function setName(): OrderProduct
     {
-        $this->name = $this->orderProduct['name'] ?? '';
+        $name = '';
+
+        switch (Settings::get('useProductNameAndSummaryFrom')) {
+            case ProductInformation::PRESTASHOP:
+                $name = $this->orderProduct['product_name'];
+                break;
+            case ProductInformation::MOLONI:
+                $name = $this->moloniProduct['name'];
+                break;
+        }
+
+        $this->name = $name;
 
         return $this;
     }
@@ -279,16 +295,49 @@ class OrderProduct implements BuilderItemInterface
      */
     protected function setQuantity(): OrderProduct
     {
-        $this->quantity = $this->orderProduct['product_quantity'] ?? 0;
+        $this->quantity = $this->orderProduct['product_quantity'] ?? 1;
 
         return $this;
     }
 
     /**
-     * Build product taxes
+     * Build order product taxes
+     *
+     * @return OrderProduct
      */
     protected function setTaxes(): OrderProduct
     {
+        $taxes = [];
+
+        /** @var TaxCalculator $taxCalculator */
+        $taxCalculator = $this->orderProduct['tax_calculator'];
+
+        if (count($taxCalculator->taxes) > 0) {
+            $taxOrder = 0;
+
+            foreach ($taxCalculator->taxes as $tax) {
+                $taxBuilder = new OrderProductTax($tax, $this->fiscalZone, $taxOrder);
+
+                $taxBuilder
+                    ->search();
+
+                if ($taxBuilder->taxId === 0) {
+                    $taxBuilder
+                        ->insert();
+                }
+
+                $taxes[] = $taxBuilder;
+
+                $taxOrder++;
+            }
+        }
+
+        if (empty($taxes)) {
+            $this->exemptionReason = Settings::get('exemptionReasonProduct');
+        } else {
+            $this->taxes = $taxes;
+        }
+
         return $this;
     }
 
@@ -299,6 +348,8 @@ class OrderProduct implements BuilderItemInterface
      */
     protected function setWarehouseId(): OrderProduct
     {
+        $this->warehouseId = Settings::get('documentWarehouse');
+
         return $this;
     }
 
