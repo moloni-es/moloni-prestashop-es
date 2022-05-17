@@ -25,6 +25,7 @@
 namespace Moloni\Controller\Admin\Settings;
 
 use Shop;
+use Store;
 use DateTime;
 use Exception;
 use Moloni\Enums\Languages;
@@ -130,7 +131,7 @@ class Settings extends MoloniController
      */
     private function getRequiredFormData(): array
     {
-        $measurementUnits = $warehouses = $documentSets = $countries = [];
+        $measurementUnits = $warehouses = $documentSets = $countries = $stores = [];
 
         $measurementUnitsQuery = MoloniApiClient::measurementUnits()->queryMeasurementUnits();
         $warehousesQuery = MoloniApiClient::warehouses()->queryWarehouses();
@@ -140,6 +141,7 @@ class Settings extends MoloniController
                 'defaultLanguageId' => Languages::ES
             ]
         ]) ?? [];
+        $storesQuery = Store::getStores($this->getContextLangId());
 
         foreach ($countriesQuery as $country) {
             $countries[$country['title']] = $country['countryId'];
@@ -157,11 +159,16 @@ class Settings extends MoloniController
             $documentSets[$documentSet['name']] = $documentSet['documentSetId'];
         }
 
+        foreach ($storesQuery as $store) {
+            $stores[$store['name']] = $store['id_store'];
+        }
+
         return [
             'measurementUnits' => $measurementUnits,
             'warehouses' => $warehouses,
             'documentSets' => $documentSets,
-            'countries' => $countries
+            'countries' => $countries,
+            'stores' => $stores,
         ];
     }
 }

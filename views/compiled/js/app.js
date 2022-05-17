@@ -102,9 +102,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "LoadAddress": function() { return /* binding */ LoadAddress; }
 /* harmony export */ });
 var LoadAddress = {
-  SHOP: 1,
-  MOLONI: 2,
-  CUSTOM: 3
+  CUSTOM: -1,
+  MOLONI: 0
 };
 
 
@@ -226,7 +225,7 @@ var MoloniSettings = /*#__PURE__*/function () {
         this.$loadAddressHolder.slideDown(200);
       } else {
         this.$loadAddressHolder.slideUp(200);
-        this.$loadAddress.val(_enums_LoadAddress__WEBPACK_IMPORTED_MODULE_2__.LoadAddress.SHOP).trigger('change');
+        this.$loadAddress.val(_enums_LoadAddress__WEBPACK_IMPORTED_MODULE_2__.LoadAddress.MOLONI).trigger('change');
       }
     }
   }, {

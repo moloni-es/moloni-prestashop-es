@@ -2,23 +2,9 @@
 
 namespace Moloni\Builders\MoloniProduct;
 
-use Moloni\Builders\Interfaces\BuilderItemInterface;
+use Moloni\Builders\Common\TaxFromRate;
 
-class ProductTax implements BuilderItemInterface
+class ProductTax extends TaxFromRate
 {
 
-    public function toArray()
-    {
-        // TODO: Implement toArray() method.
-    }
-
-    public function insert()
-    {
-        // TODO: Implement insert() method.
-    }
-
-    public function search()
-    {
-        // TODO: Implement search() method.
-    }
 }

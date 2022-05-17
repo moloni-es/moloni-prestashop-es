@@ -231,7 +231,7 @@ class OrderCustomer implements BuilderItemInterface
     {
         return [
             'name' => $this->name,
-            'customer_id' => $this->customerId,
+            'customerId' => $this->customerId,
         ];
     }
 

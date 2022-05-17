@@ -24,10 +24,8 @@
 
 namespace Moloni\Controller\Admin\Orders;
 
-use Moloni\Api\MoloniApiClient;
-use Moloni\Exceptions\Document\MoloniDocumentException;
-use Moloni\Exceptions\Document\MoloniDocumentWarning;
 use Shop;
+use Store;
 use Order;
 use Currency;
 use PrestaShopDatabaseException;
@@ -41,6 +39,9 @@ use Moloni\Enums\DocumentTypes;
 use Moloni\Enums\MoloniRoutes;
 use Moloni\Repository\OrdersRepository;
 use Moloni\Repository\MoloniDocumentsRepository;
+use Moloni\Api\MoloniApiClient;
+use Moloni\Exceptions\Document\MoloniDocumentException;
+use Moloni\Exceptions\Document\MoloniDocumentWarning;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -140,9 +141,7 @@ class Orders extends MoloniController
 
             $this->addSuccessMessage($this->trans('Document created successfully.', 'Modules.Molonies.Common'));
         } catch (MoloniDocumentWarning $e) {
-
         } catch (MoloniDocumentException $e) {
-
         } catch (MoloniException $e) {
             $msg = $this->trans($e->getMessage(), 'Modules.Molonies.Errors', $e->getIdentifiers());
             $this->addErrorMessage($msg);

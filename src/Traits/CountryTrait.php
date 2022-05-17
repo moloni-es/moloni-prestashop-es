@@ -67,6 +67,6 @@ trait CountryTrait
             }
         }
 
-        return ['countryId' => $countryId, 'languageId' => $languageId];
+        return ['countryId' => $countryId, 'languageId' => $languageId, 'code' => strtoupper($countryIso)];
     }
 }

@@ -92,6 +92,7 @@ class OrderPayment implements BuilderItemInterface
             'paymentMethodId' => $this->paymentMethodId,
             'paymentMethodName' => $this->name,
             'value' => $this->value,
+            'date' => $this->paymentTime
         ];
     }
 
@@ -160,7 +161,6 @@ class OrderPayment implements BuilderItemInterface
      */
     protected function setPaymentTime(): OrderPayment
     {
-        // todo: ver o que trás este valor
         $this->paymentTime = $this->orderPayment->date_add;
 
         return $this;
