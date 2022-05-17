@@ -24,16 +24,17 @@
 
 namespace Moloni\Builders\Document;
 
-use Moloni\Enums\LoadAddress;
-use Moloni\Helpers\Settings;
 use Order;
 use Address;
 use Carrier;
+use Store;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\Interfaces\BuilderItemInterface;
+use Moloni\Traits\CountryTrait;
+use Moloni\Enums\LoadAddress;
+use Moloni\Helpers\Settings;
 use Moloni\Exceptions\Document\MoloniDocumentDeliveryException;
 use Moloni\Exceptions\MoloniApiException;
-use Moloni\Traits\CountryTrait;
 
 class OrderDelivery implements BuilderItemInterface
 {
@@ -265,26 +266,38 @@ class OrderDelivery implements BuilderItemInterface
      * Sets load address
      *
      * @return OrderDelivery
+     *
+     * @throws MoloniDocumentDeliveryException
      */
     protected function setLoadAddress(): OrderDelivery
     {
-        switch (Settings::get('loadAddress')) {
-            case LoadAddress::SHOP:
-                // todo: where to get this address
-                break;
-            case LoadAddress::MOLONI:
-                $this->loadAddress = $this->company['address'];
-                $this->loadZipCode = $this->company['zipCode'];
-                $this->loadCity = $this->company['city'];
-                $this->loadCountry = $this->company['country']['countryId'];
-                break;
-            case LoadAddress::CUSTOM:
-                $this->loadAddress = Settings::get('customloadAddressAddress');
-                $this->loadZipCode = Settings::get('customloadAddressZipCode');
-                $this->loadCity = Settings::get('customloadAddressCity');
-                $this->loadCountry = (int)Settings::get('customloadAddressCountry');
+        $loadAddressSetting = (int)(Settings::get('loadAddress') ?? LoadAddress::MOLONI);
 
-                break;
+        if ($loadAddressSetting === LoadAddress::CUSTOM) {
+            $this->loadAddress = Settings::get('customloadAddressAddress');
+            $this->loadZipCode = Settings::get('customloadAddressZipCode');
+            $this->loadCity = Settings::get('customloadAddressCity');
+            $this->loadCountry = (int)Settings::get('customloadAddressCountry');
+        } elseif ($loadAddressSetting === LoadAddress::MOLONI) {
+            $this->loadAddress = $this->company['address'];
+            $this->loadZipCode = $this->company['zipCode'];
+            $this->loadCity = $this->company['city'];
+            $this->loadCountry = $this->company['country']['countryId'];
+        } elseif ($loadAddressSetting > 0) {
+            $store = new Store($loadAddressSetting);
+
+            try {
+                ['countryId' => $countryId] = $this->getMoloniCountryById($store->id_country);
+            } catch (MoloniApiException $e) {
+                throw new MoloniDocumentDeliveryException('Error getting load country', [], $e->getData());
+            }
+
+            $this->loadAddress = $store->address1;
+            $this->loadAddress .= ' ';
+            $this->loadAddress .= $store->address2;
+            $this->loadZipCode = $store->postcode;
+            $this->loadCity = $store->city;
+            $this->loadCountry = $countryId;
         }
 
         return $this;
@@ -311,7 +324,7 @@ class OrderDelivery implements BuilderItemInterface
 
             $this->destinationCountry = $countryId;
         } catch (MoloniAPIException $e) {
-            throw new MoloniDocumentDeliveryException('Error fetching countries', [], $e->getData());
+            throw new MoloniDocumentDeliveryException('Error getting delivery country', [], $e->getData());
         }
 
         return $this;

@@ -4,6 +4,7 @@ namespace Moloni\Form;
 
 use Moloni\Enums\Boolean;
 use Moloni\Enums\DocumentStatus;
+use Moloni\Enums\DocumentTypes;
 use Moloni\Enums\LoadAddress;
 use Moloni\Enums\ProductInformation;
 use Symfony\Component\Form\AbstractType;
@@ -19,6 +20,12 @@ class SettingsFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $measurementUnits = $options['api_data']['measurementUnits'] ?? [];
+        $stores = $options['api_data']['stores'] ?? [];
+        $warehouses = $options['api_data']['warehouses'] ?? [];
+        $documentSets = $options['api_data']['documentSets'] ?? [];
+        $countries = $options['api_data']['countries'] ?? [];
+
         $yesNoOptions = [
             'No' => Boolean::NO,
             'Yes' => Boolean::YES,
@@ -28,9 +35,9 @@ class SettingsFormType extends AbstractType
             'Moloni' => ProductInformation::MOLONI,
         ];
         $addresses = [
-            'Prestashop' => LoadAddress::SHOP,
-            'Moloni' => LoadAddress::MOLONI,
+            'Moloni company' => LoadAddress::MOLONI,
             'Custom' => LoadAddress::CUSTOM,
+            'Stores' => $stores
         ];
         $syncFields = [
             'Name' => 'name',
@@ -45,17 +52,12 @@ class SettingsFormType extends AbstractType
             'Closed' => DocumentStatus::CLOSED,
         ];
         $documentTypes = [
-            'Invoice' => 'invoices',
-            'Invoice + Receipt' => 'receipts',
-            'Purchase Order' => 'purchaseOrders',
-            'Pro Forma Invoice' => 'proFormaInvoices',
-            'Simplified invoice' => 'simplifiedInvoices',
+            'Invoice' => DocumentTypes::INVOICES,
+            'Invoice + Receipt' => DocumentTypes::RECEIPTS,
+            'Purchase Order' => DocumentTypes::PURCHASE_ORDERS,
+            'Pro Forma Invoice' => DocumentTypes::PRO_FORMA_INVOICES,
+            'Simplified invoice' => DocumentTypes::SIMPLIFIED_INVOICES,
         ];
-
-        $measurementUnits = $options['api_data']['measurementUnits'] ?? [];
-        $warehouses = $options['api_data']['warehouses'] ?? [];
-        $documentSets = $options['api_data']['documentSets'] ?? [];
-        $countries = $options['api_data']['countries'] ?? [];
 
         return $builder
             // automations

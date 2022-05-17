@@ -26,15 +26,18 @@ namespace Moloni\Builders\Document;
 
 use Product;
 use Configuration;
+use Tax;
+use TaxCalculator;
 use Moloni\Enums\ProductInformation;
 use Moloni\Helpers\Settings;
 use Moloni\Api\MoloniApiClient;
+use Moloni\Enums\ProductType;
 use Moloni\Builders\Interfaces\BuilderItemInterface;
 use Moloni\Builders\ProductFromObject;
-use Moloni\Enums\ProductType;
+use Moloni\Exceptions\Document\MoloniDocumentProductTaxException;
+use Moloni\Exceptions\MoloniException;
 use Moloni\Exceptions\Document\MoloniDocumentProductException;
 use Moloni\Exceptions\MoloniApiException;
-use TaxCalculator;
 
 class OrderProduct implements BuilderItemInterface
 {
@@ -125,7 +128,7 @@ class OrderProduct implements BuilderItemInterface
     /**
      * Fiscal Zone
      *
-     * @var string
+     * @var array
      */
     protected $fiscalZone;
 
@@ -143,7 +146,15 @@ class OrderProduct implements BuilderItemInterface
      */
     protected $orderProduct;
 
-    public function __construct(array $orderProduct, ?string $fiscalZone = 'ES')
+    /**
+     * Constructor
+     *
+     * @param array $orderProduct
+     * @param array $fiscalZone
+     *
+     * @throws MoloniDocumentProductTaxException
+     */
+    public function __construct(array $orderProduct, array $fiscalZone)
     {
         $this->orderProduct = $orderProduct;
         $this->fiscalZone = $fiscalZone;
@@ -164,9 +175,27 @@ class OrderProduct implements BuilderItemInterface
     {
         $this->setName();
 
-        return [
+        $params = [
+            'productId' => $this->productId,
+            'price' => $this->price,
             'ordering' => $order,
+            'qty' => $this->quantity,
+            'discount' => $this->discount,
         ];
+
+        if (!empty($this->exemptionReason)) {
+            $params['exemptionReason'] = $this->exemptionReason;
+        }
+
+        if (!empty($this->taxes)) {
+            $params['taxes'] = [];
+
+            foreach ($this->taxes as $tax) {
+                $params['taxes'][] = $tax->toArray();
+            }
+        }
+
+        return $params;
     }
 
 
@@ -201,6 +230,8 @@ class OrderProduct implements BuilderItemInterface
      * Start initial values
      *
      * @return $this
+     *
+     * @throws MoloniDocumentProductTaxException
      */
     protected function init(): OrderProduct
     {
@@ -285,6 +316,23 @@ class OrderProduct implements BuilderItemInterface
      */
     protected function setDiscounts(): OrderProduct
     {
+        $discount = 0;
+
+        if ((float)$this->orderProduct['reduction_percent'] > 0) {
+            $discount = (float)$this->orderProduct['reduction_percent'];
+        } elseif ((float)$this->orderProduct['reduction_amount_tax_excl'] > 0) {
+            $price = (float)$this->orderProduct['product_price'];
+
+            if ($price > 0) {
+                $discountedValue = (float)$this->orderProduct['reduction_amount_tax_excl'];
+                $discount = (1 - ($price / ($price + $discountedValue))) * 100;
+            } else {
+                $discount = 100;
+            }
+        }
+
+        $this->discount = $discount;
+
         return $this;
     }
 
@@ -304,6 +352,8 @@ class OrderProduct implements BuilderItemInterface
      * Build order product taxes
      *
      * @return OrderProduct
+     *
+     * @throws MoloniDocumentProductTaxException
      */
     protected function setTaxes(): OrderProduct
     {
@@ -316,14 +366,19 @@ class OrderProduct implements BuilderItemInterface
             $taxOrder = 0;
 
             foreach ($taxCalculator->taxes as $tax) {
-                $taxBuilder = new OrderProductTax($tax, $this->fiscalZone, $taxOrder);
+                /** @var Tax $tax */
+                $taxBuilder = new OrderProductTax($tax->rate, $this->fiscalZone, $taxOrder);
 
-                $taxBuilder
-                    ->search();
-
-                if ($taxBuilder->taxId === 0) {
+                try {
                     $taxBuilder
-                        ->insert();
+                        ->search();
+
+                    if ($taxBuilder->taxId === 0) {
+                        $taxBuilder
+                            ->insert();
+                    }
+                } catch (MoloniException $e) {
+                    throw new MoloniDocumentProductTaxException($e->getMessage(), $e->getIdentifiers(), $e->getData());
                 }
 
                 $taxes[] = $taxBuilder;

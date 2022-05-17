@@ -1,14 +1,38 @@
 <?php
+/**
+ * 2022 - Moloni.com
+ *
+ * NOTICE OF LICENSE
+ *
+ * This file is licenced under the Software License Agreement.
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * You must not modify, adapt or create derivative works of this source code
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+ * versions in the future. If you wish to customize PrestaShop for your
+ * needs please refer to http://www.prestashop.com for more information.
+ *
+ * @author    Moloni
+ * @copyright Moloni
+ * @license   https://creativecommons.org/licenses/by-nd/4.0/
+ *
+ * @noinspection PhpMultipleClassDeclarationsInspection
+ */
 
 namespace Moloni\Builders\Document;
 
+use Order;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\Interfaces\BuilderItemInterface;
 use Moloni\Enums\ProductType;
 use Moloni\Exceptions\Document\MoloniDocumentShippingException;
+use Moloni\Exceptions\Document\MoloniDocumentShippingTaxException;
 use Moloni\Exceptions\MoloniApiException;
+use Moloni\Exceptions\MoloniException;
 use Moloni\Helpers\Settings;
-use Order;
 
 class OrderShipping implements BuilderItemInterface
 {
@@ -18,6 +42,13 @@ class OrderShipping implements BuilderItemInterface
      * @var int
      */
     public $productId = 0;
+
+    /**
+     * Category
+     *
+     * @var int
+     */
+    protected $categoryId;
 
     /**
      * Moloni product type
@@ -71,7 +102,7 @@ class OrderShipping implements BuilderItemInterface
     /**
      * Taxes builder
      *
-     * @var OrderProductTax[]
+     * @var OrderShippingTax|null
      */
     protected $taxes;
 
@@ -80,7 +111,7 @@ class OrderShipping implements BuilderItemInterface
      *
      * @var string
      */
-    protected $exemptionReason;
+    protected $exemptionReason = '';
 
     /**
      * Measurement unit
@@ -92,7 +123,7 @@ class OrderShipping implements BuilderItemInterface
     /**
      * Fiscal Zone
      *
-     * @var string
+     * @var array
      */
     protected $ficalZone;
 
@@ -114,9 +145,9 @@ class OrderShipping implements BuilderItemInterface
      * Constructor
      *
      * @param Order $order
-     * @param string|null $fiscalZone
+     * @param array $fiscalZone
      */
-    public function __construct(Order $order, ?string $fiscalZone = 'ES')
+    public function __construct(Order $order, array $fiscalZone)
     {
         $this->order = $order;
         $this->orderShipping = $order->getShipping()[0] ?? [];
@@ -136,17 +167,70 @@ class OrderShipping implements BuilderItemInterface
      */
     public function toArray(?int $order = 0): array
     {
-        return [
+        $params = [
+            'productId' => $this->productId,
+            'price' => $this->price,
             'ordering' => $order,
+            'qty' => $this->quantity,
+            'discount' => $this->discount,
         ];
+
+        if (!empty($this->exemptionReason)) {
+            $params['exemptionReason'] = $this->exemptionReason;
+        }
+
+        if (!empty($this->taxes)) {
+            $params['taxes'][] = $this->taxes->toArray();
+        }
+
+        return $params;
     }
 
+    /**
+     * Creates shipping product
+     *
+     * @throws MoloniDocumentShippingException
+     */
     public function insert(): void
     {
         $this
             ->setType()
             ->setMeasurementUnit()
             ->setCategory();
+
+        try {
+            $params = [
+                'productCategoryId' => $this->categoryId,
+                'type' => $this->type,
+                'name' => $this->name,
+                'measurementUnitId' => $this->measurementUnit,
+                'price' => $this->price,
+                'hasStock' => false,
+            ];
+
+            if (!empty($this->exemptionReason)) {
+                $params['exemptionReason'] = $this->exemptionReason;
+            }
+
+            if (!empty($this->taxes)) {
+                $params['taxes'][] = $this->taxes->toArray();
+            }
+
+            $mutation = MoloniApiClient::products()
+                ->mutationProductCreate(['data' => $params]);
+
+            $productId = $mutation['data']['productCreate']['data']['productId'] ?? 0;
+
+            if ($productId > 0) {
+                $this->productId = $productId;
+            } else {
+                throw new MoloniDocumentShippingException('Error creating shipping product', [], [
+                    'mutation' => $mutation
+                ]);
+            }
+        } catch (MoloniApiException $e) {
+            throw new MoloniDocumentShippingException('Error creating shipping product', [], $e->getData());
+        }
     }
 
     /**
@@ -165,6 +249,8 @@ class OrderShipping implements BuilderItemInterface
      * Start initial values
      *
      * @return $this
+     *
+     * @throws MoloniDocumentShippingTaxException
      */
     protected function init(): OrderShipping
     {
@@ -193,8 +279,50 @@ class OrderShipping implements BuilderItemInterface
         return $this;
     }
 
-    protected function setCategory()
+    /**
+     * Set category
+     *
+     * @return $this
+     *
+     * @throws MoloniDocumentShippingException
+     */
+    protected function setCategory(): OrderShipping
     {
+        $categoryName = 'Envío';
+
+        try {
+            $variables = [
+                'options' => [
+                    'search' => [
+                        'field' => 'name',
+                        'value' => $categoryName,
+                    ],
+                ],
+            ];
+
+            $query = MoloniApiClient::categories()
+                ->queryProductCategories($variables);
+
+            if (!empty($query)) {
+                $categoryId = (int) $query[0]['productCategoryId'];
+            } else {
+                $variables = [
+                    'data' => [
+                        'name' => $categoryName
+                    ],
+                ];
+
+                $mutation = MoloniApiClient::categories()
+                    ->mutationProductCategoryCreate($variables);
+
+                $categoryId = $mutation['data']['productCategoryCreate']['data']['productCategoryId'] ?? 0;
+            }
+
+            $this->categoryId = $categoryId;
+        } catch (MoloniApiException $e) {
+            throw new MoloniDocumentShippingException('Error creating shipping category');
+        }
+
         return $this;
     }
 
@@ -242,15 +370,18 @@ class OrderShipping implements BuilderItemInterface
      */
     protected function setDiscounts(): OrderShipping
     {
+        $discount = 0;
         $cartRules = $this->order->getCartRules();
 
         foreach ($cartRules as $cartRule) {
             if ((int)$cartRule['free_shipping'] === 1) {
-                $this->discount = 100;
+                $discount = 100;
 
                 break;
             }
         }
+
+        $this->discount = $discount;
 
         return $this;
     }
@@ -269,9 +400,34 @@ class OrderShipping implements BuilderItemInterface
 
     /**
      * Build product taxes
+     *
+     * @throws MoloniDocumentShippingTaxException
      */
     protected function setTaxes(): OrderShipping
     {
+        $taxRate = $this->order->carrier_tax_rate;
+
+        if ($taxRate > 0) {
+            $taxBuilder = new OrderShippingTax($taxRate, $this->ficalZone, 0);
+
+            try {
+                $taxBuilder
+                    ->search();
+
+                if ($taxBuilder->taxId === 0) {
+                    $taxBuilder
+                        ->insert();
+                }
+            } catch (MoloniException $e) {
+                throw new MoloniDocumentShippingTaxException($e->getMessage(), $e->getIdentifiers(), $e->getData());
+            }
+
+            $this->taxes = $taxBuilder;
+        }
+
+        if (empty($this->taxes)) {
+            $this->exemptionReason = Settings::get('exemptionReasonShipping');
+        }
 
         return $this;
     }
@@ -316,7 +472,7 @@ class OrderShipping implements BuilderItemInterface
                 $this->productId = $query[0]['productId'];
             }
         } catch (MoloniApiException $e) {
-            throw new MoloniDocumentShippingException('Error fetching shipping by reference: ({0})', [$this->reference], $e->getData());
+            throw new MoloniDocumentShippingException('Error fetching shipping by reference: ({0})', ['{0}' => $this->reference], $e->getData());
         }
 
         return $this;

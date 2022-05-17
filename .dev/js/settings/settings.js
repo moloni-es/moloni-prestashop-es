@@ -73,7 +73,7 @@ export default class MoloniSettings {
         } else {
             this.$loadAddressHolder.slideUp(200);
             this.$loadAddress
-                .val(LoadAddress.SHOP)
+                .val(LoadAddress.MOLONI)
                 .trigger('change');
         }
     }
