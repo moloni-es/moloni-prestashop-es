@@ -4,6 +4,7 @@ const DocumentType = {
     PURCHASE_ORDERS: 'purchaseOrders',
     PRO_FORMA_INVOICES: 'proFormaInvoices',
     SIMPLIFIED_INVOICES: 'simplifiedInvoices',
+    ESTIMATE: 'estimate',
 }
 
 export {DocumentType};

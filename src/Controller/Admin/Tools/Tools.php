@@ -25,15 +25,12 @@
 namespace Moloni\Controller\Admin\Tools;
 
 use Moloni\Controller\Admin\MoloniController;
-use Moloni\Traits\MoloniCategoriesTrait;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class Tools extends MoloniController
 {
-    use MoloniCategoriesTrait;
-
     public function home(Request $request): Response
     {
         return $this->render('@Modules/molonies/views/templates/admin/tools/Tools.twig');

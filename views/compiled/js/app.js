@@ -85,7 +85,8 @@ var DocumentType = {
   RECEIPTS: 'receipts',
   PURCHASE_ORDERS: 'purchaseOrders',
   PRO_FORMA_INVOICES: 'proFormaInvoices',
-  SIMPLIFIED_INVOICES: 'simplifiedInvoices'
+  SIMPLIFIED_INVOICES: 'simplifiedInvoices',
+  ESTIMATE: 'estimate'
 };
 
 

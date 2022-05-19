@@ -24,6 +24,7 @@
 
 namespace Moloni\Builders\Document;
 
+use Moloni\Exceptions\Product\MoloniProductCategoryException;
 use Order;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\Interfaces\BuilderItemInterface;
@@ -146,6 +147,8 @@ class OrderShipping implements BuilderItemInterface
      *
      * @param Order $order
      * @param array $fiscalZone
+     *
+     * @throws MoloniDocumentShippingTaxException
      */
     public function __construct(Order $order, array $fiscalZone)
     {
@@ -288,39 +291,17 @@ class OrderShipping implements BuilderItemInterface
      */
     protected function setCategory(): OrderShipping
     {
-        $categoryName = 'Envío';
-
         try {
-            $variables = [
-                'options' => [
-                    'search' => [
-                        'field' => 'name',
-                        'value' => $categoryName,
-                    ],
-                ],
-            ];
+            $builder = new OrderShippingCategory('Envío', 0);
+            $builder->search();
 
-            $query = MoloniApiClient::categories()
-                ->queryProductCategories($variables);
-
-            if (!empty($query)) {
-                $categoryId = (int) $query[0]['productCategoryId'];
-            } else {
-                $variables = [
-                    'data' => [
-                        'name' => $categoryName
-                    ],
-                ];
-
-                $mutation = MoloniApiClient::categories()
-                    ->mutationProductCategoryCreate($variables);
-
-                $categoryId = $mutation['data']['productCategoryCreate']['data']['productCategoryId'] ?? 0;
+            if ($builder->productCategoryId === 0) {
+                $builder->insert();
             }
 
-            $this->categoryId = $categoryId;
-        } catch (MoloniApiException $e) {
-            throw new MoloniDocumentShippingException('Error creating shipping category');
+            $this->categoryId = $builder->productCategoryId;
+        } catch (MoloniException $e) {
+            throw new MoloniDocumentShippingException($e->getMessage(), $e->getIdentifiers(), $e->getData());
         }
 
         return $this;

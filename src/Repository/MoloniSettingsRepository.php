@@ -23,7 +23,7 @@ class MoloniSettingsRepository extends EntityRepository
             $label = $setting->getLabel();
 
             if ($label === 'productSyncFields' && !empty($value)) {
-                $value = unserialize($value);
+                $value = unserialize($value, ['allowed_classes' => false]);
             }
 
             $settings[$label] = $value;

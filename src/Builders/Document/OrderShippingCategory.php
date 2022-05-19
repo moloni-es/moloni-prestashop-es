@@ -22,11 +22,11 @@
  * @noinspection PhpMultipleClassDeclarationsInspection
  */
 
-namespace Moloni\Builders\MoloniProduct;
+namespace Moloni\Builders\Document;
 
 use Moloni\Builders\Common\CategoryFromName;
 
-class ProductCategory extends CategoryFromName
+class OrderShippingCategory extends CategoryFromName
 {
 
 }
