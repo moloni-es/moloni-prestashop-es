@@ -2,7 +2,7 @@
 
 namespace Moloni\Traits;
 
-trait DocumentActionsTrait
+trait DocumentTrait
 {
     public function getPdfUrl($documentId): string
     {

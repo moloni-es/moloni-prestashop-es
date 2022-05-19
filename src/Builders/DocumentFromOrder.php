@@ -240,6 +240,7 @@ class DocumentFromOrder implements BuilderInterface
     {
         $props = [
             'data' => [
+                'fiscalZone' => $this->fiscalZone['code'],
                 'documentSetId' => $this->documentSetId,
                 'date' => $this->dates['date'],
                 'expirationDate' => $this->dates['expirationDate'],
@@ -305,43 +306,50 @@ class DocumentFromOrder implements BuilderInterface
         try {
             switch ($this->documentType) {
                 case DocumentTypes::INVOICES:
-                    $action = 'mutationInvoiceCreate';
-                    $key = 'invoiceCreate';
+                    $mutation = MoloniApiClient::invoice()->mutationInvoiceCreate($this->createProps);
+                    $moloniDocument = $mutation['data']['invoiceCreate']['data'] ?? 0;
+
                     break;
                 case DocumentTypes::RECEIPTS:
-                    $action = 'mutationReceiptCreate';
-                    $key = 'receiptCreate';
+                    $mutation = MoloniApiClient::receipt()->mutationReceiptCreate($this->createProps);
+                    $moloniDocument = $mutation['data']['receiptCreate']['data'] ?? 0;
+
                     break;
                 case DocumentTypes::PRO_FORMA_INVOICES:
-                    $action = 'mutationProFormaInvoiceCreate';
-                    $key = 'proFormaInvoiceCreate';
+                    $mutation = MoloniApiClient::proFormaInvoice()->mutationProFormaInvoiceCreate($this->createProps);
+                    $moloniDocument = $mutation['data']['proFormaInvoiceCreate']['data'] ?? 0;
+
                     break;
                 case DocumentTypes::PURCHASE_ORDERS:
-                    $action = 'mutationPurchaseOrderCreate';
-                    $key = 'purchaseOrderCreate';
+                    $mutation = MoloniApiClient::purchaseOrder()->mutationPurchaseOrderCreate($this->createProps);
+                    $moloniDocument = $mutation['data']['purchaseOrderCreate']['data'] ?? 0;
+
                     break;
                 case DocumentTypes::SIMPLIFIED_INVOICES:
-                    $action = 'mutationSimplifiedInvoiceCreate';
-                    $key = 'simplifiedInvoiceCreate';
+                    $mutation = MoloniApiClient::simplifiedInvoice()->mutationSimplifiedInvoiceCreate($this->createProps);
+                    $moloniDocument = $mutation['data']['simplifiedInvoiceCreate']['data'] ?? 0;
+
+                    break;
+                case DocumentTypes::ESTIMATE:
+                    $mutation = MoloniApiClient::estimate()->mutationEstimateCreate($this->createProps);
+                    $moloniDocument = $mutation['data']['estimateCreate']['data'] ?? 0;
+
                     break;
                 default:
                     throw new MoloniDocumentException('Document type not found');
             }
-
-            $mutation = MoloniApiClient::documents()
-                ->$action($this->createProps);
         } catch (MoloniApiException $e) {
             throw new MoloniDocumentException($e->getMessage(), $e->getIdentifiers(), $e->getData());
         }
 
-        $documentId = $mutation['data'][$key]['data']['documentId'] ?? 0;
+        $documentId = $moloniDocument['documentId'] ?? 0;
 
         if ($documentId === 0) {
             throw new MoloniDocumentException('Error creating document', [], ['document_props' => $this->createProps, 'result' => $mutation]);
         }
 
         $this->documentId = $documentId;
-        $this->moloniDocument = $mutation['data'][$key]['data'];
+        $this->moloniDocument = $moloniDocument;
 
         if ((int) Settings::get('documentStatus') === DocumentStatus::CLOSED) {
             $difference = abs($this->moloniDocument['totalValue'] - $this->order->total_paid_tax_incl);
@@ -376,41 +384,55 @@ class DocumentFromOrder implements BuilderInterface
         try {
             switch ($this->documentType) {
                 case DocumentTypes::INVOICES:
-                    $action = 'mutationInvoiceUpdate';
-                    $key = 'invoiceUpdate';
+                    $mutation = MoloniApiClient::invoice()->mutationInvoiceUpdate($this->createProps);
+                    $moloniDocument = $mutation['data']['invoiceUpdate']['data'] ?? 0;
+
                     break;
                 case DocumentTypes::RECEIPTS:
-                    $action = 'mutationReceiptUpdate';
-                    $key = 'receiptUpdate';
+                    $mutation = MoloniApiClient::receipt()->mutationReceiptUpdate($this->createProps);
+                    $moloniDocument = $mutation['data']['receiptUpdate']['data'] ?? 0;
+
                     break;
                 case DocumentTypes::PRO_FORMA_INVOICES:
-                    $action = 'mutationProFormaInvoiceUpdate';
-                    $key = 'proFormaInvoiceUpdate';
+                    $mutation = MoloniApiClient::proFormaInvoice()->mutationProFormaInvoiceUpdate($this->createProps);
+                    $moloniDocument = $mutation['data']['proFormaInvoiceUpdate']['data'] ?? 0;
+
                     break;
                 case DocumentTypes::PURCHASE_ORDERS:
-                    $action = 'mutationPurchaseOrderUpdate';
-                    $key = 'purchaseOrderUpdate';
+                    $mutation = MoloniApiClient::purchaseOrder()->mutationPurchaseOrderUpdate($this->createProps);
+                    $moloniDocument = $mutation['data']['purchaseOrderUpdate']['data'] ?? 0;
+
                     break;
                 case DocumentTypes::SIMPLIFIED_INVOICES:
-                    $action = 'mutationSimplifiedInvoiceUpdate';
-                    $key = 'simplifiedInvoiceUpdate';
+                    $mutation = MoloniApiClient::simplifiedInvoice()->mutationSimplifiedInvoiceUpdate($this->createProps);
+                    $moloniDocument = $mutation['data']['simplifiedInvoiceUpdate']['data'] ?? 0;
+
+                    break;
+                case DocumentTypes::ESTIMATE:
+                    $mutation = MoloniApiClient::estimate()->mutationEstimateUpdate($this->createProps);
+                    $moloniDocument = $mutation['data']['estimateUpdate']['data'] ?? 0;
+
                     break;
                 default:
                     throw new MoloniDocumentException('Document type not found');
             }
 
-            $mutation = MoloniApiClient::documents()->$action($updateProps);
-
-            $documentId = $mutation['data'][$key]['data']['documentId'] ?? 0;
+            $documentId = $moloniDocument['documentId'] ?? 0;
 
             if ($documentId === 0) {
                 throw new MoloniApiException('Error closing document', [], ['mutation' => $mutation, 'props' => $updateProps]);
             }
+
+            $this->documentId = $documentId;
+
+            $this->createPdf();
+
+            if (Settings::get('sendByEmail')) {
+                $this->sendEmail();
+            }
         } catch (MoloniApiException $e) {
             throw new MoloniDocumentWarning('Error closing document', [], $e->getData());
         }
-
-        $this->documentId = $documentId;
 
         return $this;
     }
@@ -427,20 +449,27 @@ class DocumentFromOrder implements BuilderInterface
     protected function setFicalZone(): DocumentFromOrder
     {
         $fiscalZone = [];
-        $id = 0;
+        $fiscalZoneSetting = Settings::get('fiscalZoneBasedOn');
+        $addressId = 0;
 
-        switch (Configuration::get('PS_TAX_ADDRESS_TYPE')) {
+        switch ($fiscalZoneSetting) {
             case FiscalZone::BILLING:
-                $id = $this->order->id_address_invoice;
+                $addressId = $this->order->id_address_invoice;
                 break;
             case FiscalZone::SHIPPING:
-                $id = $this->order->id_address_delivery;
+                $addressId = $this->order->id_address_delivery;
+                break;
+            case FiscalZone::COMPANY:
+                $fiscalZone = [
+                    'code' => $this->company['fiscalZone']['fiscalZone'] ?? 'ES',
+                    'countryId' => $this->company['country']['countryId'] ?? Countries::SPAIN
+                ];
                 break;
         }
 
-        if ($id > 0) {
+        if ($addressId > 0) {
             try {
-                ['countryId' => $countryId, 'code' => $code] = $this->getMoloniCountryById((new Address($id))->id_country);
+                ['countryId' => $countryId, 'code' => $code] = $this->getMoloniCountryById((new Address($addressId))->id_country);
             } catch (MoloniApiException $e) {
                 throw new MoloniDocumentException('Error fetching document fiscal zone', [], $e->getData());
             }
@@ -739,6 +768,114 @@ class DocumentFromOrder implements BuilderInterface
     protected function setNotes(): DocumentFromOrder
     {
         $this->notes = $this->order->note;
+
+        return $this;
+    }
+
+    //          REQUESTS          //
+
+    /**
+     * Creates document PDF
+     *
+     * @return $this
+     */
+    protected function createPdf(): DocumentFromOrder
+    {
+        $variables = [
+            'documentId' => $this->documentId,
+        ];
+
+        try {
+            switch ($this->documentType) {
+                case DocumentTypes::INVOICES:
+                    MoloniApiClient::invoice()->mutationInvoiceGetPDF($variables);
+
+                    break;
+                case DocumentTypes::RECEIPTS:
+                    MoloniApiClient::receipt()->mutationReceiptGetPDF($variables);
+
+                    break;
+                case DocumentTypes::PRO_FORMA_INVOICES:
+                    MoloniApiClient::proFormaInvoice()->mutationProFormaInvoiceGetPDF($variables);
+
+                    break;
+                case DocumentTypes::PURCHASE_ORDERS:
+                    MoloniApiClient::purchaseOrder()->mutationPurchaseOrderGetPDF($variables);
+
+                    break;
+                case DocumentTypes::SIMPLIFIED_INVOICES:
+                    MoloniApiClient::simplifiedInvoice()->mutationSimplifiedInvoiceGetPDF($variables);
+
+                    break;
+                case DocumentTypes::ESTIMATE:
+                    MoloniApiClient::estimate()->mutationEstimateGetPDF($variables);
+
+                    break;
+            }
+        } catch (MoloniApiException $e) {
+            // todo: do something here?
+        }
+
+        return $this;
+    }
+
+    /**
+     * Send document by email
+     *
+     * @return $this
+     */
+    protected function sendEmail(): DocumentFromOrder
+    {
+        $customer = $this->customer->toArray();
+
+        if (empty($customer['email'])) {
+            return $this;
+        }
+
+        $variables = [
+            'documents' => [
+                $this->documentId,
+            ],
+            'mailData' => [
+                'to' => [
+                    'name' => $customer['name'],
+                    'email' => $customer['email'],
+                ],
+                'message' => '',
+                'attachment' => true,
+            ]
+        ];
+
+        try {
+            switch ($this->documentType) {
+                case DocumentTypes::INVOICES:
+                    MoloniApiClient::invoice()->mutationInvoiceSendEmail($variables);
+
+                    break;
+                case DocumentTypes::RECEIPTS:
+                    MoloniApiClient::receipt()->mutationReceiptSendEmail($variables);
+
+                    break;
+                case DocumentTypes::PRO_FORMA_INVOICES:
+                    MoloniApiClient::proFormaInvoice()->mutationProFormaInvoiceSendEmail($variables);
+
+                    break;
+                case DocumentTypes::PURCHASE_ORDERS:
+                    MoloniApiClient::purchaseOrder()->mutationPurchaseOrderSendEmail($variables);
+
+                    break;
+                case DocumentTypes::SIMPLIFIED_INVOICES:
+                    MoloniApiClient::simplifiedInvoice()->mutationSimplifiedInvoiceSendEmail($variables);
+
+                    break;
+                case DocumentTypes::ESTIMATE:
+                    MoloniApiClient::estimate()->mutationEstimateSendMail($variables);
+
+                    break;
+            }
+        } catch (MoloniApiException $e) {
+            // todo: do something here?
+        }
 
         return $this;
     }

@@ -5,6 +5,7 @@ namespace Moloni\Form;
 use Moloni\Enums\Boolean;
 use Moloni\Enums\DocumentStatus;
 use Moloni\Enums\DocumentTypes;
+use Moloni\Enums\FiscalZone;
 use Moloni\Enums\LoadAddress;
 use Moloni\Enums\ProductInformation;
 use Symfony\Component\Form\AbstractType;
@@ -30,34 +31,33 @@ class SettingsFormType extends AbstractType
             'No' => Boolean::NO,
             'Yes' => Boolean::YES,
         ];
+
         $productInformation = [
             'Prestashop' => ProductInformation::PRESTASHOP,
             'Moloni' => ProductInformation::MOLONI,
         ];
-        $addresses = [
-            'Moloni company' => LoadAddress::MOLONI,
-            'Custom' => LoadAddress::CUSTOM,
-            'Stores' => $stores
-        ];
-        $syncFields = [
-            'Name' => 'name',
-            'Price' => 'price',
-            'Description' => 'description',
-            'Visibility' => 'visibility',
-            'Stock' => 'stock',
-            'Categories' => 'category',
-        ];
+
         $status = [
             'Draft' => DocumentStatus::DRAFT,
             'Closed' => DocumentStatus::CLOSED,
         ];
-        $documentTypes = [
-            'Invoice' => DocumentTypes::INVOICES,
-            'Invoice + Receipt' => DocumentTypes::RECEIPTS,
-            'Purchase Order' => DocumentTypes::PURCHASE_ORDERS,
-            'Pro Forma Invoice' => DocumentTypes::PRO_FORMA_INVOICES,
-            'Simplified invoice' => DocumentTypes::SIMPLIFIED_INVOICES,
+
+        $documentTypes = DocumentTypes::getDocumentsTypes();
+
+        $fiscalZoneBasedOn = [
+            'Billing' => FiscalZone::BILLING,
+            'Shipping' => FiscalZone::SHIPPING,
+            'Company' => FiscalZone::COMPANY,
         ];
+
+        $addresses = [
+            'Moloni company' => LoadAddress::MOLONI,
+            'Custom' => LoadAddress::CUSTOM,
+        ];
+
+        if (!empty($stores)) {
+            $addresses['Stores'] = $stores;
+        }
 
         return $builder
             // automations
@@ -135,16 +135,6 @@ class SettingsFormType extends AbstractType
                 'translation_domain' => 'Modules.Molonies.Common',
                 'choice_translation_domain' => 'Modules.Molonies.Common',
             ])
-            ->add('productSyncFields', ChoiceType::class, [
-                'label' => 'Fields to sync',
-                'required' => false,
-                'multiple' => true,
-                'expanded' => true,
-                'choices' => $syncFields,
-                'placeholder' => false,
-                'translation_domain' => 'Modules.Molonies.Common',
-                'choice_translation_domain' => 'Modules.Molonies.Common',
-            ])
             // documents
             ->add('automaticDocuments', ChoiceType::class, [
                 'label' => 'Create paid documents on Moloni',
@@ -184,6 +174,15 @@ class SettingsFormType extends AbstractType
                 'label' => 'Document status',
                 'required' => true,
                 'choices' => $status,
+                'placeholder' => false,
+                'translation_domain' => 'Modules.Molonies.Common',
+                'choice_translation_domain' => 'Modules.Molonies.Common',
+            ])
+            ->add('fiscalZoneBasedOn', ChoiceType::class, [
+                'label' => 'Fiscal zone',
+                'required' => false,
+                'choices' => $fiscalZoneBasedOn,
+                'help' =>'Address used to set document fiscal zone',
                 'placeholder' => false,
                 'translation_domain' => 'Modules.Molonies.Common',
                 'choice_translation_domain' => 'Modules.Molonies.Common',

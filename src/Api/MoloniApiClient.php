@@ -30,7 +30,14 @@ use Moloni\Api\Endpoints\Countries;
 use Moloni\Api\Endpoints\Currencies;
 use Moloni\Api\Endpoints\Customers;
 use Moloni\Api\Endpoints\DeliveryMethods;
-use Moloni\Api\Endpoints\Documents;
+use Moloni\Api\Endpoints\Documents\BillsOfLading;
+use Moloni\Api\Endpoints\Documents\CreditNote;
+use Moloni\Api\Endpoints\Documents\Estimate;
+use Moloni\Api\Endpoints\Documents\Invoice;
+use Moloni\Api\Endpoints\Documents\ProFormaInvoice;
+use Moloni\Api\Endpoints\Documents\PurchaseOrder;
+use Moloni\Api\Endpoints\Documents\Receipt;
+use Moloni\Api\Endpoints\Documents\SimplifiedInvoice;
 use Moloni\Api\Endpoints\DocumentSets;
 use Moloni\Api\Endpoints\FiscalZone;
 use Moloni\Api\Endpoints\GeographicZones;
@@ -49,6 +56,43 @@ use Moloni\Api\Endpoints\Warehouses;
 
 class MoloniApiClient
 {
+    //         Documents         //
+
+    /**
+     * @var BillsOfLading|null
+     */
+    private static $billsOfLading;
+    /**
+     * @var CreditNote|null
+     */
+    private static $creditNote;
+    /**
+     * @var Estimate|null
+     */
+    private static $estimate;
+    /**
+     * @var Invoice|null
+     */
+    private static $invoice;
+    /**
+     * @var ProFormaInvoice|null
+     */
+    private static $proFormaInvoice;
+    /**
+     * @var PurchaseOrder|null
+     */
+    private static $purchaseOrder;
+    /**
+     * @var Receipt|null
+     */
+    private static $receipt;
+    /**
+     * @var SimplifiedInvoice|null
+     */
+    private static $simplifiedInvoice;
+
+    //         Generic         //
+
     /**
      * @var Categories|null
      */
@@ -77,10 +121,6 @@ class MoloniApiClient
      * @var DeliveryMethods|null
      */
     private static $deliveryMethods;
-    /**
-     * @var Documents|null
-     */
-    private static $documents;
     /**
      * @var DocumentSets|null
      */
@@ -138,6 +178,82 @@ class MoloniApiClient
      */
     private static $propertyGroups;
 
+    //         Documents         //
+
+    public static function billsOfLading(): BillsOfLading
+    {
+        if (!self::$billsOfLading) {
+            self::$billsOfLading = new BillsOfLading();
+        }
+
+        return self::$billsOfLading;
+    }
+
+    public static function creditNote(): CreditNote
+    {
+        if (!self::$creditNote) {
+            self::$creditNote = new CreditNote();
+        }
+
+        return self::$creditNote;
+    }
+
+    public static function estimate(): Estimate
+    {
+        if (!self::$estimate) {
+            self::$estimate = new Estimate();
+        }
+
+        return self::$estimate;
+    }
+
+    public static function invoice(): Invoice
+    {
+        if (!self::$invoice) {
+            self::$invoice = new Invoice();
+        }
+
+        return self::$invoice;
+    }
+
+    public static function proFormaInvoice(): ProFormaInvoice
+    {
+        if (!self::$proFormaInvoice) {
+            self::$proFormaInvoice = new ProFormaInvoice();
+        }
+
+        return self::$proFormaInvoice;
+    }
+
+    public static function purchaseOrder(): PurchaseOrder
+    {
+        if (!self::$purchaseOrder) {
+            self::$purchaseOrder = new PurchaseOrder();
+        }
+
+        return self::$purchaseOrder;
+    }
+
+    public static function receipt(): Receipt
+    {
+        if (self::$receipt) {
+            self::$receipt = new Receipt();
+        }
+
+        return self::$receipt;
+    }
+
+    public static function simplifiedInvoice(): SimplifiedInvoice
+    {
+        if (!self::$simplifiedInvoice) {
+            self::$simplifiedInvoice = new SimplifiedInvoice();
+        }
+
+        return self::$simplifiedInvoice;
+    }
+
+    //         Generic         //
+
     public static function categories(): Categories
     {
         if (!self::$categories) {
@@ -190,15 +306,6 @@ class MoloniApiClient
         }
 
         return self::$deliveryMethods;
-    }
-
-    public static function documents(): Documents
-    {
-        if (!self::$documents) {
-            self::$documents = new Documents();
-        }
-
-        return self::$documents;
     }
 
     public static function documentSets(): DocumentSets

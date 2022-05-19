@@ -24,6 +24,12 @@ class Products extends Endpoint
                         data{
                             productId
                             name
+                            identifications
+                            {
+                                type
+                                favorite
+                                text
+                            }
                         }
                         errors{
                             field
@@ -55,6 +61,12 @@ class Products extends Endpoint
                             productId
                             name
                             reference
+                            identifications
+                            {
+                                type
+                                favorite
+                                text
+                            }    
                         }
                         errors
                         {
@@ -108,6 +120,12 @@ class Products extends Endpoint
                     {
                         productCategoryId
                         name
+                    }
+                    identifications
+                    {
+                        type
+                        favorite
+                        text
                     }                
                     variants
                     {
@@ -204,6 +222,12 @@ class Products extends Endpoint
                             priceWithTaxes
                             hasStock
                             stock
+                            identifications
+                            {
+                                type
+                                favorite
+                                text
+                            }
                             measurementUnit
                             {
                                 measurementUnitId

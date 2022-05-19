@@ -24,8 +24,6 @@
 
 namespace Moloni\Builders\Document;
 
-use Product;
-use Configuration;
 use Tax;
 use TaxCalculator;
 use Moloni\Enums\ProductInformation;
@@ -33,10 +31,11 @@ use Moloni\Helpers\Settings;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Enums\ProductType;
 use Moloni\Builders\Interfaces\BuilderItemInterface;
-use Moloni\Builders\ProductFromObject;
+use Moloni\Builders\MoloniProductFromId;
+use Moloni\Exceptions\Product\MoloniProductException;
 use Moloni\Exceptions\Document\MoloniDocumentProductTaxException;
-use Moloni\Exceptions\MoloniException;
 use Moloni\Exceptions\Document\MoloniDocumentProductException;
+use Moloni\Exceptions\MoloniException;
 use Moloni\Exceptions\MoloniApiException;
 
 class OrderProduct implements BuilderItemInterface
@@ -198,20 +197,22 @@ class OrderProduct implements BuilderItemInterface
         return $params;
     }
 
-
     /**
+     * Creates the product
+     *
      * @throws MoloniDocumentProductException
      */
     public function insert(): void
     {
-        //$psProduct = new Product($this->orderProduct['product_id'], 1, Configuration::get('PS_LANG_DEFAULT'));
+        try {
+            $productBuilder = new MoloniProductFromId($this->orderProduct['product_id']);
+            $productBuilder->insert();
+        } catch (MoloniProductException $e) {
+            throw new MoloniDocumentProductException($e->getMessage(), $e->getIdentifiers(), $e->getData());
+        }
 
-        //$moloniProduct = new ProductFromObject($psProduct);
-        //$moloniProduct->insert();
-
-        //if ($moloniProduct->productId === 0) {
-        //    throw new MoloniDocumentProductException('Error creating product: ({0})', ['{0}' => $this->reference]);
-        //}
+        $this->productId = $productBuilder->productId;
+        $this->moloniProduct = $productBuilder->moloniProduct;
     }
 
     /**
@@ -256,7 +257,13 @@ class OrderProduct implements BuilderItemInterface
      */
     protected function setReference(): OrderProduct
     {
-        $this->reference = $this->orderProduct['reference'] ?? $this->orderProduct['product_id'] ?? '';
+        $reference = $this->orderProduct['reference'];
+
+        if (empty($reference)) {
+            $reference = $this->orderProduct['product_id'] ;
+        }
+
+        $this->reference = $reference;
 
         return $this;
     }
@@ -329,6 +336,15 @@ class OrderProduct implements BuilderItemInterface
             } else {
                 $discount = 100;
             }
+        }
+
+        switch (true) {
+            case $discount > 100:
+                $discount = 100;
+                break;
+            case $discount < 0:
+                $discount = 0;
+                break;
         }
 
         $this->discount = $discount;

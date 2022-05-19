@@ -103,12 +103,17 @@ abstract class MoloniController extends FrameworkBundleAdminController implement
     /**
      * Adds error message to the user
      *
-     * @param string $message
+     * @param string $message Error message
+     * @param array|null $error Error data
      *
      * @return bool
      */
-    protected function addErrorMessage(string $message): bool
+    protected function addErrorMessage(string $message, ?array $error = []): bool
     {
+        if (!empty($error)) {
+            // todo: append formated error to message
+        }
+
         return $this->addFlashMessage($message, 'error');
     }
 

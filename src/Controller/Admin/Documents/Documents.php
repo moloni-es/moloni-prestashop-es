@@ -35,14 +35,14 @@ use Moloni\Enums\DocumentTypes;
 use Moloni\Enums\MoloniRoutes;
 use Moloni\Exceptions\MoloniException;
 use Moloni\Repository\MoloniDocumentsRepository;
-use Moloni\Traits\DocumentActionsTrait;
+use Moloni\Traits\DocumentTrait;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class Documents extends MoloniController
 {
-    use DocumentActionsTrait;
+    use DocumentTrait;
 
     /**
      * Created documents list

@@ -66,6 +66,7 @@
                                 {{ form_row(form.billOfLanding) }}
                             </div>
 
+                            {{ form_row(form.fiscalZoneBasedOn) }}
                             {{ form_row(form.shippingInformation) }}
 
                             <div id="settings_form_loadAddress_row" style="display: none;">
@@ -131,10 +132,6 @@
                             {{ form_row(form.syncStockToPrestashop) }}
                             {{ form_row(form.addProductsToPrestashop) }}
                             {{ form_row(form.updateProductsToPrestashop) }}
-
-                            <h3 align="center">(Common)</h3>
-
-                            {{ form_row(form.productSyncFields) }}
                         </div>
                         <div class="tab-pane fade"
                              id="pills-advanced"
