@@ -36,6 +36,7 @@ use Moloni\Enums\MoloniRoutes;
 use Moloni\Exceptions\MoloniException;
 use Moloni\Repository\MoloniDocumentsRepository;
 use Moloni\Traits\DocumentTrait;
+use Moloni\Services\OrderProcessing;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -155,31 +156,18 @@ class Documents extends MoloniController
         $page = $request->get('page', 1);
 
         try {
-            if (!is_numeric($orderId) || $orderId < 0) {
-                throw new MoloniException('ID is invalid');
-            }
+            $action = new OrderProcessing($orderId, $this->getDoctrine()->getManager());
+            $action->discardOrder();
 
-            $entityManager = $this
-                ->getDoctrine()
-                ->getManager();
+            $msg = $this->trans('Order restored with success.', 'Modules.Molonies.Common');
+            $msg .= "(" . $action->order->reference . ")";
 
-            /** @var MoloniDocumentsRepository $moloniDocumentRepository */
-            $moloniDocumentRepository = $entityManager->getRepository(MoloniDocuments::class);
-
-            /** @var null|MoloniDocuments $document */
-            $document = $moloniDocumentRepository->findOneBy(['orderId' => $orderId, 'documentId' => -1]);
-
-            if ($document === null) {
-                throw new MoloniException('Order document not found');
-            }
-
-            $entityManager->remove($document);
-            $entityManager->flush();
-
-            $this->addSuccessMessage($this->trans('Order restored with success.', 'Modules.Molonies.Common'));
+            $this->addSuccessMessage($msg);
         } catch (MoloniException $e) {
             $msg = $this->trans($e->getMessage(), 'Modules.Molonies.Errors');
-
+            $this->addErrorMessage($msg, $e->getData());
+        } catch (PrestaShopDatabaseException|PrestaShopException $e) {
+            $msg = $this->trans('Error fetching Prestashop order', 'Modules.Molonies.Errors');
             $this->addErrorMessage($msg);
         }
 

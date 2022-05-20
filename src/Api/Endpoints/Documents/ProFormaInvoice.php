@@ -151,6 +151,7 @@ class ProFormaInvoice extends Endpoint
                             entityName
                             documentSetName
                             totalValue
+                            currencyExchangeTotalValue
                         }
                         errors
                         {
@@ -182,6 +183,7 @@ class ProFormaInvoice extends Endpoint
                 {
                     documentId
                     status
+                    currencyExchangeTotalValue
                 }
                 errors
                 {

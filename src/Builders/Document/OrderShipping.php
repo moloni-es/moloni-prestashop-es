@@ -24,7 +24,6 @@
 
 namespace Moloni\Builders\Document;
 
-use Moloni\Exceptions\Product\MoloniProductCategoryException;
 use Order;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\Interfaces\BuilderItemInterface;
@@ -168,7 +167,7 @@ class OrderShipping implements BuilderItemInterface
      *
      * @return array
      */
-    public function toArray(?int $order = 0): array
+    public function toArray(?int $order = 1): array
     {
         $params = [
             'productId' => $this->productId,
@@ -314,7 +313,7 @@ class OrderShipping implements BuilderItemInterface
      */
     protected function setName(): OrderShipping
     {
-        $this->name = $this->orderShipping['carrier_name'] ?? 'CARRIER';
+        $this->name = $this->orderShipping['carrier_name'] ?? 'Transportador';
 
         return $this;
     }
@@ -326,8 +325,8 @@ class OrderShipping implements BuilderItemInterface
      */
     protected function setPrice(): OrderShipping
     {
-        $this->price = $this->orderShipping['shipping_cost_tax_excl'] ?? 0;
-        $this->priceWithTaxes = $this->orderShipping['shipping_cost_tax_incl'] ?? 0;
+        $this->price = (float)($this->orderShipping['shipping_cost_tax_excl'] ?? 0);
+        $this->priceWithTaxes = (float)($this->orderShipping['shipping_cost_tax_incl'] ?? 0);
 
         return $this;
     }
@@ -389,7 +388,7 @@ class OrderShipping implements BuilderItemInterface
         $taxRate = $this->order->carrier_tax_rate;
 
         if ($taxRate > 0) {
-            $taxBuilder = new OrderShippingTax($taxRate, $this->ficalZone, 0);
+            $taxBuilder = new OrderShippingTax($taxRate, $this->ficalZone, 1);
 
             try {
                 $taxBuilder
@@ -407,7 +406,13 @@ class OrderShipping implements BuilderItemInterface
         }
 
         if (empty($this->taxes)) {
-            $this->exemptionReason = Settings::get('exemptionReasonShipping');
+            $exemption = Settings::get('exemptionReasonShipping');
+
+            if (empty($exemption)) {
+                throw new MoloniDocumentShippingTaxException('Shipping has no taxes applied. Please add an exemption reason in plugin settings.', []);
+            }
+
+            $this->exemptionReason = $exemption;
         }
 
         return $this;
@@ -420,7 +425,7 @@ class OrderShipping implements BuilderItemInterface
      */
     protected function setMeasurementUnit(): OrderShipping
     {
-        $this->measurementUnit = Settings::get('measurementUnit') ?? 0;
+        $this->measurementUnit = (int)(Settings::get('measurementUnit') ?? 0);
 
         return $this;
     }
@@ -450,7 +455,7 @@ class OrderShipping implements BuilderItemInterface
                 ->queryProducts($variables);
 
             if (!empty($query)) {
-                $this->productId = $query[0]['productId'];
+                $this->productId = (int)$query[0]['productId'];
             }
         } catch (MoloniApiException $e) {
             throw new MoloniDocumentShippingException('Error fetching shipping by reference: ({0})', ['{0}' => $this->reference], $e->getData());

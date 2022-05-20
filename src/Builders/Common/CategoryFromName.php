@@ -140,7 +140,7 @@ class CategoryFromName implements BuilderItemInterface
                 'filter' => [
                     'field' => 'parentId',
                     'comparison' => 'eq',
-                    'value' => (string)$this->parentId,
+                    'value' => $this->parentId > 0 ? (string)$this->parentId : null,
                 ],
                 'search' => [
                     'field' => 'name',
@@ -154,7 +154,13 @@ class CategoryFromName implements BuilderItemInterface
                 ->queryProductCategories($variables);
 
             if (!empty($query)) {
-                $this->productCategoryId = $query[0]['productCategoryId'];
+                foreach ($query as $category) {
+                    if ($category['name'] === $this->name) {
+                        $this->productCategoryId = $query[0]['productCategoryId'];
+
+                        break;
+                    }
+                }
             }
         } catch (MoloniApiException $e) {
             throw new MoloniException('Error fetching categories', [], $e->getData());

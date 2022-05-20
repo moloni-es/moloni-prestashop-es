@@ -55,11 +55,6 @@ class Categories extends Endpoint
                         {
                             productCategoryId
                             name
-                            child
-                            {
-                                name
-                                productCategoryId
-                            }
                         }
                         options
                         {

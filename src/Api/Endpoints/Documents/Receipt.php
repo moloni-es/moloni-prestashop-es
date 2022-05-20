@@ -167,6 +167,7 @@ class Receipt extends Endpoint
                             entityName
                             documentSetName
                             totalValue
+                            currencyExchangeTotalValue
                         }
                         errors
                         {
@@ -198,6 +199,7 @@ class Receipt extends Endpoint
                 {
                     documentId
                     status
+                    currencyExchangeTotalValue
                 }
                 errors
                 {

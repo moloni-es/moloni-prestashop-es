@@ -151,6 +151,7 @@ class PurchaseOrder extends Endpoint
                             entityName
                             documentSetName
                             totalValue
+                            currencyExchangeTotalValue
                         }
                         errors
                         {
@@ -182,6 +183,7 @@ class PurchaseOrder extends Endpoint
                 {
                     documentId
                     status
+                    currencyExchangeTotalValue
                 }
                 errors
                 {

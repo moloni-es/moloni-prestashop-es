@@ -68,6 +68,16 @@ class MoloniApi
     }
 
     /**
+     * Get logged company id
+     *
+     * @return int
+     */
+    public static function getCompanyId(): int
+    {
+        return self::$app->getCompanyId() ?? 0;
+    }
+
+    /**
      * Login action
      *
      * @param string $code

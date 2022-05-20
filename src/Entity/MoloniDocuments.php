@@ -35,6 +35,13 @@ class MoloniDocuments
     private $documentId;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="document_type", type="string", length=60)
+     */
+    private $documentType;
+
+    /**
      * @var int
      *
      * @ORM\Column(name="shop_id", type="integer")
@@ -180,5 +187,21 @@ class MoloniDocuments
             'order_reference' => $this->getOrderReference(),
             'created_at' => $this->getCreatedAt(),
         ];
+    }
+
+    /**
+     * @return string
+     */
+    public function getDocumentType(): string
+    {
+        return $this->documentType;
+    }
+
+    /**
+     * @param string $documentType
+     */
+    public function setDocumentType(string $documentType): void
+    {
+        $this->documentType = $documentType;
     }
 }

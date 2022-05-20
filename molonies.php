@@ -204,12 +204,8 @@ class MoloniEs extends Module
 
         $this->context->controller->addCSS($this->_path . 'views/css/moloni-icons.css');
 
-        if ($action === 'MoloniSettings') {
-            $this->context->controller->addJS($this->_path . 'views/compiled/js/app.js');
-            //$this->context->controller->addJS($this->_path . 'views/js/app.js');
-        }
-
         if (str_starts_with($action, 'Moloni')) {
+            $this->context->controller->addJS($this->_path . 'views/compiled/js/app.js');
             $this->context->controller->addCSS($this->_path . 'views/css/moloni.css');
         }
 

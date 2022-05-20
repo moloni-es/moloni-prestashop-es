@@ -24,24 +24,18 @@
 
 namespace Moloni\Controller\Admin\Orders;
 
-use Shop;
-use Store;
-use Order;
 use Currency;
 use PrestaShopDatabaseException;
 use PrestaShopException;
-use Moloni\Helpers\Settings;
-use Moloni\Builders\DocumentFromOrder;
 use Moloni\Controller\Admin\MoloniController;
-use Moloni\Entity\MoloniDocuments;
-use Moloni\Exceptions\MoloniException;
 use Moloni\Enums\DocumentTypes;
 use Moloni\Enums\MoloniRoutes;
-use Moloni\Repository\OrdersRepository;
-use Moloni\Repository\MoloniDocumentsRepository;
-use Moloni\Api\MoloniApiClient;
 use Moloni\Exceptions\Document\MoloniDocumentException;
 use Moloni\Exceptions\Document\MoloniDocumentWarning;
+use Moloni\Exceptions\MoloniException;
+use Moloni\Helpers\Settings;
+use Moloni\Repository\OrdersRepository;
+use Moloni\Services\OrderProcessing;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -57,14 +51,11 @@ class Orders extends MoloniController
      */
     public function home(Request $request): Response
     {
+        $page = $request->get('page', 1);
+
         /** @var OrdersRepository $repository */
         $repository = $this->get('moloni.repository.orders');
-
-        $page = $request->get('page', 1);
-        [
-            'orders' => $orders,
-            'paginator' => $paginator
-        ] = $repository->getPendingOrdersPaginated($page, $this->getContextLangId(), Settings::get('dateCreated'));
+        ['orders' => $orders, 'paginator' => $paginator] = $repository->getPendingOrdersPaginated($page, $this->getContextLangId(), Settings::get('dateCreated'));
 
         foreach ($orders as &$order) {
             $order['currency'] = (new Currency($order['id_currency']))->symbol;
@@ -97,58 +88,27 @@ class Orders extends MoloniController
      */
     public function create(Request $request): RedirectResponse
     {
-        $orderId = $request->get('order_id');
+        $orderId = (int)$request->get('order_id', 0);
+        $documentType = $request->get('document_type');
         $page = $request->get('page');
 
         try {
-            if (!is_numeric($orderId) || $orderId < 0) {
-                throw new MoloniException('ID is invalid');
-            }
+            $action = new OrderProcessing($orderId, $this->getDoctrine()->getManager());
+            $action->createDocument($documentType);
 
-            $order = new Order($orderId);
+            $msg = $this->trans('Document created successfully.', 'Modules.Molonies.Common');
+            $msg .= "(" . $action->order->reference . ")";
 
-            if (empty($order->id)) {
-                throw new MoloniException('Order does not exist!');
-            }
-
-            /** @var MoloniDocumentsRepository $moloniDocumentRepository */
-            $moloniDocumentRepository = $this
-                ->getDoctrine()
-                ->getManager()
-                ->getRepository(MoloniDocuments::class);
-
-            if ($moloniDocumentRepository->findOneBy(['orderId' => $orderId])) {
-                throw new MoloniException('Order already dicarded or created!');
-            }
-
-            $company = MoloniApiClient::companies()
-                ->queryCompany()['data']['company']['data'] ?? [];
-
-            $builder = new DocumentFromOrder($order, $company);
-            $builder->createDocument();
-
-            $document = new MoloniDocuments();
-            $document->setShopId((int)Shop::getContextShopID());
-            $document->setDocumentId($builder->documentId);
-            $document->setCompanyId($this->moloniContext->getCompanyId());
-            $document->setOrderId($orderId);
-            $document->setOrderReference($order->reference);
-            $document->setCreatedAt(time());
-
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($document);
-            $entityManager->flush();
-
-            $this->addSuccessMessage($this->trans('Document created successfully.', 'Modules.Molonies.Common'));
+            $this->addSuccessMessage($msg);
         } catch (MoloniDocumentWarning $e) {
             $msg = $this->trans($e->getMessage(), 'Modules.Molonies.Errors', $e->getIdentifiers());
-            $this->addWarningMessage($msg);
+            $this->addWarningMessage($msg, $e->getData());
         } catch (MoloniDocumentException $e) {
             $msg = $this->trans($e->getMessage(), 'Modules.Molonies.Errors', $e->getIdentifiers());
-            $this->addErrorMessage($msg);
+            $this->addErrorMessage($msg, $e->getData());
         } catch (MoloniException $e) {
             $msg = $this->trans($e->getMessage(), 'Modules.Molonies.Errors', $e->getIdentifiers());
-            $this->addErrorMessage($msg);
+            $this->addErrorMessage($msg, $e->getData());
         } catch (PrestaShopDatabaseException|PrestaShopException $e) {
             $msg = $this->trans('Error fetching Prestashop order', 'Modules.Molonies.Errors');
             $this->addErrorMessage($msg);
@@ -170,43 +130,16 @@ class Orders extends MoloniController
         $page = $request->get('page', 1);
 
         try {
-            if (!is_numeric($orderId) || $orderId < 0) {
-                throw new MoloniException('ID is invalid');
-            }
-
-            $order = new Order($orderId);
-
-            if ($order->id === null) {
-                throw new MoloniException('Order does not exist!');
-            }
-
-            /** @var MoloniDocumentsRepository $moloniDocumentRepository */
-            $moloniDocumentRepository = $this
-                ->getDoctrine()
-                ->getManager()
-                ->getRepository(MoloniDocuments::class);
-
-            if ($moloniDocumentRepository->findOneBy(['orderId' => $orderId])) {
-                throw new MoloniException('Order already dicarded or created!');
-            }
-
-            $document = new MoloniDocuments();
-            $document->setDocumentId(-1);
-            $document->setShopId((int)Shop::getContextShopID());
-            $document->setCompanyId($this->moloniContext->getCompanyId());
-            $document->setOrderId($orderId);
-            $document->setOrderReference($order->reference);
-            $document->setCreatedAt(time());
-
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($document);
-            $entityManager->flush();
+            $action = new OrderProcessing($orderId, $this->getDoctrine()->getManager());
+            $action->discardOrder();
 
             $msg = $this->trans('Order discarded with success.', 'Modules.Molonies.Common');
+            $msg .= "(" . $action->order->reference . ")";
+
             $this->addSuccessMessage($msg);
         } catch (MoloniException $e) {
             $msg = $this->trans($e->getMessage(), 'Modules.Molonies.Errors', $e->getIdentifiers());
-            $this->addErrorMessage($msg);
+            $this->addErrorMessage($msg, $e->getData());
         } catch (PrestaShopDatabaseException|PrestaShopException $e) {
             $msg = $this->trans('Error fetching Prestashop order', 'Modules.Molonies.Errors');
             $this->addErrorMessage($msg);

@@ -63,6 +63,13 @@ class TaxFromRate implements BuilderItemInterface
     protected $value;
 
     /**
+     * If tax is cumulative
+     *
+     * @var bool
+     */
+    protected $cumulative;
+
+    /**
      * Fiscal zone
      *
      * @var array
@@ -83,7 +90,7 @@ class TaxFromRate implements BuilderItemInterface
      * @param array|null  $fiscalZone Document fiscal zone
      * @param int|null $taxOrder Tax order
      */
-    public function __construct(float $taxRate, ?array $fiscalZone, ?int $taxOrder = 0)
+    public function __construct(float $taxRate, ?array $fiscalZone, ?int $taxOrder = 1)
     {
         if (empty($fiscalZone)) {
             $fiscalZone = [
@@ -116,6 +123,8 @@ class TaxFromRate implements BuilderItemInterface
                     'visible' => Boolean::YES,
                     'name' => $this->name,
                     'fiscalZone' => $this->fiscalZone['code'],
+                    'fiscalZoneFinanceType' => 1,
+                    'fiscalZoneFinanceTypeMode' => 'NOR',
                     'countryId' => $this->fiscalZone['countryId'],
                     'type' => $this->type,
                     'isDefault' => false,
@@ -170,6 +179,7 @@ class TaxFromRate implements BuilderItemInterface
             'taxId' => $this->taxId,
             'value' => $this->value,
             'ordering' => $this->taxOrder,
+            'cumulative' => $this->cumulative,
         ];
     }
 
@@ -184,6 +194,7 @@ class TaxFromRate implements BuilderItemInterface
     {
         $this
             ->setType()
+            ->setComulative()
             ->setName();
 
         return $this;
@@ -199,6 +210,18 @@ class TaxFromRate implements BuilderItemInterface
     public function setType(): TaxFromRate
     {
         $this->type = SaftType::IVA;
+
+        return $this;
+    }
+
+    /**
+     * Defines if tax is comulative
+     *
+     * @return $this
+     */
+    public function setComulative(): TaxFromRate
+    {
+        $this->cumulative = false;
 
         return $this;
     }

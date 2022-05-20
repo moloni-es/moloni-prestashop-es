@@ -196,7 +196,7 @@ class SettingsFormType extends AbstractType
                 'translation_domain' => 'Modules.Molonies.Common',
                 'choice_translation_domain' => 'Modules.Molonies.Common',
             ])
-            ->add('billOfLanding', ChoiceType::class, [
+            ->add('billOfLading', ChoiceType::class, [
                 'label' => 'Bill of lading',
                 'choices' => $yesNoOptions,
                 'help' => 'Create order document bill of lading',
