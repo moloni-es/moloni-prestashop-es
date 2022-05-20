@@ -185,7 +185,7 @@ class OrderPayment implements BuilderItemInterface
      */
     protected function setValue(): OrderPayment
     {
-        $this->value = $this->orderPayment->amount ?? 0;
+        $this->value = (float)($this->orderPayment->amount ?? 0);
 
         return $this;
     }

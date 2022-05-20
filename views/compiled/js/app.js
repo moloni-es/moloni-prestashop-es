@@ -83,6 +83,7 @@ __webpack_require__.r(__webpack_exports__);
 var DocumentType = {
   INVOICES: 'invoices',
   RECEIPTS: 'receipts',
+  INVOICE_AND_RECEIPT: 'invoiceAndReceipts',
   PURCHASE_ORDERS: 'purchaseOrders',
   PRO_FORMA_INVOICES: 'proFormaInvoices',
   SIMPLIFIED_INVOICES: 'simplifiedInvoices',
@@ -179,14 +180,14 @@ var MoloniSettings = /*#__PURE__*/function () {
       this.$loadAddressHolder = $('#' + this.settingIdPrefix + 'loadAddress_row');
       this.$customLoadAddressHolder = $('#' + this.settingIdPrefix + 'custom_loadAddress_row');
       this.$sendByEmailHolder = $('#' + this.settingIdPrefix + 'sendByEmail_row');
-      this.$billOfLandingHolder = $('#' + this.settingIdPrefix + 'billOfLanding_row'); // Fields
+      this.$billOfLadingHolder = $('#' + this.settingIdPrefix + 'billOfLading_row'); // Fields
 
       this.$shippingInfo = $('#' + this.settingIdPrefix + 'shippingInformation');
       this.$loadAddress = $('#' + this.settingIdPrefix + 'loadAddress');
       this.$documentStatus = $('#' + this.settingIdPrefix + 'documentStatus');
       this.$documentType = $('#' + this.settingIdPrefix + 'documentType');
       this.$sendByEmail = $('#' + this.settingIdPrefix + 'sendByEmail');
-      this.$billOfLanding = $('#' + this.settingIdPrefix + 'billOfLanding'); // Actions
+      this.$billOfLading = $('#' + this.settingIdPrefix + 'billOfLading'); // Actions
 
       this.$documentStatus.on('change', this.onDocumentStatusChange.bind(this)).trigger('change');
       this.$shippingInfo.on('change', this.onShippingInformationChange.bind(this)).trigger('change');
@@ -196,7 +197,7 @@ var MoloniSettings = /*#__PURE__*/function () {
   }, {
     key: "onDocumentTypeChange",
     value: function onDocumentTypeChange(event) {
-      if (event.target.value === _enums_DocumentType__WEBPACK_IMPORTED_MODULE_4__.DocumentType.RECEIPTS) {
+      if (event.target.value === _enums_DocumentType__WEBPACK_IMPORTED_MODULE_4__.DocumentType.INVOICE_AND_RECEIPT) {
         this.$documentStatus.val(_enums_DocumentStatus__WEBPACK_IMPORTED_MODULE_3__.DocumentStatus.CLOSED).attr('disabled', true).trigger('change');
       } else {
         this.$documentStatus.removeAttr('disabled');
@@ -208,14 +209,14 @@ var MoloniSettings = /*#__PURE__*/function () {
       switch (parseInt(event.target.value)) {
         case _enums_DocumentStatus__WEBPACK_IMPORTED_MODULE_3__.DocumentStatus.DRAFT:
           this.$sendByEmailHolder.slideUp(200);
-          this.$billOfLandingHolder.slideUp(200);
+          this.$billOfLadingHolder.slideUp(200);
           this.$sendByEmail.val(_enums_Boolean__WEBPACK_IMPORTED_MODULE_5__.Boolean.NO);
-          this.$billOfLanding.val(_enums_Boolean__WEBPACK_IMPORTED_MODULE_5__.Boolean.NO);
+          this.$billOfLading.val(_enums_Boolean__WEBPACK_IMPORTED_MODULE_5__.Boolean.NO);
           break;
 
         case _enums_DocumentStatus__WEBPACK_IMPORTED_MODULE_3__.DocumentStatus.CLOSED:
           this.$sendByEmailHolder.slideDown(200);
-          this.$billOfLandingHolder.slideDown(200);
+          this.$billOfLadingHolder.slideDown(200);
           break;
       }
     }

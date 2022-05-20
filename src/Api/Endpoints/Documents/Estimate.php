@@ -18,7 +18,7 @@ class Estimate extends Endpoint
      */
     public function queryEstimate(?array $variables = []): array
     {
-        $query = 'query estimate($companyId: Int!,$documentId: Int!,$options: InvoiceOptionsSingle)
+        $query = 'query estimate($companyId: Int!,$documentId: Int!,$options: EstimateOptionsSingle)
         {
             estimate(companyId: $companyId,documentId: $documentId,options: $options)
             {
@@ -56,7 +56,7 @@ class Estimate extends Endpoint
      */
     public function queryEstimates(?array $variables = []): array
     {
-        $query = 'query estimates($companyId: Int!,$options: InvoiceOptions)
+        $query = 'query estimates($companyId: Int!,$options: EstimateOptions)
         {
             estimates(companyId: $companyId,options: $options)
             {
@@ -89,7 +89,7 @@ class Estimate extends Endpoint
             }
         }';
 
-        return $this->paginatedPost($query, $variables, 'invoices');
+        return $this->paginatedPost($query, $variables, 'estimates');
     }
 
     /**
@@ -135,7 +135,7 @@ class Estimate extends Endpoint
      */
     public function mutationEstimateCreate(?array $variables = []): array
     {
-        $query = 'mutation estimateCreate($companyId: Int!,$data: InvoiceInsert!,$options: InvoiceMutateOptions){
+        $query = 'mutation estimateCreate($companyId: Int!,$data: EstimateInsert!,$options: EstimateMutateOptions){
             estimateCreate(companyId: $companyId,data: $data,options: $options) {
                 errors{
                     field
@@ -148,6 +148,7 @@ class Estimate extends Endpoint
                     documentTotal
                     documentSetName
                     ourReference
+                    currencyExchangeTotalValue
                 }
             }
         }';
@@ -166,7 +167,7 @@ class Estimate extends Endpoint
      */
     public function mutationEstimateUpdate(?array $variables = []): array
     {
-        $query = 'mutation estimateUpdate($companyId: Int!,$data: InvoiceUpdate!)
+        $query = 'mutation estimateUpdate($companyId: Int!,$data: EstimateUpdate!)
         {
             estimateUpdate(companyId: $companyId,data: $data) 
             {
@@ -174,6 +175,7 @@ class Estimate extends Endpoint
                 {
                     field
                     msg
+                    currencyExchangeTotalValue
                 }
                 data
                 {

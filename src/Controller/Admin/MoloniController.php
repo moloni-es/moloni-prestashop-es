@@ -55,6 +55,37 @@ abstract class MoloniController extends FrameworkBundleAdminController implement
         $this->moloniContext = $this->get('moloni.services.context');
     }
 
+    //          Privates          //
+
+    /**
+     * Creates payload message to show user
+     *
+     * @param array $errors
+     *
+     * @return string
+     */
+    private function getErrorPayload(array $errors): string
+    {
+        $msg = $this->trans('Click for more information', 'Modules.Molonies.Errors');
+
+        $error = ' </br>';
+        $error .= '<a onclick="$(\'#toggleDiv\').toggle(200);" href="#">' . $msg . '</a>';
+        $error .= '</br>';
+
+        $error .= '<div style="display: none;" id="toggleDiv">';
+
+        foreach ($errors as $key => $value) {
+            $error .= '<br>';
+            $error .= '    <b>' . $key . ': </b>';
+            $error .= '    <pre>' . print_r($value, true) . '</pre>';
+            $error .= '</br>';
+        }
+
+        $error .= '</div>';
+
+        return $error;
+    }
+
     //          Messages          //
 
     /**
@@ -92,11 +123,16 @@ abstract class MoloniController extends FrameworkBundleAdminController implement
      * Adds warning message to the user
      *
      * @param string $message
+     * @param array|null $error Error data
      *
      * @return bool
      */
-    protected function addWarningMessage(string $message): bool
+    protected function addWarningMessage(string $message, ?array $error = []): bool
     {
+        if (!empty($error)) {
+            $message .= $this->getErrorPayload($error);
+        }
+
         return $this->addFlashMessage($message, 'warning');
     }
 
@@ -111,7 +147,7 @@ abstract class MoloniController extends FrameworkBundleAdminController implement
     protected function addErrorMessage(string $message, ?array $error = []): bool
     {
         if (!empty($error)) {
-            // todo: append formated error to message
+            $message .= $this->getErrorPayload($error);
         }
 
         return $this->addFlashMessage($message, 'error');
@@ -148,18 +184,6 @@ abstract class MoloniController extends FrameworkBundleAdminController implement
     }
 
     /**
-     * Redirect to document settings page
-     *
-     * @param int|null $page
-     *
-     * @return RedirectResponse
-     */
-    protected function redirectToDocuments(?int $page = 1): RedirectResponse
-    {
-        return $this->redirectToRoute(MoloniRoutes::DOCUMENTS, ['page' => $page]);
-    }
-
-    /**
      * Redirect to Orders page
      *
      * @param int|null $page
@@ -169,6 +193,18 @@ abstract class MoloniController extends FrameworkBundleAdminController implement
     public function redirectToOrders(?int $page = 1): RedirectResponse
     {
         return $this->redirectToRoute(MoloniRoutes::ORDERS, ['page' => $page]);
+    }
+
+    /**
+     * Redirect to document settings page
+     *
+     * @param int|null $page
+     *
+     * @return RedirectResponse
+     */
+    protected function redirectToDocuments(?int $page = 1): RedirectResponse
+    {
+        return $this->redirectToRoute(MoloniRoutes::DOCUMENTS, ['page' => $page]);
     }
 
     /**

@@ -121,9 +121,9 @@ class MoloniProductFromId implements BuilderInterface
     /**
      * Has stock
      *
-     * @var int
+     * @var bool
      */
-    protected $hasStock = 0;
+    protected $hasStock = false;
 
     /**
      * Has stock
@@ -137,7 +137,7 @@ class MoloniProductFromId implements BuilderInterface
      *
      * @var int
      */
-    protected $measurementUnit;
+    protected $measurementUnitId;
 
     /**
      * Warehouse
@@ -219,7 +219,8 @@ class MoloniProductFromId implements BuilderInterface
             ->setEcoTax()
             ->setWarehouseId()
             ->setIdentifications()
-            ->setVariations();
+            ->setVariations()
+            ->setMeasurementUnitId();
 
         return $this;
     }
@@ -251,8 +252,10 @@ class MoloniProductFromId implements BuilderInterface
             'reference' => $this->reference,
             'name' => $this->name,
             'hasStock' => $this->hasStock,
+            'price' => $this->price,
             'summary' => $this->summary,
-            'identifications' => $this->identifications
+            'identifications' => $this->identifications,
+            'measurementUnitId' => $this->measurementUnitId
         ];
 
         if (!empty($this->category)) {
@@ -293,7 +296,7 @@ class MoloniProductFromId implements BuilderInterface
 
         try {
             $mutation = MoloniApiClient::products()
-                ->mutationProductUpdate(['data' => $props]);
+                ->mutationProductCreate(['data' => $props]);
 
             $moloniProduct = $mutation['data']['productCreate']['data'] ?? [];
             $productId = $moloniProduct['productId'] ?? 0;
@@ -412,7 +415,7 @@ class MoloniProductFromId implements BuilderInterface
      */
     protected function setPrice(): MoloniProductFromId
     {
-        $this->price = $this->prestashopProduct->price;
+        $this->price = $this->prestashopProduct->getPriceWithoutReduct();
 
         return $this;
     }
@@ -436,7 +439,7 @@ class MoloniProductFromId implements BuilderInterface
      */
     protected function setHasStock(): MoloniProductFromId
     {
-        $this->hasStock = Boolean::YES;
+        $this->hasStock = (bool)Boolean::YES;
 
         return $this;
     }
@@ -461,8 +464,7 @@ class MoloniProductFromId implements BuilderInterface
     protected function setTax(): MoloniProductFromId
     {
         try {
-            $mutation = MoloniApiClient::companies()
-                    ->queryCompany()['data']['company']['data'] ?? [];
+            $mutation = MoloniApiClient::companies()->queryCompany();
 
             $address = new Address();
             $address->id_country = Country::getByIso($mutation['fiscalZone']['fiscalZone'] ?? 'ES');
@@ -475,7 +477,7 @@ class MoloniProductFromId implements BuilderInterface
                     'countryId' => $mutation['country']['countryId'] ?? Countries::SPAIN
                 ];
 
-                $taxBuilder = new ProductTax($taxRate, $fiscalZone, 0);
+                $taxBuilder = new ProductTax($taxRate, $fiscalZone, 1);
                 $taxBuilder->search();
 
                 if ($taxBuilder->taxId === 0) {
@@ -548,6 +550,7 @@ class MoloniProductFromId implements BuilderInterface
     protected function setCategory(): MoloniProductFromId
     {
         if ($this->prestashopProduct->id_category_default > 0) {
+
             $categories = $this->getPrestashopCategoryTreeById($this->prestashopProduct->id_category_default);
 
             if (empty($categories)) {
@@ -559,6 +562,7 @@ class MoloniProductFromId implements BuilderInterface
 
                 foreach ($categories as $category) {
                     $builder = new ProductCategory($category, $parentId);
+
                     $builder->search();
 
                     if ($builder->productCategoryId === 0) {
@@ -568,11 +572,24 @@ class MoloniProductFromId implements BuilderInterface
                     $parentId = $builder->productCategoryId;
                 }
 
+                /** @noinspection PhpUndefinedVariableInspection */
                 $this->category = $builder;
             } catch (MoloniException $e) {
-                throw new MoloniProductCategoryException($e->getData(), $e->getIdentifiers(), $e->getData());
+                throw new MoloniProductCategoryException($e->getMessage(), $e->getIdentifiers(), $e->getData());
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * Set product measurement unit
+     *
+     * @return $this
+     */
+    protected function setMeasurementUnitId(): MoloniProductFromId
+    {
+        $this->measurementUnitId = (int)(Settings::get('measurementUnit') ?? 0);
 
         return $this;
     }
@@ -604,7 +621,7 @@ class MoloniProductFromId implements BuilderInterface
         }
 
         if (!empty($this->prestashopProduct->ean13)) {
-            $identifications =  [
+            $identifications[] =  [
                 'type' => 'EAN13',
                 'text' => $this->prestashopProduct->ean13,
                 'favorite' => false
@@ -612,14 +629,14 @@ class MoloniProductFromId implements BuilderInterface
         }
 
         if (!empty($this->prestashopProduct->isbn)) {
-            $identifications =  [
+            $identifications[] =  [
                 'type' => 'ISBN',
                 'text' => $this->prestashopProduct->isbn,
                 'favorite' => false
             ];
         }
 
-        $this->identifications[] = $identifications;
+        $this->identifications = $identifications;
 
         return $this;
     }
@@ -645,6 +662,7 @@ class MoloniProductFromId implements BuilderInterface
         try {
             $query = MoloniApiClient::products()
                 ->queryProducts($variables);
+
 
             if (!empty($query)) {
                 $this->productId = $query[0]['productId'];
@@ -676,6 +694,6 @@ class MoloniProductFromId implements BuilderInterface
      */
     protected function productHasStock(): bool
     {
-        return Boolean::YES === $this->hasStock;
+        return $this->hasStock;
     }
 }

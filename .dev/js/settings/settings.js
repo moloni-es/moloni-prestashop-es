@@ -13,7 +13,7 @@ export default class MoloniSettings {
         this.$loadAddressHolder = $('#' + this.settingIdPrefix + 'loadAddress_row');
         this.$customLoadAddressHolder = $('#' + this.settingIdPrefix + 'custom_loadAddress_row');
         this.$sendByEmailHolder = $('#' + this.settingIdPrefix + 'sendByEmail_row');
-        this.$billOfLandingHolder = $('#' + this.settingIdPrefix + 'billOfLanding_row');
+        this.$billOfLadingHolder = $('#' + this.settingIdPrefix + 'billOfLading_row');
 
         // Fields
         this.$shippingInfo = $('#' + this.settingIdPrefix + 'shippingInformation');
@@ -21,7 +21,7 @@ export default class MoloniSettings {
         this.$documentStatus = $('#' + this.settingIdPrefix + 'documentStatus');
         this.$documentType = $('#' + this.settingIdPrefix + 'documentType');
         this.$sendByEmail = $('#' + this.settingIdPrefix + 'sendByEmail');
-        this.$billOfLanding = $('#' + this.settingIdPrefix + 'billOfLanding');
+        this.$billOfLading = $('#' + this.settingIdPrefix + 'billOfLading');
 
         // Actions
         this.$documentStatus
@@ -39,7 +39,7 @@ export default class MoloniSettings {
     }
 
     onDocumentTypeChange(event) {
-        if (event.target.value === DocumentType.RECEIPTS) {
+        if (event.target.value === DocumentType.INVOICE_AND_RECEIPT) {
             this.$documentStatus
                 .val(DocumentStatus.CLOSED)
                 .attr('disabled', true)
@@ -54,14 +54,14 @@ export default class MoloniSettings {
         switch (parseInt(event.target.value)) {
             case DocumentStatus.DRAFT:
                 this.$sendByEmailHolder.slideUp(200);
-                this.$billOfLandingHolder.slideUp(200);
+                this.$billOfLadingHolder.slideUp(200);
                 this.$sendByEmail.val(Boolean.NO);
-                this.$billOfLanding.val(Boolean.NO);
+                this.$billOfLading.val(Boolean.NO);
 
                 break;
             case DocumentStatus.CLOSED:
                 this.$sendByEmailHolder.slideDown(200);
-                this.$billOfLandingHolder.slideDown(200);
+                this.$billOfLadingHolder.slideDown(200);
 
                 break;
         }

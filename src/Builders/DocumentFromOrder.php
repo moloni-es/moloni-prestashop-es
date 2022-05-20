@@ -25,8 +25,9 @@
 namespace Moloni\Builders;
 
 use Address;
-use Configuration;
 use Currency;
+use DateTime;
+use Moloni\Exceptions\MoloniException;
 use Order;
 use OrderPayment as PrestashopOrderPayment;
 use Moloni\Api\MoloniApiClient;
@@ -38,6 +39,7 @@ use Moloni\Builders\Document\OrderPayment;
 use Moloni\Builders\Document\OrderProduct;
 use Moloni\Builders\Document\OrderShipping;
 use Moloni\Builders\Interfaces\BuilderInterface;
+use Moloni\Enums\CalculationMode;
 use Moloni\Enums\Boolean;
 use Moloni\Enums\FiscalZone;
 use Moloni\Enums\DocumentStatus;
@@ -50,6 +52,7 @@ use Moloni\Exceptions\Document\MoloniDocumentPaymentException;
 use Moloni\Exceptions\Document\MoloniDocumentProductException;
 use Moloni\Exceptions\Document\MoloniDocumentProductTaxException;
 use Moloni\Exceptions\Document\MoloniDocumentShippingException;
+use Moloni\Exceptions\Document\MoloniDocumentShippingTaxException;
 use Moloni\Exceptions\Document\MoloniDocumentWarning;
 use Moloni\Exceptions\MoloniApiException;
 
@@ -62,7 +65,29 @@ class DocumentFromOrder implements BuilderInterface
      *
      * @var int
      */
-    public $documentId = 0;
+    protected $documentId = 0;
+
+    /**
+     * Moloni document total
+     *
+     * @var int
+     */
+    protected $documentTotal = 0;
+
+    /**
+     * Inserted document
+     *
+     * @var array
+     */
+    protected $moloniDocument;
+
+
+    /**
+     * Related documents
+     *
+     * @var array
+     */
+    protected $relatedWith = [];
 
     /**
      * Document type
@@ -72,18 +97,18 @@ class DocumentFromOrder implements BuilderInterface
     protected $documentType;
 
     /**
+     * Document status
+     *
+     * @var int|null
+     */
+    protected $documentStatus;
+
+    /**
      * Document set id
      *
      * @var int
      */
     protected $documentSetId;
-
-    /**
-     * Inserted document
-     *
-     * @var array
-     */
-    protected $moloniDocument;
 
     /**
      * Document dates
@@ -104,12 +129,12 @@ class DocumentFromOrder implements BuilderInterface
      *
      * @var string
      */
-    public $ourReference;
+    protected $ourReference;
 
     /**
      * Document your reference
      *
-     * @var string
+     * @var string|null
      */
     protected $yourReference;
 
@@ -170,6 +195,28 @@ class DocumentFromOrder implements BuilderInterface
     protected $notes;
 
     /**
+     * Moloni round type
+     *
+     * @var null|int
+     */
+    protected $calculationMode;
+
+    /**
+     * Send document to customer via email
+     *
+     * @var int|null
+     */
+    protected $sendEmail;
+
+    /**
+     * If shipping information is added to document
+     *
+     * @var int
+     */
+    protected $useShipping = 0;
+
+
+    /**
      * Create props
      *
      * @var array
@@ -213,11 +260,15 @@ class DocumentFromOrder implements BuilderInterface
     protected function init(): DocumentFromOrder
     {
         $this
+            ->setDocumentStatus()
             ->setDocumentType()
             ->setDocumentSet()
+            ->setSendEmail()
+            ->setCalculationMode()
+            ->setShippingInformation()
             ->setOurReference()
             ->setYourReference()
-            ->setFicalZone()
+            ->setFiscalZone()
             ->setExchangeRate()
             ->setCustomer()
             ->setDates()
@@ -239,27 +290,26 @@ class DocumentFromOrder implements BuilderInterface
     protected function toArray(): DocumentFromOrder
     {
         $props = [
-            'data' => [
-                'fiscalZone' => $this->fiscalZone['code'],
-                'documentSetId' => $this->documentSetId,
-                'date' => $this->dates['date'],
-                'expirationDate' => $this->dates['expirationDate'],
-                'ourReference' => $this->ourReference,
-                'yourReference' => $this->yourReference,
-                'customerId' => $this->customer->toArray()['customerId'],
-                'notes' => $this->notes,
-                'status' => DocumentStatus::DRAFT
-            ]
+            'fiscalZone' => $this->fiscalZone['code'],
+            'documentCalculationsMode' => $this->calculationMode,
+            'documentSetId' => $this->documentSetId,
+            'date' => $this->dates['date'],
+            'expirationDate' => $this->dates['expirationDate'],
+            'ourReference' => $this->ourReference,
+            'yourReference' => $this->yourReference,
+            'customerId' => $this->customer->toArray()['customerId'],
+            'notes' => $this->notes,
+            'status' => DocumentStatus::DRAFT,
         ];
 
-        if (!empty($this->payments)) {
+        if (!empty($this->payments) && DocumentTypes::hasPayments($this->documentType)) {
             foreach ($this->payments as $payment) {
                 $props['payments'][] = $payment->toArray();
             }
         }
 
         if (!empty($this->products)) {
-            $order = 0;
+            $order = 1;
 
             foreach ($this->products as $product) {
                 $props['products'][] = $product->toArray($order);
@@ -274,19 +324,94 @@ class DocumentFromOrder implements BuilderInterface
             $props['products'][] = $this->shipping->toArray($order);
         }
 
-        if (!empty($this->delivery)) {
+        if (!empty($this->delivery) && $this->shouldAddShippingInformation()) {
             $delivery = $this->delivery->toArray();
 
             $props = array_merge($props, $delivery);
         }
 
+        if (!empty($this->relatedWith)) {
+            $props['relatedWith'] = [];
+
+            foreach ($this->relatedWith as $related) {
+                $props['relatedWith'][] = [
+                    'relatedDocumentId' => $related['relatedDocumentId'],
+                    'value' => $related['value'],
+                ];
+            }
+        }
+
         if (!empty($this->exchangeRate)) {
-            // todo: apply exchage rates
+            $this->applyExchangeRate($props);
         }
 
         $this->createProps = ['data' => $props];
 
         return $this;
+    }
+
+    /**
+     * Apply exchage rate
+     *
+     * @param array $props
+     *
+     * @return void
+     */
+    protected function applyExchangeRate(array &$props): void
+    {
+        // Invert exchage rate
+        $value = 1 / $this->exchangeRate['exchange'];
+
+        if (!empty($props['products'] ?? [])) {
+            foreach ($props['products'] as &$product) {
+                $product['price'] *= $value;
+            }
+
+            unset($product);
+        }
+
+        if (!empty($props['payments'] ?? [])) {
+            foreach ($props['payments'] as &$payment) {
+                $payment['value'] *= $value;
+            }
+
+            unset($payment);
+        }
+
+        $props['currencyExchangeId'] = $this->exchangeRate['currencyExchangeId'];
+        $props['currencyExchangeExchange'] = $this->exchangeRate['exchange'];
+    }
+
+    //          Verifications          //
+
+    /**
+     * Checks if document should be closed
+     *
+     * @return bool
+     */
+    protected function shouldCloseDocument(): bool
+    {
+        return $this->documentStatus === DocumentStatus::CLOSED;
+    }
+
+    /**
+     * Checks if document should be sent via email
+     *
+     * @return bool
+     */
+    protected function shouldSendEmail(): bool
+    {
+        return $this->sendEmail === Boolean::YES;
+    }
+
+    /**
+     * Checks if document should have shipping information
+     *
+     * @return bool
+     */
+    protected function shouldAddShippingInformation(): bool
+    {
+        return $this->useShipping === Boolean::YES && DocumentTypes::hasDelivery($this->documentType);
     }
 
     //          PUBLICS          //
@@ -335,11 +460,16 @@ class DocumentFromOrder implements BuilderInterface
                     $moloniDocument = $mutation['data']['estimateCreate']['data'] ?? 0;
 
                     break;
+                case DocumentTypes::BILLS_OF_LADING:
+                    $mutation = MoloniApiClient::billsOfLading()->mutationBillsOfLadingCreate($this->createProps);
+                    $moloniDocument = $mutation['data']['billsOfLadingCreate']['data'] ?? 0;
+
+                    break;
                 default:
                     throw new MoloniDocumentException('Document type not found');
             }
         } catch (MoloniApiException $e) {
-            throw new MoloniDocumentException($e->getMessage(), $e->getIdentifiers(), $e->getData());
+            throw new MoloniDocumentException('Error creating document', $e->getIdentifiers(), $e->getData());
         }
 
         $documentId = $moloniDocument['documentId'] ?? 0;
@@ -351,8 +481,14 @@ class DocumentFromOrder implements BuilderInterface
         $this->documentId = $documentId;
         $this->moloniDocument = $moloniDocument;
 
-        if ((int) Settings::get('documentStatus') === DocumentStatus::CLOSED) {
-            $difference = abs($this->moloniDocument['totalValue'] - $this->order->total_paid_tax_incl);
+        if ($moloniDocument['currencyExchangeTotalValue'] > 0) {
+            $this->documentTotal = $moloniDocument['currencyExchangeTotalValue'];
+        } else {
+            $this->documentTotal = $moloniDocument['totalValue'];
+        }
+
+        if ($this->shouldCloseDocument()) {
+            $difference = abs($this->documentTotal - $this->order->total_paid_tax_incl);
 
             if ($difference < 0.01) {
                 $this->closeDocument();
@@ -370,13 +506,14 @@ class DocumentFromOrder implements BuilderInterface
      * Close document
      *
      * @return $this
+     *
      * @throws MoloniDocumentException
      */
     public function closeDocument(): DocumentFromOrder
     {
         $updateProps = [
             'data' => [
-                'document_id' => $this->documentId,
+                'documentId' => $this->documentId,
                 'status' => DocumentStatus::CLOSED,
             ]
         ];
@@ -384,33 +521,38 @@ class DocumentFromOrder implements BuilderInterface
         try {
             switch ($this->documentType) {
                 case DocumentTypes::INVOICES:
-                    $mutation = MoloniApiClient::invoice()->mutationInvoiceUpdate($this->createProps);
+                    $mutation = MoloniApiClient::invoice()->mutationInvoiceUpdate($updateProps);
                     $moloniDocument = $mutation['data']['invoiceUpdate']['data'] ?? 0;
 
                     break;
                 case DocumentTypes::RECEIPTS:
-                    $mutation = MoloniApiClient::receipt()->mutationReceiptUpdate($this->createProps);
+                    $mutation = MoloniApiClient::receipt()->mutationReceiptUpdate($updateProps);
                     $moloniDocument = $mutation['data']['receiptUpdate']['data'] ?? 0;
 
                     break;
                 case DocumentTypes::PRO_FORMA_INVOICES:
-                    $mutation = MoloniApiClient::proFormaInvoice()->mutationProFormaInvoiceUpdate($this->createProps);
+                    $mutation = MoloniApiClient::proFormaInvoice()->mutationProFormaInvoiceUpdate($updateProps);
                     $moloniDocument = $mutation['data']['proFormaInvoiceUpdate']['data'] ?? 0;
 
                     break;
                 case DocumentTypes::PURCHASE_ORDERS:
-                    $mutation = MoloniApiClient::purchaseOrder()->mutationPurchaseOrderUpdate($this->createProps);
+                    $mutation = MoloniApiClient::purchaseOrder()->mutationPurchaseOrderUpdate($updateProps);
                     $moloniDocument = $mutation['data']['purchaseOrderUpdate']['data'] ?? 0;
 
                     break;
                 case DocumentTypes::SIMPLIFIED_INVOICES:
-                    $mutation = MoloniApiClient::simplifiedInvoice()->mutationSimplifiedInvoiceUpdate($this->createProps);
+                    $mutation = MoloniApiClient::simplifiedInvoice()->mutationSimplifiedInvoiceUpdate($updateProps);
                     $moloniDocument = $mutation['data']['simplifiedInvoiceUpdate']['data'] ?? 0;
 
                     break;
                 case DocumentTypes::ESTIMATE:
-                    $mutation = MoloniApiClient::estimate()->mutationEstimateUpdate($this->createProps);
+                    $mutation = MoloniApiClient::estimate()->mutationEstimateUpdate($updateProps);
                     $moloniDocument = $mutation['data']['estimateUpdate']['data'] ?? 0;
+
+                    break;
+                case DocumentTypes::BILLS_OF_LADING:
+                    $mutation = MoloniApiClient::billsOfLading()->mutationBillsOfLadingUpdate($updateProps);
+                    $moloniDocument = $mutation['data']['billsOfLadingUpdate']['data'] ?? 0;
 
                     break;
                 default:
@@ -423,11 +565,9 @@ class DocumentFromOrder implements BuilderInterface
                 throw new MoloniApiException('Error closing document', [], ['mutation' => $mutation, 'props' => $updateProps]);
             }
 
-            $this->documentId = $documentId;
-
             $this->createPdf();
 
-            if (Settings::get('sendByEmail')) {
+            if (!empty($this->shouldSendEmail())) {
                 $this->sendEmail();
             }
         } catch (MoloniApiException $e) {
@@ -437,7 +577,104 @@ class DocumentFromOrder implements BuilderInterface
         return $this;
     }
 
+    /**
+     * Add related document
+     *
+     * @param int $documentId
+     * @param float $value
+     *
+     * @return $this
+     */
+    public function addRelatedDocument(int $documentId, float $value): DocumentFromOrder
+    {
+        $this->relatedWith = [[
+            'relatedDocumentId' => $documentId,
+            'value' => $value,
+        ]];
+
+        return $this;
+    }
+
+
+    //          GETS          //
+
+    /**
+     * @return int
+     */
+    public function getDocumentId(): int
+    {
+        return $this->documentId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDocumentTotal(): int
+    {
+        return $this->documentTotal;
+    }
+
     //          SETS          //
+
+    /**
+     * Defines type
+     *
+     * @param string|null $documentType
+     *
+     * @return DocumentFromOrder
+     *
+     * @throws MoloniDocumentException
+     */
+    public function setDocumentType(?string $documentType = null): DocumentFromOrder
+    {
+        $this->documentType = $documentType ?? Settings::get('documentType');
+
+        if (empty($this->documentType)) {
+            throw new MoloniDocumentException('No document type selected. Please choose one in plugin settings.');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Defines if document should be sent via email
+     *
+     * @return $this
+     */
+    public function setSendEmail(?int $sendByEmail = null): DocumentFromOrder
+    {
+        $this->sendEmail = (int)($sendByEmail ?? Settings::get('sendByEmail') ?? Boolean::NO);
+
+        return $this;
+    }
+
+    /**
+     * Defines if document should be closed
+     *
+     * @param int|null $documentStatus
+     *
+     * @return $this
+     */
+    public function setDocumentStatus(?int $documentStatus = null): DocumentFromOrder
+    {
+        $this->documentStatus = (int)($documentStatus ?? Settings::get('documentStatus') ?? DocumentStatus::DRAFT);
+
+        return $this;
+    }
+
+    /**
+     * Defines if document should be closed
+     *
+     * @param int|null $useShipping
+     *
+     * @return $this
+     */
+    public function setShippingInformation(?int $useShipping = null): DocumentFromOrder
+    {
+        $this->useShipping = (int)($useShipping ?? Settings::get('shippingInformation') ?? Boolean::NO);
+
+        return $this;
+    }
 
     /**
      * Defines order fiscal zone
@@ -446,7 +683,7 @@ class DocumentFromOrder implements BuilderInterface
      *
      * @throws MoloniDocumentException
      */
-    protected function setFicalZone(): DocumentFromOrder
+    protected function setFiscalZone(): DocumentFromOrder
     {
         $fiscalZone = [];
         $fiscalZoneSetting = Settings::get('fiscalZoneBasedOn');
@@ -480,13 +717,6 @@ class DocumentFromOrder implements BuilderInterface
             ];
         }
 
-        if (empty($fiscalZone)) {
-            $fiscalZone = [
-                'code' => $this->company['fiscalZone']['fiscalZone'] ?? 'ES',
-                'countryId' => $this->company['country']['countryId'] ?? Countries::SPAIN
-            ];
-        }
-
         $this->fiscalZone = $fiscalZone;
 
         return $this;
@@ -505,8 +735,9 @@ class DocumentFromOrder implements BuilderInterface
         $currency = new Currency($this->order->id_currency);
 
         if ($currency->iso_code !== $this->company['currency']['iso4217']) {
-            $from = $currency->iso_code;
-            $to = $this->company['currency']['iso4217'];
+            $from = $this->company['currency']['iso4217'];
+            $to = $currency->iso_code;
+
             $wantedPair = $from . ' ' . $to;
 
             $variables = [
@@ -572,25 +803,48 @@ class DocumentFromOrder implements BuilderInterface
      * Defines dates for document
      *
      * @return DocumentFromOrder
+     *
+     * @throws MoloniDocumentException
      */
     protected function setDates(): DocumentFromOrder
     {
+        try {
+            $date = (new DateTime())->format('Y-m-d\TH:i:sP');
+        } catch (\Exception $e) {
+            throw new MoloniDocumentException('Error occurred setting document dates');
+        }
+
         $this->dates = [
-            'date' => $this->order->date_add,
-            'expirationDate' => date('Y-m-d H:i:s'),
+            'date' => $date,
+            'expirationDate' => $date,
         ];
 
         return $this;
     }
 
     /**
-     * Defines type
+     * Defines dates for document
      *
      * @return DocumentFromOrder
      */
-    protected function setDocumentType(): DocumentFromOrder
+    protected function setCalculationMode(): DocumentFromOrder
     {
-        $this->documentSetId = Settings::get('documentType');
+        switch ($this->order->round_type) {
+            case 1:
+                $calculationMode = CalculationMode::ITEM;
+                break;
+            case 2:
+                $calculationMode = CalculationMode::LINE;
+                break;
+            case 3:
+                $calculationMode = CalculationMode::DOCUMENT;
+                break;
+            default:
+                $calculationMode = (int)$this->company['documentCalculationsMode'];
+                break;
+        }
+
+        $this->calculationMode = $calculationMode;
 
         return $this;
     }
@@ -602,7 +856,7 @@ class DocumentFromOrder implements BuilderInterface
      */
     protected function setDocumentSet(): DocumentFromOrder
     {
-        $this->documentSetId = Settings::get('documentSet') ?? 0;
+        $this->documentSetId = (int)(Settings::get('documentSet') ?? 0);
 
         return $this;
     }
@@ -626,7 +880,7 @@ class DocumentFromOrder implements BuilderInterface
      */
     protected function setYourReference(): DocumentFromOrder
     {
-        $this->yourReference = '';
+        $this->yourReference = null;
 
         return $this;
     }
@@ -672,6 +926,8 @@ class DocumentFromOrder implements BuilderInterface
             'special_discount' => 0,
         ];
 
+        // todo: verificar cupões aqui
+
         return $this;
     }
 
@@ -681,6 +937,7 @@ class DocumentFromOrder implements BuilderInterface
      * @return DocumentFromOrder
      *
      * @throws MoloniDocumentShippingException
+     * @throws MoloniDocumentShippingTaxException
      */
     protected function setShipping(): DocumentFromOrder
     {
@@ -710,8 +967,7 @@ class DocumentFromOrder implements BuilderInterface
      */
     protected function setDelivery(): DocumentFromOrder
     {
-        if ($this->order->id_address_delivery > 0 &&
-            (int)Settings::get('shippingInformation') === Boolean::YES) {
+        if ($this->order->id_address_delivery > 0) {
             $delivery = new OrderDelivery($this->order, $this->company);
 
             $delivery
@@ -811,6 +1067,10 @@ class DocumentFromOrder implements BuilderInterface
                     MoloniApiClient::estimate()->mutationEstimateGetPDF($variables);
 
                     break;
+                case DocumentTypes::BILLS_OF_LADING:
+                    MoloniApiClient::billsOfLading()->mutationBillsOfLadingGetPDF($variables);
+
+                    break;
             }
         } catch (MoloniApiException $e) {
             // todo: do something here?
@@ -870,6 +1130,10 @@ class DocumentFromOrder implements BuilderInterface
                     break;
                 case DocumentTypes::ESTIMATE:
                     MoloniApiClient::estimate()->mutationEstimateSendMail($variables);
+
+                    break;
+                case DocumentTypes::BILLS_OF_LADING:
+                    MoloniApiClient::billsOfLading()->mutationBillsOfLadingSendEmail($variables);
 
                     break;
             }

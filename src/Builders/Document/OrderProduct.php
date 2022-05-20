@@ -170,7 +170,7 @@ class OrderProduct implements BuilderItemInterface
      *
      * @return array
      */
-    public function toArray(?int $order = 0): array
+    public function toArray(?int $order = 1): array
     {
         $this->setName();
 
@@ -298,8 +298,8 @@ class OrderProduct implements BuilderItemInterface
      */
     protected function setPrice(): OrderProduct
     {
-        $this->price = $this->orderProduct['unit_price_tax_excl'] ?? 0;
-        $this->priceWithTaxes = $this->orderProduct['unit_price_tax_incl'] ?? 0;
+        $this->price = (float)($this->orderProduct['price'] ?? 0);
+        $this->priceWithTaxes = (float)($this->orderProduct['unit_price_tax_incl'] ?? 0);
 
         return $this;
     }
@@ -359,7 +359,7 @@ class OrderProduct implements BuilderItemInterface
      */
     protected function setQuantity(): OrderProduct
     {
-        $this->quantity = $this->orderProduct['product_quantity'] ?? 1;
+        $this->quantity = (int)($this->orderProduct['product_quantity'] ?? 1);
 
         return $this;
     }
@@ -379,7 +379,7 @@ class OrderProduct implements BuilderItemInterface
         $taxCalculator = $this->orderProduct['tax_calculator'];
 
         if (count($taxCalculator->taxes) > 0) {
-            $taxOrder = 0;
+            $taxOrder = 1;
 
             foreach ($taxCalculator->taxes as $tax) {
                 /** @var Tax $tax */
@@ -404,7 +404,16 @@ class OrderProduct implements BuilderItemInterface
         }
 
         if (empty($taxes)) {
-            $this->exemptionReason = Settings::get('exemptionReasonProduct');
+            $exemption = Settings::get('exemptionReasonProduct');
+
+            if (empty($exemption)) {
+                throw new MoloniDocumentProductTaxException(
+                    'Product with reference ({0}) has no taxes applied. Please add an exemption reason in plugin settings.',
+                    ['{0}' => $this->reference]
+                );
+            }
+
+            $this->exemptionReason = $exemption;
         } else {
             $this->taxes = $taxes;
         }
@@ -449,7 +458,7 @@ class OrderProduct implements BuilderItemInterface
                 ->queryProducts($variables);
 
             if (!empty($query)) {
-                $this->productId = $query[0]['productId'];
+                $this->productId = (int)$query[0]['productId'];
                 $this->moloniProduct = $query[0];
             }
         } catch (MoloniApiException $e) {

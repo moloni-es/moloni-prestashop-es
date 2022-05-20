@@ -64,6 +64,7 @@ class Companies extends Endpoint
                     slug
                     img1
                     vat
+                    documentCalculationsMode
                     currency
                     {
                         currencyId
@@ -95,6 +96,6 @@ class Companies extends Endpoint
             }
         }';
 
-        return $this->simplePost($query, $variables);
+        return $this->simplePost($query, $variables)['data']['company']['data'] ?? [];
     }
 }

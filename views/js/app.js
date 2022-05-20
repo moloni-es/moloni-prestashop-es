@@ -2,6 +2,147 @@
     /******/ 	"use strict";
     /******/ 	var __webpack_modules__ = ({
 
+        /***/ "./js/documents/documents.js":
+        /*!***********************************!*\
+          !*** ./js/documents/documents.js ***!
+          \***********************************/
+        /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+                /* harmony export */   "default": function() { return /* binding */ MoloniDocuments; }
+                /* harmony export */ });
+            /* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
+            /* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
+
+
+
+            var MoloniDocuments = /*#__PURE__*/function () {
+                function MoloniDocuments() {
+                    (0,_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__["default"])(this, MoloniDocuments);
+                }
+
+                (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__["default"])(MoloniDocuments, [{
+                    key: "startObservers",
+                    value: function startObservers() {}
+                }]);
+
+                return MoloniDocuments;
+            }();
+
+
+
+            /***/ }),
+
+        /***/ "./js/enums/Boolean.js":
+        /*!*****************************!*\
+          !*** ./js/enums/Boolean.js ***!
+          \*****************************/
+        /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+                /* harmony export */   "Boolean": function() { return /* binding */ Boolean; }
+                /* harmony export */ });
+            var Boolean = {
+                NO: 0,
+                YES: 1
+            };
+
+
+            /***/ }),
+
+        /***/ "./js/enums/DocumentStatus.js":
+        /*!************************************!*\
+          !*** ./js/enums/DocumentStatus.js ***!
+          \************************************/
+        /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+                /* harmony export */   "DocumentStatus": function() { return /* binding */ DocumentStatus; }
+                /* harmony export */ });
+            var DocumentStatus = {
+                DRAFT: 0,
+                CLOSED: 1
+            };
+
+
+            /***/ }),
+
+        /***/ "./js/enums/DocumentType.js":
+        /*!**********************************!*\
+          !*** ./js/enums/DocumentType.js ***!
+          \**********************************/
+        /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+                /* harmony export */   "DocumentType": function() { return /* binding */ DocumentType; }
+                /* harmony export */ });
+            var DocumentType = {
+                INVOICES: 'invoices',
+                RECEIPTS: 'receipts',
+                INVOICE_AND_RECEIPT: 'invoiceAndReceipts',
+                PURCHASE_ORDERS: 'purchaseOrders',
+                PRO_FORMA_INVOICES: 'proFormaInvoices',
+                SIMPLIFIED_INVOICES: 'simplifiedInvoices',
+                ESTIMATE: 'estimate'
+            };
+
+
+            /***/ }),
+
+        /***/ "./js/enums/LoadAddress.js":
+        /*!*********************************!*\
+          !*** ./js/enums/LoadAddress.js ***!
+          \*********************************/
+        /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+                /* harmony export */   "LoadAddress": function() { return /* binding */ LoadAddress; }
+                /* harmony export */ });
+            var LoadAddress = {
+                CUSTOM: -1,
+                MOLONI: 0
+            };
+
+
+            /***/ }),
+
+        /***/ "./js/orders/orders.js":
+        /*!*****************************!*\
+          !*** ./js/orders/orders.js ***!
+          \*****************************/
+        /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+                /* harmony export */   "default": function() { return /* binding */ MoloniOrders; }
+                /* harmony export */ });
+            /* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
+            /* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
+
+
+
+            var MoloniOrders = /*#__PURE__*/function () {
+                function MoloniOrders() {
+                    (0,_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__["default"])(this, MoloniOrders);
+                }
+
+                (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__["default"])(MoloniOrders, [{
+                    key: "startObservers",
+                    value: function startObservers() {}
+                }]);
+
+                return MoloniOrders;
+            }();
+
+
+
+            /***/ }),
+
         /***/ "./js/settings/settings.js":
         /*!*********************************!*\
           !*** ./js/settings/settings.js ***!
@@ -14,6 +155,14 @@
                 /* harmony export */ });
             /* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
             /* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
+            /* harmony import */ var _enums_LoadAddress__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../enums/LoadAddress */ "./js/enums/LoadAddress.js");
+            /* harmony import */ var _enums_DocumentStatus__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../enums/DocumentStatus */ "./js/enums/DocumentStatus.js");
+            /* harmony import */ var _enums_DocumentType__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../enums/DocumentType */ "./js/enums/DocumentType.js");
+            /* harmony import */ var _enums_Boolean__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../enums/Boolean */ "./js/enums/Boolean.js");
+
+
+
+
 
 
 
@@ -22,20 +171,74 @@
                     (0,_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__["default"])(this, MoloniSettings);
 
                     this.settingIdPrefix = 'settings_form_';
-                    this.settingRowHolder = 'settings_row_';
                 }
 
                 (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__["default"])(MoloniSettings, [{
                     key: "startObservers",
                     value: function startObservers() {
-                        console.log('oi');
+                        // Holders
+                        this.$loadAddressHolder = $('#' + this.settingIdPrefix + 'loadAddress_row');
+                        this.$customLoadAddressHolder = $('#' + this.settingIdPrefix + 'custom_loadAddress_row');
+                        this.$sendByEmailHolder = $('#' + this.settingIdPrefix + 'sendByEmail_row');
+                        this.$billOfLadingHolder = $('#' + this.settingIdPrefix + 'billOfLading_row'); // Fields
+
+                        this.$shippingInfo = $('#' + this.settingIdPrefix + 'shippingInformation');
+                        this.$loadAddress = $('#' + this.settingIdPrefix + 'loadAddress');
+                        this.$documentStatus = $('#' + this.settingIdPrefix + 'documentStatus');
+                        this.$documentType = $('#' + this.settingIdPrefix + 'documentType');
+                        this.$sendByEmail = $('#' + this.settingIdPrefix + 'sendByEmail');
+                        this.$billOfLading = $('#' + this.settingIdPrefix + 'billOfLading'); // Actions
+
+                        this.$documentStatus.on('change', this.onDocumentStatusChange.bind(this)).trigger('change');
+                        this.$shippingInfo.on('change', this.onShippingInformationChange.bind(this)).trigger('change');
+                        this.$loadAddress.on('change', this.onAddressChange.bind(this)).trigger('change');
+                        this.$documentType.on('change', this.onDocumentTypeChange.bind(this)).trigger('change');
                     }
                 }, {
-                    key: "onShippingInfoChange",
-                    value: function onShippingInfoChange() {}
+                    key: "onDocumentTypeChange",
+                    value: function onDocumentTypeChange(event) {
+                        if (event.target.value === _enums_DocumentType__WEBPACK_IMPORTED_MODULE_4__.DocumentType.INVOICE_AND_RECEIPT) {
+                            this.$documentStatus.val(_enums_DocumentStatus__WEBPACK_IMPORTED_MODULE_3__.DocumentStatus.CLOSED).attr('disabled', true).trigger('change');
+                        } else {
+                            this.$documentStatus.removeAttr('disabled');
+                        }
+                    }
+                }, {
+                    key: "onDocumentStatusChange",
+                    value: function onDocumentStatusChange(event) {
+                        switch (parseInt(event.target.value)) {
+                            case _enums_DocumentStatus__WEBPACK_IMPORTED_MODULE_3__.DocumentStatus.DRAFT:
+                                this.$sendByEmailHolder.slideUp(200);
+                                this.$billOfLadingHolder.slideUp(200);
+                                this.$sendByEmail.val(_enums_Boolean__WEBPACK_IMPORTED_MODULE_5__.Boolean.NO);
+                                this.$billOfLading.val(_enums_Boolean__WEBPACK_IMPORTED_MODULE_5__.Boolean.NO);
+                                break;
+
+                            case _enums_DocumentStatus__WEBPACK_IMPORTED_MODULE_3__.DocumentStatus.CLOSED:
+                                this.$sendByEmailHolder.slideDown(200);
+                                this.$billOfLadingHolder.slideDown(200);
+                                break;
+                        }
+                    }
+                }, {
+                    key: "onShippingInformationChange",
+                    value: function onShippingInformationChange(event) {
+                        if (parseInt(event.target.value) > 0) {
+                            this.$loadAddressHolder.slideDown(200);
+                        } else {
+                            this.$loadAddressHolder.slideUp(200);
+                            this.$loadAddress.val(_enums_LoadAddress__WEBPACK_IMPORTED_MODULE_2__.LoadAddress.MOLONI).trigger('change');
+                        }
+                    }
                 }, {
                     key: "onAddressChange",
-                    value: function onAddressChange() {}
+                    value: function onAddressChange(event) {
+                        if (parseInt(event.target.value) === _enums_LoadAddress__WEBPACK_IMPORTED_MODULE_2__.LoadAddress.CUSTOM) {
+                            this.$customLoadAddressHolder.slideDown(200);
+                        } else {
+                            this.$customLoadAddressHolder.slideUp(200);
+                        }
+                    }
                 }]);
 
                 return MoloniSettings;
@@ -158,8 +361,17 @@
           \*******************/
         __webpack_require__.r(__webpack_exports__);
         /* harmony import */ var _settings_settings__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./settings/settings */ "./js/settings/settings.js");
+        /* harmony import */ var _orders_orders__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./orders/orders */ "./js/orders/orders.js");
+        /* harmony import */ var _documents_documents__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./documents/documents */ "./js/documents/documents.js");
 
-        var moloniSettings = new _settings_settings__WEBPACK_IMPORTED_MODULE_0__["default"]();
+
+
+        $(document).ready(function () {
+            console.log('Moloni module loaded');
+            window.moloniSettings = new _settings_settings__WEBPACK_IMPORTED_MODULE_0__["default"]();
+            window.moloniOrders = new _orders_orders__WEBPACK_IMPORTED_MODULE_1__["default"]();
+            window.moloniDocuments = new _documents_documents__WEBPACK_IMPORTED_MODULE_2__["default"]();
+        });
     }();
     /******/ })()
 ;

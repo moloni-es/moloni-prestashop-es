@@ -8,7 +8,7 @@ use Moloni\Exceptions\MoloniApiException;
 class BillsOfLading extends Endpoint
 {
     /**
-     * Creates an bill of lading
+     * Creates a bill of lading
      *
      * @param array|null $variables variables of the request
      *
@@ -32,9 +32,61 @@ class BillsOfLading extends Endpoint
                         documentTotal
                         documentSetName
                         ourReference
+                        currencyExchangeTotalValue
                     }
                 }
             }';
+
+        return $this->simplePost($query, $variables);
+    }
+
+    /**
+     * Update an invoice
+     *
+     * @param array|null $variables variables of the request
+     *
+     * @return array Api data
+     *
+     * @throws MoloniApiException
+     */
+    public function mutationBillsOfLadingUpdate(?array $variables = []): array
+    {
+        $query = 'mutation billsOfLadingUpdate($companyId: Int!,$data: BillsOfLadingUpdate!)
+        {
+            billsOfLadingUpdate(companyId: $companyId,data: $data) 
+            {
+                errors
+                {
+                    field
+                    msg
+                }
+                data
+                {
+                    documentId
+                    status
+                    currencyExchangeTotalValue                              
+                }
+            }
+        }';
+
+        return $this->simplePost($query, $variables);
+    }
+
+    /**
+     * Creates bills of lading pdf
+     *
+     * @param array|null $variables
+     *
+     * @return array returns the Graphql response array or an error array
+     *
+     * @throws MoloniApiException
+     */
+    public function mutationBillsOfLadingGetPDF(?array $variables = []): array
+    {
+        $query = 'mutation billsOfLadingGetPDF($companyId: Int!,$documentId: Int!)
+        {
+            billsOfLadingGetPDF(companyId: $companyId,documentId: $documentId)
+        }';
 
         return $this->simplePost($query, $variables);
     }

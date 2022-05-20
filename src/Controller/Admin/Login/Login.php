@@ -156,8 +156,7 @@ class Login extends MoloniController
                     ]
                 ];
 
-                $userCompanyInfo = MoloniApiClient::companies()
-                    ->queryCompany($variables)['data']['company']['data'] ?? [];
+                $userCompanyInfo = MoloniApiClient::companies()->queryCompany($variables);
 
                 if (!empty($userCompanyInfo)) {
                     $companies[] = $userCompanyInfo;
