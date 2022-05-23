@@ -53,14 +53,14 @@ class MoloniProductFromId implements BuilderInterface
      *
      * @var int
      */
-    public $productId = 0;
+    protected $productId = 0;
 
     /**
      * Moloni roduct
      *
      * @var array
      */
-    public $moloniProduct;
+    protected $moloniProduct;
 
     /**
      * Visibility
@@ -271,7 +271,7 @@ class MoloniProductFromId implements BuilderInterface
         }
 
         if ($this->productExists()) {
-            $props['productId'] = $this->productId;
+            $props['productId'] = $this->getProductId();
         } elseif ($this->warehouseId > 0 && $this->productHasStock()) {
             $props['warehouseId'] = $this->warehouseId;
             $props['warehouses'] = [[
@@ -352,6 +352,28 @@ class MoloniProductFromId implements BuilderInterface
         return $this->getByReference();
     }
 
+    //          GETS          //
+
+    /**
+     * Moloni product id getter
+     *
+     * @return int
+     */
+    public function getProductId(): int
+    {
+        return $this->productId;
+    }
+
+    /**
+     * Moloni product getter
+     *
+     * @return array
+     */
+    public function getMoloniProduct(): array
+    {
+        return $this->moloniProduct;
+    }
+
     //          SETS          //
 
     /**
@@ -359,7 +381,7 @@ class MoloniProductFromId implements BuilderInterface
      *
      * @return $this
      */
-    protected function setVisibility(): MoloniProductFromId
+    public function setVisibility(): MoloniProductFromId
     {
         $this->visibility = ProductVisibility::VISIBLE;
 
@@ -371,7 +393,7 @@ class MoloniProductFromId implements BuilderInterface
      *
      * @return $this
      */
-    protected function setReference(): MoloniProductFromId
+    public function setReference(): MoloniProductFromId
     {
         $reference = $this->prestashopProduct->reference;
 
@@ -389,7 +411,7 @@ class MoloniProductFromId implements BuilderInterface
      *
      * @return $this
      */
-    protected function setName(): MoloniProductFromId
+    public function setName(): MoloniProductFromId
     {
         $this->name = $this->prestashopProduct->name;
 
@@ -401,7 +423,7 @@ class MoloniProductFromId implements BuilderInterface
      *
      * @return $this
      */
-    protected function setSummary(): MoloniProductFromId
+    public function setSummary(): MoloniProductFromId
     {
         $this->summary = strip_tags($this->prestashopProduct->description_short);
 
@@ -413,9 +435,9 @@ class MoloniProductFromId implements BuilderInterface
      *
      * @return $this
      */
-    protected function setPrice(): MoloniProductFromId
+    public function setPrice(): MoloniProductFromId
     {
-        $this->price = $this->prestashopProduct->getPriceWithoutReduct();
+        $this->price = $this->prestashopProduct->getPriceWithoutReduct(true);
 
         return $this;
     }
@@ -425,7 +447,7 @@ class MoloniProductFromId implements BuilderInterface
      *
      * @return MoloniProductFromId
      */
-    protected function setType(): MoloniProductFromId
+    public function setType(): MoloniProductFromId
     {
         $this->type = ProductType::PRODUCT;
 
@@ -437,7 +459,7 @@ class MoloniProductFromId implements BuilderInterface
      *
      * @return MoloniProductFromId
      */
-    protected function setHasStock(): MoloniProductFromId
+    public function setHasStock(): MoloniProductFromId
     {
         $this->hasStock = (bool)Boolean::YES;
 
@@ -449,7 +471,7 @@ class MoloniProductFromId implements BuilderInterface
      *
      * @return $this
      */
-    protected function setStock(): MoloniProductFromId
+    public function setStock(): MoloniProductFromId
     {
         $this->stock = $this->prestashopProduct->quantity;
 
@@ -461,7 +483,7 @@ class MoloniProductFromId implements BuilderInterface
      *
      * @throws MoloniProductTaxException
      */
-    protected function setTax(): MoloniProductFromId
+    public function setTax(): MoloniProductFromId
     {
         try {
             $mutation = MoloniApiClient::companies()->queryCompany();
@@ -497,9 +519,22 @@ class MoloniProductFromId implements BuilderInterface
         return $this;
     }
 
-    protected function setEcoTax(): MoloniProductFromId
+    /**
+     * Sets product eco-tax
+     *
+     * @return $this
+     */
+    public function setEcoTax(): MoloniProductFromId
     {
-        $this->ecoTax = $this->prestashopProduct->ecotax;
+        $ecoTax = (float)$this->prestashopProduct->ecotax;
+
+        if ($ecoTax > 0) {
+            $this->price -= $ecoTax;
+
+            //todo: what else?
+        }
+
+        $this->ecoTax = $ecoTax;
 
         return $this;
     }
@@ -509,7 +544,7 @@ class MoloniProductFromId implements BuilderInterface
      *
      * @return $this
      */
-    protected function setWarehouseId(): MoloniProductFromId
+    public function setWarehouseId(): MoloniProductFromId
     {
         $warehouseId = Settings::get('syncStockToMoloniWarehouse');
 
@@ -547,7 +582,7 @@ class MoloniProductFromId implements BuilderInterface
      *
      * @throws MoloniProductCategoryException
      */
-    protected function setCategory(): MoloniProductFromId
+    public function setCategory(): MoloniProductFromId
     {
         if ($this->prestashopProduct->id_category_default > 0) {
 
@@ -587,14 +622,19 @@ class MoloniProductFromId implements BuilderInterface
      *
      * @return $this
      */
-    protected function setMeasurementUnitId(): MoloniProductFromId
+    public function setMeasurementUnitId(): MoloniProductFromId
     {
         $this->measurementUnitId = (int)(Settings::get('measurementUnit') ?? 0);
 
         return $this;
     }
 
-    protected function setVariations(): MoloniProductFromId
+    /**
+     * Set product variants
+     *
+     * @return $this
+     */
+    public function setVariations(): MoloniProductFromId
     {
         if ($this->prestashopProduct->product_type === 'combinations') {
             // todo: set combination products
@@ -609,7 +649,7 @@ class MoloniProductFromId implements BuilderInterface
      *
      * @return MoloniProductFromId
      */
-    protected function setIdentifications(): MoloniProductFromId
+    public function setIdentifications(): MoloniProductFromId
     {
         $identifications = $this->moloniProduct['identifications'] ?? [];
         $identificators = ['EAN13', 'ISBN'];

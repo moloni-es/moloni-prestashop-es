@@ -27,6 +27,8 @@ namespace Moloni\Controller\Admin\Orders;
 use Currency;
 use Moloni\Actions\Orders\OrderCreateDocument;
 use Moloni\Actions\Orders\OrderDiscard;
+use Moloni\Builders\MoloniProductFromId;
+use Order;
 use PrestaShopDatabaseException;
 use PrestaShopException;
 use Moloni\Controller\Admin\MoloniController;
