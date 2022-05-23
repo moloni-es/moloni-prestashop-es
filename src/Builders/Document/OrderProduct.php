@@ -211,8 +211,8 @@ class OrderProduct implements BuilderItemInterface
             throw new MoloniDocumentProductException($e->getMessage(), $e->getIdentifiers(), $e->getData());
         }
 
-        $this->productId = $productBuilder->productId;
-        $this->moloniProduct = $productBuilder->moloniProduct;
+        $this->productId = $productBuilder->getProductId();
+        $this->moloniProduct = $productBuilder->getMoloniProduct();
     }
 
     /**

@@ -106,9 +106,12 @@ class CategoryFromName implements BuilderItemInterface
             $params = [
                 'data' => [
                     'name' => $this->name,
-                    'parentId' => $this->parentId,
                 ]
             ];
+
+            if ($this->parentId !== null && $this->parentId > 0) {
+                $params['data']['parentId'] = $this->parentId;
+            }
 
             $mutation = MoloniApiClient::categories()->mutationProductCategoryCreate($params);
 
