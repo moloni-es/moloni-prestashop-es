@@ -236,7 +236,7 @@ class MoloniApiClient
 
     public static function receipt(): Receipt
     {
-        if (self::$receipt) {
+        if (!self::$receipt) {
             self::$receipt = new Receipt();
         }
 

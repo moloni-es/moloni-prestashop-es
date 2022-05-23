@@ -37,7 +37,7 @@ class OrderPayment implements BuilderItemInterface
      *
      * @var int
      */
-    public $paymentMethodId = 0;
+    protected $paymentMethodId = 0;
 
     /**
      * Payment method name
@@ -152,6 +152,18 @@ class OrderPayment implements BuilderItemInterface
         return $this;
     }
 
+    //          GETS          //
+
+    /**
+     * Payment method id getter
+     *
+     * @return int
+     */
+    public function getPaymentMethodId(): int
+    {
+        return $this->paymentMethodId;
+    }
+
     //          SETS          //
 
     /**
@@ -159,7 +171,7 @@ class OrderPayment implements BuilderItemInterface
      *
      * @return $this
      */
-    protected function setPaymentTime(): OrderPayment
+    public function setPaymentTime(): OrderPayment
     {
         $this->paymentTime = $this->orderPayment->date_add;
 
@@ -171,7 +183,7 @@ class OrderPayment implements BuilderItemInterface
      *
      * @return $this
      */
-    protected function setName(): OrderPayment
+    public function setName(): OrderPayment
     {
         $this->name = $this->orderPayment->payment_method ?? 'Método de pago';
 
@@ -183,7 +195,7 @@ class OrderPayment implements BuilderItemInterface
      *
      * @return $this
      */
-    protected function setValue(): OrderPayment
+    public function setValue(): OrderPayment
     {
         $this->value = (float)($this->orderPayment->amount ?? 0);
 

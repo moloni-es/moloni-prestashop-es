@@ -45,7 +45,7 @@ class OrderDelivery implements BuilderItemInterface
      *
      * @var int
      */
-    public $deliveryMethodId = 0;
+    protected $deliveryMethodId = 0;
 
     /**
      * Delivery method name
@@ -246,6 +246,18 @@ class OrderDelivery implements BuilderItemInterface
             ->setDate();
 
         return $this;
+    }
+
+    //          SETS          //
+
+    /**
+     * Delivery method ID getter
+     *
+     * @return int
+     */
+    public function getDeliveryMethodId(): int
+    {
+        return $this->deliveryMethodId;
     }
 
     //          SETS          //

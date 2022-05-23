@@ -27,6 +27,9 @@ namespace Moloni\Builders;
 use Address;
 use Currency;
 use DateTime;
+use Doctrine\Persistence\ObjectManager;
+use Moloni\Api\MoloniApi;
+use Moloni\Entity\MoloniDocuments;
 use Moloni\Exceptions\MoloniException;
 use Order;
 use OrderPayment as PrestashopOrderPayment;
@@ -55,10 +58,19 @@ use Moloni\Exceptions\Document\MoloniDocumentShippingException;
 use Moloni\Exceptions\Document\MoloniDocumentShippingTaxException;
 use Moloni\Exceptions\Document\MoloniDocumentWarning;
 use Moloni\Exceptions\MoloniApiException;
+use Shop;
 
 class DocumentFromOrder implements BuilderInterface
 {
     use CountryTrait;
+
+    /**
+     * Entity manager
+     *
+     * @var ObjectManager
+     */
+    protected $entityManager;
+
 
     /**
      * Moloni document id
@@ -70,9 +82,16 @@ class DocumentFromOrder implements BuilderInterface
     /**
      * Moloni document total
      *
-     * @var int
+     * @var float
      */
     protected $documentTotal = 0;
+
+    /**
+     * Moloni document exchage total total
+     *
+     * @var float
+     */
+    protected $documentExchageTotal = 0;
 
     /**
      * Inserted document
@@ -88,6 +107,13 @@ class DocumentFromOrder implements BuilderInterface
      * @var array
      */
     protected $relatedWith = [];
+
+    /**
+     * Related documents total
+     *
+     * @var int
+     */
+    protected $relatedWithTotal = 0;
 
     /**
      * Document type
@@ -242,12 +268,26 @@ class DocumentFromOrder implements BuilderInterface
      *
      * @throws MoloniDocumentException
      */
-    public function __construct(Order $order, array $company)
+    public function __construct(Order $order, array $company, ObjectManager $entityManager)
     {
         $this->order = $order;
         $this->company = $company;
+        $this->entityManager = $entityManager;
 
         $this->init();
+    }
+
+    /**
+     * Resets some values after cloning
+     *
+     * @return void
+     */
+    public function __clone()
+    {
+        $this->documentId = 0;
+        $this->documentTotal = 0;
+        $this->documentExchageTotal = 0;
+        $this->moloniDocument = [];
     }
 
     //          PRIVATES          //
@@ -308,7 +348,7 @@ class DocumentFromOrder implements BuilderInterface
             }
         }
 
-        if (!empty($this->products)) {
+        if (!empty($this->products) && $this->shouldAddProducts()) {
             $order = 1;
 
             foreach ($this->products as $product) {
@@ -318,7 +358,7 @@ class DocumentFromOrder implements BuilderInterface
             }
         }
 
-        if (!empty($this->shipping)) {
+        if (!empty($this->shipping) && $this->shouldAddProducts()) {
             $order = count($props['products']);
 
             $props['products'][] = $this->shipping->toArray($order);
@@ -343,6 +383,13 @@ class DocumentFromOrder implements BuilderInterface
 
         if (!empty($this->exchangeRate)) {
             $this->applyExchangeRate($props);
+        }
+
+        // todo: maybe improve this
+        if ($this->documentType === DocumentTypes::RECEIPTS) {
+            unset($props['expirationDate'], $props['ourReference'], $props['yourReference'], $props['expirationDate']);
+
+            $props['totalValue'] = $this->relatedWithTotal;
         }
 
         $this->createProps = ['data' => $props];
@@ -382,7 +429,7 @@ class DocumentFromOrder implements BuilderInterface
         $props['currencyExchangeExchange'] = $this->exchangeRate['exchange'];
     }
 
-    //          Verifications          //
+    //          VERIFICATIONS          //
 
     /**
      * Checks if document should be closed
@@ -412,6 +459,16 @@ class DocumentFromOrder implements BuilderInterface
     protected function shouldAddShippingInformation(): bool
     {
         return $this->useShipping === Boolean::YES && DocumentTypes::hasDelivery($this->documentType);
+    }
+
+    /**
+     * Checks if document type can have products
+     *
+     * @return bool
+     */
+    protected function shouldAddProducts(): bool
+    {
+        return DocumentTypes::hasProducts($this->documentType);
     }
 
     //          PUBLICS          //
@@ -481,20 +538,20 @@ class DocumentFromOrder implements BuilderInterface
         $this->documentId = $documentId;
         $this->moloniDocument = $moloniDocument;
 
-        if ($moloniDocument['currencyExchangeTotalValue'] > 0) {
-            $this->documentTotal = $moloniDocument['currencyExchangeTotalValue'];
-        } else {
-            $this->documentTotal = $moloniDocument['totalValue'];
-        }
+        $this->documentTotal =  $moloniDocument['totalValue'];
+        $this->documentExchageTotal = $moloniDocument['currencyExchangeTotalValue'] > 0 ? $moloniDocument['currencyExchangeTotalValue'] : $this->documentTotal;
+
+        $this->saveRecord();
 
         if ($this->shouldCloseDocument()) {
-            $difference = abs($this->documentTotal - $this->order->total_paid_tax_incl);
+            $difference = abs($this->documentExchageTotal - $this->order->total_paid_tax_incl);
 
             if ($difference < 0.01) {
                 $this->closeDocument();
             } else {
                 throw new MoloniDocumentWarning('Could not close document, totals do not match', [], [
                     'documentProps' => $this->createProps,
+                    'mutation' => $moloniDocument
                 ]);
             }
         }
@@ -587,6 +644,8 @@ class DocumentFromOrder implements BuilderInterface
      */
     public function addRelatedDocument(int $documentId, float $value): DocumentFromOrder
     {
+        $this->relatedWithTotal = $value;
+
         $this->relatedWith = [[
             'relatedDocumentId' => $documentId,
             'value' => $value,
@@ -599,6 +658,8 @@ class DocumentFromOrder implements BuilderInterface
     //          GETS          //
 
     /**
+     * Get created document id
+     *
      * @return int
      */
     public function getDocumentId(): int
@@ -607,9 +668,11 @@ class DocumentFromOrder implements BuilderInterface
     }
 
     /**
+     * Get created document total
+     *
      * @return int
      */
-    public function getDocumentTotal(): int
+    public function getDocumentTotal(): float
     {
         return $this->documentTotal;
     }
@@ -683,7 +746,7 @@ class DocumentFromOrder implements BuilderInterface
      *
      * @throws MoloniDocumentException
      */
-    protected function setFiscalZone(): DocumentFromOrder
+    public function setFiscalZone(): DocumentFromOrder
     {
         $fiscalZone = [];
         $fiscalZoneSetting = Settings::get('fiscalZoneBasedOn');
@@ -729,7 +792,7 @@ class DocumentFromOrder implements BuilderInterface
      *
      * @throws MoloniDocumentException
      */
-    protected function setExchangeRate(): DocumentFromOrder
+    public function setExchangeRate(): DocumentFromOrder
     {
         $exchangeRate = [];
         $currency = new Currency($this->order->id_currency);
@@ -780,7 +843,7 @@ class DocumentFromOrder implements BuilderInterface
      *
      * @throws MoloniDocumentCustomerException
      */
-    protected function setCustomer(): DocumentFromOrder
+    public function setCustomer(): DocumentFromOrder
     {
         if ($this->order->id_customer) {
             $customer = new OrderCustomer($this->order);
@@ -788,7 +851,7 @@ class DocumentFromOrder implements BuilderInterface
             $customer
                 ->search();
 
-            if ($customer->customerId === 0) {
+            if ($customer->getCustomerId() === 0) {
                 $customer
                     ->insert();
             }
@@ -806,7 +869,7 @@ class DocumentFromOrder implements BuilderInterface
      *
      * @throws MoloniDocumentException
      */
-    protected function setDates(): DocumentFromOrder
+    public function setDates(): DocumentFromOrder
     {
         try {
             $date = (new DateTime())->format('Y-m-d\TH:i:sP');
@@ -827,7 +890,7 @@ class DocumentFromOrder implements BuilderInterface
      *
      * @return DocumentFromOrder
      */
-    protected function setCalculationMode(): DocumentFromOrder
+    public function setCalculationMode(): DocumentFromOrder
     {
         switch ($this->order->round_type) {
             case 1:
@@ -854,7 +917,7 @@ class DocumentFromOrder implements BuilderInterface
      *
      * @return DocumentFromOrder
      */
-    protected function setDocumentSet(): DocumentFromOrder
+    public function setDocumentSet(): DocumentFromOrder
     {
         $this->documentSetId = (int)(Settings::get('documentSet') ?? 0);
 
@@ -866,7 +929,7 @@ class DocumentFromOrder implements BuilderInterface
      *
      * @return DocumentFromOrder
      */
-    protected function setOurReference(): DocumentFromOrder
+    public function setOurReference(): DocumentFromOrder
     {
         $this->ourReference = $this->order->reference;
 
@@ -878,7 +941,7 @@ class DocumentFromOrder implements BuilderInterface
      *
      * @return DocumentFromOrder
      */
-    protected function setYourReference(): DocumentFromOrder
+    public function setYourReference(): DocumentFromOrder
     {
         $this->yourReference = null;
 
@@ -893,7 +956,7 @@ class DocumentFromOrder implements BuilderInterface
      * @throws MoloniDocumentProductException
      * @throws MoloniDocumentProductTaxException
      */
-    protected function setProducts(): DocumentFromOrder
+    public function setProducts(): DocumentFromOrder
     {
         $products = $this->order->getCartProducts();
 
@@ -903,7 +966,7 @@ class DocumentFromOrder implements BuilderInterface
             $orderProduct
                 ->search();
 
-            if ($orderProduct->productId === 0) {
+            if ($orderProduct->getProductId() === 0) {
                 $orderProduct
                     ->insert();
             }
@@ -919,7 +982,7 @@ class DocumentFromOrder implements BuilderInterface
      *
      * @return DocumentFromOrder
      */
-    protected function setDiscounts(): DocumentFromOrder
+    public function setDiscounts(): DocumentFromOrder
     {
         $this->discounts = [
             'financial_discount' => 0,
@@ -939,7 +1002,7 @@ class DocumentFromOrder implements BuilderInterface
      * @throws MoloniDocumentShippingException
      * @throws MoloniDocumentShippingTaxException
      */
-    protected function setShipping(): DocumentFromOrder
+    public function setShipping(): DocumentFromOrder
     {
         if ($this->order->total_shipping > 0) {
             $orderShipping = new OrderShipping($this->order, $this->fiscalZone);
@@ -947,7 +1010,7 @@ class DocumentFromOrder implements BuilderInterface
             $orderShipping
                 ->search();
 
-            if ($orderShipping->productId === 0) {
+            if ($orderShipping->getProductId() === 0) {
                 $orderShipping
                     ->insert();
             }
@@ -965,7 +1028,7 @@ class DocumentFromOrder implements BuilderInterface
      *
      * @throws MoloniDocumentDeliveryException
      */
-    protected function setDelivery(): DocumentFromOrder
+    public function setDelivery(): DocumentFromOrder
     {
         if ($this->order->id_address_delivery > 0) {
             $delivery = new OrderDelivery($this->order, $this->company);
@@ -973,7 +1036,7 @@ class DocumentFromOrder implements BuilderInterface
             $delivery
                 ->search();
 
-            if ($delivery->deliveryMethodId === 0) {
+            if ($delivery->getDeliveryMethodId() === 0) {
                 $delivery
                     ->insert();
             }
@@ -991,7 +1054,7 @@ class DocumentFromOrder implements BuilderInterface
      *
      * @throws MoloniDocumentPaymentException
      */
-    protected function setPaymentMethod(): DocumentFromOrder
+    public function setPaymentMethod(): DocumentFromOrder
     {
         /** @var PrestashopOrderPayment[] $orderPayments */
         $orderPayments = $this->order->getOrderPayments();
@@ -1006,7 +1069,7 @@ class DocumentFromOrder implements BuilderInterface
             $payment
                 ->search();
 
-            if ($payment->paymentMethodId === 0) {
+            if ($payment->getPaymentMethodId() === 0) {
                 $payment->insert();
             }
 
@@ -1021,7 +1084,7 @@ class DocumentFromOrder implements BuilderInterface
      *
      * @return DocumentFromOrder
      */
-    protected function setNotes(): DocumentFromOrder
+    public function setNotes(): DocumentFromOrder
     {
         $this->notes = $this->order->note;
 
@@ -1142,5 +1205,30 @@ class DocumentFromOrder implements BuilderInterface
         }
 
         return $this;
+    }
+
+    //          QUERIES          //
+
+    /**
+     * Save document creation record
+     *
+     * @return void
+     */
+    protected function saveRecord(): void
+    {
+        $shopId = (int)Shop::getContextShopID();
+        $companyId = MoloniApi::getCompanyId();
+
+        $document = new MoloniDocuments();
+        $document->setShopId($shopId);
+        $document->setDocumentId($this->documentId);
+        $document->setCompanyId($companyId);
+        $document->setDocumentType($this->documentType);
+        $document->setOrderId($this->order->id);
+        $document->setOrderReference($this->ourReference);
+        $document->setCreatedAt(time());
+
+        $this->entityManager->persist($document);
+        $this->entityManager->flush();
     }
 }

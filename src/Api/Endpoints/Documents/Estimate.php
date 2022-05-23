@@ -33,6 +33,7 @@ class Estimate extends Endpoint
                     entityName
                     documentSetName
                     totalValue
+                    pdfExport
                 }
                 errors
                 {
@@ -175,12 +176,12 @@ class Estimate extends Endpoint
                 {
                     field
                     msg
-                    currencyExchangeTotalValue
                 }
                 data
                 {
                     documentId
-                    status                              
+                    status
+                    currencyExchangeTotalValue                              
                 }
             }
         }';

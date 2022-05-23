@@ -17,7 +17,6 @@ class MoloniRoutes
     public const DOCUMENTS = 'moloni_es_documents_home';
     public const DOCUMENTS_DOWNLOAD = 'moloni_es_documents_download';
     public const DOCUMENTS_RESTORE = 'moloni_es_documents_restore';
-    public const DOCUMENTS_VIEW = 'moloni_es_documents_view';
 
     public const TOOLS = 'moloni_es_tools_home';
     public const TOOLS_IMPORT_PRODUCTS = 'moloni_es_tools_import_products';
@@ -38,7 +37,6 @@ class MoloniRoutes
         self::DOCUMENTS,
         self::DOCUMENTS_DOWNLOAD,
         self::DOCUMENTS_RESTORE,
-        self::DOCUMENTS_VIEW,
         self::TOOLS,
         self::TOOLS_IMPORT_PRODUCTS,
         self::TOOLS_IMPORT_CATEGORIES,

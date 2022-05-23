@@ -39,7 +39,7 @@ class TaxFromRate implements BuilderItemInterface
      *
      * @var int
      */
-    public $taxId = 0;
+    protected $taxId = 0;
 
     /**
      * Tax saft type
@@ -198,6 +198,18 @@ class TaxFromRate implements BuilderItemInterface
             ->setName();
 
         return $this;
+    }
+
+    //          GETS          //
+
+    /**
+     * Tax id getter
+     *
+     * @return int
+     */
+    public function getTaxId(): int
+    {
+        return $this->taxId;
     }
 
     //          SETS          //

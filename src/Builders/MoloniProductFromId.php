@@ -259,7 +259,7 @@ class MoloniProductFromId implements BuilderInterface
         ];
 
         if (!empty($this->category)) {
-            $props['productCategoryId'] = $this->category->productCategoryId;
+            $props['productCategoryId'] = $this->category->getProductCategoryId();
         }
 
         if (!empty($this->tax)) {
@@ -480,7 +480,7 @@ class MoloniProductFromId implements BuilderInterface
                 $taxBuilder = new ProductTax($taxRate, $fiscalZone, 1);
                 $taxBuilder->search();
 
-                if ($taxBuilder->taxId === 0) {
+                if ($taxBuilder->getTaxId() === 0) {
                     $taxBuilder->insert();
                 }
 
@@ -565,11 +565,11 @@ class MoloniProductFromId implements BuilderInterface
 
                     $builder->search();
 
-                    if ($builder->productCategoryId === 0) {
+                    if ($builder->getProductCategoryId() === 0) {
                         $builder->insert();
                     }
 
-                    $parentId = $builder->productCategoryId;
+                    $parentId = $builder->getProductCategoryId();
                 }
 
                 /** @noinspection PhpUndefinedVariableInspection */

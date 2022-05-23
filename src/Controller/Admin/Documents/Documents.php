@@ -24,27 +24,24 @@
 
 namespace Moloni\Controller\Admin\Documents;
 
-use Order;
-use Currency;
 use Exception;
 use PrestaShopDatabaseException;
 use PrestaShopException;
+use Moloni\Actions\Orders\OrderRestoreDiscard;
+use Moloni\Actions\Documents\DocumentsDownloadPdf;
+use Moloni\Actions\Documents\DocumentsListDetails;
 use Moloni\Controller\Admin\MoloniController;
 use Moloni\Entity\MoloniDocuments;
-use Moloni\Enums\DocumentTypes;
+use Moloni\Api\MoloniApiClient;
 use Moloni\Enums\MoloniRoutes;
 use Moloni\Exceptions\MoloniException;
 use Moloni\Repository\MoloniDocumentsRepository;
-use Moloni\Traits\DocumentTrait;
-use Moloni\Services\OrderProcessing;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class Documents extends MoloniController
 {
-    use DocumentTrait;
-
     /**
      * Created documents list
      *
@@ -55,7 +52,7 @@ class Documents extends MoloniController
     public function home(Request $request): Response
     {
         $page = $request->get('page', 1);
-        $createdDocuments = $paginator = [];
+        $documents = $paginator = [];
 
         /** @var MoloniDocumentsRepository $moloniDocumentRepository */
         $moloniDocumentRepository = $this
@@ -65,49 +62,18 @@ class Documents extends MoloniController
 
         try {
             ['documents' => $createdDocuments, 'paginator' => $paginator] = $moloniDocumentRepository->getAllPaginated($page);
+
+            $company = MoloniApiClient::companies()->queryCompany();
+            $documents = (new DocumentsListDetails())->getDetails($createdDocuments, $company);
         } catch (Exception $e) {
             $this->addErrorMessage($this->trans('Error fetching documents list', 'Modules.Molonies.Common'));
-        }
-
-        foreach ($createdDocuments as &$document) {
-            $orderId = (int)($document['order_id'] ?? 0);
-
-            try {
-                $order = new Order($orderId);
-            } catch (PrestaShopDatabaseException|PrestaShopException $e) {
-                $order = null;
-            }
-
-            if ($order === null || $order->id === null) {
-                $document['order_not_found'] = true;
-                continue;
-            }
-
-            if ($document['document_id'] < 0) {
-                $document['order_discarded'] = true;
-            }
-
-            $document['order_currency'] = (new Currency($order->id_currency))->symbol;
-            $document['order_total'] = $order->total_paid_tax_incl;
-            $document['order_email'] = $order->getCustomer()->email;
-            $document['order_customer'] = $order->getCustomer()->firstname . ' ' . $order->getCustomer()->lastname;
-
-            $document['order_view_url'] = $this->getAdminLink(
-                'AdminOrders',
-                [
-                    'vieworder' => '',
-                    'id_order' => $orderId,
-                ]
-            );
         }
 
         return $this->render(
             '@Modules/molonies/views/templates/admin/documents/Documents.twig',
             [
-                'documentArray' => $createdDocuments ?? [],
-                'documentTypes' => DocumentTypes::getDocumentsTypes(),
+                'documentArray' => $documents,
                 'downloadDocumentRoute' => MoloniRoutes::DOCUMENTS_DOWNLOAD,
-                'viewDocumentRoute' => MoloniRoutes::DOCUMENTS_VIEW,
                 'restoreDocumentRoute' => MoloniRoutes::DOCUMENTS_RESTORE,
                 'thisRoute' => MoloniRoutes::DOCUMENTS,
                 'paginator' => $paginator,
@@ -115,30 +81,34 @@ class Documents extends MoloniController
         );
     }
 
-    public function download(?int $documentId): RedirectResponse
+    /**
+     * Get download link
+     *
+     * @param Request $request
+     * @param int|null $documentId
+     *
+     * @return RedirectResponse
+     */
+    public function download(Request $request, ?int $documentId): RedirectResponse
     {
+        $documentType = $request->get('documentType', '');
+        $page = $request->get('page', 1);
+
         if (!is_numeric($documentId) || $documentId <= 0) {
             $msg = $this->trans('ID is invalid', 'Modules.Molonies.Errors');
             $this->addErrorMessage($msg);
 
-            return $this->redirectToDocuments();
+            return $this->redirectToDocuments($page);
         }
 
-        $url = $this->getPdfUrl($documentId);
+        $url = (new DocumentsDownloadPdf($documentId, $documentType))->downloadUrl();
 
-        return $this->redirect($url);
-    }
-
-    public function view(?int $documentId): RedirectResponse
-    {
-        if (!is_numeric($documentId) || $documentId <= 0) {
-            $msg = $this->trans('ID is invalid', 'Modules.Molonies.Errors');
+        if (empty($url)) {
+            $msg = $this->trans('Could not fetch pdf link.', 'Modules.Molonies.Errors');
             $this->addErrorMessage($msg);
 
-            return $this->redirectToDocuments();
+            return $this->redirectToDocuments($page);
         }
-
-        $url = $this->getDocumentUrl($documentId);
 
         return $this->redirect($url);
     }
@@ -156,8 +126,8 @@ class Documents extends MoloniController
         $page = $request->get('page', 1);
 
         try {
-            $action = new OrderProcessing($orderId, $this->getDoctrine()->getManager());
-            $action->discardOrder();
+            $action = new OrderRestoreDiscard($orderId, $this->getDoctrine()->getManager());
+            $action->restoreOrder();
 
             $msg = $this->trans('Order restored with success.', 'Modules.Molonies.Common');
             $msg .= "(" . $action->order->reference . ")";

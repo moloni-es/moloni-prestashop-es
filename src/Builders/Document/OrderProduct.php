@@ -45,7 +45,7 @@ class OrderProduct implements BuilderItemInterface
      *
      * @var int
      */
-    public $productId = 0;
+    protected $productId = 0;
 
     /**
      * Moloni roduct
@@ -248,6 +248,18 @@ class OrderProduct implements BuilderItemInterface
         return $this;
     }
 
+    //          GETS          //
+
+    /**
+     * Product id getter
+     *
+     * @return int
+     */
+    public function getProductId(): int
+    {
+        return $this->productId;
+    }
+
     //          SETS          //
 
     /**
@@ -255,7 +267,7 @@ class OrderProduct implements BuilderItemInterface
      *
      * @return OrderProduct
      */
-    protected function setReference(): OrderProduct
+    public function setReference(): OrderProduct
     {
         $reference = $this->orderProduct['reference'];
 
@@ -273,7 +285,7 @@ class OrderProduct implements BuilderItemInterface
      *
      * @return OrderProduct
      */
-    protected function setName(): OrderProduct
+    public function setName(): OrderProduct
     {
         $name = '';
 
@@ -296,7 +308,7 @@ class OrderProduct implements BuilderItemInterface
      *
      * @return OrderProduct
      */
-    protected function setPrice(): OrderProduct
+    public function setPrice(): OrderProduct
     {
         $this->price = (float)($this->orderProduct['price'] ?? 0);
         $this->priceWithTaxes = (float)($this->orderProduct['unit_price_tax_incl'] ?? 0);
@@ -309,7 +321,7 @@ class OrderProduct implements BuilderItemInterface
      *
      * @return OrderProduct
      */
-    protected function setType(): OrderProduct
+    public function setType(): OrderProduct
     {
         $this->type = ProductType::PRODUCT;
 
@@ -321,7 +333,7 @@ class OrderProduct implements BuilderItemInterface
      *
      * @return OrderProduct
      */
-    protected function setDiscounts(): OrderProduct
+    public function setDiscounts(): OrderProduct
     {
         $discount = 0;
 
@@ -357,7 +369,7 @@ class OrderProduct implements BuilderItemInterface
      *
      * @return OrderProduct
      */
-    protected function setQuantity(): OrderProduct
+    public function setQuantity(): OrderProduct
     {
         $this->quantity = (int)($this->orderProduct['product_quantity'] ?? 1);
 
@@ -371,7 +383,7 @@ class OrderProduct implements BuilderItemInterface
      *
      * @throws MoloniDocumentProductTaxException
      */
-    protected function setTaxes(): OrderProduct
+    public function setTaxes(): OrderProduct
     {
         $taxes = [];
 
@@ -389,7 +401,7 @@ class OrderProduct implements BuilderItemInterface
                     $taxBuilder
                         ->search();
 
-                    if ($taxBuilder->taxId === 0) {
+                    if ($taxBuilder->getTaxId() === 0) {
                         $taxBuilder
                             ->insert();
                     }
@@ -426,7 +438,7 @@ class OrderProduct implements BuilderItemInterface
      *
      * @return OrderProduct
      */
-    protected function setWarehouseId(): OrderProduct
+    public function setWarehouseId(): OrderProduct
     {
         $this->warehouseId = Settings::get('documentWarehouse');
 

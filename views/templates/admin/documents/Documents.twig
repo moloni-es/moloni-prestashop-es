@@ -10,13 +10,22 @@
             <table class="table table-striped table-bordered">
                 <thead>
                 <tr>
+                    <th scope="col">{{ 'Date'|trans({}, 'Modules.Molonies.Common') }}</th>
+                    <th scope="col" class="text-center">
+                        {{ 'Document type'|trans({}, 'Modules.Molonies.Common') }}
+                    </th>
                     <th scope="col">{{ 'Reference'|trans({}, 'Modules.Molonies.Common') }}</th>
                     <th scope="col">{{ 'Customer'|trans({}, 'Modules.Molonies.Common') }}</th>
-                    <th scope="col">{{ 'Email'|trans({}, 'Modules.Molonies.Common') }}</th>
-                    <th scope="col">{{ 'Amount'|trans({}, 'Modules.Molonies.Common') }}</th>
-                    <th scope="col">{{ 'Date'|trans({}, 'Modules.Molonies.Common') }}</th>
-                    <th scope="col">{{ 'Status'|trans({}, 'Modules.Molonies.Common') }}</th>
-                    <th scope="col">{{ 'Actions'|trans({}, 'Modules.Molonies.Common') }}</th>
+                    <th scope="col">{{ 'E-mail'|trans({}, 'Modules.Molonies.Common') }}</th>
+                    <th scope="col" class="text-right">
+                        {{ 'Amount'|trans({}, 'Modules.Molonies.Common') }}
+                    </th>
+                    <th scope="col" class="text-center">
+                        {{ 'Status'|trans({}, 'Modules.Molonies.Common') }}
+                    </th>
+                    <th scope="col" class="text-center">
+                        {{ 'Actions'|trans({}, 'Modules.Molonies.Common') }}
+                    </th>
                 </tr>
                 </thead>
                 <tbody>
@@ -24,21 +33,34 @@
                 {% if documentArray %}
                     {% for document in documentArray %}
                         <tr>
-                            <td>{{ document.order_reference|default('---') }}</td>
-                            <td>{{ document.order_customer|default('---') }}</td>
-                            <td>{{ document.order_email|default('---') }}</td>
-                            <td>
-                                {% if document.order_not_found is not defined %}
-                                    {{ document.order_total|number_format(2, '.', ',') }}{{ document.order_currency }}
-                                {% endif %}
-                            </td>
                             <td>
                                 {{ document.created_at is empty ? "---" : document.created_at|date("Y-m-d H:i:s", "GMT") }}
                             </td>
                             <td class="text-center">
+                                {{ document.document_type_mame|default('---')|trans({}, 'Modules.Molonies.Common') }}
+                            </td>
+                            <td>
+                                {{ document.order_reference|default('---') }}
+                            </td>
+                            <td>
+                                {{ document.order_customer|default('---') }}
+                            </td>
+                            <td>
+                                {{ document.order_email|default('---') }}
+                            </td>
+                            <td class="text-right">
+                                {% if document.order_not_found is not defined %}
+                                    {{ document.order_total|number_format(2, '.', ',') }}{{ document.order_currency }}
+                                {% endif %}
+                            </td>
+                            <td class="text-center">
                                 {% if document.order_not_found  is defined %}
                                     <span class="badge badge-danger">
-                                        {{ 'Not found'|trans({}, 'Modules.Molonies.Errors') }}
+                                        {{ 'Order not found'|trans({}, 'Modules.Molonies.Errors') }}
+                                    </span>
+                                {% elseif document.document_not_found is defined %}
+                                    <span class="badge badge-danger">
+                                        {{ 'Document not found'|trans({}, 'Modules.Molonies.Common') }}
                                     </span>
                                 {% elseif document.order_discarded is defined %}
                                     <span class="badge badge-warning">
@@ -57,17 +79,36 @@
                                     ---
                                 {% else %}
                                     <div class="btn-group">
-                                        {% if document.document_id > 0 %}
+                                        {% if document.document_not_found is defined %}
+                                            {% set btn_class = 'btn-danger' %}
+
+                                            <a type="button"
+                                               class="btn btn-sm {{ btn_class }}"
+                                               href="#">
+                                                ---
+                                            </a>
+                                        {% elseif document.document_id > 0 %}
                                             {% set btn_class = 'btn-success' %}
 
                                             <a type="button"
                                                class="btn btn-sm {{ btn_class }}"
-                                               href="{{ path(viewDocumentRoute , {documentId: document.document_id}) }}">
+                                               target="_blank"
+                                               href="{{ document.document_link }}">
+                                                <i class="material-icons">open_in_new</i>
+
                                                 {{ 'View document'|trans({}, 'Modules.Molonies.Common') }}
                                             </a>
-                                        {% endif %}
+                                        {% elseif document.document_not_found is defined %}
+                                            {% set btn_class = 'btn-primary' %}
 
-                                        {% if document.order_discarded is defined %}
+                                            <a type="button"
+                                               class="btn btn-sm {{ btn_class }}"
+                                               href="{{ path(restoreDocumentRoute , {orderId: document.order_id, page: paginator.currentPage }) }}">
+                                                <i class="material-icons">undo</i>
+
+                                                {{ 'Revert discard'|trans({}, 'Modules.Molonies.Common') }}
+                                            </a>
+                                        {% elseif document.order_discarded is defined %}
                                             {% set btn_class = 'btn-primary' %}
 
                                             <a type="button"
@@ -89,12 +130,22 @@
 
                                         <div class="dropdown-menu">
                                             <a class="dropdown-item"
-                                               href="{{ document.order_view_url }}"
+                                               href="{{ getAdminLink('AdminOrders', true, {'id_order': document.order_id, 'vieworder': ''}) }}"
                                                target="_blank">
                                                 <i class="material-icons">open_in_new</i>
 
                                                 {{ 'View order'|trans({}, 'Modules.Molonies.Common') }}
                                             </a>
+
+                                            {% if document.document_has_pdf is defined %}
+                                                <a class="dropdown-item"
+                                                   href="{{ path(downloadDocumentRoute , {documentId: document.document_id, documentType: document.document_type, page: paginator.currentPage }) }}"
+                                                   target="_blank">
+                                                    <i class="material-icons">file_download</i>
+
+                                                    {{ 'Download pdf'|trans({}, 'Modules.Molonies.Common') }}
+                                                </a>
+                                            {% endif %}
                                         </div>
                                     </div>
                                 {% endif %}
@@ -103,7 +154,7 @@
                     {% endfor %}
                 {% else %}
                     <tr>
-                        <td colspan="7">
+                        <td colspan="100%">
                             {{ 'No information to show!'|trans({}, 'Modules.Molonies.Common') }}
                         </td>
                     </tr>

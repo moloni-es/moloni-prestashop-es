@@ -174,22 +174,6 @@ class MoloniDocuments
     }
 
     /**
-     * @return array
-     */
-    public function toArray(): array
-    {
-        return [
-            'id' => $this->getId(),
-            'company_id' => $this->getCompanyId(),
-            'document_id' => $this->getDocumentId(),
-            'order_id' => $this->getOrderId(),
-            'shop_id' => $this->getShopId(),
-            'order_reference' => $this->getOrderReference(),
-            'created_at' => $this->getCreatedAt(),
-        ];
-    }
-
-    /**
      * @return string
      */
     public function getDocumentType(): string
@@ -203,5 +187,22 @@ class MoloniDocuments
     public function setDocumentType(string $documentType): void
     {
         $this->documentType = $documentType;
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'company_id' => $this->getCompanyId(),
+            'document_id' => $this->getDocumentId(),
+            'document_type' => $this->getDocumentType(),
+            'order_id' => $this->getOrderId(),
+            'shop_id' => $this->getShopId(),
+            'order_reference' => $this->getOrderReference(),
+            'created_at' => $this->getCreatedAt(),
+        ];
     }
 }

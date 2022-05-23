@@ -17,9 +17,3 @@ moloni_es_documents_restore:
   methods: [GET]
   defaults:
     _controller: 'Moloni\Controller\Admin\Documents\Documents::restore'
-
-moloni_es_documents_view:
-  path: /documents/view/{documentId}
-  methods: [GET]
-  defaults:
-    _controller: 'Moloni\Controller\Admin\Documents\Documents::view'
