@@ -41,7 +41,7 @@ class OrderShipping implements BuilderItemInterface
      *
      * @var int
      */
-    public $productId = 0;
+    protected $productId = 0;
 
     /**
      * Category
@@ -267,6 +267,18 @@ class OrderShipping implements BuilderItemInterface
         return $this;
     }
 
+    //          GETS          //
+
+    /**
+     * Product id getter
+     *
+     * @return int
+     */
+    public function getProductId(): int
+    {
+        return $this->productId;
+    }
+
     //          SETS          //
 
     /**
@@ -274,7 +286,7 @@ class OrderShipping implements BuilderItemInterface
      *
      * @return OrderShipping
      */
-    protected function setReference(): OrderShipping
+    public function setReference(): OrderShipping
     {
         $this->reference = 'envio';
 
@@ -288,17 +300,17 @@ class OrderShipping implements BuilderItemInterface
      *
      * @throws MoloniDocumentShippingException
      */
-    protected function setCategory(): OrderShipping
+    public function setCategory(): OrderShipping
     {
         try {
             $builder = new OrderShippingCategory('Envío', 0);
             $builder->search();
 
-            if ($builder->productCategoryId === 0) {
+            if ($builder->getProductCategoryId() === 0) {
                 $builder->insert();
             }
 
-            $this->categoryId = $builder->productCategoryId;
+            $this->categoryId = $builder->getProductCategoryId();
         } catch (MoloniException $e) {
             throw new MoloniDocumentShippingException($e->getMessage(), $e->getIdentifiers(), $e->getData());
         }
@@ -311,7 +323,7 @@ class OrderShipping implements BuilderItemInterface
      *
      * @return OrderShipping
      */
-    protected function setName(): OrderShipping
+    public function setName(): OrderShipping
     {
         $this->name = $this->orderShipping['carrier_name'] ?? 'Transportador';
 
@@ -323,7 +335,7 @@ class OrderShipping implements BuilderItemInterface
      *
      * @return OrderShipping
      */
-    protected function setPrice(): OrderShipping
+    public function setPrice(): OrderShipping
     {
         $this->price = (float)($this->orderShipping['shipping_cost_tax_excl'] ?? 0);
         $this->priceWithTaxes = (float)($this->orderShipping['shipping_cost_tax_incl'] ?? 0);
@@ -336,7 +348,7 @@ class OrderShipping implements BuilderItemInterface
      *
      * @return OrderShipping
      */
-    protected function setType(): OrderShipping
+    public function setType(): OrderShipping
     {
         $this->type = ProductType::SERVICE;
 
@@ -348,7 +360,7 @@ class OrderShipping implements BuilderItemInterface
      *
      * @return OrderShipping
      */
-    protected function setDiscounts(): OrderShipping
+    public function setDiscounts(): OrderShipping
     {
         $discount = 0;
         $cartRules = $this->order->getCartRules();
@@ -371,7 +383,7 @@ class OrderShipping implements BuilderItemInterface
      *
      * @return OrderShipping
      */
-    protected function setQuantity(): OrderShipping
+    public function setQuantity(): OrderShipping
     {
         $this->quantity = 1;
 
@@ -383,7 +395,7 @@ class OrderShipping implements BuilderItemInterface
      *
      * @throws MoloniDocumentShippingTaxException
      */
-    protected function setTaxes(): OrderShipping
+    public function setTaxes(): OrderShipping
     {
         $taxRate = $this->order->carrier_tax_rate;
 
@@ -394,7 +406,7 @@ class OrderShipping implements BuilderItemInterface
                 $taxBuilder
                     ->search();
 
-                if ($taxBuilder->taxId === 0) {
+                if ($taxBuilder->getTaxId() === 0) {
                     $taxBuilder
                         ->insert();
                 }
@@ -423,7 +435,7 @@ class OrderShipping implements BuilderItemInterface
      *
      * @return $this
      */
-    protected function setMeasurementUnit(): OrderShipping
+    public function setMeasurementUnit(): OrderShipping
     {
         $this->measurementUnit = (int)(Settings::get('measurementUnit') ?? 0);
 

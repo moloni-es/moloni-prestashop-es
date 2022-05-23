@@ -249,7 +249,7 @@ class SettingsFormType extends AbstractType
                 'label' => 'Send e-mail',
                 'required' => false,
                 'choices' => $yesNoOptions,
-                'help' => 'Sends document to customer via email',
+                'help' => 'Sends document to customer via e-mail',
                 'placeholder' => false,
                 'translation_domain' => 'Modules.Molonies.Common',
                 'choice_translation_domain' => 'Modules.Molonies.Common',
@@ -294,9 +294,9 @@ class SettingsFormType extends AbstractType
             ])
             // Advanced
             ->add('alertEmail', EmailType::class, [
-                'label' => 'Email address',
+                'label' => 'E-mail address',
                 'required' => false,
-                'help' => 'Email used to send notifications in case of plugin failures',
+                'help' => 'E-mail used to send notifications in case of plugin failures',
                 'attr' => [
                     'placeholder' => 'example@email.com',
                 ],

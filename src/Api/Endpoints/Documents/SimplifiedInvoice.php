@@ -33,6 +33,7 @@ class SimplifiedInvoice extends Endpoint
                             entityName
                             documentSetName
                             totalValue
+                            pdfExport
                         }
                         errors
                         {

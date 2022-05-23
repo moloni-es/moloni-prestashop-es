@@ -43,7 +43,7 @@ class OrderCustomer implements BuilderItemInterface
      *
      * @var int
      */
-    public $customerId = 0;
+    protected $customerId = 0;
 
     /**
      * Customer VAT
@@ -57,7 +57,7 @@ class OrderCustomer implements BuilderItemInterface
      *
      * @var string
      */
-    public $email;
+    protected $email = '';
 
     /**
      * Customer number
@@ -254,6 +254,18 @@ class OrderCustomer implements BuilderItemInterface
         return $this;
     }
 
+    //          GETS          //
+
+    /**
+     * Fetch customer ID
+     *
+     * @return int
+     */
+    public function getCustomerId(): int
+    {
+        return $this->customerId;
+    }
+
     //          SETS          //
 
     /**
@@ -261,7 +273,7 @@ class OrderCustomer implements BuilderItemInterface
      *
      * @throws MoloniDocumentCustomerException
      */
-    protected function setLanguageAndCountryId(): OrderCustomer
+    public function setLanguageAndCountryId(): OrderCustomer
     {
         try {
             ['countryId' => $countryId, 'languageId' => $languageId] = $this->getMoloniCountryById($this->billingAddress->id_country);
@@ -280,7 +292,7 @@ class OrderCustomer implements BuilderItemInterface
      *
      * @return OrderCustomer
      */
-    protected function setVat(): OrderCustomer
+    public function setVat(): OrderCustomer
     {
         switch (true) {
             case !empty($this->billingAddress->vat_number):
@@ -306,7 +318,7 @@ class OrderCustomer implements BuilderItemInterface
      *
      * @return OrderCustomer
      */
-    protected function setEmail(): OrderCustomer
+    public function setEmail(): OrderCustomer
     {
         $this->email = $this->customer->email;
 
@@ -320,7 +332,7 @@ class OrderCustomer implements BuilderItemInterface
      *
      * @throws MoloniDocumentCustomerException
      */
-    protected function setNumber(): OrderCustomer
+    public function setNumber(): OrderCustomer
     {
         try {
             $params = [
@@ -367,7 +379,7 @@ class OrderCustomer implements BuilderItemInterface
      *
      * @return OrderCustomer
      */
-    protected function setWebsite(): OrderCustomer
+    public function setWebsite(): OrderCustomer
     {
         $this->website = $this->customer->website;
 
@@ -379,7 +391,7 @@ class OrderCustomer implements BuilderItemInterface
      *
      * @return OrderCustomer
      */
-    protected function setName(): OrderCustomer
+    public function setName(): OrderCustomer
     {
         $name = $this->customer->firstname;
         $name .= ' ';
@@ -395,7 +407,7 @@ class OrderCustomer implements BuilderItemInterface
      *
      * @return OrderCustomer
      */
-    protected function setPhone(): OrderCustomer
+    public function setPhone(): OrderCustomer
     {
         switch (true) {
             case !empty($this->billingAddress->phone_mobile):
@@ -421,7 +433,7 @@ class OrderCustomer implements BuilderItemInterface
      *
      * @return OrderCustomer
      */
-    protected function setAddress(): OrderCustomer
+    public function setAddress(): OrderCustomer
     {
         $address = $this->billingAddress->address1;
         $address .= ' ';
@@ -441,7 +453,7 @@ class OrderCustomer implements BuilderItemInterface
      *
      * @return OrderCustomer
      */
-    protected function setCity(): OrderCustomer
+    public function setCity(): OrderCustomer
     {
         $city = $this->billingAddress->city;
 
@@ -459,7 +471,7 @@ class OrderCustomer implements BuilderItemInterface
      *
      * @return OrderCustomer
      */
-    protected function setZipCode(): OrderCustomer
+    public function setZipCode(): OrderCustomer
     {
         $this->zipCode = $this->billingAddress->postcode;
 
@@ -520,7 +532,7 @@ class OrderCustomer implements BuilderItemInterface
                 $this->customerId = $query[0]['customerId'];
             }
         } catch (MoloniApiException $e) {
-            throw new MoloniDocumentCustomerException('Error fetching customer by email: ({0})', [$this->email], $e->getData());
+            throw new MoloniDocumentCustomerException('Error fetching customer by e-mail: ({0})', [$this->email], $e->getData());
         }
     }
 }

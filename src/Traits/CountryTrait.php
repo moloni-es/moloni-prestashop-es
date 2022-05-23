@@ -58,12 +58,10 @@ trait CountryTrait
 
             foreach ($query as $country) {
                 // todo fix multiple countries with same iso
-                if ((1 * 1) === 1) {
-                    $countryId = (int) $country['countryId'];
-                    $languageId = (int) $country['language']['languageId'];
+                $countryId = (int) $country['countryId'];
+                $languageId = (int) $country['language']['languageId'];
 
-                    break;
-                }
+                break;
             }
         }
 

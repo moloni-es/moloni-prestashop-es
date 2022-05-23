@@ -8,6 +8,74 @@ use Moloni\Exceptions\MoloniApiException;
 class BillsOfLading extends Endpoint
 {
     /**
+     * Fetch bill of lading
+     *
+     * @param array|null $variables variables of the request
+     *
+     * @return array Api data
+     *
+     * @throws MoloniApiException
+     */
+    public function queryBillsOfLading(?array $variables = []): array
+    {
+        $query = 'query billsOfLading($companyId: Int!,$documentId: Int!)
+        {
+            billsOfLading(companyId: $companyId,documentId: $documentId) 
+            {
+                errors
+                {
+                    field
+                    msg
+                }
+                data
+                {
+                    documentId
+                    number
+                    totalValue
+                    documentTotal
+                    documentSetName
+                    ourReference
+                    pdfExport
+                }
+            }
+        }';
+
+        return $this->simplePost($query, $variables);
+    }
+
+    /**
+     * Get document token and path for bills of lading
+     *
+     * @param array|null $variables
+     *
+     * @return array returns the Graphql response array or an error array
+     *
+     * @throws MoloniApiException
+     */
+    public function queryBillsOfLadingGetPDFToken(?array $variables = []): array
+    {
+        $query = 'query billsOfLadingGetPDFToken($documentId: Int!)
+        {
+            billsOfLadingGetPDFToken(documentId: $documentId)
+            {
+                data
+                {
+                    token
+                    filename
+                    path
+                }
+                errors
+                {
+                    field
+                    msg
+                }
+            }
+        }';
+
+        return $this->simplePost($query, $variables);
+    }
+
+    /**
      * Creates a bill of lading
      *
      * @param array|null $variables variables of the request

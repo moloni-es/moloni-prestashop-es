@@ -33,6 +33,7 @@ class ProFormaInvoice extends Endpoint
                             entityName
                             documentSetName
                             totalValue
+                            pdfExport
                         }
                         errors
                         {

@@ -25,6 +25,8 @@
 namespace Moloni\Controller\Admin\Orders;
 
 use Currency;
+use Moloni\Actions\Orders\OrderCreateDocument;
+use Moloni\Actions\Orders\OrderDiscard;
 use PrestaShopDatabaseException;
 use PrestaShopException;
 use Moloni\Controller\Admin\MoloniController;
@@ -35,7 +37,6 @@ use Moloni\Exceptions\Document\MoloniDocumentWarning;
 use Moloni\Exceptions\MoloniException;
 use Moloni\Helpers\Settings;
 use Moloni\Repository\OrdersRepository;
-use Moloni\Services\OrderProcessing;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -93,11 +94,11 @@ class Orders extends MoloniController
         $page = $request->get('page');
 
         try {
-            $action = new OrderProcessing($orderId, $this->getDoctrine()->getManager());
+            $action = new OrderCreateDocument($orderId, $this->getDoctrine()->getManager());
             $action->createDocument($documentType);
 
             $msg = $this->trans('Document created successfully.', 'Modules.Molonies.Common');
-            $msg .= "(" . $action->order->reference . ")";
+            $msg .= " (" . $action->order->reference . ")";
 
             $this->addSuccessMessage($msg);
         } catch (MoloniDocumentWarning $e) {
@@ -130,11 +131,11 @@ class Orders extends MoloniController
         $page = $request->get('page', 1);
 
         try {
-            $action = new OrderProcessing($orderId, $this->getDoctrine()->getManager());
-            $action->discardOrder();
+            $action = new OrderDiscard($orderId, $this->getDoctrine()->getManager());
+            $action->discard();
 
             $msg = $this->trans('Order discarded with success.', 'Modules.Molonies.Common');
-            $msg .= "(" . $action->order->reference . ")";
+            $msg .= " (" . $action->order->reference . ")";
 
             $this->addSuccessMessage($msg);
         } catch (MoloniException $e) {

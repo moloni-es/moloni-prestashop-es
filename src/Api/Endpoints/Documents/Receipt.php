@@ -26,13 +26,12 @@ class Receipt extends Endpoint
                         {
                             documentId
                             number
-                            ourReference
-                            yourReference
                             entityVat
                             entityNumber
                             entityName
                             documentSetName
                             totalValue
+                            pdfExport
                         }
                         errors
                         {

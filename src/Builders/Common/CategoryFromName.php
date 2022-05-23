@@ -37,14 +37,14 @@ class CategoryFromName implements BuilderItemInterface
      *
      * @var int
      */
-    public $productCategoryId = 0;
+    protected $productCategoryId = 0;
 
     /**
      * Category parent id in Moloni
      *
      * @var int
      */
-    public $parentId;
+    protected $parentId;
 
     /**
      * Category name
@@ -126,6 +126,28 @@ class CategoryFromName implements BuilderItemInterface
         return $this;
     }
 
+    //          GETS          //
+
+    /**
+     * Parent id getter
+     *
+     * @return int
+     */
+    public function getParentId(): ?int
+    {
+        return $this->parentId;
+    }
+
+    /**
+     * Category id getter
+     *
+     * @return int
+     */
+    public function getProductCategoryId(): int
+    {
+        return $this->productCategoryId;
+    }
+
     //          REQUESTS          //
 
     /**
@@ -133,7 +155,7 @@ class CategoryFromName implements BuilderItemInterface
      *
      * @throws MoloniException
      */
-    public function getByName(): void
+    protected function getByName(): void
     {
         $variables = [
             'options' => [
