@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="Moloni\Repository\MoloniDocumentsRepository")
+ * @ORM\Entity(repositoryClass="Moloni\Repository\MoloniLogsRepository")
  */
 class MoloniLogs
 {

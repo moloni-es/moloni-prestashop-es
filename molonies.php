@@ -28,10 +28,13 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
+use Doctrine\Common\Persistence\ManagerRegistry as LegacyManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Moloni\Hooks\OrderStatusUpdate;
 use Moloni\Hooks\ProductAdd;
 use Moloni\Hooks\ProductUpdate;
 use Moloni\Install\Installer;
+use Moloni\Services\MoloniContext;
 
 class MoloniEs extends Module
 {
@@ -176,23 +179,6 @@ class MoloniEs extends Module
     }
 
     /**
-     * Add endpoints to Prestashop Webservices
-     *
-     * @return array[]
-     */
-    public function hookAddWebserviceResources(): array
-    {
-        include_once(_PS_MODULE_DIR_ . 'molonies/src/Webservice/WebserviceSpecificManagementMoloniResource.php');
-
-        return [
-            'moloniresource' => [
-                'description' => 'Moloni sync resource',
-                'specific_management' => true,
-            ],
-        ];
-    }
-
-    /**
      * Add out CSS and JS files to the backend
      *
      * @return void
@@ -213,6 +199,29 @@ class MoloniEs extends Module
     }
 
     /**
+     * Add endpoints to Prestashop Webservices
+     *
+     * @return array[]
+     */
+    public function hookAddWebserviceResources(): array
+    {
+        try {
+            $this->initContext();
+        } catch (Exception $e) {
+            // todo: catch this?
+        }
+
+        include_once(_PS_MODULE_DIR_ . 'molonies/src/Webservice/WebserviceSpecificManagementMoloniResource.php');
+
+        return [
+            'moloniresource' => [
+                'description' => 'Moloni sync resource',
+                'specific_management' => true,
+            ],
+        ];
+    }
+
+    /**
      * Called after creating a product
      *
      * @param array $params
@@ -222,7 +231,7 @@ class MoloniEs extends Module
     public function hookActionProductAdd(array $params): void
     {
         try {
-            $this->get('moloni.services.context');
+            $this->initContext();
 
             (new ProductAdd($params['id_product']))->handle();
         } catch (Exception $e) {
@@ -240,7 +249,7 @@ class MoloniEs extends Module
     public function hookActionProductUpdate(array $params): void
     {
         try {
-            $this->get('moloni.services.context');
+            $this->initContext();
 
             (new ProductUpdate($params['id_product']))->handle();
         } catch (Exception $e) {
@@ -258,12 +267,27 @@ class MoloniEs extends Module
     public function hookActionOrderStatusUpdate(array $params): void
     {
         try {
-            $this->get('moloni.services.context');
+            $this->initContext();
 
             (new OrderStatusUpdate($params['id_order'], $params['newOrderStatus']))->handle();
         } catch (Exception $e) {
             // Do nothing
         }
+    }
+
+    //          Privates          //
+
+    /**
+     * Init Moloni plugin context for in hooks
+     *
+     * @throws Exception
+     */
+    private function initContext(): void
+    {
+        /** @var ManagerRegistry|LegacyManagerRegistry $doctrine */
+        $doctrine = $this->get('doctrine');
+
+        new MoloniContext($doctrine->getManager());
     }
 
     /**

@@ -24,6 +24,7 @@
 
 namespace Moloni\Actions\Settings;
 
+use OrderState;
 use Store;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Enums\Languages;
@@ -48,7 +49,7 @@ abstract class AbstractSettingsAction
      */
     protected function getRequiredFormData(): array
     {
-        $measurementUnits = $warehouses = $documentSets = $countries = $stores = [];
+        $measurementUnits = $warehouses = $documentSets = $countries = $stores = $orderStatus = [];
 
         $measurementUnitsQuery = MoloniApiClient::measurementUnits()->queryMeasurementUnits();
         $warehousesQuery = MoloniApiClient::warehouses()->queryWarehouses();
@@ -59,6 +60,11 @@ abstract class AbstractSettingsAction
             ]
         ]);
         $storesQuery = Store::getStores($this->languageId);
+        $orderStatusQuery = OrderState::getOrderStates($this->languageId);
+
+        foreach ($orderStatusQuery as $states) {
+            $orderStatus[$states['name']] = $states['id_order_state'];
+        }
 
         foreach ($countriesQuery as $country) {
             $countries[$country['title']] = $country['countryId'];
@@ -86,6 +92,7 @@ abstract class AbstractSettingsAction
             'documentSets' => $documentSets,
             'countries' => $countries,
             'stores' => $stores,
+            'orderStatus' => $orderStatus,
         ];
     }
 }

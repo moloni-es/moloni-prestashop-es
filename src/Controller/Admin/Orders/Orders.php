@@ -59,7 +59,12 @@ class Orders extends MoloniController
 
         /** @var OrdersRepository $repository */
         $repository = $this->get('moloni.repository.orders');
-        ['orders' => $orders, 'paginator' => $paginator] = $repository->getPendingOrdersPaginated($page, $this->getContextLangId(), Settings::get('dateCreated'));
+        ['orders' => $orders, 'paginator' => $paginator] = $repository->getPendingOrdersPaginated(
+            $page,
+            $this->getContextLangId(),
+            Settings::get('dateCreated'),
+            Settings::get('orderStatusToShow')
+        );
 
         foreach ($orders as &$order) {
             $order['currency'] = (new Currency($order['id_currency']))->symbol;

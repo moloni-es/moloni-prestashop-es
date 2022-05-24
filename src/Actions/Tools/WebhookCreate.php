@@ -139,7 +139,7 @@ class WebhookCreate
         $apiAccess->save();
 
         $permissions = [
-            'moloniproducts' => ['POST' => 1],
+            'moloniresource' => ['POST' => 1],
         ];
 
         WebserviceKey::setPermissionForAccount($apiAccess->id, $permissions);

@@ -20,7 +20,7 @@ class OrderStatusUpdate extends AbstractHookAction
 
     public function handle(): void
     {
-        if ($this->isAuthenticated) {
+        if (!$this->isAuthenticated) {
             return;
         }
 

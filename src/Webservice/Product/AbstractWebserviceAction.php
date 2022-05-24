@@ -22,24 +22,18 @@
  * @noinspection PhpMultipleClassDeclarationsInspection
  */
 
-namespace Moloni\Repository;
+namespace Moloni\Webservice\Product;
 
-use Doctrine\ORM\EntityRepository;
-use Moloni\Entity\MoloniApp;
+use Moloni\Api\MoloniApi;
 
-class MoloniAppRepository extends EntityRepository
+abstract class AbstractWebserviceAction
 {
-    public function getApp(): ?object
-    {
-        return $this
-            ->findOneBy([]);
-    }
+    protected $isAuthenticated = false;
 
-    public function deleteApp()
+    public function __construct()
     {
-        return $this->createQueryBuilder('e')
-            ->delete()
-            ->getQuery()
-            ->execute();
+        if (MoloniApi::hasValidAuthentication()) {
+            $this->isAuthenticated = true;
+        }
     }
 }
