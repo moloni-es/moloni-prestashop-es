@@ -22,24 +22,16 @@
  * @noinspection PhpMultipleClassDeclarationsInspection
  */
 
-namespace Moloni\Repository;
+namespace Moloni\Webservice\Product;
 
-use Doctrine\ORM\EntityRepository;
-use Moloni\Entity\MoloniApp;
-
-class MoloniAppRepository extends EntityRepository
+class ProductCreate extends AbstractWebserviceAction
 {
-    public function getApp(): ?object
+    public function handle(int $productId): void
     {
-        return $this
-            ->findOneBy([]);
-    }
+        if (!$this->isAuthenticated) {
+            return;
+        }
 
-    public function deleteApp()
-    {
-        return $this->createQueryBuilder('e')
-            ->delete()
-            ->getQuery()
-            ->execute();
+        // todo: stuff
     }
 }

@@ -57,6 +57,13 @@ class Tools extends MoloniController
         return $this->redirectToTools();
     }
 
+    public function reinstallHooks(Request $request): RedirectResponse
+    {
+        // todo: this
+
+        return $this->redirectToTools();
+    }
+
     public function openLogs(Request $request): Response
     {
         // todo: this

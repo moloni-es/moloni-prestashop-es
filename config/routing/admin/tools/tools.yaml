@@ -18,17 +18,23 @@ moloni_es_tools_import_categories:
   defaults:
     _controller: 'Moloni\Controller\Admin\Tools\Tools::importCategories'
 
-moloni_es_tools_open_logs:
-  path: /tools/openLogs
+moloni_es_tools_reinstall_hooks:
+  path: /tools/reinstallHooks
   methods: [POST]
   defaults:
-    _controller: 'Moloni\Controller\Admin\Tools\Tools::openLogs'
+    _controller: 'Moloni\Controller\Admin\Tools\Tools::reinstallHooks'
 
 moloni_es_tools_stock_sync:
   path: /tools/syncStocks
   methods: [POST]
   defaults:
     _controller: 'Moloni\Controller\Admin\Tools\Tools::syncStocks'
+
+moloni_es_tools_open_logs:
+  path: /tools/openLogs
+  methods: [POST]
+  defaults:
+    _controller: 'Moloni\Controller\Admin\Tools\Tools::openLogs'
 
 moloni_es_tools_delete_logs:
   path: /tools/deleteLogs
@@ -41,11 +47,3 @@ moloni_es_tools_logout:
   methods: [POST]
   defaults:
     _controller: 'Moloni\Controller\Admin\Tools\Tools::logout'
-
-
-
-moloni_es_tools_export:
-  path: /tools/export
-  methods: [GET]
-  defaults:
-    _controller: 'Moloni\Controller\Admin\Tools\Tools::exportTranslations'

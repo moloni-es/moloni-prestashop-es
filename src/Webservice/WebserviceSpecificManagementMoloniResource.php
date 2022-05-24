@@ -1,9 +1,4 @@
 <?php
-
-use Moloni\Webservice\ProductCreate;
-use Moloni\Webservice\ProductStockChange;
-use Moloni\Webservice\ProductUpdate;
-
 /**
  * 2022 - Moloni.com
  *
@@ -25,6 +20,10 @@ use Moloni\Webservice\ProductUpdate;
  * @license   https://creativecommons.org/licenses/by-nd/4.0/
  * @noinspection PhpIllegalPsrClassPathInspection
  */
+
+use Moloni\Webservice\Product\ProductCreate;
+use Moloni\Webservice\Product\ProductStockChange;
+use Moloni\Webservice\Product\ProductUpdate;
 
 class WebserviceSpecificManagementMoloniResource implements WebserviceSpecificManagementInterface
 {

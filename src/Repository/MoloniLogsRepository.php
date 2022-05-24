@@ -25,21 +25,18 @@
 namespace Moloni\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Moloni\Entity\MoloniApp;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 
-class MoloniAppRepository extends EntityRepository
+class MoloniLogsRepository extends EntityRepository
 {
-    public function getApp(): ?object
+    public function getAllPaginated(?int $page = 1): array
     {
-        return $this
-            ->findOneBy([]);
+        return [];
     }
 
-    public function deleteApp()
+    public function deleteOlderLogs(): void
     {
-        return $this->createQueryBuilder('e')
-            ->delete()
-            ->getQuery()
-            ->execute();
+
     }
 }

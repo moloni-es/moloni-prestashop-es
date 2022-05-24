@@ -26,6 +26,7 @@ class SettingsFormType extends AbstractType
         $warehouses = $options['api_data']['warehouses'] ?? [];
         $documentSets = $options['api_data']['documentSets'] ?? [];
         $countries = $options['api_data']['countries'] ?? [];
+        $orderStatus = $options['api_data']['orderStatus'] ?? [];
 
         $yesNoOptions = [
             'No' => Boolean::NO,
@@ -312,6 +313,15 @@ class SettingsFormType extends AbstractType
                 'label' => 'Orders since',
                 'help' => 'Date used to limit fetch pending orders',
                 'placeholder' => false,
+                'translation_domain' => 'Modules.Molonies.Common',
+            ])
+            ->add('orderStatusToShow', ChoiceType::class, [
+                'label' => 'Order status',
+                'required' => false,
+                'multiple' => true,
+                'expanded' => true,
+                'choices' => $orderStatus,
+                'help' => 'Allowed order status to list pending orders and automatic document creation. (if at least one is selected)',
                 'translation_domain' => 'Modules.Molonies.Common',
             ])
             // save

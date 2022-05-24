@@ -1,4 +1,26 @@
 <?php
+/**
+ * 2022 - Moloni.com
+ *
+ * NOTICE OF LICENSE
+ *
+ * This file is licenced under the Software License Agreement.
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * You must not modify, adapt or create derivative works of this source code
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+ * versions in the future. If you wish to customize PrestaShop for your
+ * needs please refer to http://www.prestashop.com for more information.
+ *
+ * @author    Moloni
+ * @copyright Moloni
+ * @license   https://creativecommons.org/licenses/by-nd/4.0/
+ *
+ * @noinspection PhpMultipleClassDeclarationsInspection
+ */
 
 namespace Moloni\Repository;
 
@@ -23,27 +45,39 @@ class OrdersRepository
         $this->databasePrefix = $databasePrefix;
     }
 
-    public function getPendingOrdersPaginated($page, $langId, $dateCreated): array
+    public function getPendingOrdersPaginated($page, $langId, $dateCreated, $orderStatus): array
     {
         $expr = $this->connection->getExpressionBuilder();
 
         $ordersPerPage = 10;
         $offset = ($page - 1) * $ordersPerPage;
-        $orders = $this
+        $paginatorQuery = $this
             ->connection
             ->createQueryBuilder()
             ->addSelect('COUNT(*)')
             ->from($this->databasePrefix . 'orders', 'oo')
             ->leftJoin('oo', $this->databasePrefix . 'moloni_documents', 'mmdd', 'oo.id_order = mmdd.order_id')
-            ->where('mmdd.id is null')
-            ->execute()
+            ->where('mmdd.id is null');
+
+        if (!empty($dateCreated)) {
+            $paginatorQuery
+                ->andWhere('oo.date_add > :date_created')
+                ->setParameter('date_created', $dateCreated);
+        }
+
+        if (!empty($orderStatus)) {
+            $paginatorQuery->andWhere($expr->in('oo.current_state', $orderStatus));
+        }
+
+        $orders = $paginatorQuery->execute()
             ->fetch()['COUNT(*)'];
+
         $numberOfPages = ceil($orders / $ordersPerPage);
 
         $ordersQuery = $this
             ->connection
             ->createQueryBuilder()
-            ->addSelect('o.id_order, o.reference,  o.date_add, o.id_customer, o.id_currency, o.total_paid_tax_incl,o.current_state')
+            ->addSelect('o.id_order, o.reference,  o.date_add, o.id_customer, o.id_currency, o.total_paid_tax_incl, o.current_state, o.current_state')
             ->addSelect('c.email, c.firstname, c.lastname')
             ->addSelect('osl.name as state_name')
             ->addSelect('md.document_id as document_id')
@@ -51,16 +85,20 @@ class OrdersRepository
             ->leftJoin('o', $this->databasePrefix . 'moloni_documents', 'md', 'o.id_order = md.order_id')
             ->leftJoin('o', $this->databasePrefix . 'customer', 'c', 'o.id_customer = c.id_customer')
             ->leftJoin('o', $this->databasePrefix . 'order_state_lang', 'osl', 'o.current_state = osl.id_order_state AND osl.id_lang = :languague_id')
-            ->setParameter('languague_id', $langId);
+            ->setParameter('languague_id', $langId)
+            ->where($expr->isNull('document_id'));
 
         if (!empty($dateCreated)) {
             $ordersQuery
-                ->where('o.date_add > :date_created')
+                ->andWhere('o.date_add > :date_created')
                 ->setParameter('date_created', $dateCreated);
         }
 
+        if (!empty($orderStatus)) {
+            $ordersQuery->andWhere($expr->in('o.current_state', $orderStatus));
+        }
+
         $ordersQuery = $ordersQuery
-            ->where($expr->isNull('document_id'))
             ->setMaxResults($ordersPerPage)
             ->setFirstResult($offset)
             ->addOrderBy('o.date_add', 'DESC');

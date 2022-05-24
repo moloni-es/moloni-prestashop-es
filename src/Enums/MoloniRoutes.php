@@ -22,6 +22,7 @@ class MoloniRoutes
     public const TOOLS_IMPORT_PRODUCTS = 'moloni_es_tools_import_products';
     public const TOOLS_IMPORT_CATEGORIES = 'moloni_es_tools_import_categories';
     public const TOOLS_DISCARD_ORDERS = 'moloni_es_tools_discard_orders';
+    public const TOOLS_REINSTALL_HOOKS = 'moloni_es_tools_reinstall_hooks';
     public const TOOLS_OPEN_LOGS = 'moloni_es_tools_open_logs';
     public const TOOLS_DELETE_LOGS = 'moloni_es_tools_delete_logs';
     public const TOOLS_LOGOUT = 'moloni_es_tools_logout';
@@ -41,6 +42,7 @@ class MoloniRoutes
         self::TOOLS_IMPORT_PRODUCTS,
         self::TOOLS_IMPORT_CATEGORIES,
         self::TOOLS_DISCARD_ORDERS,
+        self::TOOLS_REINSTALL_HOOKS,
         self::TOOLS_OPEN_LOGS,
         self::TOOLS_DELETE_LOGS,
         self::TOOLS_LOGOUT,
