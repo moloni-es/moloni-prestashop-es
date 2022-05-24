@@ -27,7 +27,7 @@ namespace Moloni\Actions\Orders;
 use Moloni\Entity\MoloniDocuments;
 use Moloni\Exceptions\MoloniException;
 
-class OrderRestoreDiscard extends OrderAction
+class OrderRestoreDiscard extends AbstractOrderAction
 {
     /**
      * Restore discarted order

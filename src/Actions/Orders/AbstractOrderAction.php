@@ -24,16 +24,16 @@
 
 namespace Moloni\Actions\Orders;
 
+use Order;
+use PrestaShopDatabaseException;
+use PrestaShopException;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Persistence\ObjectRepository;
 use Moloni\Entity\MoloniDocuments;
 use Moloni\Exceptions\MoloniException;
 use Moloni\Repository\MoloniDocumentsRepository;
-use Order;
-use PrestaShopDatabaseException;
-use PrestaShopException;
 
-abstract class OrderAction
+abstract class AbstractOrderAction
 {
     /**
      * Order id

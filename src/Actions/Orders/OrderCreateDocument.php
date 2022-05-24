@@ -35,7 +35,7 @@ use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\MoloniException;
 use Moloni\Helpers\Settings;
 
-class OrderCreateDocument extends OrderAction
+class OrderCreateDocument extends AbstractOrderAction
 {
     /**
      * Create Moloni document

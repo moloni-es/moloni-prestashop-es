@@ -28,8 +28,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use Moloni\Helpers\Settings;
-use Moloni\Hooks\OrderPaid;
+use Moloni\Hooks\OrderStatusUpdate;
 use Moloni\Hooks\ProductAdd;
 use Moloni\Hooks\ProductUpdate;
 use Moloni\Install\Installer;
@@ -183,7 +182,7 @@ class MoloniEs extends Module
      */
     public function hookAddWebserviceResources(): array
     {
-        include_once _PS_MODULE_DIR_ . 'molonies/src/WebHooks/WebserviceSpecificManagementMoloniResource.php';
+        include_once(_PS_MODULE_DIR_ . 'molonies/src/Webservice/WebserviceSpecificManagementMoloniResource.php');
 
         return [
             'moloniresource' => [
@@ -214,44 +213,57 @@ class MoloniEs extends Module
     }
 
     /**
-     * Called after creating an product
+     * Called after creating a product
      *
-     * @param $params
+     * @param array $params
      *
      * @return void
      */
-    public function hookActionProductAdd($params): void
+    public function hookActionProductAdd(array $params): void
     {
-        // if ((Settings::get('AddProducts') === 1)) {
-        //     $productSave = new ProductAdd($this->context->getTranslator());
-        //     $productSave->hookActionProductSave($params['id_product']);
-        // }
+        try {
+            $this->get('moloni.services.context');
+
+            (new ProductAdd($params['id_product']))->handle();
+        } catch (Exception $e) {
+            // Do nothing
+        }
     }
 
     /**
      * Called after updating a product
      *
-     * @param $params
+     * @param array $params
      *
      * @return void
      */
-    public function hookActionProductUpdate($params): void
+    public function hookActionProductUpdate(array $params): void
     {
-        // $productSave = new ProductUpdate($this->context->getTranslator());
-        // $productSave->hookActionProductSave($params['id_product']);
+        try {
+            $this->get('moloni.services.context');
+
+            (new ProductUpdate($params['id_product']))->handle();
+        } catch (Exception $e) {
+            // Do nothing
+        }
     }
 
     /**
      * Called after an order is paid
      *
-     * @param $params
+     * @param array $params
      *
      * @return void
      */
-    public function hookActionPaymentConfirmation($params): void
+    public function hookActionOrderStatusUpdate(array $params): void
     {
-        // $paymentConfirmation = new OrderPaid($this->context->getTranslator());
-        // $paymentConfirmation->hookActionPaymentConfirmation($params['id_order']);
+        try {
+            $this->get('moloni.services.context');
+
+            (new OrderStatusUpdate($params['id_order'], $params['newOrderStatus']))->handle();
+        } catch (Exception $e) {
+            // Do nothing
+        }
     }
 
     /**

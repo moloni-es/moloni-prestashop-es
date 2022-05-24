@@ -25,6 +25,7 @@
 namespace Moloni\Controller\Admin\Orders;
 
 use Currency;
+use Db;
 use Moloni\Actions\Orders\OrderCreateDocument;
 use Moloni\Actions\Orders\OrderDiscard;
 use Moloni\Builders\MoloniProductFromId;

@@ -342,6 +342,11 @@ class MoloniProductFromId implements BuilderInterface
         }
     }
 
+    public function updateStock(): void
+    {
+        $props = [];
+    }
+
     /**
      * Search product in Moloni
      *

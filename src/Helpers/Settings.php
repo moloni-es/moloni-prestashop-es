@@ -7,7 +7,7 @@ class Settings
     /**
      * Settings
      *
-     * @var array array form: [label => value]
+     * @var null|array array form: [label => value]
      */
     private static $settings;
 

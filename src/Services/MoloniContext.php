@@ -24,11 +24,11 @@
 
 namespace Moloni\Services;
 
-use Db;
 use Doctrine\ORM\EntityManager;
 use Moloni\Api\MoloniApi;
 use Moloni\Entity\MoloniApp;
 use Moloni\Entity\MoloniSettings;
+use Moloni\Helpers\Logs;
 use Moloni\Helpers\Settings;
 use Moloni\Repository\MoloniAppRepository;
 use Moloni\Repository\MoloniSettingsRepository;
@@ -97,7 +97,9 @@ class MoloniContext
     private function loadRequirements(): void
     {
         new MoloniApi($this->entityManager, $this->app);
+
         new Settings($this->settings);
+        new Logs($this->entityManager);
     }
 
     //          PUBLICS          //
