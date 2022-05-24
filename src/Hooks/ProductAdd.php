@@ -2,68 +2,25 @@
 
 namespace Moloni\Hooks;
 
-use Configuration;
-use Moloni\Controllers\General;
-use Moloni\Helpers\Log;
-use Moloni\Helpers\LogSync;
-use Moloni\Helpers\Product;
-use PrestaShopDatabaseException;
-use PrestaShopException;
-
-class ProductAdd
+class ProductAdd extends AbstractHookAction
 {
-    /**
-     * translator component
-     */
-    public $translator;
+    private $productId;
 
-    /**
-     * ProductSave constructor.
-     *
-     * @param $translator
-     */
-    public function __construct($translator)
+    public function __construct(int $productId)
     {
-        $this->translator = $translator;
+        parent::__construct();
+
+        $this->productId = $productId;
     }
 
-    /**
-     * Called after creating or updating a product
-     *
-     * @param $productId
-     *
-     * @return bool
-     *
-     * @throws PrestaShopDatabaseException
-     * @throws PrestaShopException
-     */
-    public function hookActionProductSave($productId)
+
+    public function handle(): void
     {
-        // to prevent infinite loops
-        if (LogSync::wasSyncedRecently(1, $productId) === true) {
-            Log::writeLog('Product has already been synced (prestashop -> moloni)');
-
-            return false;
+        if (!$this->isAuthenticated) {
+            return;
         }
 
-        $productPS = new \PrestaShop\PrestaShop\Adapter\Entity\Product(
-            $productId,
-            1,
-            Configuration::get('PS_LANG_DEFAULT')
-        );
-
-        if (General::staticCheckTokens() !== true) {
-            Log::writeLog('Tokens are not valid. Cant create document!!');
-
-            return false;
-        }
-
-        $product = new Product($productPS, $this->translator);
-
-        if ($product->init() == true) {
-            $product->create();
-        }
-
-        return true;
+        $this->productId = $this->productId ?: 0;
+        // todo: do something
     }
 }

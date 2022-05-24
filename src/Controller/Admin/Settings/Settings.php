@@ -24,24 +24,20 @@
 
 namespace Moloni\Controller\Admin\Settings;
 
-use Shop;
-use Store;
-use DateTime;
 use Exception;
-use Moloni\Enums\Languages;
+use Moloni\Actions\Settings\SettingsSave;
+use Moloni\Actions\Settings\SettingsForm;
 use Moloni\Exceptions\MoloniException;
-use Moloni\Api\MoloniApiClient;
-use Moloni\Exceptions\MoloniApiException;
-use Moloni\Form\SettingsFormType;
 use Moloni\Controller\Admin\MoloniController;
 use Moloni\Entity\MoloniSettings;
-use Moloni\Helpers\Settings as helperSettings;
 use Moloni\Repository\MoloniSettingsRepository;
+use Symfony\Component\Form\FormFactory;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
+use Symfony\Component\Routing\Router;
 
 class Settings extends MoloniController
 {
@@ -54,23 +50,15 @@ class Settings extends MoloniController
      */
     public function home(): Response
     {
-        try {
-            $apiData = $this->getRequiredFormData();
-        } catch (MoloniApiException $e) {
-            $apiData = [];
-        }
+        /** @var FormFactory $formFactory */
+        $formFactory = $this->get('form.factory');
 
-        $form = $this->createForm(SettingsFormType::class, null, [
-            'url' => $this->generateUrl('moloni_es_settings_save'),
-            'api_data' => $apiData
-        ]);
-        $setting = helperSettings::getAll();
+        /** @var Router $router */
+        $router = $this->get('router');
 
-        if (isset($setting['dateCreated'])) {
-            $setting['dateCreated'] = new DateTime($setting['dateCreated']);
-        }
+        $languageId = $this->getContextLangId();
 
-        $form->setData($setting);
+        $form = (new SettingsForm($languageId, $formFactory, $router))->handle();
 
         return $this->render(
             '@Modules/molonies/views/templates/admin/settings/Settings.twig',
@@ -89,29 +77,18 @@ class Settings extends MoloniController
      */
     public function save(Request $request): RedirectResponse
     {
+        /** @var MoloniSettingsRepository $settingsRepository */
+        $settingsRepository = $this
+            ->getDoctrine()
+            ->getRepository(MoloniSettings::class);
+
+        /** @var FormFactory $formFactory */
+        $formFactory = $this->get('form.factory');
+
+        $languageId = $this->getContextLangId();
+
         try {
-            $apiData = $this->getRequiredFormData();
-        } catch (MoloniApiException $e) {
-            $apiData = [];
-        }
-
-        $form = $this->createForm(SettingsFormType::class, null, ['api_data' => $apiData]);
-        $form->handleRequest($request);
-
-        try {
-            if (!$form->isSubmitted() || !$form->isValid()) {
-                throw new MoloniException('Form not valid!');
-            }
-
-            $submitData = $form->getData();
-            $shopId = (int)Shop::getContextShopID();
-
-            /** @var MoloniSettingsRepository $settingsRepository */
-            $settingsRepository = $this
-                ->getDoctrine()
-                ->getRepository(MoloniSettings::class);
-
-            $settingsRepository->saveSettings($submitData, $shopId);
+            (new SettingsSave($languageId, $formFactory, $settingsRepository))->handle($request);
 
             $this->addSuccessMessage($this->trans('Settings saved.', 'Modules.Molonies.Success'));
         } catch (MoloniException $e) {
@@ -122,53 +99,5 @@ class Settings extends MoloniController
         }
 
         return $this->redirectToSettings();
-    }
-
-    /**
-     * Fetch required data for settings form
-     *
-     * @throws MoloniApiException
-     */
-    private function getRequiredFormData(): array
-    {
-        $measurementUnits = $warehouses = $documentSets = $countries = $stores = [];
-
-        $measurementUnitsQuery = MoloniApiClient::measurementUnits()->queryMeasurementUnits();
-        $warehousesQuery = MoloniApiClient::warehouses()->queryWarehouses();
-        $documentSetsQuery = MoloniApiClient::documentSets()->queryDocumentSets();
-        $countriesQuery = MoloniApiClient::countries()->queryCountries([
-            'options' => [
-                'defaultLanguageId' => Languages::ES
-            ]
-        ]) ?? [];
-        $storesQuery = Store::getStores($this->getContextLangId());
-
-        foreach ($countriesQuery as $country) {
-            $countries[$country['title']] = $country['countryId'];
-        }
-
-        foreach ($measurementUnitsQuery as $measurementUnit) {
-            $measurementUnits[$measurementUnit['name']] = $measurementUnit['measurementUnitId'];
-        }
-
-        foreach ($warehousesQuery as $warehouse) {
-            $warehouses[$warehouse['name']] = $warehouse['warehouseId'];
-        }
-
-        foreach ($documentSetsQuery as $documentSet) {
-            $documentSets[$documentSet['name']] = $documentSet['documentSetId'];
-        }
-
-        foreach ($storesQuery as $store) {
-            $stores[$store['name']] = $store['id_store'];
-        }
-
-        return [
-            'measurementUnits' => $measurementUnits,
-            'warehouses' => $warehouses,
-            'documentSets' => $documentSets,
-            'countries' => $countries,
-            'stores' => $stores,
-        ];
     }
 }

@@ -18,14 +18,15 @@
  * @author    Moloni
  * @copyright Moloni
  * @license   https://creativecommons.org/licenses/by-nd/4.0/
+ *
+ * @noinspection PhpMultipleClassDeclarationsInspection
  */
 
-namespace Moloni\Webservice;
+namespace Moloni\Helpers;
 
 use Configuration;
-use Moloni\Api\Endpoints\Hooks;
 use Moloni\Api\Endpoints\Companies;
-use Moloni\Helpers\Moloni;
+use Moloni\Api\Endpoints\Hooks;
 use WebserviceKey;
 
 class Webservice

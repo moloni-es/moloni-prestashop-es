@@ -29,7 +29,7 @@ use Moloni\Api\MoloniApi;
 use Moloni\Entity\MoloniDocuments;
 use Moloni\Exceptions\MoloniException;
 
-class OrderDiscard extends OrderAction
+class OrderDiscard extends AbstractOrderAction
 {
     /**
      * Mark orders as discarded
