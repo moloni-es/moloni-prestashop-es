@@ -26,9 +26,9 @@ namespace Moloni\Actions\Tools;
 
 use Configuration;
 use Db;
-use Moloni\Enums\Boolean;
 use WebserviceKey;
 use PrestaShopException;
+use Moloni\Enums\Boolean;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\MoloniException;

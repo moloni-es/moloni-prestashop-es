@@ -59,7 +59,7 @@ class Logs
      *
      * @return void
      */
-    public static function addInfoLog($message, ?array $data, ?int $orderId): void
+    public static function addInfoLog($message, ?array $data = [], ?int $orderId = 0): void
     {
         self::addLog(LogLevel::INFO, $message, $data, $orderId);
     }
@@ -73,7 +73,7 @@ class Logs
      *
      * @return void
      */
-    public static function addWarningLog($message, ?array $data, ?int $orderId): void
+    public static function addWarningLog($message, ?array $data = [], ?int $orderId = 0): void
     {
         self::addLog(LogLevel::WARNING, $message, $data, $orderId);
     }
@@ -87,7 +87,7 @@ class Logs
      *
      * @return void
      */
-    public static function addErrorLog($message, ?array $data, ?int $orderId): void
+    public static function addErrorLog($message, ?array $data = [], ?int $orderId = 0): void
     {
         self::addLog(LogLevel::ERROR, $message, $data, $orderId);
     }

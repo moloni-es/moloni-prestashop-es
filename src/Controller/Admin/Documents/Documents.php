@@ -66,7 +66,9 @@ class Documents extends MoloniController
             $company = MoloniApiClient::companies()->queryCompany();
             $documents = (new DocumentsListDetails($createdDocuments, $company))->handle();
         } catch (Exception $e) {
-            $this->addErrorMessage($this->trans('Error fetching documents list', 'Modules.Molonies.Common'));
+            $msg = $this->trans('Error fetching documents list', 'Modules.Molonies.Common');
+
+            $this->addErrorMessage($msg);
         }
 
         return $this->render(

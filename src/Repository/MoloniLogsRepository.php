@@ -24,19 +24,73 @@
 
 namespace Moloni\Repository;
 
+use Exception;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMException;
+use Doctrine\ORM\Tools\Pagination\Paginator;
+use Moloni\Entity\MoloniSyncLogs;
 
 class MoloniLogsRepository extends EntityRepository
 {
-    public function getAllPaginated(?int $page = 1): array
+    /**
+     * @throws Exception
+     */
+    public function getAllPaginated(?int $page = 1, ?int $companyId = 0): array
     {
-        return [];
+        $logs = [];
+        $logsPerPage = 10;
+
+        $query = $this
+            ->createQueryBuilder('l')
+            ->where('l.companyId = :company_id')
+            ->setParameter('company_id', $companyId)
+            ->orderBy('l.id', 'DESC')
+            ->getQuery();
+
+        $paginator = new Paginator($query, false);
+
+        $totalItems = $paginator->count();
+        $totalItems = $totalItems === 0 ? 1 : $totalItems;
+        $numberOfPages = ceil($totalItems / $logsPerPage);
+        $offset = ($page - 1) * $logsPerPage;
+
+        $paginator
+            ->getQuery()
+            ->setFirstResult($offset)
+            ->setMaxResults($logsPerPage);
+
+        /** @var MoloniSyncLogs[] $objects */
+        $logsObjects = $paginator
+            ->getIterator()
+            ->getArrayCopy();
+
+        /** @var MoloniSyncLogs $object */
+        foreach ($logsObjects as $object) {
+            $logs[] = $object->toArray();
+        }
+
+        return [
+            'logs' => $logs,
+            'paginator' => [
+                'numberOfPages' => $numberOfPages,
+                'currentPage' => $page,
+                'linesPerPage' => $logsPerPage,
+                'offset' => $offset,
+            ],
+        ];
     }
 
+    /**
+     * Delete logs with more than 1 month
+     */
     public function deleteOlderLogs(): void
     {
+        $timestampp = strtotime("-1 week");
 
+        $this->createQueryBuilder('l')
+            ->delete()
+            ->where('l.createdAt < :created_at')
+            ->setParameter('created_at', $timestampp)
+            ->getQuery()
+            ->getResult();
     }
 }
