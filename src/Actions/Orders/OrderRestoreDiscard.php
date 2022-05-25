@@ -34,7 +34,7 @@ class OrderRestoreDiscard extends AbstractOrderAction
      *
      * @throws MoloniException
      */
-    public function restoreOrder(): void
+    public function handle(): void
     {
         /** @var MoloniDocuments|null $document */
         $document = $this->documentRepository->findOneBy(['orderId' => $this->orderId, 'documentId' => -1]);

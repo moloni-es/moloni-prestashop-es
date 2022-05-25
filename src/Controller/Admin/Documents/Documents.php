@@ -64,7 +64,7 @@ class Documents extends MoloniController
             ['documents' => $createdDocuments, 'paginator' => $paginator] = $moloniDocumentRepository->getAllPaginated($page);
 
             $company = MoloniApiClient::companies()->queryCompany();
-            $documents = (new DocumentsListDetails())->getDetails($createdDocuments, $company);
+            $documents = (new DocumentsListDetails($createdDocuments, $company))->handle();
         } catch (Exception $e) {
             $this->addErrorMessage($this->trans('Error fetching documents list', 'Modules.Molonies.Common'));
         }
@@ -101,7 +101,7 @@ class Documents extends MoloniController
             return $this->redirectToDocuments($page);
         }
 
-        $url = (new DocumentsDownloadPdf($documentId, $documentType))->downloadUrl();
+        $url = (new DocumentsDownloadPdf($documentId, $documentType))->handle();
 
         if (empty($url)) {
             $msg = $this->trans('Could not fetch pdf link.', 'Modules.Molonies.Errors');
@@ -127,10 +127,10 @@ class Documents extends MoloniController
 
         try {
             $action = new OrderRestoreDiscard($orderId, $this->getDoctrine()->getManager());
-            $action->restoreOrder();
+            $action->handle();
 
             $msg = $this->trans('Order restored with success.', 'Modules.Molonies.Common');
-            $msg .= "(" . $action->order->reference . ")";
+            $msg .= "(" . $action->getOrder()->reference . ")";
 
             $this->addSuccessMessage($msg);
         } catch (MoloniException $e) {

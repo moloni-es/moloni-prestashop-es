@@ -290,7 +290,7 @@ class MoloniProductFromId implements BuilderInterface
      *
      * @throws MoloniProductException
      */
-    public function insert(): void
+    public function insert(): MoloniProductFromId
     {
         $props = $this->toArray();
 
@@ -312,6 +312,8 @@ class MoloniProductFromId implements BuilderInterface
         } catch (MoloniApiException $e) {
             throw new MoloniProductException('Error creating product', [], $e->getData());
         }
+
+        return $this;
     }
 
     /**
@@ -319,7 +321,7 @@ class MoloniProductFromId implements BuilderInterface
      *
      * @throws MoloniProductException
      */
-    public function update(): void
+    public function update(): MoloniProductFromId
     {
         $props = $this->toArray();
 
@@ -340,11 +342,17 @@ class MoloniProductFromId implements BuilderInterface
         } catch (MoloniApiException $e) {
             throw new MoloniProductException('Error updating product', [], $e->getData());
         }
+
+        return $this;
     }
 
-    public function updateStock(): void
+    public function updateStock(): MoloniProductFromId
     {
-        $props = [];
+        if ($this->productHasStock()) {
+            $props = [];
+        }
+
+        return $this;
     }
 
     /**
@@ -708,10 +716,12 @@ class MoloniProductFromId implements BuilderInterface
             $query = MoloniApiClient::products()
                 ->queryProducts($variables);
 
-
             if (!empty($query)) {
-                $this->productId = $query[0]['productId'];
-                $this->moloniProduct = $query[0];
+                $moloniProduct = $query[0];
+
+                $this->moloniProduct = $moloniProduct;
+                $this->productId = $moloniProduct['productId'];
+                $this->hasStock = $moloniProduct['hasStock'];
             }
         } catch (MoloniApiException $e) {
             throw new MoloniProductException('Error fetching product by reference: ({0})', [$this->reference], $e->getData());
@@ -742,3 +752,4 @@ class MoloniProductFromId implements BuilderInterface
         return $this->hasStock;
     }
 }
+

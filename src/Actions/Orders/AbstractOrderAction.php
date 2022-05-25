@@ -66,14 +66,14 @@ abstract class AbstractOrderAction
     /**
      * Constructor
      *
-     * @param int|null $orderId
+     * @param int|string|null $orderId
      * @param ObjectManager $entityManager
      *
      * @throws MoloniException
      * @throws PrestaShopDatabaseException
      * @throws PrestaShopException
      */
-    public function __construct(?int $orderId, ObjectManager $entityManager)
+    public function __construct($orderId, ObjectManager $entityManager)
     {
         if (!is_numeric($orderId) || $orderId < 0) {
 
@@ -92,4 +92,10 @@ abstract class AbstractOrderAction
         $this->documentRepository = $entityManager->getRepository(MoloniDocuments::class);
     }
 
+    //          Gets          //
+
+    public function getOrder(): ?Order
+    {
+        return $this->order;
+    }
 }

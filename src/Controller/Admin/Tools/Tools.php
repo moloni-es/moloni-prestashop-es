@@ -24,7 +24,12 @@
 
 namespace Moloni\Controller\Admin\Tools;
 
+use Moloni\Actions\Tools\WebhookCreate;
+use Moloni\Actions\Tools\WebhookDeleteAll;
 use Moloni\Controller\Admin\MoloniController;
+use Moloni\Enums\Boolean;
+use Moloni\Exceptions\MoloniException;
+use Moloni\Helpers\Settings;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -59,7 +64,28 @@ class Tools extends MoloniController
 
     public function reinstallHooks(Request $request): RedirectResponse
     {
-        // todo: this
+        try {
+            (new WebhookDeleteAll())->handle();
+            $action = new WebhookCreate();
+
+            if (Settings::get('syncStockToPrestashop') === Boolean::YES) {
+                $action->handle('Product', 'stockChanged');
+            }
+
+            if (Settings::get('addProductsToPrestashop') === Boolean::YES) {
+                $action->handle('Product', 'create');
+            }
+
+            if (Settings::get('updateProductsToPrestashop') === Boolean::YES) {
+                $action->handle('Product', 'update');
+            }
+
+            $msg = $this->trans('Webhooks reinstall was successful', 'Modules.Molonies.Common');
+            $this->addSuccessMessage($msg);
+        } catch (MoloniException $e) {
+            $msg = $this->trans($e->getMessage(), 'Modules.Molonies.Errors', $e->getIdentifiers());
+            $this->addErrorMessage($msg, $e->getData());
+        }
 
         return $this->redirectToTools();
     }
@@ -83,10 +109,8 @@ class Tools extends MoloniController
         return $this->redirectToTools();
     }
 
-    public function logout(Request $request): RedirectResponse
+    public function logout(): RedirectResponse
     {
-        // todo: this
-
         return $this->redirectToLogin();
     }
 }

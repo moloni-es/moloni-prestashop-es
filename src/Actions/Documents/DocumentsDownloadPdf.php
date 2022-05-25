@@ -18,7 +18,7 @@ class DocumentsDownloadPdf
         $this->documentType = $documentType;
     }
 
-    public function downloadUrl(): string
+    public function handle(): string
     {
         $url = '';
 

@@ -75,7 +75,7 @@ class MoloniSettingsRepository extends EntityRepository
                 $value = serialize($value);
             }
 
-            if (is_object($value) && $label === 'dateCreated') {
+            if (is_object($value) && $label === 'orderDateCreated') {
                 $value = $value->format('Y-m-d');
             }
 

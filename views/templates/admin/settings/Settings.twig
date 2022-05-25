@@ -26,6 +26,17 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link"
+                               id="pills-orders-tab"
+                               data-toggle="pill"
+                               href="#pills-orders"
+                               role="tab"
+                               aria-controls="pills-orders"
+                               aria-expanded="true">
+                                {{ 'Orders'|trans({}, 'Modules.Molonies.Common') }}
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link"
                                id="pills-automation-tab"
                                data-toggle="pill"
                                href="#pills-automation"
@@ -116,6 +127,13 @@
                             {{ form_row(form.clientPrefix) }}
                         </div>
                         <div class="tab-pane fade"
+                             id="pills-orders"
+                             role="tabpanel"
+                             aria-labelledby="pills-orders-tab">
+                            {{ form_row(form.orderDateCreated) }}
+                            {{ form_row(form.orderStatusToShow) }}
+                        </div>
+                        <div class="tab-pane fade"
                              id="pills-automation"
                              role="tabpanel"
                              aria-labelledby="pills-automation-tab">
@@ -138,8 +156,6 @@
                              role="tabpanel"
                              aria-labelledby="pills-advanced-tab">
                             {{ form_row(form.alertEmail) }}
-                            {{ form_row(form.dateCreated) }}
-                            {{ form_row(form.orderStatusToShow) }}
                         </div>
                     </div>
                 </div>

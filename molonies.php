@@ -155,7 +155,7 @@ class MoloniEs extends Module
     /**
      * Disable plugin
      *
-     * @param bool $force_all
+     * @param bool|null $force_all
      *
      * @return bool
      */
@@ -269,7 +269,10 @@ class MoloniEs extends Module
         try {
             $this->initContext();
 
-            (new OrderStatusUpdate($params['id_order'], $params['newOrderStatus']))->handle();
+            /** @var ManagerRegistry|LegacyManagerRegistry $doctrine */
+            $doctrine = $this->get('doctrine');
+
+            (new OrderStatusUpdate($params['id_order'], $params['newOrderStatus'], $doctrine->getManager()))->handle();
         } catch (Exception $e) {
             // Do nothing
         }
