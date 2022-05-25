@@ -140,6 +140,24 @@ class SettingsFormType extends AbstractType
                 'translation_domain' => 'Modules.Molonies.Common',
                 'choice_translation_domain' => 'Modules.Molonies.Common',
             ])
+            // orders
+            ->add('orderDateCreated', DateType::class, [
+                'widget' => 'single_text',
+                'required' => false,
+                'label' => 'Orders since',
+                'help' => 'Date used to limit fetch pending orders',
+                'placeholder' => false,
+                'translation_domain' => 'Modules.Molonies.Common',
+            ])
+            ->add('orderStatusToShow', ChoiceType::class, [
+                'label' => 'Order status',
+                'required' => false,
+                'multiple' => true,
+                'expanded' => true,
+                'choices' => $orderStatus,
+                'help' => 'Allowed order status to list pending orders and automatic document creation. (if at least one is selected)',
+                'translation_domain' => 'Modules.Molonies.Common',
+            ])
             // documents
             ->add('automaticDocuments', ChoiceType::class, [
                 'label' => 'Create paid documents on Moloni',
@@ -305,23 +323,6 @@ class SettingsFormType extends AbstractType
                 'attr' => [
                     'placeholder' => 'example@email.com',
                 ],
-                'translation_domain' => 'Modules.Molonies.Common',
-            ])
-            ->add('dateCreated', DateType::class, [
-                'widget' => 'single_text',
-                'required' => false,
-                'label' => 'Orders since',
-                'help' => 'Date used to limit fetch pending orders',
-                'placeholder' => false,
-                'translation_domain' => 'Modules.Molonies.Common',
-            ])
-            ->add('orderStatusToShow', ChoiceType::class, [
-                'label' => 'Order status',
-                'required' => false,
-                'multiple' => true,
-                'expanded' => true,
-                'choices' => $orderStatus,
-                'help' => 'Allowed order status to list pending orders and automatic document creation. (if at least one is selected)',
                 'translation_domain' => 'Modules.Molonies.Common',
             ])
             // save

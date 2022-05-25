@@ -49,7 +49,7 @@ class OrderCreateDocument extends AbstractOrderAction
      * @throws MoloniException
      * @throws MoloniApiException
      */
-    public function createDocument(?string $documentType = null): void
+    public function handle(?string $documentType = null): void
     {
         /** @noinspection CallableParameterUseCaseInTypeContextInspection */
         $documentType = $documentType ?? Settings::get('documentType');
@@ -60,7 +60,7 @@ class OrderCreateDocument extends AbstractOrderAction
 
         $company = MoloniApiClient::companies()->queryCompany();
 
-        if ((int)(Settings::get('billOfLading') ?? Boolean::NO) === Boolean::YES) {
+        if ((int)Settings::get('billOfLading') === Boolean::YES) {
             $billOfLading = new DocumentFromOrder($this->order, $company, $this->entityManager);
             $billOfLading
                 ->setDocumentType(DocumentTypes::BILLS_OF_LADING)

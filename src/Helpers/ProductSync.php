@@ -24,7 +24,25 @@
 
 namespace Moloni\Helpers;
 
-class LogSync
+use Doctrine\ORM\EntityManager;
+
+class ProductSync
 {
+    /**
+     * Entity manager
+     *
+     * @var EntityManager
+     */
+    private static $entityManager;
+
+    /**
+     * Construct
+     *
+     * @param EntityManager $entityManager
+     */
+    public function __construct(EntityManager $entityManager)
+    {
+        self::$entityManager = $entityManager;
+    }
 
 }

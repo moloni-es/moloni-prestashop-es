@@ -26,7 +26,7 @@ namespace Moloni\Webservice\Product;
 
 class ProductUpdate extends AbstractWebserviceAction
 {
-    public function handle(int $productId): void
+    public function handle(): void
     {
         if (!$this->isAuthenticated) {
             return;

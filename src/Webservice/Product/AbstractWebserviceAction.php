@@ -29,9 +29,12 @@ use Moloni\Api\MoloniApi;
 abstract class AbstractWebserviceAction
 {
     protected $isAuthenticated = false;
+    protected $productId;
 
-    public function __construct()
+    public function __construct(int $productId)
     {
+        $this->productId = $productId;
+
         if (MoloniApi::hasValidAuthentication()) {
             $this->isAuthenticated = true;
         }

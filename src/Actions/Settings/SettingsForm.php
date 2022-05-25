@@ -24,6 +24,7 @@
 
 namespace Moloni\Actions\Settings;
 
+use OrderState;
 use DateTime;
 use Exception;
 use Moloni\Exceptions\MoloniApiException;
@@ -63,12 +64,31 @@ class SettingsForm extends AbstractSettingsAction
 
         $setting = Settings::getAll();
 
-        if (isset($setting['dateCreated'])) {
-            $setting['dateCreated'] = new DateTime($setting['dateCreated']);
+        if (isset($setting['orderDateCreated'])) {
+            $setting['orderDateCreated'] = new DateTime($setting['orderDateCreated']);
+        }
+
+        if (!isset($setting['orderStatusToShow'])) {
+            $setting['orderStatusToShow'] = $this->getPaidStatusIds();
         }
 
         $form->setData($setting);
 
         return $form;
+    }
+
+    private function getPaidStatusIds(): array
+    {
+        $ids = [];
+
+        $states = OrderState::getOrderStates($this->languageId);
+
+        foreach ($states as $state) {
+            if ((int)$state['paid'] === 1) {
+                $ids[] = (int)$state['id_order_state'];
+            }
+        }
+
+        return $ids;
     }
 }

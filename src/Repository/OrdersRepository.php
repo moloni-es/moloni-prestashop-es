@@ -45,7 +45,7 @@ class OrdersRepository
         $this->databasePrefix = $databasePrefix;
     }
 
-    public function getPendingOrdersPaginated($page, $langId, $dateCreated, $orderStatus): array
+    public function getPendingOrdersPaginated($page, $langId, $orderDateCreated, $orderStatus): array
     {
         $expr = $this->connection->getExpressionBuilder();
 
@@ -59,10 +59,10 @@ class OrdersRepository
             ->leftJoin('oo', $this->databasePrefix . 'moloni_documents', 'mmdd', 'oo.id_order = mmdd.order_id')
             ->where('mmdd.id is null');
 
-        if (!empty($dateCreated)) {
+        if (!empty($orderDateCreated)) {
             $paginatorQuery
                 ->andWhere('oo.date_add > :date_created')
-                ->setParameter('date_created', $dateCreated);
+                ->setParameter('date_created', $orderDateCreated);
         }
 
         if (!empty($orderStatus)) {
@@ -88,10 +88,10 @@ class OrdersRepository
             ->setParameter('languague_id', $langId)
             ->where($expr->isNull('document_id'));
 
-        if (!empty($dateCreated)) {
+        if (!empty($orderDateCreated)) {
             $ordersQuery
                 ->andWhere('o.date_add > :date_created')
-                ->setParameter('date_created', $dateCreated);
+                ->setParameter('date_created', $orderDateCreated);
         }
 
         if (!empty($orderStatus)) {

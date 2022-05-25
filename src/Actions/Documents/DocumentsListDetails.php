@@ -35,13 +35,22 @@ use PrestaShopException;
 
 class DocumentsListDetails
 {
-    public function getDetails(?array $createdDocuments = [], ?array $company = []): array
+    private $createdDocuments;
+    private $company;
+
+    public function __construct(?array $createdDocuments = [], ?array $company = [])
     {
-        if (empty($createdDocuments)) {
-            return $createdDocuments;
+        $this->company = $company;
+        $this->createdDocuments = $createdDocuments;
+    }
+
+    public function handle(): array
+    {
+        if (empty($this->createdDocuments)) {
+            return $this->createdDocuments;
         }
 
-        foreach ($createdDocuments as &$document) {
+        foreach ($this->createdDocuments as &$document) {
             $orderId = (int)($document['order_id'] ?? 0);
 
             try {
@@ -73,14 +82,14 @@ class DocumentsListDetails
                 continue;
             }
 
-            $document['document_link'] = Domains::MOLONI_AC . '/' . $company['slug'] . '/' . $document['document_type'] . '/view/' . $document['document_id'];
+            $document['document_link'] = Domains::MOLONI_AC . '/' . $this->company['slug'] . '/' . $document['document_type'] . '/view/' . $document['document_id'];
 
             if (!empty($moloniDocument['pdfExport'])) {
                 $document['document_has_pdf'] = true;
             }
         }
 
-        return $createdDocuments;
+        return $this->createdDocuments;
     }
 
     private function fetchDocument(int $documentId, string $documentType): array

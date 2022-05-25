@@ -99,13 +99,13 @@ class WebserviceSpecificManagementMoloniResource implements WebserviceSpecificMa
 
         switch ($request['operation']) {
             case 'create':
-                (new ProductCreate())->handle((int)$request['productId']);
+                (new ProductCreate((int)$request['productId']))->handle();
                 break;
             case 'update':
-                (new ProductUpdate())->handle((int)$request['productId']);
+                (new ProductUpdate((int)$request['productId']))->handle();
                 break;
             case 'stockChanged':
-                (new ProductStockChange())->handle((int)$request['productId']);
+                (new ProductStockChange((int)$request['productId']))->handle();
                 break;
         }
 

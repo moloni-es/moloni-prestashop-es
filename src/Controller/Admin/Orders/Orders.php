@@ -30,6 +30,7 @@ use Moloni\Actions\Orders\OrderCreateDocument;
 use Moloni\Actions\Orders\OrderDiscard;
 use Moloni\Builders\MoloniProductFromId;
 use Order;
+use PrestaShop\PrestaShop\Adapter\Shop\Context;
 use PrestaShopDatabaseException;
 use PrestaShopException;
 use Moloni\Controller\Admin\MoloniController;
@@ -62,7 +63,7 @@ class Orders extends MoloniController
         ['orders' => $orders, 'paginator' => $paginator] = $repository->getPendingOrdersPaginated(
             $page,
             $this->getContextLangId(),
-            Settings::get('dateCreated'),
+            Settings::get('orderDateCreated'),
             Settings::get('orderStatusToShow')
         );
 
@@ -103,10 +104,10 @@ class Orders extends MoloniController
 
         try {
             $action = new OrderCreateDocument($orderId, $this->getDoctrine()->getManager());
-            $action->createDocument($documentType);
+            $action->handle($documentType);
 
             $msg = $this->trans('Document created successfully.', 'Modules.Molonies.Common');
-            $msg .= " (" . $action->order->reference . ")";
+            $msg .= " (" . $action->getOrder()->reference . ")";
 
             $this->addSuccessMessage($msg);
         } catch (MoloniDocumentWarning $e) {
@@ -140,10 +141,10 @@ class Orders extends MoloniController
 
         try {
             $action = new OrderDiscard($orderId, $this->getDoctrine()->getManager());
-            $action->discard();
+            $action->handle();
 
             $msg = $this->trans('Order discarded with success.', 'Modules.Molonies.Common');
-            $msg .= " (" . $action->order->reference . ")";
+            $msg .= " (" . $action->getOrder()->reference . ")";
 
             $this->addSuccessMessage($msg);
         } catch (MoloniException $e) {

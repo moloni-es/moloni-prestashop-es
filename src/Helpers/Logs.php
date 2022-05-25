@@ -24,12 +24,12 @@
 
 namespace Moloni\Helpers;
 
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\ORMException;
+use Shop;
 use Moloni\Api\MoloniApi;
 use Moloni\Entity\MoloniLogs;
 use Moloni\Enums\LogLevel;
-use Shop;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\ORMException;
 
 class Logs
 {

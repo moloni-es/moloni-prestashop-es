@@ -24,6 +24,7 @@
 
 namespace Moloni\Actions\Settings;
 
+use Moloni\Enums\Boolean;
 use Shop;
 use Moloni\Actions\Tools\WebhookCreate;
 use Moloni\Actions\Tools\WebhookDeleteAll;
@@ -82,15 +83,15 @@ class SettingsSave extends AbstractSettingsAction
             (new WebhookDeleteAll())->handle();
             $action = new WebhookCreate();
 
-            if ($submitData['syncStockToPrestashop'] === 1) {
+            if ($submitData['syncStockToPrestashop'] === Boolean::YES) {
                 $action->handle('Product', 'stockChanged');
             }
 
-            if ($submitData['addProductsToPrestashop'] === 1) {
+            if ($submitData['addProductsToPrestashop'] === Boolean::YES) {
                 $action->handle('Product', 'create');
             }
 
-            if ($submitData['updateProductsToPrestashop'] === 1) {
+            if ($submitData['updateProductsToPrestashop'] === Boolean::YES) {
                 $action->handle('Product', 'update');
             }
         } catch (MoloniException $e) {

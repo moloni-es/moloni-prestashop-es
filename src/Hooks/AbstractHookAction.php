@@ -6,12 +6,8 @@ use Moloni\Api\MoloniApi;
 
 abstract class AbstractHookAction
 {
-    protected $isAuthenticated = false;
-
-    public function __construct()
+    protected function isAuthenticated(): bool
     {
-        if (MoloniApi::hasValidAuthentication()) {
-            $this->isAuthenticated = true;
-        }
+        return MoloniApi::hasValidAuthentication();
     }
 }
