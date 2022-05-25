@@ -24,7 +24,7 @@ moloni_es_tools_reinstall_hooks:
   defaults:
     _controller: 'Moloni\Controller\Admin\Tools\Tools::reinstallHooks'
 
-moloni_es_tools_stock_sync:
+moloni_es_tools_sync_stock:
   path: /tools/syncStocks
   methods: [POST]
   defaults:
@@ -32,13 +32,15 @@ moloni_es_tools_stock_sync:
 
 moloni_es_tools_open_logs:
   path: /tools/openLogs
-  methods: [POST]
+  methods: [GET]
   defaults:
     _controller: 'Moloni\Controller\Admin\Tools\Tools::openLogs'
+    _legacy_controller: 'MoloniTools'
+    _legacy_link: 'MoloniTools'
 
 moloni_es_tools_delete_logs:
   path: /tools/deleteLogs
-  methods: [POST]
+  methods: [GET]
   defaults:
     _controller: 'Moloni\Controller\Admin\Tools\Tools::deleteLogs'
 

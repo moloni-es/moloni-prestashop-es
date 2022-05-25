@@ -15,7 +15,7 @@
                     </p>
                 </div>
                 <div class="d-flex justify-content-center align-items-center ml-auto">
-                    <a class="btn btn-primary" href="{{ path('moloni_es_tools_import_categories') }}">
+                    <a class="btn btn-primary" href="{{ path(importCategoriesRoute) }}">
                         {{ 'Import categories'|trans({}, 'Modules.Molonies.Common') }}
                     </a>
                 </div>
@@ -28,7 +28,7 @@
                     </p>
                 </div>
                 <div class="d-flex justify-content-center align-items-center ml-auto">
-                    <a class="btn btn-primary" href="{{ path('moloni_es_tools_import_products') }}">
+                    <a class="btn btn-primary" href="{{ path(importProductsRoute) }}">
                         {{ 'Import products'|trans({}, 'Modules.Molonies.Common') }}
                     </a>
                 </div>
@@ -41,7 +41,7 @@
                     </p>
                 </div>
                 <div class="d-flex justify-content-center align-items-center ml-auto">
-                    <a class="btn btn-primary" href="{{ path('moloni_es_tools_stock_sync') }}">
+                    <a class="btn btn-primary" href="{{ path(syncStockRoute) }}">
                         {{ 'Sync stock'|trans({}, 'Modules.Molonies.Common') }}
                     </a>
                 </div>
@@ -54,7 +54,7 @@
                     </p>
                 </div>
                 <div class="d-flex justify-content-center align-items-center ml-auto">
-                    <a class="btn btn-primary" href="{{ path('moloni_es_tools_reinstall_hooks') }}">
+                    <a class="btn btn-primary" href="{{ path(reinstallHooksRoute) }}">
                         {{ 'Reinstall webhooks'|trans({}, 'Modules.Molonies.Common') }}
                     </a>
                 </div>
@@ -63,11 +63,11 @@
                 <div>
                     <b>{{ "Consult logs"|trans({}, 'Modules.Molonies.Common') }}</b>
                     <p class="small-text text-muted">
-                        {{ "Consult logs of this current day"|trans({}, 'Modules.Molonies.Common') }}
+                        {{ "Consult plugin logs"|trans({}, 'Modules.Molonies.Common') }}
                     </p>
                 </div>
                 <div class="d-flex justify-content-center align-items-center ml-auto">
-                    <a class="btn btn-primary" href="{{ path('moloni_es_tools_open_logs') }}">
+                    <a class="btn btn-primary" href="{{ path(openLogsRoute) }}">
                         {{ 'View logs'|trans({}, 'Modules.Molonies.Common') }}
                     </a>
                 </div>
@@ -80,7 +80,7 @@
                     </p>
                 </div>
                 <div class="d-flex justify-content-center align-items-center ml-auto">
-                    <a class="btn btn-danger" href="{{ path('moloni_es_tools_logout') }}">
+                    <a class="btn btn-danger" href="{{ path(logoutRoute) }}">
                         {{ 'Logout'|trans({}, 'Modules.Molonies.Common') }}
                     </a>
                 </div>
@@ -93,6 +93,8 @@
     <script>
         $(document).ready(function () {
             console.log('Moloni tools page loaded');
+
+            window.moloniTools.startObservers();
         });
     </script>
 {% endblock %}
