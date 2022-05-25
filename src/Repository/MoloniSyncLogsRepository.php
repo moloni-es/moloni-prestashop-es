@@ -22,27 +22,19 @@
  * @noinspection PhpMultipleClassDeclarationsInspection
  */
 
-namespace Moloni\Helpers;
+namespace Moloni\Repository;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
 
-class ProductSync
+class MoloniSyncLogsRepository extends EntityRepository
 {
-    /**
-     * Entity manager
-     *
-     * @var EntityManager
-     */
-    private static $entityManager;
-
-    /**
-     * Construct
-     *
-     * @param EntityManager $entityManager
-     */
-    public function __construct(EntityManager $entityManager)
+    public function removeExpiredDelays(int $delay): void
     {
-        self::$entityManager = $entityManager;
+
     }
 
+    public function hasTimeOut($productId): bool
+    {
+        return false;
+    }
 }
