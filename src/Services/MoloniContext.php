@@ -30,6 +30,7 @@ use Moloni\Entity\MoloniApp;
 use Moloni\Entity\MoloniSettings;
 use Moloni\Helpers\Logs;
 use Moloni\Helpers\Settings;
+use Moloni\Helpers\SyncLogs;
 use Moloni\Repository\MoloniAppRepository;
 use Moloni\Repository\MoloniSettingsRepository;
 
@@ -96,10 +97,13 @@ class MoloniContext
 
     private function loadRequirements(): void
     {
+        // API
         new MoloniApi($this->entityManager, $this->app);
 
+        // Helpers
         new Settings($this->settings);
         new Logs($this->entityManager);
+        new SyncLogs($this->entityManager);
     }
 
     //          PUBLICS          //

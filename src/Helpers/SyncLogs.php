@@ -24,11 +24,12 @@
 
 namespace Moloni\Helpers;
 
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\ORMException;
 use Moloni\Entity\MoloniSyncLogs;
 use Moloni\Enums\SyncLogsType;
 use Moloni\Repository\MoloniSyncLogsRepository;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 
 class SyncLogs
 {
@@ -73,7 +74,11 @@ class SyncLogs
      */
     public static function productHasTimeout(int $productId): bool
     {
-        self::$syncLogsRepository->removeExpiredDelays(self::$syncDelay);
+        try {
+            self::$syncLogsRepository->removeExpiredDelays(self::$syncDelay);
+        } catch (OptimisticLockException|ORMException $e) {
+            // todo: catch this?
+        }
 
         return self::$syncLogsRepository->hasTimeOut($productId);
     }
