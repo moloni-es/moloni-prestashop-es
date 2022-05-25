@@ -29,6 +29,7 @@ use Db;
 use Moloni\Actions\Orders\OrderCreateDocument;
 use Moloni\Actions\Orders\OrderDiscard;
 use Moloni\Builders\MoloniProductFromId;
+use Moloni\Helpers\SyncLogs;
 use Order;
 use PrestaShop\PrestaShop\Adapter\Shop\Context;
 use PrestaShopDatabaseException;

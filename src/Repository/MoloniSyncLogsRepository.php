@@ -25,16 +25,37 @@
 namespace Moloni\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 
 class MoloniSyncLogsRepository extends EntityRepository
 {
+    /**
+     * Removes expired product timeouts
+     *
+     * @throws OptimisticLockException
+     * @throws ORMException
+     */
     public function removeExpiredDelays(int $delay): void
     {
+        $results = $this->createQueryBuilder('s')
+            ->where('s.syncDate < :time_now')
+            ->setParameter('time_now', time() - $delay)
+            ->getQuery()
+            ->getResult();
 
+        if (!empty($results)) {
+            $entityManager = $this->getEntityManager();
+
+            foreach ($results as $result) {
+                $entityManager->remove($result);
+                $entityManager->flush();
+            }
+        }
     }
 
     public function hasTimeOut($productId): bool
     {
-        return false;
+        return $this->findOneBy(['entityId' => $productId]) !== null;
     }
 }

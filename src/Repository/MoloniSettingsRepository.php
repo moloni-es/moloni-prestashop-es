@@ -32,6 +32,7 @@ use Moloni\Entity\MoloniSettings;
 class MoloniSettingsRepository extends EntityRepository
 {
     private $arraySettings = ['productSyncFields' , 'orderStatusToShow'];
+
     public function getSettings(): array
     {
         $settings = [];
