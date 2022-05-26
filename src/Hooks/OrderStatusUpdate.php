@@ -61,9 +61,7 @@ class OrderStatusUpdate extends AbstractHookAction
             $action = new OrderCreateDocument($this->orderId, $this->entityManager);
             $action->handle();
         } catch (MoloniDocumentWarning $e) {
-            $msg = ['Could not close document, totals do not match ({0})', ['{0}' => $e->getIdentifiers()]];
-
-            Logs::addWarningLog($msg, $e->getData(), $this->orderId);
+            Logs::addWarningLog([$e->getMessage(), $e->getIdentifiers()], $e->getData(), $this->orderId);
         } catch (MoloniDocumentException|MoloniException $e) {
             Logs::addErrorLog([$e->getMessage(), $e->getIdentifiers()], $e->getData(), $this->orderId);
         } catch (PrestaShopDatabaseException|PrestaShopException $e) {

@@ -195,12 +195,12 @@ class PrestaProductFromId implements BuilderInterface
      */
     protected function afterSave(): void
     {
+        $this->prestaProductId = $this->prestaProduct->id;
+
         if (!empty($this->categories)) {
             $this->prestaProduct->deleteCategories();
             $this->prestaProduct->addToCategories($this->categories);
         }
-
-        $this->updateStock();
     }
 
     /**
@@ -301,7 +301,6 @@ class PrestaProductFromId implements BuilderInterface
 
         try {
             $this->prestaProduct->save();
-            $this->prestaProductId = $this->prestaProduct->id;
 
             // todo: write log?
 
