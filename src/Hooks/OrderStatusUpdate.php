@@ -24,6 +24,7 @@
 
 namespace Moloni\Hooks;
 
+use Moloni\Helpers\Logs;
 use OrderState;
 use Moloni\Exceptions\Document\MoloniDocumentException;
 use Moloni\Exceptions\Document\MoloniDocumentWarning;
@@ -59,16 +60,14 @@ class OrderStatusUpdate extends AbstractHookAction
         try {
             $action = new OrderCreateDocument($this->orderId, $this->entityManager);
             $action->handle();
-
-            $msg = 'Document created successfully (automatic) ';
         } catch (MoloniDocumentWarning $e) {
+            $msg = ['Could not close document, totals do not match ({0})', ['{0}' => $e->getIdentifiers()]];
 
-        } catch (MoloniDocumentException $e) {
-
-        } catch (MoloniException $e) {
-
+            Logs::addWarningLog($msg, $e->getData(), $this->orderId);
+        } catch (MoloniDocumentException|MoloniException $e) {
+            Logs::addErrorLog([$e->getMessage(), $e->getIdentifiers()], $e->getData(), $this->orderId);
         } catch (PrestaShopDatabaseException|PrestaShopException $e) {
-
+            Logs::addErrorLog('Error getting prestashop order', ['message' => $e->getMessage()], $this->orderId);
         }
     }
 
