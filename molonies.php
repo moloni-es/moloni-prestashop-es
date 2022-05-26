@@ -30,9 +30,8 @@ if (!defined('_PS_VERSION_')) {
 
 use Doctrine\Common\Persistence\ManagerRegistry as LegacyManagerRegistry;
 use Doctrine\Persistence\ManagerRegistry;
+use Moloni\Hooks\ProductSave;
 use Moloni\Hooks\OrderStatusUpdate;
-use Moloni\Hooks\ProductAdd;
-use Moloni\Hooks\ProductUpdate;
 use Moloni\Install\Installer;
 use Moloni\Services\MoloniContext;
 
@@ -233,7 +232,7 @@ class MoloniEs extends Module
         try {
             $this->initContext();
 
-            (new ProductAdd($params['id_product']))->handle();
+            (new ProductSave($params['id_product']))->handle();
         } catch (Exception $e) {
             // Do nothing
         }
@@ -251,7 +250,7 @@ class MoloniEs extends Module
         try {
             $this->initContext();
 
-            (new ProductUpdate($params['id_product']))->handle();
+            (new ProductSave($params['id_product']))->handle();
         } catch (Exception $e) {
             // Do nothing
         }
