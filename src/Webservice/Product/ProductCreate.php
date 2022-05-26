@@ -24,14 +24,46 @@
 
 namespace Moloni\Webservice\Product;
 
+use Moloni\Enums\Boolean;
+use Moloni\Exceptions\MoloniApiException;
+use Moloni\Helpers\Settings;
+use Moloni\Builders\PrestaProductFromId;
+use Moloni\Exceptions\Product\MoloniProductException;
+use Moloni\Helpers\SyncLogs;
+
 class ProductCreate extends AbstractWebserviceAction
 {
     public function handle(): void
     {
-        if (!$this->isAuthenticated) {
+        if (!$this->shouldExecuteHandle()) {
             return;
         }
 
-        // todo: stuff
+        try {
+            $productBuilder = new PrestaProductFromId($this->productId);
+
+            if ($productBuilder->getPrestaProductId() === 0) {
+                $productBuilder->insert();
+            } elseif ((int)Settings::get('updateProductsToPrestashop') === Boolean::YES) {
+                $productBuilder->update();
+            }
+
+            SyncLogs::productAddTimeout($productBuilder->getPrestaProductId());
+        } catch (MoloniProductException $e) {
+            // todo: write log?
+        }
+    }
+
+    private function shouldExecuteHandle(): bool
+    {
+        if ($this->productId < 1) {
+            return false;
+        }
+
+        if ((int)Settings::get('addProductsToPrestashop') === Boolean::NO) {
+            return false;
+        }
+
+        return $this->isAuthenticated();
     }
 }

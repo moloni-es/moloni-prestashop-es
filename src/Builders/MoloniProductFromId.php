@@ -25,12 +25,12 @@
 namespace Moloni\Builders;
 
 use Address;
+use Category;
 use Country;
-use Moloni\Builders\MoloniProduct\ProductCategory;
-use Moloni\Exceptions\Product\MoloniProductCategoryException;
-use Moloni\Traits\CategoriesTrait;
 use Product;
 use Configuration;
+use Moloni\Builders\MoloniProduct\ProductCategory;
+use Moloni\Exceptions\Product\MoloniProductCategoryException;
 use Moloni\Enums\Countries;
 use Moloni\Exceptions\MoloniException;
 use Moloni\Exceptions\Product\MoloniProductTaxException;
@@ -46,8 +46,6 @@ use Moloni\Builders\MoloniProduct\ProductTax;
 
 class MoloniProductFromId implements BuilderInterface
 {
-    use CategoriesTrait;
-
     /**
      * Product id in Moloni
      *
@@ -597,34 +595,40 @@ class MoloniProductFromId implements BuilderInterface
      */
     public function setCategory(): MoloniProductFromId
     {
-        if ($this->prestashopProduct->id_category_default > 0) {
+        $categoriesNames = [];
+        $categoriesIds = $this->prestashopProduct->getCategories();
 
-            $categories = $this->getPrestashopCategoryTreeById($this->prestashopProduct->id_category_default);
+        if (!empty($categoriesIds)) {
+            $languageId = Configuration::get('PS_LANG_DEFAULT');
 
-            if (empty($categories)) {
-                $categories = ['Prestashop'];
+            foreach ($categoriesIds as $categoriesId) {
+                $categoriesNames[] = (new Category($categoriesId, $languageId))->name;
             }
+        }
 
-            try {
-                $parentId = 0;
+        if (empty($categoriesNames)) {
+            $categoriesNames = ['Prestashop'];
+        }
 
-                foreach ($categories as $category) {
-                    $builder = new ProductCategory($category, $parentId);
+        try {
+            $parentId = 0;
 
-                    $builder->search();
+            foreach ($categoriesNames as $category) {
+                $builder = new ProductCategory($category, $parentId);
 
-                    if ($builder->getProductCategoryId() === 0) {
-                        $builder->insert();
-                    }
+                $builder->search();
 
-                    $parentId = $builder->getProductCategoryId();
+                if ($builder->getProductCategoryId() === 0) {
+                    $builder->insert();
                 }
 
-                /** @noinspection PhpUndefinedVariableInspection */
-                $this->category = $builder;
-            } catch (MoloniException $e) {
-                throw new MoloniProductCategoryException($e->getMessage(), $e->getIdentifiers(), $e->getData());
+                $parentId = $builder->getProductCategoryId();
             }
+
+            /** @noinspection PhpUndefinedVariableInspection */
+            $this->category = $builder;
+        } catch (MoloniException $e) {
+            throw new MoloniProductCategoryException($e->getMessage(), $e->getIdentifiers(), $e->getData());
         }
 
         return $this;

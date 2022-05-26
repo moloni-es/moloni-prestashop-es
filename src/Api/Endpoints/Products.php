@@ -116,6 +116,12 @@ class Products extends Endpoint
                     {
                         warehouseId
                     }
+                    warehouses
+                    {
+                        warehouseId
+                        stock
+                        minStock
+                    }
                     productCategory
                     {
                         productCategoryId
