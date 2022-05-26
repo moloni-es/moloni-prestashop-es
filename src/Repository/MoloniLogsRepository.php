@@ -80,7 +80,7 @@ class MoloniLogsRepository extends EntityRepository
     }
 
     /**
-     * Delete logs with more than 1 month
+     * Delete logs with more than 1 week
      */
     public function deleteOlderLogs(): void
     {

@@ -111,38 +111,6 @@ var LoadAddress = {
 
 /***/ }),
 
-/***/ "./js/logs/logs.js":
-/*!*************************!*\
-  !*** ./js/logs/logs.js ***!
-  \*************************/
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": function() { return /* binding */ MoloniLogs; }
-/* harmony export */ });
-/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
-/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
-
-
-
-var MoloniLogs = /*#__PURE__*/function () {
-  function MoloniLogs() {
-    (0,_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__["default"])(this, MoloniLogs);
-  }
-
-  (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__["default"])(MoloniLogs, [{
-    key: "startObservers",
-    value: function startObservers() {}
-  }]);
-
-  return MoloniLogs;
-}();
-
-
-
-/***/ }),
-
 /***/ "./js/orders/orders.js":
 /*!*****************************!*\
   !*** ./js/orders/orders.js ***!
@@ -428,8 +396,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _orders_orders__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./orders/orders */ "./js/orders/orders.js");
 /* harmony import */ var _documents_documents__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./documents/documents */ "./js/documents/documents.js");
 /* harmony import */ var _tools_tools__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./tools/tools */ "./js/tools/tools.js");
-/* harmony import */ var _logs_logs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./logs/logs */ "./js/logs/logs.js");
-
 
 
 
@@ -440,7 +406,6 @@ $(document).ready(function () {
   window.moloniOrders = new _orders_orders__WEBPACK_IMPORTED_MODULE_1__["default"]();
   window.moloniDocuments = new _documents_documents__WEBPACK_IMPORTED_MODULE_2__["default"]();
   window.moloniTools = new _tools_tools__WEBPACK_IMPORTED_MODULE_3__["default"]();
-  window.moloniLogs = new _logs_logs__WEBPACK_IMPORTED_MODULE_4__["default"]();
 });
 }();
 /******/ })()

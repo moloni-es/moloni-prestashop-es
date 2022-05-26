@@ -62,6 +62,7 @@
                                 {% endfor %}
                             </td>
                             <td class="text-center">
+
                                 {# Overlay button #}
                                 <button type="button"
                                         class="btn btn-outline-secondary btn-sm"
@@ -70,43 +71,8 @@
                                     <i class="material-icons">inventory</i>
                                 </button>
 
-
-                                {# Overlay #}
-                                <div class="modal fade"
-                                     id="log_{{ log.id }}"
-                                     tabindex="-1"
-                                     role="dialog"
-                                     aria-labelledby="exampleModalLabel"
-                                     aria-hidden="true">
-
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title">Log payload</h5>
-                                                <button
-                                                        type="button"
-                                                        class="close"
-                                                        data-dismiss="modal"
-                                                        aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <pre class="text-left">
-                                                    {{ log.extra|json_encode(constant('JSON_PRETTY_PRINT')) }}
-                                                </pre>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button
-                                                        type="button"
-                                                        class="btn btn-outline-secondary"
-                                                        data-dismiss="modal">
-                                                    Close
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                {# Payload Overlay #}
+                                {% include '@Modules/molonies/views/templates/admin/logs/overlays/LogPayload.twig' with {'log_id': log.id, 'payload_data': log.extra} %}
                             </td>
                         </tr>
                     {% endfor %}
@@ -120,16 +86,22 @@
                 </tbody>
             </table>
 
+            {# Delete Overlay #}
+            {% include '@Modules/molonies/views/templates/admin/logs/overlays/DeleteLogs.twig' %}
+
+            {# Paginator #}
             {% include '@Modules/molonies/views/templates/admin/components/Paginator.twig' %}
         </div>
 
         <div class="card-footer">
             <div class="d-flex justify-content-end">
                 {# Delete logs #}
-                <a href="{{ path(deleteLogsRoute) }}"
-                   class="btn btn-danger mr-2">
+                <button type="button"
+                        class="btn btn-danger mr-2"
+                        data-toggle="modal"
+                        data-target="#delete_logs">
                     {{ 'Delete older logs'|trans({}, 'Modules.Molonies.Common') }}
-                </a>
+                </button>
 
                 {# Go to tools #}
                 <a href="{{ path(toolsRoute) }}"
@@ -150,8 +122,6 @@
 {% block javascripts %}
     <script>
         $(document).ready(function () {
-            window.moloniLogs.startObservers();
-
             console.log('Moloni logs page loaded');
         });
     </script>

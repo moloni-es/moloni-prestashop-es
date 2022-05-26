@@ -28,6 +28,7 @@ use Moloni\Builders\MoloniProductFromId;
 use Moloni\Enums\Boolean;
 use Moloni\Exceptions\Product\MoloniProductException;
 use Moloni\Helpers\Settings;
+use Moloni\Helpers\SyncLogs;
 
 class ProductUpdate extends AbstractHookAction
 {
@@ -45,6 +46,8 @@ class ProductUpdate extends AbstractHookAction
         }
 
         try {
+            SyncLogs::productAddTimeout($this->productId);
+
             $productBuilder = new MoloniProductFromId($this->productId);
             $productBuilder->search();
 
@@ -66,11 +69,13 @@ class ProductUpdate extends AbstractHookAction
             return false;
         }
 
-        if ((int)Settings::get('updateProductsToMoloni') === Boolean::YES) {
+        if ((int)Settings::get('updateProductsToMoloni') === Boolean::NO) {
             return false;
         }
 
-        // todo: check for ping pong effect
+        if (SyncLogs::productHasTimeout($this->productId)) {
+            return false;
+        }
 
         return $this->isAuthenticated();
     }
