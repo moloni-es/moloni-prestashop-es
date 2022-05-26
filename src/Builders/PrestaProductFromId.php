@@ -138,7 +138,7 @@ class PrestaProductFromId implements BuilderInterface
     protected $stock = 0;
 
     /**
-     * Tax builder
+     * Product tax;
      *
      * @var array|null
      */
@@ -188,6 +188,26 @@ class PrestaProductFromId implements BuilderInterface
         return $this;
     }
 
+    /**
+     * After save requirements
+     *
+     * @return void
+     */
+    protected function afterSave(): void
+    {
+        if (!empty($this->categories)) {
+            $this->prestaProduct->deleteCategories();
+            $this->prestaProduct->addToCategories($this->categories);
+        }
+
+        $this->updateStock();
+    }
+
+    /**
+     * Set prestashop product values
+     *
+     * @return $this
+     */
     protected function fillPrestaProduct(): PrestaProductFromId
     {
         $this->prestaProduct->name = $this->name;
@@ -196,9 +216,11 @@ class PrestaProductFromId implements BuilderInterface
         $this->prestaProduct->description_short = $this->description;
 
         if (!empty($this->categories)) {
-            $this->prestaProduct->deleteCategories();
-            $this->prestaProduct->addToCategories($this->categories);
             $this->prestaProduct->id_category_default = $this->categories[0];
+        }
+
+        if (!empty($this->tax)) {
+            // todo: apply default tax rule;
         }
 
         return $this;
@@ -253,7 +275,9 @@ class PrestaProductFromId implements BuilderInterface
         try {
             $this->prestaProduct->save();
 
-            $this->prestaProductId = $this->prestaProduct->id;
+            // todo: write log?
+
+            $this->afterSave();
         } catch (PrestaShopException $e) {
             throw new MoloniProductException('Error creating product ({0})', ['{0}' => $this->reference], [
                 'moloniProduct' => $this->moloniProduct
@@ -277,6 +301,11 @@ class PrestaProductFromId implements BuilderInterface
 
         try {
             $this->prestaProduct->save();
+            $this->prestaProductId = $this->prestaProduct->id;
+
+            // todo: write log?
+
+            $this->afterSave();
         } catch (PrestaShopException $e) {
             throw new MoloniProductException('Error saving product ({0})', ['{0}' => $this->reference], [
                 'moloniProduct' => $this->moloniProduct
@@ -295,7 +324,14 @@ class PrestaProductFromId implements BuilderInterface
             return;
         }
 
-        StockAvailable::setQuantity($this->prestaProductId, null, $this->stock);
+        $currentStock = StockAvailable::getQuantityAvailableByProduct($this->prestaProductId);
+
+        if ($this->stock !== $currentStock) {
+            // todo: write log?
+            StockAvailable::setQuantity($this->prestaProductId, null, $this->stock);
+        } else {
+            // todo: write log?
+        }
     }
 
     //          GETS          //
@@ -511,11 +547,16 @@ class PrestaProductFromId implements BuilderInterface
         return $this;
     }
 
+    /**
+     * Sets product taxes
+     *
+     * @return $this
+     */
     public function setTax(): PrestaProductFromId
     {
-        $this->tax = [];
-
-        // todo: this!
+        if (!empty($this->moloniProduct['taxes'])) {
+            $this->tax = [];
+        }
 
         return $this;
     }

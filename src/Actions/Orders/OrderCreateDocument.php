@@ -68,6 +68,8 @@ class OrderCreateDocument extends AbstractOrderAction
                 ->setSendEmail(Boolean::NO)
                 ->setShippingInformation(Boolean::YES)
                 ->createDocument();
+
+            // todo: write log?
         }
 
         if (isset($billOfLading)) {
@@ -92,6 +94,8 @@ class OrderCreateDocument extends AbstractOrderAction
                 ->setSendEmail(Boolean::NO)
                 ->createDocument();
 
+            // todo: write log?
+
             $receipt = clone $builder;
 
             $receipt
@@ -101,8 +105,11 @@ class OrderCreateDocument extends AbstractOrderAction
                 ->setSendEmail()
                 ->createDocument();
 
+            // todo: write log?
         } else {
             $builder->createDocument();
+
+            // todo: write log?
         }
     }
 }

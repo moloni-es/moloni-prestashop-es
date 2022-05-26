@@ -25,7 +25,6 @@
 namespace Moloni\Webservice\Product;
 
 use Moloni\Enums\Boolean;
-use Moloni\Exceptions\MoloniApiException;
 use Moloni\Helpers\Settings;
 use Moloni\Builders\PrestaProductFromId;
 use Moloni\Exceptions\Product\MoloniProductException;
@@ -41,14 +40,17 @@ class ProductCreate extends AbstractWebserviceAction
 
         try {
             $productBuilder = new PrestaProductFromId($this->productId);
+            $prestaProductId = $productBuilder->getPrestaProductId();
 
-            if ($productBuilder->getPrestaProductId() === 0) {
+            if ($prestaProductId === 0) {
                 $productBuilder->insert();
-            } elseif ((int)Settings::get('updateProductsToPrestashop') === Boolean::YES) {
+
+                SyncLogs::productAddTimeout($productBuilder->getPrestaProductId());
+            } elseif ((int)Settings::get('updateProductsToPrestashop') === Boolean::YES && !SyncLogs::productHasTimeout($prestaProductId)) {
+                SyncLogs::productAddTimeout($prestaProductId);
+
                 $productBuilder->update();
             }
-
-            SyncLogs::productAddTimeout($productBuilder->getPrestaProductId());
         } catch (MoloniProductException $e) {
             // todo: write log?
         }

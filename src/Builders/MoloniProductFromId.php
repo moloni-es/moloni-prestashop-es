@@ -302,6 +302,8 @@ class MoloniProductFromId implements BuilderInterface
             if ($productId > 0) {
                 $this->productId = $productId;
                 $this->moloniProduct = $moloniProduct;
+
+                // todo: write log?
             } else {
                 throw new MoloniProductException('Error creating product', [], [
                     'mutation' => $mutation
@@ -332,6 +334,8 @@ class MoloniProductFromId implements BuilderInterface
 
             if ($productId > 0) {
                 $this->moloniProduct = $moloniProduct;
+
+                // todo: write log?
             } else {
                 throw new MoloniProductException('Error updating product', [], [
                     'mutation' => $mutation
@@ -349,6 +353,9 @@ class MoloniProductFromId implements BuilderInterface
         if ($this->productHasStock()) {
             $props = [];
         }
+
+        // todo: this?
+        // todo: write log?
 
         return $this;
     }

@@ -41,14 +41,19 @@ class ProductUpdate extends AbstractWebserviceAction
 
         try {
             $productBuilder = new PrestaProductFromId($this->productId);
+            $prestaProductId = $productBuilder->getPrestaProductId();
 
-            if ($productBuilder->getPrestaProductId() > 0) {
-                $productBuilder->update();
+            if ($prestaProductId > 0) {
+                if (!SyncLogs::productHasTimeout($prestaProductId)) {
+                    SyncLogs::productAddTimeout($prestaProductId);
+
+                    $productBuilder->update();
+                }
             } elseif ((int)Settings::get('addProductsToPrestashop') === Boolean::YES) {
                 $productBuilder->insert();
-            }
 
-            SyncLogs::productAddTimeout($productBuilder->getPrestaProductId());
+                SyncLogs::productAddTimeout($productBuilder->getPrestaProductId());
+            }
         } catch (MoloniProductException $e) {
             // todo: write log?
         }
