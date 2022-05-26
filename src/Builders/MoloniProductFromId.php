@@ -29,6 +29,7 @@ use Category;
 use Country;
 use Product;
 use Configuration;
+use StockAvailable;
 use Moloni\Builders\MoloniProduct\ProductCategory;
 use Moloni\Exceptions\Product\MoloniProductCategoryException;
 use Moloni\Enums\Countries;
@@ -305,12 +306,12 @@ class MoloniProductFromId implements BuilderInterface
 
                 // todo: write log?
             } else {
-                throw new MoloniProductException('Error creating product', [], [
+                throw new MoloniProductException('Error creating product ({0})', ['{0}' => $this->reference], [
                     'mutation' => $mutation
                 ]);
             }
         } catch (MoloniApiException $e) {
-            throw new MoloniProductException('Error creating product', [], $e->getData());
+            throw new MoloniProductException('Error creating product ({0})', ['{0}' => $this->reference], $e->getData());
         }
 
         return $this;
@@ -337,12 +338,12 @@ class MoloniProductFromId implements BuilderInterface
 
                 // todo: write log?
             } else {
-                throw new MoloniProductException('Error updating product', [], [
+                throw new MoloniProductException('Error updating product ({0})', ['{0}' => $this->reference], [
                     'mutation' => $mutation
                 ]);
             }
         } catch (MoloniApiException $e) {
-            throw new MoloniProductException('Error updating product', [], $e->getData());
+            throw new MoloniProductException('Error updating product ({0})', ['{0}' => $this->reference], $e->getData());
         }
 
         return $this;
@@ -352,10 +353,31 @@ class MoloniProductFromId implements BuilderInterface
     {
         if ($this->productHasStock()) {
             $props = [];
-        }
 
-        // todo: this?
-        // todo: write log?
+            $valid = false;
+            $moloniStock = 0;
+            
+
+            if ($this->warehouseId === 1) {
+
+            } else {
+
+            }
+
+            if () {
+                
+            }
+
+            if (valid) {
+                if ($moloniStock === $this->stock) {
+                    // do nothing
+                    // todo: write log?
+                } else {
+                    // update stock
+                    // todo: write log?
+                }
+            }
+        }
 
         return $this;
     }
@@ -491,7 +513,7 @@ class MoloniProductFromId implements BuilderInterface
      */
     public function setStock(): MoloniProductFromId
     {
-        $this->stock = $this->prestashopProduct->quantity;
+        $this->stock = StockAvailable::getQuantityAvailableByProduct($this->prestashopProduct->id);
 
         return $this;
     }
@@ -584,7 +606,7 @@ class MoloniProductFromId implements BuilderInterface
                     $warehouseId = $mutation[0]['warehouseId'];
                 }
             } catch (MoloniApiException $e) {
-                $warehouseId = 0;
+                $warehouseId = 1;
             }
         }
 
@@ -735,7 +757,7 @@ class MoloniProductFromId implements BuilderInterface
                 $this->hasStock = $moloniProduct['hasStock'];
             }
         } catch (MoloniApiException $e) {
-            throw new MoloniProductException('Error fetching product by reference: ({0})', [$this->reference], $e->getData());
+            throw new MoloniProductException('Error fetching product by reference: ({0})', ['{0}' => $this->reference], $e->getData());
         }
 
         return $this;

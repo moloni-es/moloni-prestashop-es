@@ -48,7 +48,7 @@ class ProductStockChange extends AbstractWebserviceAction
                 $productBuilder->updateStock();
             }
         } catch (MoloniProductException $e) {
-            // todo: write log?
+            Logs::addErrorLog([$e->getMessage(), $e->getIdentifiers()], $e->getData());
         }
     }
 

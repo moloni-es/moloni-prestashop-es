@@ -52,7 +52,7 @@ class ProductCreate extends AbstractWebserviceAction
                 $productBuilder->update();
             }
         } catch (MoloniProductException $e) {
-            // todo: write log?
+            Logs::addErrorLog([$e->getMessage(), $e->getIdentifiers()], $e->getData());
         }
     }
 
