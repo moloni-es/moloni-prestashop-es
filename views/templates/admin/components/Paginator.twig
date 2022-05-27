@@ -12,11 +12,11 @@
         </li>
         <li class="page-item active">
             <input
-                    name="paginator_jump_page"
+                    name="moloni_paginator"
                     class="jump-to-page"
                     type="text"
                     value="{{ paginator.currentPage|default(1) }}"
-                    psurl="{{ path(thisRoute, {page: paginator.currentPage|default(1)}) }}"
+                    psurl="{{ path(thisRoute) }}"
                     psmax="{{ paginator.numberOfPages|default(1) }}"
             />
         </li>
