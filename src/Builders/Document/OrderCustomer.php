@@ -504,7 +504,9 @@ class OrderCustomer implements BuilderItemInterface
                 $this->customerId = $query[0]['customerId'];
             }
         } catch (MoloniApiException $e) {
-            throw new MoloniDocumentCustomerException('Error fetching customer by VAT: ({0})', [$this->vat], $e->getData());
+            throw new MoloniDocumentCustomerException('Error fetching customer by VAT: ({0})', [
+                '{0}' => $this->vat,
+            ], $e->getData());
         }
     }
 
@@ -532,7 +534,9 @@ class OrderCustomer implements BuilderItemInterface
                 $this->customerId = $query[0]['customerId'];
             }
         } catch (MoloniApiException $e) {
-            throw new MoloniDocumentCustomerException('Error fetching customer by e-mail: ({0})', [$this->email], $e->getData());
+            throw new MoloniDocumentCustomerException('Error fetching customer by e-mail: ({0})', [
+                '{0}' => $this->email
+            ], $e->getData());
         }
     }
 }

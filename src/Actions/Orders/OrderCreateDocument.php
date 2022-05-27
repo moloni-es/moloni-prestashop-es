@@ -67,9 +67,8 @@ class OrderCreateDocument extends AbstractOrderAction
                 ->setDocumentStatus(DocumentStatus::CLOSED)
                 ->setSendEmail(Boolean::NO)
                 ->setShippingInformation(Boolean::YES)
-                ->createDocument();
-
-            // todo: write log?
+                ->createDocument()
+                ->addLog();
         }
 
         if (isset($billOfLading)) {
@@ -92,9 +91,8 @@ class OrderCreateDocument extends AbstractOrderAction
                 ->setDocumentType(DocumentTypes::INVOICES)
                 ->setDocumentStatus(DocumentStatus::CLOSED)
                 ->setSendEmail(Boolean::NO)
-                ->createDocument();
-
-            // todo: write log?
+                ->createDocument()
+                ->addLog();
 
             $receipt = clone $builder;
 
@@ -103,13 +101,13 @@ class OrderCreateDocument extends AbstractOrderAction
                 ->setDocumentType(DocumentTypes::RECEIPTS)
                 ->setDocumentStatus(DocumentStatus::CLOSED)
                 ->setSendEmail()
-                ->createDocument();
+                ->createDocument()
+                ->addLog();
 
-            // todo: write log?
         } else {
-            $builder->createDocument();
-
-            // todo: write log?
+            $builder
+                ->createDocument()
+                ->addLog();
         }
     }
 }

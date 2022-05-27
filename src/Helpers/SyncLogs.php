@@ -77,7 +77,7 @@ class SyncLogs
         try {
             self::$syncLogsRepository->removeExpiredDelays(self::$syncDelay);
         } catch (OptimisticLockException|ORMException $e) {
-            // todo: catch this?
+            // no need to catch anything
         }
 
         return self::$syncLogsRepository->hasTimeOut($productId);
@@ -101,7 +101,7 @@ class SyncLogs
             self::$entityManager->persist($syncLog);
             self::$entityManager->flush();
         } catch (ORMException $e) {
-            // todo: catch this?
+            // no need to catch anything
         }
     }
 }

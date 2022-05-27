@@ -124,7 +124,7 @@ class Login extends MoloniController
 
             MoloniApi::login($code);
         } catch (MoloniException $e) {
-            $msg = $this->trans($e->getMessage(), 'Modules.Molonies.Errors');
+            $msg = $this->trans($e->getMessage(), 'Modules.Molonies.Errors', $e->getIdentifiers());
             $this->addErrorMessage($msg);
 
             return $this->redirectToLogin();
@@ -201,7 +201,7 @@ class Login extends MoloniController
             $entityManager->persist($moloniApp);
             $entityManager->flush();
 
-            $msg = $this->trans('Company selected successfully', 'Modules.Molonies.Success');
+            $msg = $this->trans('Company selected successfully', 'Modules.Molonies.Common');
             $this->addSuccessMessage($msg);
         } catch (MoloniException $e) {
             $msg = $this->trans($e->getMessage(), 'Modules.Molonies.Errors', $e->getIdentifiers());

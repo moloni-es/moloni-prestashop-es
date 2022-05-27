@@ -186,6 +186,7 @@ class Products extends Endpoint
                             taxId
                             value
                             name
+                            fiscalZone
                         }
                         value
                         ordering
@@ -243,9 +244,73 @@ class Products extends Endpoint
                             {
                                 warehouseId
                             }
+                            warehouses
+                            {
+                                warehouseId
+                                stock
+                                minStock
+                            }
                             productCategory{
                                 name
-                            }                       
+                            }
+                            variants
+                            {
+                                visible
+                                productId
+                                name
+                                reference
+                                summary
+                                price
+                                priceWithTaxes
+                                hasStock
+                                stock
+                                propertyPairs
+                                {
+                                    property
+                                    {
+                                        name
+                                    }
+                                    propertyValue
+                                    {
+                                        code
+                                        value
+                                    }
+                                }
+                            }
+                            parent
+                            {
+                                productId
+                                name
+                            }
+                            propertyGroup
+                            {
+                                propertyGroupId
+                                name
+                                properties
+                                {
+                                    propertyId
+                                    name
+                                    ordering
+                                    values
+                                    {
+                                        propertyValueId
+                                        code
+                                        value
+                                    }
+                                }
+                            }
+                            taxes
+                            {
+                                tax
+                                {
+                                    taxId
+                                    value
+                                    name
+                                    fiscalZone
+                                }
+                                value
+                                ordering
+                            }                   
                         }
                         options
                         {

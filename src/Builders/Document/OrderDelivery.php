@@ -209,10 +209,17 @@ class OrderDelivery implements BuilderItemInterface
             if ((int) $deliveryMethodId > 0) {
                 $this->deliveryMethodId = (int) $deliveryMethodId;
             } else {
-                throw new MoloniDocumentDeliveryException('Error creating delivery method: ({0})', [$this->name], ['params' => $params, 'response' => $mutation]);
+                throw new MoloniDocumentDeliveryException('Error creating delivery method: ({0})', [
+                    '{0}' => $this->name,
+                ], [
+                    'params' => $params,
+                    'response' => $mutation,
+                ]);
             }
         } catch (MoloniApiException $e) {
-            throw new MoloniDocumentDeliveryException('Error creating delivery method: ({0})', [$this->name], $e->getData());
+            throw new MoloniDocumentDeliveryException('Error creating delivery method: ({0})', [
+                '{0}' => $this->name
+            ], $e->getData());
         }
 
         return $this;

@@ -25,11 +25,11 @@
 namespace Moloni\Controller\Admin\Orders;
 
 use Currency;
+use PrestaShopException;
+use Moloni\Helpers\Logs;
+use PrestaShopDatabaseException;
 use Moloni\Actions\Orders\OrderCreateDocument;
 use Moloni\Actions\Orders\OrderDiscard;
-use Moloni\Builders\PrestaProductFromId;
-use PrestaShopDatabaseException;
-use PrestaShopException;
 use Moloni\Controller\Admin\MoloniController;
 use Moloni\Enums\DocumentTypes;
 use Moloni\Enums\MoloniRoutes;
@@ -108,12 +108,13 @@ class Orders extends MoloniController
 
             $this->addSuccessMessage($msg);
         } catch (MoloniDocumentWarning $e) {
+            Logs::addWarningLog([$e->getMessage(), $e->getIdentifiers()], $e->getData());
+
             $msg = $this->trans($e->getMessage(), 'Modules.Molonies.Errors', $e->getIdentifiers());
             $this->addWarningMessage($msg, $e->getData());
-        } catch (MoloniDocumentException $e) {
-            $msg = $this->trans($e->getMessage(), 'Modules.Molonies.Errors', $e->getIdentifiers());
-            $this->addErrorMessage($msg, $e->getData());
-        } catch (MoloniException $e) {
+        } catch (MoloniDocumentException|MoloniException $e) {
+            Logs::addErrorLog([$e->getMessage(), $e->getIdentifiers()], $e->getData());
+
             $msg = $this->trans($e->getMessage(), 'Modules.Molonies.Errors', $e->getIdentifiers());
             $this->addErrorMessage($msg, $e->getData());
         } catch (PrestaShopDatabaseException|PrestaShopException $e) {

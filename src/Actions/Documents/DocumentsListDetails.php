@@ -143,7 +143,7 @@ class DocumentsListDetails
 
             $document = $query;
         } catch (MoloniApiException $e) {
-            // todo: catch something here?
+            // no need to catch anything
         }
 
         return $document;

@@ -27,6 +27,7 @@ namespace Moloni\Hooks;
 use Moloni\Builders\MoloniProductFromId;
 use Moloni\Enums\Boolean;
 use Moloni\Exceptions\Product\MoloniProductException;
+use Moloni\Helpers\Logs;
 use Moloni\Helpers\Settings;
 use Moloni\Helpers\SyncLogs;
 

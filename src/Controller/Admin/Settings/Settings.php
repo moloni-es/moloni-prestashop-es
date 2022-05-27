@@ -90,12 +90,13 @@ class Settings extends MoloniController
         try {
             (new SettingsSave($languageId, $formFactory, $settingsRepository))->handle($request);
 
-            $this->addSuccessMessage($this->trans('Settings saved.', 'Modules.Molonies.Success'));
+            $this->addSuccessMessage($this->trans('Settings saved.', 'Modules.Molonies.Common'));
         } catch (MoloniException $e) {
-            $msg = $this->trans($e->getMessage(), 'Modules.Molonies.Errors');
+            $msg = $this->trans($e->getMessage(), 'Modules.Molonies.Errors', $e->getIdentifiers());
             $this->addErrorMessage($msg);
         } catch (OptimisticLockException|ORMException $e) {
-            $this->addErrorMessage($this->trans('Error saving settings', 'Modules.Molonies.Errors'));
+            $msg = $this->trans('Error saving settings', 'Modules.Molonies.Errors');
+            $this->addErrorMessage($msg);
         }
 
         return $this->redirectToSettings();

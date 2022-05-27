@@ -421,7 +421,7 @@ class OrderShipping implements BuilderItemInterface
             $exemption = Settings::get('exemptionReasonShipping');
 
             if (empty($exemption)) {
-                throw new MoloniDocumentShippingTaxException('Shipping has no taxes applied. Please add an exemption reason in plugin settings.', []);
+                throw new MoloniDocumentShippingTaxException('Shipping has no taxes applied. Please add an exemption reason in plugin settings.');
             }
 
             $this->exemptionReason = $exemption;

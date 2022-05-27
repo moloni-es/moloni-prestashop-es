@@ -11,7 +11,7 @@ class DocumentTypes
     public const PRO_FORMA_INVOICES = 'proFormaInvoices';
     public const SIMPLIFIED_INVOICES = 'simplifiedInvoices';
     public const ESTIMATE = 'estimate';
-    public const BILLS_OF_LADING = 'billsOfLading';
+    public const BILLS_OF_LADING = 'billsOfLadings';
 
     public const TYPES_WITH_PAYMENTS = [
         self::RECEIPTS,

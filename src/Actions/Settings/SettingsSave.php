@@ -95,7 +95,7 @@ class SettingsSave extends AbstractSettingsAction
                 $action->handle('Product', 'update');
             }
         } catch (MoloniException $e) {
-            // todo: catch something?
+            // no need to catch anything
         }
     }
 }
