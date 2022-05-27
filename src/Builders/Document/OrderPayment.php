@@ -118,10 +118,17 @@ class OrderPayment implements BuilderItemInterface
             if ((int) $paymentMethodId > 0) {
                 $this->paymentMethodId = (int) $paymentMethodId;
             } else {
-                throw new MoloniDocumentPaymentException('Error creating payment method: ({0})', [$this->name], ['params' => $params, 'response' => $mutation]);
+                throw new MoloniDocumentPaymentException('Error creating payment method: ({0})', [
+                    '{0}' => $this->name
+                ], [
+                    'params' => $params,
+                    'response' => $mutation,
+                ]);
             }
         } catch (MoloniApiException $e) {
-            throw new MoloniDocumentPaymentException('Error creating payment method: ({0})', [$this->name], $e->getData());
+            throw new MoloniDocumentPaymentException('Error creating payment method: ({0})', [
+                '{0}' => $this->name
+            ], $e->getData());
         }
 
         return $this;

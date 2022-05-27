@@ -6,6 +6,7 @@ use Moloni\Api\MoloniApiClient;
 use Moloni\Enums\DocumentTypes;
 use Moloni\Enums\Domains;
 use Moloni\Exceptions\MoloniApiException;
+use Moloni\Exceptions\MoloniException;
 
 class DocumentsDownloadPdf
 {
@@ -18,6 +19,9 @@ class DocumentsDownloadPdf
         $this->documentType = $documentType;
     }
 
+    /**
+     * @throws MoloniException
+     */
     public function handle(): string
     {
         $url = '';
@@ -31,6 +35,9 @@ class DocumentsDownloadPdf
         return $url;
     }
 
+    /**
+     * @throws MoloniException
+     */
     private function fetchToken(): array
     {
         $query = [];
@@ -77,7 +84,7 @@ class DocumentsDownloadPdf
                     break;
             }
         } catch (MoloniApiException $e) {
-            // todo: catch this??
+            throw new MoloniException('Error fetching pdf token', $e->getData());
         }
 
         return $query;

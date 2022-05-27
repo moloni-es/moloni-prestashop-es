@@ -474,7 +474,9 @@ class OrderProduct implements BuilderItemInterface
                 $this->moloniProduct = $query[0];
             }
         } catch (MoloniApiException $e) {
-            throw new MoloniDocumentProductException('Error fetching product by reference: ({0})', [$this->reference], $e->getData());
+            throw new MoloniDocumentProductException('Error fetching product by reference: ({0})', [
+                '{0}' => $this->reference
+            ], $e->getData());
         }
 
         return $this;

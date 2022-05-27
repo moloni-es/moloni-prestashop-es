@@ -25,6 +25,7 @@
 namespace Moloni\Webservice\Product;
 
 use Moloni\Enums\Boolean;
+use Moloni\Helpers\Logs;
 use Moloni\Helpers\Settings;
 use Moloni\Builders\PrestaProductFromId;
 use Moloni\Exceptions\Product\MoloniProductException;

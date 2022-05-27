@@ -24,6 +24,10 @@
 
 namespace Moloni\Builders;
 
+use Country;
+use Moloni\Enums\Countries;
+use Moloni\Enums\FiscalZone;
+use Moloni\Helpers\Logs;
 use Product;
 use Configuration;
 use PrestaShopException;
@@ -35,6 +39,7 @@ use Moloni\Helpers\Settings;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\Product\MoloniProductException;
 use Moloni\Exceptions\Product\MoloniProductCategoryException;
+use TaxRulesGroup;
 
 class PrestaProductFromId implements BuilderInterface
 {
@@ -140,9 +145,9 @@ class PrestaProductFromId implements BuilderInterface
     /**
      * Product tax;
      *
-     * @var array|null
+     * @var int|null
      */
-    protected $tax;
+    protected $taxRulesGroupId;
 
     /**
      * Product variants
@@ -181,7 +186,7 @@ class PrestaProductFromId implements BuilderInterface
             ->setDescription()
             ->setIdentifications()
             ->setHasStock()
-            ->setWarehouse()
+            ->setWarehouseId()
             ->setStock()
             ->setPrice();
 
@@ -219,8 +224,8 @@ class PrestaProductFromId implements BuilderInterface
             $this->prestaProduct->id_category_default = $this->categories[0];
         }
 
-        if (!empty($this->tax)) {
-            // todo: apply default tax rule;
+        if (!empty($this->taxRulesGroupId)) {
+            $this->prestaProduct->id_tax_rules_group = $this->taxRulesGroupId;
         }
 
         return $this;
@@ -268,14 +273,14 @@ class PrestaProductFromId implements BuilderInterface
         $this->prestaProduct = new Product();
 
         $this
-            ->setTax()
+            ->setTaxRulesGroupId()
             ->setCategories()
             ->fillPrestaProduct();
 
         try {
             $this->prestaProduct->save();
 
-            // todo: write log?
+            Logs::addInfoLog(['Product created in Prestashop ({0})', ['{0}' => $this->reference]], ['moloniProduct' => $this->moloniProduct]);
 
             $this->afterSave();
         } catch (PrestaShopException $e) {
@@ -302,7 +307,7 @@ class PrestaProductFromId implements BuilderInterface
         try {
             $this->prestaProduct->save();
 
-            // todo: write log?
+            Logs::addInfoLog(['Product updated in Prestashop ({0})', ['{0}' => $this->reference]], ['moloniProduct' => $this->moloniProduct]);
 
             $this->afterSave();
         } catch (PrestaShopException $e) {
@@ -323,13 +328,18 @@ class PrestaProductFromId implements BuilderInterface
             return;
         }
 
-        $currentStock = StockAvailable::getQuantityAvailableByProduct($this->prestaProductId);
+        $currentStock = (float)StockAvailable::getQuantityAvailableByProduct($this->prestaProductId);
 
         if ($this->stock !== $currentStock) {
-            // todo: write log?
             StockAvailable::setQuantity($this->prestaProductId, null, $this->stock);
+
+            Logs::addInfoLog('Stock updated in Prestashop (old: {0} | new: {1}) ({2})', [
+                '{0}' => $currentStock,
+                '{1}' => $this->stock,
+                '{2}' => $this->reference,
+            ]);
         } else {
-            // todo: write log?
+            Logs::addInfoLog('Stock is already updated in Prestashop ({0})', ['{0}' => $this->reference]);
         }
     }
 
@@ -463,7 +473,7 @@ class PrestaProductFromId implements BuilderInterface
      *
      * @return $this
      */
-    public function setWarehouse(): PrestaProductFromId
+    public function setWarehouseId(): PrestaProductFromId
     {
         $warehouseId = Settings::get('syncStockToPrestashopWarehouse');
 
@@ -551,10 +561,28 @@ class PrestaProductFromId implements BuilderInterface
      *
      * @return $this
      */
-    public function setTax(): PrestaProductFromId
+    public function setTaxRulesGroupId(): PrestaProductFromId
     {
-        if (!empty($this->moloniProduct['taxes'])) {
-            $this->tax = [];
+        if (!empty($this->moloniProduct['taxes']) && $this->exists()) {
+            $moloniTax = $this->moloniProduct['taxes'][0]['tax'] ?? [];
+
+            $taxRulesGroupId = 0;
+
+            $fiscalZone = $moloniTax['fiscalZone'] ?? 'ES';
+            $countryId = Country::getByIso($fiscalZone);
+            $value = (float)($moloniTax['value'] ?? 0);
+
+            $taxes = array_reverse(TaxRulesGroup::getAssociatedTaxRatesByIdCountry($countryId), true);
+
+            foreach ($taxes as $id => $tax) {
+                if ($value === (float)$tax) {
+                    $taxRulesGroupId = $id;
+
+                    break;
+                }
+            }
+
+            $this->taxRulesGroupId = $taxRulesGroupId;
         }
 
         return $this;

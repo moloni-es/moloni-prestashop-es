@@ -132,7 +132,7 @@ class Logs
             self::$entityManager->persist($log);
             self::$entityManager->flush($log);
         } catch (ORMException $e) {
-            // todo: catch this?
+            // no need to catch anything
         }
     }
 }

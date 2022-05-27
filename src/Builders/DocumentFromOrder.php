@@ -31,6 +31,7 @@ use Doctrine\Persistence\ObjectManager;
 use Moloni\Api\MoloniApi;
 use Moloni\Entity\MoloniDocuments;
 use Moloni\Exceptions\MoloniException;
+use Moloni\Helpers\Logs;
 use Order;
 use OrderPayment as PrestashopOrderPayment;
 use Moloni\Api\MoloniApiClient;
@@ -111,7 +112,7 @@ class DocumentFromOrder implements BuilderInterface
     /**
      * Related documents total
      *
-     * @var int
+     * @var float
      */
     protected $relatedWithTotal = 0;
 
@@ -121,6 +122,13 @@ class DocumentFromOrder implements BuilderInterface
      * @var string
      */
     protected $documentType;
+
+    /**
+     * Document type name
+     *
+     * @var string
+     */
+    protected $documentTypeName;
 
     /**
      * Document status
@@ -385,7 +393,6 @@ class DocumentFromOrder implements BuilderInterface
             $this->applyExchangeRate($props);
         }
 
-        // todo: maybe improve this
         if ($this->documentType === DocumentTypes::RECEIPTS) {
             unset($props['expirationDate'], $props['ourReference'], $props['yourReference'], $props['expirationDate']);
 
@@ -526,13 +533,19 @@ class DocumentFromOrder implements BuilderInterface
                     throw new MoloniDocumentException('Document type not found');
             }
         } catch (MoloniApiException $e) {
-            throw new MoloniDocumentException('Error creating document ({0})', ['{0}' => $this->ourReference], $e->getData());
+            throw new MoloniDocumentException('Error creating {0} document ({1})', [
+                '{0}' => $this->documentTypeName,
+                '{1}' => $this->ourReference,
+            ], $e->getData());
         }
 
         $documentId = $moloniDocument['documentId'] ?? 0;
 
         if ($documentId === 0) {
-            throw new MoloniDocumentException('Error creating document ({0})', ['{0}' => $this->ourReference], [
+            throw new MoloniDocumentException('Error creating {0} document ({1})', [
+                '{0}' => $this->documentTypeName,
+                '{1}' => $this->ourReference,
+            ], [
                 'document_props' => $this->createProps, 'result' => $mutation
             ]);
         }
@@ -540,7 +553,7 @@ class DocumentFromOrder implements BuilderInterface
         $this->documentId = $documentId;
         $this->moloniDocument = $moloniDocument;
 
-        $this->documentTotal =  $moloniDocument['totalValue'];
+        $this->documentTotal = $moloniDocument['totalValue'];
         $this->documentExchageTotal = $moloniDocument['currencyExchangeTotalValue'] > 0 ? $moloniDocument['currencyExchangeTotalValue'] : $this->documentTotal;
 
         $this->saveRecord();
@@ -551,8 +564,10 @@ class DocumentFromOrder implements BuilderInterface
             if ($difference < 0.01) {
                 $this->closeDocument();
             } else {
-                // todo: fix this
-                throw new MoloniDocumentWarning('Could not close document, totals do not match', [], [
+                throw new MoloniDocumentWarning('Could not close {0}, totals do not match ({1})', [
+                    '{0}' => $this->documentTypeName,
+                    '{1}' => $this->ourReference,
+                ], [
                     'documentProps' => $this->createProps,
                     'mutation' => $moloniDocument
                 ]);
@@ -622,7 +637,10 @@ class DocumentFromOrder implements BuilderInterface
             $documentId = $moloniDocument['documentId'] ?? 0;
 
             if ($documentId === 0) {
-                throw new MoloniApiException('Error closing document ({0})', ['{0}' => $this->ourReference], [
+                throw new MoloniApiException('Error closing {0} document ({1})', [
+                    '{0}' => $this->documentTypeName,
+                    '{1}' => $this->ourReference,
+                ], [
                     'mutation' => $mutation, 'props' => $updateProps
                 ]);
             }
@@ -633,7 +651,10 @@ class DocumentFromOrder implements BuilderInterface
                 $this->sendEmail();
             }
         } catch (MoloniApiException $e) {
-            throw new MoloniDocumentWarning('Error closing document ({0})', ['{0}' => $this->ourReference], $e->getData());
+            throw new MoloniDocumentWarning('Error closing {0} document ({1})', [
+                '{0}' => $this->documentTypeName,
+                '{1}' => $this->ourReference,
+            ], $e->getData());
         }
 
         return $this;
@@ -659,6 +680,27 @@ class DocumentFromOrder implements BuilderInterface
         return $this;
     }
 
+    /**
+     * Add document creation log
+     *
+     * @return $this
+     */
+    public function addLog(): DocumentFromOrder
+    {
+        if ($this->documentId > 0) {
+            $msg = [
+                '{0} document created with success ({1})',
+                [
+                    '{0}' => $this->documentTypeName,
+                    '{1}' => $this->ourReference,
+                ]
+            ];
+
+            Logs::addInfoLog($msg, ['props' => $this->createProps]);
+        }
+
+        return $this;
+    }
 
     //          GETS          //
 
@@ -700,6 +742,8 @@ class DocumentFromOrder implements BuilderInterface
         if (empty($this->documentType)) {
             throw new MoloniDocumentException('No document type selected. Please choose one in plugin settings.');
         }
+
+        $this->documentTypeName = DocumentTypes::getDocumentTypeName($this->documentType);
 
         return $this;
     }
@@ -1141,7 +1185,7 @@ class DocumentFromOrder implements BuilderInterface
                     break;
             }
         } catch (MoloniApiException $e) {
-            // todo: do something here?
+            // No need to catch anything
         }
 
         return $this;
@@ -1206,7 +1250,7 @@ class DocumentFromOrder implements BuilderInterface
                     break;
             }
         } catch (MoloniApiException $e) {
-            // todo: do something here?
+            // No need to catch anything
         }
 
         return $this;

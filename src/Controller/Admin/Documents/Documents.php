@@ -103,14 +103,21 @@ class Documents extends MoloniController
             return $this->redirectToDocuments($page);
         }
 
-        $url = (new DocumentsDownloadPdf($documentId, $documentType))->handle();
+        try {
+            $url = (new DocumentsDownloadPdf($documentId, $documentType))->handle();
 
-        if (empty($url)) {
-            $msg = $this->trans('Could not fetch pdf link.', 'Modules.Molonies.Errors');
-            $this->addErrorMessage($msg);
+            if (empty($url)) {
+                throw new MoloniException('Could not fetch pdf link.', [], ['result' => $url]);
+            }
+        } catch (MoloniException $e) {
+            $msg = $this->trans($e->getMessage(), 'Modules.Molonies.Errors', $e->getIdentifiers());
+
+            $this->addErrorMessage($msg, $e->getData());
 
             return $this->redirectToDocuments($page);
         }
+
+
 
         return $this->redirect($url);
     }
@@ -136,7 +143,7 @@ class Documents extends MoloniController
 
             $this->addSuccessMessage($msg);
         } catch (MoloniException $e) {
-            $msg = $this->trans($e->getMessage(), 'Modules.Molonies.Errors');
+            $msg = $this->trans($e->getMessage(), 'Modules.Molonies.Errors', $e->getIdentifiers());
             $this->addErrorMessage($msg, $e->getData());
         } catch (PrestaShopDatabaseException|PrestaShopException $e) {
             $msg = $this->trans('Error fetching Prestashop order', 'Modules.Molonies.Errors');
