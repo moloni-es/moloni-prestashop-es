@@ -15,9 +15,12 @@
                     </p>
                 </div>
                 <div class="d-flex justify-content-center align-items-center ml-auto">
-                    <a class="btn btn-primary" href="{{ path(importCategoriesRoute) }}">
+                    <button type="button"
+                            class="btn btn-primary"
+                            data-toggle="modal"
+                            data-target="#import_categories">
                         {{ 'Import categories'|trans({}, 'Modules.Molonies.Common') }}
-                    </a>
+                    </button>
                 </div>
             </div>
             <div class="d-flex border-top">
@@ -28,9 +31,12 @@
                     </p>
                 </div>
                 <div class="d-flex justify-content-center align-items-center ml-auto">
-                    <a class="btn btn-primary" href="{{ path(importProductsRoute) }}">
+                    <button type="button"
+                            class="btn btn-primary"
+                            data-toggle="modal"
+                            data-target="#import_products">
                         {{ 'Import products'|trans({}, 'Modules.Molonies.Common') }}
-                    </a>
+                    </button>
                 </div>
             </div>
             <div class="d-flex border-top">
@@ -41,9 +47,12 @@
                     </p>
                 </div>
                 <div class="d-flex justify-content-center align-items-center ml-auto">
-                    <a class="btn btn-primary" href="{{ path(syncStockRoute) }}">
-                        {{ 'Sync stock'|trans({}, 'Modules.Molonies.Common') }}
-                    </a>
+                    <button type="button"
+                            class="btn btn-primary"
+                            data-toggle="modal"
+                            data-target="#sync_stocks">
+                        {{ 'Synchronize stocks'|trans({}, 'Modules.Molonies.Common') }}
+                    </button>
                 </div>
             </div>
             <div class="d-flex border-top">
@@ -87,6 +96,15 @@
             </div>
         </div>
     </div>
+
+    {# Import categories Overlay #}
+    {% include '@Modules/molonies/views/templates/admin/tools/overlays/CategoryImport.twig' %}
+
+    {# Import products Overlay #}
+    {% include '@Modules/molonies/views/templates/admin/tools/overlays/ProductImport.twig' %}
+
+    {# Synchronize stocks Overlay #}
+    {% include '@Modules/molonies/views/templates/admin/tools/overlays/SyncStocks.twig' %}
 {% endblock %}
 
 {% block javascripts %}
