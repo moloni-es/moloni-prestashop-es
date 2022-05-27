@@ -20,6 +20,8 @@ abstract class SendEmail
     {
         $this->email = $email;
         $this->data = $data;
+
+        $this->subject = 'Moloni Spain plugin';
     }
 
     protected function sendEmail(): void

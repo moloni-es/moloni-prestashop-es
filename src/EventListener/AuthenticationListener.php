@@ -25,9 +25,9 @@
 namespace Moloni\EventListener;
 
 use Moloni\Api\MoloniApi;
+use Moloni\Enums\MoloniRoutes;
 use Moloni\Controller\Admin\MoloniController;
 use Moloni\Controller\Admin\MoloniControllerInterface;
-use Moloni\Enums\MoloniRoutes;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 
 class AuthenticationListener

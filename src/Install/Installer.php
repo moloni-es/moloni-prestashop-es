@@ -27,6 +27,8 @@ use Db;
 use Exception;
 use Hook;
 use Language;
+use Moloni\Entity\MoloniApp;
+use Moloni\Repository\MoloniAppRepository;
 use MoloniEs;
 use PrestaShopDatabaseException;
 use PrestaShopException;
@@ -106,10 +108,6 @@ class Installer
      */
     public function install(): bool
     {
-        //if (!$this->installTranslations()) {
-        //    return false;
-        //}
-
         return $this->createCommon();
     }
 
@@ -130,10 +128,6 @@ class Installer
      */
     public function uninstall(): bool
     {
-        if (!$this->uninstallTranslations()) {
-            return false;
-        }
-
         return $this->destroyCommon();
     }
 
@@ -305,55 +299,6 @@ class Installer
     }
 
     /**
-     * Install translations
-     *
-     * @return bool
-     */
-    private function installTranslations(): bool
-    {
-        $database = Db::getInstance();
-
-        // verify if the translations already exist
-        $sql = 'SELECT count(*) FROM ' . _DB_PREFIX_ . 'translation
-                where `domain` like "ModulesMolonies%"';
-
-        try {
-            $count = (int) ($database->executeS($sql))[0]['count(*)'];
-        } catch (PrestaShopDatabaseException $e) {
-            return true;
-        }
-
-        if ($count === 0) {
-            return true;
-        }
-
-        $langs = ['PT', 'ES'];
-
-        foreach ($langs as $lang) {
-            try {
-                $langId = Language::getIdByIso($lang);
-            } catch (PrestaShopException $e) {
-                return true;
-            }
-
-            if ($langId) {
-                $sqlFile = glob($this->module->getLocalPath() . 'sql/translations/' . strtolower($lang) . '.sql');
-
-                $sqlStatement = 'SET @idLang = ' . $langId . ';' . PHP_EOL;
-                $sqlStatement .= $this->getSqlStatements($sqlFile[0]);
-
-                try {
-                    $database->execute($sqlStatement);
-                } catch (Exception $exception) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
-    /**
      * Deletes an tab
      *
      * @param string $className
@@ -376,29 +321,19 @@ class Installer
     }
 
     /**
-     * Uninstalls translations
-     *
-     * @return bool
-     */
-    private function uninstallTranslations(): bool
-    {
-        $database = Db::getInstance();
-        $database->delete(
-            'translation',
-            '`domain` LIKE \'ModulesMolonies%\''
-        );
-
-        return true;
-    }
-
-    /**
      * Remove login credentials
      *
      * @return void
      */
     private function removeLogin(): void
     {
-        $dataBase = Db::getInstance();
-        $dataBase->execute('TRUNCATE ' . _DB_PREFIX_ . 'moloni_app');
+        try {
+            /** @var MoloniAppRepository $repository */
+            $repository = $this->module->get('doctrine')->getRepository(MoloniApp::class);
+
+            $repository->deleteApp();
+        } catch (Exception $e) {
+            // No need to catch
+        }
     }
 }
