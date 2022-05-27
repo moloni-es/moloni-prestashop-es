@@ -26,7 +26,6 @@ namespace Moloni\Controller\Admin\Orders;
 
 use Currency;
 use PrestaShopException;
-use Moloni\Helpers\Logs;
 use PrestaShopDatabaseException;
 use Moloni\Actions\Orders\OrderCreateDocument;
 use Moloni\Actions\Orders\OrderDiscard;
@@ -37,6 +36,7 @@ use Moloni\Exceptions\Document\MoloniDocumentException;
 use Moloni\Exceptions\Document\MoloniDocumentWarning;
 use Moloni\Exceptions\MoloniException;
 use Moloni\Helpers\Settings;
+use Moloni\Helpers\Logs;
 use Moloni\Repository\OrdersRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;

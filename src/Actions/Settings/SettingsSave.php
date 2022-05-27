@@ -24,18 +24,18 @@
 
 namespace Moloni\Actions\Settings;
 
-use Moloni\Enums\Boolean;
 use Shop;
 use Moloni\Actions\Tools\WebhookCreate;
 use Moloni\Actions\Tools\WebhookDeleteAll;
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMException;
+use Moloni\Enums\Boolean;
 use Moloni\Exceptions\MoloniException;
 use Moloni\Repository\MoloniSettingsRepository;
-use Symfony\Component\Form\FormFactory;
-use Symfony\Component\HttpFoundation\Request;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Form\SettingsFormType;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
+use Symfony\Component\Form\FormFactory;
+use Symfony\Component\HttpFoundation\Request;
 
 class SettingsSave extends AbstractSettingsAction
 {
