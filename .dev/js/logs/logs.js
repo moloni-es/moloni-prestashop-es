@@ -1,6 +1,6 @@
 import Paginator from '../paginator/paginator';
 
-export default class MoloniOrders {
+export default class MoloniLogs {
     constructor() {}
 
     startObservers() {
