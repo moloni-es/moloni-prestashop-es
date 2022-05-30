@@ -1,0 +1,7 @@
+ 
+
+Hola,
+
+La autenticación Moloni caducó
+
+Por favor, inserte sus credenciales de nuevo.

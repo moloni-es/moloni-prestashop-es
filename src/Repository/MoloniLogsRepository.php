@@ -50,7 +50,10 @@ class MoloniLogsRepository extends EntityRepository
 
         $totalItems = $paginator->count();
         $totalItems = $totalItems === 0 ? 1 : $totalItems;
+
         $numberOfPages = ceil($totalItems / $logsPerPage);
+        $numberOfPages = $numberOfPages <= 0 ? 1 : $numberOfPages;
+
         $offset = ($page - 1) * $logsPerPage;
 
         $paginator

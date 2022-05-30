@@ -1,0 +1,10 @@
+ 
+
+Hi,
+
+Advertencia de documento de Moloni
+
+Se creó un documento como borrador porque los valores del pedido y del documento no coinciden.
+Por favor revise el documento resultante.
+
+Pedido ID: {order_id}
