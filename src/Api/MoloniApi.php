@@ -28,7 +28,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\BadResponseException;
-use Moloni\Emails\AuthenticationExpiredEmail;
+use Moloni\Mails\AuthenticationExpiredEmail;
 use Moloni\Entity\MoloniApp;
 use Moloni\Enums\Domains;
 use Moloni\Exceptions\MoloniApiException;

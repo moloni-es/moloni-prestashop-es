@@ -1,0 +1,10 @@
+ 
+
+Hi,
+
+Error de documento Moloni
+
+Se produjo un error al crear un documento de Moloni.
+Consulte los registros del complemento para obtener más información.
+
+Pedido ID: {order_id}

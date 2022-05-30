@@ -73,6 +73,7 @@ class OrdersRepository
             ->fetch()['COUNT(*)'];
 
         $numberOfPages = ceil($orders / $ordersPerPage);
+        $numberOfPages = $numberOfPages <= 0 ? 1 : $numberOfPages;
 
         $ordersQuery = $this
             ->connection
