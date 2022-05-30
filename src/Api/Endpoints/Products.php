@@ -107,6 +107,7 @@ class Products extends Endpoint
                     hasStock
                     stock
                     minStock
+                    img
                     measurementUnit
                     {
                         measurementUnitId
@@ -229,6 +230,7 @@ class Products extends Endpoint
                             priceWithTaxes
                             hasStock
                             stock
+                            img
                             identifications
                             {
                                 type
