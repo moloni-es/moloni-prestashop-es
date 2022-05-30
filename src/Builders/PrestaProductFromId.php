@@ -25,9 +25,7 @@
 namespace Moloni\Builders;
 
 use Country;
-use Moloni\Enums\Countries;
-use Moloni\Enums\FiscalZone;
-use Moloni\Helpers\Logs;
+use Image;
 use Product;
 use Configuration;
 use PrestaShopException;
@@ -35,6 +33,8 @@ use StockAvailable;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\Interfaces\BuilderInterface;
 use Moloni\Builders\PrestaProduct\ProductCategory;
+use Moloni\Actions\Moloni\UpdateMoloniProductImage;
+use Moloni\Helpers\Logs;
 use Moloni\Helpers\Settings;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\Product\MoloniProductException;
@@ -150,6 +150,13 @@ class PrestaProductFromId implements BuilderInterface
     protected $taxRulesGroupId;
 
     /**
+     * Product cover image
+     *
+     * @var array
+     */
+    protected $coverImage;
+
+    /**
      * Product variants
      *
      * @var array
@@ -181,6 +188,7 @@ class PrestaProductFromId implements BuilderInterface
             ->fetchProductFromMoloni()
             ->setReference()
             ->fetchProductFromPresta()
+            ->setCoverImage()
             ->setVariants()
             ->setName()
             ->setDescription()
@@ -205,6 +213,10 @@ class PrestaProductFromId implements BuilderInterface
         if (!empty($this->categories)) {
             $this->prestaProduct->deleteCategories();
             $this->prestaProduct->addToCategories($this->categories);
+        }
+
+        if (!empty($this->coverImage)) {
+            (new UpdateMoloniProductImage($this->coverImage, $this->moloniProductId))->handle();
         }
     }
 
@@ -540,6 +552,21 @@ class PrestaProductFromId implements BuilderInterface
 
             $this->stock = $stock;
         }
+
+        return $this;
+    }
+
+    /**
+     * Set product image
+     *
+     * @return $this
+     */
+    public function setCoverImage(): PrestaProductFromId
+    {
+        /** @var array|null $coverImage */
+        $coverImage = Image::getCover($this->prestaProductId);
+
+        $this->coverImage = $coverImage ?? [];
 
         return $this;
     }

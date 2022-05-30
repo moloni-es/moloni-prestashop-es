@@ -283,7 +283,7 @@ class MoloniProductFromId implements BuilderInterface
      *
      * @return void
      */
-    public function afterSave(): void
+    private function afterSave(): void
     {
         if (!empty($this->imagePath)) {
             (new UpdatePrestaProductImage($this->prestashopProduct->id, $this->imagePath))->handle();
