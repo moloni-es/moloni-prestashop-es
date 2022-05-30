@@ -27,6 +27,8 @@ namespace Moloni\Builders;
 use Address;
 use Category;
 use Country;
+use Image;
+use Moloni\Actions\Presta\UpdatePrestaProductImage;
 use Product;
 use Configuration;
 use StockAvailable;
@@ -110,6 +112,13 @@ class MoloniProductFromId implements BuilderInterface
      * @var array
      */
     protected $identifications = [];
+
+    /**
+     * Product image path
+     *
+     * @var string
+     */
+    protected $imagePath = '';
 
     /**
      * Product price
@@ -226,20 +235,6 @@ class MoloniProductFromId implements BuilderInterface
     }
 
     /**
-     * Verify requirements to create product
-     *
-     * @throws MoloniProductException
-     */
-    protected function verifyProduct(): MoloniProductFromId
-    {
-        if (empty($this->prestashopProduct->id)) {
-            throw new MoloniProductException('Prestashop product not found');
-        }
-
-        return $this;
-    }
-
-    /**
      * Create product information to save
      *
      * @return array
@@ -283,6 +278,32 @@ class MoloniProductFromId implements BuilderInterface
         return $props;
     }
 
+    /**
+     * Actions run after a save
+     *
+     * @return void
+     */
+    public function afterSave(): void
+    {
+        if (!empty($this->imagePath)) {
+            (new UpdatePrestaProductImage($this->prestashopProduct->id, $this->imagePath))->handle();
+        }
+    }
+
+    /**
+     * Verify requirements to create product
+     *
+     * @throws MoloniProductException
+     */
+    protected function verifyProduct(): MoloniProductFromId
+    {
+        if (empty($this->prestashopProduct->id)) {
+            throw new MoloniProductException('Prestashop product not found');
+        }
+
+        return $this;
+    }
+
     //          PUBLICS          //
 
     /**
@@ -306,6 +327,8 @@ class MoloniProductFromId implements BuilderInterface
                 $this->moloniProduct = $moloniProduct;
 
                 Logs::addInfoLog(['Product created in Moloni ({0})', ['{0}' => $this->reference]], ['props' => $props]);
+
+                $this->afterSave();
             } else {
                 throw new MoloniProductException('Error creating product ({0})', ['{0}' => $this->reference], [
                     'mutation' => $mutation
@@ -338,6 +361,8 @@ class MoloniProductFromId implements BuilderInterface
                 $this->moloniProduct = $moloniProduct;
 
                 Logs::addInfoLog(['Product updated in Moloni ({0})', ['{0}' => $this->reference]], ['props' => $props]);
+
+                $this->afterSave();
             } else {
                 throw new MoloniProductException('Error updating product ({0})', ['{0}' => $this->reference], [
                     'mutation' => $mutation
@@ -523,11 +548,13 @@ class MoloniProductFromId implements BuilderInterface
     /**
      * Set has stock
      *
+     * @param bool|null $hasStock
+     *
      * @return MoloniProductFromId
      */
-    public function setHasStock(): MoloniProductFromId
+    public function setHasStock($hasStock = null): MoloniProductFromId
     {
-        $this->hasStock = (bool)Boolean::YES;
+        $this->hasStock = $hasStock ?? (bool)Boolean::YES;
 
         return $this;
     }
@@ -757,6 +784,24 @@ class MoloniProductFromId implements BuilderInterface
         return $this;
     }
 
+    /**
+     * Set image name
+     *
+     * @return $this
+     */
+    public function setImagePath(): MoloniProductFromId
+    {
+        $imageName = '';
+
+        if (!empty($this->moloniProduct) && !empty($this->moloniProduct['img'])) {
+            $imageName = $this->moloniProduct['img'];
+        }
+
+        $this->imagePath = $imageName;
+
+        return $this;
+    }
+
     //          REQUESTS          //
 
     /**
@@ -784,7 +829,10 @@ class MoloniProductFromId implements BuilderInterface
 
                 $this->moloniProduct = $moloniProduct;
                 $this->productId = $moloniProduct['productId'];
-                $this->hasStock = $moloniProduct['hasStock'];
+
+                $this
+                    ->setHasStock($moloniProduct['hasStock'])
+                    ->setImagePath();
             }
         } catch (MoloniApiException $e) {
             throw new MoloniProductException('Error fetching product by reference: ({0})', ['{0}' => $this->reference], $e->getData());
