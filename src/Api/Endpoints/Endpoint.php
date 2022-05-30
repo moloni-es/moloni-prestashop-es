@@ -33,6 +33,22 @@ abstract class Endpoint
     }
 
     /**
+     * Make post with file upload
+     *
+     * @param array $operations
+     * @param string|null $map
+     * @param string|null $file
+     *
+     * @return array
+     *
+     * @throws MoloniApiException
+     */
+    protected function postWithFile(array $operations = [], ?string $map = '', ?string $file = ''): array
+    {
+        return MoloniApi::postWithFile($operations, $map, $file);
+    }
+
+    /**
      * Make a paginated request
      *
      * @param string $query
