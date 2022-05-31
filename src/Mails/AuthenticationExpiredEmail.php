@@ -26,6 +26,7 @@ namespace Moloni\Mails;
 
 use Configuration;
 use Mail;
+use Moloni\Enums\Domains;
 
 class AuthenticationExpiredEmail extends SendEmail
 {
@@ -39,7 +40,10 @@ class AuthenticationExpiredEmail extends SendEmail
             (int)(Configuration::get('PS_LANG_DEFAULT')), // defaut language id
             'authentication_expired', // email template file to be use
             $this->subject, // email subject
-            [],
+            [
+                '{moloni_url}' => Domains::MOLONI,
+                '{year}' => date("Y"),
+            ],
             $this->email, // receiver email address
             NULL, //receiver name
             NULL, //from email address
