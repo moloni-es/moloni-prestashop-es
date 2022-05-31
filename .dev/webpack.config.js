@@ -7,7 +7,7 @@ const ModuleDevDir = Path.resolve(__dirname);
 const DevAppCSS = Path.resolve(__dirname, 'css/app.scss');
 const DevAppJS = Path.resolve(__dirname, 'js/app.js');
 
-const DeployDir = Path.resolve(__dirname, '../views/compiled');
+const DeployDir = Path.resolve(__dirname, '../views');
 const DeployAppCSS = Path.resolve(__dirname, '../views/css/');
 const DeployAppJS = Path.resolve(__dirname, '../views/js/');
 
@@ -19,13 +19,12 @@ if (!Encore.isRuntimeEnvironmentConfigured()) {
 
 Encore
   .setOutputPath(DeployDir)
-  .setPublicPath('/views/compiled')
+  .setPublicPath('/views')
   .addEntry('js/app', DevAppJS)
   .addStyleEntry('css/app', DevAppCSS)
   .enableBuildNotifications()
   .enableSassLoader()
   .enablePostCssLoader()
   .disableSingleRuntimeChunk()
-  .cleanupOutputBeforeBuild()
 
 module.exports = Encore.getWebpackConfig();

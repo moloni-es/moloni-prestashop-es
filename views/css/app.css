@@ -1,1 +1,48 @@
-.flex{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex}.moloni-login--card{padding:2.5rem;width:30rem}.moloni-login--block{margin-top:2rem}.moloni-login--block:first-child{margin-top:0}.moloni-login--image{-webkit-box-pack:center;-ms-flex-pack:center;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-justify-content:center;justify-content:center}.moloni-login--button{width:100%}.moloni-login-divider{margin-bottom:1.5rem;margin-top:1.5rem}.moloni-login-divider--holder{-webkit-box-pack:center;-ms-flex-pack:center;-webkit-box-align:center;-ms-flex-align:center;-webkit-align-items:center;align-items:center;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-justify-content:center;justify-content:center}.moloni-login-divider--text{-ms-flex-negative:0;-webkit-flex-shrink:0;flex-shrink:0;padding-left:1rem;padding-right:1rem}.moloni-login-divider--divider{border-top:1px solid #bbcdd2;height:0;width:100%}.moloni-company--card{height:100%;width:20rem}.moloni-company--wrapper{gap:1rem}.moloni-company--image{-webkit-box-pack:center;-ms-flex-pack:center;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;height:9.5rem;-webkit-justify-content:center;justify-content:center}.required:before{color:#f54c3e;content:"* "}.moloni-registration--card{-webkit-box-orient:vertical;-webkit-box-direction:normal;-webkit-box-align:center;-ms-flex-align:center;-ms-flex-line-pack:center;-webkit-align-content:center;align-content:center;-webkit-align-items:center;align-items:center;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;padding:3rem 1rem;width:100%}.moloni-registration--image{max-width:1000px}.moloni-registration--form{max-width:1000px;padding-top:3rem}.moloni-registration--row:not(.row){margin-bottom:1.2rem}.moloni-registration--col{margin-bottom:1.2rem;position:relative;width:100%}@media (min-width:768px){.moloni-registration--col{-webkit-box-flex:0;-webkit-flex:0 0 auto;-ms-flex:0 0 auto;flex:0 0 auto;padding-left:.9375rem;padding-right:.9375rem;width:50%}}.moloni-registration--buttons{-webkit-box-pack:end;-ms-flex-pack:end;-webkit-box-align:end;-ms-flex-align:end;-webkit-align-items:flex-end;align-items:flex-end;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-justify-content:flex-end;justify-content:flex-end;max-width:1000px;padding-top:2rem;width:100%}.moloni-registration--buttons button{margin-left:1rem}.ml-py-2{padding-bottom:.5rem;padding-top:.5rem}
+/** Colors **/
+.flex {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.moloni-login {
+  width: 45rem;
+}
+
+.moloni-company {
+  width: 20rem;
+  height: 100%;
+}
+
+.moloni-company--wrapper {
+  gap: 1rem;
+}
+
+.moloni-company--image {
+  height: 9.5rem;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+
+.required::before {
+  content: "* ";
+  color: #f54c3e;
+}
+
+@media (max-width: 599px) {
+  .moloni-cenas {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    background-size: cover;
+    font-size: xx-small;
+  }
+}

@@ -2,12 +2,12 @@
   "entrypoints": {
     "js/app": {
       "js": [
-        "/views/compiled/js/app.js"
+        "/views/js/app.js"
       ]
     },
     "css/app": {
       "css": [
-        "/views/compiled/css/app.css"
+        "/views/css/app.css"
       ]
     }
   }
