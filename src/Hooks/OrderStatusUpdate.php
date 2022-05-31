@@ -51,9 +51,11 @@ class OrderStatusUpdate extends AbstractHookAction
         $this->orderId = $orderId;
         $this->newOrderStatus = $newOrderStatus;
         $this->entityManager = $entityManager;
+
+        $this->handle();
     }
 
-    public function handle(): void
+    private function handle(): void
     {
         if (!$this->shouldExecuteHandle()) {
             return;

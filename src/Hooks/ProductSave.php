@@ -38,9 +38,11 @@ class ProductSave extends AbstractHookAction
     public function __construct(int $productId)
     {
         $this->productId = $productId;
+
+        $this->handle();
     }
 
-    public function handle(): void
+    private function handle(): void
     {
         if (!$this->shouldExecuteHandle()) {
             return;

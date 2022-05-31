@@ -243,7 +243,7 @@ var Paginator = /*#__PURE__*/function () {
 
       element.val(page);
       var form = $('<form>');
-      form.attr('action', url);
+      form.attr('action', url + '&page=' + page);
       form.attr('method', 'get');
       $('body').append(form);
       form.submit();

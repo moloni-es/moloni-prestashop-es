@@ -232,7 +232,7 @@ class MoloniEs extends Module
         try {
             $this->initContext();
 
-            (new ProductSave($params['id_product']))->handle();
+            new ProductSave($params['id_product']);
         } catch (Exception $e) {
             // Do nothing
         }
@@ -250,7 +250,7 @@ class MoloniEs extends Module
         try {
             $this->initContext();
 
-            (new ProductSave($params['id_product']))->handle();
+            new ProductSave($params['id_product']);
         } catch (Exception $e) {
             // Do nothing
         }
@@ -271,7 +271,7 @@ class MoloniEs extends Module
             /** @var ManagerRegistry|LegacyManagerRegistry $doctrine */
             $doctrine = $this->get('doctrine');
 
-            (new OrderStatusUpdate($params['id_order'], $params['newOrderStatus'], $doctrine->getManager()))->handle();
+            new OrderStatusUpdate($params['id_order'], $params['newOrderStatus'], $doctrine->getManager());
         } catch (Exception $e) {
             // Do nothing
         }
