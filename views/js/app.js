@@ -221,17 +221,17 @@ var Paginator = /*#__PURE__*/function () {
   }, {
     key: "onLoseFocus",
     value: function onLoseFocus() {
-      var element = $(this);
-      var page = parseInt(element.val());
-      var value = parseInt(element.attr('value'));
-      var url = element.attr('psurl');
-      var psmax = parseInt(element.attr('psmax'));
+      var pageNumberInput = $(this);
+      var page = parseInt(pageNumberInput.val());
+      var value = parseInt(pageNumberInput.attr('value'));
+      var url = pageNumberInput.attr('psurl');
+      var psmax = parseInt(pageNumberInput.attr('psmax'));
 
       if (page === value) {
         return;
       }
 
-      element.attr('disabled', true);
+      pageNumberInput.attr('disabled', true);
 
       if (page > psmax) {
         page = psmax;
@@ -241,12 +241,9 @@ var Paginator = /*#__PURE__*/function () {
         page = 1;
       }
 
-      element.val(page);
-      var form = $('<form>');
-      form.attr('action', url + '&page=' + page);
-      form.attr('method', 'get');
-      $('body').append(form);
-      form.submit();
+      pageNumberInput.val(page);
+      url = url + '&page=' + page;
+      window.location.href = url;
     }
   }]);
 

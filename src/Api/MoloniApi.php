@@ -29,7 +29,7 @@ use Doctrine\ORM\ORMException;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Post\PostFile;
-use Moloni\Mails\AuthenticationExpiredEmail;
+use Moloni\Mails\AuthenticationExpiredMail;
 use Moloni\Entity\MoloniApp;
 use Moloni\Enums\Domains;
 use Moloni\Exceptions\MoloniApiException;
@@ -175,11 +175,11 @@ class MoloniApi
             self::$entityManager->persist(self::$app);
             self::$entityManager->flush();
         } catch (BadResponseException|ORMException $e) {
-            (new AuthenticationExpiredEmail(Settings::get('alertEmail'), ['message' => $e->getMessage()]))->handle();
+            (new AuthenticationExpiredMail(Settings::get('alertEmail'), ['message' => $e->getMessage()]))->handle();
 
             return false;
         } catch (MoloniLoginException $e) {
-            (new AuthenticationExpiredEmail(Settings::get('alertEmail'), $e->getData()))->handle();
+            (new AuthenticationExpiredMail(Settings::get('alertEmail'), $e->getData()))->handle();
 
             return false;
         }

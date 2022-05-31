@@ -24,7 +24,7 @@
 
 namespace Moloni\Mails;
 
-abstract class SendEmail
+abstract class SendMail
 {
     protected $email;
     protected $data;
@@ -42,5 +42,10 @@ abstract class SendEmail
         $this->data = $data;
 
         $this->subject = 'Prestashop - Moloni plugin';
+    }
+
+    protected function getLogoUrl(): string
+    {
+        return (new \Link())->getBaseLink() . '/modules/molonies/views/img/logoMail.png';
     }
 }

@@ -29,8 +29,8 @@ use Moloni\Exceptions\Document\MoloniDocumentException;
 use Moloni\Exceptions\Document\MoloniDocumentWarning;
 use Moloni\Exceptions\MoloniException;
 use Moloni\Enums\Boolean;
-use Moloni\Mails\DocumentErrorEmail;
-use Moloni\Mails\DocumentWarningEmail;
+use Moloni\Mails\DocumentErrorMail;
+use Moloni\Mails\DocumentWarningMail;
 use Moloni\Helpers\Logs;
 use Moloni\Helpers\Settings;
 use Moloni\Actions\Orders\OrderCreateDocument;
@@ -65,11 +65,11 @@ class OrderStatusUpdate extends AbstractHookAction
             $action = new OrderCreateDocument($this->orderId, $this->entityManager);
             $action->handle();
         } catch (MoloniDocumentWarning $e) {
-            (new DocumentWarningEmail(Settings::get('alertEmail'), ['order_id' => $this->orderId]))->handle();
+            (new DocumentWarningMail(Settings::get('alertEmail'), ['order_id' => $this->orderId]))->handle();
 
             Logs::addWarningLog([$e->getMessage(), $e->getIdentifiers()], $e->getData(), $this->orderId);
         } catch (MoloniDocumentException|MoloniException $e) {
-            (new DocumentErrorEmail(Settings::get('alertEmail'), ['order_id' => $this->orderId]))->handle();
+            (new DocumentErrorMail(Settings::get('alertEmail'), ['order_id' => $this->orderId]))->handle();
 
             Logs::addErrorLog([$e->getMessage(), $e->getIdentifiers()], $e->getData(), $this->orderId);
         } catch (PrestaShopDatabaseException|PrestaShopException $e) {
