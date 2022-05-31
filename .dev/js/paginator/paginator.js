@@ -37,7 +37,7 @@ export default class Paginator {
 
         let form = $('<form>');
 
-        form.attr('action', url);
+        form.attr('action', url + '&page=' + page);
         form.attr('method', 'get');
 
         $('body').append(form);

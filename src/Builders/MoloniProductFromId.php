@@ -408,20 +408,13 @@ class MoloniProductFromId implements BuilderInterface
     public function updateStock(): MoloniProductFromId
     {
         if ($this->productExists() && $this->productHasStock()) {
-
             if ($this->productHasVariants()) {
                 // update variants stock
             } else {
                 try {
                     new UpdateMoloniProductStock($this->moloniProductId, $this->warehouseId, $this->stock, $this->moloniProduct['warehouses'], $this->reference);
                 } catch (MoloniApiException $e) {
-                    $message = [
-                        'Error creating stock movement ({0})', [
-                            '{0}' => $this->reference
-                        ]
-                    ];
-
-                    throw new MoloniProductException($message, $e->getData());
+                    throw new MoloniProductException('Error creating stock movement ({0})', ['{0}' => $this->reference], $e->getData());
                 }
             }
         }
@@ -600,7 +593,7 @@ class MoloniProductFromId implements BuilderInterface
      *
      * @return MoloniProductFromId
      */
-    public function setHasStock($hasStock = null): MoloniProductFromId
+    public function setHasStock(bool $hasStock = null): MoloniProductFromId
     {
         $this->hasStock = $hasStock ?? (bool)Boolean::YES;
 

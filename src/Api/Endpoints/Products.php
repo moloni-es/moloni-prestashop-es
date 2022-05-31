@@ -25,6 +25,16 @@ class Products extends Endpoint
                             productId
                             name
                             img
+                            warehouse
+                            {
+                                warehouseId
+                            }
+                            warehouses
+                            {
+                                warehouseId
+                                stock
+                                minStock
+                            }
                             identifications
                             {
                                 type
@@ -63,6 +73,16 @@ class Products extends Endpoint
                             name
                             reference
                             img
+                            warehouse
+                            {
+                                warehouseId
+                            }
+                            warehouses
+                            {
+                                warehouseId
+                                stock
+                                minStock
+                            }
                             identifications
                             {
                                 type
