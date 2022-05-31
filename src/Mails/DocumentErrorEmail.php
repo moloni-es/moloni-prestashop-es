@@ -26,6 +26,7 @@ namespace Moloni\Mails;
 
 use Configuration;
 use Mail;
+use Moloni\Enums\Domains;
 
 class DocumentErrorEmail extends SendEmail
 {
@@ -42,7 +43,9 @@ class DocumentErrorEmail extends SendEmail
             'document_error', // email template file to be use
             $this->subject, // email subject
             [
-                '{order_id}' => $orderId
+                '{order_id}' => $orderId,
+                '{moloni_url}' => Domains::MOLONI,
+                '{year}' => date("Y"),
             ],
             $this->email, // receiver email address
             NULL, //receiver name
