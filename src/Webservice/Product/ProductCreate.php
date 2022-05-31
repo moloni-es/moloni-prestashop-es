@@ -40,12 +40,12 @@ class ProductCreate extends AbstractWebserviceAction
 
         try {
             $productBuilder = new PrestaProductFromId($this->productId);
-            $prestaProductId = $productBuilder->getPrestaProductId();
+            $prestaProductId = $productBuilder->getPrestashopProductId();
 
             if ($prestaProductId === 0) {
                 $productBuilder->insert();
 
-                SyncLogs::productAddTimeout($productBuilder->getPrestaProductId());
+                SyncLogs::productAddTimeout($productBuilder->getPrestashopProductId());
             } elseif ((int)Settings::get('updateProductsToPrestashop') === Boolean::YES && !SyncLogs::productHasTimeout($prestaProductId)) {
                 SyncLogs::productAddTimeout($prestaProductId);
 

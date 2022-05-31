@@ -41,7 +41,7 @@ class ProductStockChange extends AbstractWebserviceAction
 
         try {
             $productBuilder = new PrestaProductFromId($this->productId);
-            $prestaProductId = $productBuilder->getPrestaProductId();
+            $prestaProductId = $productBuilder->getPrestashopProductId();
 
             if ($prestaProductId > 0 && !SyncLogs::productHasTimeout($prestaProductId)) {
                 SyncLogs::productAddTimeout($prestaProductId);

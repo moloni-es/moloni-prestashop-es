@@ -24,14 +24,14 @@
 
 namespace Moloni\Actions\Presta;
 
-use Image;
-use ImageManager;
-use ImageType;
-use PrestaShopDatabaseException;
-use Configuration;
-use PrestaShopException;
 use Shop;
 use Tools;
+use Image;
+use ImageType;
+use ImageManager;
+use Configuration;
+use PrestaShopException;
+use PrestaShopDatabaseException;
 use Moloni\Enums\Domains;
 use PrestaShop\PrestaShop\Adapter\Import\ImageCopier;
 
@@ -47,9 +47,11 @@ class UpdatePrestaProductImage
 
         $this->moloniImagePath = $moloniImagePath;
         $this->prestashopProductId = $prestashopProductId;
+
+        $this->handle();
     }
 
-    public function handle(): void
+    private function handle(): void
     {
         if (empty($this->moloniImagePath)) {
             return;

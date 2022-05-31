@@ -25,6 +25,7 @@
 namespace Moloni\Controller\Admin\Orders;
 
 use Currency;
+use Moloni\Builders\MoloniProductFromId;
 use PrestaShopException;
 use PrestaShopDatabaseException;
 use Moloni\Actions\Orders\OrderCreateDocument;
@@ -53,6 +54,11 @@ class Orders extends MoloniController
      */
     public function home(Request $request): Response
     {
+        $fabio = new MoloniProductFromId(23);
+        $fabio->search()->update()->afterSave();
+        dump($fabio);
+        die;
+
         $page = $request->get('page', 1);
 
         /** @var OrdersRepository $repository */

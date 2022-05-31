@@ -26,16 +26,17 @@ namespace Moloni\Builders;
 
 use Country;
 use Image;
-use Moloni\Enums\SyncFields;
+use Moloni\Actions\Presta\UpdatePrestaProductImage;
 use Product;
 use Configuration;
 use PrestaShopException;
-use StockAvailable;
 use TaxRulesGroup;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\Interfaces\BuilderInterface;
 use Moloni\Builders\PrestaProduct\ProductCategory;
 use Moloni\Actions\Moloni\UpdateMoloniProductImage;
+use Moloni\Actions\Presta\UpdatePrestaProductStock;
+use Moloni\Enums\SyncFields;
 use Moloni\Helpers\Logs;
 use Moloni\Helpers\Settings;
 use Moloni\Exceptions\MoloniApiException;
@@ -63,14 +64,14 @@ class PrestaProductFromId implements BuilderInterface
      *
      * @var int
      */
-    protected $prestaProductId = 0;
+    protected $prestashopProductId = 0;
 
     /**
      * Prestashop product
      *
      * @var Product|null
      */
-    protected $prestaProduct;
+    protected $prestashopProduct;
 
 
     /**
@@ -151,11 +152,11 @@ class PrestaProductFromId implements BuilderInterface
     protected $taxRulesGroupId;
 
     /**
-     * Product cover image
+     * Product image path
      *
-     * @var array
+     * @var string
      */
-    protected $coverImage = [];
+    protected $imagePath = '';
 
     /**
      * Product variants
@@ -199,7 +200,7 @@ class PrestaProductFromId implements BuilderInterface
             ->fetchProductFromMoloni()
             ->setReference()
             ->fetchProductFromPresta()
-            ->setCoverImage()
+            ->setImagePath()
             ->setVariants()
             ->setName()
             ->setDescription()
@@ -220,15 +221,15 @@ class PrestaProductFromId implements BuilderInterface
      */
     protected function afterSave(): void
     {
-        $this->prestaProductId = $this->prestaProduct->id;
+        $this->prestashopProductId = $this->prestashopProduct->id;
 
         if (!empty($this->categories)) {
-            $this->prestaProduct->deleteCategories();
-            $this->prestaProduct->addToCategories($this->categories);
+            $this->prestashopProduct->deleteCategories();
+            $this->prestashopProduct->addToCategories($this->categories);
         }
 
-        if (!empty($this->coverImage) && $this->shouldSyncImage()) {
-            (new UpdateMoloniProductImage($this->coverImage, $this->moloniProductId))->handle();
+        if (!empty($this->imagePath) && $this->shouldSyncImage()) {
+            new UpdatePrestaProductImage($this->prestashopProduct->id, $this->imagePath);
         }
     }
 
@@ -240,25 +241,25 @@ class PrestaProductFromId implements BuilderInterface
     protected function fillPrestaProduct(): PrestaProductFromId
     {
         if ($this->shouldSyncName()) {
-            $this->prestaProduct->name = $this->name;
+            $this->prestashopProduct->name = $this->name;
         }
 
         if ($this->shouldSyncDescription()) {
-            $this->prestaProduct->description_short = $this->description;
+            $this->prestashopProduct->description_short = $this->description;
         }
 
         if ($this->shouldSyncPrice()) {
-            $this->prestaProduct->price = $this->price;
+            $this->prestashopProduct->price = $this->price;
         }
 
-        $this->prestaProduct->reference = $this->reference;
+        $this->prestashopProduct->reference = $this->reference;
 
         if (!empty($this->categories)) {
-            $this->prestaProduct->id_category_default = $this->categories[0];
+            $this->prestashopProduct->id_category_default = $this->categories[0];
         }
 
         if (!empty($this->taxRulesGroupId)) {
-            $this->prestaProduct->id_tax_rules_group = $this->taxRulesGroupId;
+            $this->prestashopProduct->id_tax_rules_group = $this->taxRulesGroupId;
         }
 
         return $this;
@@ -284,8 +285,8 @@ class PrestaProductFromId implements BuilderInterface
         if ($productId > 0) {
             $product = new Product($productId, true, Configuration::get('PS_LANG_DEFAULT'));
 
-            $this->prestaProductId = $productId;
-            $this->prestaProduct = $product;
+            $this->prestashopProductId = $productId;
+            $this->prestashopProduct = $product;
         }
 
         return $this;
@@ -303,14 +304,14 @@ class PrestaProductFromId implements BuilderInterface
      */
     public function insert(): void
     {
-        $this->prestaProduct = new Product();
+        $this->prestashopProduct = new Product();
 
         $this
             ->setTaxRulesGroupId()
             ->fillPrestaProduct();
 
         try {
-            $this->prestaProduct->save();
+            $this->prestashopProduct->save();
 
             Logs::addInfoLog(['Product created in Prestashop ({0})', ['{0}' => $this->reference]], ['moloniProduct' => $this->moloniProduct]);
 
@@ -335,7 +336,7 @@ class PrestaProductFromId implements BuilderInterface
         $this->fillPrestaProduct();
 
         try {
-            $this->prestaProduct->save();
+            $this->prestashopProduct->save();
 
             Logs::addInfoLog(['Product updated in Prestashop ({0})', ['{0}' => $this->reference]], ['moloniProduct' => $this->moloniProduct]);
 
@@ -354,27 +355,15 @@ class PrestaProductFromId implements BuilderInterface
      */
     public function updateStock(): void
     {
-        if (!$this->productHasStock() || $this->productHasVariants() || !$this->productExists()) {
+        if (!$this->productHasStock() || !$this->productExists()) {
             return;
         }
 
-        $currentStock = (float)StockAvailable::getQuantityAvailableByProduct($this->prestaProductId);
-
-        if ($this->stock !== $currentStock) {
-            StockAvailable::setQuantity($this->prestaProductId, null, $this->stock);
-
-            $msg = [
-                'Stock updated in Prestashop (old: {0} | new: {1}) ({2})', [
-                    '{0}' => $currentStock,
-                    '{1}' => $this->stock,
-                    '{2}' => $this->reference,
-                ]
-            ];
+        if ($this->productHasVariants()) {
+            // update variants stock
         } else {
-            $msg = ['Stock is already updated in Prestashop ({0})', ['{0}' => $this->reference]];
+            new UpdatePrestaProductStock($this->prestashopProductId, $this->reference, null, $this->stock);
         }
-
-        Logs::addInfoLog($msg);
     }
 
     //          VERIFICATIONS          //
@@ -446,9 +435,9 @@ class PrestaProductFromId implements BuilderInterface
      *
      * @return int
      */
-    public function getPrestaProductId(): int
+    public function getPrestashopProductId(): int
     {
-        return $this->prestaProductId;
+        return $this->prestashopProductId;
     }
 
     //          SETS          //
@@ -631,16 +620,19 @@ class PrestaProductFromId implements BuilderInterface
     }
 
     /**
-     * Set product image
+     * Set image name
      *
      * @return $this
      */
-    public function setCoverImage(): PrestaProductFromId
+    public function setImagePath(): PrestaProductFromId
     {
-        /** @var array|null $coverImage */
-        $coverImage = Image::getCover($this->prestaProductId);
+        $imagePath = '';
 
-        $this->coverImage = $coverImage ?? [];
+        if (!empty($this->moloniProduct) && !empty($this->moloniProduct['img'])) {
+            $imagePath = $this->moloniProduct['img'];
+        }
+
+        $this->imagePath = $imagePath;
 
         return $this;
     }
@@ -732,7 +724,7 @@ class PrestaProductFromId implements BuilderInterface
      */
     protected function productExists(): bool
     {
-        return $this->prestaProductId > 0;
+        return $this->prestashopProductId > 0;
     }
 
     /**

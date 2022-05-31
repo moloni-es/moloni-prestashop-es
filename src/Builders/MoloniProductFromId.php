@@ -28,7 +28,7 @@ use Address;
 use Category;
 use Country;
 use Image;
-use Moloni\Actions\Presta\UpdatePrestaProductImage;
+use Moloni\Actions\Moloni\UpdateMoloniProductImage;
 use Moloni\Enums\SyncFields;
 use Product;
 use Configuration;
@@ -36,6 +36,8 @@ use StockAvailable;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Helpers\Settings;
 use Moloni\Helpers\Logs;
+use Moloni\Actions\Moloni\UpdateMoloniProductStock;
+use Moloni\Actions\Presta\UpdatePrestaProductImage;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\Product\MoloniProductException;
 use Moloni\Exceptions\Product\MoloniProductCategoryException;
@@ -116,11 +118,11 @@ class MoloniProductFromId implements BuilderInterface
     protected $identifications = [];
 
     /**
-     * Product image path
+     * Product cover image
      *
-     * @var string
+     * @var array
      */
-    protected $imagePath = '';
+    protected $coverImage = [];
 
     /**
      * Product price
@@ -225,6 +227,7 @@ class MoloniProductFromId implements BuilderInterface
     {
         $this
             ->verifyProduct()
+            ->setCoverImage()
             ->setVisibility()
             ->setName()
             ->setSummary()
@@ -288,7 +291,7 @@ class MoloniProductFromId implements BuilderInterface
         }
 
         if ($this->productExists()) {
-            $props['productId'] = $this->getMoloniProductId();
+            $props['productId'] = $this->moloniProductId;
         } elseif ($this->warehouseId > 0 && $this->productHasStock()) {
             $props['warehouseId'] = $this->warehouseId;
             $props['warehouses'] = [[
@@ -307,8 +310,8 @@ class MoloniProductFromId implements BuilderInterface
      */
     protected function afterSave(): void
     {
-        if (!empty($this->imagePath) && $this->shouldSyncImage()) {
-            (new UpdatePrestaProductImage($this->prestashopProduct->id, $this->imagePath))->handle();
+        if (!empty($this->coverImage) && $this->shouldSyncImage()) {
+            new UpdateMoloniProductImage($this->coverImage, $this->moloniProductId);
         }
     }
 
@@ -404,60 +407,22 @@ class MoloniProductFromId implements BuilderInterface
      */
     public function updateStock(): MoloniProductFromId
     {
-        if ($this->productExists() && $this->productHasStock() && !$this->productHasVariants()) {
-            $moloniStock = 0;
+        if ($this->productExists() && $this->productHasStock()) {
 
-            foreach ($this->moloniProduct['warehouses'] as $warehouse) {
-                if ($warehouse['warehouseId'] === $this->warehouseId) {
-                    $moloniStock = $warehouse['stock'];
+            if ($this->productHasVariants()) {
+                // update variants stock
+            } else {
+                try {
+                    new UpdateMoloniProductStock($this->moloniProductId, $this->warehouseId, $this->stock, $this->moloniProduct['warehouses'], $this->reference);
+                } catch (MoloniApiException $e) {
+                    $message = [
+                        'Error creating stock movement ({0})', [
+                            '{0}' => $this->reference
+                        ]
+                    ];
 
-                    break;
+                    throw new MoloniProductException($message, $e->getData());
                 }
-            }
-
-            if ($moloniStock === $this->stock) {
-                Logs::addInfoLog(['Stock is already updated in Moloni ({0})', ['{0}' => $this->reference]]);
-
-                return $this;
-            }
-
-            try {
-                $props = [
-                    'productId' => $this->moloniProductId,
-                    'notes' => 'Prestashop',
-                    'warehouseId' => $this->warehouseId,
-                ];
-
-                if ($moloniStock > $this->stock) {
-                    $diference = $moloniStock - $this->stock;
-
-                    $props['qty'] = $diference;
-
-                    $mutation = MoloniApiClient::stock()->mutationStockMovementManualExitCreate(['data' => $props]);
-                } else {
-                    $diference = $this->stock - $moloniStock;
-
-                    $props['qty'] = $diference;
-
-                    $mutation = MoloniApiClient::stock()->mutationStockMovementManualEntryCreate(['data' => $props]);
-                }
-
-                $message = [
-                    'Stock updated in Moloni (old: {0} | new: {1}) ({2})', [
-                        '{0}' => $moloniStock,
-                        '{1}' => $this->stock,
-                        '{2}' => $this->reference,
-                    ]
-                ];
-                Logs::addInfoLog($message, ['mutation' => $mutation]);
-            } catch (MoloniApiException $e) {
-                $message = [
-                    'Error creating stock movement ({0})', [
-                        '{0}' => $this->reference
-                    ]
-                ];
-
-                throw new MoloniProductException($message, $e->getData());
             }
         }
 
@@ -820,6 +785,21 @@ class MoloniProductFromId implements BuilderInterface
     }
 
     /**
+     * Set product image
+     *
+     * @return $this
+     */
+    public function setCoverImage(): MoloniProductFromId
+    {
+        /** @var array|null $coverImage */
+        $coverImage = Image::getCover($this->prestashopProduct->id);
+
+        $this->coverImage = $coverImage ?? [];
+
+        return $this;
+    }
+
+    /**
      * Set product variants
      *
      * @return $this
@@ -871,24 +851,6 @@ class MoloniProductFromId implements BuilderInterface
         return $this;
     }
 
-    /**
-     * Set image name
-     *
-     * @return $this
-     */
-    public function setImagePath(): MoloniProductFromId
-    {
-        $imageName = '';
-
-        if (!empty($this->moloniProduct) && !empty($this->moloniProduct['img'])) {
-            $imageName = $this->moloniProduct['img'];
-        }
-
-        $this->imagePath = $imageName;
-
-        return $this;
-    }
-
     //          REQUESTS          //
 
     /**
@@ -915,11 +877,9 @@ class MoloniProductFromId implements BuilderInterface
                 $moloniProduct = $query[0];
 
                 $this->moloniProduct = $moloniProduct;
-                $this->moloniProductId = $moloniProduct['productId'];
+                $this->moloniProductId = (int)$moloniProduct['productId'];
 
-                $this
-                    ->setHasStock($moloniProduct['hasStock'])
-                    ->setImagePath();
+                $this->setHasStock($moloniProduct['hasStock']);
             }
         } catch (MoloniApiException $e) {
             throw new MoloniProductException('Error fetching product by reference: ({0})', ['{0}' => $this->reference], $e->getData());
@@ -949,7 +909,6 @@ class MoloniProductFromId implements BuilderInterface
     {
         return $this->hasStock;
     }
-
 
     /**
      * Returns if product has variants

@@ -222,9 +222,9 @@ var Paginator = /*#__PURE__*/function () {
     key: "onLoseFocus",
     value: function onLoseFocus() {
       var element = $(this);
-      var form = element.closest('form');
       var page = parseInt(element.val());
       var value = parseInt(element.attr('value'));
+      var url = element.attr('psurl');
       var psmax = parseInt(element.attr('psmax'));
 
       if (page === value) {
@@ -242,6 +242,11 @@ var Paginator = /*#__PURE__*/function () {
       }
 
       element.val(page);
+      var form = $('<form>');
+      form.attr('action', url);
+      form.attr('method', 'get');
+      $('body').append(form);
+      form.submit();
     }
   }]);
 
