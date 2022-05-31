@@ -163,6 +163,7 @@ class UpdatePrestaProductImage
                     }
 
                     $file = $tmpDir . 'product_mini_' . (int) $image->id . '_' . (int)Shop::getContextShopID() . '.jpg';
+
                     if (is_file($file)) {
                         unlink($file);
                     }

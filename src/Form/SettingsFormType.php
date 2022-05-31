@@ -8,6 +8,7 @@ use Moloni\Enums\DocumentTypes;
 use Moloni\Enums\FiscalZone;
 use Moloni\Enums\LoadAddress;
 use Moloni\Enums\ProductInformation;
+use Moloni\Enums\SyncFields;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -136,6 +137,17 @@ class SettingsFormType extends AbstractType
                 'required' => false,
                 'choices' => $yesNoOptions,
                 'help' => 'When updating a product in Moloni, the product will be updated in Prestashop',
+                'placeholder' => false,
+                'translation_domain' => 'Modules.Molonies.Common',
+                'choice_translation_domain' => 'Modules.Molonies.Common',
+            ])
+            ->add('productSyncFields', ChoiceType::class, [
+                'label' => 'Products fields',
+                'multiple' => true,
+                'expanded' => true,
+                'required' => false,
+                'choices' => SyncFields::getSyncFields(),
+                'help' => 'Choose which fields will be synced when a product is updated.',
                 'placeholder' => false,
                 'translation_domain' => 'Modules.Molonies.Common',
                 'choice_translation_domain' => 'Modules.Molonies.Common',

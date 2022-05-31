@@ -26,10 +26,12 @@ namespace Moloni\Builders;
 
 use Country;
 use Image;
+use Moloni\Enums\SyncFields;
 use Product;
 use Configuration;
 use PrestaShopException;
 use StockAvailable;
+use TaxRulesGroup;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\Interfaces\BuilderInterface;
 use Moloni\Builders\PrestaProduct\ProductCategory;
@@ -39,7 +41,6 @@ use Moloni\Helpers\Settings;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\Product\MoloniProductException;
 use Moloni\Exceptions\Product\MoloniProductCategoryException;
-use TaxRulesGroup;
 
 class PrestaProductFromId implements BuilderInterface
 {
@@ -154,7 +155,7 @@ class PrestaProductFromId implements BuilderInterface
      *
      * @var array
      */
-    protected $coverImage;
+    protected $coverImage = [];
 
     /**
      * Product variants
@@ -163,14 +164,24 @@ class PrestaProductFromId implements BuilderInterface
      */
     protected $variants;
 
+
+    /**
+     * Fields that will be synced
+     *
+     * @var array
+     */
+    protected $syncFields;
+
     /**
      * Constructor
      *
      * @throws MoloniProductException
      */
-    public function __construct(int $moloniProductId)
+    public function __construct(int $moloniProductId, ?array $syncFields = null)
     {
         $this->moloniProductId = $moloniProductId;
+
+        $this->syncFields = $syncFields ?? Settings::get('productSyncFields') ?? SyncFields::getDefaultFields();
 
         $this->init();
     }
@@ -193,6 +204,7 @@ class PrestaProductFromId implements BuilderInterface
             ->setName()
             ->setDescription()
             ->setIdentifications()
+            ->setCategories()
             ->setHasStock()
             ->setWarehouseId()
             ->setStock()
@@ -215,7 +227,7 @@ class PrestaProductFromId implements BuilderInterface
             $this->prestaProduct->addToCategories($this->categories);
         }
 
-        if (!empty($this->coverImage)) {
+        if (!empty($this->coverImage) && $this->shouldSyncImage()) {
             (new UpdateMoloniProductImage($this->coverImage, $this->moloniProductId))->handle();
         }
     }
@@ -227,10 +239,19 @@ class PrestaProductFromId implements BuilderInterface
      */
     protected function fillPrestaProduct(): PrestaProductFromId
     {
-        $this->prestaProduct->name = $this->name;
+        if ($this->shouldSyncName()) {
+            $this->prestaProduct->name = $this->name;
+        }
+
+        if ($this->shouldSyncDescription()) {
+            $this->prestaProduct->description_short = $this->description;
+        }
+
+        if ($this->shouldSyncPrice()) {
+            $this->prestaProduct->price = $this->price;
+        }
+
         $this->prestaProduct->reference = $this->reference;
-        $this->prestaProduct->price = $this->price;
-        $this->prestaProduct->description_short = $this->description;
 
         if (!empty($this->categories)) {
             $this->prestaProduct->id_category_default = $this->categories[0];
@@ -286,7 +307,6 @@ class PrestaProductFromId implements BuilderInterface
 
         $this
             ->setTaxRulesGroupId()
-            ->setCategories()
             ->fillPrestaProduct();
 
         try {
@@ -312,9 +332,7 @@ class PrestaProductFromId implements BuilderInterface
      */
     public function update(): void
     {
-        $this
-            ->setCategories()
-            ->fillPrestaProduct();
+        $this->fillPrestaProduct();
 
         try {
             $this->prestaProduct->save();
@@ -336,7 +354,7 @@ class PrestaProductFromId implements BuilderInterface
      */
     public function updateStock(): void
     {
-        if (!$this->hasStock() || $this->hasVariants() || !$this->exists()) {
+        if (!$this->productHasStock() || $this->productHasVariants() || !$this->productExists()) {
             return;
         }
 
@@ -345,14 +363,70 @@ class PrestaProductFromId implements BuilderInterface
         if ($this->stock !== $currentStock) {
             StockAvailable::setQuantity($this->prestaProductId, null, $this->stock);
 
-            Logs::addInfoLog('Stock updated in Prestashop (old: {0} | new: {1}) ({2})', [
-                '{0}' => $currentStock,
-                '{1}' => $this->stock,
-                '{2}' => $this->reference,
-            ]);
+            $msg = [
+                'Stock updated in Prestashop (old: {0} | new: {1}) ({2})', [
+                    '{0}' => $currentStock,
+                    '{1}' => $this->stock,
+                    '{2}' => $this->reference,
+                ]
+            ];
         } else {
-            Logs::addInfoLog('Stock is already updated in Prestashop ({0})', ['{0}' => $this->reference]);
+            $msg = ['Stock is already updated in Prestashop ({0})', ['{0}' => $this->reference]];
         }
+
+        Logs::addInfoLog($msg);
+    }
+
+    //          VERIFICATIONS          //
+
+    /**
+     * Should sync product name
+     *
+     * @return bool
+     */
+    protected function shouldSyncName(): bool
+    {
+        return !$this->productExists() || in_array(SyncFields::NAME, $this->syncFields, true);
+    }
+
+    /**
+     * Should sync product price
+     *
+     * @return bool
+     */
+    protected function shouldSyncPrice(): bool
+    {
+        return !$this->productExists() || in_array(SyncFields::PRICE, $this->syncFields, true);
+    }
+
+    /**
+     * Should sync product description
+     *
+     * @return bool
+     */
+    protected function shouldSyncDescription(): bool
+    {
+        return in_array(SyncFields::DESCRIPTION, $this->syncFields, true);
+    }
+
+    /**
+     * Should sync product categories
+     *
+     * @return bool
+     */
+    protected function shouldSyncCategories(): bool
+    {
+        return in_array(SyncFields::CATEGORIES, $this->syncFields, true);
+    }
+
+    /**
+     * Should sync product image
+     *
+     * @return bool
+     */
+    protected function shouldSyncImage(): bool
+    {
+        return in_array(SyncFields::IMAGE, $this->syncFields, true);
     }
 
     //          GETS          //
@@ -414,7 +488,7 @@ class PrestaProductFromId implements BuilderInterface
     {
         $categoryId = $this->moloniProduct['productCategory']['productCategoryId'] ?? 0;
 
-        if ($categoryId > 0) {
+        if ($categoryId > 0 && $this->shouldSyncCategories()) {
             $builder = new ProductCategory($categoryId);
             $builder->search();
 
@@ -535,7 +609,7 @@ class PrestaProductFromId implements BuilderInterface
      */
     public function setStock(): PrestaProductFromId
     {
-        if ($this->hasStock()) {
+        if ($this->productHasStock()) {
             $stock = 0;
 
             if ($this->warehouseId === 1) {
@@ -590,7 +664,7 @@ class PrestaProductFromId implements BuilderInterface
      */
     public function setTaxRulesGroupId(): PrestaProductFromId
     {
-        if (!empty($this->moloniProduct['taxes']) && $this->exists()) {
+        if (!empty($this->moloniProduct['taxes']) && $this->productExists()) {
             $moloniTax = $this->moloniProduct['taxes'][0]['tax'] ?? [];
 
             $taxRulesGroupId = 0;
@@ -656,7 +730,7 @@ class PrestaProductFromId implements BuilderInterface
      *
      * @return bool
      */
-    protected function exists(): bool
+    protected function productExists(): bool
     {
         return $this->prestaProductId > 0;
     }
@@ -666,7 +740,7 @@ class PrestaProductFromId implements BuilderInterface
      *
      * @return bool
      */
-    protected function hasStock(): bool
+    protected function productHasStock(): bool
     {
         return $this->hasStock === true;
     }
@@ -676,7 +750,7 @@ class PrestaProductFromId implements BuilderInterface
      *
      * @return bool
      */
-    protected function hasVariants(): bool
+    protected function productHasVariants(): bool
     {
         return !empty($this->variants);
     }

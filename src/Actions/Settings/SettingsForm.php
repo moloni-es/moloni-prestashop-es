@@ -24,6 +24,7 @@
 
 namespace Moloni\Actions\Settings;
 
+use Moloni\Enums\SyncFields;
 use OrderState;
 use DateTime;
 use Exception;
@@ -70,6 +71,10 @@ class SettingsForm extends AbstractSettingsAction
 
         if (!isset($setting['orderStatusToShow'])) {
             $setting['orderStatusToShow'] = $this->getPaidStatusIds();
+        }
+
+        if (!isset($setting['productSyncFields'])) {
+            $setting['productSyncFields'] = SyncFields::getDefaultFields();
         }
 
         $form->setData($setting);
