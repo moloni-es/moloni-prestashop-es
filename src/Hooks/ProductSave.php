@@ -52,7 +52,7 @@ class ProductSave extends AbstractHookAction
             $productBuilder = new MoloniProductFromId($this->productId);
             $productBuilder->search();
 
-            if ($productBuilder->getProductId() !== 0) {
+            if ($productBuilder->getMoloniProductId() !== 0) {
                 if ((int)Settings::get('updateProductsToMoloni') === Boolean::YES) {
                     $productBuilder->update();
                 }
