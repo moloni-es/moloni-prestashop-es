@@ -105,10 +105,12 @@ class Installer
      * Install plugin
      *
      * @return bool
+     *
+     * @throws PrestaShopDatabaseException
      */
     public function install(): bool
     {
-        return $this->createCommon();
+        return $this->verifyInstall() && $this->createCommon();
     }
 
     /**
@@ -141,7 +143,43 @@ class Installer
         return $this->destroyCommon();
     }
 
-    //        Privates        //
+    //        VERIFICATIONS        //
+
+    /**
+     * Some verifications to prevent old plugin errors
+     *
+     * @return bool
+     *
+     * @throws PrestaShopDatabaseException
+     */
+    private function verifyInstall(): bool
+    {
+        $database = Db::getInstance();
+
+        // Check if the table already exists
+        $query = $database->executeS("SHOW COLUMNS FROM `" . _DB_PREFIX_ . "_moloni_app` LIKE 'id'");
+
+        if (empty($query)) {
+            return true;
+        }
+
+        // If so, check if new columns exist
+        $query = $database->executeS("SHOW COLUMNS FROM `" . _DB_PREFIX_ . "_moloni_app` LIKE 'access_time'");
+
+        if (!empty($query)) {
+            return true;
+        }
+
+        // If not, drop old tables
+        $database->execute('DROP TABLE ' . _DB_PREFIX_ . '_moloni_app');
+        $database->execute('DROP TABLE ' . _DB_PREFIX_ . '_moloni_documents');
+        $database->execute('DROP TABLE ' . _DB_PREFIX_ . '_moloni_settings');
+        $database->execute('DROP TABLE ' . _DB_PREFIX_ . '_moloni_sync_logs');
+
+        return true;
+    }
+
+    //        PRIVATES        //
 
     /**
      * Common actions when installing and enabling plugin
