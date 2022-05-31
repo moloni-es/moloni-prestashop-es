@@ -41,7 +41,7 @@ class ProductUpdate extends AbstractWebserviceAction
 
         try {
             $productBuilder = new PrestaProductFromId($this->productId);
-            $prestaProductId = $productBuilder->getPrestaProductId();
+            $prestaProductId = $productBuilder->getPrestashopProductId();
 
             if ($prestaProductId > 0) {
                 if (!SyncLogs::productHasTimeout($prestaProductId)) {
@@ -52,7 +52,7 @@ class ProductUpdate extends AbstractWebserviceAction
             } elseif ((int)Settings::get('addProductsToPrestashop') === Boolean::YES) {
                 $productBuilder->insert();
 
-                SyncLogs::productAddTimeout($productBuilder->getPrestaProductId());
+                SyncLogs::productAddTimeout($productBuilder->getPrestashopProductId());
             }
         } catch (MoloniProductException $e) {
             Logs::addErrorLog([$e->getMessage(), $e->getIdentifiers()], $e->getData());

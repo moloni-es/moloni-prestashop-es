@@ -24,12 +24,12 @@
 
 namespace Moloni\Hooks;
 
-use Moloni\Builders\MoloniProductFromId;
 use Moloni\Enums\Boolean;
-use Moloni\Exceptions\Product\MoloniProductException;
+use Moloni\Builders\MoloniProductFromId;
 use Moloni\Helpers\Logs;
 use Moloni\Helpers\Settings;
 use Moloni\Helpers\SyncLogs;
+use Moloni\Exceptions\Product\MoloniProductException;
 
 class ProductSave extends AbstractHookAction
 {

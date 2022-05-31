@@ -47,9 +47,11 @@ class UpdateMoloniProductImage
         $this->moloniProductId = $moloniProductId;
 
         $this->languageId = Configuration::get('PS_LANG_DEFAULT');
+
+        $this->handle();
     }
 
-    public function handle(): void
+    private function handle(): void
     {
         if (empty($this->coverImage)) {
             return;
