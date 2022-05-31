@@ -28,7 +28,7 @@ use Configuration;
 use Mail;
 use Moloni\Enums\Domains;
 
-class DocumentErrorEmail extends SendEmail
+class DocumentWarningMail extends SendMail
 {
     public function handle(): void
     {
@@ -40,11 +40,12 @@ class DocumentErrorEmail extends SendEmail
 
         Mail::Send(
             (int)(Configuration::get('PS_LANG_DEFAULT')), // defaut language id
-            'document_error', // email template file to be use
+            'document_warning', // email template file to be use
             $this->subject, // email subject
             [
                 '{order_id}' => $orderId,
                 '{moloni_url}' => Domains::MOLONI,
+                '{moloni_logo_url}' =>  $this->getLogoUrl(),
                 '{year}' => date("Y"),
             ],
             $this->email, // receiver email address

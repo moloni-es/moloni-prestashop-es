@@ -12,18 +12,18 @@ export default class Paginator {
     }
 
     onLoseFocus() {
-        let element = $(this);
+        let pageNumberInput = $(this);
 
-        let page = parseInt(element.val());
-        let value = parseInt(element.attr('value'));
-        let url = element.attr('psurl');
-        let psmax = parseInt(element.attr('psmax'));
+        let page = parseInt(pageNumberInput.val());
+        let value = parseInt(pageNumberInput.attr('value'));
+        let url = pageNumberInput.attr('psurl');
+        let psmax = parseInt(pageNumberInput.attr('psmax'));
 
         if (page === value) {
             return;
         }
 
-        element.attr('disabled', true);
+        pageNumberInput.attr('disabled', true);
 
         if (page > psmax) {
             page = psmax;
@@ -33,15 +33,10 @@ export default class Paginator {
             page = 1;
         }
 
-        element.val(page);
+        pageNumberInput.val(page);
 
-        let form = $('<form>');
+        url = url + '&page=' + page;
 
-        form.attr('action', url + '&page=' + page);
-        form.attr('method', 'get');
-
-        $('body').append(form);
-
-        form.submit();
+        window.location.href = url;
     }
 }

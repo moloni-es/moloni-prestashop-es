@@ -28,7 +28,7 @@ use Configuration;
 use Mail;
 use Moloni\Enums\Domains;
 
-class AuthenticationExpiredEmail extends SendEmail
+class AuthenticationExpiredMail extends SendMail
 {
     public function handle(): void
     {
@@ -42,6 +42,7 @@ class AuthenticationExpiredEmail extends SendEmail
             $this->subject, // email subject
             [
                 '{moloni_url}' => Domains::MOLONI,
+                '{moloni_logo_url}' => $this->getLogoUrl(),
                 '{year}' => date("Y"),
             ],
             $this->email, // receiver email address
