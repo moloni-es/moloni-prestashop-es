@@ -1,6 +1,6 @@
 {
   "name": "molonies",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "moloni-prestashop-es",
   "scripts": {
     "build": "webpack --progress",
