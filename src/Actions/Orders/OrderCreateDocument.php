@@ -52,7 +52,7 @@ class OrderCreateDocument extends AbstractOrderAction
     public function handle(?string $documentType = null): void
     {
         /** @noinspection CallableParameterUseCaseInTypeContextInspection */
-        $documentType = $documentType ?? Settings::get('documentType');
+        $documentType = $documentType ?? Settings::get('documentType') ?? '';
 
         if ($this->documentRepository->findOneBy(['orderId' => $this->orderId])) {
             throw new MoloniException('Order already dicarded or created!');
@@ -60,7 +60,7 @@ class OrderCreateDocument extends AbstractOrderAction
 
         $company = MoloniApiClient::companies()->queryCompany();
 
-        if ((int)Settings::get('billOfLading') === Boolean::YES) {
+        if ($this->shouldCreateBillOfLading($documentType)) {
             $billOfLading = new DocumentFromOrder($this->order, $company, $this->entityManager);
             $billOfLading
                 ->setDocumentType(DocumentTypes::BILLS_OF_LADING)
@@ -109,5 +109,10 @@ class OrderCreateDocument extends AbstractOrderAction
                 ->createDocument()
                 ->addLog();
         }
+    }
+
+    private function shouldCreateBillOfLading(string $documentType): bool
+    {
+        return (int)Settings::get('billOfLading') === Boolean::YES && $documentType !== DocumentTypes::BILLS_OF_LADING;
     }
 }

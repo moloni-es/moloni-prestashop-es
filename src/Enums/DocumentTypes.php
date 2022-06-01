@@ -56,6 +56,7 @@ class DocumentTypes
             'Pro Forma Invoice' => self::PRO_FORMA_INVOICES,
             'Simplified invoice' => self::SIMPLIFIED_INVOICES,
             'Budget' => self::ESTIMATE,
+            'Bills of lading' => self::BILLS_OF_LADING,
         ];
     }
 
