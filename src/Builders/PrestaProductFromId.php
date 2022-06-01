@@ -25,16 +25,17 @@
 namespace Moloni\Builders;
 
 use Country;
-use Image;
-use Moloni\Actions\Presta\UpdatePrestaProductImage;
+use Moloni\Actions\Presta\ProcessAttributesGroup;
+use Moloni\Enums\Boolean;
 use Product;
 use Configuration;
 use PrestaShopException;
 use TaxRulesGroup;
 use Moloni\Api\MoloniApiClient;
+use Moloni\Actions\Presta\UpdatePrestaProductImage;
+use Moloni\Builders\PrestaProduct\ProductCombination;
 use Moloni\Builders\Interfaces\BuilderInterface;
 use Moloni\Builders\PrestaProduct\ProductCategory;
-use Moloni\Actions\Moloni\UpdateMoloniProductImage;
 use Moloni\Actions\Presta\UpdatePrestaProductStock;
 use Moloni\Enums\SyncFields;
 use Moloni\Helpers\Logs;
@@ -53,7 +54,7 @@ class PrestaProductFromId implements BuilderInterface
     protected $moloniProductId = 0;
 
     /**
-     * Moloni roduct
+     * Moloni product
      *
      * @var array|null
      */
@@ -87,6 +88,13 @@ class PrestaProductFromId implements BuilderInterface
      * @var string
      */
     protected $reference;
+
+    /**
+     * Product type
+     *
+     * @var string
+     */
+    protected $type = '';
 
     /**
      * Product summary
@@ -161,9 +169,9 @@ class PrestaProductFromId implements BuilderInterface
     /**
      * Product variants
      *
-     * @var array
+     * @var ProductCombination[]
      */
-    protected $variants;
+    protected $combinations;
 
 
     /**
@@ -201,7 +209,8 @@ class PrestaProductFromId implements BuilderInterface
             ->setReference()
             ->fetchProductFromPresta()
             ->setImagePath()
-            ->setVariants()
+            ->setCombinations()
+            ->setType()
             ->setName()
             ->setDescription()
             ->setIdentifications()
@@ -230,6 +239,16 @@ class PrestaProductFromId implements BuilderInterface
 
         if (!empty($this->imagePath) && $this->shouldSyncImage()) {
             new UpdatePrestaProductImage($this->prestashopProduct->id, $this->imagePath);
+        }
+
+        if ($this->productHasCombinations()) {
+            // Check if Moloni groups exist
+            new ProcessAttributesGroup($this->moloniProduct['propertyGroup']);
+
+            // Save combinations
+            foreach ($this->combinations as $combination) {
+                $combination->save();
+            }
         }
     }
 
@@ -262,6 +281,10 @@ class PrestaProductFromId implements BuilderInterface
             $this->prestashopProduct->id_tax_rules_group = $this->taxRulesGroupId;
         }
 
+        if (!empty($this->type)) {
+            $this->prestashopProduct->product_type = $this->type;
+        }
+
         return $this;
     }
 
@@ -287,6 +310,8 @@ class PrestaProductFromId implements BuilderInterface
 
             $this->prestashopProductId = $productId;
             $this->prestashopProduct = $product;
+        } else {
+            $this->prestashopProduct = new Product();
         }
 
         return $this;
@@ -304,8 +329,6 @@ class PrestaProductFromId implements BuilderInterface
      */
     public function insert(): void
     {
-        $this->prestashopProduct = new Product();
-
         $this
             ->setTaxRulesGroupId()
             ->fillPrestaProduct();
@@ -359,10 +382,12 @@ class PrestaProductFromId implements BuilderInterface
             return;
         }
 
-        if ($this->productHasVariants()) {
-            // update variants stock
+        if ($this->productHasCombinations()) {
+            foreach ($this->combinations as $combination) {
+                $combination->updateStock();
+            }
         } else {
-            new UpdatePrestaProductStock($this->prestashopProductId, $this->reference, null, $this->stock);
+            new UpdatePrestaProductStock($this->prestashopProductId, null, $this->reference, $this->stock);
         }
     }
 
@@ -488,6 +513,20 @@ class PrestaProductFromId implements BuilderInterface
     }
 
     /**
+     * Set product type
+     *
+     * @return $this
+     */
+    public function setType(): PrestaProductFromId
+    {
+        if ($this->productHasCombinations()) {
+            $this->type = 'combinations';
+        }
+
+        return $this;
+    }
+
+    /**
      * Set product summary
      *
      * @return $this
@@ -586,7 +625,7 @@ class PrestaProductFromId implements BuilderInterface
      */
     public function setHasStock(): PrestaProductFromId
     {
-        $this->hasStock = $this->moloniProduct['hasStock'] ?? true;
+        $this->hasStock = $this->moloniProduct['hasStock'] ?? (bool)Boolean::YES;
 
         return $this;
     }
@@ -620,7 +659,7 @@ class PrestaProductFromId implements BuilderInterface
     }
 
     /**
-     * Set image name
+     * Set image path
      *
      * @return $this
      */
@@ -642,9 +681,17 @@ class PrestaProductFromId implements BuilderInterface
      *
      * @return $this
      */
-    public function setVariants(): PrestaProductFromId
+    public function setCombinations(): PrestaProductFromId
     {
-        $this->variants = $this->moloniProduct['variants'] ?? [];
+        $combinations = [];
+
+        if (!empty($this->moloniProduct['variants'])) {
+            foreach ($this->moloniProduct['variants'] as $variant) {
+                $combinations[] = new ProductCombination($this->prestashopProduct, $variant);
+            }
+        }
+
+        $this->combinations = $combinations;
 
         return $this;
     }
@@ -728,7 +775,7 @@ class PrestaProductFromId implements BuilderInterface
     }
 
     /**
-     * Returns if product has variants
+     * Returns if product has stock
      *
      * @return bool
      */
@@ -742,8 +789,8 @@ class PrestaProductFromId implements BuilderInterface
      *
      * @return bool
      */
-    protected function productHasVariants(): bool
+    protected function productHasCombinations(): bool
     {
-        return !empty($this->variants);
+        return !empty($this->combinations);
     }
 }

@@ -30,7 +30,6 @@ use DateTime;
 use Doctrine\Persistence\ObjectManager;
 use Moloni\Api\MoloniApi;
 use Moloni\Entity\MoloniDocuments;
-use Moloni\Exceptions\MoloniException;
 use Moloni\Helpers\Logs;
 use Order;
 use OrderPayment as PrestashopOrderPayment;

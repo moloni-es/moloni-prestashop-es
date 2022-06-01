@@ -42,7 +42,7 @@ class UpdatePrestaProductStock
      * @param int|null $attributeId
      * @param float|int|null $newStock
      */
-    public function __construct(int $prestaProductId, string $prestaProductReference, ?int $attributeId = null, $newStock = 0)
+    public function __construct(int $prestaProductId, ?int $attributeId = null, string $prestaProductReference = '', $newStock = 0)
     {
         $this->prestaProductId = $prestaProductId;
         $this->prestaProductReference = $prestaProductReference;
