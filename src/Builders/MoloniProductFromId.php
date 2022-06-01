@@ -37,7 +37,6 @@ use Moloni\Api\MoloniApiClient;
 use Moloni\Helpers\Settings;
 use Moloni\Helpers\Logs;
 use Moloni\Actions\Moloni\UpdateMoloniProductStock;
-use Moloni\Actions\Presta\UpdatePrestaProductImage;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\Product\MoloniProductException;
 use Moloni\Exceptions\Product\MoloniProductCategoryException;

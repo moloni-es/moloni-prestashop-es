@@ -2,22 +2,9 @@
 
 namespace Moloni\Builders\MoloniProduct;
 
-use Moloni\Builders\Interfaces\BuilderItemInterface;
+use Moloni\Builders\Interfaces\BuilderInterface;
 
-class ProductVariant implements BuilderItemInterface
+class ProductVariant implements BuilderInterface
 {
-    public function toArray()
-    {
-        // TODO: Implement toArray() method.
-    }
 
-    public function insert()
-    {
-        // TODO: Implement insert() method.
-    }
-
-    public function search()
-    {
-        // TODO: Implement search() method.
-    }
 }

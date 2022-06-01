@@ -7,6 +7,77 @@ use Moloni\Exceptions\MoloniApiException;
 class Products extends Endpoint
 {
     /**
+     * Gets the information of a product
+     *
+     * @param array|null $variables variables of the query
+     *
+     * @return array information of the product
+     *
+     * @throws MoloniApiException
+     */
+    public function queryProduct(?array $variables = []): array
+    {
+        $query = 'query product($companyId: Int!,$productId: Int!)
+        {
+            product(companyId: $companyId,productId: $productId)
+            {
+                data
+                {
+                    ' . $this->getProductSegment() . '
+                    ' . $this->getVariantSegment() . '
+                }
+                errors
+                {
+                    field
+                    msg
+                }
+            }
+        }';
+
+        return $this->simplePost($query, $variables);
+    }
+
+    /**
+     * Gets all products
+     *
+     * @param array|null $variables variables of the query
+     *
+     * @return array returns all products
+     *
+     * @throws MoloniApiException
+     */
+    public function queryProducts(?array $variables = []): array
+    {
+        $query = 'query products($companyId: Int!,$options: ProductOptions)
+                {
+                    products(companyId: $companyId,options: $options)
+                    {
+                        data
+                        {
+                            ' . $this->getProductSegment() . ' 
+                            ' . $this->getVariantSegment() . '                   
+                        }
+                        options
+                        {
+                            pagination
+                            {
+                                page
+                                qty
+                                count
+                            }
+                        }
+                        errors
+                        {
+                            field
+                            msg
+                        }
+                    }
+                }';
+
+        return $this->paginatedPost($query, $variables, 'products');
+    }
+
+    /**
      * Create a new product
      *
      * @param array|null $variables variables of the query
@@ -21,26 +92,10 @@ class Products extends Endpoint
                 {
                     productCreate(companyId: $companyId,data: $data) 
                     {
-                        data{
-                            productId
-                            name
-                            img
-                            warehouse
-                            {
-                                warehouseId
-                            }
-                            warehouses
-                            {
-                                warehouseId
-                                stock
-                                minStock
-                            }
-                            identifications
-                            {
-                                type
-                                favorite
-                                text
-                            }
+                        data
+                        {
+                            ' . $this->getProductSegment() . '   
+                            ' . $this->getVariantSegment() . '
                         }
                         errors{
                             field
@@ -69,26 +124,8 @@ class Products extends Endpoint
                     {
                         data
                         {
-                            productId
-                            name
-                            reference
-                            img
-                            warehouse
-                            {
-                                warehouseId
-                            }
-                            warehouses
-                            {
-                                warehouseId
-                                stock
-                                minStock
-                            }
-                            identifications
-                            {
-                                type
-                                favorite
-                                text
-                            }    
+                            ' . $this->getProductSegment() . '  
+                            ' . $this->getVariantSegment() . '  
                         }
                         errors
                         {
@@ -137,258 +174,137 @@ class Products extends Endpoint
         return $this->postWithFile($operations, $map, $file);
     }
 
+    //          PRIVATES          //
+
     /**
-     * Gets the information of a product
+     * Product part of query
      *
-     * @param array|null $variables variables of the query
-     *
-     * @return array information of the product
-     *
-     * @throws MoloniApiException
+     * @return string
      */
-    public function queryProduct(?array $variables = []): array
+    private function getProductSegment(): string
     {
-        $query = 'query product($companyId: Int!,$productId: Int!)
-        {
-            product(companyId: $companyId,productId: $productId)
+        return '
+            name
+            productId
+            type
+            reference
+            summary
+            price
+            priceWithTaxes
+            hasStock
+            stock
+            img
+            identifications
             {
-                data
+                type
+                favorite
+                text
+            }
+            measurementUnit
+            {
+                measurementUnitId
+                name
+            }   
+            warehouse
+            {
+                warehouseId
+            }
+            warehouses
+            {
+                warehouseId
+                stock
+                minStock
+            }
+            productCategory{
+                name
+                productCategoryId
+            }
+            parent
+            {
+                productId
+                name
+            }
+            propertyGroup
+            {
+                propertyGroupId
+                name
+                properties
                 {
-                    visible
+                    propertyId
                     name
-                    productId
-                    type
-                    reference
-                    summary
-                    price
-                    priceWithTaxes
-                    hasStock
-                    stock
-                    minStock
-                    img
-                    measurementUnit
+                    ordering
+                    values
                     {
-                        measurementUnitId
-                        name
-                    }   
-                    warehouse
-                    {
-                        warehouseId
-                    }
-                    warehouses
-                    {
-                        warehouseId
-                        stock
-                        minStock
-                    }
-                    productCategory
-                    {
-                        productCategoryId
-                        name
-                    }
-                    identifications
-                    {
-                        type
-                        favorite
-                        text
-                    }                
-                    variants
-                    {
-                        visible
-                        productId
-                        name
-                        reference
-                        summary
-                        price
-                        priceWithTaxes
-                        hasStock
-                        stock
-                        propertyPairs
-                        {
-                            property
-                            {
-                                name
-                            }
-                            propertyValue
-                            {
-                                code
-                                value
-                            }
-                        }
-                    }
-                    parent
-                    {
-                        productId
-                        name
-                    }
-                    propertyGroup
-                    {
-                        propertyGroupId
-                        name
-                        properties
-                        {
-                            propertyId
-                            name
-                            ordering
-                            values
-                            {
-                                propertyValueId
-                                code
-                                value
-                            }
-                        }
-                    }
-                    taxes
-                    {
-                        tax
-                        {
-                            taxId
-                            value
-                            name
-                            fiscalZone
-                        }
+                        propertyValueId
+                        code
                         value
-                        ordering
-                    }       
-                }
-                errors
-                {
-                    field
-                    msg
+                    }
                 }
             }
-        }';
-
-        return $this->simplePost($query, $variables);
+            taxes
+            {
+                tax
+                {
+                    taxId
+                    value
+                    name
+                    fiscalZone
+                }
+                value
+                ordering
+            }
+        ';
     }
 
     /**
-     * Gets all products
+     * Variant part of query
      *
-     * @param array|null $variables variables of the query
-     *
-     * @return array returns all products
-     *
-     * @throws MoloniApiException
+     * @return string
      */
-    public function queryProducts(?array $variables = []): array
+    private function getVariantSegment(): string
     {
-        $query = 'query products($companyId: Int!,$options: ProductOptions)
+        return '
+        variants
+        {
+            visible
+            productId
+            name
+            reference
+            summary
+            price
+            img
+            priceWithTaxes
+            hasStock
+            stock
+            warehouse
+            {
+                warehouseId
+            }
+            warehouses
+            {
+                warehouseId
+                stock
+                minStock
+            }
+            identifications
+            {
+                type
+                favorite
+                text
+            } 
+            propertyPairs
+            {
+                property
                 {
-                    products(companyId: $companyId,options: $options)
-                    {
-                        data
-                        {
-                            name
-                            productId
-                            type
-                            reference
-                            summary
-                            price
-                            priceWithTaxes
-                            hasStock
-                            stock
-                            img
-                            identifications
-                            {
-                                type
-                                favorite
-                                text
-                            }
-                            measurementUnit
-                            {
-                                measurementUnitId
-                                name
-                            }   
-                            warehouse
-                            {
-                                warehouseId
-                            }
-                            warehouses
-                            {
-                                warehouseId
-                                stock
-                                minStock
-                            }
-                            productCategory{
-                                name
-                            }
-                            variants
-                            {
-                                visible
-                                productId
-                                name
-                                reference
-                                summary
-                                price
-                                priceWithTaxes
-                                hasStock
-                                stock
-                                propertyPairs
-                                {
-                                    property
-                                    {
-                                        name
-                                    }
-                                    propertyValue
-                                    {
-                                        code
-                                        value
-                                    }
-                                }
-                            }
-                            parent
-                            {
-                                productId
-                                name
-                            }
-                            propertyGroup
-                            {
-                                propertyGroupId
-                                name
-                                properties
-                                {
-                                    propertyId
-                                    name
-                                    ordering
-                                    values
-                                    {
-                                        propertyValueId
-                                        code
-                                        value
-                                    }
-                                }
-                            }
-                            taxes
-                            {
-                                tax
-                                {
-                                    taxId
-                                    value
-                                    name
-                                    fiscalZone
-                                }
-                                value
-                                ordering
-                            }                   
-                        }
-                        options
-                        {
-                            pagination
-                            {
-                                page
-                                qty
-                                count
-                            }
-                        }
-                        errors
-                        {
-                            field
-                            msg
-                        }
-                    }
-                }';
-
-        return $this->paginatedPost($query, $variables, 'products');
+                    name
+                }
+                propertyValue
+                {
+                    code
+                    value
+                }
+            }
+        }
+        ';
     }
 }

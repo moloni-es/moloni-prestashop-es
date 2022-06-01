@@ -170,3 +170,4 @@ class ProductCategory
         return $query['data']['productCategory']['data'] ?? [];
     }
 }
+

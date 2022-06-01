@@ -22,6 +22,8 @@
  * @noinspection PhpMultipleClassDeclarationsInspection
  */
 
+declare(strict_types=1);
+
 namespace Moloni\Builders\Document;
 
 use Tax;
@@ -272,7 +274,7 @@ class OrderProduct implements BuilderItemInterface
         $reference = $this->orderProduct['reference'];
 
         if (empty($reference)) {
-            $reference = $this->orderProduct['product_id'] ;
+            $reference = (string)$this->orderProduct['product_id'] ;
         }
 
         $this->reference = $reference;

@@ -2,42 +2,6 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./js/documents/documents.js":
-/*!***********************************!*\
-  !*** ./js/documents/documents.js ***!
-  \***********************************/
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": function() { return /* binding */ MoloniDocuments; }
-/* harmony export */ });
-/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
-/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
-/* harmony import */ var _paginator_paginator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../paginator/paginator */ "./js/paginator/paginator.js");
-
-
-
-
-var MoloniDocuments = /*#__PURE__*/function () {
-  function MoloniDocuments() {
-    (0,_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__["default"])(this, MoloniDocuments);
-  }
-
-  (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__["default"])(MoloniDocuments, [{
-    key: "startObservers",
-    value: function startObservers() {
-      new _paginator_paginator__WEBPACK_IMPORTED_MODULE_2__["default"]();
-    }
-  }]);
-
-  return MoloniDocuments;
-}();
-
-
-
-/***/ }),
-
 /***/ "./js/enums/Boolean.js":
 /*!*****************************!*\
   !*** ./js/enums/Boolean.js ***!
@@ -115,10 +79,46 @@ var LoadAddress = {
 
 /***/ }),
 
-/***/ "./js/logs/logs.js":
-/*!*************************!*\
-  !*** ./js/logs/logs.js ***!
-  \*************************/
+/***/ "./js/pages/documents.js":
+/*!*******************************!*\
+  !*** ./js/pages/documents.js ***!
+  \*******************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": function() { return /* binding */ MoloniDocuments; }
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
+/* harmony import */ var _paginator_paginator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../paginator/paginator */ "./js/paginator/paginator.js");
+
+
+
+
+var MoloniDocuments = /*#__PURE__*/function () {
+  function MoloniDocuments() {
+    (0,_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__["default"])(this, MoloniDocuments);
+  }
+
+  (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__["default"])(MoloniDocuments, [{
+    key: "startObservers",
+    value: function startObservers() {
+      new _paginator_paginator__WEBPACK_IMPORTED_MODULE_2__["default"]();
+    }
+  }]);
+
+  return MoloniDocuments;
+}();
+
+
+
+/***/ }),
+
+/***/ "./js/pages/logs.js":
+/*!**************************!*\
+  !*** ./js/pages/logs.js ***!
+  \**************************/
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
@@ -151,10 +151,10 @@ var MoloniLogs = /*#__PURE__*/function () {
 
 /***/ }),
 
-/***/ "./js/orders/orders.js":
-/*!*****************************!*\
-  !*** ./js/orders/orders.js ***!
-  \*****************************/
+/***/ "./js/pages/orders.js":
+/*!****************************!*\
+  !*** ./js/pages/orders.js ***!
+  \****************************/
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
@@ -187,77 +187,10 @@ var MoloniOrders = /*#__PURE__*/function () {
 
 /***/ }),
 
-/***/ "./js/paginator/paginator.js":
-/*!***********************************!*\
-  !*** ./js/paginator/paginator.js ***!
-  \***********************************/
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": function() { return /* binding */ Paginator; }
-/* harmony export */ });
-/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
-/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
-
-
-
-var Paginator = /*#__PURE__*/function () {
-  function Paginator() {
-    (0,_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__["default"])(this, Paginator);
-
-    this.startObservers();
-  }
-
-  (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__["default"])(Paginator, [{
-    key: "startObservers",
-    value: function startObservers() {
-      var paginator = $('input[name="moloni_paginator"]');
-
-      if (paginator.length) {
-        paginator.on('focusout', this.onLoseFocus);
-      }
-    }
-  }, {
-    key: "onLoseFocus",
-    value: function onLoseFocus() {
-      var pageNumberInput = $(this);
-      var page = parseInt(pageNumberInput.val());
-      var value = parseInt(pageNumberInput.attr('value'));
-      var url = pageNumberInput.attr('psurl');
-      var psmax = parseInt(pageNumberInput.attr('psmax'));
-
-      if (page === value) {
-        return;
-      }
-
-      pageNumberInput.attr('disabled', true);
-
-      if (page > psmax) {
-        page = psmax;
-      }
-
-      if (page < 0) {
-        page = 1;
-      }
-
-      pageNumberInput.val(page);
-      url = url + '&page=' + page;
-      window.location.href = url;
-    }
-  }]);
-
-  return Paginator;
-}();
-
-
-
-/***/ }),
-
-/***/ "./js/settings/settings.js":
-/*!*********************************!*\
-  !*** ./js/settings/settings.js ***!
-  \*********************************/
+/***/ "./js/pages/settings.js":
+/*!******************************!*\
+  !*** ./js/pages/settings.js ***!
+  \******************************/
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
@@ -359,9 +292,9 @@ var MoloniSettings = /*#__PURE__*/function () {
 
 /***/ }),
 
-/***/ "./js/tools/tools.js":
+/***/ "./js/pages/tools.js":
 /*!***************************!*\
-  !*** ./js/tools/tools.js ***!
+  !*** ./js/pages/tools.js ***!
   \***************************/
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
@@ -382,9 +315,85 @@ var MoloniTools = /*#__PURE__*/function () {
   (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__["default"])(MoloniTools, [{
     key: "startObservers",
     value: function startObservers() {}
+  }, {
+    key: "syncProducts",
+    value: function syncProducts() {}
+  }, {
+    key: "syncCategories",
+    value: function syncCategories() {}
+  }, {
+    key: "syncStock",
+    value: function syncStock() {}
   }]);
 
   return MoloniTools;
+}();
+
+
+
+/***/ }),
+
+/***/ "./js/paginator/paginator.js":
+/*!***********************************!*\
+  !*** ./js/paginator/paginator.js ***!
+  \***********************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": function() { return /* binding */ Paginator; }
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
+
+
+
+var Paginator = /*#__PURE__*/function () {
+  function Paginator() {
+    (0,_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__["default"])(this, Paginator);
+
+    this.startObservers();
+  }
+
+  (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__["default"])(Paginator, [{
+    key: "startObservers",
+    value: function startObservers() {
+      var paginator = $('input[name="moloni_paginator"]');
+
+      if (paginator.length) {
+        paginator.on('focusout', this.onLoseFocus);
+      }
+    }
+  }, {
+    key: "onLoseFocus",
+    value: function onLoseFocus() {
+      var pageNumberInput = $(this);
+      var page = parseInt(pageNumberInput.val());
+      var value = parseInt(pageNumberInput.attr('value'));
+      var url = pageNumberInput.attr('psurl');
+      var psmax = parseInt(pageNumberInput.attr('psmax'));
+
+      if (page === value) {
+        return;
+      }
+
+      pageNumberInput.attr('disabled', true);
+
+      if (page > psmax) {
+        page = psmax;
+      }
+
+      if (page < 0) {
+        page = 1;
+      }
+
+      pageNumberInput.val(page);
+      url = url + '&page=' + page;
+      window.location.href = url;
+    }
+  }]);
+
+  return Paginator;
 }();
 
 
@@ -503,11 +512,11 @@ var __webpack_exports__ = {};
   !*** ./js/app.js ***!
   \*******************/
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _settings_settings__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./settings/settings */ "./js/settings/settings.js");
-/* harmony import */ var _orders_orders__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./orders/orders */ "./js/orders/orders.js");
-/* harmony import */ var _documents_documents__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./documents/documents */ "./js/documents/documents.js");
-/* harmony import */ var _tools_tools__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./tools/tools */ "./js/tools/tools.js");
-/* harmony import */ var _logs_logs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./logs/logs */ "./js/logs/logs.js");
+/* harmony import */ var _pages_settings__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./pages/settings */ "./js/pages/settings.js");
+/* harmony import */ var _pages_orders__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./pages/orders */ "./js/pages/orders.js");
+/* harmony import */ var _pages_documents__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./pages/documents */ "./js/pages/documents.js");
+/* harmony import */ var _pages_tools__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./pages/tools */ "./js/pages/tools.js");
+/* harmony import */ var _pages_logs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./pages/logs */ "./js/pages/logs.js");
 
 
 
@@ -515,11 +524,11 @@ __webpack_require__.r(__webpack_exports__);
 
 $(document).ready(function () {
   console.log('Moloni module loaded');
-  window.moloniSettings = new _settings_settings__WEBPACK_IMPORTED_MODULE_0__["default"]();
-  window.moloniOrders = new _orders_orders__WEBPACK_IMPORTED_MODULE_1__["default"]();
-  window.moloniDocuments = new _documents_documents__WEBPACK_IMPORTED_MODULE_2__["default"]();
-  window.moloniTools = new _tools_tools__WEBPACK_IMPORTED_MODULE_3__["default"]();
-  window.moloniLogs = new _logs_logs__WEBPACK_IMPORTED_MODULE_4__["default"]();
+  window.moloniSettings = new _pages_settings__WEBPACK_IMPORTED_MODULE_0__["default"]();
+  window.moloniOrders = new _pages_orders__WEBPACK_IMPORTED_MODULE_1__["default"]();
+  window.moloniDocuments = new _pages_documents__WEBPACK_IMPORTED_MODULE_2__["default"]();
+  window.moloniTools = new _pages_tools__WEBPACK_IMPORTED_MODULE_3__["default"]();
+  window.moloniLogs = new _pages_logs__WEBPACK_IMPORTED_MODULE_4__["default"]();
 });
 }();
 /******/ })()
