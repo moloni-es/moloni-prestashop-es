@@ -232,7 +232,7 @@ class ProductVariant
      */
     public function updateStock(): ProductVariant
     {
-        if (!$this->variantExists() && $this->variantHasStock()) {
+        if (!$this->variantExists() || !$this->variantHasStock()) {
             return $this;
         }
 
