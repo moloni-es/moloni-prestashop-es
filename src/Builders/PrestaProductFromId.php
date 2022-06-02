@@ -248,12 +248,17 @@ class PrestaProductFromId implements BuilderInterface
             try {
                 new ProcessAttributesGroup($this->moloniProduct['propertyGroup']);
             } catch (PrestaShopException $e) {
-                throw new MoloniProductException('Error when creating product attributes');
+                throw new MoloniProductException('Error when creating product attributes', [], [$e->getMessage()]);
             }
 
             // Save combinations
             foreach ($this->combinations as $combination) {
-                $combination->save();
+                if ($combination->getCombinationId() > 0) {
+                    $combination->update();
+                } else {
+                    $combination->insert();
+                    $combination->updateStock();
+                }
             }
         }
     }

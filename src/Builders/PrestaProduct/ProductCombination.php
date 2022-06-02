@@ -238,22 +238,6 @@ class ProductCombination implements BuilderInterface
     //          PUBLICS          //
 
     /**
-     * Insert or update combination
-     *
-     * @return void
-     *
-     * @throws MoloniProductCombinationException
-     */
-    public function save(): void
-    {
-        if ($this->combinationExists()) {
-            $this->update();
-        } else {
-            $this->insert();
-        }
-    }
-
-    /**
      * Insert variant in prestashop
      *
      * @return void
@@ -332,11 +316,11 @@ class ProductCombination implements BuilderInterface
     }
 
     /**
-     * Get Moloni variant id
+     * Get Moloni variant
      */
-    public function getCombination(): ?Combination
+    public function getCombinationId(): int
     {
-        return $this->prestashopCombination;
+        return $this->prestashopCombination->id ?? 0;
     }
 
     //          SETS          //
@@ -404,7 +388,7 @@ class ProductCombination implements BuilderInterface
      */
     public function setPrice(): ProductCombination
     {
-        $this->price = $this->prestashopProduct->price - $this->moloniVariant['price'];
+        $this->price = $this->moloniVariant['price'];
 
         return $this;
     }
@@ -504,6 +488,11 @@ class ProductCombination implements BuilderInterface
         return $this;
     }
 
+    /**
+     * Set product attributes
+     *
+     * @return $this
+     */
     public function setAttributes(): ProductCombination
     {
         $attributes = [];
