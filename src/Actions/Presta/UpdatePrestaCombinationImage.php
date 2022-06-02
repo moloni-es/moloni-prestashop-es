@@ -51,6 +51,7 @@ class UpdatePrestaCombinationImage extends PrestaImage
         if (empty($this->moloniImagePath)) {
             return;
         }
+
         $shopId = (int)Shop::getContextShopID();
         $combinationImage = Image::getBestImageAttribute($shopId, $this->languageId, $this->prestashopProductId, $this->prestashopCombination->id);
 

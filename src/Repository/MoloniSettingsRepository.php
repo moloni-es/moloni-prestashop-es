@@ -91,7 +91,7 @@ class MoloniSettingsRepository extends EntityRepository
             $setting->setShopId($shopId);
 
             $entityManager->persist($setting);
-            $entityManager->flush($setting);
+            $entityManager->flush();
         }
     }
 }
