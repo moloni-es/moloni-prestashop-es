@@ -29,6 +29,7 @@ use Category;
 use Country;
 use Image;
 use Moloni\Actions\Moloni\UpdateMoloniProductImage;
+use Moloni\Builders\MoloniProduct\ProductVariant;
 use Moloni\Enums\SyncFields;
 use Product;
 use Configuration;
@@ -182,7 +183,7 @@ class MoloniProductFromId implements BuilderInterface
     /**
      * Product variants
      *
-     * @var array
+     * @var ProductVariant[]
      */
     protected $variants;
 
@@ -225,7 +226,7 @@ class MoloniProductFromId implements BuilderInterface
     protected function init(): MoloniProductFromId
     {
         $this
-            ->verifyProduct()
+            ->verifyPrestaProduct()
             ->setCoverImage()
             ->setVisibility()
             ->setName()
@@ -240,7 +241,7 @@ class MoloniProductFromId implements BuilderInterface
             ->setEcoTax()
             ->setWarehouseId()
             ->setIdentifications()
-            ->setVariations()
+            ->setVariants()
             ->setMeasurementUnitId();
 
         return $this;
@@ -289,9 +290,18 @@ class MoloniProductFromId implements BuilderInterface
             $props['exemptionReason'] = $this->exemptionReason;
         }
 
+        if ($this->productHasVariants()) {
+            foreach ($this->variants as $variant) {
+                $props['variants'] = [];
+                $props['variants'][] = $variant->toArray();
+            }
+
+            // todo: colocar variants não existentes com visibilidade "escondido"
+        }
+
         if ($this->productExists()) {
             $props['productId'] = $this->moloniProductId;
-        } elseif ($this->warehouseId > 0 && $this->productHasStock()) {
+        } elseif ($this->warehouseId > 0 && $this->productHasStock() && !$this->productHasVariants()) {
             $props['warehouseId'] = $this->warehouseId;
             $props['warehouses'] = [[
                 'warehouseId' => $this->warehouseId,
@@ -310,22 +320,30 @@ class MoloniProductFromId implements BuilderInterface
     protected function afterSave(): void
     {
         if (!empty($this->coverImage) && $this->shouldSyncImage()) {
+            if ($this->productHasVariants()) {
+                foreach ($this->variants as $variant) {
+                    //  todo: update image
+                }
+            }
+
             new UpdateMoloniProductImage($this->coverImage, $this->moloniProductId);
         }
     }
 
     /**
-     * Verify requirements to create product
+     * Actions run before a update
+     *
+     * @return void
      *
      * @throws MoloniProductException
      */
-    protected function verifyProduct(): MoloniProductFromId
+    protected function beforeUpdate(): void
     {
-        if (empty($this->prestashopProduct->id)) {
-            throw new MoloniProductException('Prestashop product not found');
+        if ($this->productExists() && $this->productHasVariants()) {
+            if (empty($this->moloniProduct['variants'])) {
+                throw new MoloniProductException('Cannot update product in Moloni. Product types do not match');
+            }
         }
-
-        return $this;
     }
 
     //          PUBLICS          //
@@ -372,6 +390,8 @@ class MoloniProductFromId implements BuilderInterface
      */
     public function update(): MoloniProductFromId
     {
+        $this->beforeUpdate();
+
         $props = $this->toArray();
 
         try {
@@ -408,7 +428,9 @@ class MoloniProductFromId implements BuilderInterface
     {
         if ($this->productExists() && $this->productHasStock()) {
             if ($this->productHasVariants()) {
-                // update variants stock
+                foreach ($this->variants as $variant) {
+                    $variant->updateStock();
+                }
             } else {
                 try {
                     new UpdateMoloniProductStock($this->moloniProductId, $this->warehouseId, $this->stock, $this->moloniProduct['warehouses'], $this->reference);
@@ -429,58 +451,6 @@ class MoloniProductFromId implements BuilderInterface
     public function search(): MoloniProductFromId
     {
         return $this->getByReference();
-    }
-
-    //          VERIFICATIONS          //
-
-    /**
-     * Should sync product name
-     *
-     * @return bool
-     */
-    protected function shouldSyncName(): bool
-    {
-        return !$this->productExists() || in_array(SyncFields::NAME, $this->syncFields, true);
-    }
-
-    /**
-     * Should sync product price
-     *
-     * @return bool
-     */
-    protected function shouldSyncPrice(): bool
-    {
-        return !$this->productExists() || in_array(SyncFields::PRICE, $this->syncFields, true);
-    }
-
-    /**
-     * Should sync product description
-     *
-     * @return bool
-     */
-    protected function shouldSyncDescription(): bool
-    {
-        return in_array(SyncFields::DESCRIPTION, $this->syncFields, true);
-    }
-
-    /**
-     * Should sync product categories
-     *
-     * @return bool
-     */
-    protected function shouldSyncCategories(): bool
-    {
-        return !$this->productExists() || in_array(SyncFields::CATEGORIES, $this->syncFields, true);
-    }
-
-    /**
-     * Should sync product image
-     *
-     * @return bool
-     */
-    protected function shouldSyncImage(): bool
-    {
-        return in_array(SyncFields::IMAGE, $this->syncFields, true);
     }
 
     //          GETS          //
@@ -664,7 +634,7 @@ class MoloniProductFromId implements BuilderInterface
         if ($ecoTax > 0) {
             $this->price -= $ecoTax;
 
-            //todo: what else?
+            //todo: what else is needed?
         }
 
         $this->ecoTax = $ecoTax;
@@ -796,11 +766,18 @@ class MoloniProductFromId implements BuilderInterface
      *
      * @return $this
      */
-    public function setVariations(): MoloniProductFromId
+    public function setVariants(): MoloniProductFromId
     {
         if ($this->prestashopProduct->product_type === 'combinations') {
-            // todo: set combination products
-            $this->variants = [];
+            $combinations = $this->prestashopProduct->getAttributeCombinations(null, false);
+
+            foreach ($combinations as $combination) {
+                $builder = new ProductVariant((int)$combination['id_product_attribute'], $this->moloniProduct['variants'] ?? []);
+                $builder
+                    ->setWarehouseId($this->warehouseId);
+
+                $this->variants[] = $builder;
+            }
         }
 
         return $this;
@@ -841,6 +818,72 @@ class MoloniProductFromId implements BuilderInterface
         $this->identifications = $identifications;
 
         return $this;
+    }
+
+    //          VERIFICATIONS          //
+
+    /**
+     * Verify requirements to create product
+     *
+     * @throws MoloniProductException
+     */
+    protected function verifyPrestaProduct(): MoloniProductFromId
+    {
+        if (empty($this->prestashopProduct->id)) {
+            throw new MoloniProductException('Prestashop product not found');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Should sync product name
+     *
+     * @return bool
+     */
+    protected function shouldSyncName(): bool
+    {
+        return !$this->productExists() || in_array(SyncFields::NAME, $this->syncFields, true);
+    }
+
+    /**
+     * Should sync product price
+     *
+     * @return bool
+     */
+    protected function shouldSyncPrice(): bool
+    {
+        return !$this->productExists() || in_array(SyncFields::PRICE, $this->syncFields, true);
+    }
+
+    /**
+     * Should sync product description
+     *
+     * @return bool
+     */
+    protected function shouldSyncDescription(): bool
+    {
+        return in_array(SyncFields::DESCRIPTION, $this->syncFields, true);
+    }
+
+    /**
+     * Should sync product categories
+     *
+     * @return bool
+     */
+    protected function shouldSyncCategories(): bool
+    {
+        return !$this->productExists() || in_array(SyncFields::CATEGORIES, $this->syncFields, true);
+    }
+
+    /**
+     * Should sync product image
+     *
+     * @return bool
+     */
+    protected function shouldSyncImage(): bool
+    {
+        return in_array(SyncFields::IMAGE, $this->syncFields, true);
     }
 
     //          REQUESTS          //

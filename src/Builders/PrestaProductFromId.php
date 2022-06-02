@@ -318,12 +318,13 @@ class PrestaProductFromId implements BuilderInterface
 
         if ($productId > 0) {
             $product = new Product($productId, true, Configuration::get('PS_LANG_DEFAULT'));
-
-            $this->prestashopProductId = $productId;
-            $this->prestashopProduct = $product;
         } else {
-            $this->prestashopProduct = new Product();
+            $product = new Product();
+            $productId = 0;
         }
+
+        $this->prestashopProduct = $product;
+        $this->prestashopProductId = $productId;
 
         return $this;
     }
