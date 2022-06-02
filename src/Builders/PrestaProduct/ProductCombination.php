@@ -26,6 +26,7 @@ declare(strict_types=1);
 
 namespace Moloni\Builders\PrestaProduct;
 
+use Moloni\Actions\Presta\UpdatePrestaCombinationImage;
 use Product;
 use Combination;
 use PrestaShopException;
@@ -195,7 +196,7 @@ class ProductCombination implements BuilderInterface
         }
 
         if (!empty($this->imagePath) && $this->shouldSyncImage()) {
-            // todo: sync images?
+            new UpdatePrestaCombinationImage((int)$this->prestashopProduct->id, $this->prestashopCombination, $this->imagePath);
         }
     }
 
@@ -209,7 +210,7 @@ class ProductCombination implements BuilderInterface
         $combinationId = Combination::getIdByReference($this->prestashopProduct->id, $this->reference);
 
         if ($combinationId > 0) {
-            $this->prestashopCombination = new Combination($combinationId);
+            $this->prestashopCombination = new Combination((int)$combinationId);
         }
 
         return $this;
@@ -289,9 +290,7 @@ class ProductCombination implements BuilderInterface
      */
     public function update(): void
     {
-        $this
-            ->setAttributes()
-            ->fillPrestaCombination();
+        $this->fillPrestaCombination();
 
         try {
             $this->prestashopCombination->save();

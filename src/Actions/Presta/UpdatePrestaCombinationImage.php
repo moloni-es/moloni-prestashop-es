@@ -25,19 +25,23 @@
 namespace Moloni\Actions\Presta;
 
 use Image;
+use Combination;
 use PrestaShopException;
 use PrestaShopDatabaseException;
 use Moloni\Actions\Presta\Common\PrestaImage;
+use Shop;
 
-class UpdatePrestaProductImage extends PrestaImage
+class UpdatePrestaCombinationImage extends PrestaImage
 {
     protected $prestashopProductId;
+    protected $prestashopCombination;
 
-    public function __construct(int $prestashopProductId, string $moloniImagePath)
+    public function __construct(int $prestashopProductId, Combination $prestashopCombination, string $moloniImagePath)
     {
         parent::__construct($moloniImagePath);
 
         $this->prestashopProductId = $prestashopProductId;
+        $this->prestashopCombination = $prestashopCombination;
 
         $this->handle();
     }
@@ -47,16 +51,15 @@ class UpdatePrestaProductImage extends PrestaImage
         if (empty($this->moloniImagePath)) {
             return;
         }
+        $shopId = (int)Shop::getContextShopID();
+        $combinationImage = Image::getBestImageAttribute($shopId, $this->languageId, $this->prestashopProductId, $this->prestashopCombination->id);
 
-        /** @var array|null $coverImage */
-        $coverImage = Image::getCover($this->prestashopProductId);
-
-        if (!empty($coverImage)) {
-            $image = new Image($coverImage['id_image'], $this->languageId);
-            $image->deleteImage();
+        if (!empty($combinationImage)) {
+            $image = new Image((int)$combinationImage['id_image'], $this->languageId);
+            $image->deleteImage(true);
         } else {
             $image = new Image(null, $this->languageId);
-            $image->cover = true;
+            $image->cover = false;
             $image->id_product = $this->prestashopProductId;
 
             try {
@@ -65,6 +68,8 @@ class UpdatePrestaProductImage extends PrestaImage
                 // todo: write log?
                 return;
             }
+
+            $this->prestashopCombination->setImages([$image->id]);
         }
 
         try {

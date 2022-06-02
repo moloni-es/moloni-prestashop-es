@@ -568,7 +568,7 @@ class MoloniProductFromId implements BuilderInterface
      */
     public function setPrice(): MoloniProductFromId
     {
-        $this->price = $this->prestashopProduct->getPriceWithoutReduct(true);
+        $this->price = $this->prestashopProduct->getPriceWithoutReduct(true, null, 2);
 
         return $this;
     }
