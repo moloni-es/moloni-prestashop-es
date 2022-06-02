@@ -227,6 +227,8 @@ class PrestaProductFromId implements BuilderInterface
      * After save requirements
      *
      * @return void
+     *
+     * @throws MoloniProductException
      */
     protected function afterSave(): void
     {
@@ -243,7 +245,11 @@ class PrestaProductFromId implements BuilderInterface
 
         if ($this->productHasCombinations()) {
             // Check if Moloni groups exist
-            new ProcessAttributesGroup($this->moloniProduct['propertyGroup']);
+            try {
+                new ProcessAttributesGroup($this->moloniProduct['propertyGroup']);
+            } catch (PrestaShopException $e) {
+                throw new MoloniProductException('Error when creating product attributes');
+            }
 
             // Save combinations
             foreach ($this->combinations as $combination) {
@@ -577,7 +583,7 @@ class PrestaProductFromId implements BuilderInterface
      */
     public function setPrice(): PrestaProductFromId
     {
-        $this->price = $this->moloniProduct['price'] ?? 0;
+        $this->price = (float)($this->moloniProduct['price'] ?? 0);
 
         return $this;
     }
