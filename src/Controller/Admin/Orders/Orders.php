@@ -25,20 +25,20 @@
 namespace Moloni\Controller\Admin\Orders;
 
 use Currency;
-use Moloni\Builders\PrestaProductFromId;
-use PrestaShopException;
-use PrestaShopDatabaseException;
 use Moloni\Actions\Orders\OrderCreateDocument;
 use Moloni\Actions\Orders\OrderDiscard;
+use Moloni\Builders\MoloniProductWithVariants;
 use Moloni\Controller\Admin\MoloniController;
 use Moloni\Enums\DocumentTypes;
 use Moloni\Enums\MoloniRoutes;
 use Moloni\Exceptions\Document\MoloniDocumentException;
 use Moloni\Exceptions\Document\MoloniDocumentWarning;
 use Moloni\Exceptions\MoloniException;
-use Moloni\Helpers\Settings;
-use Moloni\Helpers\Logs;
 use Moloni\Repository\OrdersRepository;
+use Moloni\Tools\Logs;
+use Moloni\Tools\Settings;
+use PrestaShopDatabaseException;
+use PrestaShopException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

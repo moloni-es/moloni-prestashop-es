@@ -24,13 +24,13 @@
 
 namespace Moloni\Actions\Settings;
 
-use Moloni\Enums\SyncFields;
-use OrderState;
 use DateTime;
 use Exception;
+use Moloni\Enums\SyncFields;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Form\SettingsFormType;
-use Moloni\Helpers\Settings;
+use Moloni\Tools\Settings;
+use OrderState;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;

@@ -22,14 +22,14 @@
  * @noinspection PhpMultipleClassDeclarationsInspection
  */
 
-namespace Moloni\Helpers;
+namespace Moloni\Tools;
 
-use Moloni\Entity\MoloniSyncLogs;
-use Moloni\Enums\SyncLogsType;
-use Moloni\Repository\MoloniSyncLogsRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
+use Moloni\Entity\MoloniSyncLogs;
+use Moloni\Enums\SyncLogsType;
+use Moloni\Repository\MoloniSyncLogsRepository;
 
 class SyncLogs
 {

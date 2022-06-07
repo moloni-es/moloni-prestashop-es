@@ -46,8 +46,8 @@ use Moloni\Exceptions\MoloniException;
 use Moloni\Exceptions\Product\MoloniProductCategoryException;
 use Moloni\Exceptions\Product\MoloniProductException;
 use Moloni\Exceptions\Product\MoloniProductTaxException;
-use Moloni\Helpers\Logs;
-use Moloni\Helpers\Settings;
+use Moloni\Tools\Logs;
+use Moloni\Tools\Settings;
 use Product;
 
 class MoloniProductWithVariants implements BuilderInterface
@@ -795,11 +795,8 @@ class MoloniProductWithVariants implements BuilderInterface
             $builder
                 ->setMoloniParentProductId($this->moloniProductId)
                 ->setParentHasStock($this->hasStock)
-                ->setWarehouseId($this->warehouseId);
-
-            if (!empty($this->propertyGroup)) {
-                $builder->setPropertyPairs($this->propertyGroup['variants'][(int)$combination->id] ?? []);
-            }
+                ->setWarehouseId($this->warehouseId)
+                ->setPropertyPairs($this->propertyGroup['variants'][(int)$combination->id] ?? []);
 
             $this->variants[] = $builder;
         }

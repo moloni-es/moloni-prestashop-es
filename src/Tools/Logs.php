@@ -22,14 +22,14 @@
  * @noinspection PhpMultipleClassDeclarationsInspection
  */
 
-namespace Moloni\Helpers;
+namespace Moloni\Tools;
 
-use Shop;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\ORMException;
 use Moloni\Api\MoloniApi;
 use Moloni\Entity\MoloniLogs;
 use Moloni\Enums\LogLevel;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\ORMException;
+use Shop;
 
 class Logs
 {

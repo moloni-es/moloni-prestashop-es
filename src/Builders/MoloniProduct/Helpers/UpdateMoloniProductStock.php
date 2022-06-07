@@ -26,7 +26,7 @@ namespace Moloni\Builders\MoloniProduct\Helpers;
 
 use Moloni\Api\MoloniApiClient;
 use Moloni\Exceptions\MoloniApiException;
-use Moloni\Helpers\Logs;
+use Moloni\Tools\Logs;
 
 class UpdateMoloniProductStock
 {

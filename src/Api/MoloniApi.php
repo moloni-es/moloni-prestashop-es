@@ -29,12 +29,12 @@ use Doctrine\ORM\ORMException;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Post\PostFile;
-use Moloni\Mails\AuthenticationExpiredMail;
 use Moloni\Entity\MoloniApp;
 use Moloni\Enums\Domains;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\MoloniLoginException;
-use Moloni\Helpers\Settings;
+use Moloni\Mails\AuthenticationExpiredMail;
+use Moloni\Tools\Settings;
 
 class MoloniApi
 {

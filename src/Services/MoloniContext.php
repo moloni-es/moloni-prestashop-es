@@ -28,12 +28,12 @@ use Doctrine\ORM\EntityManager;
 use Moloni\Api\MoloniApi;
 use Moloni\Entity\MoloniApp;
 use Moloni\Entity\MoloniSettings;
-use Moloni\Helpers\Logs;
-use Moloni\Helpers\ProductAssociations;
-use Moloni\Helpers\Settings;
-use Moloni\Helpers\SyncLogs;
 use Moloni\Repository\MoloniAppRepository;
 use Moloni\Repository\MoloniSettingsRepository;
+use Moloni\Tools\Logs;
+use Moloni\Tools\ProductAssociations;
+use Moloni\Tools\Settings;
+use Moloni\Tools\SyncLogs;
 
 class MoloniContext
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Moloni\Helpers;
+namespace Moloni\Tools;
 
 class Settings
 {

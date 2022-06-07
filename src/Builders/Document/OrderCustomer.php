@@ -24,15 +24,15 @@
 
 namespace Moloni\Builders\Document;
 
-use Order;
 use Address;
 use Customer;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\Interfaces\BuilderItemInterface;
 use Moloni\Exceptions\Document\MoloniDocumentCustomerException;
 use Moloni\Exceptions\MoloniApiException;
-use Moloni\Helpers\Settings;
+use Moloni\Tools\Settings;
 use Moloni\Traits\CountryTrait;
+use Order;
 
 class OrderCustomer implements BuilderItemInterface
 {
