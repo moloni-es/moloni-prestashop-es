@@ -24,22 +24,22 @@
 
 declare(strict_types=1);
 
-namespace Moloni\Builders\PrestaProduct;
+namespace Moloni\Builders\PrestashopProduct;
 
-use Moloni\Actions\Presta\UpdatePrestaCombinationImage;
-use Product;
 use Combination;
-use PrestaShopException;
 use Moloni\Api\MoloniApiClient;
+use Moloni\Builders\Interfaces\BuilderInterface;
+use Moloni\Builders\PrestashopProduct\Helpers\UpdatePrestaCombinationImage;
+use Moloni\Builders\PrestashopProduct\Helpers\UpdatePrestaProductStock;
 use Moloni\Enums\Boolean;
 use Moloni\Enums\SyncFields;
+use Moloni\Exceptions\MoloniApiException;
+use Moloni\Exceptions\Product\MoloniProductCombinationException;
 use Moloni\Helpers\Logs;
 use Moloni\Helpers\Settings;
 use Moloni\Traits\AttributesTrait;
-use Moloni\Builders\Interfaces\BuilderInterface;
-use Moloni\Actions\Presta\UpdatePrestaProductStock;
-use Moloni\Exceptions\MoloniApiException;
-use Moloni\Exceptions\Product\MoloniProductCombinationException;
+use PrestaShopException;
+use Product;
 
 class ProductCombination implements BuilderInterface
 {
@@ -179,6 +179,7 @@ class ProductCombination implements BuilderInterface
             ->setPrice()
             ->setIdentifications()
             ->setImagePath()
+            ->setAttributes()
             ->setWarehouseId();
 
         return $this;
@@ -189,14 +190,10 @@ class ProductCombination implements BuilderInterface
      *
      * @return void
      */
-    protected function afterSave(): void
+    protected function afterInsert(): void
     {
         if (!empty($this->attributes)) {
             $this->prestashopCombination->setAttributes($this->attributes);
-        }
-
-        if (!empty($this->imagePath) && $this->shouldSyncImage()) {
-            new UpdatePrestaCombinationImage((int)$this->prestashopProduct->id, $this->prestashopCombination, $this->imagePath);
         }
     }
 
@@ -248,16 +245,14 @@ class ProductCombination implements BuilderInterface
     {
         $this->prestashopCombination = new Combination();
 
-        $this
-            ->setAttributes()
-            ->fillPrestaCombination();
+        $this->fillPrestaCombination();
 
         try {
             $this->prestashopCombination->save();
 
             Logs::addInfoLog(['Combination created in Prestashop ({0})', ['{0}' => $this->reference]], ['moloniVariant' => $this->moloniVariant]);
 
-            $this->afterSave();
+            $this->afterInsert();
         } catch (PrestaShopException $e) {
             throw new MoloniProductCombinationException('Error creating combination ({0})', ['{0}' => $this->reference], [
                 'moloniVariant' => $this->moloniVariant
@@ -280,8 +275,6 @@ class ProductCombination implements BuilderInterface
             $this->prestashopCombination->save();
 
             Logs::addInfoLog(['Combination updated in Prestashop ({0})', ['{0}' => $this->reference]], ['moloniVariant' => $this->moloniVariant]);
-
-            $this->afterSave();
         } catch (PrestaShopException $e) {
             throw new MoloniProductCombinationException('Error updating combination ({0})', ['{0}' => $this->reference], [
                 'moloniVariant' => $this->moloniVariant
@@ -522,16 +515,6 @@ class ProductCombination implements BuilderInterface
     protected function shouldSyncPrice(): bool
     {
         return !$this->combinationExists() || in_array(SyncFields::PRICE, $this->syncFields, true);
-    }
-
-    /**
-     * Should sync variant image
-     *
-     * @return bool
-     */
-    protected function shouldSyncImage(): bool
-    {
-        return in_array(SyncFields::IMAGE, $this->syncFields, true);
     }
 
     //          Auxiliary          //

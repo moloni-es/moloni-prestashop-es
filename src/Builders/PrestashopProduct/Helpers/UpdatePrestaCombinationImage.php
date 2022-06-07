@@ -22,13 +22,12 @@
  * @noinspection PhpMultipleClassDeclarationsInspection
  */
 
-namespace Moloni\Actions\Presta;
+namespace Moloni\Builders\PrestashopProduct\Helpers;
 
-use Image;
 use Combination;
-use PrestaShopException;
+use Image;
 use PrestaShopDatabaseException;
-use Moloni\Actions\Presta\Common\PrestaImage;
+use PrestaShopException;
 use Shop;
 
 class UpdatePrestaCombinationImage extends PrestaImage

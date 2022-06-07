@@ -22,7 +22,7 @@
  * @noinspection PhpMultipleClassDeclarationsInspection
  */
 
-namespace Moloni\Builders\PrestaProduct;
+namespace Moloni\Builders\PrestashopProduct;
 
 use Tools;
 use Category;

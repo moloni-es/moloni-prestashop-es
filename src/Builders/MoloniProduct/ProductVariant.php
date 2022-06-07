@@ -30,17 +30,24 @@ use Product;
 use Combination;
 use Configuration;
 use StockAvailable;
-use Moloni\Helpers\Settings;
-use Moloni\Actions\Moloni\UpdateMoloniProductStock;
-use Moloni\Exceptions\MoloniApiException;
-use Moloni\Exceptions\Product\MoloniProductException;
+use Moloni\Builders\MoloniProduct\Helpers\UpdateMoloniProductStock;
 use Moloni\Enums\Boolean;
 use Moloni\Enums\ProductVisibility;
+use Moloni\Exceptions\MoloniApiException;
+use Moloni\Exceptions\Product\MoloniProductException;
+use Moloni\Helpers\Settings;
 
 class ProductVariant
 {
     /**
-     * Moloni variant data
+     * Moloni parent product id
+     *
+     * @var int
+     */
+    protected $moloniParentProductId = 0;
+
+    /**
+     * Moloni variant id
      *
      * @var int
      */
@@ -101,7 +108,7 @@ class ProductVariant
      *
      * @var bool
      */
-    protected $hasStock = false;
+    protected $parentHasStock;
 
     /**
      * Has stock
@@ -111,13 +118,6 @@ class ProductVariant
     protected $stock = 0;
 
     /**
-     * Measurement unit
-     *
-     * @var int
-     */
-    protected $measurementUnitId = 0;
-
-    /**
      * Warehouse
      *
      * @var int
@@ -125,11 +125,11 @@ class ProductVariant
     protected $warehouseId;
 
     /**
-     * Variant attibutes
+     * Variant property values
      *
-     * @var array|null
+     * @var array
      */
-    protected $attributes = [];
+    protected $propertyPairs = [];
 
     /**
      * Product image
@@ -149,14 +149,13 @@ class ProductVariant
     /**
      * Constructor
      *
-     * @param int $prestashopCombinationId
-     * @param int $warehouseId
+     * @param Combination $prestashopCombination
      * @param array|null $allMoloniVariants
      */
-    public function __construct(int $prestashopCombinationId, ?array $allMoloniVariants = [])
+    public function __construct(Combination $prestashopCombination, ?array $allMoloniVariants = [])
     {
+        $this->prestashopCombination = $prestashopCombination;
         $this->allMoloniVariants = $allMoloniVariants;
-        $this->prestashopCombination = new Combination($prestashopCombinationId, Configuration::get('PS_LANG_DEFAULT'));
 
         $this->init();
     }
@@ -173,15 +172,13 @@ class ProductVariant
         $this
             ->setReference()
             ->setMoloniVariant()
+            ->setParentHasStock()
             ->setName()
             ->setIdentifications()
-            ->setAttributes()
             ->setPrice()
-            ->setHasStock()
             ->setStock()
-            ->setMeasurementUnitId()
-            ->setWarehouseId()
-            ->setVisibility();
+            ->setVisibility()
+            ->setPropertyPairs();
 
         return $this;
     }
@@ -198,26 +195,25 @@ class ProductVariant
         $props = [
             'visible' => $this->visibility,
             'name' => $this->name,
-            'hasStock' => $this->hasStock,
             'price' => $this->price,
             'identifications' => $this->identifications,
-            'measurementUnitId' => $this->measurementUnitId
+            'propertyPairs' => $this->propertyPairs
         ];
 
         if ($this->variantExists()) {
             $props['productId'] = $this->moloniVariantId;
-        } else {
-            if (!empty($this->attributes)) {
-                // todo: Adicionar attributos
+        } else if ($this->parentHasStock()) {
+            $props['warehouseId'] = $this->warehouseId;
+            $warehouses = [
+                'warehouseId' => $this->warehouseId,
+                'stock' => 0,
+            ];
+
+            if (!$this->parentExists()) {
+                $warehouses['stock'] = $this->stock;
             }
 
-            if ($this->warehouseId > 0 && $this->variantHasStock()) {
-                $props['warehouseId'] = $this->warehouseId;
-                $props['warehouses'] = [[
-                    'warehouseId' => $this->warehouseId,
-                    'stock' => $this->stock,
-                ]];
-            }
+            $props['warehouses'] = [$warehouses];
         }
 
         return $props;
@@ -232,7 +228,7 @@ class ProductVariant
      */
     public function updateStock(): ProductVariant
     {
-        if (!$this->variantExists() || !$this->variantHasStock()) {
+        if (!$this->variantExists()) {
             return $this;
         }
 
@@ -278,7 +274,6 @@ class ProductVariant
     }
 
     //          SETS          //
-
 
     public function setMoloniVariant(?array $moloniVariant = []): ProductVariant
     {
@@ -327,7 +322,7 @@ class ProductVariant
      */
     public function setName(): ProductVariant
     {
-        $this->name = $this->moloniVariant['name'] ?? $this->reference;
+        $this->name = $this->moloniVariant['name'] ?? $this->reference ?? 'Variant';
 
         return $this;
     }
@@ -408,6 +403,19 @@ class ProductVariant
     }
 
     /**
+     * Set if variants has stock
+     *
+     * @param bool|null $parentHasStock
+     * @return ProductVariant
+     */
+    public function setParentHasStock(?bool $parentHasStock = null): ProductVariant
+    {
+        $this->parentHasStock = $parentHasStock ?? (bool)Boolean::YES;
+
+        return $this;
+    }
+
+    /**
      * Set variant stock
      *
      * @return ProductVariant
@@ -415,18 +423,6 @@ class ProductVariant
     public function setStock(): ProductVariant
     {
         $this->stock = StockAvailable::getQuantityAvailableByProduct($this->prestashopCombination->id_product, $this->prestashopCombination->id);
-
-        return $this;
-    }
-
-    /**
-     * Set has stock
-     *
-     * @return ProductVariant
-     */
-    public function setHasStock(): ProductVariant
-    {
-        $this->hasStock = $this->moloniVariant['hasStock'] ?? (bool)Boolean::YES;
 
         return $this;
     }
@@ -447,26 +443,29 @@ class ProductVariant
     }
 
     /**
-     * Set measurement unit
+     * Set parent id
+     *
+     * @param int $moloniParentProductId
      *
      * @return ProductVariant
      */
-    public function setMeasurementUnitId(): ProductVariant
+    public function setMoloniParentProductId(int $moloniParentProductId): ProductVariant
     {
-        $this->measurementUnitId = (int)(Settings::get('measurementUnit') ?? 0);
+        $this->moloniParentProductId = $moloniParentProductId;
 
         return $this;
     }
 
     /**
-     * Set variant attributes
+     * Set variant property pairs
+     *
+     * @param array|null $propertyPairs
      *
      * @return ProductVariant
      */
-    public function setAttributes(): ProductVariant
+    public function setPropertyPairs(?array $propertyPairs = []): ProductVariant
     {
-        // todo: get/create attributes in Moloni
-        $this->attributes = [];
+        $this->propertyPairs = $propertyPairs;
 
         return $this;
     }
@@ -478,9 +477,19 @@ class ProductVariant
      *
      * @return bool
      */
-    protected function variantHasStock(): bool
+    protected function parentHasStock(): bool
     {
-        return $this->hasStock;
+        return $this->parentHasStock;
+    }
+
+    /**
+     * Checks if product has stock
+     *
+     * @return bool
+     */
+    protected function parentExists(): bool
+    {
+        return $this->moloniParentProductId > 0;
     }
 
     /**

@@ -22,7 +22,7 @@
  * @noinspection PhpMultipleClassDeclarationsInspection
  */
 
-namespace Moloni\Actions\Presta;
+namespace Moloni\Builders\PrestashopProduct\Helpers;
 
 use Moloni\Helpers\Logs;
 use StockAvailable;

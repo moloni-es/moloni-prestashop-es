@@ -22,12 +22,11 @@
  * @noinspection PhpMultipleClassDeclarationsInspection
  */
 
-namespace Moloni\Actions\Presta;
+namespace Moloni\Builders\PrestashopProduct\Helpers;
 
 use Image;
-use PrestaShopException;
 use PrestaShopDatabaseException;
-use Moloni\Actions\Presta\Common\PrestaImage;
+use PrestaShopException;
 
 class UpdatePrestaProductImage extends PrestaImage
 {

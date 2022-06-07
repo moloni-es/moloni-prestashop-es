@@ -716,7 +716,7 @@ class DocumentFromOrder implements BuilderInterface
     /**
      * Get created document total
      *
-     * @return int
+     * @return float
      */
     public function getDocumentTotal(): float
     {
