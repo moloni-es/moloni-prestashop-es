@@ -26,6 +26,9 @@ declare(strict_types=1);
 
 namespace Moloni\Builders\Document;
 
+use Configuration;
+use Moloni\Builders\MoloniProductWithVariants;
+use Product;
 use Tax;
 use TaxCalculator;
 use Moloni\Enums\ProductInformation;
@@ -33,7 +36,7 @@ use Moloni\Helpers\Settings;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Enums\ProductType;
 use Moloni\Builders\Interfaces\BuilderItemInterface;
-use Moloni\Builders\MoloniProductFromId;
+use Moloni\Builders\MoloniProductSimple;
 use Moloni\Exceptions\Product\MoloniProductException;
 use Moloni\Exceptions\Document\MoloniDocumentProductTaxException;
 use Moloni\Exceptions\Document\MoloniDocumentProductException;
@@ -207,7 +210,14 @@ class OrderProduct implements BuilderItemInterface
     public function insert(): void
     {
         try {
-            $productBuilder = new MoloniProductFromId($this->orderProduct['product_id']);
+            $product = new Product($this->orderProduct['product_id'], true, Configuration::get('PS_LANG_DEFAULT'));
+
+            if ($product->product_type === 'combinations') {
+                $productBuilder = new MoloniProductWithVariants($product);
+            } else {
+                $productBuilder = new MoloniProductSimple($product);
+            }
+
             $productBuilder->insert();
         } catch (MoloniProductException $e) {
             throw new MoloniDocumentProductException($e->getMessage(), $e->getIdentifiers(), $e->getData());

@@ -24,8 +24,11 @@
 
 namespace Moloni\Hooks;
 
+use Moloni\Builders\MoloniProductWithVariants;
+use Product;
+use Configuration;
 use Moloni\Enums\Boolean;
-use Moloni\Builders\MoloniProductFromId;
+use Moloni\Builders\MoloniProductSimple;
 use Moloni\Helpers\Logs;
 use Moloni\Helpers\Settings;
 use Moloni\Helpers\SyncLogs;
@@ -50,8 +53,14 @@ class ProductSave extends AbstractHookAction
 
         try {
             SyncLogs::productAddTimeout($this->productId);
+            $product = new Product($this->productId, true, Configuration::get('PS_LANG_DEFAULT'));
 
-            $productBuilder = new MoloniProductFromId($this->productId);
+            if ($product->product_type === 'combinations') {
+                $productBuilder = new MoloniProductWithVariants($product);
+            } else {
+                $productBuilder = new MoloniProductSimple($product);
+            }
+
             $productBuilder->search();
 
             if ($productBuilder->getMoloniProductId() !== 0) {

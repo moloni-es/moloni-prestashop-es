@@ -22,17 +22,17 @@
  * @noinspection PhpMultipleClassDeclarationsInspection
  */
 
-namespace Moloni\Actions\Presta\Common;
+namespace Moloni\Builders\PrestashopProduct\Helpers;
 
-use Shop;
-use Tools;
-use Image;
-use ImageType;
-use ImageManager;
 use Configuration;
-use PrestaShopDatabaseException;
+use Image;
+use ImageManager;
+use ImageType;
 use Moloni\Enums\Domains;
 use PrestaShop\PrestaShop\Adapter\Import\ImageCopier;
+use PrestaShopDatabaseException;
+use Shop;
+use Tools;
 
 abstract class PrestaImage
 {
@@ -48,13 +48,12 @@ abstract class PrestaImage
     /**
      * * Adapetd from Prestashop *
      *
-     * @see \PrestaShop\PrestaShop\Adapter\Import\ImageCopier::copyImg
-     *
      * @param Image $image
      *
      * @return void
      *
      * @throws PrestaShopDatabaseException
+     * @see \PrestaShop\PrestaShop\Adapter\Import\ImageCopier::copyImg
      */
     protected function saveImage(Image $image): void
     {
@@ -119,13 +118,13 @@ abstract class PrestaImage
                         $pathInfos[] = [$targetWidth, $targetHeight, $path . '-' . stripslashes($imageType['name']) . '.jpg'];
                     }
 
-                    $file = $tmpDir . 'product_mini_' . (int) $image->id . '.jpg';
+                    $file = $tmpDir . 'product_mini_' . (int)$image->id . '.jpg';
 
                     if (is_file($file)) {
                         unlink($file);
                     }
 
-                    $file = $tmpDir . 'product_mini_' . (int) $image->id . '_' . (int)Shop::getContextShopID() . '.jpg';
+                    $file = $tmpDir . 'product_mini_' . (int)$image->id . '_' . (int)Shop::getContextShopID() . '.jpg';
 
                     if (is_file($file)) {
                         unlink($file);
@@ -144,13 +143,12 @@ abstract class PrestaImage
     /**
      * * Copied from Prestashop *
      *
-     * @see \PrestaShop\PrestaShop\Adapter\Import\ImageCopier::getBestPath
-     *
      * @param int $targetWidth
      * @param int $targetHeight
      * @param array $pathInfos
      *
      * @return string
+     * @see \PrestaShop\PrestaShop\Adapter\Import\ImageCopier::getBestPath
      */
     protected function getBestPath(int $targetWidth, int $targetHeight, array $pathInfos): string
     {

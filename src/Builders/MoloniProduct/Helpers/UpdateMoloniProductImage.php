@@ -22,12 +22,13 @@
  * @noinspection PhpMultipleClassDeclarationsInspection
  */
 
-namespace Moloni\Actions\Moloni;
+namespace Moloni\Builders\MoloniProduct\Helpers;
 
-use Image;
 use Configuration;
+use Image;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Exceptions\MoloniApiException;
+use const Moloni\Services\Moloni\_PS_BASE_URL_;
 
 class UpdateMoloniProductImage
 {
@@ -42,7 +43,8 @@ class UpdateMoloniProductImage
      * @param array $coverImage
      * @param int $moloniProductId
      */
-    public function __construct(array $coverImage, int $moloniProductId) {
+    public function __construct(array $coverImage, int $moloniProductId)
+    {
         $this->coverImage = $coverImage;
         $this->moloniProductId = $moloniProductId;
 
@@ -66,7 +68,7 @@ class UpdateMoloniProductImage
             ]
         ];
 
-        $file = _PS_BASE_URL_._THEME_PROD_DIR_.$image->getExistingImgPath().".jpg";
+        $file = _PS_BASE_URL_ . _THEME_PROD_DIR_ . $image->getExistingImgPath() . ".jpg";
 
         try {
             MoloniApiClient::products()->mutationProductImageUpdate($props, $file);

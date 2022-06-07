@@ -22,11 +22,11 @@
  * @noinspection PhpMultipleClassDeclarationsInspection
  */
 
-namespace Moloni\Actions\Moloni;
+namespace Moloni\Builders\MoloniProduct\Helpers;
 
-use Moloni\Helpers\Logs;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Exceptions\MoloniApiException;
+use Moloni\Helpers\Logs;
 
 class UpdateMoloniProductStock
 {

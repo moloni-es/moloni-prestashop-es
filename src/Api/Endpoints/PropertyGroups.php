@@ -23,24 +23,7 @@ class PropertyGroups extends Endpoint
             {
                 data
                 {
-                    propertyGroupId
-                    name
-                    visible
-                    properties
-                    {
-                        propertyId
-                        name
-                        visible
-                        ordering
-                        values
-                        {
-                           propertyValueId
-                           code
-                           value
-                           visible
-                           ordering
-                        }
-                    }
+                    ' . $this->getCommonSegment() . '
                 }
                 errors
                 {
@@ -79,24 +62,7 @@ class PropertyGroups extends Endpoint
             {
                 data
                 {
-                    propertyGroupId
-                    name
-                    visible
-                    properties
-                    {
-                        propertyId
-                        name
-                        visible
-                        ordering
-                        values
-                        {
-                           propertyValueId
-                           code
-                           value
-                           visible
-                           ordering
-                        }
-                    }
+                    ' . $this->getCommonSegment() . '
                 }
                 errors
                 {
@@ -126,24 +92,7 @@ class PropertyGroups extends Endpoint
             {
                 data
                 {
-                    propertyGroupId
-                    name
-                    visible
-                    properties
-                    {
-                        propertyId
-                        name
-                        visible
-                        ordering
-                        values
-                        {
-                           propertyValueId
-                           code
-                           value
-                           visible
-                           ordering
-                        }
-                    }
+                    ' . $this->getCommonSegment() . '
                 }
                 errors
                 {
@@ -173,24 +122,7 @@ class PropertyGroups extends Endpoint
             {
                 data
                 {
-                    propertyGroupId
-                    name
-                    visible
-                    properties
-                    {
-                        propertyId
-                        name
-                        visible
-                        ordering
-                        values
-                        {
-                           propertyValueId
-                           code
-                           value
-                           visible
-                           ordering
-                        }
-                    }
+                    ' . $this->getCommonSegment() . '
                 }
                 errors
                 {
@@ -201,5 +133,37 @@ class PropertyGroups extends Endpoint
         }';
 
         return $this->simplePost($query, $variables);
+    }
+
+    /**
+     * Common segments for all queries and mutations
+     *
+     * @return string
+     */
+    private function getCommonSegment(): string
+    {
+        return '
+            propertyGroupId
+            name
+            visible
+            deletable
+            properties
+            {
+                propertyId
+                name
+                visible
+                ordering
+                deletable
+                values
+                {
+                   propertyValueId
+                   code
+                   value
+                   visible
+                   ordering
+                   deletable
+                }
+            }
+        ';
     }
 }
