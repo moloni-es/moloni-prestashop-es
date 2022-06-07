@@ -24,15 +24,15 @@
 
 namespace Moloni\Hooks;
 
-use Moloni\Builders\MoloniProductWithVariants;
-use Product;
 use Configuration;
-use Moloni\Enums\Boolean;
 use Moloni\Builders\MoloniProductSimple;
-use Moloni\Helpers\Logs;
-use Moloni\Helpers\Settings;
-use Moloni\Helpers\SyncLogs;
+use Moloni\Builders\MoloniProductWithVariants;
+use Moloni\Enums\Boolean;
 use Moloni\Exceptions\Product\MoloniProductException;
+use Moloni\Tools\Logs;
+use Moloni\Tools\Settings;
+use Moloni\Tools\SyncLogs;
+use Product;
 
 class ProductSave extends AbstractHookAction
 {

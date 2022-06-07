@@ -22,7 +22,7 @@
  * @noinspection PhpMultipleClassDeclarationsInspection
  */
 
-namespace Moloni\Helpers;
+namespace Moloni\Tools;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;

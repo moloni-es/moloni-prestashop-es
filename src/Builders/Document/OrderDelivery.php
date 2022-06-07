@@ -24,17 +24,17 @@
 
 namespace Moloni\Builders\Document;
 
-use Order;
 use Address;
 use Carrier;
-use Store;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\Interfaces\BuilderItemInterface;
-use Moloni\Traits\CountryTrait;
 use Moloni\Enums\LoadAddress;
-use Moloni\Helpers\Settings;
 use Moloni\Exceptions\Document\MoloniDocumentDeliveryException;
 use Moloni\Exceptions\MoloniApiException;
+use Moloni\Tools\Settings;
+use Moloni\Traits\CountryTrait;
+use Order;
+use Store;
 
 class OrderDelivery implements BuilderItemInterface
 {

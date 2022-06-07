@@ -33,7 +33,7 @@ use Moloni\Exceptions\Document\MoloniDocumentException;
 use Moloni\Exceptions\Document\MoloniDocumentWarning;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\MoloniException;
-use Moloni\Helpers\Settings;
+use Moloni\Tools\Settings;
 
 class OrderCreateDocument extends AbstractOrderAction
 {

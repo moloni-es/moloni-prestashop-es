@@ -45,8 +45,8 @@ use Moloni\Exceptions\MoloniException;
 use Moloni\Exceptions\Product\MoloniProductCategoryException;
 use Moloni\Exceptions\Product\MoloniProductException;
 use Moloni\Exceptions\Product\MoloniProductTaxException;
-use Moloni\Helpers\Logs;
-use Moloni\Helpers\Settings;
+use Moloni\Tools\Logs;
+use Moloni\Tools\Settings;
 use Product;
 use StockAvailable;
 

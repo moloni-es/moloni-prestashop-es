@@ -26,9 +26,6 @@ namespace Moloni\Builders;
 
 use Configuration;
 use Country;
-use PrestaShopException;
-use Product;
-use TaxRulesGroup;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\Interfaces\BuilderInterface;
 use Moloni\Builders\PrestashopProduct\Helpers\ProcessAttributesGroup;
@@ -41,8 +38,11 @@ use Moloni\Enums\SyncFields;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\Product\MoloniProductCategoryException;
 use Moloni\Exceptions\Product\MoloniProductException;
-use Moloni\Helpers\Logs;
-use Moloni\Helpers\Settings;
+use Moloni\Tools\Logs;
+use Moloni\Tools\Settings;
+use PrestaShopException;
+use Product;
+use TaxRulesGroup;
 
 class PrestashopProduct implements BuilderInterface
 {

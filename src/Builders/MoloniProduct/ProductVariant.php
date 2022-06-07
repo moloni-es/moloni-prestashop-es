@@ -24,18 +24,18 @@
 
 namespace Moloni\Builders\MoloniProduct;
 
-use Shop;
-use Image;
-use Product;
 use Combination;
 use Configuration;
-use StockAvailable;
+use Image;
 use Moloni\Builders\MoloniProduct\Helpers\UpdateMoloniProductStock;
 use Moloni\Enums\Boolean;
 use Moloni\Enums\ProductVisibility;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\Product\MoloniProductException;
-use Moloni\Helpers\Settings;
+use Moloni\Tools\Settings;
+use Product;
+use Shop;
+use StockAvailable;
 
 class ProductVariant
 {
@@ -156,18 +156,16 @@ class ProductVariant
     {
         $this->prestashopCombination = $prestashopCombination;
         $this->allMoloniVariants = $allMoloniVariants;
-
-        $this->init();
     }
 
-    //          PRIVATES          //
+    //          PUBLICS          //
 
     /**
      * Create data
      *
      * @return $this
      */
-    protected function init(): ProductVariant
+    public function init(): ProductVariant
     {
         $this
             ->setReference()
@@ -182,8 +180,6 @@ class ProductVariant
 
         return $this;
     }
-
-    //          PUBLICS          //
 
     /**
      * Create variant information to save
@@ -206,7 +202,6 @@ class ProductVariant
             $props['warehouseId'] = $this->warehouseId;
             $warehouses = [
                 'warehouseId' => $this->warehouseId,
-                'stock' => 0,
             ];
 
             if (!$this->parentExists()) {
@@ -289,11 +284,7 @@ class ProductVariant
                     continue;
                 }
 
-                if ($variant['reference'] === $this->reference) {
-                    $existingVariant = $variant;
-
-                    break;
-                }
+                // todo: verificar aqui tabela de associação
             }
         }
 

@@ -24,7 +24,6 @@
 
 namespace Moloni\Builders\Document;
 
-use Order;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\Interfaces\BuilderItemInterface;
 use Moloni\Enums\ProductType;
@@ -32,7 +31,8 @@ use Moloni\Exceptions\Document\MoloniDocumentShippingException;
 use Moloni\Exceptions\Document\MoloniDocumentShippingTaxException;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\MoloniException;
-use Moloni\Helpers\Settings;
+use Moloni\Tools\Settings;
+use Order;
 
 class OrderShipping implements BuilderItemInterface
 {

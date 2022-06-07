@@ -24,17 +24,17 @@
 
 namespace Moloni\Hooks;
 
-use OrderState;
+use Doctrine\Persistence\ObjectManager;
+use Moloni\Actions\Orders\OrderCreateDocument;
+use Moloni\Enums\Boolean;
 use Moloni\Exceptions\Document\MoloniDocumentException;
 use Moloni\Exceptions\Document\MoloniDocumentWarning;
 use Moloni\Exceptions\MoloniException;
-use Moloni\Enums\Boolean;
 use Moloni\Mails\DocumentErrorMail;
 use Moloni\Mails\DocumentWarningMail;
-use Moloni\Helpers\Logs;
-use Moloni\Helpers\Settings;
-use Moloni\Actions\Orders\OrderCreateDocument;
-use Doctrine\Persistence\ObjectManager;
+use Moloni\Tools\Logs;
+use Moloni\Tools\Settings;
+use OrderState;
 use PrestaShopDatabaseException;
 use PrestaShopException;
 

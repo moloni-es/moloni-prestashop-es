@@ -27,21 +27,21 @@ declare(strict_types=1);
 namespace Moloni\Builders\Document;
 
 use Configuration;
+use Moloni\Api\MoloniApiClient;
+use Moloni\Builders\Interfaces\BuilderItemInterface;
+use Moloni\Builders\MoloniProductSimple;
 use Moloni\Builders\MoloniProductWithVariants;
+use Moloni\Enums\ProductInformation;
+use Moloni\Enums\ProductType;
+use Moloni\Exceptions\Document\MoloniDocumentProductException;
+use Moloni\Exceptions\Document\MoloniDocumentProductTaxException;
+use Moloni\Exceptions\MoloniApiException;
+use Moloni\Exceptions\MoloniException;
+use Moloni\Exceptions\Product\MoloniProductException;
+use Moloni\Tools\Settings;
 use Product;
 use Tax;
 use TaxCalculator;
-use Moloni\Enums\ProductInformation;
-use Moloni\Helpers\Settings;
-use Moloni\Api\MoloniApiClient;
-use Moloni\Enums\ProductType;
-use Moloni\Builders\Interfaces\BuilderItemInterface;
-use Moloni\Builders\MoloniProductSimple;
-use Moloni\Exceptions\Product\MoloniProductException;
-use Moloni\Exceptions\Document\MoloniDocumentProductTaxException;
-use Moloni\Exceptions\Document\MoloniDocumentProductException;
-use Moloni\Exceptions\MoloniException;
-use Moloni\Exceptions\MoloniApiException;
 
 class OrderProduct implements BuilderItemInterface
 {

@@ -24,7 +24,7 @@
 
 namespace Moloni\Builders\PrestashopProduct\Helpers;
 
-use Moloni\Helpers\Logs;
+use Moloni\Tools\Logs;
 use StockAvailable;
 
 class UpdatePrestaProductStock

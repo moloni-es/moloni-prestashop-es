@@ -24,13 +24,12 @@
 
 namespace Moloni\Webservice\Product;
 
-use Moloni\Enums\Boolean;
-use Moloni\Exceptions\MoloniApiException;
-use Moloni\Helpers\Logs;
-use Moloni\Helpers\Settings;
 use Moloni\Builders\PrestashopProduct;
+use Moloni\Enums\Boolean;
 use Moloni\Exceptions\Product\MoloniProductException;
-use Moloni\Helpers\SyncLogs;
+use Moloni\Tools\Logs;
+use Moloni\Tools\Settings;
+use Moloni\Tools\SyncLogs;
 
 class ProductUpdate extends AbstractWebserviceAction
 {
