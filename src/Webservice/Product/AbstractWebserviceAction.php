@@ -25,6 +25,9 @@
 namespace Moloni\Webservice\Product;
 
 use Moloni\Api\MoloniApi;
+use Moloni\Api\MoloniApiClient;
+use Moloni\Exceptions\MoloniApiException;
+use Moloni\Exceptions\Product\MoloniProductException;
 
 abstract class AbstractWebserviceAction
 {
@@ -38,5 +41,32 @@ abstract class AbstractWebserviceAction
     protected function isAuthenticated(): bool
     {
         return MoloniApi::hasValidAuthentication();
+    }
+
+    /**
+     * @throws MoloniProductException
+     */
+    protected function fetchProductFromMoloni($productId): array
+    {
+        $variables = [
+            'productId' => $productId
+        ];
+
+        try {
+            $query = MoloniApiClient::products()->queryProduct($variables);
+
+            $moloniProduct = $query['data']['product']['data'] ?? [];
+
+            if (empty($moloniProduct)) {
+                throw new MoloniProductException('Could not find product in Moloni ({0})', ['{0}' => $productId], [
+                    'variables' => $variables,
+                    'query' => $query,
+                ]);
+            }
+        } catch (MoloniApiException $e) {
+            throw new MoloniProductException('Error fetching product by id ({0})', ['{0}' => $productId], $e->getData());
+        }
+
+        return $moloniProduct;
     }
 }

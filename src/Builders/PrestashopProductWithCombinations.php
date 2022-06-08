@@ -45,7 +45,7 @@ use Moloni\Exceptions\Product\MoloniProductException;
 use Moloni\Tools\Logs;
 use Moloni\Tools\Settings;
 
-class PrestashopProductFromId implements BuilderInterface
+class PrestashopProductWithCombinations implements BuilderInterface
 {
     /**
      * Product id in Moloni
@@ -187,9 +187,10 @@ class PrestashopProductFromId implements BuilderInterface
      *
      * @throws MoloniProductException
      */
-    public function __construct(int $moloniProductId, ?array $syncFields = null)
+    public function __construct(array $moloniProduct, ?array $syncFields = null)
     {
-        $this->moloniProductId = $moloniProductId;
+        $this->moloniProduct = $moloniProduct;
+        $this->moloniProductId = $moloniProduct['productId'];
 
         $this->syncFields = $syncFields ?? Settings::get('productSyncFields') ?? SyncFields::getDefaultFields();
 
@@ -203,10 +204,9 @@ class PrestashopProductFromId implements BuilderInterface
      *
      * @throws MoloniProductException
      */
-    protected function init(): PrestashopProductFromId
+    protected function init(): PrestashopProductWithCombinations
     {
         $this
-            ->fetchProductFromMoloni()
             ->setReference()
             ->fetchProductFromPresta()
             ->setImagePath()
@@ -244,26 +244,24 @@ class PrestashopProductFromId implements BuilderInterface
             new UpdatePrestaProductImage($this->prestashopProduct->id, $this->imagePath);
         }
 
-        if ($this->productHasCombinations()) {
-            // Check if Moloni groups exist
-            try {
-                new ProcessAttributesGroup($this->moloniProduct['propertyGroup']);
-            } catch (PrestaShopException $e) {
-                throw new MoloniProductException('Error when creating product attributes', [], [$e->getMessage()]);
-            }
-
-            // Save combinations
-            foreach ($this->combinations as $combination) {
-                if ($combination->getCombinationId() > 0) {
-                    $combination->update();
-                } else {
-                    $combination->insert();
-                    $combination->updateStock();
-                }
-            }
-
-            new CreateMappingsAfterPrestaProductCreateOrUpdate($this->moloniProduct, $this->prestashopProduct, $this->combinations);
+        // Check if Moloni groups exist
+        try {
+            new ProcessAttributesGroup($this->moloniProduct['propertyGroup']);
+        } catch (PrestaShopException $e) {
+            throw new MoloniProductException('Error when creating product attributes', [], [$e->getMessage()]);
         }
+
+        // Save combinations
+        foreach ($this->combinations as $combination) {
+            if ($combination->getCombinationId() > 0) {
+                $combination->update();
+            } else {
+                $combination->insert();
+                $combination->updateStock();
+            }
+        }
+
+        new CreateMappingsAfterPrestaProductCreateOrUpdate($this->moloniProduct, $this->prestashopProduct, $this->combinations);
     }
 
     /**
@@ -271,7 +269,7 @@ class PrestashopProductFromId implements BuilderInterface
      *
      * @return $this
      */
-    protected function fillPrestaProduct(): PrestashopProductFromId
+    protected function fillPrestaProduct(): PrestashopProductWithCombinations
     {
         if ($this->shouldSyncName()) {
             $this->prestashopProduct->name = $this->name;
@@ -286,6 +284,7 @@ class PrestashopProductFromId implements BuilderInterface
         }
 
         $this->prestashopProduct->reference = $this->reference;
+        $this->prestashopProduct->product_type = $this->type;
 
         if (!empty($this->categories)) {
             $this->prestashopProduct->id_category_default = $this->categories[0];
@@ -295,27 +294,13 @@ class PrestashopProductFromId implements BuilderInterface
             $this->prestashopProduct->id_tax_rules_group = $this->taxRulesGroupId;
         }
 
-        if (!empty($this->type)) {
-            $this->prestashopProduct->product_type = $this->type;
-        }
-
         return $this;
-    }
-
-    /**
-     * Finds Moloni product by ID
-     *
-     * @throws MoloniProductException
-     */
-    protected function fetchProductFromMoloni(): PrestashopProductFromId
-    {
-        return $this->getById();
     }
 
     /**
      * Finds Prestashop product by reference
      */
-    protected function fetchProductFromPresta(): PrestashopProductFromId
+    protected function fetchProductFromPresta(): PrestashopProductWithCombinations
     {
         $productId = (int)Product::getIdByReference($this->reference);
 
@@ -397,13 +382,300 @@ class PrestashopProductFromId implements BuilderInterface
             return;
         }
 
-        if ($this->productHasCombinations()) {
-            foreach ($this->combinations as $combination) {
-                $combination->updateStock();
-            }
-        } else {
-            new UpdatePrestaProductStock($this->prestashopProductId, null, $this->reference, $this->stock);
+        foreach ($this->combinations as $combination) {
+            $combination->updateStock();
         }
+    }
+
+    //          GETS          //
+
+    /**
+     * Get Moloni product id
+     *
+     * @return int
+     */
+    public function getMoloniProductId(): int
+    {
+        return $this->moloniProductId;
+    }
+
+    /**
+     * Get reference
+     *
+     * @return string
+     */
+    public function getReference(): string
+    {
+        return $this->reference;
+    }
+
+    /**
+     * Get Prestashop product id
+     *
+     * @return int
+     */
+    public function getPrestashopProductId(): int
+    {
+        return $this->prestashopProductId;
+    }
+
+    //          SETS          //
+
+    /**
+     * Set product name
+     *
+     * @return $this
+     */
+    public function setName(): PrestashopProductWithCombinations
+    {
+        $this->name = $this->moloniProduct['name'] ?? '';
+
+        return $this;
+    }
+
+    /**
+     * Set product reference
+     *
+     * @return $this
+     */
+    public function setReference(): PrestashopProductWithCombinations
+    {
+        $this->reference = $this->moloniProduct['reference'] ?? '';
+
+        return $this;
+    }
+
+    /**
+     * Set product category
+     *
+     * @return $this
+     *
+     * @throws MoloniProductCategoryException
+     */
+    public function setCategories(): PrestashopProductWithCombinations
+    {
+        $categoryId = $this->moloniProduct['productCategory']['productCategoryId'] ?? 0;
+
+        if ($categoryId > 0 && $this->shouldSyncCategories()) {
+            $builder = new ProductCategory($categoryId);
+            $builder->search();
+
+            $this->categories = $builder->getCategoriesIds();
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set product type
+     *
+     * @return $this
+     */
+    public function setType(): PrestashopProductWithCombinations
+    {
+        $this->type = 'combinations';
+
+        return $this;
+    }
+
+    /**
+     * Set product summary
+     *
+     * @return $this
+     */
+    public function setDescription(): PrestashopProductWithCombinations
+    {
+        $this->description = $this->moloniProduct['summary'] ?? '';
+
+        return $this;
+    }
+
+    /**
+     * Set product identifications
+     *
+     * @return $this
+     */
+    public function setIdentifications(): PrestashopProductWithCombinations
+    {
+        $isbn = '';
+        $ean13 = '';
+
+        if (!empty($this->moloniProduct['identifications'])) {
+            foreach ($this->moloniProduct['identifications'] as $identification) {
+                if ($identification['type'] === 'ISBN') {
+                    $isbn = $identification['text'];
+
+                    continue;
+                }
+
+                if ($identification['type'] === 'EAN13') {
+                    $ean13 = $identification['text'];
+
+                    continue;
+                }
+            }
+        }
+
+        $this->isbn = $isbn;
+        $this->ean13 = $ean13;
+
+        return $this;
+    }
+
+    /**
+     * Set product price
+     *
+     * @return $this
+     */
+    public function setPrice(): PrestashopProductWithCombinations
+    {
+        $this->price = (float)($this->moloniProduct['price'] ?? 0);
+
+        return $this;
+    }
+
+    /**
+     * Set product warehouse
+     *
+     * @return $this
+     */
+    public function setWarehouseId(): PrestashopProductWithCombinations
+    {
+        $warehouseId = Settings::get('syncStockToPrestashopWarehouse');
+
+        if (empty($warehouseId)) {
+            $params = [
+                'options' => [
+                    'filter' => [
+                        'field' => 'isDefault',
+                        'comparison' => 'eq',
+                        'value' => "1"
+                    ],
+                ]
+            ];
+
+            try {
+                $mutation = MoloniApiClient::warehouses()->queryWarehouses($params);
+
+                if (!empty($mutation)) {
+                    $warehouseId = $mutation[0]['warehouseId'];
+                }
+            } catch (MoloniApiException $e) {
+                $warehouseId = 1;
+            }
+        }
+
+        $this->warehouseId = (int)$warehouseId;
+
+        return $this;
+    }
+
+    /**
+     * Set product has stock
+     *
+     * @return $this
+     */
+    public function setHasStock(): PrestashopProductWithCombinations
+    {
+        $this->hasStock = $this->moloniProduct['hasStock'] ?? (bool)Boolean::YES;
+
+        return $this;
+    }
+
+    /**
+     * Set product stock
+     *
+     * @return $this
+     */
+    public function setStock(): PrestashopProductWithCombinations
+    {
+        if ($this->productHasStock()) {
+            $stock = 0;
+
+            if ($this->warehouseId === 1) {
+                $stock = (float)($this->moloniProduct['stock'] ?? 0);
+            } else {
+                foreach ($this->moloniProduct['warehouses'] as $warehouse) {
+                    $stock = (float)$warehouse['stock'];
+
+                    if ((int)$warehouse['warehouseId'] === $this->warehouseId) {
+                        break;
+                    }
+                }
+            }
+
+            $this->stock = $stock;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set image path
+     *
+     * @return $this
+     */
+    public function setImagePath(): PrestashopProductWithCombinations
+    {
+        $imagePath = '';
+
+        if (!empty($this->moloniProduct) && !empty($this->moloniProduct['img'])) {
+            $imagePath = $this->moloniProduct['img'];
+        }
+
+        $this->imagePath = $imagePath;
+
+        return $this;
+    }
+
+    /**
+     * Sets product variants
+     *
+     * @return $this
+     */
+    public function setCombinations(): PrestashopProductWithCombinations
+    {
+        $combinations = [];
+
+        foreach ($this->moloniProduct['variants'] as $variant) {
+            $combinations[] = new ProductCombination($this->prestashopProduct, $variant);
+        }
+
+        $this->combinations = $combinations;
+
+        return $this;
+    }
+
+    /**
+     * Sets product taxes
+     *
+     * @return $this
+     */
+    public function setTaxRulesGroupId(): PrestashopProductWithCombinations
+    {
+        if (!empty($this->moloniProduct['taxes']) && $this->productExists()) {
+            $moloniTax = $this->moloniProduct['taxes'][0]['tax'] ?? [];
+
+            $taxRulesGroupId = 0;
+
+            $fiscalZone = $moloniTax['fiscalZone'] ?? 'ES';
+            $countryId = Country::getByIso($fiscalZone);
+            $value = (float)($moloniTax['value'] ?? 0);
+
+            $taxes = array_reverse(TaxRulesGroup::getAssociatedTaxRatesByIdCountry($countryId), true);
+
+            foreach ($taxes as $id => $tax) {
+                if ($value === (float)$tax) {
+                    $taxRulesGroupId = $id;
+
+                    break;
+                }
+            }
+
+            $this->taxRulesGroupId = $taxRulesGroupId;
+        }
+
+        return $this;
     }
 
     //          VERIFICATIONS          //
@@ -458,335 +730,6 @@ class PrestashopProductFromId implements BuilderInterface
         return in_array(SyncFields::IMAGE, $this->syncFields, true);
     }
 
-    //          GETS          //
-
-    /**
-     * Get Moloni product id
-     *
-     * @return int
-     */
-    public function getMoloniProductId(): int
-    {
-        return $this->moloniProductId;
-    }
-
-    /**
-     * Get reference
-     *
-     * @return string
-     */
-    public function getReference(): string
-    {
-        return $this->reference;
-    }
-
-    /**
-     * Get Prestashop product id
-     *
-     * @return int
-     */
-    public function getPrestashopProductId(): int
-    {
-        return $this->prestashopProductId;
-    }
-
-    //          SETS          //
-
-    /**
-     * Set product name
-     *
-     * @return $this
-     */
-    public function setName(): PrestashopProductFromId
-    {
-        $this->name = $this->moloniProduct['name'] ?? '';
-
-        return $this;
-    }
-
-    /**
-     * Set product reference
-     *
-     * @return $this
-     */
-    public function setReference(): PrestashopProductFromId
-    {
-        $this->reference = $this->moloniProduct['reference'] ?? '';
-
-        return $this;
-    }
-
-    /**
-     * Set product category
-     *
-     * @return $this
-     *
-     * @throws MoloniProductCategoryException
-     */
-    public function setCategories(): PrestashopProductFromId
-    {
-        $categoryId = $this->moloniProduct['productCategory']['productCategoryId'] ?? 0;
-
-        if ($categoryId > 0 && $this->shouldSyncCategories()) {
-            $builder = new ProductCategory($categoryId);
-            $builder->search();
-
-            $this->categories = $builder->getCategoriesIds();
-        }
-
-        return $this;
-    }
-
-    /**
-     * Set product type
-     *
-     * @return $this
-     */
-    public function setType(): PrestashopProductFromId
-    {
-        if ($this->productHasCombinations()) {
-            $this->type = 'combinations';
-        }
-
-        return $this;
-    }
-
-    /**
-     * Set product summary
-     *
-     * @return $this
-     */
-    public function setDescription(): PrestashopProductFromId
-    {
-        $this->description = $this->moloniProduct['summary'] ?? '';
-
-        return $this;
-    }
-
-    /**
-     * Set product identifications
-     *
-     * @return $this
-     */
-    public function setIdentifications(): PrestashopProductFromId
-    {
-        $isbn = '';
-        $ean13 = '';
-
-        if (!empty($this->moloniProduct['identifications'])) {
-            foreach ($this->moloniProduct['identifications'] as $identification) {
-                if ($identification['type'] === 'ISBN') {
-                    $isbn = $identification['text'];
-
-                    continue;
-                }
-
-                if ($identification['type'] === 'EAN13') {
-                    $ean13 = $identification['text'];
-
-                    continue;
-                }
-            }
-        }
-
-        $this->isbn = $isbn;
-        $this->ean13 = $ean13;
-
-        return $this;
-    }
-
-    /**
-     * Set product price
-     *
-     * @return $this
-     */
-    public function setPrice(): PrestashopProductFromId
-    {
-        $this->price = (float)($this->moloniProduct['price'] ?? 0);
-
-        return $this;
-    }
-
-    /**
-     * Set product warehouse
-     *
-     * @return $this
-     */
-    public function setWarehouseId(): PrestashopProductFromId
-    {
-        $warehouseId = Settings::get('syncStockToPrestashopWarehouse');
-
-        if (empty($warehouseId)) {
-            $params = [
-                'options' => [
-                    'filter' => [
-                        'field' => 'isDefault',
-                        'comparison' => 'eq',
-                        'value' => "1"
-                    ],
-                ]
-            ];
-
-            try {
-                $mutation = MoloniApiClient::warehouses()->queryWarehouses($params);
-
-                if (!empty($mutation)) {
-                    $warehouseId = $mutation[0]['warehouseId'];
-                }
-            } catch (MoloniApiException $e) {
-                $warehouseId = 1;
-            }
-        }
-
-        $this->warehouseId = (int)$warehouseId;
-
-        return $this;
-    }
-
-    /**
-     * Set product has stock
-     *
-     * @return $this
-     */
-    public function setHasStock(): PrestashopProductFromId
-    {
-        $this->hasStock = $this->moloniProduct['hasStock'] ?? (bool)Boolean::YES;
-
-        return $this;
-    }
-
-    /**
-     * Set product stock
-     *
-     * @return $this
-     */
-    public function setStock(): PrestashopProductFromId
-    {
-        if ($this->productHasStock()) {
-            $stock = 0;
-
-            if ($this->warehouseId === 1) {
-                $stock = (float)($this->moloniProduct['stock'] ?? 0);
-            } else {
-                foreach ($this->moloniProduct['warehouses'] as $warehouse) {
-                    $stock = (float)$warehouse['stock'];
-
-                    if ((int)$warehouse['warehouseId'] === $this->warehouseId) {
-                        break;
-                    }
-                }
-            }
-
-            $this->stock = $stock;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Set image path
-     *
-     * @return $this
-     */
-    public function setImagePath(): PrestashopProductFromId
-    {
-        $imagePath = '';
-
-        if (!empty($this->moloniProduct) && !empty($this->moloniProduct['img'])) {
-            $imagePath = $this->moloniProduct['img'];
-        }
-
-        $this->imagePath = $imagePath;
-
-        return $this;
-    }
-
-    /**
-     * Sets product variants
-     *
-     * @return $this
-     */
-    public function setCombinations(): PrestashopProductFromId
-    {
-        $combinations = [];
-
-        if (!empty($this->moloniProduct['variants'])) {
-            foreach ($this->moloniProduct['variants'] as $variant) {
-                $combinations[] = new ProductCombination($this->prestashopProduct, $variant);
-            }
-        }
-
-        $this->combinations = $combinations;
-
-        return $this;
-    }
-
-    /**
-     * Sets product taxes
-     *
-     * @return $this
-     */
-    public function setTaxRulesGroupId(): PrestashopProductFromId
-    {
-        if (!empty($this->moloniProduct['taxes']) && $this->productExists()) {
-            $moloniTax = $this->moloniProduct['taxes'][0]['tax'] ?? [];
-
-            $taxRulesGroupId = 0;
-
-            $fiscalZone = $moloniTax['fiscalZone'] ?? 'ES';
-            $countryId = Country::getByIso($fiscalZone);
-            $value = (float)($moloniTax['value'] ?? 0);
-
-            $taxes = array_reverse(TaxRulesGroup::getAssociatedTaxRatesByIdCountry($countryId), true);
-
-            foreach ($taxes as $id => $tax) {
-                if ($value === (float)$tax) {
-                    $taxRulesGroupId = $id;
-
-                    break;
-                }
-            }
-
-            $this->taxRulesGroupId = $taxRulesGroupId;
-        }
-
-        return $this;
-    }
-
-    //          REQUESTS          //
-
-    /**
-     * Finds product by id
-     *
-     * @throws MoloniProductException
-     */
-    protected function getById(): PrestashopProductFromId
-    {
-        $variables = [
-            'productId' => $this->moloniProductId
-        ];
-
-        try {
-            $query = MoloniApiClient::products()
-                ->queryProduct($variables);
-
-            $moloniProduct = $query['data']['product']['data'] ?? [];
-
-            if (!empty($moloniProduct)) {
-                $this->moloniProduct = $moloniProduct;
-            } else {
-                throw new MoloniProductException('Could not find product in Moloni ({0})', ['{0}' => $this->moloniProductId], [
-                    'variables' => $variables,
-                    'query' => $query,
-                ]);
-            }
-        } catch (MoloniApiException $e) {
-            throw new MoloniProductException('Error fetching product by id ({0})', ['{0}' => $this->moloniProductId], $e->getData());
-        }
-
-        return $this;
-    }
-
     //          Auxiliary          //
 
     /**
@@ -807,15 +750,5 @@ class PrestashopProductFromId implements BuilderInterface
     protected function productHasStock(): bool
     {
         return $this->hasStock === true;
-    }
-
-    /**
-     * Returns if product has variants
-     *
-     * @return bool
-     */
-    protected function productHasCombinations(): bool
-    {
-        return !empty($this->combinations);
     }
 }

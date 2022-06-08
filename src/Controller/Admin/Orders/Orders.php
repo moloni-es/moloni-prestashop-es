@@ -27,7 +27,6 @@ namespace Moloni\Controller\Admin\Orders;
 use Currency;
 use Moloni\Actions\Orders\OrderCreateDocument;
 use Moloni\Actions\Orders\OrderDiscard;
-use Moloni\Builders\MoloniProductWithVariants;
 use Moloni\Controller\Admin\MoloniController;
 use Moloni\Enums\DocumentTypes;
 use Moloni\Enums\MoloniRoutes;
