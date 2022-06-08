@@ -31,7 +31,7 @@ use Country;
 use Image;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\Interfaces\BuilderInterface;
-use Moloni\Builders\MoloniProduct\Helpers\UpdateMoloniProductImage;
+use Moloni\Builders\MoloniProduct\Helpers\UpdateMoloniSimpleProductImage;
 use Moloni\Builders\MoloniProduct\Helpers\UpdateMoloniProductStock;
 use Moloni\Builders\MoloniProduct\ProductCategory;
 use Moloni\Builders\MoloniProduct\ProductTax;
@@ -302,7 +302,7 @@ class MoloniProductSimple implements BuilderInterface
     protected function afterSave(): void
     {
         if (!empty($this->coverImage) && $this->shouldSyncImage()) {
-            new UpdateMoloniProductImage($this->coverImage, $this->moloniProductId);
+            new UpdateMoloniSimpleProductImage($this->coverImage, $this->moloniProductId);
         }
     }
 
@@ -346,11 +346,13 @@ class MoloniProductSimple implements BuilderInterface
 
                 $this->afterSave();
             } else {
+                dump($mutation);
                 throw new MoloniProductException('Error creating product ({0})', ['{0}' => $this->reference], [
                     'mutation' => $mutation
                 ]);
             }
         } catch (MoloniApiException $e) {
+            dump($e->getData());
             throw new MoloniProductException('Error creating product ({0})', ['{0}' => $this->reference], $e->getData());
         }
 

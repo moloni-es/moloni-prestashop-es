@@ -24,13 +24,12 @@
 
 namespace Moloni\Builders\MoloniProduct\Helpers;
 
-use Configuration;
 use Image;
-use Moloni\Api\MoloniApiClient;
+use Configuration;
+use Moloni\Api\MoloniApi;
 use Moloni\Exceptions\MoloniApiException;
-use const Moloni\Services\Moloni\_PS_BASE_URL_;
 
-class UpdateMoloniProductImage
+class UpdateMoloniSimpleProductImage
 {
     private $languageId;
 
@@ -71,9 +70,34 @@ class UpdateMoloniProductImage
         $file = _PS_BASE_URL_ . _THEME_PROD_DIR_ . $image->getExistingImgPath() . ".jpg";
 
         try {
-            MoloniApiClient::products()->mutationProductImageUpdate($props, $file);
+            $operations = ['query' => $this->getMutation(), 'variables' => $props];
+            $map = '{ "0": ["variables.data.img"] }';
+
+            MoloniApi::postWithFile($operations, $map, [$file]);
         } catch (MoloniApiException $e) {
+            dump($e->getData());die;
             // todo: write log?
         }
+    }
+
+    private function getMutation(): string
+    {
+        return 'mutation productUpdate($companyId: Int!,$data: ProductUpdate!)
+        {
+            productUpdate(companyId: $companyId ,data: $data)
+            {
+                data
+                {
+                    productId
+                    name
+                    reference
+                }
+                errors
+                {
+                    field
+                    msg
+                }
+            }
+        }';
     }
 }

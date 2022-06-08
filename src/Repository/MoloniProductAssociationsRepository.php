@@ -24,42 +24,26 @@
 
 namespace Moloni\Repository;
 
+use Doctrine\ORM\ORMException;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMException;
 use Moloni\Entity\MoloniProductAssociations;
 
 class MoloniProductAssociationsRepository extends EntityRepository
 {
-    public function getAssociation($moloniId = null, $prestashopId = null, $combinationId = null): ?object
-    {
-        $props = [];
-
-        if (!empty($moloniId)) {
-            $props['mlProductId'] = $moloniId;
-        }
-
-        if (!empty($prestashopId)) {
-            $props['psProductId'] = $prestashopId;
-        }
-
-        if (!empty($combinationId)) {
-            $props['psCombinationId'] = $combinationId;
-        }
-
-        return $this->findOneBy($props);
-    }
-
-    public function addAssociation($moloniId, $prestashopId, $combinationId): void
+    public function addAssociation($mlProductId, $mlProductReference, $mlVariantId, $psProductId, $psProductReference, $psCombinationId, $psCombinationReference, $active): void
     {
         $entityManager = $this->getEntityManager();
 
         $association = new MoloniProductAssociations();
-
-        $association->setMlProductId($moloniId);
-        $association->setPsProductId($prestashopId);
-        $association->setPsCombinationId($combinationId);
-        $association->setActive(1);
+        $association->setMlProductId($mlProductId);
+        $association->setMlProductReference($mlProductReference);
+        $association->setMlVariantId($mlVariantId);
+        $association->setPsProductId($psProductId);
+        $association->setPsProductReference($psProductReference);
+        $association->setPsCombinationId($psCombinationId);
+        $association->setPsCombinationReference($psCombinationReference);
+        $association->setActive($active);
 
         try {
             $entityManager->persist($association);
@@ -69,20 +53,33 @@ class MoloniProductAssociationsRepository extends EntityRepository
         }
     }
 
-    public function deleteAssociation($moloniId): void
+    public function deleteByMoloniId($moloniId): void
     {
-        $entityManager = $this->getEntityManager();
+        $this->createQueryBuilder('a')
+            ->delete()
+            ->where('a.mlProductId = :moloni_id')
+            ->setParameter('moloni_id', $moloniId)
+            ->getQuery()
+            ->getResult();
+    }
 
-        /** @var MoloniProductAssociations|null $object */
-        $object = $this->getAssociation($moloniId);
+    public function deleteByPrestashopId($prestashopId): void
+    {
+        $this->createQueryBuilder('a')
+            ->delete()
+            ->where('a.psProductId = :prestashop_id')
+            ->setParameter('prestashop_id', $prestashopId)
+            ->getQuery()
+            ->getResult();
+    }
 
-        if ($object) {
-            try {
-                $entityManager->remove($object);
-                $entityManager->flush();
-            } catch (ORMException $e) {
-                // catch this?
-            }
-        }
+    public function deleteByCombinationId($combinationId): void
+    {
+        $this->createQueryBuilder('a')
+            ->delete()
+            ->where('a.psCombinationId = :combination_id')
+            ->setParameter('combination_id', $combinationId)
+            ->getQuery()
+            ->getResult();
     }
 }

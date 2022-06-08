@@ -32,6 +32,9 @@ use Country;
 use Image;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\Interfaces\BuilderInterface;
+use Moloni\Builders\MoloniProduct\Helpers\UpdateMoloniSimpleProductImage;
+use Moloni\Builders\MoloniProduct\Helpers\UpdateMoloniVariantsProductImage;
+use Moloni\Builders\MoloniProduct\Helpers\Variants\CreateMappingsAfterMoloniProductCreateOrUpdate;
 use Moloni\Builders\MoloniProduct\Helpers\Variants\FindOrCreatePropertyGroup;
 use Moloni\Builders\MoloniProduct\ProductCategory;
 use Moloni\Builders\MoloniProduct\ProductTax;
@@ -326,8 +329,10 @@ class MoloniProductWithVariants implements BuilderInterface
     protected function afterSave(): void
     {
         if (!empty($this->coverImage) && $this->shouldSyncImage()) {
-            //  todo: atualizar também imagens das variantes
+            new UpdateMoloniVariantsProductImage($this->coverImage, $this->moloniProduct, $this->variants);
         }
+
+        new CreateMappingsAfterMoloniProductCreateOrUpdate($this->prestashopProduct, $this->moloniProduct, $this->variants);
     }
 
     /**
@@ -353,9 +358,9 @@ class MoloniProductWithVariants implements BuilderInterface
      */
     public function insert(): MoloniProductWithVariants
     {
-        $props = $this
-            ->setVariants()
-            ->toArray();
+        $this->setVariants();
+
+        $props = $this->toArray();
 
         try {
             $mutation = MoloniApiClient::products()
@@ -372,11 +377,13 @@ class MoloniProductWithVariants implements BuilderInterface
 
                 $this->afterSave();
             } else {
+                dump($mutation);
                 throw new MoloniProductException('Error creating product ({0})', ['{0}' => $this->reference], [
                     'mutation' => $mutation
                 ]);
             }
         } catch (MoloniApiException $e) {
+            dump($e->getData());
             throw new MoloniProductException('Error creating product ({0})', ['{0}' => $this->reference], $e->getData());
         }
 
@@ -622,7 +629,7 @@ class MoloniProductWithVariants implements BuilderInterface
         if ($ecoTax > 0) {
             $this->price -= $ecoTax;
 
-            //todo: what else is needed?
+            // todo: what else is needed?
         }
 
         $this->ecoTax = $ecoTax;
