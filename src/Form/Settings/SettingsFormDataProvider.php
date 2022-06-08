@@ -144,31 +144,31 @@ class SettingsFormDataProvider implements FormDataProviderInterface
         }
 
         $this->yesNo = [
-            $this->trans('No') => Boolean::NO,
-            $this->trans('Yes') => Boolean::YES,
+            $this->trans('No', 'Modules.Molonies.Settings') => Boolean::NO,
+            $this->trans('Yes', 'Modules.Molonies.Settings') => Boolean::YES,
         ];
 
         $this->productInformation = [
-            $this->trans('Prestashop') => ProductInformation::PRESTASHOP,
-            $this->trans('Moloni') => ProductInformation::MOLONI,
+            'Prestashop' => ProductInformation::PRESTASHOP,
+            'Moloni' => ProductInformation::MOLONI,
         ];
 
         $this->status = [
-            $this->trans('Draft') => DocumentStatus::DRAFT,
-            $this->trans('Closed') => DocumentStatus::CLOSED,
+            $this->trans('Draft', 'Modules.Molonies.Settings') => DocumentStatus::DRAFT,
+            $this->trans('Closed', 'Modules.Molonies.Settings') => DocumentStatus::CLOSED,
         ];
 
         $this->documentTypes = DocumentTypes::getDocumentsTypes();
 
         $this->fiscalZoneBasedOn = [
-            $this->trans('Billing') => FiscalZone::BILLING,
-            $this->trans('Shipping') => FiscalZone::SHIPPING,
-            $this->trans('Company') => FiscalZone::COMPANY,
+            $this->trans('Billing', 'Modules.Molonies.Settings') => FiscalZone::BILLING,
+            $this->trans('Shipping', 'Modules.Molonies.Settings') => FiscalZone::SHIPPING,
+            $this->trans('Company', 'Modules.Molonies.Settings') => FiscalZone::COMPANY,
         ];
 
         $this->addresses = [
-            $this->trans('Moloni company') => LoadAddress::MOLONI,
-            $this->trans('Custom') => LoadAddress::CUSTOM,
+            $this->trans('Moloni company', 'Modules.Molonies.Settings') => LoadAddress::MOLONI,
+            $this->trans('Custom', 'Modules.Molonies.Settings') => LoadAddress::CUSTOM,
         ];
 
         if (!empty($this->stores)) {
@@ -182,12 +182,14 @@ class SettingsFormDataProvider implements FormDataProviderInterface
      * Simple translator implementation
      *
      * @param string $string
+     * @param string $domain
      *
      * @return string
+     * @noinspection PhpSameParameterValueInspection
      */
-    private function trans(string $string): string
+    private function trans(string $string, string $domain): string
     {
-        return $this->translator->trans($string, [], 'Modules.Molonies.Settings');
+        return $this->translator->trans($string, [], $domain);
     }
 
     /**

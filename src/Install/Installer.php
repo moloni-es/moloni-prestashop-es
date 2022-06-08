@@ -196,7 +196,7 @@ class Installer
             $tabName = $this->module->getTranslator()->trans(
                 $tab['tabName'],
                 [],
-                'Modules.Molonies.Molonies'
+                'Modules.Molonies.Admin'
             );
 
             if (!$this->installTab($tab['name'], $tab['parent'], $tabName, $tab['logo'])) {
@@ -309,7 +309,7 @@ class Installer
 
         $arg1 = 'Error loading installation files!';
         $arg2 = [];
-        $arg3 = 'Modules.Molonies.Molonies';
+        $arg3 = 'Modules.Molonies.Admin';
 
         if (empty($installSqlFiles)) {
             throw new RuntimeException($this->module->getTranslator()->trans($arg1, $arg2, $arg3));
@@ -326,7 +326,7 @@ class Installer
                 $msg = $this->module->getTranslator()->trans(
                     'Error executing operation from %s!',
                     [],
-                    'Modules.Molonies.Molonies'
+                    'Modules.Molonies.Admin'
                 );
 
                 throw new RuntimeException(sprintf($msg, end($parts)));

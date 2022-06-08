@@ -33,7 +33,7 @@ use Moloni\Enums\Domains;
 use Moloni\Enums\Languages;
 use Moloni\Enums\MoloniRoutes;
 use Moloni\Exceptions\MoloniException;
-use Moloni\Form\LoginFormType;
+use Moloni\Form\Login\LoginFormType;
 use Moloni\Repository\MoloniAppRepository;
 use Shop;
 use Symfony\Component\HttpFoundation\RedirectResponse;
