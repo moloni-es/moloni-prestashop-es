@@ -3,6 +3,8 @@
 namespace Moloni\Form;
 
 use DateTime;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Enums\Boolean;
 use Moloni\Enums\DocumentStatus;
@@ -13,11 +15,11 @@ use Moloni\Enums\LoadAddress;
 use Moloni\Enums\ProductInformation;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Repository\MoloniSettingsRepository;
+use Moloni\Tools\Settings;
 use Store;
 use OrderState;
 use Shop;
 use Moloni\Enums\SyncFields;
-use Moloni\Helpers\Settings;
 use PrestaShop\PrestaShop\Core\Form\FormDataProviderInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
@@ -70,6 +72,10 @@ class SettingsFormDataProvider implements FormDataProviderInterface
         return $settings;
     }
 
+    /**
+     * @throws OptimisticLockException
+     * @throws ORMException
+     */
     public function setData(array $data): array
     {
         $shopId = (int)Shop::getContextShopID();
