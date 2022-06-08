@@ -1,6 +1,6 @@
 <?php
 
-namespace Moloni\Form;
+namespace Moloni\Form\Settings;
 
 use Moloni\Actions\Tools\WebhookCreate;
 use Moloni\Actions\Tools\WebhookDeleteAll;

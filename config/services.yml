@@ -34,15 +34,8 @@ services:
 
   # Moloni form service di
 
-  moloni.settings.form_data_provider:
-    class: 'Moloni\Form\SettingsFormDataProvider'
-    arguments:
-      - '@translator'
-      - '@moloni.repository.settings'
-      - '@=service("prestashop.adapter.legacy.context").getLanguage().id'
-
   moloni.settings.form:
-    class: Moloni\Form\SettingsFormHandler
+    class: Moloni\Form\Settings\SettingsFormHandler
     public: true
     autowire: true
     autoconfigure: false
@@ -51,8 +44,15 @@ services:
       - '@prestashop.core.hook.dispatcher'
       - '@moloni.settings.form_data_provider'
 
+  moloni.settings.form_data_provider:
+    class: 'Moloni\Form\Settings\SettingsFormDataProvider'
+    arguments:
+      - '@translator'
+      - '@moloni.repository.settings'
+      - '@=service("prestashop.adapter.legacy.context").getLanguage().id'
+
   moloni.settings.form_type:
-    class: Moloni\Form\SettingsFormType
+    class: Moloni\Form\Settings\SettingsFormType
     parent: 'form.type.translatable.aware'
     public: true
     autowire: true
