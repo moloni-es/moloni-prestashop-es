@@ -24,8 +24,10 @@
 
 namespace Moloni\Webservice\Product;
 
-use Moloni\Builders\PrestashopProductFromId;
+use Moloni\Builders\PrestashopProductSimple;
+use Moloni\Builders\PrestashopProductWithCombinations;
 use Moloni\Enums\Boolean;
+use Moloni\Exceptions\MoloniException;
 use Moloni\Exceptions\Product\MoloniProductException;
 use Moloni\Tools\Logs;
 use Moloni\Tools\Settings;
@@ -40,7 +42,14 @@ class ProductStockChange extends AbstractWebserviceAction
         }
 
         try {
-            $productBuilder = new PrestashopProductFromId($this->productId);
+            $product = $this->fetchProductFromMoloni($this->productId);
+
+            if (empty($product['variants'])) {
+                $productBuilder = new PrestashopProductSimple($product);
+            } else {
+                $productBuilder = new PrestashopProductWithCombinations($product);
+            }
+
             $prestaProductId = $productBuilder->getPrestashopProductId();
 
             if ($prestaProductId > 0 && !SyncLogs::productHasTimeout($prestaProductId)) {
