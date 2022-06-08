@@ -11,6 +11,12 @@ services:
       - '@doctrine.dbal.default_connection'
       - '%database_prefix%'
 
+  moloni.repository.settings:
+    class: Moloni\Repository\MoloniSettingsRepository
+    factory: [ '@doctrine.orm.default_entity_manager', getRepository ]
+    arguments:
+      - Moloni\Entity\MoloniSettings
+
   # Moloni services
 
   moloni.services.context:
@@ -24,3 +30,34 @@ services:
     class: Moloni\EventListener\AuthenticationListener
     tags:
       - { name: kernel.event_listener, event: kernel.controller }
+
+
+  # Moloni form service di
+
+  moloni.settings.form_data_provider:
+    class: 'Moloni\Form\SettingsFormDataProvider'
+    arguments:
+      - '@translator'
+      - '@moloni.repository.settings'
+      - '@=service("prestashop.adapter.legacy.context").getLanguage().id'
+
+  moloni.settings.form:
+    class: Moloni\Form\SettingsFormHandler
+    public: true
+    autowire: true
+    autoconfigure: false
+    arguments:
+      - '@form.factory'
+      - '@prestashop.core.hook.dispatcher'
+      - '@moloni.settings.form_data_provider'
+
+  moloni.settings.form_type:
+    class: Moloni\Form\SettingsFormType
+    parent: 'form.type.translatable.aware'
+    public: true
+    autowire: true
+    autoconfigure: false
+    tags:
+      - { name: form.type }
+    arguments:
+      - '@moloni.settings.form_data_provider'

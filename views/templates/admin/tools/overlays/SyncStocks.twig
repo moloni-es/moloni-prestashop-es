@@ -19,13 +19,12 @@
             </div>
             <div class="modal-body">
                 <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec dui
-                    sem, egestas non luctus et, semper sed risus. Etiam vel quam et eros
-                    pharetra volutpat. Sed faucibus hendrerit diam vitae hendrerit.
+                    {{ 'This tool will fetch all your Moloni products that were updated on the last 7 days, and synchronize your Prestashop stocks with the ones on your Moloni account.'|trans({}, 'Modules.Molonies.Common') }}<br>
+                    {{ 'When the tool is finish, all your Prestashop stock will be updated to match the stock on your Moloni account.'|trans({}, 'Modules.Molonies.Common') }}<br>
+                    {{ 'Please keep this window open until the process finishes.'|trans({}, 'Modules.Molonies.Common') }}
                 </p>
                 <p>
-                    Donec mollis pretium ex luctus molestie. Pellentesque imperdiet libero
-                    eget metus gravida dictum.
+                    {{ 'Are you sure you want to continue? '|trans({}, 'Modules.Molonies.Common') }}
                 </p>
             </div>
             <div class="modal-footer">

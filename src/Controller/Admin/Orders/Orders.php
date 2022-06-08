@@ -54,8 +54,6 @@ class Orders extends MoloniController
      */
     public function home(Request $request): Response
     {
-        (new PrestaProductFromId(98986))->insert();die;
-
         $page = $request->get('page', 1);
 
         /** @var OrdersRepository $repository */
@@ -71,7 +69,7 @@ class Orders extends MoloniController
             $order['currency'] = (new Currency($order['id_currency']))->symbol;
             $order['view_url'] = $this->getAdminLink('AdminOrders', [
                 'vieworder' => '',
-                'id_order' => $order['id_order']
+                'id_order' => $order['id_order'],
             ]);
         }
 
@@ -98,7 +96,7 @@ class Orders extends MoloniController
      */
     public function create(Request $request): RedirectResponse
     {
-        $orderId = (int)$request->get('order_id', 0);
+        $orderId = (int) $request->get('order_id', 0);
         $documentType = $request->get('document_type');
         $page = $request->get('page');
 
@@ -107,7 +105,7 @@ class Orders extends MoloniController
             $action->handle($documentType);
 
             $msg = $this->trans('Document created successfully.', 'Modules.Molonies.Common');
-            $msg .= " (" . $action->getOrder()->reference . ")";
+            $msg .= ' (' . $action->getOrder()->reference . ')';
 
             $this->addSuccessMessage($msg);
         } catch (MoloniDocumentWarning $e) {
@@ -145,7 +143,7 @@ class Orders extends MoloniController
             $action->handle();
 
             $msg = $this->trans('Order discarded with success.', 'Modules.Molonies.Common');
-            $msg .= " (" . $action->getOrder()->reference . ")";
+            $msg .= ' (' . $action->getOrder()->reference . ')';
 
             $this->addSuccessMessage($msg);
         } catch (MoloniException $e) {
