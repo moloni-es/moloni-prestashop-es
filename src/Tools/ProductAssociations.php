@@ -25,27 +25,17 @@
 namespace Moloni\Tools;
 
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\ORMException;
-use Doctrine\Persistence\ObjectRepository;
 use Moloni\Entity\MoloniProductAssociations;
 use Moloni\Repository\MoloniProductAssociationsRepository;
 
 class ProductAssociations
 {
     /**
-     * Entity manager
-     *
-     * @var EntityManager
-     */
-    private static $entityManager;
-
-    /**
      * Associations repository
      *
-     * @var EntityRepository|ObjectRepository|MoloniProductAssociationsRepository
+     * @var MoloniProductAssociationsRepository
      */
-    private static $associationManager;
+    private static $associationRepository;
 
     /**
      * Construct
@@ -54,35 +44,53 @@ class ProductAssociations
      */
     public function __construct(EntityManager $entityManager)
     {
-        self::$entityManager = $entityManager;
-        self::$associationManager = $entityManager->getRepository(MoloniProductAssociations::class);
+        /** @var MoloniProductAssociationsRepository $repository */
+        $repository = $entityManager->getRepository(MoloniProductAssociations::class);
+
+        self::$associationRepository = $repository;
     }
 
-    public static function getByMoloniId($id): ?object
+    //          RETRIEVES          //
+
+    public static function findByMoloniParentId($parentId): array
     {
-        return self::$associationManager->getAssociation($id);
+        return self::$associationRepository->findBy(['mlProductId' => $parentId]);
     }
 
-    public static function getByPrestaId($id): ?object
+    public static function findByMoloniVariantId($variantId): ?object
     {
-        return self::$associationManager->getAssociation(null, $id);
+        return self::$associationRepository->findOneBy(['mlVariantId' => $variantId], ['id' => 'DESC']);
     }
 
-    public static function addAssociation(): void
+    public static function findByPrestashopProductId($productId): array
     {
-        $association = new MoloniProductAssociations();
-        // todo: finish this
-
-        try {
-            self::$entityManager->persist($association);
-            self::$entityManager->flush();
-        } catch (ORMException $e) {
-            // do not catch
-        }
+        return self::$associationRepository->findBy(['psProductId' => $productId]);
     }
 
-    public static function deleteAssociation(): void
+    public static function findByPrestashopCombinationId($combinationId): ?object
     {
-        // todo: finish this
+        return self::$associationRepository->findOneBy(['psCombinationId' => $combinationId], ['id' => 'DESC']);
+    }
+
+    //          CRUD          //
+
+    public static function add($mlProductId, $mlProductReference, $mlVariantId, $psProductId, $psProductReference, $psCombinationId, $psCombinationReference, $active): void
+    {
+        self::$associationRepository->addAssociation($mlProductId, $mlProductReference, $mlVariantId, $psProductId, $psProductReference, $psCombinationId, $psCombinationReference, $active);
+    }
+
+    public static function deleteByPrestashopId($prestashopId): void
+    {
+        self::$associationRepository->deleteByPrestashopId($prestashopId);
+    }
+
+    public static function deleteByCombinationId($combinationId): void
+    {
+        self::$associationRepository->deleteByCombinationId($combinationId);
+    }
+
+    public static function deleteByMoloniId($moloniId): void
+    {
+        self::$associationRepository->deleteByMoloniId($moloniId);
     }
 }

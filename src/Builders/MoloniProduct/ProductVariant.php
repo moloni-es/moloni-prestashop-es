@@ -156,6 +156,8 @@ class ProductVariant
     {
         $this->prestashopCombination = $prestashopCombination;
         $this->allMoloniVariants = $allMoloniVariants;
+
+        $this->init();
     }
 
     //          PUBLICS          //
@@ -176,7 +178,8 @@ class ProductVariant
             ->setPrice()
             ->setStock()
             ->setVisibility()
-            ->setPropertyPairs();
+            ->setPropertyPairs()
+            ->setImage();
 
         return $this;
     }
@@ -259,6 +262,26 @@ class ProductVariant
     }
 
     /**
+     * Get variant property pairs
+     *
+     * @return array
+     */
+    public function getPropertyPairs(): array
+    {
+        return $this->propertyPairs;
+    }
+
+    /**
+     * Get variant reference
+     *
+     * @return string
+     */
+    public function getReference(): string
+    {
+        return $this->reference;
+    }
+
+    /**
      * Get variant image
      *
      * @return array
@@ -270,6 +293,13 @@ class ProductVariant
 
     //          SETS          //
 
+    /**
+     * Set moloni variant
+     *
+     * @param array|null $moloniVariant
+     *
+     * @return $this
+     */
     public function setMoloniVariant(?array $moloniVariant = []): ProductVariant
     {
         $existingVariant = [];
@@ -428,7 +458,11 @@ class ProductVariant
         $languageId = (int)Configuration::get('PS_LANG_DEFAULT');
         $shopId = (int)Shop::getContextShopID();
 
-        $this->image = Image::getBestImageAttribute($shopId, $languageId, $this->prestashopCombination->id_product, $this->prestashopCombination->id);
+        $image = Image::getBestImageAttribute($shopId, $languageId, $this->prestashopCombination->id_product, $this->prestashopCombination->id);
+
+        if ($image) {
+            $this->image = $image;
+        }
 
         return $this;
     }

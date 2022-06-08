@@ -138,42 +138,6 @@ class Products extends Endpoint
         return $this->simplePost($query, $variables);
     }
 
-    /**
-     * Update a product image
-     *
-     * @param array|null $variables variables of the query
-     * @param string|null $file
-     *
-     * @return array
-     *
-     * @throws MoloniApiException
-     */
-    public function mutationProductImageUpdate(?array $variables = [], ?string $file = ''): array
-    {
-        $query = 'mutation productUpdate($companyId: Int!,$data: ProductUpdate!)
-        {
-            productUpdate(companyId: $companyId ,data: $data)
-            {
-                data
-                {
-                    productId
-                    name
-                    reference
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
-
-        $operations = ['query' => $query, 'variables' => $variables];
-        $map = '{ "0": ["variables.data.img"] }';
-
-        return $this->postWithFile($operations, $map, $file);
-    }
-
     //          PRIVATES          //
 
     /**
@@ -294,6 +258,8 @@ class Products extends Endpoint
             } 
             propertyPairs
             {
+                propertyId
+                propertyValueId
                 property
                 {
                     name

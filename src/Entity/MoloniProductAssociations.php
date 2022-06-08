@@ -50,7 +50,7 @@ class MoloniProductAssociations
     private $psProductId;
 
     /**
-     * @var int
+     * @var string
      *
      * @ORM\Column(name="ps_product_reference", type="string", length=250)
      */
@@ -64,28 +64,35 @@ class MoloniProductAssociations
     private $psCombinationId;
 
     /**
-     * @var int
+     * @var string
      *
      * @ORM\Column(name="ps_combination_reference", type="string", length=250)
      */
     private $psCombinationReference;
 
     /**
-     * @var string
+     * @var int
      *
      * @ORM\Column(name="ml_product_id", type="integer")
      */
     private $mlProductId;
 
     /**
-     * @var int
+     * @var string
      *
      * @ORM\Column(name="ml_product_reference", type="string", length=250)
      */
     private $mlProductReference;
 
     /**
-     * @var string
+     * @var int
+     *
+     * @ORM\Column(name="ml_variant_id", type="integer")
+     */
+    private $mlVariantId;
+
+    /**
+     * @var int
      *
      * @ORM\Column(name="active", type="integer")
      */
@@ -116,99 +123,115 @@ class MoloniProductAssociations
     }
 
     /**
-     * @return string
+     * @return int
      */
-    public function getMlProductId(): string
+    public function getMlProductId(): int
     {
         return $this->mlProductId;
     }
 
     /**
-     * @param string $mlProductId
+     * @param int $mlProductId
      */
-    public function setMlProductId(string $mlProductId): void
+    public function setMlProductId(int $mlProductId): void
     {
         $this->mlProductId = $mlProductId;
     }
 
     /**
-     * @return string
+     * @return int
      */
-    public function getActive(): string
+    public function getActive(): int
     {
         return $this->active;
     }
 
     /**
-     * @param string $active
+     * @param int $active
      */
-    public function setActive(string $active): void
+    public function setActive(int $active): void
     {
         $this->active = $active;
     }
 
     /**
-     * @return string
+     * @return int
      */
-    public function getPsCombinationId(): string
+    public function getPsCombinationId(): int
     {
         return $this->psCombinationId;
     }
 
     /**
-     * @param string $psCombinationId
+     * @param int $psCombinationId
      */
-    public function setPsCombinationId(string $psCombinationId): void
+    public function setPsCombinationId(int $psCombinationId): void
     {
         $this->psCombinationId = $psCombinationId;
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getPsProductReference(): int
+    public function getPsProductReference(): string
     {
         return $this->psProductReference;
     }
 
     /**
-     * @param int $psProductReference
+     * @param string $psProductReference
      */
-    public function setPsProductReference(int $psProductReference): void
+    public function setPsProductReference(string $psProductReference): void
     {
         $this->psProductReference = $psProductReference;
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getPsCombinationReference(): int
+    public function getPsCombinationReference(): string
     {
         return $this->psCombinationReference;
     }
 
     /**
-     * @param int $psCombinationReference
+     * @param string $psCombinationReference
      */
-    public function setPsCombinationReference(int $psCombinationReference): void
+    public function setPsCombinationReference(string $psCombinationReference): void
     {
         $this->psCombinationReference = $psCombinationReference;
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getMlProductReference(): int
+    public function getMlProductReference(): string
     {
         return $this->mlProductReference;
     }
 
     /**
-     * @param int $mlProductReference
+     * @param string $mlProductReference
      */
-    public function setMlProductReference(int $mlProductReference): void
+    public function setMlProductReference(string $mlProductReference): void
     {
         $this->mlProductReference = $mlProductReference;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMlVariantId(): int
+    {
+        return $this->mlVariantId;
+    }
+
+    /**
+     * @param int $mlVariantId
+     */
+    public function setMlVariantId(int $mlVariantId): void
+    {
+        $this->mlVariantId = $mlVariantId;
     }
 
     /**
@@ -224,6 +247,7 @@ class MoloniProductAssociations
             'ps_combination_reference' => $this->getPsCombinationReference(),
             'ml_product_id' => $this->getMlProductId(),
             'ml_product_reference' => $this->getMlProductReference(),
+            'ml_variant_id' => $this->getMlVariantId(),
             'active' => $this->getActive(),
         ];
     }

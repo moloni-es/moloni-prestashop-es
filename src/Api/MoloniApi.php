@@ -244,7 +244,7 @@ class MoloniApi
      *
      * @throws MoloniApiException
      */
-    public static function postWithFile(array $operations = [], string $map = '', string $file = ''): array
+    public static function postWithFile(array $operations = [], string $map = '', array $files = []): array
     {
         if (!self::$client) {
             self::$client = new Client();
@@ -267,8 +267,10 @@ class MoloniApi
                 $postBody->setField('map', $map);
             }
 
-            if (!empty($file)) {
-                $postBody->addFile(new PostFile('0', fopen($file, 'rb')));
+            if (!empty($files)) {
+                foreach ($files as $idx => $file) {
+                    $postBody->addFile(new PostFile((string)$idx, fopen($file, 'rb')));
+                }
             }
 
             $request->addHeader('Authorization', 'bearer ' . self::$app->getAccessToken());
