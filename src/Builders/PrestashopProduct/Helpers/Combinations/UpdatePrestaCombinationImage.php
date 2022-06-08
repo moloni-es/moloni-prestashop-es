@@ -24,12 +24,12 @@
 
 namespace Moloni\Builders\PrestashopProduct\Helpers\Combinations;
 
-use Combination;
-use Image;
-use Moloni\Builders\PrestashopProduct\Helpers\PrestaImage;
-use PrestaShopDatabaseException;
-use PrestaShopException;
 use Shop;
+use Image;
+use Combination;
+use PrestaShopException;
+use PrestaShopDatabaseException;
+use Moloni\Builders\PrestashopProduct\Helpers\PrestaImage;
 
 class UpdatePrestaCombinationImage extends PrestaImage
 {
