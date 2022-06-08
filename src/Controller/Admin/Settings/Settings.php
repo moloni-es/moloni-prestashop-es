@@ -24,81 +24,51 @@
 
 namespace Moloni\Controller\Admin\Settings;
 
-use Exception;
-use Moloni\Actions\Settings\SettingsSave;
-use Moloni\Actions\Settings\SettingsForm;
-use Moloni\Exceptions\MoloniException;
 use Moloni\Controller\Admin\MoloniController;
-use Moloni\Entity\MoloniSettings;
-use Moloni\Repository\MoloniSettingsRepository;
-use Symfony\Component\Form\FormFactory;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use PrestaShop\PrestaShop\Core\Form\FormHandlerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMException;
-use Symfony\Component\Routing\Router;
+
 
 class Settings extends MoloniController
 {
-    /**
-     * Settings form page
-     *
-     * @return Response
-     *
-     * @throws Exception
-     */
-    public function home(): Response
+    public function home(Request $request): Response
     {
-        /** @var FormFactory $formFactory */
-        $formFactory = $this->get('form.factory');
+        $settingsFormHandler = $this->getSettingsFormHandler();
+        $settingsForm = $settingsFormHandler->getForm();
+        $settingsForm->handleRequest($request);
 
-        /** @var Router $router */
-        $router = $this->get('router');
+        if ($settingsForm->isSubmitted() && $settingsForm->isValid()) {
+            try {
+                $errors = $settingsFormHandler->save($settingsForm->getData());
+            } catch (\Exception $e) {
+                $errors = [];
+                $errors[] = $e->getMessage();
+            }
 
-        $languageId = $this->getContextLangId();
+            if (empty($errors)) {
+                $this->addSuccessMessage(
+                    $this->trans(
+                        'Your module settings were successfuly updated.',
+                        'Modules.Molonies.Settings'
+                    )
+                );
+                return $this->redirectToSettings();
+            }
 
-        $form = (new SettingsForm($languageId, $formFactory, $router))->handle();
+            $this->flashErrors($errors);
+        }
 
         return $this->render(
             '@Modules/molonies/views/templates/admin/settings/Settings.twig',
             [
-                'form' => $form->createView(),
+                'form' => $settingsForm->createView(),
             ]
         );
     }
 
-    /**
-     * Save plugin settings
-     *
-     * @param Request $request
-     *
-     * @return RedirectResponse
-     */
-    public function save(Request $request): RedirectResponse
+    private function getSettingsFormHandler(): FormHandlerInterface
     {
-        /** @var MoloniSettingsRepository $settingsRepository */
-        $settingsRepository = $this
-            ->getDoctrine()
-            ->getRepository(MoloniSettings::class);
-
-        /** @var FormFactory $formFactory */
-        $formFactory = $this->get('form.factory');
-
-        $languageId = $this->getContextLangId();
-
-        try {
-            (new SettingsSave($languageId, $formFactory, $settingsRepository))->handle($request);
-
-            $this->addSuccessMessage($this->trans('Settings saved.', 'Modules.Molonies.Common'));
-        } catch (MoloniException $e) {
-            $msg = $this->trans($e->getMessage(), 'Modules.Molonies.Errors', $e->getIdentifiers());
-            $this->addErrorMessage($msg);
-        } catch (OptimisticLockException|ORMException $e) {
-            $msg = $this->trans('Error saving settings', 'Modules.Molonies.Errors');
-            $this->addErrorMessage($msg);
-        }
-
-        return $this->redirectToSettings();
+        return $this->get('moloni.settings.form');
     }
 }

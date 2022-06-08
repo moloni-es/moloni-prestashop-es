@@ -1,13 +1,7 @@
 moloni_es_settings_home:
   path: /settings/
-  methods: [GET]
+  methods: [GET,POST]
   defaults:
     _controller: 'Moloni\Controller\Admin\Settings\Settings::home'
     _legacy_controller: 'MoloniSettings'
     _legacy_link: 'MoloniSettings'
-
-moloni_es_settings_save:
-  path: /settings/save
-  methods: [POST]
-  defaults:
-    _controller: 'Moloni\Controller\Admin\Settings\Settings::save'
