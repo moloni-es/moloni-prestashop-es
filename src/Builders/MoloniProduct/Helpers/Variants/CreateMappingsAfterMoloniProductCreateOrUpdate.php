@@ -39,6 +39,8 @@ class CreateMappingsAfterMoloniProductCreateOrUpdate
     private $moloniProductMutated;
 
     /**
+     * Construct
+     *
      * @param array $moloniProductMutated
      * @param Product $prestashopProduct
      * @param ProductVariant[] $variantsBuilders

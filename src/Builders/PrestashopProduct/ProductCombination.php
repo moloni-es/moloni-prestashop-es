@@ -22,11 +22,12 @@
  * @noinspection PhpMultipleClassDeclarationsInspection
  */
 
-declare(strict_types=1);
-
 namespace Moloni\Builders\PrestashopProduct;
 
+use Moloni\Builders\PrestashopProduct\Helpers\UpdatePrestaProductImage;
+use Product;
 use Combination;
+use PrestaShopException;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\Interfaces\BuilderInterface;
 use Moloni\Builders\PrestashopProduct\Helpers\UpdatePrestaProductStock;
@@ -37,8 +38,6 @@ use Moloni\Exceptions\Product\MoloniProductCombinationException;
 use Moloni\Tools\Logs;
 use Moloni\Tools\Settings;
 use Moloni\Traits\AttributesTrait;
-use PrestaShopException;
-use Product;
 
 class ProductCombination implements BuilderInterface
 {
@@ -185,7 +184,7 @@ class ProductCombination implements BuilderInterface
     }
 
     /**
-     * After save requirements
+     * After save actions
      *
      * @return void
      */
@@ -193,6 +192,13 @@ class ProductCombination implements BuilderInterface
     {
         if (!empty($this->attributes)) {
             $this->prestashopCombination->setAttributes($this->attributes);
+        }
+    }
+
+    protected function afterSave(): void
+    {
+        if (!empty($this->imagePath) && !$this->shouldSyncImage()) {
+            // todo: update combination images
         }
     }
 
@@ -252,6 +258,7 @@ class ProductCombination implements BuilderInterface
             Logs::addInfoLog(['Combination created in Prestashop ({0})', ['{0}' => $this->reference]], ['moloniVariant' => $this->moloniVariant]);
 
             $this->afterInsert();
+            $this->afterSave();
         } catch (PrestaShopException $e) {
             throw new MoloniProductCombinationException('Error creating combination ({0})', ['{0}' => $this->reference], [
                 'moloniVariant' => $this->moloniVariant
@@ -274,6 +281,8 @@ class ProductCombination implements BuilderInterface
             $this->prestashopCombination->save();
 
             Logs::addInfoLog(['Combination updated in Prestashop ({0})', ['{0}' => $this->reference]], ['moloniVariant' => $this->moloniVariant]);
+
+            $this->afterSave();
         } catch (PrestaShopException $e) {
             throw new MoloniProductCombinationException('Error updating combination ({0})', ['{0}' => $this->reference], [
                 'moloniVariant' => $this->moloniVariant
@@ -292,27 +301,55 @@ class ProductCombination implements BuilderInterface
             return;
         }
 
-        new UpdatePrestaProductStock($this->prestashopProduct->id, $this->prestashopCombination->id, $this->reference, $this->stock);
+        new UpdatePrestaProductStock((int)$this->prestashopProduct->id, (int)$this->prestashopCombination->id, $this->reference, $this->stock);
     }
 
     //          GETS          //
 
     /**
-     * Get Moloni variant id
+     * Get Moloni variant
      *
      * @return array
      */
-    public function getVariant(): array
+    public function getMoloniVariant(): array
     {
         return $this->moloniVariant;
     }
 
     /**
-     * Get Moloni variant
+     * Get Moloni variant id
+     *
+     * @return int
+     */
+    public function getMoloniVariantId(): int
+    {
+        return (int)($this->moloniVariant['productId'] ?? 0);
+    }
+
+    /**
+     * Get Prestashop combination
+     */
+    public function getCombination(): ?Combination
+    {
+        return $this->prestashopCombination;
+    }
+
+    /**
+     * Get Prestashop combination id
      */
     public function getCombinationId(): int
     {
-        return $this->prestashopCombination->id ?? 0;
+        return (int)($this->prestashopCombination->id ?? 0);
+    }
+
+    /**
+     * Get combination reference
+     *
+     * @return string
+     */
+    public function getReference(): string
+    {
+        return $this->reference;
     }
 
     //          SETS          //
@@ -514,6 +551,16 @@ class ProductCombination implements BuilderInterface
     protected function shouldSyncPrice(): bool
     {
         return !$this->combinationExists() || in_array(SyncFields::PRICE, $this->syncFields, true);
+    }
+
+    /**
+     * Should sync product image
+     *
+     * @return bool
+     */
+    protected function shouldSyncImage(): bool
+    {
+        return in_array(SyncFields::IMAGE, $this->syncFields, true);
     }
 
     //          Auxiliary          //

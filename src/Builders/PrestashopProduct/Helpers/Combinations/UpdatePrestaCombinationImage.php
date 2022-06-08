@@ -22,10 +22,11 @@
  * @noinspection PhpMultipleClassDeclarationsInspection
  */
 
-namespace Moloni\Builders\PrestashopProduct\Helpers;
+namespace Moloni\Builders\PrestashopProduct\Helpers\Combinations;
 
 use Combination;
 use Image;
+use Moloni\Builders\PrestashopProduct\Helpers\PrestaImage;
 use PrestaShopDatabaseException;
 use PrestaShopException;
 use Shop;

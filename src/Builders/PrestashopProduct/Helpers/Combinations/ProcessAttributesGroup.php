@@ -22,7 +22,7 @@
  * @noinspection PhpMultipleClassDeclarationsInspection
  */
 
-namespace Moloni\Builders\PrestashopProduct\Helpers;
+namespace Moloni\Builders\PrestashopProduct\Helpers\Combinations;
 
 use Attribute;
 use AttributeGroup;

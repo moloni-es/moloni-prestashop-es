@@ -22,14 +22,14 @@
  * @noinspection PhpMultipleClassDeclarationsInspection
  */
 
-namespace Moloni\Builders\MoloniProduct\Helpers;
+namespace Moloni\Builders\MoloniProduct\Helpers\Variants;
 
-use Image;
 use Configuration;
+use Image;
 use Moloni\Api\MoloniApi;
+use Moloni\Builders\MoloniProduct\ProductVariant;
 use Moloni\Enums\Boolean;
 use Moloni\Exceptions\MoloniApiException;
-use Moloni\Builders\MoloniProduct\ProductVariant;
 use Moloni\Traits\VariantTrait;
 
 class UpdateMoloniVariantsProductImage
