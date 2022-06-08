@@ -30,6 +30,7 @@ if (!defined('_PS_VERSION_')) {
 
 use Doctrine\Common\Persistence\ManagerRegistry as LegacyManagerRegistry;
 use Doctrine\Persistence\ManagerRegistry;
+use Moloni\Enums\TranslationDomains;
 use Moloni\Hooks\ProductSave;
 use Moloni\Hooks\OrderStatusUpdate;
 use Moloni\Install\Installer;
@@ -54,14 +55,14 @@ class MoloniEs extends Module
 
         $this->displayName = $this->trans('Moloni España', [], 'Modules.Molonies.Molonies');
         $this->description = $this->trans(
-            'Transform all your orders in verified documents without any effort and focus on selling!',
+            'Automatic document creation wiith real time stock synchronization and powerful sales analysis!',
             [],
-            'Modules.Molonies.Molonies'
+            TranslationDomains::COMMON
         );
         $this->confirmUninstall = $this->trans(
-            'Do you want to unnistall module? All information will be deleted!',
+            'Are you sure you want to unnistall this module?',
             [],
-            'Modules.Molonies.Molonies'
+            TranslationDomains::COMMON
         );
 
         $this->autoload();
@@ -192,9 +193,6 @@ class MoloniEs extends Module
             $this->context->controller->addJS($this->_path . 'views/js/app.js');
             $this->context->controller->addCSS($this->_path . 'views/css/app.css');
         }
-
-        // Deprecated??
-        // $this->context->controller->addJquery();
     }
 
     /**

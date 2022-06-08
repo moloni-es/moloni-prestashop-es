@@ -46,6 +46,6 @@ abstract class SendMail
 
     protected function getLogoUrl(): string
     {
-        return (new \Link())->getBaseLink() . '/modules/molonies/views/img/logoMail.png';
+        return (new \Link())->getBaseLink() . '/modules/molonies/views/img/moloni_logo_white.png';
     }
 }
