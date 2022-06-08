@@ -24,11 +24,15 @@
 
 namespace Moloni\Builders;
 
-use Configuration;
 use Country;
+use Product;
+use Configuration;
+use TaxRulesGroup;
+use PrestaShopException;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\Interfaces\BuilderInterface;
-use Moloni\Builders\PrestashopProduct\Helpers\ProcessAttributesGroup;
+use Moloni\Builders\PrestashopProduct\Helpers\Combinations\CreateMappingsAfterPrestaProductCreateOrUpdate;
+use Moloni\Builders\PrestashopProduct\Helpers\Combinations\ProcessAttributesGroup;
 use Moloni\Builders\PrestashopProduct\Helpers\UpdatePrestaProductImage;
 use Moloni\Builders\PrestashopProduct\Helpers\UpdatePrestaProductStock;
 use Moloni\Builders\PrestashopProduct\ProductCategory;
@@ -40,11 +44,8 @@ use Moloni\Exceptions\Product\MoloniProductCategoryException;
 use Moloni\Exceptions\Product\MoloniProductException;
 use Moloni\Tools\Logs;
 use Moloni\Tools\Settings;
-use PrestaShopException;
-use Product;
-use TaxRulesGroup;
 
-class PrestashopProduct implements BuilderInterface
+class PrestashopProductFromId implements BuilderInterface
 {
     /**
      * Product id in Moloni
@@ -202,7 +203,7 @@ class PrestashopProduct implements BuilderInterface
      *
      * @throws MoloniProductException
      */
-    protected function init(): PrestashopProduct
+    protected function init(): PrestashopProductFromId
     {
         $this
             ->fetchProductFromMoloni()
@@ -260,6 +261,8 @@ class PrestashopProduct implements BuilderInterface
                     $combination->updateStock();
                 }
             }
+
+            new CreateMappingsAfterPrestaProductCreateOrUpdate($this->moloniProduct, $this->prestashopProduct, $this->combinations);
         }
     }
 
@@ -268,7 +271,7 @@ class PrestashopProduct implements BuilderInterface
      *
      * @return $this
      */
-    protected function fillPrestaProduct(): PrestashopProduct
+    protected function fillPrestaProduct(): PrestashopProductFromId
     {
         if ($this->shouldSyncName()) {
             $this->prestashopProduct->name = $this->name;
@@ -304,7 +307,7 @@ class PrestashopProduct implements BuilderInterface
      *
      * @throws MoloniProductException
      */
-    protected function fetchProductFromMoloni(): PrestashopProduct
+    protected function fetchProductFromMoloni(): PrestashopProductFromId
     {
         return $this->getById();
     }
@@ -312,7 +315,7 @@ class PrestashopProduct implements BuilderInterface
     /**
      * Finds Prestashop product by reference
      */
-    protected function fetchProductFromPresta(): PrestashopProduct
+    protected function fetchProductFromPresta(): PrestashopProductFromId
     {
         $productId = (int)Product::getIdByReference($this->reference);
 
@@ -468,6 +471,16 @@ class PrestashopProduct implements BuilderInterface
     }
 
     /**
+     * Get reference
+     *
+     * @return string
+     */
+    public function getReference(): string
+    {
+        return $this->reference;
+    }
+
+    /**
      * Get Prestashop product id
      *
      * @return int
@@ -484,7 +497,7 @@ class PrestashopProduct implements BuilderInterface
      *
      * @return $this
      */
-    public function setName(): PrestashopProduct
+    public function setName(): PrestashopProductFromId
     {
         $this->name = $this->moloniProduct['name'] ?? '';
 
@@ -496,7 +509,7 @@ class PrestashopProduct implements BuilderInterface
      *
      * @return $this
      */
-    public function setReference(): PrestashopProduct
+    public function setReference(): PrestashopProductFromId
     {
         $this->reference = $this->moloniProduct['reference'] ?? '';
 
@@ -510,7 +523,7 @@ class PrestashopProduct implements BuilderInterface
      *
      * @throws MoloniProductCategoryException
      */
-    public function setCategories(): PrestashopProduct
+    public function setCategories(): PrestashopProductFromId
     {
         $categoryId = $this->moloniProduct['productCategory']['productCategoryId'] ?? 0;
 
@@ -529,7 +542,7 @@ class PrestashopProduct implements BuilderInterface
      *
      * @return $this
      */
-    public function setType(): PrestashopProduct
+    public function setType(): PrestashopProductFromId
     {
         if ($this->productHasCombinations()) {
             $this->type = 'combinations';
@@ -543,7 +556,7 @@ class PrestashopProduct implements BuilderInterface
      *
      * @return $this
      */
-    public function setDescription(): PrestashopProduct
+    public function setDescription(): PrestashopProductFromId
     {
         $this->description = $this->moloniProduct['summary'] ?? '';
 
@@ -555,7 +568,7 @@ class PrestashopProduct implements BuilderInterface
      *
      * @return $this
      */
-    public function setIdentifications(): PrestashopProduct
+    public function setIdentifications(): PrestashopProductFromId
     {
         $isbn = '';
         $ean13 = '';
@@ -587,7 +600,7 @@ class PrestashopProduct implements BuilderInterface
      *
      * @return $this
      */
-    public function setPrice(): PrestashopProduct
+    public function setPrice(): PrestashopProductFromId
     {
         $this->price = (float)($this->moloniProduct['price'] ?? 0);
 
@@ -599,7 +612,7 @@ class PrestashopProduct implements BuilderInterface
      *
      * @return $this
      */
-    public function setWarehouseId(): PrestashopProduct
+    public function setWarehouseId(): PrestashopProductFromId
     {
         $warehouseId = Settings::get('syncStockToPrestashopWarehouse');
 
@@ -635,7 +648,7 @@ class PrestashopProduct implements BuilderInterface
      *
      * @return $this
      */
-    public function setHasStock(): PrestashopProduct
+    public function setHasStock(): PrestashopProductFromId
     {
         $this->hasStock = $this->moloniProduct['hasStock'] ?? (bool)Boolean::YES;
 
@@ -647,7 +660,7 @@ class PrestashopProduct implements BuilderInterface
      *
      * @return $this
      */
-    public function setStock(): PrestashopProduct
+    public function setStock(): PrestashopProductFromId
     {
         if ($this->productHasStock()) {
             $stock = 0;
@@ -675,7 +688,7 @@ class PrestashopProduct implements BuilderInterface
      *
      * @return $this
      */
-    public function setImagePath(): PrestashopProduct
+    public function setImagePath(): PrestashopProductFromId
     {
         $imagePath = '';
 
@@ -693,7 +706,7 @@ class PrestashopProduct implements BuilderInterface
      *
      * @return $this
      */
-    public function setCombinations(): PrestashopProduct
+    public function setCombinations(): PrestashopProductFromId
     {
         $combinations = [];
 
@@ -713,7 +726,7 @@ class PrestashopProduct implements BuilderInterface
      *
      * @return $this
      */
-    public function setTaxRulesGroupId(): PrestashopProduct
+    public function setTaxRulesGroupId(): PrestashopProductFromId
     {
         if (!empty($this->moloniProduct['taxes']) && $this->productExists()) {
             $moloniTax = $this->moloniProduct['taxes'][0]['tax'] ?? [];
@@ -747,7 +760,7 @@ class PrestashopProduct implements BuilderInterface
      *
      * @throws MoloniProductException
      */
-    protected function getById(): PrestashopProduct
+    protected function getById(): PrestashopProductFromId
     {
         $variables = [
             'productId' => $this->moloniProductId

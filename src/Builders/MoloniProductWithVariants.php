@@ -32,10 +32,9 @@ use Country;
 use Image;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\Interfaces\BuilderInterface;
-use Moloni\Builders\MoloniProduct\Helpers\UpdateMoloniSimpleProductImage;
-use Moloni\Builders\MoloniProduct\Helpers\UpdateMoloniVariantsProductImage;
-use Moloni\Builders\MoloniProduct\Helpers\Variants\CreateMappingsAfterMoloniProductCreateOrUpdate;
+use Moloni\Builders\MoloniProduct\Helpers\Variants\CreateMappingsAfterPrestaProductCreateOrUpdate;
 use Moloni\Builders\MoloniProduct\Helpers\Variants\FindOrCreatePropertyGroup;
+use Moloni\Builders\MoloniProduct\Helpers\Variants\UpdateMoloniVariantsProductImage;
 use Moloni\Builders\MoloniProduct\ProductCategory;
 use Moloni\Builders\MoloniProduct\ProductTax;
 use Moloni\Builders\MoloniProduct\ProductVariant;
@@ -332,7 +331,7 @@ class MoloniProductWithVariants implements BuilderInterface
             new UpdateMoloniVariantsProductImage($this->coverImage, $this->moloniProduct, $this->variants);
         }
 
-        new CreateMappingsAfterMoloniProductCreateOrUpdate($this->prestashopProduct, $this->moloniProduct, $this->variants);
+        new CreateMappingsAfterPrestaProductCreateOrUpdate($this->prestashopProduct, $this->moloniProduct, $this->variants);
     }
 
     /**

@@ -24,7 +24,7 @@
 
 namespace Moloni\Webservice\Product;
 
-use Moloni\Builders\PrestashopProduct;
+use Moloni\Builders\PrestashopProductFromId;
 use Moloni\Enums\Boolean;
 use Moloni\Exceptions\Product\MoloniProductException;
 use Moloni\Tools\Logs;
@@ -40,7 +40,7 @@ class ProductCreate extends AbstractWebserviceAction
         }
 
         try {
-            $productBuilder = new PrestashopProduct($this->productId);
+            $productBuilder = new PrestashopProductFromId($this->productId);
             $prestaProductId = $productBuilder->getPrestashopProductId();
 
             if ($prestaProductId === 0) {
