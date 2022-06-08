@@ -22,6 +22,8 @@
  * @noinspection PhpMultipleClassDeclarationsInspection
  */
 
+declare(strict_types=1);
+
 namespace Moloni\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -114,7 +116,7 @@ class MoloniApp
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }

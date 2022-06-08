@@ -61,3 +61,12 @@ services:
       - { name: form.type }
     arguments:
       - '@moloni.settings.form_data_provider'
+
+  moloni.login.form_type:
+    class: Moloni\Form\Login\LoginFormType
+    parent: 'form.type.translatable.aware'
+    public: true
+    autowire: true
+    autoconfigure: false
+    tags:
+      - { name: form.type }

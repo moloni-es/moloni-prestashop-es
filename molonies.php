@@ -30,7 +30,6 @@ if (!defined('_PS_VERSION_')) {
 
 use Doctrine\Common\Persistence\ManagerRegistry as LegacyManagerRegistry;
 use Doctrine\Persistence\ManagerRegistry;
-use Moloni\Enums\TranslationDomains;
 use Moloni\Hooks\ProductSave;
 use Moloni\Hooks\OrderStatusUpdate;
 use Moloni\Install\Installer;
@@ -53,16 +52,16 @@ class MoloniEs extends Module
 
         parent::__construct();
 
-        $this->displayName = $this->trans('Moloni España', [], 'Modules.Molonies.Molonies');
+        $this->displayName = $this->trans('Moloni España', [], 'Modules.Molonies.Admin');
         $this->description = $this->trans(
-            'Automatic document creation wiith real time stock synchronization and powerful sales analysis!',
+            'Automatic document creation with real time stock synchronization and powerful sales analysis!',
             [],
-            TranslationDomains::COMMON
+            'Modules.Molonies.Admin'
         );
         $this->confirmUninstall = $this->trans(
             'Are you sure you want to unnistall this module?',
             [],
-            TranslationDomains::COMMON
+            'Modules.Molonies.Admin'
         );
 
         $this->autoload();
