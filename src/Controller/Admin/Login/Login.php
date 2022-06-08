@@ -53,7 +53,7 @@ class Login extends MoloniController
             '@Modules/molonies/views/templates/admin/login/Login.twig',
             [
                 'form' => $form->createView(),
-                'img' => _MODULE_DIR_ . 'molonies/views/img/logoBig.png',
+                'img' => _MODULE_DIR_ . 'molonies/views/img/moloni_logo_colors.svg',
             ]
         );
     }

@@ -3,11 +3,13 @@
     <name>molonies</name>
     <displayName><![CDATA[Moloni Espa&ntilde;a]]></displayName>
     <version><![CDATA[2.0.0]]></version>
-    <description><![CDATA[Transform all your orders in verified documents without any effort and focus on selling!]]></description>
+    <description><![CDATA[
+    Automatic document creation wiith real time stock synchronization and powerful sales analysis.
+    ]]></description>
     <author><![CDATA[Moloni]]></author>
     <tab><![CDATA[administration]]></tab>
-	<confirmUninstall><![CDATA[Do you want to unnistall module? All information will be deleted!]]></confirmUninstall>
+    <confirmUninstall><![CDATA[Are you sure you want to unnistall this module?]]></confirmUninstall>
     <is_configurable>0</is_configurable>
     <need_instance>1</need_instance>
-	<limited_countries></limited_countries>
+    <limited_countries/>
 </module>
