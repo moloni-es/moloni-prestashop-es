@@ -24,13 +24,13 @@
 
 namespace Moloni\Builders\PrestashopProduct;
 
-use Moloni\Builders\PrestashopProduct\Helpers\UpdatePrestaProductImage;
 use Product;
 use Combination;
 use PrestaShopException;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\Interfaces\BuilderInterface;
 use Moloni\Builders\PrestashopProduct\Helpers\UpdatePrestaProductStock;
+use Moloni\Builders\PrestashopProduct\Helpers\Combinations\UpdatePrestaCombinationImage;
 use Moloni\Enums\Boolean;
 use Moloni\Enums\SyncFields;
 use Moloni\Exceptions\MoloniApiException;
@@ -197,8 +197,8 @@ class ProductCombination implements BuilderInterface
 
     protected function afterSave(): void
     {
-        if (!empty($this->imagePath) && !$this->shouldSyncImage()) {
-            // todo: update combination images
+        if (!empty($this->imagePath) && $this->shouldSyncImage()) {
+            new UpdatePrestaCombinationImage($this->prestashopCombination, $this->imagePath);
         }
     }
 
