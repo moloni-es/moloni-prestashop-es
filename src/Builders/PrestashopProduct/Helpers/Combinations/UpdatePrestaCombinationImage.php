@@ -33,14 +33,12 @@ use Shop;
 
 class UpdatePrestaCombinationImage extends PrestaImage
 {
-    protected $prestashopProductId;
     protected $prestashopCombination;
 
-    public function __construct(int $prestashopProductId, Combination $prestashopCombination, string $moloniImagePath)
+    public function __construct(Combination $prestashopCombination, string $moloniImagePath)
     {
         parent::__construct($moloniImagePath);
 
-        $this->prestashopProductId = $prestashopProductId;
         $this->prestashopCombination = $prestashopCombination;
 
         $this->handle();
@@ -53,7 +51,7 @@ class UpdatePrestaCombinationImage extends PrestaImage
         }
 
         $shopId = (int)Shop::getContextShopID();
-        $combinationImage = Image::getBestImageAttribute($shopId, $this->languageId, $this->prestashopProductId, $this->prestashopCombination->id);
+        $combinationImage = Image::getBestImageAttribute($shopId, $this->languageId, $this->prestashopCombination->id_product, $this->prestashopCombination->id);
 
         if (!empty($combinationImage)) {
             $image = new Image((int)$combinationImage['id_image'], $this->languageId);
@@ -61,7 +59,7 @@ class UpdatePrestaCombinationImage extends PrestaImage
         } else {
             $image = new Image(null, $this->languageId);
             $image->cover = false;
-            $image->id_product = $this->prestashopProductId;
+            $image->id_product = $this->prestashopCombination->id_product;
 
             try {
                 $image->save();
