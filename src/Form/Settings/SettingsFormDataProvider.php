@@ -1,6 +1,6 @@
 <?php
 
-namespace Moloni\Form;
+namespace Moloni\Form\Settings;
 
 use DateTime;
 use Doctrine\ORM\OptimisticLockException;
@@ -13,14 +13,14 @@ use Moloni\Enums\FiscalZone;
 use Moloni\Enums\Languages;
 use Moloni\Enums\LoadAddress;
 use Moloni\Enums\ProductInformation;
+use Moloni\Enums\SyncFields;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Repository\MoloniSettingsRepository;
 use Moloni\Tools\Settings;
-use Store;
 use OrderState;
-use Shop;
-use Moloni\Enums\SyncFields;
 use PrestaShop\PrestaShop\Core\Form\FormDataProviderInterface;
+use Shop;
+use Store;
 use Symfony\Component\Translation\TranslatorInterface;
 
 class SettingsFormDataProvider implements FormDataProviderInterface
@@ -167,8 +167,8 @@ class SettingsFormDataProvider implements FormDataProviderInterface
         ];
 
         $this->addresses = [
-            'Moloni company' => LoadAddress::MOLONI,
-            'Custom' => LoadAddress::CUSTOM,
+            $this->trans('Moloni company') => LoadAddress::MOLONI,
+            $this->trans('Custom') => LoadAddress::CUSTOM,
         ];
 
         if (!empty($this->stores)) {

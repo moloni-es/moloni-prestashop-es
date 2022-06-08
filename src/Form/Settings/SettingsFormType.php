@@ -3,7 +3,7 @@
 
 declare(strict_types=1);
 
-namespace Moloni\Form;
+namespace Moloni\Form\Settings;
 
 use Moloni\Enums\SyncFields;
 use Moloni\Exceptions\MoloniApiException;
@@ -61,12 +61,11 @@ class SettingsFormType extends TranslatorAwareType
     private function syncStockToMoloni(): SettingsFormType
     {
         $this->builder->add('syncStockToMoloni', ChoiceType::class, [
-            'label' => 'Synchronize stocks',
+            'label' => $this->trans('Synchronize stocks', $this->transDomain),
             'required' => false,
             'choices' => $this->options->getYesNo(),
-            'help' => 'Automatic stock synchronization to Moloni',
+            'help' => $this->trans('Automatic stock synchronization to Moloni', $this->transDomain),
             'placeholder' => false,
-            'translation_domain' => $this->transDomain,
         ]);
 
         return $this;
@@ -78,15 +77,16 @@ class SettingsFormType extends TranslatorAwareType
     private function syncStockToMoloniWarehouse(): SettingsFormType
     {
         $this->builder->add('syncStockToMoloniWarehouse', ChoiceType::class, [
-            'label' => 'Stock destination',
-            'required' => false,
+            'label' => $this->trans('Stock destination', $this->transDomain),
             'choices' => [
-                'Default warehouse' => 1,
-                'Warehouses' => $this->options->getWarehouses(),
+                $this->trans('Default warehouse', $this->transDomain) => 1,
+                $this->trans('Warehouses', $this->transDomain) => $this->options->getWarehouses(),
             ],
-            'help' => 'Stock destination when updating stock and creating products in Moloni',
-            'placeholder' => 'Please select an option',
-            'translation_domain' => $this->transDomain,
+            'help' => $this->trans(
+                'Stock destination when updating stock and creating products in Moloni',
+                $this->transDomain
+            ),
+            'placeholder' => $this->trans('Please select an option', $this->transDomain),
         ]);
 
         return $this;
@@ -98,12 +98,12 @@ class SettingsFormType extends TranslatorAwareType
     private function addProductsToMoloni(): SettingsFormType
     {
         $this->builder->add('addProductsToMoloni', ChoiceType::class, [
-            'label' => 'Create products',
-            'required' => false,
+            'label' => $this->trans('Create products', $this->transDomain),
             'choices' => $this->options->getYesNo(),
-            'help' => 'When creating a product in Prestashop, the product will be created in Moloni',
-            'placeholder' => false,
-            'translation_domain' => $this->transDomain,
+            'help' => $this->trans(
+                'When creating a product in Prestashop, the product will be created in Moloni',
+                $this->transDomain
+            ),
         ]);
 
         return $this;
@@ -112,12 +112,12 @@ class SettingsFormType extends TranslatorAwareType
     private function updateProductsToMoloni(): SettingsFormType
     {
         $this->builder->add('updateProductsToMoloni', ChoiceType::class, [
-            'label' => 'Update products',
-            'required' => false,
+            'label' => $this->trans('Update products', $this->transDomain),
             'choices' => $this->options->getYesNo(),
-            'help' => 'When updating a product in Prestashop, the product will be updated in Moloni',
-            'placeholder' => false,
-            'translation_domain' => $this->transDomain,
+            'help' => $this->trans(
+                'When updating a product in Prestashop, the product will be updated in Moloni',
+                $this->transDomain
+            ),
         ]);
 
         return $this;
@@ -126,12 +126,10 @@ class SettingsFormType extends TranslatorAwareType
     private function syncStockToPrestashop(): SettingsFormType
     {
         $this->builder->add('syncStockToPrestashop', ChoiceType::class, [
-            'label' => 'Synchronize stocks',
+            'label' => $this->trans('Synchronize stocks', $this->transDomain),
             'required' => false,
             'choices' => $this->options->getYesNo(),
-            'help' => 'Automatic stock synchronization to Prestashop',
-            'placeholder' => false,
-            'translation_domain' => $this->transDomain,
+            'help' => $this->trans('Automatic stock synchronization to Prestashop', $this->transDomain),
         ]);
 
         return $this;
@@ -141,15 +139,16 @@ class SettingsFormType extends TranslatorAwareType
     {
         $this->builder
             ->add('syncStockToPrestashopWarehouse', ChoiceType::class, [
-                'label' => 'Stock source',
-                'required' => false,
+                'label' => $this->trans('Stock source', $this->transDomain),
                 'choices' => [
-                    'Accumulated stock' => 1,
-                    'Warehouses' => $this->options->getWarehouses(),
+                    $this->trans('Accumulated stock', $this->transDomain) => 1,
+                    $this->trans('Warehouses', $this->transDomain) => $this->options->getWarehouses(),
                 ],
-                'help' => 'Stock source used when synchronizing stock and creating products in Prestashop',
-                'placeholder' => 'Please select an option',
-                'translation_domain' => $this->transDomain,
+                'help' => $this->trans(
+                    'Stock source used when synchronizing stock and creating products in Prestashop',
+                    $this->transDomain
+                ),
+                'placeholder' => $this->trans('Please select an option', $this->transDomain),
             ]);
 
         return $this;
@@ -158,12 +157,12 @@ class SettingsFormType extends TranslatorAwareType
     private function addProductsToPrestashop(): SettingsFormType
     {
         $this->builder->add('addProductsToPrestashop', ChoiceType::class, [
-            'label' => 'Create products',
-            'required' => false,
+            'label' => $this->trans('Create products', $this->transDomain),
             'choices' => $this->options->getYesNo(),
-            'help' => 'When creating a product in Moloni, the product will be created in Prestashop',
-            'placeholder' => false,
-            'translation_domain' => $this->transDomain,
+            'help' => $this->trans(
+                'When creating a product in Moloni, the product will be created in Prestashop',
+                $this->transDomain
+            ),
         ]);
 
         return $this;
@@ -172,12 +171,15 @@ class SettingsFormType extends TranslatorAwareType
     private function updateProductsToPrestashop(): SettingsFormType
     {
         $this->builder->add('updateProductsToPrestashop', ChoiceType::class, [
-            'label' => 'Update products',
+            'label' => $this->trans('Update products', $this->transDomain),
             'required' => false,
             'choices' => $this->options->getYesNo(),
-            'help' => 'When updating a product in Moloni, the product will be updated in Prestashop',
+            'help' => $this->trans(
+                'When updating a product in Moloni, the product will be updated in Prestashop',
+                $this->transDomain
+            ),
             'placeholder' => false,
-            'translation_domain' => $this->transDomain,
+
         ]);
 
         return $this;
@@ -186,14 +188,11 @@ class SettingsFormType extends TranslatorAwareType
     private function productSyncFields(): SettingsFormType
     {
         $this->builder->add('productSyncFields', ChoiceType::class, [
-            'label' => 'Products fields',
+            'label' => $this->trans('Products fields', $this->transDomain),
             'multiple' => true,
             'expanded' => true,
-            'required' => false,
             'choices' => SyncFields::getSyncFields(),
-            'help' => 'Choose which fields will be synced when a product is updated.',
-            'placeholder' => false,
-            'translation_domain' => $this->transDomain,
+            'help' => $this->trans('Choose which fields will be synced when a product is updated.', $this->transDomain),
         ]);
 
         return $this;
@@ -204,10 +203,9 @@ class SettingsFormType extends TranslatorAwareType
         $this->builder->add('orderDateCreated', DateType::class, [
             'widget' => 'single_text',
             'required' => false,
-            'label' => 'Orders since',
-            'help' => 'Date used to limit fetch pending orders',
+            'label' => $this->trans('Orders since', $this->transDomain),
+            'help' => $this->trans('Date used to limit fetch pending orders', $this->transDomain),
             'placeholder' => false,
-            'translation_domain' => $this->transDomain,
         ]);
 
         return $this;
@@ -216,13 +214,14 @@ class SettingsFormType extends TranslatorAwareType
     private function orderStatusToShow(): SettingsFormType
     {
         $this->builder->add('orderStatusToShow', ChoiceType::class, [
-            'label' => 'Order status',
-            'required' => false,
+            'label' => $this->trans('Order status', $this->transDomain),
             'multiple' => true,
             'expanded' => true,
             'choices' => $this->options->getOrderStatus(),
-            'help' => 'Allowed order status to list pending orders and automatic document creation. (if at least one is selected)',
-            'translation_domain' => $this->transDomain,
+            'help' => $this->trans(
+                'Allowed order status to list pending orders and automatic document creation. (if at least one is selected)',
+                $this->transDomain
+            ),
         ]);
 
         return $this;
@@ -231,15 +230,9 @@ class SettingsFormType extends TranslatorAwareType
     private function automaticDocuments(): SettingsFormType
     {
         $this->builder->add('automaticDocuments', ChoiceType::class, [
-            'label' => $this->trans('Create paid documents on Moloni', 'Modules.Molonies.Settings'),
-            'required' => false,
+            'label' => $this->trans('Create paid documents on Moloni', $this->transDomain),
             'choices' => $this->options->getYesNo(),
-            'help' => $this->trans(
-                'Automatically create document when an order is paid',
-                'Modules.Molonies.Settings'
-            ),
-            'placeholder' => false,
-            'translation_domain' => 'Modules.Molonies.Settings',
+            'help' => $this->trans('Automatically create document when an order is paid', $this->transDomain),
         ]);
 
         return $this;
@@ -248,10 +241,12 @@ class SettingsFormType extends TranslatorAwareType
     private function clientPrefix(): SettingsFormType
     {
         $this->builder->add('clientPrefix', TextType::class, [
-            'label' => 'Client Prefix',
-            'required' => false,
-            'help' => 'If set, created customers will have this prefix in their code (Example: PS)',
-            'translation_domain' => $this->transDomain,
+            'label' => $this->trans('Client Prefix', $this->transDomain),
+            'help' => $this->trans(
+                'If set, created customers will have this prefix in their code (Example: PS)',
+                $this->transDomain
+            ),
+
         ]);
 
         return $this;
@@ -261,11 +256,11 @@ class SettingsFormType extends TranslatorAwareType
     {
         $this->builder
             ->add('documentSet', ChoiceType::class, [
-                'label' => 'Document set',
+                'label' => $this->trans('Document set', $this->transDomain),
                 'required' => true,
                 'choices' => $this->options->getDocumentSets(),
-                'placeholder' => 'Please select an option',
-                'translation_domain' => $this->transDomain,
+                'placeholder' => $this->trans('Please select an option', $this->transDomain),
+
             ]);
 
         return $this;
@@ -275,14 +270,14 @@ class SettingsFormType extends TranslatorAwareType
     {
         $this->builder
             ->add('documentType', ChoiceType::class, [
-                'label' => 'Document type',
+                'label' => $this->trans('Document type', $this->transDomain),
                 'label_attr' => [
                     'required' => true,
                 ],
                 'required' => true,
                 'choices' => $this->options->getDocumentTypes(),
-                'placeholder' => 'Please select an option',
-                'translation_domain' => $this->transDomain,
+                'placeholder' => $this->trans('Please select an option', $this->transDomain),
+
             ]);
 
         return $this;
@@ -292,11 +287,9 @@ class SettingsFormType extends TranslatorAwareType
     {
         $this->builder
             ->add('documentStatus', ChoiceType::class, [
-                'label' => 'Document status',
+                'label' => $this->trans('Document status', $this->transDomain),
                 'required' => true,
                 'choices' => $this->options->getStatus(),
-                'placeholder' => false,
-                'translation_domain' => $this->transDomain,
             ]);
 
         return $this;
@@ -306,12 +299,9 @@ class SettingsFormType extends TranslatorAwareType
     {
         $this->builder
             ->add('fiscalZoneBasedOn', ChoiceType::class, [
-                'label' => 'Fiscal zone',
-                'required' => false,
+                'label' => $this->trans('Fiscal zone', $this->transDomain),
                 'choices' => $this->options->getFiscalZoneBasedOn(),
-                'help' => 'Address used to set document fiscal zone',
-                'placeholder' => false,
-                'translation_domain' => $this->transDomain,
+                'help' => $this->trans('Address used to set document fiscal zone', $this->transDomain),
             ]);
 
         return $this;
@@ -320,12 +310,9 @@ class SettingsFormType extends TranslatorAwareType
     private function shippingInformation(): SettingsFormType
     {
         $this->builder->add('shippingInformation', ChoiceType::class, [
-            'label' => 'Shipping information',
-            'required' => false,
+            'label' => $this->trans('Shipping information', $this->transDomain),
             'choices' => $this->options->getYesNo(),
-            'help' => 'Show shipping information',
-            'placeholder' => false,
-            'translation_domain' => $this->transDomain,
+            'help' => $this->trans('Show shipping information', $this->transDomain),
         ]);
 
         return $this;
@@ -334,12 +321,9 @@ class SettingsFormType extends TranslatorAwareType
     private function billOfLading(): SettingsFormType
     {
         $this->builder->add('billOfLading', ChoiceType::class, [
-            'label' => 'Bill of lading',
+            'label' => $this->trans('Bill of lading', $this->transDomain),
             'choices' => $this->options->getYesNo(),
-            'help' => 'Create order document bill of lading',
-            'placeholder' => false,
-            'required' => false,
-            'translation_domain' => $this->transDomain,
+            'help' => $this->trans('Create order document bill of lading', $this->transDomain),
         ]);
 
         return $this;
@@ -349,12 +333,9 @@ class SettingsFormType extends TranslatorAwareType
     {
         $this->builder
             ->add('loadAddress', ChoiceType::class, [
-                'label' => 'Loading address',
+                'label' => $this->trans('Loading address', $this->transDomain),
                 'choices' => $this->options->getAddresses(),
-                'help' => 'Load address used',
-                'placeholder' => false,
-                'required' => false,
-                'choice_translation_domain' => $this->transDomain,
+                'help' => $this->trans('Load address used', $this->transDomain),
             ]);
 
         return $this;
@@ -363,11 +344,8 @@ class SettingsFormType extends TranslatorAwareType
     private function customloadAddressAddress(): SettingsFormType
     {
         $this->builder->add('customloadAddressAddress', TextType::class, [
-            'label' => false,
-            'required' => false,
-            'translation_domain' => $this->transDomain,
             'attr' => [
-                'placeholder' => 'Address',
+                'placeholder' => $this->trans('Address', $this->transDomain),
             ],
         ]);
 
@@ -377,11 +355,8 @@ class SettingsFormType extends TranslatorAwareType
     private function customloadAddressZipCode(): SettingsFormType
     {
         $this->builder->add('customloadAddressZipCode', TextType::class, [
-            'label' => false,
-            'required' => false,
-            'translation_domain' => $this->transDomain,
             'attr' => [
-                'placeholder' => 'Zip-code',
+                'placeholder' => $this->trans('Zip-code', $this->transDomain),
             ],
         ]);
 
@@ -391,11 +366,8 @@ class SettingsFormType extends TranslatorAwareType
     private function customloadAddressCity(): SettingsFormType
     {
         $this->builder->add('customloadAddressCity', TextType::class, [
-            'label' => false,
-            'required' => false,
-            'translation_domain' => $this->transDomain,
             'attr' => [
-                'placeholder' => 'City',
+                'placeholder' => $this->trans('City', $this->transDomain),
             ],
         ]);
 
@@ -406,11 +378,8 @@ class SettingsFormType extends TranslatorAwareType
     {
         $this->builder
             ->add('customloadAddressCountry', ChoiceType::class, [
-                'label' => false,
-                'required' => false,
                 'choices' => $this->options->getCountries(),
-                'placeholder' => 'Please select country',
-                'translation_domain' => $this->transDomain,
+                'placeholder' => $this->trans('Please select country', $this->transDomain),
             ]);
 
         return $this;
@@ -420,12 +389,9 @@ class SettingsFormType extends TranslatorAwareType
     {
         $this->builder
             ->add('sendByEmail', ChoiceType::class, [
-                'label' => 'Send e-mail',
-                'required' => false,
+                'label' => $this->trans('Send e-mail', $this->transDomain),
                 'choices' => $this->options->getYesNo(),
-                'help' => 'Sends document to customer via e-mail',
-                'placeholder' => false,
-                'translation_domain' => $this->transDomain,
+                'help' => $this->trans('Sends document to customer via e-mail', $this->transDomain),
             ]);
 
         return $this;
@@ -435,12 +401,13 @@ class SettingsFormType extends TranslatorAwareType
     {
         $this->builder
             ->add('useProductNameAndSummaryFrom', ChoiceType::class, [
-                'label' => 'Use product name and summary from',
+                'label' => $this->trans('Use product name and summary from', $this->transDomain),
                 'required' => true,
                 'choices' => $this->options->getProductInformation(),
-                'help' => 'The product in the document will use the name and summary from the selected source',
-                'placeholder' => false,
-                'translation_domain' => $this->transDomain,
+                'help' => $this->trans(
+                    'The product in the document will use the name and summary from the selected source',
+                    $this->transDomain
+                ),
             ]);
 
         return $this;
@@ -453,12 +420,11 @@ class SettingsFormType extends TranslatorAwareType
                 'label' => $this->trans('Product exemption reason', $this->transDomain),
                 'label_subtitle' => $this->trans('Product exemption reason1', $this->transDomain),
                 'label_tag_name' => $this->trans('Product exemption reason2', $this->transDomain),
-                'help' => "Fuck this",
+                'help' => $this->trans("Fuck this", $this->transDomain),
                 'label_attr' => [
-                    'popover' => 'Tooltip me I\'m famous !',
+                    'popover' => $this->trans('Tooltip me I\'m famous !', $this->transDomain),
                 ],
                 'label_help_box' => $this->trans('Product exemption reason4', $this->transDomain),
-                'required' => false,
             ]);
 
         return $this;
@@ -468,10 +434,8 @@ class SettingsFormType extends TranslatorAwareType
     {
         $this->builder
             ->add('exemptionReasonShipping', TextType::class, [
-                'label' => 'Shipping exemption reason',
-                'required' => false,
-                'help' => 'Will be used if the shipping method has no taxes',
-                'translation_domain' => $this->transDomain,
+                'label' => $this->trans('Shipping exemption reason', $this->transDomain),
+                'help' => $this->trans('Will be used if the shipping method has no taxes', $this->transDomain),
             ]);
 
         return $this;
@@ -481,12 +445,11 @@ class SettingsFormType extends TranslatorAwareType
     {
         $this->builder
             ->add('measurementUnit', ChoiceType::class, [
-                'label' => 'Measure unit',
+                'label' => $this->trans('Measure unit', $this->transDomain),
                 'required' => true,
                 'choices' => $this->options->getMeasurementUnits(),
-                'help' => 'Created products will use this measurement unit',
-                'placeholder' => 'Please select an option',
-                'translation_domain' => $this->transDomain,
+                'help' => $this->trans('Created products will use this measurement unit', $this->transDomain),
+                'placeholder' => $this->trans('Please select an option', $this->transDomain),
             ]);
 
         return $this;
@@ -495,12 +458,10 @@ class SettingsFormType extends TranslatorAwareType
     private function documentWarehouse(): SettingsFormType
     {
         $this->builder->add('documentWarehouse', ChoiceType::class, [
-            'label' => 'Document warehouse',
-            'required' => false,
+            'label' => $this->trans('Document warehouse', $this->transDomain),
             'choices' => $this->options->getWarehouses(),
-            'help' => 'Warehouse used in documents',
-            'placeholder' => 'Please select an option',
-            'translation_domain' => $this->transDomain,
+            'help' => $this->trans('Warehouse used in documents', $this->transDomain),
+            'placeholder' => $this->trans('Please select an option', $this->transDomain),
         ]);
 
         return $this;
@@ -509,13 +470,11 @@ class SettingsFormType extends TranslatorAwareType
     private function alertEmail(): SettingsFormType
     {
         $this->builder->add('alertEmail', EmailType::class, [
-            'label' => 'E-mail address',
-            'required' => false,
-            'help' => 'E-mail used to send notifications in case of plugin failures',
+            'label' => $this->trans('E-mail address', $this->transDomain),
+            'help' => $this->trans('E-mail used to send notifications in case of plugin failures', $this->transDomain),
             'attr' => [
-                'placeholder' => 'example@email.com',
+                'placeholder' => $this->trans('example@email.com', $this->transDomain),
             ],
-            'translation_domain' => $this->transDomain,
         ]);
 
         return $this;
@@ -526,7 +485,6 @@ class SettingsFormType extends TranslatorAwareType
         $this->builder->add('saveChanges', SubmitType::class, [
             'attr' => ['class' => 'btn-primary'],
             'label' => 'Save',
-            'translation_domain' => $this->transDomain,
         ]);
 
         return $this;
