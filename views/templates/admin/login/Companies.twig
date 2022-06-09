@@ -18,23 +18,40 @@
                             {% endif %}
                         </div>
                         <div class="card-block moloni-company--information">
-                            <p>
-                                {{ 'E-mail'|trans({}, 'Modules.Molonies.Common') }}: {{ company.email|default('') }}
-                            </p>
-                            <p>
-                                {{ 'Address'|trans({}, 'Modules.Molonies.Common') }}: {{ company.address|default('') }}
-                            </p>
-                            <p>
-                                {{ 'Zip-Code'|trans({}, 'Modules.Molonies.Common') }}: {{ company.zipCode|default('') }}
-                            </p>
-                            <p>
-                                {{ 'Country'|trans({}, 'Modules.Molonies.Common') }}: {{ company.country.title|default('') }}
-                            </p>
+
+                            {% if company.email %}
+                                <p>
+                                    {{ 'E-mail'|trans({}, 'Modules.Molonies.Common') }}: {{ company.email|default('') }}
+                                </p>
+                            {% endif %}
+
+                            {% if company.address %}
+                                <p>
+                                    {{ 'Address'|trans({}, 'Modules.Molonies.Common') }}
+                                    : {{ company.address|default('') }}
+                                </p>
+                            {% endif %}
+
+
+                            {% if company.zipCode %}
+                                <p>
+                                    {{ 'Zip-Code'|trans({}, 'Modules.Molonies.Common') }}
+                                    : {{ company.zipCode|default('') }}
+                                </p>
+                            {% endif %}
+
+                            {% if company.country.title %}
+                                <p>
+                                    {{ 'Country'|trans({}, 'Modules.Molonies.Common') }}
+                                    : {{ company.country.title|default('') }}
+                                </p>
+                            {% endif %}
                         </div>
                         <div class="card-footer">
                             <div class="d-flex justify-content-end">
-                                <a href="{{ path(submit_route, {companyId: company.companyId}) }}" class="btn btn-primary">
-                                    {{ 'Choose this store'|trans({}, 'Modules.Molonies.Common') }}
+                                <a href="{{ path(submit_route, {companyId: company.companyId}) }}"
+                                   class="btn btn-primary">
+                                    {{ 'Select this company'|trans({}, 'Modules.Molonies.Common') }}
                                 </a>
                             </div>
                         </div>
@@ -44,17 +61,7 @@
         </div>
     {% else %}
         <div>
-            Sem resultados a apresentar
+            {{ 'Your account does not have access to any eligible company.'|trans({}, 'Modules.Molonies.Common') }}
         </div>
     {% endif %}
-
-
-{% endblock %}
-
-{% block javascripts %}
-    <script>
-        $(document).ready(function () {
-            console.log('Moloni companies page loaded');
-        });
-    </script>
 {% endblock %}

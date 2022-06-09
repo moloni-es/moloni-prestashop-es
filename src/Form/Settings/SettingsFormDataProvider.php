@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Moloni\Form\Settings;
 
 use DateTime;
@@ -168,11 +170,11 @@ class SettingsFormDataProvider implements FormDataProviderInterface
 
         $this->addresses = [
             $this->trans('Moloni company', 'Modules.Molonies.Settings') => LoadAddress::MOLONI,
-            $this->trans('Custom', 'Modules.Molonies.Settings') => LoadAddress::CUSTOM,
+            $this->trans('Custom address', 'Modules.Molonies.Settings') => LoadAddress::CUSTOM,
         ];
 
         if (!empty($this->stores)) {
-            $this->addresses['Stores'] = $this->stores;
+            $this->addresses[$this->trans('Stores', 'Modules.Molonies.Settings')] = $this->stores;
         }
 
         return $this;

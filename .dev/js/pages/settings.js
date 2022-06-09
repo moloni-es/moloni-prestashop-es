@@ -5,15 +5,15 @@ import {Boolean} from '../enums/Boolean';
 
 export default class MoloniSettings {
     constructor() {
-        this.settingIdPrefix = 'settings_form_';
+        this.settingIdPrefix = 'MoloniSettings_';
     }
 
     startObservers() {
         // Holders
-        this.$loadAddressHolder = $('#' + this.settingIdPrefix + 'loadAddress_row');
-        this.$customLoadAddressHolder = $('#' + this.settingIdPrefix + 'custom_loadAddress_row');
-        this.$sendByEmailHolder = $('#' + this.settingIdPrefix + 'sendByEmail_row');
-        this.$billOfLadingHolder = $('#' + this.settingIdPrefix + 'billOfLading_row');
+        this.$loadAddressHolder = $('#settings_form_loadAddress_row');
+        this.$customLoadAddressHolder = $('#settings_form_custom_loadAddress_row');
+        this.$sendByEmailHolder = $('#settings_form_sendByEmail_row');
+        this.$billOfLadingHolder = $('#settings_form_billOfLading_row');
 
         // Fields
         this.$shippingInfo = $('#' + this.settingIdPrefix + 'shippingInformation');

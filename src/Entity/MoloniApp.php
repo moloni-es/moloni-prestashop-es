@@ -122,11 +122,11 @@ class MoloniApp
     }
 
     /**
-     * @return string|null
+     * @return int|null
      */
-    public function getAccessTime(): ?string
+    public function getAccessTime(): ?int
     {
-        return $this->accessTime;
+        return (int)$this->accessTime;
     }
 
     /**

@@ -5,8 +5,6 @@ import MoloniTools from './pages/tools'
 import MoloniLogs from './pages/logs'
 
 $(document).ready(() => {
-    console.log('Moloni module loaded');
-
     window.moloniSettings = new MoloniSettings();
     window.moloniOrders = new MoloniOrders();
     window.moloniDocuments = new MoloniDocuments();
