@@ -1,5 +1,5 @@
 <div class="modal fade"
-     id="sync_stocks"
+     id="logout"
      tabindex="-1"
      role="dialog"
      aria-hidden="true">
@@ -8,7 +8,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">
-                    {{ 'Synchronize stocks'|trans({}, 'Modules.Molonies.Common') }}
+                    {{ 'Logout'|trans({}, 'Modules.Molonies.Common') }}
                 </h5>
                 <button type="button"
                         class="close"
@@ -19,9 +19,7 @@
             </div>
             <div class="modal-body">
                 <p>
-                    {{ 'This tool will fetch all your Moloni products that were updated on the last 7 days, and synchronize your Prestashop stocks with the ones on your Moloni account.'|trans({}, 'Modules.Molonies.Common') }}<br>
-                    {{ 'When the tool is finish, all your Prestashop stock will be updated to match the stock on your Moloni account.'|trans({}, 'Modules.Molonies.Common') }}<br>
-                    {{ 'Please keep this window open until the process finishes.'|trans({}, 'Modules.Molonies.Common') }}
+                    {{ 'Moloni authentication will be lost.'|trans({}, 'Modules.Molonies.Common') }}<br>
                 </p>
                 <p>
                     {{ 'Are you sure you want to continue? '|trans({}, 'Modules.Molonies.Common') }}
@@ -33,8 +31,8 @@
                         data-dismiss="modal">
                     {{ 'Close'|trans({}, 'Modules.Molonies.Common') }}
                 </button>
-                <a class="btn btn-primary" href="{{ path(syncStockRoute) }}">
-                    {{ 'Synchronize stocks'|trans({}, 'Modules.Molonies.Common') }}
+                <a class="btn btn-danger" href="{{ path(logoutRoute) }}">
+                    {{ 'Logout'|trans({}, 'Modules.Molonies.Common') }}
                 </a>
             </div>
         </div>
