@@ -75,7 +75,6 @@ class UpdateMoloniSimpleProductImage
 
             MoloniApi::postWithFile($operations, $map, [$file]);
         } catch (MoloniApiException $e) {
-            dump($e->getData());die;
             // todo: write log?
         }
     }
