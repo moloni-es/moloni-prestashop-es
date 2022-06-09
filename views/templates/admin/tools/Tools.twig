@@ -18,7 +18,7 @@
                     <button type="button"
                             class="btn btn-primary"
                             data-toggle="modal"
-                            data-target="#import_categories">
+                            data-target="#import_categories_modal">
                         {{ 'Import categories'|trans({}, 'Modules.Molonies.Common') }}
                     </button>
                 </div>
@@ -34,7 +34,7 @@
                     <button type="button"
                             class="btn btn-primary"
                             data-toggle="modal"
-                            data-target="#import_products">
+                            data-target="#import_products_modal">
                         {{ 'Import products'|trans({}, 'Modules.Molonies.Common') }}
                     </button>
                 </div>
@@ -50,7 +50,7 @@
                     <button type="button"
                             class="btn btn-primary"
                             data-toggle="modal"
-                            data-target="#sync_stocks">
+                            data-target="#sync_stocks_modal">
                         {{ 'Synchronize stocks'|trans({}, 'Modules.Molonies.Common') }}
                     </button>
                 </div>
@@ -94,7 +94,7 @@
                     <button type="button"
                             class="btn btn-danger"
                             data-toggle="modal"
-                            data-target="#logout">
+                            data-target="#logout_modal">
                         {{ 'Logout'|trans({}, 'Modules.Molonies.Common') }}
                     </button>
                 </div>
@@ -113,13 +113,14 @@
 
     {# Logout Overlay #}
     {% include '@Modules/molonies/views/templates/admin/tools/overlays/Logout.twig' %}
+
+    {# Action Overlay #}
+    {% include '@Modules/molonies/views/templates/admin/tools/overlays/ActionOverlay.twig' %}
 {% endblock %}
 
 {% block javascripts %}
     <script>
         $(document).ready(function () {
-            console.log('Moloni tools page loaded');
-
             window.moloniTools.startObservers();
         });
     </script>

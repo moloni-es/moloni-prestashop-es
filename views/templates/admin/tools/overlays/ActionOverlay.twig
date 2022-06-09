@@ -1,0 +1,26 @@
+<button style="display: none;" type="button" data-toggle="modal" data-target="#action_overlay_modal" id="action_overlay_button"></button>
+
+<div class="modal fade"
+     id="action_overlay_modal"
+     tabindex="-1"
+     role="dialog"
+     aria-hidden="true">
+
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    {{ 'Action in progress'|trans({}, 'Modules.Molonies.Common') }}
+                </h5>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer">
+                <button type="button"
+                        class="btn btn-outline-secondary"
+                        data-dismiss="modal">
+                    {{ 'Close'|trans({}, 'Modules.Molonies.Common') }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

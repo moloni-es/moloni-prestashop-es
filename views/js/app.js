@@ -115,6 +115,38 @@ var MoloniDocuments = /*#__PURE__*/function () {
 
 /***/ }),
 
+/***/ "./js/pages/login.js":
+/*!***************************!*\
+  !*** ./js/pages/login.js ***!
+  \***************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": function() { return /* binding */ MoloniLogin; }
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
+
+
+
+var MoloniLogin = /*#__PURE__*/function () {
+  function MoloniLogin() {
+    (0,_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__["default"])(this, MoloniLogin);
+  }
+
+  (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__["default"])(MoloniLogin, [{
+    key: "startObservers",
+    value: function startObservers() {}
+  }]);
+
+  return MoloniLogin;
+}();
+
+
+
+/***/ }),
+
 /***/ "./js/pages/logs.js":
 /*!**************************!*\
   !*** ./js/pages/logs.js ***!
@@ -304,6 +336,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
 /* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
+/* harmony import */ var _tools_syncProducts__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../tools/syncProducts */ "./js/tools/syncProducts.js");
+/* harmony import */ var _tools_syncCategories__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../tools/syncCategories */ "./js/tools/syncCategories.js");
+/* harmony import */ var _tools_syncStock__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../tools/syncStock */ "./js/tools/syncStock.js");
+
+
+
 
 
 
@@ -314,16 +352,35 @@ var MoloniTools = /*#__PURE__*/function () {
 
   (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__["default"])(MoloniTools, [{
     key: "startObservers",
-    value: function startObservers() {}
+    value: function startObservers() {
+      $('#import_products_button').on('click', this.syncProducts);
+      $('#import_categories_button').on('click', this.syncCategories);
+      $('#synchronize_stocks_button').on('click', this.syncStock);
+    }
   }, {
     key: "syncProducts",
-    value: function syncProducts() {}
+    value: function syncProducts() {
+      var action = $(this).attr('data-href');
+      (0,_tools_syncProducts__WEBPACK_IMPORTED_MODULE_2__["default"])({
+        action: action
+      });
+    }
   }, {
     key: "syncCategories",
-    value: function syncCategories() {}
+    value: function syncCategories() {
+      var action = $(this).attr('data-href');
+      (0,_tools_syncCategories__WEBPACK_IMPORTED_MODULE_3__["default"])({
+        action: action
+      });
+    }
   }, {
     key: "syncStock",
-    value: function syncStock() {}
+    value: function syncStock() {
+      var action = $(this).attr('data-href');
+      (0,_tools_syncStock__WEBPACK_IMPORTED_MODULE_4__["default"])({
+        action: action
+      });
+    }
   }]);
 
   return MoloniTools;
@@ -397,6 +454,84 @@ var Paginator = /*#__PURE__*/function () {
 }();
 
 
+
+/***/ }),
+
+/***/ "./js/tools/syncCategories.js":
+/*!************************************!*\
+  !*** ./js/tools/syncCategories.js ***!
+  \************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+var SyncCategories = function SyncCategories(_ref) {
+  var action = _ref.action,
+      title = _ref.title;
+  $('#action_overlay_button').trigger('click');
+  $.post({
+    url: action,
+    cache: false,
+    data: {
+      test: 'já foste'
+    }
+  }).then(function (response) {
+    console.log(response);
+  });
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (SyncCategories);
+
+/***/ }),
+
+/***/ "./js/tools/syncProducts.js":
+/*!**********************************!*\
+  !*** ./js/tools/syncProducts.js ***!
+  \**********************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+var SyncProducts = function SyncProducts(_ref) {
+  var action = _ref.action,
+      title = _ref.title;
+  $('#action_overlay_button').trigger('click');
+  $.post({
+    url: action,
+    cache: false,
+    data: {
+      test: 'já foste'
+    }
+  }).then(function (response) {
+    console.log(response);
+  });
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (SyncProducts);
+
+/***/ }),
+
+/***/ "./js/tools/syncStock.js":
+/*!*******************************!*\
+  !*** ./js/tools/syncStock.js ***!
+  \*******************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+var SyncStock = function SyncStock(_ref) {
+  var action = _ref.action,
+      title = _ref.title;
+  $('#action_overlay_button').trigger('click');
+  $.post({
+    url: action,
+    cache: false,
+    data: {
+      test: 'já foste'
+    }
+  }).then(function (response) {
+    console.log(response);
+  });
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (SyncStock);
 
 /***/ }),
 
@@ -517,6 +652,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _pages_documents__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./pages/documents */ "./js/pages/documents.js");
 /* harmony import */ var _pages_tools__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./pages/tools */ "./js/pages/tools.js");
 /* harmony import */ var _pages_logs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./pages/logs */ "./js/pages/logs.js");
+/* harmony import */ var _pages_login__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./pages/login */ "./js/pages/login.js");
+
 
 
 
@@ -528,6 +665,7 @@ $(document).ready(function () {
   window.moloniDocuments = new _pages_documents__WEBPACK_IMPORTED_MODULE_2__["default"]();
   window.moloniTools = new _pages_tools__WEBPACK_IMPORTED_MODULE_3__["default"]();
   window.moloniLogs = new _pages_logs__WEBPACK_IMPORTED_MODULE_4__["default"]();
+  window.moloniLogin = new _pages_login__WEBPACK_IMPORTED_MODULE_5__["default"]();
 });
 }();
 /******/ })()

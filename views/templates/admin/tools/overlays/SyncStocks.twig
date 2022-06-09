@@ -1,5 +1,5 @@
 <div class="modal fade"
-     id="sync_stocks"
+     id="sync_stocks_modal"
      tabindex="-1"
      role="dialog"
      aria-hidden="true">
@@ -33,9 +33,12 @@
                         data-dismiss="modal">
                     {{ 'Close'|trans({}, 'Modules.Molonies.Common') }}
                 </button>
-                <a class="btn btn-primary" href="{{ path(syncStockRoute) }}">
+                <button class="btn btn-primary"
+                        data-href="{{ path(syncStockRoute) }}"
+                        data-dismiss="modal"
+                        id="synchronize_stocks_button">
                     {{ 'Synchronize stocks'|trans({}, 'Modules.Molonies.Common') }}
-                </a>
+                </button>
             </div>
         </div>
     </div>

@@ -1,9 +1,15 @@
-export default class SyncProducts {
-    constructor() {
+const SyncProducts = ({ action, title }) => {
+    $('#action_overlay_button').trigger('click');
 
-    }
-
-    startObservers() {
-
-    }
+    $.post({
+        url: action,
+        cache: false,
+        data: {
+            test: 'já foste'
+        },
+    }).then((response) => {
+        console.log(response);
+    });
 }
+
+export default SyncProducts;

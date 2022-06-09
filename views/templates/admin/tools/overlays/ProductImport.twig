@@ -1,5 +1,5 @@
 <div class="modal fade"
-     id="import_products"
+     id="import_products_modal"
      tabindex="-1"
      role="dialog"
      aria-hidden="true">
@@ -32,9 +32,12 @@
                         data-dismiss="modal">
                     {{ 'Close'|trans({}, 'Modules.Molonies.Common') }}
                 </button>
-                <a class="btn btn-primary" href="{{ path(importProductsRoute) }}">
+                <button class="btn btn-primary"
+                        data-dismiss="modal"
+                        data-href="{{ path(importProductsRoute) }}"
+                        id="import_products_button">
                     {{ 'Import products'|trans({}, 'Modules.Molonies.Common') }}
-                </a>
+                </button>
             </div>
         </div>
     </div>

@@ -20,7 +20,7 @@ moloni_es_tools_import_categories:
 
 moloni_es_tools_reinstall_hooks:
   path: /tools/reinstallHooks
-  methods: [POST]
+  methods: [GET]
   defaults:
     _controller: 'Moloni\Controller\Admin\Tools\Tools::reinstallHooks'
 
