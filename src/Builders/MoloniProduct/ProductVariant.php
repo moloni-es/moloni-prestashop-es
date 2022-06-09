@@ -28,6 +28,7 @@ use Combination;
 use Configuration;
 use Image;
 use Moloni\Builders\MoloniProduct\Helpers\UpdateMoloniProductStock;
+use Moloni\Builders\MoloniProduct\Helpers\Variants\FindVariant;
 use Moloni\Enums\Boolean;
 use Moloni\Enums\ProductVisibility;
 use Moloni\Exceptions\MoloniApiException;
@@ -40,18 +41,11 @@ use StockAvailable;
 class ProductVariant
 {
     /**
-     * Moloni parent product id
+     * Moloni parent product
      *
-     * @var int
+     * @var array
      */
-    protected $moloniParentProductId = 0;
-
-    /**
-     * Moloni variant id
-     *
-     * @var int
-     */
-    protected $moloniVariantId = 0;
+    protected $moloniParentProduct = [];
 
     /**
      * Moloni variant data
@@ -150,12 +144,14 @@ class ProductVariant
      * Constructor
      *
      * @param Combination $prestashopCombination
-     * @param array|null $allMoloniVariants
+     * @param array|null $moloniParentProduct
      */
-    public function __construct(Combination $prestashopCombination, ?array $allMoloniVariants = [])
+    public function __construct(Combination $prestashopCombination, ?array $moloniParentProduct = [])
     {
         $this->prestashopCombination = $prestashopCombination;
-        $this->allMoloniVariants = $allMoloniVariants;
+
+        $this->moloniParentProduct = $moloniParentProduct;
+        $this->allMoloniVariants = $moloniParentProduct['variants'] ?? [];
 
         $this->init();
     }
@@ -178,7 +174,6 @@ class ProductVariant
             ->setPrice()
             ->setStock()
             ->setVisibility()
-            ->setPropertyPairs()
             ->setImage();
 
         return $this;
@@ -200,7 +195,7 @@ class ProductVariant
         ];
 
         if ($this->variantExists()) {
-            $props['productId'] = $this->moloniVariantId;
+            $props['productId'] = $this->getMoloniVariantId();
         } else if ($this->parentHasStock()) {
             $props['warehouseId'] = $this->warehouseId;
             $warehouses = [
@@ -231,7 +226,7 @@ class ProductVariant
         }
 
         try {
-            new UpdateMoloniProductStock($this->moloniVariantId, $this->warehouseId, $this->stock, $this->moloniVariant['warehouses'], $this->reference);
+            new UpdateMoloniProductStock($this->getMoloniVariantId(), $this->warehouseId, $this->stock, $this->moloniVariant['warehouses'], $this->reference);
         } catch (MoloniApiException $e) {
             throw new MoloniProductException('Error creating stock movement ({0})', ['{0}' => $this->reference], $e->getData());
         }
@@ -239,87 +234,22 @@ class ProductVariant
         return $this;
     }
 
-    //          GETS          //
-
-    /**
-     * Get variant id
-     *
-     * @return int
-     */
-    public function getMoloniVariantId(): int
-    {
-        return $this->moloniVariantId;
-    }
-
-    /**
-     * Get combination id
-     *
-     * @return int
-     */
-    public function getPrestashopCombinationId(): int
-    {
-        return $this->prestashopCombination->id;
-    }
-
-    /**
-     * Get variant property pairs
-     *
-     * @return array
-     */
-    public function getPropertyPairs(): array
-    {
-        return $this->propertyPairs;
-    }
-
-    /**
-     * Get variant reference
-     *
-     * @return string
-     */
-    public function getReference(): string
-    {
-        return $this->reference;
-    }
-
-    /**
-     * Get variant image
-     *
-     * @return array
-     */
-    public function getImage(): array
-    {
-        return $this->image;
-    }
-
     //          SETS          //
 
     /**
-     * Set moloni variant
-     *
-     * @param array|null $moloniVariant
+     * Finds moloni variant
      *
      * @return $this
      */
-    public function setMoloniVariant(?array $moloniVariant = []): ProductVariant
+    public function setMoloniVariant(): ProductVariant
     {
-        $existingVariant = [];
+        if ($this->parentExists()) {
+            $variant = (new FindVariant($this->getPrestashopCombinationId(), $this->reference, $this->allMoloniVariants))->handle();
 
-        // todo: verificar aqui tabela de associação
-
-        if (!empty($moloniVariant)) {
-            $existingVariant = $moloniVariant;
-        } else {
-            foreach ($this->allMoloniVariants as $variant) {
-                if ((int)$variant['visible'] === Boolean::NO) {
-                    continue;
-                }
-
-                // todo: verificar aqui tabela de associação
+            if (!empty($variant)) {
+                $this->moloniVariant = $variant;
             }
         }
-
-        $this->moloniVariant = $existingVariant;
-        $this->moloniVariantId = $existingVariant['productId'] ?? 0;
 
         return $this;
     }
@@ -468,20 +398,6 @@ class ProductVariant
     }
 
     /**
-     * Set parent id
-     *
-     * @param int $moloniParentProductId
-     *
-     * @return ProductVariant
-     */
-    public function setMoloniParentProductId(int $moloniParentProductId): ProductVariant
-    {
-        $this->moloniParentProductId = $moloniParentProductId;
-
-        return $this;
-    }
-
-    /**
      * Set variant property pairs
      *
      * @param array|null $propertyPairs
@@ -493,6 +409,76 @@ class ProductVariant
         $this->propertyPairs = $propertyPairs;
 
         return $this;
+    }
+
+    //          GETS          //
+
+    /**
+     * Get parent id
+     *
+     * @return int
+     */
+    public function getMoloniParentId(): int
+    {
+        if (empty($this->moloniParentProduct)) {
+            return 0;
+        }
+
+        return (int)$this->moloniParentProduct['productId'];
+    }
+
+    /**
+     * Get variant id
+     *
+     * @return int
+     */
+    public function getMoloniVariantId(): int
+    {
+        if (empty($this->moloniVariant)) {
+            return 0;
+        }
+
+        return (int)$this->moloniVariant['productId'];
+    }
+
+    /**
+     * Get combination id
+     *
+     * @return int
+     */
+    public function getPrestashopCombinationId(): int
+    {
+        return $this->prestashopCombination->id;
+    }
+
+    /**
+     * Get variant property pairs
+     *
+     * @return array
+     */
+    public function getPropertyPairs(): array
+    {
+        return $this->propertyPairs;
+    }
+
+    /**
+     * Get variant reference
+     *
+     * @return string
+     */
+    public function getReference(): string
+    {
+        return $this->reference;
+    }
+
+    /**
+     * Get variant image
+     *
+     * @return array
+     */
+    public function getImage(): array
+    {
+        return $this->image;
     }
 
     //          Auxiliary          //
@@ -514,7 +500,7 @@ class ProductVariant
      */
     protected function parentExists(): bool
     {
-        return $this->moloniParentProductId > 0;
+        return $this->getMoloniParentId() > 0;
     }
 
     /**
@@ -524,6 +510,6 @@ class ProductVariant
      */
     protected function variantExists(): bool
     {
-        return $this->moloniVariantId > 0;
+        return $this->getMoloniVariantId() > 0;
     }
 }

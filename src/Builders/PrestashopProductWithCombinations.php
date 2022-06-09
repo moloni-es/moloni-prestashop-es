@@ -24,17 +24,15 @@
 
 namespace Moloni\Builders;
 
-use Country;
 use Product;
 use Configuration;
-use TaxRulesGroup;
 use PrestaShopException;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\Interfaces\BuilderInterface;
+use Moloni\Builders\PrestashopProduct\Helpers\FindTaxGroupFromMoloniTax;
 use Moloni\Builders\PrestashopProduct\Helpers\Combinations\CreateMappingsAfterPrestaProductCreateOrUpdate;
 use Moloni\Builders\PrestashopProduct\Helpers\Combinations\ProcessAttributesGroup;
 use Moloni\Builders\PrestashopProduct\Helpers\UpdatePrestaProductImage;
-use Moloni\Builders\PrestashopProduct\Helpers\UpdatePrestaProductStock;
 use Moloni\Builders\PrestashopProduct\ProductCategory;
 use Moloni\Builders\PrestashopProduct\ProductCombination;
 use Moloni\Enums\Boolean;
@@ -48,25 +46,11 @@ use Moloni\Tools\Settings;
 class PrestashopProductWithCombinations implements BuilderInterface
 {
     /**
-     * Product id in Moloni
-     *
-     * @var int
-     */
-    protected $moloniProductId = 0;
-
-    /**
      * Moloni product
      *
      * @var array|null
      */
     protected $moloniProduct;
-
-    /**
-     * Product id in Prestashop
-     *
-     * @var int
-     */
-    protected $prestashopProductId = 0;
 
     /**
      * Prestashop product
@@ -190,7 +174,6 @@ class PrestashopProductWithCombinations implements BuilderInterface
     public function __construct(array $moloniProduct, ?array $syncFields = null)
     {
         $this->moloniProduct = $moloniProduct;
-        $this->moloniProductId = $moloniProduct['productId'];
 
         $this->syncFields = $syncFields ?? Settings::get('productSyncFields') ?? SyncFields::getDefaultFields();
 
@@ -233,8 +216,6 @@ class PrestashopProductWithCombinations implements BuilderInterface
      */
     protected function afterSave(): void
     {
-        $this->prestashopProductId = $this->prestashopProduct->id;
-
         if (!empty($this->categories)) {
             $this->prestashopProduct->deleteCategories();
             $this->prestashopProduct->addToCategories($this->categories);
@@ -308,11 +289,9 @@ class PrestashopProductWithCombinations implements BuilderInterface
             $product = new Product($productId, true, Configuration::get('PS_LANG_DEFAULT'));
         } else {
             $product = new Product();
-            $productId = 0;
         }
 
         $this->prestashopProduct = $product;
-        $this->prestashopProductId = $productId;
 
         return $this;
     }
@@ -396,8 +375,11 @@ class PrestashopProductWithCombinations implements BuilderInterface
      */
     public function getMoloniProductId(): int
     {
-        return $this->moloniProductId;
-    }
+        if (empty($this->moloniProduct)) {
+            return 0;
+        }
+
+        return (int)$this->moloniProduct['productId'];    }
 
     /**
      * Get reference
@@ -416,7 +398,7 @@ class PrestashopProductWithCombinations implements BuilderInterface
      */
     public function getPrestashopProductId(): int
     {
-        return $this->prestashopProductId;
+        return $this->prestashopProduct->id;
     }
 
     //          SETS          //
@@ -638,7 +620,9 @@ class PrestashopProductWithCombinations implements BuilderInterface
         $combinations = [];
 
         foreach ($this->moloniProduct['variants'] as $variant) {
-            $combinations[] = new ProductCombination($this->prestashopProduct, $variant);
+            if ($variant['visible'] === true) {
+                $combinations[] = new ProductCombination($this->prestashopProduct, $variant);
+            }
         }
 
         $this->combinations = $combinations;
@@ -656,23 +640,7 @@ class PrestashopProductWithCombinations implements BuilderInterface
         if (!empty($this->moloniProduct['taxes']) && $this->productExists()) {
             $moloniTax = $this->moloniProduct['taxes'][0]['tax'] ?? [];
 
-            $taxRulesGroupId = 0;
-
-            $fiscalZone = $moloniTax['fiscalZone'] ?? 'ES';
-            $countryId = Country::getByIso($fiscalZone);
-            $value = (float)($moloniTax['value'] ?? 0);
-
-            $taxes = array_reverse(TaxRulesGroup::getAssociatedTaxRatesByIdCountry($countryId), true);
-
-            foreach ($taxes as $id => $tax) {
-                if ($value === (float)$tax) {
-                    $taxRulesGroupId = $id;
-
-                    break;
-                }
-            }
-
-            $this->taxRulesGroupId = $taxRulesGroupId;
+            $this->taxRulesGroupId = (new FindTaxGroupFromMoloniTax($moloniTax))->handle();
         }
 
         return $this;
@@ -739,7 +707,7 @@ class PrestashopProductWithCombinations implements BuilderInterface
      */
     protected function productExists(): bool
     {
-        return $this->prestashopProductId > 0;
+        return $this->getPrestashopProductId() > 0;
     }
 
     /**

@@ -100,7 +100,7 @@ class MoloniApp
      */
     public function isValidAccessToken(): bool
     {
-        return strtotime('+40 minutes', $this->getAccessTime()) > time();
+        return strtotime('+40 minutes', (int)($this->getAccessTime() ?? 0)) > time();
     }
 
     /**
@@ -110,7 +110,7 @@ class MoloniApp
      */
     public function isValidRefreshToken(): bool
     {
-        return strtotime('+13 days', $this->getAccessTime()) > time();
+        return strtotime('+13 days', (int)($this->getAccessTime() ?? 0)) > time();
     }
 
     /**

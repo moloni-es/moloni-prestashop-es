@@ -30,6 +30,7 @@ use PrestaShopException;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\Interfaces\BuilderInterface;
 use Moloni\Builders\PrestashopProduct\Helpers\UpdatePrestaProductStock;
+use Moloni\Builders\PrestashopProduct\Helpers\Combinations\FindOrCreateCombination;
 use Moloni\Builders\PrestashopProduct\Helpers\Combinations\UpdatePrestaCombinationImage;
 use Moloni\Enums\Boolean;
 use Moloni\Enums\SyncFields;
@@ -184,7 +185,7 @@ class ProductCombination implements BuilderInterface
     }
 
     /**
-     * After save actions
+     * After insert actions
      *
      * @return void
      */
@@ -195,6 +196,11 @@ class ProductCombination implements BuilderInterface
         }
     }
 
+    /**
+     * After save actions
+     *
+     * @return void
+     */
     protected function afterSave(): void
     {
         if (!empty($this->imagePath) && $this->shouldSyncImage()) {
@@ -203,17 +209,19 @@ class ProductCombination implements BuilderInterface
     }
 
     /**
-     * Finds Prestashop combination by reference
+     * Finds Prestashop combination
      *
      * @return $this
      */
     protected function fetchCombinationFromPresta(): ProductCombination
     {
-        $combinationId = Combination::getIdByReference($this->prestashopProduct->id, $this->reference);
-
-        if ($combinationId > 0) {
-            $this->prestashopCombination = new Combination((int)$combinationId);
+        if ($this->parentExists()) {
+            $combination = (new FindOrCreateCombination($this->getMoloniVariantId(), $this->prestashopProduct->id, $this->reference))->handle();
+        } else {
+            $combination = new Combination();
         }
+
+        $this->prestashopCombination = $combination;
 
         return $this;
     }
@@ -248,8 +256,6 @@ class ProductCombination implements BuilderInterface
      */
     public function insert(): void
     {
-        $this->prestashopCombination = new Combination();
-
         $this->fillPrestaCombination();
 
         try {
@@ -323,7 +329,11 @@ class ProductCombination implements BuilderInterface
      */
     public function getMoloniVariantId(): int
     {
-        return (int)($this->moloniVariant['productId'] ?? 0);
+        if (empty($this->moloniVariant)) {
+            return 0;
+        }
+
+        return (int)$this->moloniVariant['productId'];
     }
 
     /**
@@ -339,7 +349,7 @@ class ProductCombination implements BuilderInterface
      */
     public function getCombinationId(): int
     {
-        return (int)($this->prestashopCombination->id ?? 0);
+        return (int)$this->prestashopCombination->id;
     }
 
     /**
@@ -570,9 +580,19 @@ class ProductCombination implements BuilderInterface
      *
      * @return bool
      */
+    protected function parentExists(): bool
+    {
+        return $this->prestashopProduct->id > 0;
+    }
+
+    /**
+     * Returns if combination already exists
+     *
+     * @return bool
+     */
     protected function combinationExists(): bool
     {
-        return !empty($this->prestashopCombination) && $this->prestashopCombination->id > 0;
+        return $this->prestashopCombination->id > 0;
     }
 
     /**

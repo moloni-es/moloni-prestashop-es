@@ -32,7 +32,7 @@ use Country;
 use Image;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\Interfaces\BuilderInterface;
-use Moloni\Builders\MoloniProduct\Helpers\Variants\CreateMappingsAfterPrestaProductCreateOrUpdate;
+use Moloni\Builders\MoloniProduct\Helpers\Variants\CreateMappingsAfterMoloniProductCreateOrUpdate;
 use Moloni\Builders\MoloniProduct\Helpers\Variants\FindOrCreatePropertyGroup;
 use Moloni\Builders\MoloniProduct\Helpers\Variants\UpdateMoloniVariantsProductImage;
 use Moloni\Builders\MoloniProduct\ProductCategory;
@@ -55,18 +55,11 @@ use Product;
 class MoloniProductWithVariants implements BuilderInterface
 {
     /**
-     * Product id in Moloni
-     *
-     * @var int
-     */
-    protected $moloniProductId = 0;
-
-    /**
      * Moloni roduct
      *
      * @var array
      */
-    protected $moloniProduct;
+    protected $moloniProduct = [];
 
 
     /**
@@ -304,10 +297,23 @@ class MoloniProductWithVariants implements BuilderInterface
         }
 
         if ($this->productExists()) {
-            $props['productId'] = $this->moloniProductId;
+            $props['productId'] = $this->getMoloniProductId();
 
-            if (count($props['variants']) !== count($this->moloniProduct['variants'])) {
-                // todo: colocar variants não existentes com visibilidade "escondido"
+            // Check for unused variants that cannot be deleted
+            foreach ($this->moloniProduct['variants'] as $existingVariant) {
+                foreach ($props['variants'] as $newVariant) {
+                    if ($existingVariant['productId'] === $newVariant['productId']) {
+                        continue 2;
+                    }
+                }
+
+                // If we cannot delete variant, set it as invisible
+                if ($existingVariant['deletable'] === false) {
+                    $props['variants'][] = [
+                        'productId' => $existingVariant['productId'],
+                        'visible' => Boolean::NO,
+                    ];
+                }
             }
         } else {
             $props['hasStock'] = $this->hasStock;
@@ -331,7 +337,7 @@ class MoloniProductWithVariants implements BuilderInterface
             new UpdateMoloniVariantsProductImage($this->coverImage, $this->moloniProduct, $this->variants);
         }
 
-        new CreateMappingsAfterPrestaProductCreateOrUpdate($this->prestashopProduct, $this->moloniProduct, $this->variants);
+        new CreateMappingsAfterMoloniProductCreateOrUpdate($this->prestashopProduct, $this->moloniProduct, $this->variants);
     }
 
     /**
@@ -366,23 +372,19 @@ class MoloniProductWithVariants implements BuilderInterface
                 ->mutationProductCreate(['data' => $props]);
 
             $moloniProduct = $mutation['data']['productCreate']['data'] ?? [];
-            $productId = $moloniProduct['productId'] ?? 0;
 
-            if ($productId > 0) {
-                $this->moloniProductId = $productId;
+            if (!empty($moloniProduct)) {
                 $this->moloniProduct = $moloniProduct;
 
                 Logs::addInfoLog(['Product created in Moloni ({0})', ['{0}' => $this->reference]], ['props' => $props]);
 
                 $this->afterSave();
             } else {
-                dump($mutation);
                 throw new MoloniProductException('Error creating product ({0})', ['{0}' => $this->reference], [
                     'mutation' => $mutation
                 ]);
             }
         } catch (MoloniApiException $e) {
-            dump($e->getData());
             throw new MoloniProductException('Error creating product ({0})', ['{0}' => $this->reference], $e->getData());
         }
 
@@ -416,13 +418,11 @@ class MoloniProductWithVariants implements BuilderInterface
 
                 $this->afterSave();
             } else {
-                dump($mutation);
                 throw new MoloniProductException('Error updating product ({0})', ['{0}' => $this->reference], [
                     'mutation' => $mutation
                 ]);
             }
         } catch (MoloniApiException $e) {
-            dump($e->getData());
             throw new MoloniProductException('Error updating product ({0})', ['{0}' => $this->reference], $e->getData());
         }
 
@@ -468,7 +468,11 @@ class MoloniProductWithVariants implements BuilderInterface
      */
     public function getMoloniProductId(): int
     {
-        return $this->moloniProductId;
+        if (empty($this->moloniProduct)) {
+            return 0;
+        }
+
+        return (int)$this->moloniProduct['productId'];
     }
 
     /**
@@ -797,9 +801,8 @@ class MoloniProductWithVariants implements BuilderInterface
     public function setVariants(): MoloniProductWithVariants
     {
         foreach ($this->prestashopCombinations as $combination) {
-            $builder = new ProductVariant($combination, $this->moloniProduct['variants'] ?? []);
+            $builder = new ProductVariant($combination, $this->moloniProduct);
             $builder
-                ->setMoloniParentProductId($this->moloniProductId)
                 ->setParentHasStock($this->hasStock)
                 ->setWarehouseId($this->warehouseId)
                 ->setPropertyPairs($this->propertyGroup['variants'][(int)$combination->id] ?? []);
@@ -873,8 +876,6 @@ class MoloniProductWithVariants implements BuilderInterface
                 $moloniProduct = $query[0];
 
                 $this->moloniProduct = $moloniProduct;
-                $this->moloniProductId = (int)$moloniProduct['productId'];
-
                 $this->setHasStock($moloniProduct['hasStock']);
             }
         } catch (MoloniApiException $e) {
@@ -893,7 +894,7 @@ class MoloniProductWithVariants implements BuilderInterface
      */
     protected function productExists(): bool
     {
-        return $this->moloniProductId > 0;
+        return $this->getMoloniProductId() > 0;
     }
 
     /**
