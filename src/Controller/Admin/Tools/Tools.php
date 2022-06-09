@@ -25,6 +25,9 @@
 namespace Moloni\Controller\Admin\Tools;
 
 use Exception;
+use Moloni\Actions\Imports\ImportCategoriesFromMoloni;
+use Moloni\Actions\Imports\ImportProductsFromMoloni;
+use Moloni\Actions\Imports\ImportStockChangesFromMoloni;
 use Moloni\Actions\Tools\LogsListDetails;
 use Moloni\Actions\Tools\WebhookCreate;
 use Moloni\Actions\Tools\WebhookDeleteAll;
@@ -56,25 +59,31 @@ class Tools extends MoloniController
         );
     }
 
-    public function importProducts(Request $request): RedirectResponse
+    public function importProducts(Request $request): Response
     {
-        // todo: this
+        $data = $request->get('test');
 
-        return $this->redirectToTools();
+        (new ImportProductsFromMoloni())->handle();
+
+        return new Response($data);
     }
 
-    public function importCategories(Request $request): RedirectResponse
+    public function importCategories(Request $request): Response
     {
-        // todo: this
+        $data = $request->get('test');
 
-        return $this->redirectToTools();
+        (new ImportCategoriesFromMoloni())->handle();
+
+        return new Response($data);
     }
 
-    public function syncStocks(Request $request): RedirectResponse
+    public function syncStocks(Request $request): Response
     {
-        // todo: this
+        $data = $request->get('test');
 
-        return $this->redirectToTools();
+        (new ImportStockChangesFromMoloni())->handle();
+
+        return new Response($data);
     }
 
     public function reinstallHooks(Request $request): RedirectResponse

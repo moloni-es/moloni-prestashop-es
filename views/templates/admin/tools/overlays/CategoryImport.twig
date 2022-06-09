@@ -1,5 +1,5 @@
 <div class="modal fade"
-     id="import_categories"
+     id="import_categories_modal"
      tabindex="-1"
      role="dialog"
      aria-hidden="true">
@@ -29,12 +29,17 @@
             <div class="modal-footer">
                 <button type="button"
                         class="btn btn-outline-secondary"
-                        data-dismiss="modal">
+                        data-dismiss="modal"
+                        data-toggle="modal"
+                        data-target="#action_modal">
                     {{ 'Close'|trans({}, 'Modules.Molonies.Common') }}
                 </button>
-                <a class="btn btn-primary" href="{{ path(importCategoriesRoute) }}">
+                <button class="btn btn-primary"
+                        data-dismiss="modal"
+                        data-href="{{ path(importCategoriesRoute) }}"
+                        id="import_categories_button">
                     {{ 'Import categories'|trans({}, 'Modules.Molonies.Common') }}
-                </a>
+                </button>
             </div>
         </div>
     </div>
