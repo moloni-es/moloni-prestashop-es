@@ -214,17 +214,17 @@ var MoloniSettings = /*#__PURE__*/function () {
   function MoloniSettings() {
     (0,_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__["default"])(this, MoloniSettings);
 
-    this.settingIdPrefix = 'settings_form_';
+    this.settingIdPrefix = 'MoloniSettings_';
   }
 
   (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__["default"])(MoloniSettings, [{
     key: "startObservers",
     value: function startObservers() {
       // Holders
-      this.$loadAddressHolder = $('#' + this.settingIdPrefix + 'loadAddress_row');
-      this.$customLoadAddressHolder = $('#' + this.settingIdPrefix + 'custom_loadAddress_row');
-      this.$sendByEmailHolder = $('#' + this.settingIdPrefix + 'sendByEmail_row');
-      this.$billOfLadingHolder = $('#' + this.settingIdPrefix + 'billOfLading_row'); // Fields
+      this.$loadAddressHolder = $('#settings_form_loadAddress_row');
+      this.$customLoadAddressHolder = $('#settings_form_custom_loadAddress_row');
+      this.$sendByEmailHolder = $('#settings_form_sendByEmail_row');
+      this.$billOfLadingHolder = $('#settings_form_billOfLading_row'); // Fields
 
       this.$shippingInfo = $('#' + this.settingIdPrefix + 'shippingInformation');
       this.$loadAddress = $('#' + this.settingIdPrefix + 'loadAddress');
@@ -523,7 +523,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 $(document).ready(function () {
-  console.log('Moloni module loaded');
   window.moloniSettings = new _pages_settings__WEBPACK_IMPORTED_MODULE_0__["default"]();
   window.moloniOrders = new _pages_orders__WEBPACK_IMPORTED_MODULE_1__["default"]();
   window.moloniDocuments = new _pages_documents__WEBPACK_IMPORTED_MODULE_2__["default"]();

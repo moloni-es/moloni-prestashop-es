@@ -8,7 +8,7 @@
             <div class="card">
                 <h3 class="card-header">
                     <i class="material-icons">settings</i>
-                    {{ 'Settings'|trans({}, 'Modules.Molonies.Common') }}
+                    {{ 'Settings'|trans({}, 'Modules.Molonies.Settings') }}
                 </h3>
                 {{ form_start(form) }}
                 <div class="card-nav">
@@ -21,7 +21,7 @@
                                role="tab"
                                aria-controls="pills-documents"
                                aria-expanded="true">
-                                {{ 'Documents'|trans({}, 'Modules.Molonies.Common') }}
+                                {{ 'Documents'|trans({}, 'Modules.Molonies.Settings') }}
                             </a>
                         </li>
                         <li class="nav-item">
@@ -32,7 +32,7 @@
                                role="tab"
                                aria-controls="pills-orders"
                                aria-expanded="true">
-                                {{ 'Orders'|trans({}, 'Modules.Molonies.Common') }}
+                                {{ 'Orders'|trans({}, 'Modules.Molonies.Settings') }}
                             </a>
                         </li>
                         <li class="nav-item">
@@ -43,7 +43,7 @@
                                role="tab"
                                aria-controls="pills-automation"
                                aria-expanded="true">
-                                {{ 'Automation'|trans({}, 'Modules.Molonies.Common') }}
+                                {{ 'Automation'|trans({}, 'Modules.Molonies.Settings') }}
                             </a>
                         </li>
                         <li class="nav-item">
@@ -54,7 +54,7 @@
                                role="tab"
                                aria-controls="pills-advanced"
                                aria-expanded="true">
-                                {{ 'Advanced'|trans({}, 'Modules.Molonies.Common') }}
+                                {{ 'Advanced'|trans({}, 'Modules.Molonies.Settings') }}
                             </a>
                         </li>
                     </ul>
@@ -137,21 +137,21 @@
                              id="pills-automation"
                              role="tabpanel"
                              aria-labelledby="pills-automation-tab">
-                            <h3 align="center">Automation from Prestashop to Moloni</h3>
+                            {{ 'From Prestashop to Moloni'|trans({}, 'Modules.Molonies.Settings') }}
 
                             {{ form_row(form.syncStockToMoloniWarehouse) }}
                             {{ form_row(form.syncStockToMoloni) }}
                             {{ form_row(form.addProductsToMoloni) }}
                             {{ form_row(form.updateProductsToMoloni) }}
 
-                            <h3 align="center">Automation from Moloni to Prestashop</h3>
+                            {{ 'From moloni to Prestashop'|trans({}, 'Modules.Molonies.Settings') }}
 
                             {{ form_row(form.syncStockToPrestashopWarehouse) }}
                             {{ form_row(form.syncStockToPrestashop) }}
                             {{ form_row(form.addProductsToPrestashop) }}
                             {{ form_row(form.updateProductsToPrestashop) }}
 
-                            <h3 align="center">Common</h3>
+                            {{ 'Common settings'|trans({}, 'Modules.Molonies.Settings') }}
 
                             {{ form_row(form.productSyncFields) }}
                         </div>
@@ -176,9 +176,7 @@
 
 {% block javascripts %}
     <script>
-        $(document).ready(function () {
-            console.log('Moloni settings page loaded');
-
+        $(document).ready(function() {
             window.moloniSettings.startObservers();
         });
     </script>

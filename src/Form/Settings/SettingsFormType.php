@@ -60,9 +60,15 @@ class SettingsFormType extends TranslatorAwareType
     {
         $this->builder->add('syncStockToMoloni', ChoiceType::class, [
             'label' => $this->trans('Synchronize stocks', "Modules.Molonies.Settings"),
+            'label_attr' => [
+                'popover' => $this->trans(
+                    'Choose to synchronize the product when a Prestashop product is updated.<br><br>
+                            Ex.: Update a product in Prestashop from 0 stock to 20, and a stock movement will be create in Moloni for that product.',
+                    "Modules.Molonies.Settings"
+                ),
+            ],
             'required' => false,
             'choices' => $this->options->getYesNo(),
-            'help' => $this->trans('Automatic stock synchronization to Moloni', "Modules.Molonies.Settings"),
             'placeholder' => false,
         ]);
 
@@ -75,16 +81,20 @@ class SettingsFormType extends TranslatorAwareType
     private function syncStockToMoloniWarehouse(): SettingsFormType
     {
         $this->builder->add('syncStockToMoloniWarehouse', ChoiceType::class, [
-            'label' => $this->trans('Stock destination', "Modules.Molonies.Settings"),
+            'label' => $this->trans('Warehouse', "Modules.Molonies.Settings"),
+            'label_attr' => [
+                'popover' => $this->trans(
+                    'Select which warehouse will be used during the product insert process or during the product stock synchronization process.
+                            This warehouse will be used when a product is inserted or updated <b>in Prestashop.</b>',
+                    "Modules.Molonies.Settings"
+                ),
+            ],
             'choices' => [
                 $this->trans('Default warehouse', "Modules.Molonies.Settings") => 1,
                 $this->trans('Warehouses', "Modules.Molonies.Settings") => $this->options->getWarehouses(),
             ],
-            'help' => $this->trans(
-                'Stock destination when updating stock and creating products in Moloni',
-                "Modules.Molonies.Settings"
-            ),
             'placeholder' => $this->trans('Please select an option', "Modules.Molonies.Settings"),
+            'required' => false
         ]);
 
         return $this;
@@ -97,11 +107,16 @@ class SettingsFormType extends TranslatorAwareType
     {
         $this->builder->add('addProductsToMoloni', ChoiceType::class, [
             'label' => $this->trans('Create products', "Modules.Molonies.Settings"),
+            'label_attr' => [
+                'popover' => $this->trans(
+                    'Choose if a product should be created in Moloni when it is <b>created</b> in Prestashop.<br><br>
+                            Ex.: Insert a new product in Prestashop and that same product will be automaticaly created in Moloni.',
+                    "Modules.Molonies.Settings"
+                ),
+            ],
             'choices' => $this->options->getYesNo(),
-            'help' => $this->trans(
-                'When creating a product in Prestashop, the product will be created in Moloni',
-                "Modules.Molonies.Settings"
-            ),
+            'required' => false,
+            'placeholder' => false
         ]);
 
         return $this;
@@ -111,11 +126,16 @@ class SettingsFormType extends TranslatorAwareType
     {
         $this->builder->add('updateProductsToMoloni', ChoiceType::class, [
             'label' => $this->trans('Update products', "Modules.Molonies.Settings"),
+            'label_attr' => [
+                'popover' => $this->trans(
+                    'Choose if a product should be created in Moloni when it is <b>updated</b> in Prestashop.<br><br>
+                            Ex.: Update a product in Prestashop and that same product will be automaticaly created or updated in Moloni.',
+                    "Modules.Molonies.Settings"
+                ),
+            ],
             'choices' => $this->options->getYesNo(),
-            'help' => $this->trans(
-                'When updating a product in Prestashop, the product will be updated in Moloni',
-                "Modules.Molonies.Settings"
-            ),
+            'required' => false,
+            'placeholder' => false
         ]);
 
         return $this;
@@ -137,7 +157,14 @@ class SettingsFormType extends TranslatorAwareType
     {
         $this->builder
             ->add('syncStockToPrestashopWarehouse', ChoiceType::class, [
-                'label' => $this->trans('Stock source', "Modules.Molonies.Settings"),
+                'label' => $this->trans('Warehouse', "Modules.Molonies.Settings"),
+                'label_attr' => [
+                    'popover' => $this->trans(
+                        'Select which warehouse will be used during the product insert process or during the product stock synchronization process.<br><br>
+                                This warehouse will be used when a product is inserted or updated <b>in Moloni.</b>',
+                        "Modules.Molonies.Settings"
+                    ),
+                ],
                 'choices' => [
                     $this->trans('Accumulated stock', "Modules.Molonies.Settings") => 1,
                     $this->trans('Warehouses', "Modules.Molonies.Settings") => $this->options->getWarehouses(),
@@ -146,7 +173,7 @@ class SettingsFormType extends TranslatorAwareType
                     'Stock source used when synchronizing stock and creating products in Prestashop',
                     "Modules.Molonies.Settings"
                 ),
-                'placeholder' => $this->trans('Please select an option', "Modules.Molonies.Settings"),
+                'required' => false
             ]);
 
         return $this;
@@ -189,6 +216,7 @@ class SettingsFormType extends TranslatorAwareType
             'label' => $this->trans('Product fields', "Modules.Molonies.Settings"),
             'multiple' => true,
             'expanded' => true,
+            'required' => false,
             'choices' => SyncFields::getSyncFields(),
             'help' => $this->trans(
                 'Choose which fields will be synced when a product is updated.',
@@ -203,10 +231,16 @@ class SettingsFormType extends TranslatorAwareType
     {
         $this->builder->add('orderDateCreated', DateType::class, [
             'widget' => 'single_text',
-            'required' => false,
             'label' => $this->trans('Orders since', "Modules.Molonies.Settings"),
-            'help' => $this->trans('Date used to limit fetch pending orders', "Modules.Molonies.Settings"),
+            'label_attr' => [
+                'popover' => $this->trans(
+                    'By default, we will list all orders that were not converted into Moloni documents.<br><br>
+                            If you are migrating from an old invoicing software to Moloni, you may choose to list only orders after a selected date.',
+                    "Modules.Molonies.Settings"
+                ),
+            ],
             'placeholder' => false,
+            'required' => false,
         ]);
 
         return $this;
@@ -216,13 +250,17 @@ class SettingsFormType extends TranslatorAwareType
     {
         $this->builder->add('orderStatusToShow', ChoiceType::class, [
             'label' => $this->trans('Order status', "Modules.Molonies.Settings"),
+            'label_attr' => [
+                'popover' => $this->trans(
+                    'When an order is in one of the following selected status, it will become available to be converted into a document.<br><br>
+                            If you have the option <b>"Auto create documents"</b> activated, when an order passes in one of the selected states, we will try to automatically create a document for it.',
+                    "Modules.Molonies.Settings"
+                ),
+            ],
             'multiple' => true,
             'expanded' => true,
-            'choices' => $this->options->getOrderStatus(),
-            'help' => $this->trans(
-                'Allowed order status to list pending orders and automatic document creation. (if at least one is selected)',
-                "Modules.Molonies.Settings"
-            ),
+            'required' => false,
+            'choices' => $this->options->getOrderStatus()
         ]);
 
         return $this;
@@ -231,9 +269,20 @@ class SettingsFormType extends TranslatorAwareType
     private function automaticDocuments(): SettingsFormType
     {
         $this->builder->add('automaticDocuments', ChoiceType::class, [
-            'label' => $this->trans('Create paid documents on Moloni', "Modules.Molonies.Settings"),
+            'label' => $this->trans('Auto create documents', "Modules.Molonies.Settings"),
+            'label_attr' => [
+                'popover' => $this->trans(
+                    'When a Prestashop order passes on a status that is select in the "orders" configuration tab, the module will try to automaticaly create a document for that order.',
+                    "Modules.Molonies.Settings"
+                ),
+            ],
             'choices' => $this->options->getYesNo(),
-            'help' => $this->trans('Automatically create document when an order is paid', "Modules.Molonies.Settings"),
+            'help' => $this->trans(
+                'Choose this to automaticaly create documents in Moloni.',
+                "Modules.Molonies.Settings"
+            ),
+            'placeholder' => false,
+            'required' => false,
         ]);
 
         return $this;
@@ -242,12 +291,16 @@ class SettingsFormType extends TranslatorAwareType
     private function clientPrefix(): SettingsFormType
     {
         $this->builder->add('clientPrefix', TextType::class, [
-            'label' => $this->trans('Client Prefix', "Modules.Molonies.Settings"),
-            'help' => $this->trans(
-                'If set, created customers will have this prefix in their code (Example: PS)',
-                "Modules.Molonies.Settings"
-            ),
-
+            'label' => $this->trans('Customer code prefix', "Modules.Molonies.Settings"),
+            'label_attr' => [
+                'popover' => $this->trans(
+                    'A customer needs to have a unique identifier in Moloni, and you can use this option to add a prefix to that identifier.<br><br>
+                            If you set a prefix of "PS_", your customer numbers will be incremented for example as PS_1, PS_2, PS_3, etc.<br><br>
+                            This is useful to easily identify which customers were created by this module.',
+                    "Modules.Molonies.Settings"
+                ),
+            ],
+            'required' => false
         ]);
 
         return $this;
@@ -258,10 +311,16 @@ class SettingsFormType extends TranslatorAwareType
         $this->builder
             ->add('documentSet', ChoiceType::class, [
                 'label' => $this->trans('Document set', "Modules.Molonies.Settings"),
+                'label_attr' => [
+                    'popover' => $this->trans(
+                        'Select which Moloni document set you want to use for your documents.<br><br>
+                                You can manage your company document sets directly in your Moloni account.',
+                        "Modules.Molonies.Settings"
+                    ),
+                ],
                 'required' => true,
                 'choices' => $this->options->getDocumentSets(),
                 'placeholder' => $this->trans('Please select an option', "Modules.Molonies.Settings"),
-
             ]);
 
         return $this;
@@ -273,7 +332,10 @@ class SettingsFormType extends TranslatorAwareType
             ->add('documentType', ChoiceType::class, [
                 'label' => $this->trans('Document type', "Modules.Molonies.Settings"),
                 'label_attr' => [
-                    'required' => true,
+                    'popover' => $this->trans(
+                        'Select which type of document you want to issue automatically.',
+                        "Modules.Molonies.Settings"
+                    ),
                 ],
                 'required' => true,
                 'choices' => $this->options->getDocumentTypes(),
@@ -289,8 +351,16 @@ class SettingsFormType extends TranslatorAwareType
         $this->builder
             ->add('documentStatus', ChoiceType::class, [
                 'label' => $this->trans('Document status', "Modules.Molonies.Settings"),
-                'required' => true,
+                'label_attr' => [
+                    'popover' => $this->trans(
+                        'You can issue your documents as draft and close them later, or you can insert them directly as closed.
+                            <br><br>Before closing the document we will first confirm that the total value of the order matches with total value of the document.',
+                        "Modules.Molonies.Settings"
+                    ),
+                ],
                 'choices' => $this->options->getStatus(),
+                'placeholder' => false,
+                'required' => false,
             ]);
 
         return $this;
@@ -300,9 +370,16 @@ class SettingsFormType extends TranslatorAwareType
     {
         $this->builder
             ->add('fiscalZoneBasedOn', ChoiceType::class, [
-                'label' => $this->trans('Fiscal zone', "Modules.Molonies.Settings"),
+                'label' => $this->trans('Taxes Fiscal zone', "Modules.Molonies.Settings"),
+                'label_attr' => [
+                    'popover' => $this->trans(
+                        'Select which fiscal zone should be used for new taxes that need to be created.',
+                        "Modules.Molonies.Settings"
+                    ),
+                ],
                 'choices' => $this->options->getFiscalZoneBasedOn(),
-                'help' => $this->trans('Address used to set document fiscal zone', "Modules.Molonies.Settings"),
+                'placeholder' => false,
+                'required' => false,
             ]);
 
         return $this;
@@ -311,9 +388,16 @@ class SettingsFormType extends TranslatorAwareType
     private function shippingInformation(): SettingsFormType
     {
         $this->builder->add('shippingInformation', ChoiceType::class, [
-            'label' => $this->trans('Shipping information', "Modules.Molonies.Settings"),
+            'label' => $this->trans('Show shipping information', "Modules.Molonies.Settings"),
+            'label_attr' => [
+                'popover' => $this->trans(
+                    'If the seleceted document type shipping information is optional, you can use this option to choose if you want to include it or not.',
+                    "Modules.Molonies.Settings"
+                ),
+            ],
             'choices' => $this->options->getYesNo(),
-            'help' => $this->trans('Show shipping information', "Modules.Molonies.Settings"),
+            'placeholder' => false,
+            'required' => false,
         ]);
 
         return $this;
@@ -322,9 +406,16 @@ class SettingsFormType extends TranslatorAwareType
     private function billOfLading(): SettingsFormType
     {
         $this->builder->add('billOfLading', ChoiceType::class, [
-            'label' => $this->trans('Bill of lading', "Modules.Molonies.Settings"),
+            'label' => $this->trans('Create bill of lading', "Modules.Molonies.Settings"),
+            'label_attr' => [
+                'popover' => $this->trans(
+                    'Choose if you want to create a Bill of Lading associated with the main document.',
+                    "Modules.Molonies.Settings"
+                ),
+            ],
             'choices' => $this->options->getYesNo(),
-            'help' => $this->trans('Create order document bill of lading', "Modules.Molonies.Settings"),
+            'placeholder' => false,
+            'required' => false,
         ]);
 
         return $this;
@@ -335,8 +426,16 @@ class SettingsFormType extends TranslatorAwareType
         $this->builder
             ->add('loadAddress', ChoiceType::class, [
                 'label' => $this->trans('Loading address', "Modules.Molonies.Settings"),
+                'label_attr' => [
+                    'popover' => $this->trans(
+                        'Select which shipping address should be used for your shipping documents<br>
+                                You can select between your company address, your store addresses or set a custom one.',
+                        "Modules.Molonies.Settings"
+                    ),
+                ],
                 'choices' => $this->options->getAddresses(),
-                'help' => $this->trans('Load address used', "Modules.Molonies.Settings"),
+                'placeholder' => false,
+                'required' => false,
             ]);
 
         return $this;
@@ -345,9 +444,11 @@ class SettingsFormType extends TranslatorAwareType
     private function customloadAddressAddress(): SettingsFormType
     {
         $this->builder->add('customloadAddressAddress', TextType::class, [
+            'label' => false,
             'attr' => [
                 'placeholder' => $this->trans('Address', "Modules.Molonies.Settings"),
             ],
+            'required' => false
         ]);
 
         return $this;
@@ -356,9 +457,11 @@ class SettingsFormType extends TranslatorAwareType
     private function customloadAddressZipCode(): SettingsFormType
     {
         $this->builder->add('customloadAddressZipCode', TextType::class, [
+            'label' => false,
             'attr' => [
                 'placeholder' => $this->trans('Zip-code', "Modules.Molonies.Settings"),
             ],
+            'required' => false
         ]);
 
         return $this;
@@ -367,6 +470,8 @@ class SettingsFormType extends TranslatorAwareType
     private function customloadAddressCity(): SettingsFormType
     {
         $this->builder->add('customloadAddressCity', TextType::class, [
+            'label' => false,
+            'required' => false,
             'attr' => [
                 'placeholder' => $this->trans('City', "Modules.Molonies.Settings"),
             ],
@@ -379,8 +484,10 @@ class SettingsFormType extends TranslatorAwareType
     {
         $this->builder
             ->add('customloadAddressCountry', ChoiceType::class, [
+                'label' => false,
                 'choices' => $this->options->getCountries(),
-                'placeholder' => $this->trans('Please select country', "Modules.Molonies.Settings"),
+                'placeholder' => $this->trans('Please select a country', "Modules.Molonies.Settings"),
+                'required' => false
             ]);
 
         return $this;
@@ -391,8 +498,15 @@ class SettingsFormType extends TranslatorAwareType
         $this->builder
             ->add('sendByEmail', ChoiceType::class, [
                 'label' => $this->trans('Send e-mail', "Modules.Molonies.Settings"),
+                'label_attr' => [
+                    'popover' => $this->trans(
+                        'When a document is inserted and correctly closed in Moloni an e-mail with the document will be sent to the customer.',
+                        "Modules.Molonies.Settings"
+                    ),
+                ],
                 'choices' => $this->options->getYesNo(),
-                'help' => $this->trans('Sends document to customer via e-mail', "Modules.Molonies.Settings"),
+                'placeholder' => false,
+                'required' => false
             ]);
 
         return $this;
@@ -402,13 +516,16 @@ class SettingsFormType extends TranslatorAwareType
     {
         $this->builder
             ->add('useProductNameAndSummaryFrom', ChoiceType::class, [
-                'label' => $this->trans('Use product name and summary from', "Modules.Molonies.Settings"),
-                'required' => true,
+                'label' => $this->trans('Product details from', "Modules.Molonies.Settings"),
+                'label_attr' => [
+                    'popover' => $this->trans(
+                        'Choose if the product should use the name and description set in Moloni or in your store.',
+                        "Modules.Molonies.Settings"
+                    ),
+                ],
                 'choices' => $this->options->getProductInformation(),
-                'help' => $this->trans(
-                    'The product in the document will use the name and summary from the selected source',
-                    "Modules.Molonies.Settings"
-                ),
+                'placeholder' => false,
+                'required' => false
             ]);
 
         return $this;
@@ -421,11 +538,11 @@ class SettingsFormType extends TranslatorAwareType
                 'label' => $this->trans('Product exemption reason', "Modules.Molonies.Settings"),
                 'label_attr' => [
                     'popover' => $this->trans(
-                        'This exemption reason will be used when a product does not have a defined tax on the order that you are trying to issue',
+                        'This exemption reason will be used when a <b>product</b> does not have a defined tax on the order that you are trying to issue.',
                         "Modules.Molonies.Settings"
                     ),
                 ],
-                'label_help_box' => $this->trans('Product exemption reason4', "Modules.Molonies.Settings"),
+                'required' => false
             ]);
 
         return $this;
@@ -436,10 +553,13 @@ class SettingsFormType extends TranslatorAwareType
         $this->builder
             ->add('exemptionReasonShipping', TextType::class, [
                 'label' => $this->trans('Shipping exemption reason', "Modules.Molonies.Settings"),
-                'help' => $this->trans(
-                    'Will be used if the shipping method has no taxes',
-                    "Modules.Molonies.Settings"
-                ),
+                'label_attr' => [
+                    'popover' => $this->trans(
+                        'This exemption reason will be used when your order <b>shipping</b> does not have a defined tax on the order that you are trying to issue.',
+                        "Modules.Molonies.Settings"
+                    ),
+                ],
+                'required' => false
             ]);
 
         return $this;
@@ -452,8 +572,14 @@ class SettingsFormType extends TranslatorAwareType
                 'label' => $this->trans('Measure unit', "Modules.Molonies.Settings"),
                 'required' => true,
                 'choices' => $this->options->getMeasurementUnits(),
-                'help' => $this->trans('Created products will use this measurement unit', "Modules.Molonies.Settings"),
                 'placeholder' => $this->trans('Please select an option', "Modules.Molonies.Settings"),
+                'label_attr' => [
+                    'popover' => $this->trans(
+                        'Choose which measurement unit should be used by default on your Products.<br><br>
+                               You can manage your measurement units in your Moloni account.',
+                        "Modules.Molonies.Settings"
+                    ),
+                ],
             ]);
 
         return $this;
@@ -463,9 +589,15 @@ class SettingsFormType extends TranslatorAwareType
     {
         $this->builder->add('documentWarehouse', ChoiceType::class, [
             'label' => $this->trans('Document warehouse', "Modules.Molonies.Settings"),
+            'label_attr' => [
+                'popover' => $this->trans(
+                    'Choose which warehouse should be used when issuing documents.',
+                    "Modules.Molonies.Settings"
+                ),
+            ],
             'choices' => $this->options->getWarehouses(),
-            'help' => $this->trans('Warehouse used in documents', "Modules.Molonies.Settings"),
-            'placeholder' => $this->trans('Please select an option', "Modules.Molonies.Settings"),
+            'required' => true,
+            'placeholder' => false,
         ]);
 
         return $this;
@@ -474,14 +606,15 @@ class SettingsFormType extends TranslatorAwareType
     private function alertEmail(): SettingsFormType
     {
         $this->builder->add('alertEmail', EmailType::class, [
-            'label' => $this->trans('E-mail address', "Modules.Molonies.Settings"),
+            'label' => $this->trans('Alert e-mail', "Modules.Molonies.Settings"),
             'help' => $this->trans(
-                'E-mail used to send notifications in case of plugin failures',
+                'Receive alerts for when an error occurs during a document creation process.',
                 "Modules.Molonies.Settings"
             ),
             'attr' => [
                 'placeholder' => $this->trans('example@email.com', "Modules.Molonies.Settings"),
             ],
+            'required' => false,
         ]);
 
         return $this;
