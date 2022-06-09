@@ -427,7 +427,7 @@ class ProductCombination implements BuilderInterface
      */
     public function setPrice(): ProductCombination
     {
-        $this->price = $this->moloniVariant['price'];
+        $this->price = $this->prestashopProduct->price - $this->moloniVariant['price'];
 
         return $this;
     }

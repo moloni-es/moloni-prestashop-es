@@ -620,7 +620,7 @@ class PrestashopProductWithCombinations implements BuilderInterface
         $combinations = [];
 
         foreach ($this->moloniProduct['variants'] as $variant) {
-            if ($variant['visible'] === true) {
+            if ($variant['visible'] === Boolean::YES) {
                 $combinations[] = new ProductCombination($this->prestashopProduct, $variant);
             }
         }
