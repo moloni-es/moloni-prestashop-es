@@ -1,37 +1,7 @@
 @use 'assets/vars';
 
-.moloni-login {
-  width: 45rem;
-}
+@import "pages/login";
+@import "pages/companySelect";
+@import "pages/settings";
 
-.moloni-company {
-  width: 20rem;
-  height: 100%;
-}
-
-.moloni-company--wrapper {
-  gap: 1rem;
-}
-
-.moloni-company--image {
-  height: 9.5rem;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-}
-
-.required::before {
-  content:'* ';
-  color: #f54c3e;
-}
-
-.ml-py-2 {
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-}
-
+@import "assets/utilities";

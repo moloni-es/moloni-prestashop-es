@@ -34,7 +34,7 @@ class LoginFormType extends TranslatorAwareType
                 ],
             ])
             ->add('connect', SubmitType::class, [
-                'attr' => ['class' => 'btn-primary'],
+                'attr' => ['class' => 'btn-primary moloni-login--button'],
                 'label' => $this->trans('Connect', "Modules.Molonies.Common"),
             ])
             ->setAction($options['url'])

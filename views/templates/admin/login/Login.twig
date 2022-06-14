@@ -2,16 +2,16 @@
 
 {% block content %}
     <div class="d-flex justify-content-center align-items-center">
-        <div class="card moloni-login">
+        <div class="card moloni-login--card">
             {{ form_start(form) }}
-                <div class="card-header">
-                    <div class="d-flex justify-content-center align-items-center p-2">
-                        <a href="https://www.moloni.es/" target="_blank">
-                            <img src="{{ img }}" alt="Logo">
+                <div class="moloni-login--block">
+                    <div class="moloni-login--image">
+                        <a href="https://www.moloni.es/"  target="_blank">
+                            <img src="{{ img }}" alt="Logo" width="140px" height="24px">
                         </a>
                     </div>
                 </div>
-                <div class="card-block">
+                <div class="moloni-login--block">
                     <div class="form-group">
                         {{ form_label(form.clientID) }}
                         {{ form_widget(form.clientID) }}
@@ -24,10 +24,20 @@
                         {{ form_errors(form) }}
                     </div>
                 </div>
-                <div class="card-footer">
-                    <div class="d-flex justify-content-end">
-                        {{ form_widget(form.connect) }}
+                <div class="moloni-login--block">
+                    {{ form_widget(form.connect) }}
+
+                    <div class="moloni-login-divider moloni-login-divider--holder">
+                        <div class="moloni-login-divider--divider"></div>
+                        <div class="moloni-login-divider--text">
+                            {{ "I don't have an account yet."|trans({}, 'Modules.Molonies.Common') }}
+                        </div>
+                        <div class="moloni-login-divider--divider"></div>
                     </div>
+
+                    <button type="button" class="btn btn-secondary moloni-login--button">
+                        {{ 'Create account'|trans({}, 'Modules.Molonies.Common') }}
+                    </button>
                 </div>
             {{ form_end(form) }}
         </div>
