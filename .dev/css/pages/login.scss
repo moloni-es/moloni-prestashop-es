@@ -1,0 +1,50 @@
+/*
+Login
+*/
+
+.moloni-login {
+  &--card {
+    width: 30rem;
+    padding: 2.5rem;
+  }
+
+  &--block {
+    margin-top: 2rem;
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+
+  &--image {
+    display: flex;
+    justify-content: center;
+  }
+
+  &--button {
+    width: 100%;
+  }
+
+  &-divider {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+
+    &--holder {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    &--text {
+      padding-left: 1rem;
+      padding-right: 1rem;
+      flex-shrink: 0;
+    }
+
+    &--divider {
+      height: 0px;
+      border-top: 1px solid #BBCDD2;
+      width: 100%;
+    }
+  }
+}

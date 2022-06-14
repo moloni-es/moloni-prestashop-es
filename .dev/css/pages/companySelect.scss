@@ -1,0 +1,26 @@
+/*
+Company select
+*/
+
+.moloni-company {
+  &--card {
+    width: 20rem;
+    height: 100%;
+  }
+
+  &--wrapper {
+    gap: 1rem;
+  }
+
+  &--image {
+    height: 9.5rem;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+  }
+}

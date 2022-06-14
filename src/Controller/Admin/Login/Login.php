@@ -24,6 +24,7 @@
 
 namespace Moloni\Controller\Admin\Login;
 
+use Shop;
 use Doctrine\ORM\ORMException;
 use Moloni\Api\MoloniApi;
 use Moloni\Api\MoloniApiClient;
@@ -35,7 +36,6 @@ use Moloni\Enums\MoloniRoutes;
 use Moloni\Exceptions\MoloniException;
 use Moloni\Form\Login\LoginFormType;
 use Moloni\Repository\MoloniAppRepository;
-use Shop;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
