@@ -128,7 +128,7 @@ class SettingsFormType extends TranslatorAwareType
             'label' => $this->trans('Update products', "Modules.Molonies.Settings"),
             'label_attr' => [
                 'popover' => $this->trans(
-                    'Choose if a product should be created in Moloni when it is <b>updated</b> in Prestashop.<br><br>
+                    'Choose if a product should be updated in Moloni when it is <b>updated</b> in Prestashop.<br><br>
                             Ex.: Update a product in Prestashop and that same product will be automaticaly created or updated in Moloni.',
                     "Modules.Molonies.Settings"
                 ),
@@ -145,9 +145,16 @@ class SettingsFormType extends TranslatorAwareType
     {
         $this->builder->add('syncStockToPrestashop', ChoiceType::class, [
             'label' => $this->trans('Synchronize stocks', "Modules.Molonies.Settings"),
+            'label_attr' => [
+                'popover' => $this->trans(
+                    'Choose to synchronize the product when a Moloni product is updated.<br><br>
+                            Ex.: Update a product in Moloni from 0 stock to 20 and the product stock in Prestashop will be updated.',
+                    "Modules.Molonies.Settings"
+                ),
+            ],
             'required' => false,
+            'placeholder' => false,
             'choices' => $this->options->getYesNo(),
-            'help' => $this->trans('Automatic stock synchronization to Prestashop', "Modules.Molonies.Settings"),
         ]);
 
         return $this;
@@ -169,11 +176,8 @@ class SettingsFormType extends TranslatorAwareType
                     $this->trans('Accumulated stock', "Modules.Molonies.Settings") => 1,
                     $this->trans('Warehouses', "Modules.Molonies.Settings") => $this->options->getWarehouses(),
                 ],
-                'help' => $this->trans(
-                    'Stock source used when synchronizing stock and creating products in Prestashop',
-                    "Modules.Molonies.Settings"
-                ),
-                'required' => false
+                'required' => false,
+                'placeholder' => false,
             ]);
 
         return $this;
@@ -183,11 +187,16 @@ class SettingsFormType extends TranslatorAwareType
     {
         $this->builder->add('addProductsToPrestashop', ChoiceType::class, [
             'label' => $this->trans('Create products', "Modules.Molonies.Settings"),
+            'label_attr' => [
+                'popover' => $this->trans(
+                    'Choose if a product should be created in Prestashop when it is <b>created</b> in Moloni.<br><br>
+                            Ex.: Insert a new product in Moloni and that same product will be automaticaly created in Prestashop.',
+                    "Modules.Molonies.Settings"
+                ),
+            ],
             'choices' => $this->options->getYesNo(),
-            'help' => $this->trans(
-                'When creating a product in Moloni, the product will be created in Prestashop',
-                "Modules.Molonies.Settings"
-            ),
+            'required' => false,
+            'placeholder' => false,
         ]);
 
         return $this;
@@ -197,14 +206,16 @@ class SettingsFormType extends TranslatorAwareType
     {
         $this->builder->add('updateProductsToPrestashop', ChoiceType::class, [
             'label' => $this->trans('Update products', "Modules.Molonies.Settings"),
+            'label_attr' => [
+                'popover' => $this->trans(
+                    'Choose if a product should be updated in Prestashop when it is <b>updated</b> in Moloni.<br><br>
+                            Ex.: Update a product in Moloni and that same product will be automaticaly created or updated in Prestashop.',
+                    "Modules.Molonies.Settings"
+                ),
+            ],
             'required' => false,
-            'choices' => $this->options->getYesNo(),
-            'help' => $this->trans(
-                'When updating a product in Moloni, the product will be updated in Prestashop',
-                "Modules.Molonies.Settings"
-            ),
             'placeholder' => false,
-
+            'choices' => $this->options->getYesNo(),
         ]);
 
         return $this;
@@ -214,14 +225,17 @@ class SettingsFormType extends TranslatorAwareType
     {
         $this->builder->add('productSyncFields', ChoiceType::class, [
             'label' => $this->trans('Product fields', "Modules.Molonies.Settings"),
+            'label_attr' => [
+                'popover' => $this->trans(
+                    'You can select which fields should be updated when a product update occurs.<br><br>
+                            This is useful to have for example different prices on your online store and in your Moloni account, or different names.',
+                    "Modules.Molonies.Settings"
+                ),
+            ],
             'multiple' => true,
             'expanded' => true,
             'required' => false,
             'choices' => SyncFields::getSyncFields(),
-            'help' => $this->trans(
-                'Choose which fields will be synced when a product is updated.',
-                "Modules.Molonies.Settings"
-            ),
         ]);
 
         return $this;
