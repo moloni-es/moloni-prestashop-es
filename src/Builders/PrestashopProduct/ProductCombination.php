@@ -38,11 +38,13 @@ use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\Product\MoloniProductCombinationException;
 use Moloni\Tools\Logs;
 use Moloni\Tools\Settings;
+use Moloni\Traits\LogsTrait;
 use Moloni\Traits\AttributesTrait;
 
 class ProductCombination implements BuilderInterface
 {
     use AttributesTrait;
+    use LogsTrait;
 
     /**
      * Moloni variant
@@ -135,6 +137,7 @@ class ProductCombination implements BuilderInterface
      * @var array
      */
     protected $attributes = [];
+
 
     /**
      * Fields that will be synced
@@ -261,7 +264,9 @@ class ProductCombination implements BuilderInterface
         try {
             $this->prestashopCombination->save();
 
-            Logs::addInfoLog(['Combination created in Prestashop ({0})', ['{0}' => $this->reference]], ['moloniVariant' => $this->moloniVariant]);
+            if ($this->shouldWriteLogs()) {
+                Logs::addInfoLog(['Combination created in Prestashop ({0})', ['{0}' => $this->reference]], ['moloniVariant' => $this->moloniVariant]);
+            }
 
             $this->afterInsert();
             $this->afterSave();
@@ -286,7 +291,9 @@ class ProductCombination implements BuilderInterface
         try {
             $this->prestashopCombination->save();
 
-            Logs::addInfoLog(['Combination updated in Prestashop ({0})', ['{0}' => $this->reference]], ['moloniVariant' => $this->moloniVariant]);
+            if ($this->shouldWriteLogs()) {
+                Logs::addInfoLog(['Combination updated in Prestashop ({0})', ['{0}' => $this->reference]], ['moloniVariant' => $this->moloniVariant]);
+            }
 
             $this->afterSave();
         } catch (PrestaShopException $e) {
@@ -307,7 +314,7 @@ class ProductCombination implements BuilderInterface
             return;
         }
 
-        new UpdatePrestaProductStock((int)$this->prestashopProduct->id, (int)$this->prestashopCombination->id, $this->reference, $this->stock);
+        new UpdatePrestaProductStock((int)$this->prestashopProduct->id, (int)$this->prestashopCombination->id, $this->reference, $this->stock, $this->shouldWriteLogs());
     }
 
     //          GETS          //

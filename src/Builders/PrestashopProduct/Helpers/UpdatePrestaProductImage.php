@@ -61,7 +61,6 @@ class UpdatePrestaProductImage extends PrestaImage
             try {
                 $image->save();
             } catch (PrestaShopException $e) {
-                // todo: write log?
                 return;
             }
         }
@@ -69,7 +68,6 @@ class UpdatePrestaProductImage extends PrestaImage
         try {
             $this->saveImage($image);
         } catch (PrestaShopDatabaseException $e) {
-            // todo: write log?
             return;
         }
     }

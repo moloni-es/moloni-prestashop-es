@@ -24,9 +24,12 @@
 
 namespace Moloni\Builders\MoloniProduct;
 
+use Shop;
+use Image;
+use Product;
 use Combination;
 use Configuration;
-use Image;
+use StockAvailable;
 use Moloni\Builders\MoloniProduct\Helpers\UpdateMoloniProductStock;
 use Moloni\Builders\MoloniProduct\Helpers\Variants\FindVariant;
 use Moloni\Enums\Boolean;
@@ -34,12 +37,12 @@ use Moloni\Enums\ProductVisibility;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\Product\MoloniProductException;
 use Moloni\Tools\Settings;
-use Product;
-use Shop;
-use StockAvailable;
+use Moloni\Traits\LogsTrait;
 
 class ProductVariant
 {
+    use LogsTrait;
+
     /**
      * Moloni parent product
      *
@@ -226,7 +229,7 @@ class ProductVariant
         }
 
         try {
-            new UpdateMoloniProductStock($this->getMoloniVariantId(), $this->warehouseId, $this->stock, $this->moloniVariant['warehouses'], $this->reference);
+            new UpdateMoloniProductStock($this->getMoloniVariantId(), $this->warehouseId, $this->stock, $this->moloniVariant['warehouses'], $this->reference, $this->shouldWriteLogs());
         } catch (MoloniApiException $e) {
             throw new MoloniProductException('Error creating stock movement ({0})', ['{0}' => $this->reference], $e->getData());
         }

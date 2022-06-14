@@ -25,10 +25,13 @@
 namespace Moloni\Builders\PrestashopProduct\Helpers;
 
 use Moloni\Tools\Logs;
+use Moloni\Traits\LogsTrait;
 use StockAvailable;
 
 class UpdatePrestaProductStock
 {
+    use LogsTrait;
+
     private $prestaProductId;
     private $prestaProductReference;
     private $attributeId;
@@ -38,16 +41,18 @@ class UpdatePrestaProductStock
      * Construct
      *
      * @param int $prestaProductId
-     * @param string $prestaProductReference
      * @param int|null $attributeId
+     * @param string $prestaProductReference
      * @param float|int|null $newStock
+     * @param bool|null $writeLogs
      */
-    public function __construct(int $prestaProductId, ?int $attributeId = null, string $prestaProductReference = '', $newStock = 0)
+    public function __construct(int $prestaProductId, ?int $attributeId = null, string $prestaProductReference = '', $newStock = 0, ?bool $writeLogs = true)
     {
         $this->prestaProductId = $prestaProductId;
         $this->prestaProductReference = $prestaProductReference;
         $this->attributeId = $attributeId;
         $this->newStock = $newStock;
+        $this->writeLogs = $writeLogs;
 
         $this->handle();
     }
@@ -75,6 +80,8 @@ class UpdatePrestaProductStock
             $msg = ['Stock is already updated in Prestashop ({0})', ['{0}' => $this->prestaProductReference]];
         }
 
-        Logs::addInfoLog($msg);
+        if ($this->shouldWriteLogs()) {
+            Logs::addInfoLog($msg);
+        }
     }
 }
