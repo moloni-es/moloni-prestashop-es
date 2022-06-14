@@ -40,6 +40,7 @@ use Moloni\Api\Endpoints\Documents\Receipt;
 use Moloni\Api\Endpoints\Documents\SimplifiedInvoice;
 use Moloni\Api\Endpoints\DocumentSets;
 use Moloni\Api\Endpoints\FiscalZone;
+use Moloni\Api\Endpoints\BusinessAreas;
 use Moloni\Api\Endpoints\GeographicZones;
 use Moloni\Api\Endpoints\Hooks;
 use Moloni\Api\Endpoints\Languages;
@@ -129,6 +130,10 @@ class MoloniApiClient
      * @var FiscalZone|null
      */
     private static $fiscalZone;
+    /**
+     * @var BusinessAreas|null
+     */
+    private static $businessAreas;
     /**
      * @var GeographicZones|null
      */
@@ -324,6 +329,15 @@ class MoloniApiClient
         }
 
         return self::$fiscalZone;
+    }
+
+    public static function businessAreas(): BusinessAreas
+    {
+        if (!self::$businessAreas) {
+            self::$businessAreas = new BusinessAreas();
+        }
+
+        return self::$businessAreas;
     }
 
     public static function geographicZones(): GeographicZones
