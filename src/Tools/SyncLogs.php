@@ -86,7 +86,7 @@ class SyncLogs
     /**
      * Adds timeout to a given product
      *
-     * @param int $productId
+     * @param int $productId Prestashop product id
      *
      * @return void
      */

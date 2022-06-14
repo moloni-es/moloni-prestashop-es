@@ -31,6 +31,7 @@ use Moloni\Enums\StockSync;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\Product\MoloniProductException;
 use Moloni\Tools\Logs;
+use Moloni\Tools\SyncLogs;
 
 class ImportStockChangesFromMoloni extends ImportProducts
 {
@@ -73,6 +74,8 @@ class ImportStockChangesFromMoloni extends ImportProducts
                 }
 
                 if ($builder->getPrestashopProductId() > 0) {
+                    SyncLogs::productAddTimeout($builder->getPrestashopProductId());
+
                     $builder->disableLogs();
                     $builder->updateStock();
 
