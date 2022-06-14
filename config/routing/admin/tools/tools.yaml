@@ -12,12 +12,6 @@ moloni_es_tools_import_products:
   defaults:
     _controller: 'Moloni\Controller\Admin\Tools\Tools::importProducts'
 
-moloni_es_tools_import_categories:
-  path: /tools/importCategories
-  methods: [POST]
-  defaults:
-    _controller: 'Moloni\Controller\Admin\Tools\Tools::importCategories'
-
 moloni_es_tools_reinstall_hooks:
   path: /tools/reinstallHooks
   methods: [GET]

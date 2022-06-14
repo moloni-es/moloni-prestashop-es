@@ -20,7 +20,6 @@ class MoloniRoutes
 
     public const TOOLS = 'moloni_es_tools_home';
     public const TOOLS_IMPORT_PRODUCTS = 'moloni_es_tools_import_products';
-    public const TOOLS_IMPORT_CATEGORIES = 'moloni_es_tools_import_categories';
     public const TOOLS_SYNC_STOCK = 'moloni_es_tools_sync_stock';
     public const TOOLS_REINSTALL_HOOKS = 'moloni_es_tools_reinstall_hooks';
     public const TOOLS_OPEN_LOGS = 'moloni_es_tools_open_logs';
@@ -40,7 +39,6 @@ class MoloniRoutes
         self::DOCUMENTS_RESTORE,
         self::TOOLS,
         self::TOOLS_IMPORT_PRODUCTS,
-        self::TOOLS_IMPORT_CATEGORIES,
         self::TOOLS_SYNC_STOCK,
         self::TOOLS_REINSTALL_HOOKS,
         self::TOOLS_OPEN_LOGS,

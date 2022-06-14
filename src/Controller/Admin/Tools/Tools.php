@@ -25,7 +25,6 @@
 namespace Moloni\Controller\Admin\Tools;
 
 use Exception;
-use Moloni\Actions\Imports\ImportCategoriesFromMoloni;
 use Moloni\Actions\Imports\ImportProductsFromMoloni;
 use Moloni\Actions\Imports\ImportStockChangesFromMoloni;
 use Moloni\Actions\Tools\LogsListDetails;
@@ -49,7 +48,6 @@ class Tools extends MoloniController
         return $this->render(
             '@Modules/molonies/views/templates/admin/tools/Tools.twig',
             [
-                'importCategoriesRoute' => MoloniRoutes::TOOLS_IMPORT_CATEGORIES,
                 'importProductsRoute' => MoloniRoutes::TOOLS_IMPORT_PRODUCTS,
                 'syncStockRoute' => MoloniRoutes::TOOLS_SYNC_STOCK,
                 'reinstallHooksRoute' => MoloniRoutes::TOOLS_REINSTALL_HOOKS,
@@ -84,15 +82,6 @@ class Tools extends MoloniController
         ]);
 
         return new Response($response);
-    }
-
-    public function importCategories(Request $request): Response
-    {
-        $data = $request->get('test');
-
-        (new ImportCategoriesFromMoloni())->handle();
-
-        return new Response($data);
     }
 
     public function syncStocks(Request $request): Response
