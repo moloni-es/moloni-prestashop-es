@@ -1,5 +1,4 @@
 import SyncProducts from '../tools/syncProducts';
-import SyncCategories from '../tools/syncCategories';
 import SyncStock from '../tools/syncStock';
 
 export default class MoloniTools {
@@ -15,12 +14,6 @@ export default class MoloniTools {
         let action = $(this).attr('data-href');
 
         SyncProducts({ action });
-    }
-
-    syncCategories() {
-        let action = $(this).attr('data-href');
-
-        SyncCategories({ action });
     }
 
     syncStock() {
