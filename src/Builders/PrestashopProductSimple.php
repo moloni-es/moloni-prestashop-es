@@ -24,18 +24,16 @@
 
 namespace Moloni\Builders;
 
-use Country;
-use Moloni\Builders\PrestashopProduct\Helpers\FindTaxGroupFromMoloniTax;
+use Moloni\Traits\LogsTrait;
 use Product;
 use Configuration;
-use TaxRulesGroup;
 use PrestaShopException;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\Interfaces\BuilderInterface;
+use Moloni\Builders\PrestashopProduct\ProductCategory;
 use Moloni\Builders\PrestashopProduct\Helpers\UpdatePrestaProductImage;
 use Moloni\Builders\PrestashopProduct\Helpers\UpdatePrestaProductStock;
-use Moloni\Builders\PrestashopProduct\ProductCategory;
-use Moloni\Builders\PrestashopProduct\ProductCombination;
+use Moloni\Builders\PrestashopProduct\Helpers\FindTaxGroupFromMoloniTax;
 use Moloni\Enums\Boolean;
 use Moloni\Enums\SyncFields;
 use Moloni\Exceptions\MoloniApiException;
@@ -46,6 +44,7 @@ use Moloni\Tools\Settings;
 
 class PrestashopProductSimple implements BuilderInterface
 {
+    use LogsTrait;
 
     /**
      * Moloni product
@@ -289,7 +288,9 @@ class PrestashopProductSimple implements BuilderInterface
         try {
             $this->prestashopProduct->save();
 
-            Logs::addInfoLog(['Product created in Prestashop ({0})', ['{0}' => $this->reference]], ['moloniProduct' => $this->moloniProduct]);
+            if ($this->shouldWriteLogs()) {
+                Logs::addInfoLog(['Product created in Prestashop ({0})', ['{0}' => $this->reference]], ['moloniProduct' => $this->moloniProduct]);
+            }
 
             $this->afterSave();
         } catch (PrestaShopException $e) {
@@ -314,7 +315,9 @@ class PrestashopProductSimple implements BuilderInterface
         try {
             $this->prestashopProduct->save();
 
-            Logs::addInfoLog(['Product updated in Prestashop ({0})', ['{0}' => $this->reference]], ['moloniProduct' => $this->moloniProduct]);
+            if ($this->shouldWriteLogs()) {
+                Logs::addInfoLog(['Product updated in Prestashop ({0})', ['{0}' => $this->reference]], ['moloniProduct' => $this->moloniProduct]);
+            }
 
             $this->afterSave();
         } catch (PrestaShopException $e) {
@@ -335,7 +338,7 @@ class PrestashopProductSimple implements BuilderInterface
             return;
         }
 
-        new UpdatePrestaProductStock($this->getPrestashopProductId(), null, $this->reference, $this->stock);
+        new UpdatePrestaProductStock($this->getPrestashopProductId(), null, $this->reference, $this->stock, $this->shouldWriteLogs());
     }
 
     //          GETS          //

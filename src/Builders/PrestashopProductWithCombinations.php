@@ -37,6 +37,7 @@ use Moloni\Builders\PrestashopProduct\ProductCategory;
 use Moloni\Builders\PrestashopProduct\ProductCombination;
 use Moloni\Enums\Boolean;
 use Moloni\Enums\SyncFields;
+use Moloni\Traits\LogsTrait;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\Product\MoloniProductCategoryException;
 use Moloni\Exceptions\Product\MoloniProductException;
@@ -45,6 +46,10 @@ use Moloni\Tools\Settings;
 
 class PrestashopProductWithCombinations implements BuilderInterface
 {
+    use LogsTrait {
+        disableLogs as traitDisableLogs;
+    }
+
     /**
      * Moloni product
      *
@@ -315,7 +320,9 @@ class PrestashopProductWithCombinations implements BuilderInterface
         try {
             $this->prestashopProduct->save();
 
-            Logs::addInfoLog(['Product created in Prestashop ({0})', ['{0}' => $this->reference]], ['moloniProduct' => $this->moloniProduct]);
+            if ($this->shouldWriteLogs()) {
+                Logs::addInfoLog(['Product created in Prestashop ({0})', ['{0}' => $this->reference]], ['moloniProduct' => $this->moloniProduct]);
+            }
 
             $this->afterSave();
         } catch (PrestaShopException $e) {
@@ -340,7 +347,9 @@ class PrestashopProductWithCombinations implements BuilderInterface
         try {
             $this->prestashopProduct->save();
 
-            Logs::addInfoLog(['Product updated in Prestashop ({0})', ['{0}' => $this->reference]], ['moloniProduct' => $this->moloniProduct]);
+            if ($this->shouldWriteLogs()) {
+                Logs::addInfoLog(['Product updated in Prestashop ({0})', ['{0}' => $this->reference]], ['moloniProduct' => $this->moloniProduct]);
+            }
 
             $this->afterSave();
         } catch (PrestaShopException $e) {
@@ -644,6 +653,20 @@ class PrestashopProductWithCombinations implements BuilderInterface
         }
 
         return $this;
+    }
+
+    /**
+     * Disable logs proxy
+     *
+     * @return void
+     */
+    public function disableLogs(): void
+    {
+        $this->traitDisableLogs();
+
+        foreach ($this->combinations as $combination) {
+            $combination->disableLogs();
+        }
     }
 
     //          VERIFICATIONS          //

@@ -24,6 +24,7 @@
 
 namespace Moloni\Builders;
 
+use Product;
 use Address;
 use Category;
 use Combination;
@@ -50,10 +51,12 @@ use Moloni\Exceptions\Product\MoloniProductException;
 use Moloni\Exceptions\Product\MoloniProductTaxException;
 use Moloni\Tools\Logs;
 use Moloni\Tools\Settings;
-use Product;
+use Moloni\Traits\LogsTrait;
 
 class MoloniProductWithVariants implements BuilderInterface
 {
+    use LogsTrait;
+
     /**
      * Moloni roduct
      *
@@ -341,6 +344,16 @@ class MoloniProductWithVariants implements BuilderInterface
     }
 
     /**
+     * Actions run before an actionn
+     *
+     * @return void
+     */
+    protected function beforeAction(): void
+    {
+        $this->setVariants();
+    }
+
+    /**
      * Actions run before an update
      *
      * @return void
@@ -363,7 +376,7 @@ class MoloniProductWithVariants implements BuilderInterface
      */
     public function insert(): MoloniProductWithVariants
     {
-        $this->setVariants();
+        $this->beforeAction();
 
         $props = $this->toArray();
 
@@ -376,7 +389,9 @@ class MoloniProductWithVariants implements BuilderInterface
             if (!empty($moloniProduct)) {
                 $this->moloniProduct = $moloniProduct;
 
-                Logs::addInfoLog(['Product created in Moloni ({0})', ['{0}' => $this->reference]], ['props' => $props]);
+                if ($this->shouldWriteLogs()) {
+                    Logs::addInfoLog(['Product created in Moloni ({0})', ['{0}' => $this->reference]], ['props' => $props]);
+                }
 
                 $this->afterSave();
             } else {
@@ -398,9 +413,8 @@ class MoloniProductWithVariants implements BuilderInterface
      */
     public function update(): MoloniProductWithVariants
     {
-        $this
-            ->setVariants()
-            ->beforeUpdate();
+        $this->beforeAction();
+        $this->beforeUpdate();
 
         $props = $this->toArray();
 
@@ -414,7 +428,9 @@ class MoloniProductWithVariants implements BuilderInterface
             if ($productId > 0) {
                 $this->moloniProduct = $moloniProduct;
 
-                Logs::addInfoLog(['Product updated in Moloni ({0})', ['{0}' => $this->reference]], ['props' => $props]);
+                if ($this->shouldWriteLogs()) {
+                    Logs::addInfoLog(['Product updated in Moloni ({0})', ['{0}' => $this->reference]], ['props' => $props]);
+                }
 
                 $this->afterSave();
             } else {
@@ -436,7 +452,7 @@ class MoloniProductWithVariants implements BuilderInterface
      */
     public function updateStock(): MoloniProductWithVariants
     {
-        $this->setVariants();
+        $this->beforeAction();
 
         if (!$this->productExists() || !$this->productHasStock()) {
             return $this;
@@ -806,6 +822,10 @@ class MoloniProductWithVariants implements BuilderInterface
                 ->setParentHasStock($this->hasStock)
                 ->setWarehouseId($this->warehouseId)
                 ->setPropertyPairs($this->propertyGroup['variants'][(int)$combination->id] ?? []);
+
+            if (!$this->shouldWriteLogs()) {
+                $builder->disableLogs();
+            }
 
             $this->variants[] = $builder;
         }

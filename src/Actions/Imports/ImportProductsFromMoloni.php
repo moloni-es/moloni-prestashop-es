@@ -72,6 +72,7 @@ class ImportProductsFromMoloni extends ImportProducts
                 }
 
                 if ($builder->getPrestashopProductId() === 0) {
+                    $builder->disableLogs();
                     $builder->insert();
 
                     $this->syncedProducts[] = $product['reference'];

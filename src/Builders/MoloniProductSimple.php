@@ -29,6 +29,8 @@ use Category;
 use Configuration;
 use Country;
 use Image;
+use Product;
+use StockAvailable;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\Interfaces\BuilderInterface;
 use Moloni\Builders\MoloniProduct\Helpers\UpdateMoloniSimpleProductImage;
@@ -47,11 +49,12 @@ use Moloni\Exceptions\Product\MoloniProductException;
 use Moloni\Exceptions\Product\MoloniProductTaxException;
 use Moloni\Tools\Logs;
 use Moloni\Tools\Settings;
-use Product;
-use StockAvailable;
+use Moloni\Traits\LogsTrait;
 
 class MoloniProductSimple implements BuilderInterface
 {
+    use LogsTrait;
+
     /**
      * Moloni roduct
      *
@@ -333,7 +336,9 @@ class MoloniProductSimple implements BuilderInterface
             if (!empty($moloniProduct)) {
                 $this->moloniProduct = $moloniProduct;
 
-                Logs::addInfoLog(['Product created in Moloni ({0})', ['{0}' => $this->reference]], ['props' => $props]);
+                if ($this->shouldWriteLogs()) {
+                    Logs::addInfoLog(['Product created in Moloni ({0})', ['{0}' => $this->reference]], ['props' => $props]);
+                }
 
                 $this->afterSave();
             } else {
@@ -369,7 +374,9 @@ class MoloniProductSimple implements BuilderInterface
             if ($productId > 0) {
                 $this->moloniProduct = $moloniProduct;
 
-                Logs::addInfoLog(['Product updated in Moloni ({0})', ['{0}' => $this->reference]], ['props' => $props]);
+                if ($this->shouldWriteLogs()) {
+                    Logs::addInfoLog(['Product updated in Moloni ({0})', ['{0}' => $this->reference]], ['props' => $props]);
+                }
 
                 $this->afterSave();
             } else {
@@ -393,7 +400,7 @@ class MoloniProductSimple implements BuilderInterface
     {
         if ($this->productExists() && $this->productHasStock()) {
             try {
-                new UpdateMoloniProductStock($this->getMoloniProductId(), $this->warehouseId, $this->stock, $this->moloniProduct['warehouses'], $this->reference);
+                new UpdateMoloniProductStock($this->getMoloniProductId(), $this->warehouseId, $this->stock, $this->moloniProduct['warehouses'], $this->reference, $this->shouldWriteLogs());
             } catch (MoloniApiException $e) {
                 throw new MoloniProductException('Error creating stock movement ({0})', ['{0}' => $this->reference], $e->getData());
             }
