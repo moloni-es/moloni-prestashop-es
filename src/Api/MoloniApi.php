@@ -61,6 +61,8 @@ class MoloniApi
         self::$entityManager = $entityManager;
     }
 
+    //          Gets          //
+
     /**
      * Get session
      *
@@ -80,6 +82,8 @@ class MoloniApi
     {
         return self::$app->getCompanyId() ?? 0;
     }
+
+    //          Requests          //
 
     /**
      * Login action
@@ -202,19 +206,23 @@ class MoloniApi
             self::$client = new Client();
         }
 
-        if (isset($data['variables']) && !isset($data['variables']['companyId'])) {
-            $data['variables']['companyId'] = self::$app->getCompanyId();
+        $headers = [
+            'Content-Type' => 'application/json',
+        ];
+
+        if (self::$app) {
+            if (isset($data['variables']) && !isset($data['variables']['companyId'])) {
+                $data['variables']['companyId'] = self::$app->getCompanyId();
+            }
+
+            $headers['Authorization'] = 'bearer ' . self::$app->getAccessToken();
         }
 
         try {
-            $response = [];
             $request = self::$client->post(
                 Domains::MOLONI_API,
                 [
-                    'headers' => [
-                        'Authorization' => 'bearer ' . self::$app->getAccessToken(),
-                        'Content-Type' => 'application/json',
-                    ],
+                    'headers' => $headers,
                     'body' => json_encode($data),
                 ]
             );
@@ -225,7 +233,7 @@ class MoloniApi
                 $response = json_decode($json, true);
             }
 
-            return $response;
+            return $response ?? [];
         } catch (BadResponseException $e) {
             $response = $e->getResponse() ? $e->getResponse()->json() : [];
 
@@ -238,13 +246,12 @@ class MoloniApi
      *
      * @param array|null $operations
      * @param string|null $map
-     * @param string|null $file
-     *
+     * @param array|null $files
      * @return array
      *
      * @throws MoloniApiException
      */
-    public static function postWithFile(array $operations = [], string $map = '', array $files = []): array
+    public static function postWithFile(?array $operations = [], ?string $map = '', ?array $files = []): array
     {
         if (!self::$client) {
             self::$client = new Client();
@@ -290,6 +297,8 @@ class MoloniApi
             throw new MoloniApiException('Request error', [], ['data' => $operations, 'response' => $response]);
         }
     }
+
+    //          Verifications          //
 
     /**
      * Verifies if company is selected
