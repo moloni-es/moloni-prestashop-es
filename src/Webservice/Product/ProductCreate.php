@@ -27,6 +27,7 @@ namespace Moloni\Webservice\Product;
 use Moloni\Builders\PrestashopProductSimple;
 use Moloni\Builders\PrestashopProductWithCombinations;
 use Moloni\Enums\Boolean;
+use Moloni\Enums\StockSync;
 use Moloni\Exceptions\Product\MoloniProductException;
 use Moloni\Tools\Logs;
 use Moloni\Tools\Settings;
@@ -42,6 +43,10 @@ class ProductCreate extends AbstractWebserviceAction
 
         try {
             $product = $this->fetchProductFromMoloni($this->productId);
+
+            if (StockSync::isIgnoredReference($product['reference'])) {
+                return;
+            }
 
             if (empty($product['variants'])) {
                 $productBuilder = new PrestashopProductSimple($product);

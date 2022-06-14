@@ -11,13 +11,17 @@
                  aria-valuenow="{{ currentPercentage }}"
                  aria-valuemin="0"
                  aria-valuemax="100">
-                25%
+                {{ currentPercentage }}%
             </div>
         </div>
 
-        <p>
-            {{ 'Please wait, syncing in progress'|trans({}, 'Modules.Molonies.Common') }}
-        </p>
+        <br>
+
+        <div class="alert alert-info" role="alert">
+            <p class="alert-text">
+                {{ 'Please wait, syncing in progress'|trans({}, 'Modules.Molonies.Common') }}
+            </p>
+        </div>
     {% else %}
         <div class="progress">
             <div class="progress-bar bg-success"
@@ -26,12 +30,16 @@
                  aria-valuenow="100"
                  aria-valuemin="0"
                  aria-valuemax="100">
-                25%
+                100%
             </div>
         </div>
 
-        <p>
-            {{ 'Process complete'|trans({}, 'Modules.Molonies.Common') }}
-        </p>
+        <br>
+
+        <div class="alert alert-success" role="alert">
+            <p class="alert-text">
+                {{ 'Process complete'|trans({}, 'Modules.Molonies.Common') }}
+            </p>
+        </div>
     {% endif %}
 </div>

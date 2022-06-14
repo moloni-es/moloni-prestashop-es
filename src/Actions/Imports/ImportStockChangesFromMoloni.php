@@ -27,8 +27,10 @@ namespace Moloni\Actions\Imports;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\PrestashopProductSimple;
 use Moloni\Builders\PrestashopProductWithCombinations;
+use Moloni\Enums\StockSync;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\Product\MoloniProductException;
+use Moloni\Tools\Logs;
 
 class ImportStockChangesFromMoloni extends ImportProducts
 {
@@ -52,14 +54,13 @@ class ImportStockChangesFromMoloni extends ImportProducts
             ]
         ];
 
-
         try {
             $query = MoloniApiClient::products()->queryProducts($props, true);
         } catch (MoloniApiException $e) {
             return;
         }
 
-        $this->totalResults = (int)($query['data']['products']['options']['count'] ?? 0);
+        $this->totalResults = (int)($query['data']['products']['options']['pagination']['count'] ?? 0);
 
         $data = $query['data']['products']['data'] ?? [];
 
@@ -71,18 +72,27 @@ class ImportStockChangesFromMoloni extends ImportProducts
                     $builder = new PrestashopProductWithCombinations($product);
                 }
 
-                $builder->updateStock();
+                if ($builder->getPrestashopProductId() > 0) {
+                    $builder->updateStock();
 
-                $this->syncedProducts[] = $product['reference'];
+                    $this->syncedProducts[] = $product['reference'];
+                } else {
+                    $this->errorProducts[] = [
+                        $product['reference'] => 'Product does not exist in Prestashop'
+                    ];
+                }
             } catch (MoloniProductException $e) {
                 $this->errorProducts[] = [
-                    $product['reference'] => [
-                        'errorDump' => $e->getData()
-                    ]
+                    $product['reference'] => $e->getData()
                 ];
             }
         }
 
-        sleep(3);
+        $logMsg = ['Products stock sync. Part {0}', ['{0}' => $this->page]];
+        $logData = [
+            'success' => $this->syncedProducts,
+            'error' => $this->errorProducts,
+        ];
+        Logs::addInfoLog($logMsg, $logData);
     }
 }

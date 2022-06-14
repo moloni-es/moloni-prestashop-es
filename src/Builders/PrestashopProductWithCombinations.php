@@ -398,7 +398,7 @@ class PrestashopProductWithCombinations implements BuilderInterface
      */
     public function getPrestashopProductId(): int
     {
-        return $this->prestashopProduct->id;
+        return (int)$this->prestashopProduct->id;
     }
 
     //          SETS          //

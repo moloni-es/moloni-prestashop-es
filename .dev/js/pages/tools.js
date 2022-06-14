@@ -6,7 +6,6 @@ export default class MoloniTools {
 
     startObservers() {
         $('#import_products_button').on('click', this.syncProducts);
-        $('#import_categories_button').on('click', this.syncCategories);
         $('#synchronize_stocks_button').on('click', this.syncStock);
     }
 

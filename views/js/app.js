@@ -337,9 +337,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
 /* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
 /* harmony import */ var _tools_syncProducts__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../tools/syncProducts */ "./js/tools/syncProducts.js");
-/* harmony import */ var _tools_syncCategories__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../tools/syncCategories */ "./js/tools/syncCategories.js");
-/* harmony import */ var _tools_syncStock__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../tools/syncStock */ "./js/tools/syncStock.js");
-
+/* harmony import */ var _tools_syncStock__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../tools/syncStock */ "./js/tools/syncStock.js");
 
 
 
@@ -354,7 +352,6 @@ var MoloniTools = /*#__PURE__*/function () {
     key: "startObservers",
     value: function startObservers() {
       $('#import_products_button').on('click', this.syncProducts);
-      $('#import_categories_button').on('click', this.syncCategories);
       $('#synchronize_stocks_button').on('click', this.syncStock);
     }
   }, {
@@ -366,18 +363,10 @@ var MoloniTools = /*#__PURE__*/function () {
       });
     }
   }, {
-    key: "syncCategories",
-    value: function syncCategories() {
-      var action = $(this).attr('data-href');
-      (0,_tools_syncCategories__WEBPACK_IMPORTED_MODULE_3__["default"])({
-        action: action
-      });
-    }
-  }, {
     key: "syncStock",
     value: function syncStock() {
       var action = $(this).attr('data-href');
-      (0,_tools_syncStock__WEBPACK_IMPORTED_MODULE_4__["default"])({
+      (0,_tools_syncStock__WEBPACK_IMPORTED_MODULE_3__["default"])({
         action: action
       });
     }
@@ -476,31 +465,6 @@ var MakeRequest = async function MakeRequest(action, data) {
 
 /***/ }),
 
-/***/ "./js/tools/syncCategories.js":
-/*!************************************!*\
-  !*** ./js/tools/syncCategories.js ***!
-  \************************************/
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-__webpack_require__.r(__webpack_exports__);
-var SyncCategories = function SyncCategories(_ref) {
-  var action = _ref.action;
-  $('#action_overlay_button').trigger('click');
-  $.post({
-    url: action,
-    cache: false,
-    data: {
-      test: 'já foste'
-    }
-  }).then(function (response) {
-    console.log(response);
-  });
-};
-
-/* harmony default export */ __webpack_exports__["default"] = (SyncCategories);
-
-/***/ }),
-
 /***/ "./js/tools/syncProducts.js":
 /*!**********************************!*\
   !*** ./js/tools/syncProducts.js ***!
@@ -518,29 +482,31 @@ var SyncProducts = async function SyncProducts(_ref) {
   var closeButton = actionModal.find('#action_overlay_button');
   var spinner = actionModal.find('#action_overlay_spinner');
   var content = actionModal.find('#action_overlay_content');
+  var error = actionModal.find('#action_overlay_error');
   content.html('').hide();
   closeButton.hide();
+  error.hide();
   spinner.show();
   actionButton.trigger('click');
   var page = 1;
-  var syncedProducts = [];
-  var errorProducts = [];
+
+  var toogleContent = function toogleContent() {
+    spinner.fadeOut(100, function () {
+      content.fadeIn(200);
+    });
+  };
 
   var sync = async function sync() {
     var resp = await (0,_makeRequest__WEBPACK_IMPORTED_MODULE_0__["default"])(action, {
       page: page
     });
-    console.log(resp);
+    resp = JSON.parse(resp);
 
-    if (page === 0) {
-      spinner.hide(100, function () {
-        content.show(200);
-      });
+    if (page === 1) {
+      toogleContent();
     }
 
     content.html(resp.overlayContent);
-    syncedProducts = syncedProducts.concat(resp.products);
-    errorProducts = errorProducts.concat(resp.errorProducts);
 
     if (resp.hasMore && actionModal.is(':visible')) {
       page = page + 1;
@@ -548,10 +514,15 @@ var SyncProducts = async function SyncProducts(_ref) {
     }
   };
 
-  await sync();
+  try {
+    await sync();
+  } catch (ex) {
+    spinner.fadeOut(50);
+    content.fadeOut(50);
+    error.fadeIn(200);
+  }
+
   closeButton.show(200);
-  console.log(syncedProducts);
-  console.log(errorProducts);
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (SyncProducts);
@@ -575,29 +546,31 @@ var SyncStock = async function SyncStock(_ref) {
   var closeButton = actionModal.find('#action_overlay_button');
   var spinner = actionModal.find('#action_overlay_spinner');
   var content = actionModal.find('#action_overlay_content');
+  var error = actionModal.find('#action_overlay_error');
   content.html('').hide();
   closeButton.hide();
+  error.hide();
   spinner.show();
   actionButton.trigger('click');
   var page = 1;
-  var syncedProducts = [];
-  var errorProducts = [];
+
+  var toogleContent = function toogleContent() {
+    spinner.fadeOut(100, function () {
+      content.fadeIn(200);
+    });
+  };
 
   var sync = async function sync() {
     var resp = await (0,_makeRequest__WEBPACK_IMPORTED_MODULE_0__["default"])(action, {
       page: page
     });
-    console.log(resp);
+    resp = JSON.parse(resp);
 
-    if (page === 0) {
-      spinner.hide(100, function () {
-        content.show(200);
-      });
+    if (page === 1) {
+      toogleContent();
     }
 
     content.html(resp.overlayContent);
-    syncedProducts = syncedProducts.concat(resp.products);
-    errorProducts = errorProducts.concat(resp.errorProducts);
 
     if (resp.hasMore && actionModal.is(':visible')) {
       page = page + 1;
@@ -605,10 +578,15 @@ var SyncStock = async function SyncStock(_ref) {
     }
   };
 
-  await sync();
+  try {
+    await sync();
+  } catch (ex) {
+    spinner.fadeOut(50);
+    content.fadeOut(50);
+    error.fadeIn(200);
+  }
+
   closeButton.show(200);
-  console.log(syncedProducts);
-  console.log(errorProducts);
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (SyncStock);

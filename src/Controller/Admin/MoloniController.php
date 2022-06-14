@@ -156,7 +156,7 @@ abstract class MoloniController extends FrameworkBundleAdminController implement
     //          Redirects          //
 
     /**
-     * Redirect to Log in index Page
+     * Redirect to log in page
      *
      * @return RedirectResponse
      */
@@ -168,7 +168,7 @@ abstract class MoloniController extends FrameworkBundleAdminController implement
             ->getManager()
             ->getRepository(MoloniApp::class);
 
-        //$repository->deleteApp();
+        $repository->deleteApp();
 
         return $this->redirectToRoute(MoloniRoutes::LOGIN);
     }
