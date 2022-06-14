@@ -31,6 +31,7 @@ use Moloni\Builders\PrestashopProductSimple;
 use Moloni\Builders\PrestashopProductWithCombinations;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\Product\MoloniProductException;
+use Moloni\Tools\SyncLogs;
 
 class ImportProductsFromMoloni extends ImportProducts
 {
@@ -74,6 +75,10 @@ class ImportProductsFromMoloni extends ImportProducts
                 if ($builder->getPrestashopProductId() === 0) {
                     $builder->disableLogs();
                     $builder->insert();
+
+                    SyncLogs::productAddTimeout($builder->getPrestashopProductId());
+
+                    $builder->updateStock();
 
                     $this->syncedProducts[] = $product['reference'];
                 } else {
