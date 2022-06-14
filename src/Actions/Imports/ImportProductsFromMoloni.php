@@ -62,7 +62,7 @@ class ImportProductsFromMoloni extends ImportProducts
 
         foreach ($data as $product) {
             if (StockSync::isIgnoredReference($product['reference'])) {
-                return;
+                continue;
             }
 
             try {
