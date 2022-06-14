@@ -24,6 +24,8 @@
 
 namespace Moloni\Actions\Imports;
 
+use Moloni\Enums\StockSync;
+use Moloni\Tools\Logs;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\PrestashopProductSimple;
 use Moloni\Builders\PrestashopProductWithCombinations;
@@ -47,18 +49,21 @@ class ImportProductsFromMoloni extends ImportProducts
             ]
         ];
 
-
         try {
             $query = MoloniApiClient::products()->queryProducts($props, true);
         } catch (MoloniApiException $e) {
             return;
         }
 
-        $this->totalResults = (int)($query['data']['products']['options']['count'] ?? 0);
+        $this->totalResults = (int)($query['data']['products']['options']['pagination']['count'] ?? 0);
 
         $data = $query['data']['products']['data'] ?? [];
 
         foreach ($data as $product) {
+            if (StockSync::isIgnoredReference($product['reference'])) {
+                return;
+            }
+
             try {
                 if (empty($product['variants'])) {
                     $builder = new PrestashopProductSimple($product);
@@ -70,6 +75,10 @@ class ImportProductsFromMoloni extends ImportProducts
                     $builder->insert();
 
                     $this->syncedProducts[] = $product['reference'];
+                } else {
+                    $this->errorProducts[] = [
+                        $product['reference'] => 'Product already exists in Prestashop'
+                    ];
                 }
             } catch (MoloniProductException $e) {
                 $this->errorProducts[] = [
@@ -80,6 +89,11 @@ class ImportProductsFromMoloni extends ImportProducts
             }
         }
 
-        sleep(3);
+        $logMsg = ['Products import. Part {0}', ['{0}' => $this->page]];
+        $logData = [
+            'success' => $this->syncedProducts,
+            'error' => $this->errorProducts,
+        ];
+        Logs::addInfoLog($logMsg, $logData);
     }
 }

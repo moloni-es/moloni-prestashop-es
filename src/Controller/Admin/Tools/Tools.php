@@ -72,16 +72,17 @@ class Tools extends MoloniController
         $tool->handle();
 
         $response['hasMore'] = $tool->getHasMore();
-        $response['syncedProducts'] = $tool->getSyncedProducts();
-        $response['errorProducts'] = $tool->getErrorProducts();
 
-        $response['overlayContent'] = $this->render('@Modules/molonies/views/templates/admin/tools/overlays/segments/ProductSyncContent.twig', [
-            'hasMore' => $tool->getHasMore(),
-            'totalResults' => $tool->getTotalResults(),
-            'currentPercentage' => $tool->getCurrentPercentage(),
-        ]);
+        $response['overlayContent'] = $this->renderView(
+            '@Modules/molonies/views/templates/admin/tools/overlays/segments/ProductSyncContent.twig',
+            [
+                'hasMore' => $tool->getHasMore(),
+                'totalResults' => $tool->getTotalResults(),
+                'currentPercentage' => $tool->getCurrentPercentage(),
+            ]
+        );
 
-        return new Response($response);
+        return new Response(json_encode($response));
     }
 
     public function syncStocks(Request $request): Response
@@ -99,16 +100,17 @@ class Tools extends MoloniController
         $tool->handle();
 
         $response['hasMore'] = $tool->getHasMore();
-        $response['syncedProducts'] = $tool->getSyncedProducts();
-        $response['errorProducts'] = $tool->getErrorProducts();
 
-        $response['overlayContent'] = $this->render('@Modules/molonies/views/templates/admin/tools/overlays/segments/StockSyncContent.twig', [
-            'hasMore' => $tool->getHasMore(),
-            'totalResults' => $tool->getTotalResults(),
-            'currentPercentage' => $tool->getCurrentPercentage(),
-        ]);
+        $response['overlayContent'] = $this->renderView(
+            '@Modules/molonies/views/templates/admin/tools/overlays/segments/ProductSyncContent.twig',
+            [
+                'hasMore' => $tool->getHasMore(),
+                'totalResults' => $tool->getTotalResults(),
+                'currentPercentage' => $tool->getCurrentPercentage(),
+            ]
+        );
 
-        return new Response($response);
+        return new Response(json_encode($response));
     }
 
     public function reinstallHooks(Request $request): RedirectResponse
