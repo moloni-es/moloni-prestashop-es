@@ -1,4 +1,4 @@
-const SyncCategories = ({ action, title }) => {
+const SyncCategories = ({ action }) => {
     $('#action_overlay_button').trigger('click');
 
     $.post({

@@ -46,7 +46,7 @@ class Products extends Endpoint
      *
      * @throws MoloniApiException
      */
-    public function queryProducts(?array $variables = []): array
+    public function queryProducts(?array $variables = [], ?bool $singlePage = false): array
     {
         $query = 'query products($companyId: Int!,$options: ProductOptions)
                 {
@@ -73,6 +73,10 @@ class Products extends Endpoint
                         }
                     }
                 }';
+
+        if ($singlePage === true) {
+            return $this->simplePost($query, $variables);
+        }
 
         return $this->paginatedPost($query, $variables, 'products');
     }

@@ -61,11 +61,29 @@ class Tools extends MoloniController
 
     public function importProducts(Request $request): Response
     {
-        $data = $request->get('test');
+        $page = (int)$request->get('page', 1);
 
-        (new ImportProductsFromMoloni())->handle();
+        $response = [
+            'valid' => true,
+            'post' => [
+                'page' => $page
+            ]
+        ];
 
-        return new Response($data);
+        $tool = new ImportProductsFromMoloni($page);
+        $tool->handle();
+
+        $response['hasMore'] = $tool->getHasMore();
+        $response['syncedProducts'] = $tool->getSyncedProducts();
+        $response['errorProducts'] = $tool->getErrorProducts();
+
+        $response['overlayContent'] = $this->render('@Modules/molonies/views/templates/admin/tools/overlays/segments/ProductSyncContent.twig', [
+            'hasMore' => $tool->getHasMore(),
+            'totalResults' => $tool->getTotalResults(),
+            'currentPercentage' => $tool->getCurrentPercentage(),
+        ]);
+
+        return new Response($response);
     }
 
     public function importCategories(Request $request): Response
@@ -79,11 +97,29 @@ class Tools extends MoloniController
 
     public function syncStocks(Request $request): Response
     {
-        $data = $request->get('test');
+        $page = (int)$request->get('page', 1);
 
-        (new ImportStockChangesFromMoloni())->handle();
+        $response = [
+            'valid' => true,
+            'post' => [
+                'page' => $page
+            ]
+        ];
 
-        return new Response($data);
+        $tool = new ImportStockChangesFromMoloni($page);
+        $tool->handle();
+
+        $response['hasMore'] = $tool->getHasMore();
+        $response['syncedProducts'] = $tool->getSyncedProducts();
+        $response['errorProducts'] = $tool->getErrorProducts();
+
+        $response['overlayContent'] = $this->render('@Modules/molonies/views/templates/admin/tools/overlays/segments/StockSyncContent.twig', [
+            'hasMore' => $tool->getHasMore(),
+            'totalResults' => $tool->getTotalResults(),
+            'currentPercentage' => $tool->getCurrentPercentage(),
+        ]);
+
+        return new Response($response);
     }
 
     public function reinstallHooks(Request $request): RedirectResponse

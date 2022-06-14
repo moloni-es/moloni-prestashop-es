@@ -13,11 +13,18 @@
                     {{ 'Action in progress'|trans({}, 'Modules.Molonies.Common') }}
                 </h5>
             </div>
-            <div class="modal-body"></div>
+            <div class="modal-body">
+                <div id="action_overlay_content" style="display: none;"></div>
+                <div id="action_overlay_spinner" class="d-flex justify-content-center align-items-center">
+                    <div class="spinner"></div>
+                </div>
+            </div>
             <div class="modal-footer">
-                <button type="button"
+                <button id="action_overlay_button"
+                        type="button"
                         class="btn btn-outline-secondary"
-                        data-dismiss="modal">
+                        data-dismiss="modal"
+                        style="display: none;">
                     {{ 'Close'|trans({}, 'Modules.Molonies.Common') }}
                 </button>
             </div>

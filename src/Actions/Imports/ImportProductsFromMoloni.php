@@ -24,15 +24,62 @@
 
 namespace Moloni\Actions\Imports;
 
-class ImportProductsFromMoloni
+use Moloni\Api\MoloniApiClient;
+use Moloni\Builders\PrestashopProductSimple;
+use Moloni\Builders\PrestashopProductWithCombinations;
+use Moloni\Exceptions\MoloniApiException;
+use Moloni\Exceptions\Product\MoloniProductException;
+
+class ImportProductsFromMoloni extends ImportProducts
 {
-    public function __construct()
-    {
-
-    }
-
     public function handle(): void
     {
+        $props = [
+            'options' => [
+                'order' => [
+                    'field' => 'reference',
+                    'sort' => 'DESC',
+                ],
+                'pagination' => [
+                    'page' => $this->page,
+                    'qty' => $this->itemsPerPage,
+                ]
+            ]
+        ];
 
+
+        try {
+            $query = MoloniApiClient::products()->queryProducts($props, true);
+        } catch (MoloniApiException $e) {
+            return;
+        }
+
+        $this->totalResults = (int)($query['data']['products']['options']['count'] ?? 0);
+
+        $data = $query['data']['products']['data'] ?? [];
+
+        foreach ($data as $product) {
+            try {
+                if (empty($product['variants'])) {
+                    $builder = new PrestashopProductSimple($product);
+                } else {
+                    $builder = new PrestashopProductWithCombinations($product);
+                }
+
+                if ($builder->getPrestashopProductId() === 0) {
+                    $builder->insert();
+
+                    $this->syncedProducts[] = $product['reference'];
+                }
+            } catch (MoloniProductException $e) {
+                $this->errorProducts[] = [
+                    $product['reference'] => [
+                        'errorDump' => $e->getData()
+                    ]
+                ];
+            }
+        }
+
+        sleep(3);
     }
 }
