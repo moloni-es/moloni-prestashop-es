@@ -457,6 +457,25 @@ var Paginator = /*#__PURE__*/function () {
 
 /***/ }),
 
+/***/ "./js/tools/makeRequest.js":
+/*!*********************************!*\
+  !*** ./js/tools/makeRequest.js ***!
+  \*********************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+var MakeRequest = async function MakeRequest(action, data) {
+  return $.post({
+    url: action,
+    cache: false,
+    data: data
+  });
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (MakeRequest);
+
+/***/ }),
+
 /***/ "./js/tools/syncCategories.js":
 /*!************************************!*\
   !*** ./js/tools/syncCategories.js ***!
@@ -465,8 +484,7 @@ var Paginator = /*#__PURE__*/function () {
 
 __webpack_require__.r(__webpack_exports__);
 var SyncCategories = function SyncCategories(_ref) {
-  var action = _ref.action,
-      title = _ref.title;
+  var action = _ref.action;
   $('#action_overlay_button').trigger('click');
   $.post({
     url: action,
@@ -490,19 +508,50 @@ var SyncCategories = function SyncCategories(_ref) {
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
-var SyncProducts = function SyncProducts(_ref) {
-  var action = _ref.action,
-      title = _ref.title;
-  $('#action_overlay_button').trigger('click');
-  $.post({
-    url: action,
-    cache: false,
-    data: {
-      test: 'já foste'
+/* harmony import */ var _makeRequest__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./makeRequest */ "./js/tools/makeRequest.js");
+
+
+var SyncProducts = async function SyncProducts(_ref) {
+  var action = _ref.action;
+  var actionButton = $('#action_overlay_button');
+  var actionModal = $('#action_overlay_modal');
+  var closeButton = actionModal.find('#action_overlay_button');
+  var spinner = actionModal.find('#action_overlay_spinner');
+  var content = actionModal.find('#action_overlay_content');
+  content.html('').hide();
+  closeButton.hide();
+  spinner.show();
+  actionButton.trigger('click');
+  var page = 1;
+  var syncedProducts = [];
+  var errorProducts = [];
+
+  var sync = async function sync() {
+    var resp = await (0,_makeRequest__WEBPACK_IMPORTED_MODULE_0__["default"])(action, {
+      page: page
+    });
+    console.log(resp);
+
+    if (page === 0) {
+      spinner.hide(100, function () {
+        content.show(200);
+      });
     }
-  }).then(function (response) {
-    console.log(response);
-  });
+
+    content.html(resp.overlayContent);
+    syncedProducts = syncedProducts.concat(resp.products);
+    errorProducts = errorProducts.concat(resp.errorProducts);
+
+    if (resp.hasMore && actionModal.is(':visible')) {
+      page = page + 1;
+      return await sync();
+    }
+  };
+
+  await sync();
+  closeButton.show(200);
+  console.log(syncedProducts);
+  console.log(errorProducts);
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (SyncProducts);
@@ -516,19 +565,50 @@ var SyncProducts = function SyncProducts(_ref) {
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
-var SyncStock = function SyncStock(_ref) {
-  var action = _ref.action,
-      title = _ref.title;
-  $('#action_overlay_button').trigger('click');
-  $.post({
-    url: action,
-    cache: false,
-    data: {
-      test: 'já foste'
+/* harmony import */ var _makeRequest__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./makeRequest */ "./js/tools/makeRequest.js");
+
+
+var SyncStock = async function SyncStock(_ref) {
+  var action = _ref.action;
+  var actionButton = $('#action_overlay_button');
+  var actionModal = $('#action_overlay_modal');
+  var closeButton = actionModal.find('#action_overlay_button');
+  var spinner = actionModal.find('#action_overlay_spinner');
+  var content = actionModal.find('#action_overlay_content');
+  content.html('').hide();
+  closeButton.hide();
+  spinner.show();
+  actionButton.trigger('click');
+  var page = 1;
+  var syncedProducts = [];
+  var errorProducts = [];
+
+  var sync = async function sync() {
+    var resp = await (0,_makeRequest__WEBPACK_IMPORTED_MODULE_0__["default"])(action, {
+      page: page
+    });
+    console.log(resp);
+
+    if (page === 0) {
+      spinner.hide(100, function () {
+        content.show(200);
+      });
     }
-  }).then(function (response) {
-    console.log(response);
-  });
+
+    content.html(resp.overlayContent);
+    syncedProducts = syncedProducts.concat(resp.products);
+    errorProducts = errorProducts.concat(resp.errorProducts);
+
+    if (resp.hasMore && actionModal.is(':visible')) {
+      page = page + 1;
+      return await sync();
+    }
+  };
+
+  await sync();
+  closeButton.show(200);
+  console.log(syncedProducts);
+  console.log(errorProducts);
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (SyncStock);
