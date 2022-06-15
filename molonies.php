@@ -53,7 +53,7 @@ class MoloniEs extends Module
         parent::__construct();
 
         $this->displayName = 'Moloni España';
-        $this->description = 'Automatic document creation with real time stock synchronization and powerful sales analysis!';
+        $this->description = 'Automatic document creation with real time stock synchronization and powerful sales analysis.';
         $this->confirmUninstall = $this->trans(
             'Are you sure you want to unnistall this module?',
             [],
