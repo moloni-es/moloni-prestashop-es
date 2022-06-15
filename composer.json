@@ -12,8 +12,8 @@
   "version": "v2.0",
   "scripts": {
     "check-phpstan": "php vendor/bin/phpstan analyse --configuration=tests/phpstan/phpstan.neon --memory-limit 10G",
-    "auto-phpcs": "vendor/bin/php-cs-fixer fix -vv",
-    "auto-index": "php vendor/bin/autoindex prestashop:add:index ./molonies",
+    "auto-phpcs": "vendor/bin/php-cs-fixer fix",
+    "auto-index": "php vendor/bin/autoindex prestashop:add:index --exclude=vendor",
     "auto-header": "php vendor/bin/header-stamp --license=.dev/assets/license.txt --exclude=vendor,node_modules"
   },
   "minimum-stability": "stable",
