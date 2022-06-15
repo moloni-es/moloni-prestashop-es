@@ -88,24 +88,21 @@ class WebserviceSpecificManagementMoloniResource implements WebserviceSpecificMa
      */
     public function manage(): void
     {
-        $request = file_get_contents('php://input');
-        $request = json_decode($request, true);
-
-        if (!isset($request['model'], $request['operation'], $request['productId']) || $request['model'] !== 'Product') {
+        if (!isset($_POST['model'], $_POST['operation'], $_POST['productId']) || $_POST['model'] !== 'Product') {
             $this->output = 'Bad request';
 
             return;
         }
 
-        switch ($request['operation']) {
+        switch ($_POST['operation']) {
             case 'create':
-                (new ProductCreate((int)$request['productId']))->handle();
+                (new ProductCreate((int)$_POST['productId']))->handle();
                 break;
             case 'update':
-                (new ProductUpdate((int)$request['productId']))->handle();
+                (new ProductUpdate((int)$_POST['productId']))->handle();
                 break;
             case 'stockChanged':
-                (new ProductStockChange((int)$request['productId']))->handle();
+                (new ProductStockChange((int)$_POST['productId']))->handle();
                 break;
         }
 

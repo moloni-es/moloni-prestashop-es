@@ -638,7 +638,7 @@ class SettingsFormType extends TranslatorAwareType
     {
         $this->builder->add('saveChanges', SubmitType::class, [
             'attr' => ['class' => 'btn-primary'],
-            'label' => 'Save',
+            'label' =>$this->trans('Save', "Modules.Molonies.Settings"),
         ]);
 
         return $this;

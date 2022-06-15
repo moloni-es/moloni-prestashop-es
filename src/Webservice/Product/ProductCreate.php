@@ -60,11 +60,14 @@ class ProductCreate extends AbstractWebserviceAction
                 $productBuilder->insert();
 
                 SyncLogs::productAddTimeout($productBuilder->getPrestashopProductId());
+
+                $productBuilder->updateStock();
             } elseif ((int)Settings::get('updateProductsToPrestashop') === Boolean::YES && !SyncLogs::productHasTimeout($prestaProductId)) {
                 SyncLogs::productAddTimeout($prestaProductId);
 
                 $productBuilder->update();
             }
+
         } catch (MoloniProductException $e) {
             Logs::addErrorLog([$e->getMessage(), $e->getIdentifiers()], $e->getData());
         }

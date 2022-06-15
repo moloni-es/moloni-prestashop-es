@@ -24,6 +24,7 @@
 
 namespace Moloni\Tools;
 
+use Shop;
 use DateTime;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\OptimisticLockException;
@@ -93,8 +94,11 @@ class SyncLogs
      */
     public static function productAddTimeout(int $productId): void
     {
+        $shopId = (int)Shop::getContextShopID();
+
         $syncLog = new MoloniSyncLogs();
         $syncLog->setEntityId($productId);
+        $syncLog->setShopId($shopId);
         $syncLog->setTypeId(SyncLogsType::PRODUCT);
         $syncLog->setSyncDate(new DateTime());
 
