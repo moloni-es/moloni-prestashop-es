@@ -24,6 +24,7 @@
 
 namespace Moloni\Repository;
 
+use DateTime;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
@@ -38,9 +39,11 @@ class MoloniSyncLogsRepository extends EntityRepository
      */
     public function removeExpiredDelays(int $delay): void
     {
+        $timestamp = time() - $delay;
+
         $results = $this->createQueryBuilder('s')
             ->where('s.syncDate < :time_now')
-            ->setParameter('time_now', time() - $delay)
+            ->setParameter('time_now', new DateTime('@'. $timestamp))
             ->getQuery()
             ->getResult();
 

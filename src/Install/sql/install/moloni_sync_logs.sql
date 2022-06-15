@@ -3,5 +3,5 @@ CREATE TABLE IF NOT EXISTS PREFIX_moloni_sync_logs(
         `shop_id` INT(11) NOT NULL,
         `type_id` INT(11) NOT NULL,
         `entity_id` INT(11) NOT NULL,
-        `sync_date` VARCHAR(250) NOT NULL
+        `sync_date` datetime DEFAULT CURRENT_TIMESTAMP
     ) DEFAULT CHARSET = utf8 AUTO_INCREMENT = 1;

@@ -28,6 +28,7 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Moloni\Entity\MoloniSettings;
+use Moloni\Enums\Date;
 
 class MoloniSettingsRepository extends EntityRepository
 {
@@ -77,7 +78,7 @@ class MoloniSettingsRepository extends EntityRepository
             }
 
             if (is_object($value) && $label === 'orderDateCreated') {
-                $value = $value->format('Y-m-d');
+                $value = $value->format(Date::DATE_FORMAT);
             }
 
             $setting = $this->findOneBy(['label' => $label]);

@@ -1274,7 +1274,7 @@ class DocumentFromOrder implements BuilderInterface
         $document->setDocumentType($this->documentType);
         $document->setOrderId($this->order->id);
         $document->setOrderReference($this->ourReference);
-        $document->setCreatedAt(time());
+        $document->setCreatedAt(new DateTime());
 
         $this->entityManager->persist($document);
         $this->entityManager->flush();
