@@ -388,7 +388,8 @@ class PrestashopProductWithCombinations implements BuilderInterface
             return 0;
         }
 
-        return (int)$this->moloniProduct['productId'];    }
+        return (int)$this->moloniProduct['productId'];
+    }
 
     /**
      * Get reference
