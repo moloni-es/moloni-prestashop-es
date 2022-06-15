@@ -62,7 +62,7 @@ jobs:
         if: steps.composer-cache.outputs.cache-hit != 'true'
         run: cd ./molonies && composer install --prefer-dist --no-progress --no-suggest --no-dev
 
-      - name: Adding automatic headers
+      - name: Adding automatic headers to folders
         run: cd ./ && composer run auto-header
 
       - name: Zip realease folder
