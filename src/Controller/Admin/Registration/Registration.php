@@ -25,13 +25,55 @@
 namespace Moloni\Controller\Admin\Registration;
 
 use Moloni\Controller\Admin\MoloniController;
+use Moloni\Enums\MoloniRoutes;
+use PrestaShop\PrestaShop\Core\Form\FormHandlerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class Registration extends MoloniController
 {
-    public function home(Request $request): void
+    public function home(Request $request)
     {
+        $registrationFormHandler = $this->getRegistrationFormHandler();
 
+        $registrationForm = $registrationFormHandler->getForm();
+        $registrationForm->handleRequest($request);
+
+        if ($registrationForm->isSubmitted() && $registrationForm->isValid()) {
+            try {
+                $errors = $registrationFormHandler->save($registrationForm->getData());
+            } catch (\Exception $e) {
+                $errors = [];
+                $errors[] = $e->getMessage();
+            }
+
+            if (empty($errors)) {
+                $this->addSuccessMessage(
+                    $this->trans(
+                        'A confirmation email has been sent to your email address.',
+                        'Modules.Molonies.Common'
+                    )
+                );
+
+                return $this->redirectToLogin();
+            }
+
+            foreach ($errors as $error) {
+                $this->addErrorMessage($error);
+            }
+        }
+
+        return $this->render(
+            '@Modules/molonies/views/templates/admin/registration/Registration.twig',
+            [
+                'form' => $registrationForm->createView(),
+                'img' => _MODULE_DIR_ . 'molonies/views/img/moloni_logo_colors.svg',
+                'login_route' => MoloniRoutes::LOGIN,
+            ]
+        );
+    }
+
+    private function getRegistrationFormHandler(): FormHandlerInterface
+    {
+        return $this->get('moloni.registration.form');
     }
 }

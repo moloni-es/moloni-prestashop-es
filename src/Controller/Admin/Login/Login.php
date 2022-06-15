@@ -53,6 +53,7 @@ class Login extends MoloniController
             [
                 'form' => $form->createView(),
                 'img' => _MODULE_DIR_ . 'molonies/views/img/moloni_logo_colors.svg',
+                'registration_route' => MoloniRoutes::REGISTRATION,
             ]
         );
     }

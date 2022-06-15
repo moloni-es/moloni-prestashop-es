@@ -93,6 +93,16 @@ Settings
   color: #f54c3e;
 }
 
+.moloni-registration--content {
+  max-width: 1000px;
+}
+.moloni-registration--buttons {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
 /*
 Utilities
 */
