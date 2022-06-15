@@ -219,6 +219,38 @@ var MoloniOrders = /*#__PURE__*/function () {
 
 /***/ }),
 
+/***/ "./js/pages/registration.js":
+/*!**********************************!*\
+  !*** ./js/pages/registration.js ***!
+  \**********************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": function() { return /* binding */ MoloniRegistration; }
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
+
+
+
+var MoloniRegistration = /*#__PURE__*/function () {
+  function MoloniRegistration() {
+    (0,_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__["default"])(this, MoloniRegistration);
+  }
+
+  (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__["default"])(MoloniRegistration, [{
+    key: "startObservers",
+    value: function startObservers() {}
+  }]);
+
+  return MoloniRegistration;
+}();
+
+
+
+/***/ }),
+
 /***/ "./js/pages/settings.js":
 /*!******************************!*\
   !*** ./js/pages/settings.js ***!
@@ -711,6 +743,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _pages_tools__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./pages/tools */ "./js/pages/tools.js");
 /* harmony import */ var _pages_logs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./pages/logs */ "./js/pages/logs.js");
 /* harmony import */ var _pages_login__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./pages/login */ "./js/pages/login.js");
+/* harmony import */ var _pages_registration__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./pages/registration */ "./js/pages/registration.js");
+
 
 
 
@@ -724,6 +758,7 @@ $(document).ready(function () {
   window.moloniTools = new _pages_tools__WEBPACK_IMPORTED_MODULE_3__["default"]();
   window.moloniLogs = new _pages_logs__WEBPACK_IMPORTED_MODULE_4__["default"]();
   window.moloniLogin = new _pages_login__WEBPACK_IMPORTED_MODULE_5__["default"]();
+  window.moloniRegistration = new _pages_registration__WEBPACK_IMPORTED_MODULE_6__["default"]();
 });
 }();
 /******/ })()

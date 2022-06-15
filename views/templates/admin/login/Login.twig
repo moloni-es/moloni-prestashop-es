@@ -34,10 +34,9 @@
                         </div>
                         <div class="moloni-login-divider--divider"></div>
                     </div>
-
-                    <button type="button" class="btn btn-secondary moloni-login--button">
+                    <a class="btn btn-secondary moloni-login--button" href="{{ path(registration_route) }}">
                         {{ 'Create account'|trans({}, 'Modules.Molonies.Common') }}
-                    </button>
+                    </a>
                 </div>
             {{ form_end(form) }}
         </div>

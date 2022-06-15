@@ -86,6 +86,22 @@ abstract class MoloniController extends FrameworkBundleAdminController implement
         return $error;
     }
 
+    /**
+     * Delete app instance
+     *
+     * @return void
+     */
+    private function deleteApp(): void
+    {
+        /** @var MoloniAppRepository $repository */
+        $repository = $this
+            ->getDoctrine()
+            ->getManager()
+            ->getRepository(MoloniApp::class);
+
+        $repository->deleteApp();
+    }
+
     //          Messages          //
 
     /**
@@ -162,15 +178,21 @@ abstract class MoloniController extends FrameworkBundleAdminController implement
      */
     public function redirectToLogin(): RedirectResponse
     {
-        /** @var MoloniAppRepository $repository */
-        $repository = $this
-            ->getDoctrine()
-            ->getManager()
-            ->getRepository(MoloniApp::class);
-
-        $repository->deleteApp();
+        $this->deleteApp();
 
         return $this->redirectToRoute(MoloniRoutes::LOGIN);
+    }
+
+    /**
+     * Redirect to registration page
+     *
+     * @return RedirectResponse
+     */
+    protected function redirectToRegistration(): RedirectResponse
+    {
+        $this->deleteApp();
+
+        return $this->redirectToRoute(MoloniRoutes::REGISTRATION);
     }
 
     /**

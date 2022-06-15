@@ -10,6 +10,8 @@ class MoloniRoutes
     public const LOGIN_COMPANY_SELECT = 'moloni_es_login_company_select';
     public const LOGIN_COMPANY_SUBMIT = 'moloni_es_login_company_submit';
 
+    public const REGISTRATION = 'moloni_es_registration_home';
+
     public const ORDERS = 'moloni_es_orders_home';
     public const ORDERS_CREATE = 'moloni_es_orders_create';
     public const ORDERS_DISCARD = 'moloni_es_orders_discard';
@@ -28,7 +30,6 @@ class MoloniRoutes
     public const TOOLS_EXPORT = 'moloni_es_tools_export';
 
     public const SETTINGS = 'moloni_es_settings_home';
-    public const SETTINGS_SAVE = 'moloni_es_settings_save';
 
     public const ROUTES_FULLY_AUTHENTICATED = [
         self::ORDERS,
@@ -46,7 +47,6 @@ class MoloniRoutes
         self::TOOLS_LOGOUT,
         self::TOOLS_EXPORT,
         self::SETTINGS,
-        self::SETTINGS_SAVE,
     ];
 
     public const ROUTES_PARTIALLY_AUTHENTICATED = [
@@ -58,6 +58,7 @@ class MoloniRoutes
     public const ROUTES_NON_AUTHENTICATED = [
         self::LOGIN,
         self::LOGIN_SUBMIT,
+        self::REGISTRATION,
     ];
 
     public static function isFullyAuthenticatedRoute(string $route): bool
