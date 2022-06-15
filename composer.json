@@ -12,7 +12,7 @@
   "scripts": {
     "check-phpstan": "php vendor/bin/phpstan analyse --configuration=tests/phpstan/phpstan.neon --memory-limit 10G",
     "check-phpcs": "vendor/bin/php-cs-fixer fix -vv",
-    "auto-header": "php vendor/bin/header-stamp --license=.dev/assets/license.txt --exclude=vendor,node_modules --dry-run"
+    "auto-header": "php vendor/bin/header-stamp --license=.dev/assets/license.txt --exclude=vendor,node_modules"
   },
   "minimum-stability": "stable",
   "require-dev": {
