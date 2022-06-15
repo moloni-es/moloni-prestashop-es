@@ -34,7 +34,7 @@
                     {% for document in documentArray %}
                         <tr>
                             <td>
-                                {{ document.created_at is empty ? "---" : document.created_at|date("Y-m-d H:i:s", "GMT") }}
+                                {{ document.created_at is empty ? "---" : document.created_at|date("Y-m-d H:i:s") }}
                             </td>
                             <td class="text-center">
                                 {{ document.document_type_mame|default('---')|trans({}, 'Modules.Molonies.Common') }}

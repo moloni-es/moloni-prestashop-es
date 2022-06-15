@@ -26,7 +26,7 @@
                     {% for log in logs %}
                         <tr>
                             <td>
-                                {{ log.created_at|date("Y-m-d H:i:s", "GMT")}}
+                                {{ log.created_at|date("Y-m-d H:i:s")}}
                             </td>
                             <td class="text-center">
                                 {% if log.level == constant('Moloni\\Enums\\LogLevel::INFO') %}
