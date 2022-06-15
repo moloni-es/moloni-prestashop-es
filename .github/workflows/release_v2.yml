@@ -49,9 +49,9 @@ jobs:
           --exclude '.gitignore' \
           --exclude '.php_cs.dist' \ 
           --exclude '.php-cs-fixer.cache' \ 
-          --exclude 'docs' \ 
-          --exclude 'tests' \ 
-          --exclude 'vendor' \
+          --exclude 'docs/' \ 
+          --exclude 'tests/' \ 
+          --exclude 'vendor/' \
           . ./molonies
 
       - name: Install dependencies without dev
