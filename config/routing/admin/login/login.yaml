@@ -1,5 +1,5 @@
 moloni_es_login_home:
-  path: /login
+  path: /
   methods: [GET]
   defaults:
     _controller: 'Moloni\Controller\Admin\Login\Login::home'
@@ -7,26 +7,26 @@ moloni_es_login_home:
     _legacy_link: 'Moloni'
 
 moloni_es_login_submit:
-  path: /login
+  path: /
   methods: [POST]
   defaults:
     _controller: 'Moloni\Controller\Admin\Login\Login::submit'
 
 moloni_es_login_retrievecode:
-  path: /login/retrieveCode
+  path: /retrieveCode
   methods: [GET]
   defaults:
     _controller: 'Moloni\Controller\Admin\Login\Login::retrieveCode'
 
 moloni_es_login_company_select:
-  path: /login/company
+  path: /company
   methods: [GET]
   defaults:
     _controller: 'Moloni\Controller\Admin\Login\Login::companySelect'
     _legacy_controller: 'Moloni'
 
 moloni_es_login_company_submit:
-  path: /login/companySubmit/{companyId}
+  path: /companySubmit/{companyId}
   methods: [ GET ]
   defaults:
     _controller: 'Moloni\Controller\Admin\Login\Login::companySelectSubmit'

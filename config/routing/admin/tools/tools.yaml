@@ -1,5 +1,5 @@
 moloni_es_tools_home:
-  path: /tools
+  path: /
   methods: [GET]
   defaults:
     _controller: 'Moloni\Controller\Admin\Tools\Tools::home'
@@ -7,25 +7,25 @@ moloni_es_tools_home:
     _legacy_link: 'MoloniTools'
 
 moloni_es_tools_import_products:
-  path: /tools/importProducts
+  path: /importProducts
   methods: [POST]
   defaults:
     _controller: 'Moloni\Controller\Admin\Tools\Tools::importProducts'
 
 moloni_es_tools_reinstall_hooks:
-  path: /tools/reinstallHooks
+  path: /reinstallHooks
   methods: [GET]
   defaults:
     _controller: 'Moloni\Controller\Admin\Tools\Tools::reinstallHooks'
 
 moloni_es_tools_sync_stock:
-  path: /tools/syncStocks
+  path: /syncStocks
   methods: [POST]
   defaults:
     _controller: 'Moloni\Controller\Admin\Tools\Tools::syncStocks'
 
 moloni_es_tools_open_logs:
-  path: /tools/openLogs
+  path: /openLogs
   methods: [GET]
   defaults:
     _controller: 'Moloni\Controller\Admin\Tools\Tools::openLogs'
@@ -33,13 +33,13 @@ moloni_es_tools_open_logs:
     _legacy_link: 'MoloniTools'
 
 moloni_es_tools_delete_logs:
-  path: /tools/deleteLogs
+  path: /deleteLogs
   methods: [GET]
   defaults:
     _controller: 'Moloni\Controller\Admin\Tools\Tools::deleteLogs'
 
 moloni_es_tools_logout:
-  path: /tools/logout
+  path: /logout
   methods: [GET]
   defaults:
     _controller: 'Moloni\Controller\Admin\Tools\Tools::logout'
