@@ -38,16 +38,16 @@ jobs:
 
       - name: Begin node compiling process
         run: |
-          cd .dev/ && npm i && npm run build && cd ..
+          cd .dev/ && npm i && npm run build
 
       - name: Create Release Folder
         run: |
+          cd ./ && \
           rsync -arv \ 
           --exclude '.git/' \ 
           --exclude '.github/' \
           --exclude '.gitignore' \
           --exclude '.php_cs.dist' \ 
-          --exclude '.php-cs-fixer.cache' \ 
           --exclude 'docs/' \ 
           --exclude 'tests/' \ 
           --exclude 'vendor/' \
