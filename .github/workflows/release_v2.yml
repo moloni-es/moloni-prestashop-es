@@ -38,7 +38,7 @@ jobs:
 
       - name: Begin node compiling process
         run: |
-          cd .dev/ && npm i && npm run build & && cd ./
+          cd .dev/ && npm i && npm run build && cd ..
 
       - name: Create Release Folder
         run: |
