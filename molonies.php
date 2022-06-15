@@ -184,7 +184,7 @@ class MoloniEs extends Module
      */
     public function hookActionAdminControllerSetMedia(): void
     {
-        $action = $this->context->controller->php_self;
+        $action = $this->context->controller->php_self ?? '';
 
         $this->context->controller->addCSS($this->_path . 'views/css/moloni-icons.css');
 
