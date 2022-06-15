@@ -42,6 +42,7 @@ jobs:
 
       - name: Create Release Folder
         run: |
+          cd ./ && \
           rsync -arv \ 
           --exclude '.git/' \ 
           --exclude '.github/' \
@@ -51,17 +52,17 @@ jobs:
           --exclude 'docs' \ 
           --exclude 'tests' \ 
           --exclude 'vendor' \
-          . ./moloniprestashopes
+          . ./molonies
 
       - name: Install dependencies without dev
         if: steps.composer-cache.outputs.cache-hit != 'true'
-        run: cd ./moloniprestashopes && composer install --prefer-dist --no-progress --no-suggest --no-dev
+        run: cd ./molonies && composer install --prefer-dist --no-progress --no-suggest --no-dev
 
       - name: Adding automatic headers
         run: cd ./ && composer run auto-header
 
       - name: Zip realease folder
-        run: zip -r moloniprestashopes.zip ./moloniprestashopes
+        run: zip -r molonies.zip ./molonies
 
       - name: Reading Version
         uses: moloni-pt/github-version-creator@master
@@ -88,6 +89,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./moloniprestashopes.zip
-          asset_name: moloniprestashopes.zip
+          asset_path: ./molonies.zip
+          asset_name: molonies.zip
           asset_content_type: application/zip
