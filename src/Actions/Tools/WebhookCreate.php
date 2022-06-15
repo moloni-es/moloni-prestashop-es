@@ -81,17 +81,8 @@ class WebhookCreate
     private function setUrl(): void
     {
         $baseUrlSecure = defined('_PS_BASE_URL_SSL_') ? _PS_BASE_URL_SSL_ : '';
-        $baseUrl = defined('__PS_BASE_URI__') ? __PS_BASE_URI__ : '';
 
-        //the authorization key needs to be after http(s):// and before the actual domain
-        //(example: http://{key}@domain.com)
-        $strlen = strlen('://');
-        $strpos = strpos($baseUrlSecure, '://');
-
-        $url = substr_replace($baseUrlSecure, '://' . $this->key . '@', $strpos, $strlen);
-        $url .= $baseUrl . 'api/moloniresource/';
-
-        $this->url = $url;
+        $this->url = $baseUrlSecure . 'api/moloniresource/?ws_key=' . $this->key;
     }
 
     /**
