@@ -397,7 +397,7 @@ class OrderShipping implements BuilderItemInterface
      */
     public function setTaxes(): OrderShipping
     {
-        $taxRate = $this->order->carrier_tax_rate;
+        $taxRate = (float)$this->order->carrier_tax_rate;
 
         if ($taxRate > 0) {
             $taxBuilder = new OrderShippingTax($taxRate, $this->ficalZone, 1);
