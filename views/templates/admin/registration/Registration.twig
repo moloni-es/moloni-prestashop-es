@@ -1,49 +1,96 @@
 {% extends '@PrestaShop/Admin/layout.html.twig' %}
 
 {% block content %}
+    {{ form_start(form) }}
+    <div class="d-flex justify-content-center align-items-center">
+        <div class="card moloni-registration--card">
+            <div class="moloni-registration--image">
+                <a href="https://www.moloni.es/" target="_blank">
+                    <img src="{{ img }}" alt="Logo" width="140px" height="24px">
+                </a>
+            </div>
+
+            <div class="moloni-registration--form">
+                <div class="form-group">
+                    {{ form_label(form.email) }}
+                    {{ form_widget(form.email) }}
+                </div>
+                <div class="form-group row">
+                    <div class="col-6">
+                        {{ form_label(form.businessType) }}
+                        {{ form_widget(form.businessType) }}
+                    </div>
+
+                    <div class="col-6">
+                        {{ form_label(form.businessTypeName) }}
+                        {{ form_widget(form.businessTypeName) }}
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-6">
+                        {{ form_label(form.companyName) }}
+                        {{ form_widget(form.companyName) }}
+                    </div>
+                    <div class="col-6">
+                        {{ form_label(form.vat) }}
+                        {{ form_widget(form.vat) }}
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-6">
+                        {{ form_label(form.country) }}
+                        {{ form_widget(form.country) }}
+                    </div>
+                    <div class="col-6">
+                        {{ form_label(form.slug) }}
+                        {{ form_widget(form.slug) }}
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-6">
+                        {{ form_label(form.username) }}
+                        {{ form_widget(form.username) }}
+                    </div>
+                    <div class="col-6">
+                        {{ form_label(form.phone) }}
+                        {{ form_widget(form.phone) }}
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-6">
+                        {{ form_label(form.password) }}
+                        {{ form_widget(form.password) }}
+                    </div>
+                    <div class="col-6">
+                        {{ form_label(form.passwordConfirmation) }}
+                        {{ form_widget(form.passwordConfirmation) }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.serviceTerms) }}
+                    {{ form_widget(form.serviceTerms) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.newsletter) }}
+                    {{ form_widget(form.newsletter) }}
+                </div>
+            </div>
+            <div class="moloni-registration--buttons">
+                <a class="btn btn-outline-secondary" href="{{ path(login_route) }}">
+                    {{ 'Cancel'|trans({}, 'Modules.Molonies.Common') }}
+                </a>
+
+                {{ form_widget(form.register) }}
+            </div>
+        </div>
+    </div>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
     <script>
         $(document).ready(function () {
             window.moloniRegistration.startObservers();
         });
     </script>
-{% endblock %}
-
-{% block javascripts %}
-    <div class="d-flex justify-content-center align-items-center">
-        <div class="card moloni-registration--card">
-            {{ form_start(form) }}
-            <div class="moloni-registration--content">
-                <div class="moloni-registration--image">
-                    <a href="https://www.moloni.es/"  target="_blank">
-                        <img src="{{ img }}" alt="Logo" width="140px" height="24px">
-                    </a>
-                </div>
-
-                <div class="moloni-registration--form">
-                    {{ form_row(form.email) }}
-                    {{ form_row(form.businessType) }}
-                    {{ form_row(form.businessTypeName) }}
-                    {{ form_row(form.companyName) }}
-                    {{ form_row(form.vat) }}
-                    {{ form_row(form.country) }}
-                    {{ form_row(form.slug) }}
-                    {{ form_row(form.username) }}
-                    {{ form_row(form.phone) }}
-                    {{ form_row(form.password) }}
-                    {{ form_row(form.passwordConfirmation) }}
-                    {{ form_row(form.serviceTerms) }}
-                    {{ form_row(form.newsletter) }}
-                    {{ form_row(form.register) }}
-                </div>
-
-                <div class="moloni-registration--buttons">
-                    <a class="btn btn-outline-secondary" href="{{ path(login_route) }}">
-                        {{ 'Cancel'|trans({}, 'Modules.Molonies.Common') }}
-                    </a>
-
-                </div>
-            </div>
-            {{ form_end(form) }}
-        </div>
-    </div>
 {% endblock %}

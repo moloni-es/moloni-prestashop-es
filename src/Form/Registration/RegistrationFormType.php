@@ -36,6 +36,8 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class RegistrationFormType extends TranslatorAwareType
 {
@@ -180,11 +182,19 @@ class RegistrationFormType extends TranslatorAwareType
                 'Between 6 and 16 characters, at least one uppercase letter, one symbol and one number',
                 "Modules.Molonies.Settings"
             ),
+            'constraints' => [
+                new Length(['min' => 6]),
+                new NotBlank(),
+            ],
             'required' => true,
         ]);
 
         $this->builder->add('passwordConfirmation', PasswordType::class, [
             'label' => $this->trans('Password confirmation', "Modules.Molonies.Common"),
+            'constraints' => [
+                new Length(['min' => 6]),
+                new NotBlank(),
+            ],
             'required' => true,
         ]);
 
@@ -226,9 +236,11 @@ class RegistrationFormType extends TranslatorAwareType
     private function registerButton(): void
     {
         $this->builder->add('register', SubmitType::class, [
-            'attr' => ['class' => 'btn-primary'],
+            'attr' => [
+                'class' => 'btn-primary',
+                'disabled' => 'true',
+            ],
             'label' => $this->trans('Register', "Modules.Molonies.Common"),
         ]);
-
     }
 }

@@ -82,7 +82,7 @@ class WebhookCreate
     {
         $baseUrlSecure = defined('_PS_BASE_URL_SSL_') ? _PS_BASE_URL_SSL_ : '';
 
-        $this->url = $baseUrlSecure . 'api/moloniresource/?ws_key=' . $this->key;
+        $this->url = $baseUrlSecure . '/api/moloniresource/?ws_key=' . $this->key;
     }
 
     /**
