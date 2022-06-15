@@ -43,13 +43,13 @@ jobs:
       - name: Create Release Folder
         run: |
           cd ./ && \
-          rsync -arv \ 
-          --exclude '.git/' \ 
+          rsync -arv \
+          --exclude '.git/' \
           --exclude '.github/' \
           --exclude '.gitignore' \
-          --exclude '.php-cs-fixer.php' \ 
-          --exclude 'docs/' \ 
-          --exclude 'tests/' \ 
+          --exclude '.php-cs-fixer.php' \
+          --exclude 'docs/' \
+          --exclude 'tests/' \
           --exclude 'vendor/' \
           . ./molonies
 
