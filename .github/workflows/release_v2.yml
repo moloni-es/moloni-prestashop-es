@@ -69,10 +69,10 @@ jobs:
         run: zip -r molonies.zip ./molonies
 
       - name: Reading Version
+        id: package-version
         uses: moloni-pt/github-version-creator@master
         with:
           method: composer.json
-        id: package-version
 
       - name: Create new release
         id: create_release
