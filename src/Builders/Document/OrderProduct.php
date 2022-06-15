@@ -407,7 +407,7 @@ class OrderProduct implements BuilderItemInterface
 
             foreach ($taxCalculator->taxes as $tax) {
                 /** @var Tax $tax */
-                $taxBuilder = new OrderProductTax($tax->rate, $this->fiscalZone, $taxOrder);
+                $taxBuilder = new OrderProductTax((float)$tax->rate, $this->fiscalZone, $taxOrder);
 
                 try {
                     $taxBuilder

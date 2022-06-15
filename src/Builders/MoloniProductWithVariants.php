@@ -608,7 +608,7 @@ class MoloniProductWithVariants implements BuilderInterface
             $address = new Address();
             $address->id_country = Country::getByIso($mutation['fiscalZone']['fiscalZone'] ?? 'ES');
 
-            $taxRate = $this->prestashopProduct->getTaxesRate($address);
+            $taxRate = (float)$this->prestashopProduct->getTaxesRate($address);
 
             if ($taxRate > 0) {
                 $fiscalZone = [
