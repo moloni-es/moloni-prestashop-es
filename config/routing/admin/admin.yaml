@@ -1,3 +1,6 @@
+moloni_es_registration:
+  resource: "registration/registration.yaml"
+
 moloni_es_login:
   resource: "login/login.yaml"
 

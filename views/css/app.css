@@ -33,8 +33,8 @@ Login
   width: 100%;
 }
 .moloni-login-divider {
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 .moloni-login-divider--holder {
   display: -webkit-box;
