@@ -64,7 +64,7 @@ jobs:
         run: | 
           cd ./ && \
           composer run auto-phpcs && \
-          cinoiser run auto-index && \
+          composer run auto-index && \
           composer run auto-header
 
       - name: Zip realease folder
