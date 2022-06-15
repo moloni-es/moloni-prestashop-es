@@ -89,6 +89,7 @@ class Login extends MoloniController
         $moloniApp->setClientSecret($clientSecret);
         $moloniApp->setCompanyId(0);
         $moloniApp->setShopId(Shop::getContextShopID() ?? 0);
+        $moloniApp->setAccessTime(0);
 
         $entityManager = $this
             ->getDoctrine()
