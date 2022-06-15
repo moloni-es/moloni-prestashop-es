@@ -27,6 +27,7 @@ namespace Moloni\Controller\Admin\Login;
 use Shop;
 use Moloni\Api\MoloniApi;
 use Moloni\Api\MoloniApiClient;
+use Moloni\Actions\Helpers\HasOldPluginTables;
 use Moloni\Controller\Admin\MoloniController;
 use Moloni\Entity\MoloniApp;
 use Moloni\Enums\Domains;
@@ -47,6 +48,12 @@ class Login extends MoloniController
         $form = $this->createForm(LoginFormType::class, null, [
             'url' => $this->generateUrl(MoloniRoutes::LOGIN)
         ]);
+
+        if ((new HasOldPluginTables())->handle()) {
+            $msg = $this->trans('Error found in plugin tables, please contact customer support.', 'Modules.Molonies.Common');
+
+            $this->addErrorMessage($msg);
+        }
 
         return $this->render(
             '@Modules/molonies/views/templates/admin/login/Login.twig',
