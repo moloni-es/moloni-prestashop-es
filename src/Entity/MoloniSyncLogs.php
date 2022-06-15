@@ -24,7 +24,6 @@
 
 namespace Moloni\Entity;
 
-use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -57,16 +56,9 @@ class MoloniSyncLogs
     private $entityId;
 
     /**
-     * @var int
+     * @var string
      *
-     * @ORM\Column(name="shop_id", type="integer")
-     */
-    private $shopId;
-
-    /**
-     * @var DateTime
-     *
-     * @ORM\Column(name="sync_date", type="datetime")
+     * @ORM\Column(name="sync_date", type="string", length=250)
      */
     private $syncDate;
 
@@ -111,35 +103,19 @@ class MoloniSyncLogs
     }
 
     /**
-     * @return DateTime
+     * @return string
      */
-    public function getSyncDate(): DateTime
+    public function getSyncDate(): string
     {
         return $this->syncDate;
     }
 
     /**
-     * @param DateTime $syncDate
+     * @param string $syncDate
      */
-    public function setSyncDate(DateTime $syncDate): void
+    public function setSyncDate(string $syncDate): void
     {
         $this->syncDate = $syncDate;
-    }
-
-    /**
-     * @return int
-     */
-    public function getShopId(): int
-    {
-        return $this->shopId;
-    }
-
-    /**
-     * @param int $shopId
-     */
-    public function setShopId(int $shopId): void
-    {
-        $this->shopId = $shopId;
     }
 
     /**
@@ -152,7 +128,6 @@ class MoloniSyncLogs
             'type_id' => $this->getTypeId(),
             'entity_id' => $this->getEntityId(),
             'sync_date' => $this->getSyncDate(),
-            'shop_id' => $this->getShopId(),
         ];
     }
 }
