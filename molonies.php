@@ -30,8 +30,8 @@ if (!defined('_PS_VERSION_')) {
 
 use Doctrine\Common\Persistence\ManagerRegistry as LegacyManagerRegistry;
 use Doctrine\Persistence\ManagerRegistry;
-use Moloni\Hooks\ProductSave;
 use Moloni\Hooks\OrderStatusUpdate;
+use Moloni\Hooks\ProductSave;
 use Moloni\Install\Installer;
 use Moloni\Services\MoloniContext;
 
@@ -52,12 +52,8 @@ class MoloniEs extends Module
 
         parent::__construct();
 
-        $this->displayName = $this->trans('Moloni España', [], 'Modules.Molonies.Admin');
-        $this->description = $this->trans(
-            'Automatic document creation with real time stock synchronization and powerful sales analysis!',
-            [],
-            'Modules.Molonies.Admin'
-        );
+        $this->displayName = 'Moloni España';
+        $this->description = 'Automatic document creation with real time stock synchronization and powerful sales analysis!';
         $this->confirmUninstall = $this->trans(
             'Are you sure you want to unnistall this module?',
             [],
@@ -188,7 +184,7 @@ class MoloniEs extends Module
 
         $this->context->controller->addCSS($this->_path . 'views/css/moloni-icons.css');
 
-        if (strpos($action, "Moloni") === 0) {
+        if (strpos($action, 'Moloni') === 0) {
             $this->context->controller->addJS($this->_path . 'views/js/app.js');
             $this->context->controller->addCSS($this->_path . 'views/css/app.css');
         }
@@ -207,7 +203,7 @@ class MoloniEs extends Module
             // todo: catch this?
         }
 
-        include_once(_PS_MODULE_DIR_ . 'molonies/src/Webservice/WebserviceSpecificManagementMoloniResource.php');
+        include_once _PS_MODULE_DIR_ . 'molonies/src/Webservice/WebserviceSpecificManagementMoloniResource.php';
 
         return [
             'moloniresource' => [
