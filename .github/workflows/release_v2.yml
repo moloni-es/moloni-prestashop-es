@@ -63,9 +63,9 @@ jobs:
       - name: Automatic fixes
         run: | 
           cd ./ && \
-          composer run auto-phpcs && \
           composer run auto-index && \
-          composer run auto-header
+          composer run auto-header && \
+          composer run auto-phpcs
 
       - name: Zip realease folder
         run: zip -r molonies.zip ./molonies
