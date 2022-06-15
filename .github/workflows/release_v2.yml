@@ -60,8 +60,12 @@ jobs:
       - name: Install dependencies without dev
         run: cd ./molonies && composer install --prefer-dist --no-progress --no-suggest --no-dev
 
-      - name: Adding automatic headers to folders
-        run: cd ./ && composer run auto-header
+      - name: Automatic fixes
+        run: | 
+          cd ./ && \
+          composer run auto-phpcs && \
+          cinoiser run auto-index && \
+          composer run auto-header
 
       - name: Zip realease folder
         run: zip -r molonies.zip ./molonies
