@@ -30,6 +30,7 @@ use Doctrine\ORM\ORMException;
 use Moloni\Entity\MoloniSyncLogs;
 use Moloni\Enums\SyncLogsType;
 use Moloni\Repository\MoloniSyncLogsRepository;
+use Shop;
 
 class SyncLogs
 {
@@ -92,8 +93,11 @@ class SyncLogs
      */
     public static function productAddTimeout(int $productId): void
     {
+        $shopId = (int)Shop::getContextShopID();
+
         $syncLog = new MoloniSyncLogs();
         $syncLog->setEntityId($productId);
+        $syncLog->setShopId($shopId);
         $syncLog->setTypeId(SyncLogsType::PRODUCT);
         $syncLog->setSyncDate(time());
 

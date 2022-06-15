@@ -56,6 +56,13 @@ class MoloniSyncLogs
     private $entityId;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="shop_id", type="integer")
+     */
+    private $shopId;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="sync_date", type="string", length=250)
@@ -119,6 +126,22 @@ class MoloniSyncLogs
     }
 
     /**
+     * @return int
+     */
+    public function getShopId(): int
+    {
+        return $this->shopId;
+    }
+
+    /**
+     * @param int $shopId
+     */
+    public function setShopId(int $shopId): void
+    {
+        $this->shopId = $shopId;
+    }
+
+    /**
      * @return array
      */
     public function toArray(): array
@@ -128,6 +151,7 @@ class MoloniSyncLogs
             'type_id' => $this->getTypeId(),
             'entity_id' => $this->getEntityId(),
             'sync_date' => $this->getSyncDate(),
+            'shop_id' => $this->getShopId(),
         ];
     }
 }
