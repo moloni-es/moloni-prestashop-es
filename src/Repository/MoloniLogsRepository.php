@@ -24,6 +24,7 @@
 
 namespace Moloni\Repository;
 
+use DateTime;
 use Exception;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
@@ -87,12 +88,10 @@ class MoloniLogsRepository extends EntityRepository
      */
     public function deleteOlderLogs(): void
     {
-        $timestampp = strtotime("-1 week");
-
         $this->createQueryBuilder('l')
             ->delete()
             ->where('l.createdAt < :created_at')
-            ->setParameter('created_at', $timestampp)
+            ->setParameter('created_at', new DateTime('@' . strtotime("-1 week")))
             ->getQuery()
             ->getResult();
     }

@@ -24,6 +24,7 @@
 
 namespace Moloni\Tools;
 
+use DateTime;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
@@ -95,7 +96,7 @@ class SyncLogs
         $syncLog = new MoloniSyncLogs();
         $syncLog->setEntityId($productId);
         $syncLog->setTypeId(SyncLogsType::PRODUCT);
-        $syncLog->setSyncDate(time());
+        $syncLog->setSyncDate(new DateTime());
 
         try {
             self::$entityManager->persist($syncLog);

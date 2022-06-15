@@ -24,6 +24,7 @@
 
 namespace Moloni\Tools;
 
+use DateTime;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
 use Moloni\Api\MoloniApi;
@@ -126,7 +127,7 @@ class Logs
         $log->setLevel($level);
         $log->setExtra(json_encode($data));
         $log->setMessage(json_encode($message));
-        $log->setCreatedAt(time());
+        $log->setCreatedAt(new DateTime());
 
         try {
             self::$entityManager->persist($log);

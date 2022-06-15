@@ -26,6 +26,7 @@ declare(strict_types=1);
 
 namespace Moloni\Entity;
 
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -87,9 +88,9 @@ class MoloniApp
     private $companyId;
 
     /**
-     * @var string
+     * @var DateTime
      *
-     * @ORM\Column(name="access_time", type="string", length=250)
+     * @ORM\Column(name="access_time", type="datetime")
      */
     private $accessTime;
 
@@ -100,7 +101,11 @@ class MoloniApp
      */
     public function isValidAccessToken(): bool
     {
-        return strtotime('+40 minutes', (int)($this->getAccessTime() ?? 0)) > time();
+        if ($this->getAccessTime() === null) {
+            return false;
+        }
+
+        return $this->getAccessTime() > new DateTime('@' . strtotime('-40 minutes'));
     }
 
     /**
@@ -110,7 +115,11 @@ class MoloniApp
      */
     public function isValidRefreshToken(): bool
     {
-        return strtotime('+13 days', (int)($this->getAccessTime() ?? 0)) > time();
+        if ($this->getAccessTime() === null) {
+            return false;
+        }
+
+        return $this->getAccessTime() > new DateTime('@' . strtotime('-13 days'));
     }
 
     /**
@@ -122,17 +131,17 @@ class MoloniApp
     }
 
     /**
-     * @return int|null
+     * @return DateTime|null
      */
-    public function getAccessTime(): ?int
+    public function getAccessTime(): ?DateTime
     {
-        return (int)$this->accessTime;
+        return $this->accessTime;
     }
 
     /**
-     * @param string $accessTime
+     * @param DateTime $accessTime
      */
-    public function setAccessTime(string $accessTime): void
+    public function setAccessTime(DateTime $accessTime): void
     {
         $this->accessTime = $accessTime;
     }

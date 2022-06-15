@@ -25,7 +25,6 @@
 namespace Moloni\Controller\Admin\Login;
 
 use Shop;
-use Doctrine\ORM\ORMException;
 use Moloni\Api\MoloniApi;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Controller\Admin\MoloniController;
@@ -89,22 +88,14 @@ class Login extends MoloniController
         $moloniApp->setClientSecret($clientSecret);
         $moloniApp->setCompanyId(0);
         $moloniApp->setShopId(Shop::getContextShopID() ?? 0);
-        $moloniApp->setAccessTime(0);
 
-        try {
-            $entityManager = $this
-                ->getDoctrine()
-                ->getManager();
-            $entityManager->persist($moloniApp);
-            $entityManager->flush();
-        } catch (ORMException $e) {
-            $msg = $this->trans('Error saving information', 'Modules.Molonies.Errors');
-            $this->addErrorMessage($msg);
+        $entityManager = $this
+            ->getDoctrine()
+            ->getManager();
+        $entityManager->persist($moloniApp);
+        $entityManager->flush();
 
-            return $this->redirectToLogin();
-        }
-
-        $redirectUri = _PS_BASE_URL_SSL_ ?? '';
+        $redirectUri = defined('_PS_BASE_URL_SSL_') ? _PS_BASE_URL_SSL_ : '';
         $redirectUri .= $this->generateUrl(MoloniRoutes::LOGIN_RETRIEVE_CODE, [], UrlGeneratorInterface::ABSOLUTE_URL);
 
         $url = Domains::MOLONI_API;

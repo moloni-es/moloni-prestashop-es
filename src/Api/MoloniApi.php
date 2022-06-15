@@ -24,6 +24,7 @@
 
 namespace Moloni\Api;
 
+use DateTime;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
 use GuzzleHttp\Client;
@@ -127,7 +128,7 @@ class MoloniApi
 
             self::$app->setAccessToken($body->accessToken);
             self::$app->setRefreshToken($body->refreshToken);
-            self::$app->setAccessTime(time());
+            self::$app->setAccessTime(new DateTime());
 
             self::$entityManager->persist(self::$app);
             self::$entityManager->flush();
@@ -174,7 +175,7 @@ class MoloniApi
 
             self::$app->setAccessToken($body->accessToken);
             self::$app->setRefreshToken($body->refreshToken);
-            self::$app->setAccessTime(time());
+            self::$app->setAccessTime(new DateTime());
 
             self::$entityManager->persist(self::$app);
             self::$entityManager->flush();

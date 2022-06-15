@@ -24,6 +24,7 @@
 
 namespace Moloni\Actions\Orders;
 
+use DateTime;
 use Shop;
 use Moloni\Api\MoloniApi;
 use Moloni\Entity\MoloniDocuments;
@@ -66,7 +67,7 @@ class OrderDiscard extends AbstractOrderAction
         $document->setDocumentType('');
         $document->setOrderId($this->orderId);
         $document->setOrderReference($this->order->reference);
-        $document->setCreatedAt(time());
+        $document->setCreatedAt(new DateTime());
 
         $this->entityManager->persist($document);
         $this->entityManager->flush();

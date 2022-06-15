@@ -24,6 +24,7 @@
 
 namespace Moloni\Entity;
 
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -85,9 +86,9 @@ class MoloniLogs
     private $extra;
 
     /**
-     * @var string
+     * @var DateTime
      *
-     * @ORM\Column(name="created_at", type="string", length=250)
+     * @ORM\Column(name="created_at", type="datetime")
      */
     private $createdAt;
 
@@ -196,17 +197,17 @@ class MoloniLogs
     }
 
     /**
-     * @return string
+     * @return DateTime
      */
-    public function getCreatedAt(): string
+    public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }
 
     /**
-     * @param string $createdAt
+     * @param DateTime $createdAt
      */
-    public function setCreatedAt(string $createdAt): void
+    public function setCreatedAt(DateTime $createdAt): void
     {
         $this->createdAt = $createdAt;
     }
