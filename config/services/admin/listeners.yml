@@ -1,0 +1,9 @@
+services:
+  _defaults:
+    autowire: true      # Automatically injects dependencies in your services.
+    autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+  moloni.listener.authentication:
+    class: Moloni\EventListener\AuthenticationListener
+    tags:
+      - { name: kernel.event_listener, event: kernel.controller }

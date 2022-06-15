@@ -1,0 +1,73 @@
+services:
+  _defaults:
+    autowire: true      # Automatically injects dependencies in your services.
+    autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+  moloni.settings.form:
+    class: Moloni\Form\Settings\SettingsFormHandler
+    public: true
+    autowire: true
+    autoconfigure: false
+    arguments:
+      - '@form.factory'
+      - '@prestashop.core.hook.dispatcher'
+      - '@moloni.settings.form_data_provider'
+
+  moloni.settings.form_data_provider:
+    class: 'Moloni\Form\Settings\SettingsFormDataProvider'
+    arguments:
+      - '@translator'
+      - '@moloni.repository.settings'
+      - '@=service("prestashop.adapter.legacy.context").getLanguage().id'
+
+  moloni.settings.form_type:
+    class: Moloni\Form\Settings\SettingsFormType
+    parent: 'form.type.translatable.aware'
+    public: true
+    autowire: true
+    autoconfigure: false
+    tags:
+      - { name: form.type }
+    arguments:
+      - '@moloni.settings.form_data_provider'
+
+    # Registration
+
+  moloni.registration.form:
+    class: Moloni\Form\Settings\SettingsFormHandler
+    public: true
+    autowire: true
+    autoconfigure: false
+    arguments:
+      - '@form.factory'
+      - '@prestashop.core.hook.dispatcher'
+      - '@moloni.settings.form_data_provider'
+      -
+
+  moloni.registration.form_data_provider:
+    class: 'Moloni\Form\Registration\RegistrationFormDataProvider'
+    arguments:
+      - '@translator'
+      - '@=service("prestashop.adapter.legacy.context").getLanguage().id'
+
+  moloni.registration.form_type:
+    class: Moloni\Form\Registration\RegistrationFormType
+    parent: 'form.type.translatable.aware'
+    public: true
+    autowire: true
+    autoconfigure: false
+    tags:
+      - { name: form.type }
+    arguments:
+      - '@moloni.registration.form_data_provider'
+
+    # Login
+
+  moloni.login.form_type:
+    class: Moloni\Form\Login\LoginFormType
+    parent: 'form.type.translatable.aware'
+    public: true
+    autowire: true
+    autoconfigure: false
+    tags:
+      - { name: form.type }
