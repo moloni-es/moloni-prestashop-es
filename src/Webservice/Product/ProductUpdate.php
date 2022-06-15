@@ -66,6 +66,8 @@ class ProductUpdate extends AbstractWebserviceAction
                 $productBuilder->insert();
 
                 SyncLogs::productAddTimeout($productBuilder->getPrestashopProductId());
+
+                $productBuilder->updateStock();
             }
         } catch (MoloniProductException $e) {
             Logs::addErrorLog([$e->getMessage(), $e->getIdentifiers()], $e->getData());

@@ -3,6 +3,8 @@ services:
     autowire: true      # Automatically injects dependencies in your services.
     autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
+  # Settings
+
   moloni.settings.form:
     class: Moloni\Form\Settings\SettingsFormHandler
     public: true
@@ -31,24 +33,20 @@ services:
     arguments:
       - '@moloni.settings.form_data_provider'
 
-    # Registration
+  # Registration
 
   moloni.registration.form:
-    class: Moloni\Form\Settings\SettingsFormHandler
+    class: Moloni\Form\Registration\RegistrationFormHandler
     public: true
     autowire: true
     autoconfigure: false
     arguments:
       - '@form.factory'
       - '@prestashop.core.hook.dispatcher'
-      - '@moloni.settings.form_data_provider'
-      -
+      - '@moloni.registration.form_data_provider'
 
   moloni.registration.form_data_provider:
-    class: 'Moloni\Form\Registration\RegistrationFormDataProvider'
-    arguments:
-      - '@translator'
-      - '@=service("prestashop.adapter.legacy.context").getLanguage().id'
+    class: Moloni\Form\Registration\RegistrationFormDataProvider
 
   moloni.registration.form_type:
     class: Moloni\Form\Registration\RegistrationFormType
@@ -61,7 +59,7 @@ services:
     arguments:
       - '@moloni.registration.form_data_provider'
 
-    # Login
+  # Login
 
   moloni.login.form_type:
     class: Moloni\Form\Login\LoginFormType
