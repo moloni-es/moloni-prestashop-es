@@ -1,5 +1,5 @@
 moloni_es_registration_home:
-  path: /registration/
+  path: /
   methods: [GET,POST]
   defaults:
     _controller: 'Moloni\Controller\Admin\Registration\Registration::home'

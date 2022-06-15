@@ -1,5 +1,5 @@
 moloni_es_settings_home:
-  path: /settings/
+  path: /
   methods: [GET,POST]
   defaults:
     _controller: 'Moloni\Controller\Admin\Settings\Settings::home'
