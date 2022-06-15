@@ -33,19 +33,12 @@ jobs:
         if: steps.composer-cache.outputs.cache-hit != 'true'
         run: composer install --prefer-dist --no-progress --no-suggest
 
-      - name: Adding automatic headers
-        run: composer run auto-header
-
       - name: Set up nodejs
         uses: actions/setup-node@v1
 
       - name: Begin node compiling process
         run: |
           cd .dev/ && npm i && npm run build
-
-      - name: Install dependencies without dev
-        if: steps.composer-cache.outputs.cache-hit != 'true'
-        run: composer install --prefer-dist --no-progress --no-suggest --no-dev
 
       - name: Create Release Folder
         run: |
@@ -57,7 +50,15 @@ jobs:
           --exclude '.php-cs-fixer.cache' \ 
           --exclude 'docs' \ 
           --exclude 'tests' \ 
+          --exclude 'vendor' \
           . ./moloniprestashopes
+
+      - name: Install dependencies without dev
+        if: steps.composer-cache.outputs.cache-hit != 'true'
+        run: cd ./moloniprestashopes && composer install --prefer-dist --no-progress --no-suggest --no-dev
+
+      - name: Adding automatic headers
+        run: cd ./ && composer run auto-header
 
       - name: Zip realease folder
         run: zip -r moloniprestashopes.zip ./moloniprestashopes
