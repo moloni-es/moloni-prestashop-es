@@ -9,6 +9,7 @@
       "email": "plugins@moloni.com"
     }
   ],
+  "version": "v2.0",
   "scripts": {
     "check-phpstan": "php vendor/bin/phpstan analyse --configuration=tests/phpstan/phpstan.neon --memory-limit 10G",
     "check-phpcs": "vendor/bin/php-cs-fixer fix -vv",
