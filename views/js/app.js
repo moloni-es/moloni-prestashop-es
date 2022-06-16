@@ -79,6 +79,90 @@ var LoadAddress = {
 
 /***/ }),
 
+/***/ "./js/helpers/createSlug.js":
+/*!**********************************!*\
+  !*** ./js/helpers/createSlug.js ***!
+  \**********************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+var CreateSlug = function CreateSlug(string) {
+  return string.replace(/[^a-zA-Z0-9]/g, '');
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (CreateSlug);
+
+/***/ }),
+
+/***/ "./js/helpers/validateRegistrationForm.js":
+/*!************************************************!*\
+  !*** ./js/helpers/validateRegistrationForm.js ***!
+  \************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+var ValidateRegistrationForm = function ValidateRegistrationForm(_ref) {
+  var email = _ref.email,
+      businessType = _ref.businessType,
+      companyName = _ref.companyName,
+      vat = _ref.vat,
+      country = _ref.country,
+      slug = _ref.slug,
+      password = _ref.password,
+      passwordConfirmation = _ref.passwordConfirmation,
+      serviceTerms = _ref.serviceTerms;
+
+  try {
+    if (email === '') {
+      throw false;
+    }
+
+    if (businessType === '') {
+      throw false;
+    }
+
+    if (companyName === '') {
+      throw false;
+    }
+
+    if (vat === '') {
+      throw false;
+    }
+
+    if (country === '') {
+      throw false;
+    }
+
+    if (slug === '') {
+      throw false;
+    }
+
+    if (password === '' || password.length < 6) {
+      throw false;
+    }
+
+    if (passwordConfirmation === '' || passwordConfirmation.length < 6) {
+      throw false;
+    }
+
+    if (passwordConfirmation !== password) {
+      throw false;
+    }
+
+    if (!serviceTerms) {
+      throw false;
+    }
+  } catch (err) {
+    return err;
+  }
+
+  return true;
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (ValidateRegistrationForm);
+
+/***/ }),
+
 /***/ "./js/pages/documents.js":
 /*!*******************************!*\
   !*** ./js/pages/documents.js ***!
@@ -137,7 +221,19 @@ var MoloniLogin = /*#__PURE__*/function () {
 
   (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__["default"])(MoloniLogin, [{
     key: "startObservers",
-    value: function startObservers() {}
+    value: function startObservers() {
+      this.loginButton = $('#login_form_connect');
+    }
+  }, {
+    key: "enableLogin",
+    value: function enableLogin() {
+      this.loginButton.removeAttr('disabled');
+    }
+  }, {
+    key: "disableLogin",
+    value: function disableLogin() {
+      this.loginButton.attr('disabled', true);
+    }
   }]);
 
   return MoloniLogin;
@@ -231,17 +327,107 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
 /* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/esm/createClass.js");
+/* harmony import */ var _helpers_createSlug__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../helpers/createSlug */ "./js/helpers/createSlug.js");
+/* harmony import */ var _helpers_validateRegistrationForm__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../helpers/validateRegistrationForm */ "./js/helpers/validateRegistrationForm.js");
+
+
 
 
 
 var MoloniRegistration = /*#__PURE__*/function () {
   function MoloniRegistration() {
     (0,_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__["default"])(this, MoloniRegistration);
+
+    this.registrationIdPrefix = 'MoloniRegistration_';
   }
 
   (0,_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__["default"])(MoloniRegistration, [{
     key: "startObservers",
-    value: function startObservers() {}
+    value: function startObservers() {
+      // Holders
+      this.$businessTypeNameHolder = $('#registration_form_businessTypeName_row');
+      this.$passwordError = $('#registration_form_password_error'); // Fields
+
+      this.$email = $('#' + this.registrationIdPrefix + 'email');
+      this.$businessType = $('#' + this.registrationIdPrefix + 'businessType');
+      this.$companyName = $('#' + this.registrationIdPrefix + 'companyName');
+      this.$vat = $('#' + this.registrationIdPrefix + 'vat');
+      this.$country = $('#' + this.registrationIdPrefix + 'country');
+      this.$slug = $('#' + this.registrationIdPrefix + 'slug');
+      this.$password = $('#' + this.registrationIdPrefix + 'password_first');
+      this.$passwordConfirmation = $('#' + this.registrationIdPrefix + 'password_second');
+      this.$serviceTerms = $('#' + this.registrationIdPrefix + 'serviceTerms');
+      this.$registerButton = $('#' + this.registrationIdPrefix + 'register'); // Actions
+
+      this.$businessType.on('change', this.onBusinessChange.bind(this));
+      this.$password.on('keyup', this.onPasswordChange.bind(this));
+      this.$passwordConfirmation.on('keyup', this.onPasswordChange.bind(this));
+      this.$companyName.on('keyup', this.onCompanyNameChange.bind(this)); // Verify form
+
+      this.$email.on('change', this.verifyForm.bind(this));
+      this.$businessType.on('change', this.verifyForm.bind(this));
+      this.$companyName.on('change', this.verifyForm.bind(this));
+      this.$vat.on('change', this.verifyForm.bind(this));
+      this.$country.on('change', this.verifyForm.bind(this));
+      this.$slug.on('change', this.verifyForm.bind(this));
+      this.$password.on('change', this.verifyForm.bind(this));
+      this.$passwordConfirmation.on('keyup', this.verifyForm.bind(this));
+      this.$serviceTerms.on('change', this.verifyForm.bind(this));
+      this.onBusinessChange();
+      this.onPasswordChange();
+      this.verifyForm();
+    }
+  }, {
+    key: "onCompanyNameChange",
+    value: function onCompanyNameChange() {
+      if (this.$companyName.val() !== '') {
+        this.$slug.val((0,_helpers_createSlug__WEBPACK_IMPORTED_MODULE_2__["default"])(event.target.value));
+      }
+    }
+  }, {
+    key: "onPasswordChange",
+    value: function onPasswordChange() {
+      var password = this.$password.val();
+      var confirmPassword = this.$passwordConfirmation.val();
+
+      if (password !== '' && confirmPassword !== '') {
+        if (password === confirmPassword) {
+          this.$passwordError.slideUp(200);
+        } else {
+          this.$passwordError.slideDown(200);
+        }
+      }
+    }
+  }, {
+    key: "onBusinessChange",
+    value: function onBusinessChange() {
+      if (this.$businessType.val() == 'custom') {
+        this.$businessTypeNameHolder.fadeIn(200);
+      } else {
+        this.$businessTypeNameHolder.fadeOut(200);
+      }
+    }
+  }, {
+    key: "verifyForm",
+    value: function verifyForm() {
+      var valid = (0,_helpers_validateRegistrationForm__WEBPACK_IMPORTED_MODULE_3__["default"])({
+        email: this.$email.val(),
+        businessType: this.$businessType.val(),
+        companyName: this.$companyName.val(),
+        vat: this.$vat.val(),
+        country: this.$country.val(),
+        slug: this.$slug.val(),
+        password: this.$password.val(),
+        passwordConfirmation: this.$passwordConfirmation.val(),
+        serviceTerms: this.$serviceTerms.is(":checked")
+      });
+
+      if (valid) {
+        this.$registerButton.removeAttr('disabled');
+      } else {
+        this.$registerButton.attr('disabled', true);
+      }
+    }
   }]);
 
   return MoloniRegistration;

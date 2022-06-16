@@ -39,9 +39,11 @@ class Registration extends MoloniController
         $registrationForm->handleRequest($request);
 
         if ($registrationForm->isSubmitted() && $registrationForm->isValid()) {
+
             try {
                 $errors = $registrationFormHandler->save($registrationForm->getData());
             } catch (\Exception $e) {
+
                 $errors = [];
                 $errors[] = $e->getMessage();
             }
@@ -57,9 +59,7 @@ class Registration extends MoloniController
                 return $this->redirectToLogin();
             }
 
-            foreach ($errors as $error) {
-                $this->addErrorMessage($error);
-            }
+            $this->flashErrors($errors);
         }
 
         return $this->render(

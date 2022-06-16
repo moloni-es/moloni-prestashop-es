@@ -2,6 +2,10 @@
 
 {% block content %}
     {{ form_start(form) }}
+
+    {# Password error #}
+    {% include '@Modules/molonies/views/templates/admin/registration/segments/PasswordError.twig' %}
+
     <div class="d-flex justify-content-center align-items-center">
         <div class="card moloni-registration--card">
             <div class="moloni-registration--image">
@@ -21,7 +25,9 @@
                         {{ form_widget(form.businessType) }}
                     </div>
 
-                    <div class="col-6">
+                    <div class="col-6"
+                         id="registration_form_businessTypeName_row"
+                         style="display: none;">
                         {{ form_label(form.businessTypeName) }}
                         {{ form_widget(form.businessTypeName) }}
                     </div>
@@ -58,12 +64,16 @@
                 </div>
                 <div class="form-group row">
                     <div class="col-6">
-                        {{ form_label(form.password) }}
-                        {{ form_widget(form.password) }}
+                        {{ form_label(form.password.first) }}
+                        {{ form_widget(form.password.first) }}
+
+                        <small class="form-text">
+                            {{ 'Between 6 and 16 characters, at least one uppercase letter, one symbol and one number'|trans({}, 'Modules.Molonies.Common') }}
+                        </small>
                     </div>
                     <div class="col-6">
-                        {{ form_label(form.passwordConfirmation) }}
-                        {{ form_widget(form.passwordConfirmation) }}
+                        {{ form_label(form.password.second) }}
+                        {{ form_widget(form.password.second) }}
                     </div>
                 </div>
                 <div class="form-group">

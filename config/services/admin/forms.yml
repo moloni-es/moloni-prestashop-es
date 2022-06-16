@@ -47,6 +47,8 @@ services:
 
   moloni.registration.form_data_provider:
     class: Moloni\Form\Registration\RegistrationFormDataProvider
+    arguments:
+      - '@translator'
 
   moloni.registration.form_type:
     class: Moloni\Form\Registration\RegistrationFormType

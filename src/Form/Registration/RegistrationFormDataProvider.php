@@ -35,8 +35,15 @@ use Symfony\Component\Translation\TranslatorInterface;
 
 class RegistrationFormDataProvider implements FormDataProviderInterface
 {
+    private $translator;
+
     private $countries = [];
     private $businessAreas = [];
+
+    public function __construct(TranslatorInterface $translator)
+    {
+        $this->translator = $translator;
+    }
 
     public function getData(): array
     {
@@ -72,7 +79,23 @@ class RegistrationFormDataProvider implements FormDataProviderInterface
             $this->businessAreas[$area['title']] = $area['businessAreaId'];
         }
 
+        $this->businessAreas[$this->trans('Other', 'Modules.Molonies.Common')] = 'custom';
+
         return $this;
+    }
+
+    /**
+     * Simple translator implementation
+     *
+     * @param string $string
+     * @param string $domain
+     *
+     * @return string
+     * @noinspection PhpSameParameterValueInspection
+     */
+    private function trans(string $string, string $domain): string
+    {
+        return $this->translator->trans($string, [], $domain);
     }
 
     /**
