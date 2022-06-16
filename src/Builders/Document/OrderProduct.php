@@ -39,6 +39,7 @@ use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\MoloniException;
 use Moloni\Exceptions\Product\MoloniProductException;
 use Moloni\Tools\Settings;
+use Moloni\Tools\SyncLogs;
 use Product;
 use Tax;
 use TaxCalculator;
@@ -210,6 +211,8 @@ class OrderProduct implements BuilderItemInterface
     public function insert(): void
     {
         try {
+            SyncLogs::productAddTimeout((int)$this->orderProduct['product_id']);
+
             $product = new Product($this->orderProduct['product_id'], true, Configuration::get('PS_LANG_DEFAULT'));
 
             if ($product->product_type === 'combinations') {
