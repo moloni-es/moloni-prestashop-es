@@ -12,16 +12,36 @@
     padding-bottom: 3rem;
   }
 
-  &--image{
+  &--image {
     max-width: 1000px;
   }
 
-  &--form{
+  &--form {
     max-width: 1000px;
     padding-top: 3rem;
   }
 
-  &--buttons{
+  &--row {
+    &:not(.row) {
+      margin-bottom: 1.2rem;
+    }
+  }
+
+  &--col {
+    margin-bottom: 1.2rem;
+    position: relative;
+    width: 100%;
+
+    @include for-small-desktop-up {
+      flex: 0 0 auto;
+      width: 50%;
+
+      padding-right: .9375rem;
+      padding-left: .9375rem;
+    }
+  }
+
+  &--buttons {
     display: flex;
     justify-content: flex-end;
     align-items: flex-end;
@@ -30,7 +50,7 @@
     max-width: 1000px;
     padding-top: 2rem;
 
-    & button{
+    & button {
       margin-left: 1rem;
     }
   }

@@ -123,6 +123,25 @@ Settings
   max-width: 1000px;
   padding-top: 3rem;
 }
+.moloni-registration--row:not(.row) {
+  margin-bottom: 1.2rem;
+}
+.moloni-registration--col {
+  margin-bottom: 1.2rem;
+  position: relative;
+  width: 100%;
+}
+@media (min-width: 768px) {
+  .moloni-registration--col {
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 0 auto;
+        -ms-flex: 0 0 auto;
+            flex: 0 0 auto;
+    width: 50%;
+    padding-right: 0.9375rem;
+    padding-left: 0.9375rem;
+  }
+}
 .moloni-registration--buttons {
   display: -webkit-box;
   display: -webkit-flex;

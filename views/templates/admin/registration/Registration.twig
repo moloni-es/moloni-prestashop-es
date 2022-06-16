@@ -7,7 +7,7 @@
     {% include '@Modules/molonies/views/templates/admin/registration/segments/PasswordError.twig' %}
 
     <div class="d-flex justify-content-center align-items-center">
-        <div class="card moloni-registration--card">
+        <div class="card moloni-registration moloni-registration--card">
             <div class="moloni-registration--image">
                 <a href="https://www.moloni.es/" target="_blank">
                     <img src="{{ img }}" alt="Logo" width="140px" height="24px">
@@ -15,55 +15,55 @@
             </div>
 
             <div class="moloni-registration--form">
-                <div class="form-group">
+                <div class="moloni-registration--row">
                     {{ form_label(form.email) }}
                     {{ form_widget(form.email) }}
                 </div>
-                <div class="form-group row">
-                    <div class="col-6">
+                <div class="moloni-registration--row row">
+                    <div class="moloni-registration--col">
                         {{ form_label(form.businessType) }}
                         {{ form_widget(form.businessType) }}
                     </div>
 
-                    <div class="col-6"
+                    <div class="moloni-registration--col"
                          id="registration_form_businessTypeName_row"
                          style="display: none;">
                         {{ form_label(form.businessTypeName) }}
                         {{ form_widget(form.businessTypeName) }}
                     </div>
                 </div>
-                <div class="form-group row">
-                    <div class="col-6">
+                <div class="moloni-registration--row row">
+                    <div class="moloni-registration--col">
                         {{ form_label(form.companyName) }}
                         {{ form_widget(form.companyName) }}
                     </div>
-                    <div class="col-6">
+                    <div class="moloni-registration--col">
                         {{ form_label(form.vat) }}
                         {{ form_widget(form.vat) }}
                     </div>
                 </div>
-                <div class="form-group row">
-                    <div class="col-6">
+                <div class="moloni-registration--row row">
+                    <div class="moloni-registration--col">
                         {{ form_label(form.country) }}
                         {{ form_widget(form.country) }}
                     </div>
-                    <div class="col-6">
+                    <div class="moloni-registration--col">
                         {{ form_label(form.slug) }}
                         {{ form_widget(form.slug) }}
                     </div>
                 </div>
-                <div class="form-group row">
-                    <div class="col-6">
+                <div class="moloni-registration--row row">
+                    <div class="moloni-registration--col">
                         {{ form_label(form.username) }}
                         {{ form_widget(form.username) }}
                     </div>
-                    <div class="col-6">
+                    <div class="moloni-registration--col">
                         {{ form_label(form.phone) }}
                         {{ form_widget(form.phone) }}
                     </div>
                 </div>
-                <div class="form-group row">
-                    <div class="col-6">
+                <div class="moloni-registration--row row">
+                    <div class="moloni-registration--col">
                         {{ form_label(form.password.first) }}
                         {{ form_widget(form.password.first) }}
 
@@ -71,16 +71,16 @@
                             {{ 'Between 6 and 16 characters, at least one uppercase letter, one symbol and one number'|trans({}, 'Modules.Molonies.Common') }}
                         </small>
                     </div>
-                    <div class="col-6">
+                    <div class="moloni-registration--col">
                         {{ form_label(form.password.second) }}
                         {{ form_widget(form.password.second) }}
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="moloni-registration--row">
                     {{ form_label(form.serviceTerms) }}
                     {{ form_widget(form.serviceTerms) }}
                 </div>
-                <div class="form-group">
+                <div class="moloni-registration--row">
                     {{ form_label(form.newsletter) }}
                     {{ form_widget(form.newsletter) }}
                 </div>
