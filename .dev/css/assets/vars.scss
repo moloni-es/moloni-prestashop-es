@@ -16,6 +16,12 @@
   }
 }
 
+@mixin for-small-desktop-up {
+  @media (min-width: 768px) {
+    @content;
+  }
+}
+
 @mixin for-desktop-up {
   @media (min-width: 1200px) {
     @content;
@@ -34,4 +40,3 @@ $black: "black";
 .flex {
   display: flex;
 }
-
