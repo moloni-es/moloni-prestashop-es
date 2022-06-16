@@ -55,9 +55,7 @@ class Settings extends MoloniController
                 return $this->redirectToSettings();
             }
 
-            foreach ($errors as $error) {
-                $this->addErrorMessage($error);
-            }
+            $this->flashErrors($errors);
         }
 
         return $this->render(

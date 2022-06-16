@@ -49,7 +49,9 @@ class Login extends MoloniController
             'url' => $this->generateUrl(MoloniRoutes::LOGIN)
         ]);
 
-        if ((new HasOldPluginTables())->handle()) {
+        $hasOldTables = (new HasOldPluginTables())->handle();
+
+        if ($hasOldTables) {
             $msg = $this->trans('Error found in plugin tables, please contact customer support.', 'Modules.Molonies.Common');
 
             $this->addErrorMessage($msg);
@@ -61,6 +63,7 @@ class Login extends MoloniController
                 'form' => $form->createView(),
                 'img' => _MODULE_DIR_ . 'molonies/views/img/moloni_logo_colors.svg',
                 'registration_route' => MoloniRoutes::REGISTRATION,
+                'has_old_tables' => $hasOldTables,
             ]
         );
     }

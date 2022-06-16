@@ -29,7 +29,9 @@ namespace Moloni\Form\Registration;
 use Moloni\Exceptions\MoloniApiException;
 use PrestaShopBundle\Form\Admin\Type\TranslatorAwareType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -97,6 +99,7 @@ class RegistrationFormType extends TranslatorAwareType
             'label' => $this->trans('Business type', "Modules.Molonies.Common"),
             'choices' => $this->options->getBusinessAreas(),
             'required' => true,
+            'placeholder' => $this->trans('Please select an option', "Modules.Molonies.Common"),
         ]);
 
         $this->builder->add('businessTypeName', TextType::class, [
@@ -131,6 +134,7 @@ class RegistrationFormType extends TranslatorAwareType
     {
         $this->builder->add('country', ChoiceType::class, [
             'label' => $this->trans('Country', "Modules.Molonies.Common"),
+            'placeholder' => $this->trans('Please select an option', "Modules.Molonies.Common"),
             'choices' => $this->options->getCountries(),
             'required' => true,
         ]);
@@ -142,6 +146,13 @@ class RegistrationFormType extends TranslatorAwareType
     {
         $this->builder->add('slug', TextType::class, [
             'label' => $this->trans('Slug', "Modules.Molonies.Common"),
+            'attr' => [
+                'placeholder' => 'ac.moloni.es/*slug*',
+            ],
+            'constraints' => [
+                new Length(['min' => 4]),
+                new NotBlank(),
+            ],
             'required' => true,
         ]);
 
@@ -152,7 +163,7 @@ class RegistrationFormType extends TranslatorAwareType
     {
         $this->builder->add('username', TextType::class, [
             'label' => $this->trans('Name of person responsible for the account', "Modules.Molonies.Common"),
-            'required' => true,
+            'required' => false,
         ]);
 
         return $this;
@@ -160,7 +171,7 @@ class RegistrationFormType extends TranslatorAwareType
 
     private function setPhone(): RegistrationFormType
     {
-        $this->builder->add('phone', TextType::class, [
+        $this->builder->add('phone', TelType::class, [
             'label' => $this->trans('Phone', "Modules.Molonies.Common"),
             'label_attr' => [
                 'popover' => $this->trans(
@@ -176,24 +187,23 @@ class RegistrationFormType extends TranslatorAwareType
 
     private function setPassword(): RegistrationFormType
     {
-        $this->builder->add('password', PasswordType::class, [
+        $this->builder->add('password', RepeatedType::class, [
+            'type' => PasswordType::class,
             'label' => $this->trans('Password', "Modules.Molonies.Common"),
-            'help' => $this->trans(
-                'Between 6 and 16 characters, at least one uppercase letter, one symbol and one number',
-                "Modules.Molonies.Settings"
-            ),
             'constraints' => [
-                new Length(['min' => 6]),
+                new Length([
+                    'min' => 6,
+                    'minMessage' => $this->getMinLengthValidationMessage(),
+                    'max' => 16,
+                    'maxMessage' => $this->getMaxLengthValidationMessage(),
+                ]),
                 new NotBlank(),
             ],
-            'required' => true,
-        ]);
-
-        $this->builder->add('passwordConfirmation', PasswordType::class, [
-            'label' => $this->trans('Password confirmation', "Modules.Molonies.Common"),
-            'constraints' => [
-                new Length(['min' => 6]),
-                new NotBlank(),
+            'first_options' => [
+                'label' => $this->trans('Password', "Modules.Molonies.Common"),
+            ],
+            'second_options' => [
+                'label' => $this->trans('Password confirmation', "Modules.Molonies.Common"),
             ],
             'required' => true,
         ]);
@@ -242,5 +252,15 @@ class RegistrationFormType extends TranslatorAwareType
             ],
             'label' => $this->trans('Register', "Modules.Molonies.Common"),
         ]);
+    }
+
+    private function getMinLengthValidationMessage(): string
+    {
+        return $this->trans('This field cannot be shorter than {0} characters',"Modules.Molonies.Common", ['{0}' => 6]);
+    }
+
+    private function getMaxLengthValidationMessage(): string
+    {
+        return $this->trans('This field cannot be longer than {0} characters',"Modules.Molonies.Common", ['{0}' => 16]);
     }
 }
