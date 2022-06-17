@@ -1,0 +1,462 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="admin745p3ar3j" source-language="es-ES" target-language="es-ES" datatype="plaintext">
+    <body>
+      <trans-unit id="e5f4798182df0d63799411ed04316673">
+        <source>Between 6 and 16 characters, at least one uppercase letter, one symbol and one number</source>
+        <target> Entre 6 y 16 caracteres, al menos una letra mayúscula, un símbolo y un número</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="bafd7322c6e97d25b6299b5d6fe8920b">
+        <source>No</source>
+        <target>No</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="93cba07454f06a4a960172bbd6e2a435">
+        <source>Yes</source>
+        <target>Si</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="f03ab16cd58372c77ba45a3d9a5a1cb9">
+        <source>Draft</source>
+        <target>Borrador</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="03f4a47830f97377a35321051685071e">
+        <source>Closed</source>
+        <target>Cerrado</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="780c462e85ba4399a5d42e88f69a15ca">
+        <source>Billing</source>
+        <target>Facturación</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="ea9cf7e47ff33b2be14e6dd07cbcefc6">
+        <source>Shipping</source>
+        <target>Envío</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="1c76cbfe21c6f44c1d1e59d54f3e4420">
+        <source>Company</source>
+        <target>Empresa</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="5780595ea434e445d81969fc7db6b3f1">
+        <source>Moloni company</source>
+        <target>Empresa Moloni</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="2cf2c3b318cd7431414db3f2240a199c">
+        <source>Custom address</source>
+        <target>Dirección personalizada </target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="821b8ee6937cec96c30fdafbfe836d68">
+        <source>Stores</source>
+        <target>Tiendas</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="4a2728d1b582d99a3b928afd3ea9992c">
+        <source>Synchronize stocks</source>
+        <target>Sincronizar stocks</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="81a81b8045df1a25fca1ef1422ce1f1c">
+        <source><![CDATA[Choose to synchronize the product when a Prestashop product is updated.<br><br>
+                            Ex.: Update a product in Prestashop from 0 stock to 20, and a stock movement will be create in Moloni for that product.]]></source>
+        <target><![CDATA[Elige sincronizar el producto cuando se actualiza un producto de Prestashop.<br><br>
+                            Ej: Actualizar un producto en Prestashop de 0 stock a 20, y se creará un movimiento de stock en Moloni para ese producto]]></target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="6416e8cb5fc0a208d94fa7f5a300dbc4">
+        <source>Warehouse</source>
+        <target>Almacén</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="4dea4f1677aff8de828f361ea970fd41">
+        <source><![CDATA[Select which warehouse will be used during the product insert process or during the product stock synchronization process.
+                            This warehouse will be used when a product is inserted or updated <b>in Prestashop.</b>]]></source>
+        <target><![CDATA[Selecciona qué almacén se utilizará durante el proceso de creación de productos o durante el proceso de sincronización de stocks de productos. Este almacén se utilizará cuando se cree o se actualice un producto <b>en Prestashop.</b>]]></target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="91a98945c72e1b031c78a064c10feb98">
+        <source>Default warehouse</source>
+        <target>Almacén por defecto</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="3020c78ae45aff9a35b95856af076765">
+        <source>Warehouses</source>
+        <target>Almacenes</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="407deaabede956257901211b1e2ab6d2">
+        <source>Please select an option</source>
+        <target>Selecciona una opción</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="e67570b749b341140a0e22d03c7aeda1">
+        <source>Create products</source>
+        <target>Crear productos</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="44e707b1a79fa84e70d725f9481e5df9">
+        <source><![CDATA[Choose if a product should be created in Moloni when it is <b>created</b> in Prestashop.<br><br>
+                            Ex.: Insert a new product in Prestashop and that same product will be automaticaly created in Moloni.]]></source>
+        <target><![CDATA[Elige si un producto debe crearse en Moloni cuando se <b>cree</b> en Prestashop.<br><br> Ej.: Crea un nuevo producto en Prestashop y ese mismo producto se creará automáticamente en Moloni.]]></target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="e6daf960d8aa69d30038e6977242cb6d">
+        <source>Update products</source>
+        <target>Actualizar productos</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="23b2f87f5aa322e3812355b26c6d139e">
+        <source><![CDATA[Choose if a product should be updated in Moloni when it is <b>updated</b> in Prestashop.<br><br>
+                            Ex.: Update a product in Prestashop and that same product will be automaticaly created or updated in Moloni.]]></source>
+        <target><![CDATA[Elige si un producto debe actualizarse en Moloni cuando se <b>actualiza</b> en Prestashop.<br><br>
+                            Por ejemplo: actualiza un producto en Prestashop y ese mismo producto se creará o actualizará automáticamente en Moloni.]]></target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="9ce34f6c4de439cedd870fb014d53bb2">
+        <source><![CDATA[Choose to synchronize the product when a Moloni product is updated.<br><br>
+                            Ex.: Update a product in Moloni from 0 stock to 20 and the product stock in Prestashop will be updated.]]></source>
+        <target><![CDATA[Elige sincronizar el producto cuando se actualice un producto de Moloni.<br><br>
+                            Ej.: Actualizar un producto en Moloni de stock 0 a 20 y se actualizará el stock del producto en Prestashop.]]></target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="112171233a12cfa6c12cd43f292c22d0">
+        <source><![CDATA[Select which warehouse will be used during the product insert process or during the product stock synchronization process.<br><br>
+                                This warehouse will be used when a product is inserted or updated <b>in Moloni.</b>]]></source>
+        <target><![CDATA[Selecciona qué almacén se utilizará durante el proceso de creación de productos o durante el proceso de sincronización de stocks de productos.<br><br>
+                                Este almacén se utilizará cuando se cree o actualice un producto <b>en Moloni.</b>]]></target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="b21ee4f18f5fff809c9875ef2a1b9993">
+        <source>Accumulated stock</source>
+        <target>Stock acumulado</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="e7c1da71abde5cedd907b0c43d854d62">
+        <source><![CDATA[Choose if a product should be created in Prestashop when it is <b>created</b> in Moloni.<br><br>
+                            Ex.: Insert a new product in Moloni and that same product will be automaticaly created in Prestashop.]]></source>
+        <target><![CDATA[Elige si un producto debe crearse en Prestashop cuando se <b>cree</b> en Moloni.<br><br>
+                            Ej.: Crear un nuevo producto en Moloni y ese mismo producto se creará automáticamente en Prestashop.]]></target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="d3b1f3ac7625d806c2320ff4c95de6f9">
+        <source><![CDATA[Choose if a product should be updated in Prestashop when it is <b>updated</b> in Moloni.<br><br>
+                            Ex.: Update a product in Moloni and that same product will be automaticaly created or updated in Prestashop.]]></source>
+        <target><![CDATA[Elige si un producto debe actualizarse en Prestashop cuando se <b>actualiza</b> en Moloni.<br><br>
+                            Por ejemplo: actualiza un producto en Moloni y ese mismo producto se creará o actualizará automáticamente en Prestashop.]]></target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="e4846653504c74720ede0f2c8997a46d">
+        <source>Product fields</source>
+        <target>Campos del producto</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="73079a5e146384eb20fecc190dc0224e">
+        <source><![CDATA[You can select which fields should be updated when a product update occurs.<br><br>
+                            This is useful to have for example different prices on your online store and in your Moloni account, or different names.]]></source>
+        <target><![CDATA[Puedes seleccionar que campos deben actualizarse cuando se produce una actualización del producto.<br><br>
+                            Esto es útil para tener, por ejemplo, diferentes precios en tu tienda en línea y en su cuenta de Moloni, o diferentes nombres.]]></target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="277fa74edc699d051126ba16f1c64419">
+        <source>Orders since</source>
+        <target>Pedidos desde </target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="89641cbf35a7bdfcf2c744f2b9ca6b8d">
+        <source><![CDATA[By default, we will list all orders that were not converted into Moloni documents.<br><br>
+                            If you are migrating from an old invoicing software to Moloni, you may choose to list only orders after a selected date.]]></source>
+        <target><![CDATA[Por defecto, enumeramos todos los pedidos que no se convirtieron en documentos de Moloni.<br><br>
+                            Si vienes de un software de facturación diferente a Moloni, puede optar por enumerar solo los pedidos posteriores a una fecha seleccionada.]]></target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="57297718fdb439175177cf6b196172d1">
+        <source>Order status</source>
+        <target>Estado del pedido</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="ea7f48348f1477060b2471c0c5c725f6">
+        <source><![CDATA[When an order is in one of the following selected status, it will become available to be converted into a document.<br><br>
+                            If you have the option <b>"Auto create documents"</b> activated, when an order passes in one of the selected states, we will try to automatically create a document for it.]]></source>
+        <target><![CDATA[Cuando un pedido se encuentra en uno de los siguientes estados seleccionados, estará disponible para convertirlo en un documento.<br><br>
+                            Si tienes activada está opción <b>"Crear documentos automáticamente"</b>, cuando un pedido pase en uno de los estados seleccionados, intentaremos crear automáticamente un documento para ese pedido.]]></target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="ca6e6edde3223d1be1b84a9629a0cde7">
+        <source>Auto create documents</source>
+        <target>Crear documentos automáticamente </target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="791c33ba7af4efcd8e77e7370c3a87af">
+        <source>When a Prestashop order passes on a status that is select in the "orders" configuration tab, the module will try to automaticaly create a document for that order.</source>
+        <target>Cuando un pedido de Prestashop pasa a un estado que se selecciona en la pestaña de configuración de "pedidos", el módulo intentará crear automáticamente un documento para ese pedido.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="139192bbbd592a86b82343a52fecbe92">
+        <source>Choose this to automaticaly create documents in Moloni.</source>
+        <target>Selecciona esto para crear documentos automáticamente en Moloni.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="2556183970729e90187cb0ba7c82ed97">
+        <source>Customer code prefix</source>
+        <target> Prefijo del cliente</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="f1edd62a390ac538d1657a9ec7bae4f4">
+        <source><![CDATA[A customer needs to have a unique identifier in Moloni, and you can use this option to add a prefix to that identifier.<br><br>
+                            If you set a prefix of "PS_", your customer numbers will be incremented for example as PS_1, PS_2, PS_3, etc.<br><br>
+                            This is useful to easily identify which customers were created by this module.]]></source>
+        <target><![CDATA[Un cliente debe tener un identificador único en Moloni, y puedes usar esta opción para añadir un prefijo a ese identificador.<br><br>
+                            Si establece un prefijo de "PS_", los números de cliente se incrementarán, por ejemplo, como PS_1, PS_2, PS_3, etc.<br><br>
+                            Esto es útil para identificar fácilmente qué clientes fueron creados por este módulo.]]></target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="33bf4dcf572fe687ed1607bcf4620eca">
+        <source>Document set</source>
+        <target>Serie de documentos</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="21d1696d1ea50372512efaee94a87530">
+        <source><![CDATA[Select which Moloni document set you want to use for your documents.<br><br>
+                                You can manage your company document sets directly in your Moloni account.]]></source>
+        <target><![CDATA[Selecciona la serie de documentos de Moloni que quieres utilizar para tus documentos.<br><br>
+Puedes gestionar las series de documentos de tu empresa directamente en tu cuenta de Moloni.]]></target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="208a23b4a66a2500d7f1e5868af58e3b">
+        <source>Document type</source>
+        <target>Tipo de documento</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="9cd1af4533c8dc7a7cd67aade4bf7bc4">
+        <source>Select which type of document you want to issue automatically.</source>
+        <target>Selecciona el tipo de documento que quieres emitir automáticamente.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="414c3c9ec7a65076ad9440960f3ed02b">
+        <source>Document status</source>
+        <target>Estado del documento</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="c3b2c2a52c0254b134afb57a843f5a12">
+        <source><![CDATA[You can issue your documents as draft and close them later, or you can insert them directly as closed.
+                            <br><br>Before closing the document we will first confirm that the total value of the order matches with total value of the document.]]></source>
+        <target><![CDATA[Puedes emitir tus documentos como borrador y cerrarlos más tarde, o puede crearlos directamente como cerrados.
+                            <br><br>Antes de cerrar el documento primero confirmaremos que el valor total del pedido coincide con el valor total del documento.]]></target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="b03d24077e8167aa785302f532995248">
+        <source>Taxes Fiscal zone</source>
+        <target>Zona fiscal de Impuestos</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="7b131c895969d29b679a12352510d659">
+        <source>Select which fiscal zone should be used for new taxes that need to be created.</source>
+        <target> Selecciona qué zona fiscal debe utilizarse para los nuevos impuestos que deben crearse.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="cdeb74a8fcf416f7347e08629457b065">
+        <source>Show shipping information</source>
+        <target>Mostrar información de envío</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="9be72add23936ccab2f32ea464f061ea">
+        <source>If the seleceted document type shipping information is optional, you can use this option to choose if you want to include it or not.</source>
+        <target>Si la información de envío del tipo de documento seleccionado es opcional, puede utilizar esta opción para elegir si desea incluirla o no.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="2c1c32524355166b4ea3b01f52c6ac0d">
+        <source>Create bill of lading</source>
+        <target>Crear albarán</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="5e01aaad27d74588d465f5bae2fb76da">
+        <source>Choose if you want to create a Bill of Lading associated with the main document.</source>
+        <target>Crear automáticamente un albarán y asócialo al documento principal </target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="de3126d03b15a00160488adbfccce00e">
+        <source>Loading address</source>
+        <target>Dirección de carga</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="1ce77b1ac0c926ba5454216e88c309e4">
+        <source><![CDATA[Select which shipping address should be used for your shipping documents<br>
+                                You can select between your company address, your store addresses or set a custom one.]]></source>
+        <target><![CDATA[Selecciona qué dirección de envío debe utilizarse para tus documentos de envío<br> Puedes seleccionar entre la dirección de tu empresa, la de tu tienda o establecer una personalizada.]]></target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="dd7bf230fde8d4836917806aff6a6b27">
+        <source>Address</source>
+        <target>Dirección</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="f9feca164ceaebba358575c02583fe01">
+        <source>Zip-code</source>
+        <target>Código postal</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="57d056ed0984166336b7879c2af3657f">
+        <source>City</source>
+        <target>Ciudad</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="fb9e838d470b2c27c2c128d127165f9e">
+        <source>Please select a country</source>
+        <target>Por favor, selecciona un país</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="e31c0c465a632294c280582e7d982aa9">
+        <source>Send e-mail</source>
+        <target>Enviar e-mail</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="688da8f7acc04cbe5c77843729f27e93">
+        <source>When a document is inserted and correctly closed in Moloni an e-mail with the document will be sent to the customer.</source>
+        <target>Cuando se crea un documento y se cierra correctamente en Moloni, se envía un correo electrónico con el documento al cliente.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="248ca08d3a28cd69fafc92d5f8967368">
+        <source>Product details from</source>
+        <target>Usar detalles de los productos de</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="5f7ed0e651885bb6187820a9d4612c56">
+        <source>Choose if the product should use the name and description set in Moloni or in your store.</source>
+        <target>Elige si el producto debe usar el nombre y la descripción establecidos en Moloni o en tu tienda.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="a3e2dff2b97277df3671542faa531e3d">
+        <source>Product exemption reason</source>
+        <target>Motivo de exención del producto</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="9123b9cb4d1004d5321562257360f418">
+        <source><![CDATA[This exemption reason will be used when a <b>product</b> does not have a defined tax on the order that you are trying to issue.]]></source>
+        <target><![CDATA[Este motivo de exención se utilizará cuando un <b>producto</b> no tenga un impuesto definido en el pedido que se intenta emitir.]]></target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="119f6c623d1af3a3b309ae63fb575d9d">
+        <source>Shipping exemption reason</source>
+        <target>Motivo de exención de envío</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="e5087b9fadb800a95206178a4cd425be">
+        <source><![CDATA[This exemption reason will be used when your order <b>shipping</b> does not have a defined tax on the order that you are trying to issue.]]></source>
+        <target><![CDATA[Este motivo de exención se utilizará cuando su pedido <b>envío</b> no tenga un impuesto definido en el pedido que está intentando emitir.]]></target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="0b60040b717a3696401bb5aaeb4925ae">
+        <source>Measure unit</source>
+        <target>Unidad de medida</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="0b8e9eb6aff8ddf864a344fe49fe79db">
+        <source><![CDATA[Choose which measurement unit should be used by default on your Products.<br><br>
+                               You can manage your measurement units in your Moloni account.]]></source>
+        <target><![CDATA[Elige qué unidad de medida debería usarse por defecto en tus Productos.<br><br> Puede gestionar tus unidades de medida en tu cuenta Moloni.]]></target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="3a1ae6a6772712b959d8811b849e89d5">
+        <source>Document warehouse</source>
+        <target>Almacén utilizado en los documentos</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="182de22798396a20f49de2172f3d1c1a">
+        <source>Choose which warehouse should be used when issuing documents.</source>
+        <target>Elige qué almacén debe utilizarse al emitir los documentos.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="5a0c714514bf5b3d308285e907ffbba8">
+        <source>Alert e-mail</source>
+        <target>Alerta de e-mail</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="4e04b53d02944b61e5e948c96762fe62">
+        <source>Receive alerts for when an error occurs during a document creation process.</source>
+        <target>Recibir alertas cuando se produce un error durante el proceso de creación de un documento.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="8455938a1db5c475a87d76edacb6284e">
+        <source>example@email.com</source>
+        <target>example@email.com</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="c9cc8cce247e49bae79f15173ce97354">
+        <source>Save</source>
+        <target>Guardar</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="791f323b4d14b78da4e6388fd745ca37">
+        <source>Your module settings were successfuly updated.</source>
+        <target>La configuración de tu módulo se ha actualizado correctamente.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="f4f70727dc34561dfde1a3c529b6205c">
+        <source>Settings</source>
+        <target>Configuraciones</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="f28128b38efbc6134dc40751ee21fd29">
+        <source>Documents</source>
+        <target>Documentos</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="7442e29d7d53e549b78d93c46b8cdcfc">
+        <source>Orders</source>
+        <target>Pedidos</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="caea8340e2d186a540518d08602aa065">
+        <source>Automation</source>
+        <target>Automatización</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="9b6545e4cea9b4ad4979d41bb9170e2b">
+        <source>Advanced</source>
+        <target>Herramientas avanzadas</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="75ab0072ab96108e88a135f4bf6dbbfd">
+        <source>Automatic actions from Prestashop</source>
+        <target>Acciones automáticas desde Prestashop</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="39fef457dec2ceab3fa2e1dd13379b45">
+        <source>This actions happen when an action occours in your Prestashop Store.</source>
+        <target>Estas acciones ocurren cuando una acción ocurre en tu tienda Prestashop.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="58a4dd5dc5a38f53f19100d3596950fc">
+        <source>Automatic actions from Moloni</source>
+        <target> Acciones automáticas de Moloni</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="f4d61d9bc8d415d59151f9dd6f9f9296">
+        <source>This actions happen when an action occours in your Moloni account.</source>
+        <target>Estas acciones ocurren cuando se produce una acción en tu cuenta Moloni.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="66591f622dc9b52760904edc862dabda">
+        <source>Synchronization extras</source>
+        <target> Configuraciones adicionales </target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="34fd9411e176ec8b01db3910a962bf1a">
+        <source>This settings will be applied to all automatic actions.</source>
+        <target>Esta configuración se aplicará a todas las acciones automáticas.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="d31a032c8184903027dbe80e9b0e7410">
+        <source>Common settings</source>
+        <target>Ajustes habituales</target>
+        <note>Line: </note>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
