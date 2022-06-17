@@ -57,6 +57,8 @@ class ExportStocksToMoloni extends ExportProducts
                 }
 
                 if ($productBuilder->getMoloniProductId() > 0) {
+                    SyncLogs::moloniProductAddTimeout($productBuilder->getMoloniProductId());
+
                     $productBuilder->disableLogs();
                     $productBuilder->updateStock();
 
