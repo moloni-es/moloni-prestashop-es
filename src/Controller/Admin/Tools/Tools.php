@@ -25,6 +25,8 @@
 namespace Moloni\Controller\Admin\Tools;
 
 use Exception;
+use Moloni\Actions\Exports\ExportProductsToMoloni;
+use Moloni\Actions\Exports\ExportStocksToMoloni;
 use Moloni\Actions\Imports\ImportProductsFromMoloni;
 use Moloni\Actions\Imports\ImportStockChangesFromMoloni;
 use Moloni\Actions\Tools\LogsListDetails;
@@ -49,7 +51,9 @@ class Tools extends MoloniController
             '@Modules/molonies/views/templates/admin/tools/Tools.twig',
             [
                 'importProductsRoute' => MoloniRoutes::TOOLS_IMPORT_PRODUCTS,
-                'syncStockRoute' => MoloniRoutes::TOOLS_SYNC_STOCK,
+                'importStocksRoute' => MoloniRoutes::TOOLS_IMPORT_STOCKS,
+                'exportProductsRoute' => MoloniRoutes::TOOLS_EXPORT_PRODUCTS,
+                'exportStocksRoute' => MoloniRoutes::TOOLS_EXPORT_STOCKS,
                 'reinstallHooksRoute' => MoloniRoutes::TOOLS_REINSTALL_HOOKS,
                 'openLogsRoute' => MoloniRoutes::TOOLS_OPEN_LOGS,
                 'logoutRoute' => MoloniRoutes::TOOLS_LOGOUT,
@@ -85,7 +89,7 @@ class Tools extends MoloniController
         return new Response(json_encode($response));
     }
 
-    public function syncStocks(Request $request): Response
+    public function importStocks(Request $request): Response
     {
         $page = (int)$request->get('page', 1);
 
@@ -97,6 +101,62 @@ class Tools extends MoloniController
         ];
 
         $tool = new ImportStockChangesFromMoloni($page);
+        $tool->handle();
+
+        $response['hasMore'] = $tool->getHasMore();
+
+        $response['overlayContent'] = $this->renderView(
+            '@Modules/molonies/views/templates/admin/tools/overlays/segments/ProductSyncContent.twig',
+            [
+                'hasMore' => $tool->getHasMore(),
+                'totalResults' => $tool->getTotalResults(),
+                'currentPercentage' => $tool->getCurrentPercentage(),
+            ]
+        );
+
+        return new Response(json_encode($response));
+    }
+
+    public function exportProducts(Request $request): Response
+    {
+        $page = (int)$request->get('page', 1);
+
+        $response = [
+            'valid' => true,
+            'post' => [
+                'page' => $page
+            ]
+        ];
+
+        $tool = new ExportProductsToMoloni($page);
+        $tool->handle();
+
+        $response['hasMore'] = $tool->getHasMore();
+
+        $response['overlayContent'] = $this->renderView(
+            '@Modules/molonies/views/templates/admin/tools/overlays/segments/ProductSyncContent.twig',
+            [
+                'hasMore' => $tool->getHasMore(),
+                'totalResults' => $tool->getTotalResults(),
+                'currentPercentage' => $tool->getCurrentPercentage(),
+            ]
+        );
+
+        return new Response(json_encode($response));
+    }
+
+    public function exportStocks(Request $request): Response
+    {
+        $page = (int)$request->get('page', 1);
+
+        $response = [
+            'valid' => true,
+            'post' => [
+                'page' => $page
+            ]
+        ];
+
+        $tool = new ExportStocksToMoloni($page);
         $tool->handle();
 
         $response['hasMore'] = $tool->getHasMore();
