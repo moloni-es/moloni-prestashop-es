@@ -48,6 +48,6 @@ class IsVatValid
             $query = false;
         }
 
-        return $query;
+        return $query['data']['getFreeVAT'] ?? false;
     }
 }

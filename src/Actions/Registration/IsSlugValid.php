@@ -48,6 +48,6 @@ class IsSlugValid
             $query = false;
         }
 
-        return $query;
+        return $query['data']['getFreeSlug'] ?? false;
     }
 }
