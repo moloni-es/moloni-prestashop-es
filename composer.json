@@ -15,7 +15,7 @@
       "php -r \"copy('index.php', 'vendor/prestashop/autoindex/assets/index.php');\"",
       "php vendor/bin/autoindex prestashop:add:index --exclude=vendor/php-cs-fixer,vendor/friendsofphp"
     ],
-    "auto-header": "php vendor/bin/header-stamp --license=.dev/assets/license.txt --exclude=vendor,node_modules",
+    "auto-header": "php vendor/bin/header-stamp --license=.dev/assets/license.txt --exclude=composer.json,vendor,node_modules",
     "auto-phpcs": "vendor/bin/php-cs-fixer fix",
     "build": [
       "@auto-index",
