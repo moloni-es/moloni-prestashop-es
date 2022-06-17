@@ -84,7 +84,7 @@ class PropertyGroups extends Endpoint
      *
      * @throws MoloniApiException
      */
-    public function mutationPropertyGroupUpdate(array $variables = []): array
+    public function mutationPropertyGroupUpdate(?array $variables = []): array
     {
         $query = 'mutation propertyGroupUpdate($companyId: Int!,$data: PropertyGroupUpdate!)
         {

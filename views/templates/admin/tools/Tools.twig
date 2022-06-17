@@ -25,7 +25,7 @@
             </div>
             <div class="d-flex border-top">
                 <div class="ml-py-2">
-                    <b>{{ 'Run stock synchronization'|trans({}, 'Modules.Molonies.Common') }}</b>
+                    <b>{{ 'Import stocks from Moloni'|trans({}, 'Modules.Molonies.Common') }}</b>
                     <p class="small-text text-muted">
                         {{ "This tool will search for all the products that were updated in your Moloni account in the last seven days, and will update the stock of the matching Prestashop products."|trans({}, 'Modules.Molonies.Common') }}
                     </p>
@@ -34,11 +34,45 @@
                     <button type="button"
                             class="btn btn-primary"
                             data-toggle="modal"
-                            data-target="#sync_stocks_modal">
-                        {{ 'Synchronize stocks'|trans({}, 'Modules.Molonies.Common') }}
+                            data-target="#import_stocks_modal">
+                        {{ 'Import stocks'|trans({}, 'Modules.Molonies.Common') }}
                     </button>
                 </div>
             </div>
+
+            <div class="d-flex border-top">
+                <div class="ml-py-2">
+                    <b>{{ 'Export products to Moloni'|trans({}, 'Modules.Molonies.Common') }}</b>
+                    <p class="small-text text-muted">
+                        {{ "Use this tool to create all products from your Moloni account in your Prestashop store."|trans({}, 'Modules.Molonies.Common') }}
+                    </p>
+                </div>
+                <div class="d-flex justify-content-center align-items-center ml-auto">
+                    <button type="button"
+                            class="btn btn-primary"
+                            data-toggle="modal"
+                            data-target="#export_products_modal">
+                        {{ 'Export products'|trans({}, 'Modules.Molonies.Common') }}
+                    </button>
+                </div>
+            </div>
+            <div class="d-flex border-top">
+                <div class="ml-py-2">
+                    <b>{{ 'Export stocks to Moloni'|trans({}, 'Modules.Molonies.Common') }}</b>
+                    <p class="small-text text-muted">
+                        {{ "This tool will search for all the products that were updated in your Moloni account in the last seven days, and will update the stock of the matching Prestashop products."|trans({}, 'Modules.Molonies.Common') }}
+                    </p>
+                </div>
+                <div class="d-flex justify-content-center align-items-center ml-auto">
+                    <button type="button"
+                            class="btn btn-primary"
+                            data-toggle="modal"
+                            data-target="#export_stocks_modal">
+                        {{ 'Export stocks'|trans({}, 'Modules.Molonies.Common') }}
+                    </button>
+                </div>
+            </div>
+
             <div class="d-flex border-top">
                 <div class="ml-py-2">
                     <b>{{ 'Reinstall webhooks'|trans({}, 'Modules.Molonies.Common') }}</b>
@@ -89,8 +123,14 @@
     {# Import products Overlay #}
     {% include '@Modules/molonies/views/templates/admin/tools/overlays/ProductImport.twig' %}
 
-    {# Synchronize stocks Overlay #}
-    {% include '@Modules/molonies/views/templates/admin/tools/overlays/SyncStocks.twig' %}
+    {# Import stocks Overlay #}
+    {% include '@Modules/molonies/views/templates/admin/tools/overlays/StocksImport.twig' %}
+
+    {# Export products Overlay #}
+    {% include '@Modules/molonies/views/templates/admin/tools/overlays/ProductExport.twig' %}
+
+    {# Export stocks Overlay #}
+    {% include '@Modules/molonies/views/templates/admin/tools/overlays/StocksExport.twig' %}
 
     {# Logout Overlay #}
     {% include '@Modules/molonies/views/templates/admin/tools/overlays/Logout.twig' %}

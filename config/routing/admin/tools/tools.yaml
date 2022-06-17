@@ -6,23 +6,35 @@ moloni_es_tools_home:
     _legacy_controller: 'MoloniTools'
     _legacy_link: 'MoloniTools'
 
-moloni_es_tools_import_products:
-  path: /importProducts
-  methods: [POST]
-  defaults:
-    _controller: 'Moloni\Controller\Admin\Tools\Tools::importProducts'
-
 moloni_es_tools_reinstall_hooks:
   path: /reinstallHooks
   methods: [GET]
   defaults:
     _controller: 'Moloni\Controller\Admin\Tools\Tools::reinstallHooks'
 
-moloni_es_tools_sync_stock:
-  path: /syncStocks
+moloni_es_tools_import_products:
+  path: /importProducts
   methods: [POST]
   defaults:
-    _controller: 'Moloni\Controller\Admin\Tools\Tools::syncStocks'
+    _controller: 'Moloni\Controller\Admin\Tools\Tools::importProducts'
+
+moloni_es_tools_import_stocks:
+  path: /importStocks
+  methods: [POST]
+  defaults:
+    _controller: 'Moloni\Controller\Admin\Tools\Tools::importStocks'
+
+moloni_es_tools_export_products:
+  path: /exportProducts
+  methods: [POST]
+  defaults:
+    _controller: 'Moloni\Controller\Admin\Tools\Tools::exportProducts'
+
+moloni_es_tools_export_stocks:
+  path: /exportStocks
+  methods: [POST]
+  defaults:
+    _controller: 'Moloni\Controller\Admin\Tools\Tools::exportStocks'
 
 moloni_es_tools_open_logs:
   path: /openLogs

@@ -1,5 +1,5 @@
 <div class="modal fade"
-     id="sync_stocks_modal"
+     id="export_products_modal"
      tabindex="-1"
      role="dialog"
      aria-hidden="true">
@@ -8,7 +8,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">
-                    {{ 'Synchronize stocks'|trans({}, 'Modules.Molonies.Common') }}
+                    {{ 'Export products'|trans({}, 'Modules.Molonies.Common') }}
                 </h5>
                 <button type="button"
                         class="close"
@@ -19,12 +19,11 @@
             </div>
             <div class="modal-body">
                 <p>
-                    {{ 'This tool will fetch all your Moloni products that were updated on the last 7 days, and synchronize your Prestashop stocks with the ones on your Moloni account.'|trans({}, 'Modules.Molonies.Common') }}<br>
-                    {{ 'When the tool is finish, all your Prestashop stock will be updated to match the stock on your Moloni account.'|trans({}, 'Modules.Molonies.Common') }}<br>
-                </p>
-                <p>
+                    {{ 'All your prestashop products will be created on your Moloni account if they do not exist.'|trans({}, 'Modules.Molonies.Common') }}
+                    <br>
                     {{ 'Please keep this window open until the process finishes.'|trans({}, 'Modules.Molonies.Common') }}
                 </p>
+                <br>
                 <p>
                     {{ 'Are you sure you want to continue? '|trans({}, 'Modules.Molonies.Common') }}
                 </p>
@@ -36,10 +35,10 @@
                     {{ 'Close'|trans({}, 'Modules.Molonies.Common') }}
                 </button>
                 <button class="btn btn-primary"
-                        data-href="{{ path(syncStockRoute) }}"
                         data-dismiss="modal"
-                        id="synchronize_stocks_button">
-                    {{ 'Synchronize stocks'|trans({}, 'Modules.Molonies.Common') }}
+                        data-href="{{ path(exportProductsRoute) }}"
+                        id="import_products_button">
+                    {{ 'Export products'|trans({}, 'Modules.Molonies.Common') }}
                 </button>
             </div>
         </div>
