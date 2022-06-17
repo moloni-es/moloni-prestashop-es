@@ -146,9 +146,6 @@ class RegistrationFormType extends TranslatorAwareType
     {
         $this->builder->add('slug', TextType::class, [
             'label' => $this->trans('Slug', "Modules.Molonies.Common"),
-            'attr' => [
-                'placeholder' => 'ac.moloni.es/*slug*',
-            ],
             'constraints' => [
                 new Length(['min' => 4]),
                 new NotBlank(),
@@ -248,7 +245,6 @@ class RegistrationFormType extends TranslatorAwareType
         $this->builder->add('register', SubmitType::class, [
             'attr' => [
                 'class' => 'btn-primary',
-                'disabled' => 'true',
             ],
             'label' => $this->trans('Register', "Modules.Molonies.Common"),
         ]);

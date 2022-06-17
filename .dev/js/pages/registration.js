@@ -1,50 +1,37 @@
 import CreateSlug from "../helpers/createSlug";
-import ValidateRegistrationForm from "../helpers/validateRegistrationForm";
+import MakeRequest from "../helpers/makeRequest";
+import DrawRegistrationErrors from "../helpers/drawRegistrationErrors";
 
 export default class MoloniRegistration {
     constructor() {
         this.registrationIdPrefix = 'MoloniRegistration_';
     }
 
-    startObservers({verifySlugAction, verifyVatAction}) {
+    startObservers({verifyFormAction}) {
         // Actions
-        this.verifySlugAction = verifySlugAction;
-        this.verifyVatAction = verifyVatAction;
+        this.verifyFormAction = verifyFormAction;
 
         // Holders
         this.$businessTypeNameHolder = $('#registration_form_businessTypeName_row');
 
+        // Form
+        this.$form = $('[name=MoloniRegistration]');
+
         // Fields
-        this.$email = $('#' + this.registrationIdPrefix + 'email');
         this.$businessType = $('#' + this.registrationIdPrefix + 'businessType');
         this.$companyName = $('#' + this.registrationIdPrefix + 'companyName');
-        this.$vat = $('#' + this.registrationIdPrefix + 'vat');
-        this.$country = $('#' + this.registrationIdPrefix + 'country');
         this.$slug = $('#' + this.registrationIdPrefix + 'slug');
-        this.$password = $('#' + this.registrationIdPrefix + 'password_first');
-        this.$passwordConfirmation = $('#' + this.registrationIdPrefix + 'password_second');
-        this.$serviceTerms = $('#' + this.registrationIdPrefix + 'serviceTerms');
-        this.$registerButton = $('#' + this.registrationIdPrefix + 'register');
+
+        // Buttons
+        this.$formButton = $('#' + this.registrationIdPrefix + 'register');
+        this.$verifyButton = $('#verify_registration_form');
 
         // Actions
         this.$businessType.on('change', this.onBusinessChange.bind(this));
         this.$companyName.on('keyup', this.onCompanyNameChange.bind(this));
-
-        // Verify form
-        this.$email
-            .add(this.$businessType)
-            .add(this.$companyName)
-            .add(this.$vat)
-            .add(this.$country)
-            .add(this.$slug)
-            .add(this.$serviceTerms)
-            .on('change', this.verifyForm.bind(this));
-        this.$password
-            .add(this.$passwordConfirmation)
-            .on('keyup', this.verifyForm.bind(this));
+        this.$verifyButton.on('click', this.verifyForm.bind(this));
 
         this.onBusinessChange();
-        this.verifyForm();
     }
 
     onCompanyNameChange() {
@@ -62,25 +49,21 @@ export default class MoloniRegistration {
         }
     }
 
-    verifyForm() {
-        let valid = ValidateRegistrationForm({
-            $emailElem: this.$email,
-            $businessTypeElem: this.$businessType,
-            $companyNameElem: this.$companyName,
-            $vatElem: this.$vat,
-            $countryElem: this.$country,
-            $slugElem: this.$slug,
-            $passwordElem: this.$password,
-            $passwordConfirmationElem: this.$passwordConfirmation,
-            $serviceTermsElem: this.$serviceTerms,
-            verifySlugAction: this.verifyVatAction,
-            verifyVatAction: this.verifyVatAction,
-        });
+    async verifyForm() {
+        $('.invalid-feedback').hide().html('');
+        $('.is-invalid').removeClass('is-invalid');
 
-        if (valid) {
-            this.$registerButton.removeAttr('disabled');
+        this.$verifyButton.attr('disabled', true);
+
+        let response = await MakeRequest(this.verifyFormAction, this.$form.serialize());
+        response = JSON.parse(response);
+
+        if (response.valid) {
+            this.$formButton.trigger('click');
         } else {
-            this.$registerButton.attr('disabled', true);
+            DrawRegistrationErrors(response.errors, this.registrationIdPrefix);
+
+            this.$verifyButton.removeAttr('disabled');
         }
     }
 }

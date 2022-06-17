@@ -16,12 +16,16 @@
                     {{ form_label(form.email) }}
                     {{ form_errors(form.email) }}
                     {{ form_widget(form.email) }}
+
+                    <div class="invalid-feedback"></div>
                 </div>
                 <div class="moloni-registration--row row">
                     <div class="moloni-registration--col">
                         {{ form_label(form.businessType) }}
                         {{ form_errors(form.businessType) }}
                         {{ form_widget(form.businessType) }}
+
+                        <div class="invalid-feedback"></div>
                     </div>
 
                     <div class="moloni-registration--col"
@@ -37,11 +41,15 @@
                         {{ form_label(form.companyName) }}
                         {{ form_errors(form.companyName) }}
                         {{ form_widget(form.companyName) }}
+
+                        <div class="invalid-feedback"></div>
                     </div>
                     <div class="moloni-registration--col">
                         {{ form_label(form.vat) }}
                         {{ form_errors(form.vat) }}
                         {{ form_widget(form.vat) }}
+
+                        <div class="invalid-feedback"></div>
                     </div>
                 </div>
                 <div class="moloni-registration--row row">
@@ -49,11 +57,23 @@
                         {{ form_label(form.country) }}
                         {{ form_errors(form.country) }}
                         {{ form_widget(form.country) }}
+
+                        <div class="invalid-feedback"></div>
                     </div>
                     <div class="moloni-registration--col">
                         {{ form_label(form.slug) }}
                         {{ form_errors(form.slug) }}
-                        {{ form_widget(form.slug) }}
+
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon3">
+                                    ac.moloni.es/
+                                </span>
+                            </div>
+                            {{ form_widget(form.slug) }}
+                        </div>
+
+                        <div class="invalid-feedback"></div>
                     </div>
                 </div>
                 <div class="moloni-registration--row row">
@@ -77,17 +97,23 @@
                         <small class="form-text">
                             {{ 'Between 6 and 16 characters, at least one uppercase letter, one symbol and one number'|trans({}, 'Modules.Molonies.Common') }}
                         </small>
+
+                        <div class="invalid-feedback"></div>
                     </div>
                     <div class="moloni-registration--col">
                         {{ form_label(form.password.second) }}
                         {{ form_errors(form.password.second) }}
                         {{ form_widget(form.password.second) }}
+
+                        <div class="invalid-feedback"></div>
                     </div>
                 </div>
                 <div class="moloni-registration--row">
                     {{ form_label(form.serviceTerms) }}
                     {{ form_errors(form.serviceTerms) }}
                     {{ form_widget(form.serviceTerms) }}
+
+                    <div class="invalid-feedback"></div>
                 </div>
                 <div class="moloni-registration--row">
                     {{ form_label(form.newsletter) }}
@@ -100,6 +126,11 @@
                     {{ 'Cancel'|trans({}, 'Modules.Molonies.Common') }}
                 </a>
 
+                <button type="button" class="btn btn-primary" id="verify_registration_form">
+                    {{ 'Register'|trans({}, 'Modules.Molonies.Common') }}
+                </button>
+            </div>
+            <div style="display: none;">
                 {{ form_widget(form.register) }}
             </div>
         </div>
@@ -111,8 +142,7 @@
     <script>
         $(document).ready(function () {
             let props = {
-                verifySlugAction: "{{ path(verifySlugAction) }}",
-                verifyVatAction: "{{ path(verifyVatAction) }}"
+                verifyFormAction: "{{ path(verifyFormAction) }}",
             };
 
             window.moloniRegistration.startObservers(props);
