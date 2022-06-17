@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="admin745p3ar3j" source-language="es-ES" target-language="es-ES" datatype="plaintext">
+    <body>
+      <trans-unit id="67509542f3351ede1bd24dcdb31fb1df">
+        <source>Error fetching logs list</source>
+        <target> Error al obtener la lista de registros</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="cb1b164d9438d999056c79658de0d71c">
+        <source>Form is not valid!!</source>
+        <target>¡El formulario no es válido!</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="3c3d541c3569616652fc8b09aaa2502a">
+        <source>Click for more information</source>
+        <target> Haz clic para obtener más información</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="a61cb43682f5cca5e88ac9a0a0c4d8b9">
+        <source>ID is invalid</source>
+        <target>El ID no es válido</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="62b5d95d6f1eb04022fe3c269b6bb15d">
+        <source>Error fetching Prestashop order</source>
+        <target>Error al recuperar un pedido en Prestashop</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="24909e87dc242b9dd539e10609b8b050">
+        <source>Order not found</source>
+        <target>Pedido no encontrado</target>
+        <note>Line: </note>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

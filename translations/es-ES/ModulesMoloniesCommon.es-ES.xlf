@@ -1,0 +1,492 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="admin745p3ar3j" source-language="es-ES" target-language="es-ES" datatype="plaintext">
+    <body>
+      <trans-unit id="1e884e3078d9978e216a027ecd57fb34">
+        <source>E-mail</source>
+        <target>E-mail</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="56396cec5c858be914156d159a387592">
+        <source>Business type</source>
+        <target>Tipo de negocio </target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="b7a9c90c16059f36a2a19d09b6050013">
+        <source>Business type name</source>
+        <target>Business type name</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="c281f92b77ba329f692077d23636f5c9">
+        <source>Company name</source>
+        <target>Nombre de la empresa </target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="bfc1c6031e1fbadc9f486c6b93c34c01">
+        <source>Vat</source>
+        <target>NIF/DNI</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="59716c97497eb9694541f7c3d37b1a4d">
+        <source>Country</source>
+        <target>País</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="0c908588520b3ef787bce443fc2b507c">
+        <source>Slug</source>
+        <target>Slug</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="bde9be40e3b2f44a4d98f7874de8351e">
+        <source>Name of person responsible for the account</source>
+        <target>Nombre del responsable de la cuenta</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="bcc254b55c4a1babdf1dcb82c207506b">
+        <source>Phone</source>
+        <target>Teléfono</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="f2ed863122d937c1865d14a2ea5c075d">
+        <source>Do I have to fill in this field? We use your mobile number to validate your identity and if one day we need to get in touch quickly, the mobile is the most efficient way. We recommend filling in this field.</source>
+        <target>¿Tengo que rellenar este campo? Utilizamos tu número de móvil para validar tu identidad y si un día necesitamos ponernos  rápidamente en contacto, el móvil es la forma más eficaz. Te recomendamos que rellenes este campo.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="dc647eb65e6711e155375218212b3964">
+        <source>Password</source>
+        <target>Contraseña</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="1a08c8ca9af355a37e4b5d4595434211">
+        <source>Password confirmation</source>
+        <target>Confirmación de contraseña </target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="1fb0baab19cd612e0246d9bb20146e6b">
+        <source>I have read and accept the Moloni Terms of Service with the inclusion of the regulation act of the subcontractor according to article 28 of the Regulation.</source>
+        <target>He leído y acepto las Condiciones de Servicio de Moloni con la inclusión del acta de regulación del subcontratista según el artículo 28 del Reglamento.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="7f6acb1c80cdad5bd80b36ee5fba7674">
+        <source>I want to receive email updates about Moloni</source>
+        <target>Quiero recibir actualizaciones por correo electrónico sobre Moloni</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="0ba7583639a274c434bbe6ef797115a4">
+        <source>Register</source>
+        <target>Registro</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="76525f0f34b48475e5ca33f71d296f3b">
+        <source>Client ID</source>
+        <target>Client ID</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="734082edf44417dd19cc65943aa65c36">
+        <source>Client Secret</source>
+        <target>Client Secret</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="49ab28040dfa07f53544970c6d147e1e">
+        <source>Connect</source>
+        <target>Conectar</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="2cd5f4dedebdbb0dd22c07d403b150fd">
+        <source>Webhooks reinstall was successful</source>
+        <target>La reinstalación de Webhooks se ha realizado con éxito</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="49d8305929013b44243a63f064091e6e">
+        <source>Older logs deleted</source>
+        <target>Logs antiguos eliminados</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="3ad4e878c2e8d330d1369eba18ad30dd">
+        <source>A confirmation email has been sent to your email address.</source>
+        <target>Se ha enviado un correo electrónico de confirmación a tu dirección de correo electrónico.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="0e3ddcff7b4b131d6748fdd816e6cce9">
+        <source>Company selected successfully</source>
+        <target>Empresa seleccionada con éxito</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="43412e5b88dc9c0e67396e8ecc56475c">
+        <source>Error fetching documents list</source>
+        <target>Error al obtener la lista de documentos</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="3cdde9f08aa2ed20b962b648d5d1934d">
+        <source>Order restored with success.</source>
+        <target>Pedido recreado con éxito.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="7a302c2b42853461b706984a2e9c3d12">
+        <source>Document created successfully.</source>
+        <target>Documento creado con éxito.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="b341ab21c44305cdbc7ad20a96ee2b38">
+        <source>Order discarded with success.</source>
+        <target>Pedido descartado con éxito.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="df27933c064013f2abe6ebebf0e98635">
+        <source>Created documents</source>
+        <target>Documentos creados</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="44749712dbec183e983dcd78a7736c41">
+        <source>Date</source>
+        <target>Fecha</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="208a23b4a66a2500d7f1e5868af58e3b">
+        <source>Document type</source>
+        <target>Tipo de documento </target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="63d5049791d9d79d86e9a108b0a999ca">
+        <source>Reference</source>
+        <target>Referencia</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="ce26601dac0dea138b7295f02b7620a7">
+        <source>Customer</source>
+        <target>Cliente</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="b2f40690858b404ed10e62bdf422c704">
+        <source>Amount</source>
+        <target>Cantidad</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="ec53a8c4f07baed5d8825072c89799be">
+        <source>Status</source>
+        <target>Estado</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="06df33001c1d7187fdd81ea1f5b277aa">
+        <source>Actions</source>
+        <target>Acciones</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="9d4ed2062ba34a07f92b48d2a2dff92d">
+        <source>Document not found</source>
+        <target>Documento no encontrado</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="1477772fd3936b7943bd02dade7915f3">
+        <source>Discarted</source>
+        <target>Descartar</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="0eceeb45861f9585dd7a97a3e36f85c6">
+        <source>Created</source>
+        <target>Creado</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="f6858ff3741dc1c7ad8a2cd0fcea8b6d">
+        <source>View document</source>
+        <target>Ver documento</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="f1a5f71a34119fe63d7e8ac495e821e6">
+        <source>Revert discard</source>
+        <target>Revertir descarte</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="cb8fe83175bea4ba19d633b1dc6ea656">
+        <source>View order</source>
+        <target>Ver pedido</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="8098187879fc75422fe2d1f351f22003">
+        <source>Download pdf</source>
+        <target>Descargar pdf</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="edb839a8aee1d27847a44f758fb4a9e5">
+        <source>No information to show!</source>
+        <target>No hay información que mostrar</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="e129ae480280e47ef82fc7702f8321ba">
+        <source>Refresh list</source>
+        <target>Actualizar lista</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="b429b01543ebc27e45fb0447c8828be2">
+        <source>Pending orders</source>
+        <target>Pedidos pendientes</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="4f67fe16b274bf31a67539fbedb8f8d3">
+        <source>Document Type</source>
+        <target>Tipo de documento</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="0c8ae58cc7e14e01f92e34ccfbd45f2e">
+        <source>Create document</source>
+        <target>Crear documento</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="9dd4d069db3578f505d7516d90541420">
+        <source>Discard order</source>
+        <target>Descartar pedido</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="c4d0532a2ff3843d9523ab5a5d58f12b">
+        <source>All your documents are already converted into documents!</source>
+        <target>¡Todos tus pedidos ya están convertidos en documentos!</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="4c89a4828cdeb4b0e246d7a5f6057d11">
+        <source>I don't have an account yet.</source>
+        <target>Todavía no tengo una cuenta.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="42369faa6a6b243aac58683f3874bf99">
+        <source>Create account</source>
+        <target>Crear una cuenta</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="dd7bf230fde8d4836917806aff6a6b27">
+        <source>Address</source>
+        <target>Dirección</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="a9b7a641560149f47f445b699a8c190c">
+        <source>Zip-Code</source>
+        <target>Código postal </target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="f92a5a7c1a5f017b5056a5568e53812b">
+        <source>Select this company</source>
+        <target>Selecciona esta empresa</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="0b61d890295cd01b669ad9d9269fa286">
+        <source>Your account does not have access to any eligible company.</source>
+        <target>Tu cuenta no tiene acceso a ninguna empresa.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="b2d37ae1cedf42ff874289b721860af2">
+        <source>Logs</source>
+        <target>Logs</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="a1fa27779242b4902f7ae3bdd5c6d508">
+        <source>Type</source>
+        <target>Tipo</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="4c2a8fe7eaf24721cc7a9f0175115bd4">
+        <source>Message</source>
+        <target>Mensaje</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="00f4e5788aab6d3546bb433842dbbefc">
+        <source>Payload</source>
+        <target>Datos de la operación</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="a82be0f551b8708bc08eb33cd9ded0cf">
+        <source>Information</source>
+        <target>Información</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="0eaadb4fcb48a0a0ed7bc9868be9fbaa">
+        <source>Warning</source>
+        <target>Aviso</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="902b0d55fddef6f8d651fe1035b7d4bd">
+        <source>Error</source>
+        <target>Error</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="54d7076cace9b517b32961b35e2efadd">
+        <source>Delete older logs</source>
+        <target>Borrar los logs más antiguos</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="22b653bd8d2edcebb9e0036b4ac79262">
+        <source>Go back</source>
+        <target>Volver</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="fb47fb1676de5b5b9c19acccf5b9e63b">
+        <source>This action will delete all logs with more than one week.</source>
+        <target>Esta acción borrará todos los logs con más de una semana.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="50b0c23ed36ab3724d19072fa3538c97">
+        <source>Do you wish to continue?</source>
+        <target> ¿Deseas continuar?</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="ea4788705e6873b424c65e91c2846b19">
+        <source>Cancel</source>
+        <target>Cancelar</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="f2a6c498fb90ee345d997f888fce3b18">
+        <source>Delete</source>
+        <target>Eliminar</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="b5b43fbb08ca83a35afc2d3aafe25cfa">
+        <source>Log payload</source>
+        <target>Registro de los datos de la operación</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="d3d2e617335f08df83599665eef8a418">
+        <source>Close</source>
+        <target>Cerrar</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="8625e1de7be14c39b1d14dc03d822497">
+        <source>Tools</source>
+        <target>Herramientas </target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="0d5a8024cd5ac3ea58c88f2c44c95247">
+        <source>Import products from Moloni</source>
+        <target>Importar productos de Moloni</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="e25f084df9bdfcd6ae7abe7ec3dc703b">
+        <source>Use this tool to create all products from your Moloni account in your Prestashop store.</source>
+        <target>Utiliza esta herramienta para crear todos los productos de tu cuenta Moloni en tu tienda Prestashop</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="6cada368407ea1c3a5e352895ef4c5ae">
+        <source>Import products</source>
+        <target>Importar productos</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="c1621712c02269c50f5e2686d5c6337b">
+        <source>Run stock synchronization</source>
+        <target>Ejecutando la sincronización de stocks</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="eae4100c497cdea51d9090aef40c7b3a">
+        <source>This tool will search for all the products that were updated in your Moloni account in the last seven days, and will update the stock of the matching Prestashop products.</source>
+        <target>Esta herramienta buscará todos los productos que fueron actualizados en tu cuenta Moloni en los últimos siete días, y actualizará el stock de los productos correspondientes en Prestashop.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="4a2728d1b582d99a3b928afd3ea9992c">
+        <source>Synchronize stocks</source>
+        <target>Sincronizar stocks </target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="f1c95a82738b4469449377e91b61f4df">
+        <source>Reinstall webhooks</source>
+        <target>Reinstalar webhooks</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="66fbbde59049118b3acb690a1812db1f">
+        <source>This tool is used to recreate the synchronization webhooks that run in Moloni.</source>
+        <target>Esta herramienta se utiliza para recrear los webhooks de sincronización que se ejecutan en Moloni.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="0b855b89c37708d51b36bb2eb6263af4">
+        <source>You should run this if for example your store URL changes or if the Prestashop access tokens for this module change.</source>
+        <target>Debes ejecutar esto si, por ejemplo, la URL de tu tienda cambia o si los tokens de acceso a Prestashop para este módulo cambian.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="ef9bd66e2148c02b9a2aa4b928d59f05">
+        <source>Consult logs</source>
+        <target>Consultar logs</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="ba97b9eee18d832a0123ec2c401dcd42">
+        <source>All plugin operations like document creation or stock synchronization are automatically logged.</source>
+        <target>Todas las operaciones del plugin, como la creación de documentos o la sincronización de stocks, se registran automáticamente.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="3b33cad1a0e5717629298b821c5cbe07">
+        <source>You can access all the logs using this tool to keep track on everything that happens.</source>
+        <target>Puedes acceder a todos los registros utilizando esta herramienta para hacer un seguimiento de todo lo que ocurre.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="5850b5fc125e3eecae04a5412f2b054f">
+        <source>View logs</source>
+        <target>Ver logs</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="0323de4f66a1700e2173e9bcdce02715">
+        <source>Logout</source>
+        <target>Salir</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="af5b4f60def2e84220463bc687d72e54">
+        <source>Logout from the selected Moloni account. We will keep all the data regarding issued documents.</source>
+        <target>Cierra la sesión de la cuenta Moloni seleccionada. Conservaremos todos los datos relativos a los documentos emitidos.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="f6eba8ebe37a46bd2935035945c63c94">
+        <source>Action in progress</source>
+        <target>Acción en curso</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="c6701602de1528fd79d5eff3e8eb1edd">
+        <source>Something went wrong!</source>
+        <target>¡Algo ha salido mal!</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="b2e28ca63ef095f6224ee6e2ecb96bf1">
+        <source>Please check logs for more information.</source>
+        <target>Consulta los logs para obtener más información.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="19bc7ba72ef4e327ed6da4afb0a96b1c">
+        <source>Total results</source>
+        <target>Resultados totales </target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="5690482169be441ced17cf9967d74b80">
+        <source>Please wait, syncing in progress</source>
+        <target>Por favor, espera, sincronización en curso</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="254cec87ba5d0dac94cf0bee486d7c6f">
+        <source>Process complete</source>
+        <target>Proceso completo</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="e113c67ba07bd0d3597c70ffd2b12f14">
+        <source>Moloni authentication will be lost.</source>
+        <target>La autentificación de Moloni se perderá.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="88062af3aba20177b6aa8cab54a68753">
+        <source>Are you sure you want to continue? </source>
+        <target>¿Seguro que quieres continuar?</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="43f6558ff7d14c4a6a5db75a5db31b95">
+        <source>This tool will fetch all your Moloni products that were updated on the last 7 days, and synchronize your Prestashop stocks with the ones on your Moloni account.</source>
+        <target>Esta herramienta buscará todos tus productos de Moloni que fueron actualizados en los últimos 7 días, y sincronizará tus stocks de Prestashop con los de tu cuenta de Moloni.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="334d49f9f7576d982ff0dad8b64f3683">
+        <source>When the tool is finish, all your Prestashop stock will be updated to match the stock on your Moloni account.</source>
+        <target>Cuando la herramienta finalice, todo tu stock de Prestashop será actualizado para que coincida con el stock de tu cuenta Moloni.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="3714d8ced882d0a4372c1f32704d5b92">
+        <source>Please keep this window open until the process finishes.</source>
+        <target>Por favor, mantén esta ventana abierta hasta que termine el proceso.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="56e1390333138bd1401ede7f35ae9825">
+        <source>All your Moloni products will be created on your Prestashop store if they do not exist.</source>
+        <target>Todos tus productos Moloni serán creados en tu tienda Prestashop si no existen.</target>
+        <note>Line: </note>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
