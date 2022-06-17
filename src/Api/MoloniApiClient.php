@@ -50,6 +50,7 @@ use Moloni\Api\Endpoints\PaymentMethods;
 use Moloni\Api\Endpoints\PriceClasses;
 use Moloni\Api\Endpoints\Products;
 use Moloni\Api\Endpoints\PropertyGroups;
+use Moloni\Api\Endpoints\Registration;
 use Moloni\Api\Endpoints\Stock;
 use Moloni\Api\Endpoints\Taxes;
 use Moloni\Api\Endpoints\Timezones;
@@ -182,6 +183,10 @@ class MoloniApiClient
      * @var PropertyGroups|null
      */
     private static $propertyGroups;
+    /**
+     * @var Registration|null
+     */
+    private static $registration;
 
     //         Documents         //
 
@@ -419,6 +424,15 @@ class MoloniApiClient
         }
 
         return self::$propertyGroups;
+    }
+
+    public static function registration(): Registration
+    {
+        if (!self::$registration) {
+            self::$registration = new Registration();
+        }
+
+        return self::$registration;
     }
 
     public static function stock(): Stock

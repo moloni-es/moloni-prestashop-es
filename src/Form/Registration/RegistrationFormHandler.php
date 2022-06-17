@@ -26,6 +26,8 @@ declare(strict_types=1);
 
 namespace Moloni\Form\Registration;
 
+use Moloni\Actions\Registration\CreateNewMoloniAccount;
+use Moloni\Exceptions\MoloniException;
 use PrestaShop\PrestaShop\Core\Form\FormDataProviderInterface;
 use PrestaShop\PrestaShop\Core\Form\FormHandlerInterface;
 use PrestaShop\PrestaShop\Core\Hook\HookDispatcherInterface;
@@ -51,8 +53,8 @@ class RegistrationFormHandler implements FormHandlerInterface
 
 
     public function __construct(
-        FormFactoryInterface $formFactory,
-        HookDispatcherInterface $hookDispatcher,
+        FormFactoryInterface         $formFactory,
+        HookDispatcherInterface      $hookDispatcher,
         RegistrationFormDataProvider $formDataProvider
     ) {
         $this->formFactory = $formFactory;
@@ -76,5 +78,13 @@ class RegistrationFormHandler implements FormHandlerInterface
     {
         $this->formDataProvider->setData($data);
         return [];
+    }
+
+    /**
+     * @throws MoloniException
+     */
+    public function submit(array $data): void
+    {
+        new CreateNewMoloniAccount($data);
     }
 }
