@@ -24,14 +24,12 @@
 
 namespace Moloni\Controller\Admin\Registration;
 
-use Moloni\Actions\Registration\IsSlugValid;
-use Moloni\Actions\Registration\IsVatValid;
+use Moloni\Actions\Registration\IsFormValid;
 use Moloni\Controller\Admin\MoloniController;
 use Moloni\Enums\MoloniRoutes;
 use Moloni\Exceptions\MoloniException;
 use Moloni\Form\Registration\RegistrationFormHandler;
 use PrestaShop\PrestaShop\Core\Form\FormHandlerInterface;
-use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -47,6 +45,12 @@ class Registration extends MoloniController
 
         if ($registrationForm->isSubmitted() && $registrationForm->isValid()) {
             try {
+                $validator = new IsFormValid($registrationForm->getData(), $this->getContext()->getTranslator());
+
+                if (!$validator->isValid()) {
+                    throw new MoloniException('An unexpected error occurred', [], ['errors' => $validator->getErrors()]);
+                }
+
                 $registrationFormHandler->submit($registrationForm->getData());
 
                 $this->addSuccessMessage(
@@ -70,34 +74,22 @@ class Registration extends MoloniController
                 'form' => $registrationForm->createView(),
                 'img' => _MODULE_DIR_ . 'molonies/views/img/moloni_logo_colors.svg',
                 'loginRoute' => MoloniRoutes::LOGIN,
-                'verifySlugAction' => MoloniRoutes::REGISTRATION_VERIFY_SLUG,
-                'verifyVatAction' => MoloniRoutes::REGISTRATION_VERIFY_VAT,
+                'verifyFormAction' => MoloniRoutes::REGISTRATION_VERIFY_FORM,
             ]
         );
     }
 
-    public function verifySlug(Request $request): Response
+    public function verifyForm(Request $request): Response
     {
-        $slug = $request->get('slug', '');
+        $data = $request->get('MoloniRegistration', []);
+
+        $validator = new IsFormValid($data, $this->getContext()->getTranslator());
 
         $response = [
-            'valid' => (new IsSlugValid($slug))->handle(),
+            'valid' => $validator->isValid(),
+            'errors' => $validator->getErrors(),
             'post' => [
-                'slug' => $slug
-            ]
-        ];
-
-        return new Response(json_encode($response));
-    }
-
-    public function verifyVat(Request $request): Response
-    {
-        $vat = $request->get('vat', '');
-
-        $response = [
-            'valid' => (new IsVatValid($vat))->handle(),
-            'post' => [
-                'vat' => $vat
+                'formData' => $data
             ]
         ];
 

@@ -1,4 +1,4 @@
-import MakeRequest from '../makeRequest';
+import MakeRequest from '../../helpers/makeRequest';
 
 const ExportStocks = async (action) => {
     const actionButton = $('#action_overlay_button');
