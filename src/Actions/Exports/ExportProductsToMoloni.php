@@ -36,13 +36,16 @@ class ExportProductsToMoloni extends ExportProducts
     public function handle(): void
     {
         $start = ($this->page - 1) * $this->itemsPerPage;
-        $limit = $this->page * $this->itemsPerPage;
 
-        $products = Product::getProducts($this->languageId, $start, $limit, 'id_product', 'DESC', false, true);
+        $products = Product::getProducts($this->languageId, $start, $this->itemsPerPage, 'id_product', 'DESC', false, true);
 
         $this->totalResults = count($products);
 
         foreach ($products as $productData) {
+            if (empty($productData['reference'])) {
+                continue;
+            }
+
             SyncLogs::prestashopProductAddTimeout((int)$productData['id_product']);
 
             $product = new Product($productData['id_product'], true, $this->languageId);
@@ -54,19 +57,21 @@ class ExportProductsToMoloni extends ExportProducts
                     $productBuilder = new MoloniProductSimple($product);
                 }
 
+                $productBuilder->search();
+
                 if ($productBuilder->getMoloniProductId() === 0) {
                     $productBuilder->disableLogs();
                     $productBuilder->insert();
 
-                    $this->syncedProducts[] = $product['reference'];
+                    $this->syncedProducts[] = $product->reference;
                 } else {
                     $this->errorProducts[] = [
-                        $product['reference'] => 'Product already exists in Moloni'
+                        $product->reference => 'Product already exists in Moloni'
                     ];
                 }
             } catch (MoloniProductException $e) {
                 $this->errorProducts[] = [
-                    $product['reference'] => $e->getData()
+                    $product->reference => $e->getData()
                 ];
             }
         }

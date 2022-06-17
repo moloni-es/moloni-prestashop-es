@@ -1,10 +1,10 @@
 <div>
-    <p>
-        {{ '{0} products processed'|trans({'{0}': processedProducts}, 'Modules.Molonies.Common') }}
-    </p>
-
     {% if hasMore %}
-        <div class="spinner spinner-primary"></div>
+        <div class="d-flex align-items-center">
+            <div class="spinner spinner-primary"></div>
+            &nbsp
+            {{ '{0} products processed'|trans({'{0}': processedProducts}, 'Modules.Molonies.Common') }}
+        </div>
 
         <br>
 
@@ -14,6 +14,12 @@
             </p>
         </div>
     {% else %}
+        <p>
+            {{ '{0} products processed'|trans({'{0}': processedProducts}, 'Modules.Molonies.Common') }}
+        </p>
+
+        <br>
+
         <div class="alert alert-success" role="alert">
             <p class="alert-text">
                 {{ 'Process complete'|trans({}, 'Modules.Molonies.Common') }}
