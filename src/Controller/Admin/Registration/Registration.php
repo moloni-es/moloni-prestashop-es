@@ -24,15 +24,21 @@
 
 namespace Moloni\Controller\Admin\Registration;
 
+use Moloni\Actions\Registration\IsSlugValid;
+use Moloni\Actions\Registration\IsVatValid;
 use Moloni\Controller\Admin\MoloniController;
 use Moloni\Enums\MoloniRoutes;
+use Moloni\Exceptions\MoloniException;
+use Moloni\Form\Registration\RegistrationFormHandler;
 use PrestaShop\PrestaShop\Core\Form\FormHandlerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class Registration extends MoloniController
 {
     public function home(Request $request)
     {
+        /** @var RegistrationFormHandler $registrationFormHandler */
         $registrationFormHandler = $this->getRegistrationFormHandler();
 
         $registrationForm = $registrationFormHandler->getForm();
@@ -41,14 +47,8 @@ class Registration extends MoloniController
         if ($registrationForm->isSubmitted() && $registrationForm->isValid()) {
 
             try {
-                $errors = $registrationFormHandler->save($registrationForm->getData());
-            } catch (\Exception $e) {
+                $registrationFormHandler->submit($registrationForm->getData());
 
-                $errors = [];
-                $errors[] = $e->getMessage();
-            }
-
-            if (empty($errors)) {
                 $this->addSuccessMessage(
                     $this->trans(
                         'A confirmation email has been sent to your email address.',
@@ -57,9 +57,11 @@ class Registration extends MoloniController
                 );
 
                 return $this->redirectToLogin();
-            }
+            } catch (MoloniException $e) {
+                $msg = $this->trans($e->getMessage(), 'Modules.Molonies.Errors');
 
-            $this->flashErrors($errors);
+                $this->addErrorMessage($msg, $e->getData());
+            }
         }
 
         return $this->render(
@@ -70,6 +72,34 @@ class Registration extends MoloniController
                 'login_route' => MoloniRoutes::LOGIN,
             ]
         );
+    }
+
+    public function verifySlug(Request $request): Response
+    {
+        $slug = $request->get('slug', '');
+
+        $response = [
+            'valid' => (new IsSlugValid($slug))->handle(),
+            'post' => [
+                'slug' => $slug
+            ]
+        ];
+
+        return new Response(json_encode($response));
+    }
+
+    public function verifyVat(Request $request): Response
+    {
+        $vat = $request->get('vat', '');
+
+        $response = [
+            'valid' => (new IsVatValid($vat))->handle(),
+            'post' => [
+                'vat' => $vat
+            ]
+        ];
+
+        return new Response(json_encode($response));
     }
 
     private function getRegistrationFormHandler(): FormHandlerInterface
