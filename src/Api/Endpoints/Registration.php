@@ -28,9 +28,9 @@ class Registration extends Endpoint
      */
     public function queryGetFreeSlug(?array $variables = []): array
     {
-        $query = 'query getFreeSlug($vat: String!)
+        $query = 'query getFreeSlug($slug: String!)
         {
-            getFreeSlug(vat: $vat)
+            getFreeSlug(slug: $slug)
         }';
 
         return $this->simplePost($query, $variables);
@@ -43,9 +43,9 @@ class Registration extends Endpoint
      */
     public function queryGetFreeVAT(?array $variables = []): array
     {
-        $query = 'query getFreeVAT($data: CompanySignUp!)
+        $query = 'query getFreeVAT($vat: String!)
         {
-            getFreeVAT(data: $data)
+            getFreeVAT(vat: $vat)
         }';
 
         return $this->simplePost($query, $variables);
