@@ -211,7 +211,7 @@ class OrderProduct implements BuilderItemInterface
     public function insert(): void
     {
         try {
-            SyncLogs::productAddTimeout((int)$this->orderProduct['product_id']);
+            SyncLogs::prestashopProductAddTimeout((int)$this->orderProduct['product_id']);
 
             $product = new Product($this->orderProduct['product_id'], true, Configuration::get('PS_LANG_DEFAULT'));
 

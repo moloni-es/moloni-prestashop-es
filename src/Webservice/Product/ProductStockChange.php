@@ -48,6 +48,8 @@ class ProductStockChange extends AbstractWebserviceAction
                 return;
             }
 
+            SyncLogs::moloniProductAddTimeout($this->productId);
+
             if (empty($product['variants'])) {
                 $productBuilder = new PrestashopProductSimple($product);
             } else {
@@ -56,8 +58,8 @@ class ProductStockChange extends AbstractWebserviceAction
 
             $prestaProductId = $productBuilder->getPrestashopProductId();
 
-            if ($prestaProductId > 0 && !SyncLogs::productHasTimeout($prestaProductId)) {
-                SyncLogs::productAddTimeout($prestaProductId);
+            if ($prestaProductId > 0 && !SyncLogs::prestashopProductHasTimeout($prestaProductId)) {
+                SyncLogs::prestashopProductAddTimeout($prestaProductId);
 
                 $productBuilder->updateStock();
             }
@@ -73,6 +75,10 @@ class ProductStockChange extends AbstractWebserviceAction
         }
 
         if ((int)Settings::get('syncStockToPrestashop') === Boolean::NO) {
+            return false;
+        }
+
+        if (SyncLogs::moloniProductHasTimeout($this->productId)) {
             return false;
         }
 

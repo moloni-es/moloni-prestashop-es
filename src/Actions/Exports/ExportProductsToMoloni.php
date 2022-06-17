@@ -43,7 +43,7 @@ class ExportProductsToMoloni extends ExportProducts
         $this->totalResults = count($products);
 
         foreach ($products as $productData) {
-            SyncLogs::productAddTimeout((int)$productData['id_product']);
+            SyncLogs::prestashopProductAddTimeout((int)$productData['id_product']);
 
             $product = new Product($productData['id_product'], true, $this->languageId);
 

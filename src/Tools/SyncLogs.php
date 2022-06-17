@@ -64,39 +64,96 @@ class SyncLogs
     {
         self::$entityManager = $entityManager;
         self::$syncLogsRepository = $entityManager->getRepository(MoloniSyncLogs::class);
-    }
 
-    /**
-     * Check if a given product has timeout
-     *
-     * @param int $productId
-     *
-     * @return bool
-     */
-    public static function productHasTimeout(int $productId): bool
-    {
         try {
             self::$syncLogsRepository->removeExpiredDelays(self::$syncDelay);
         } catch (OptimisticLockException|ORMException $e) {
             // no need to catch anything
         }
+    }
 
-        return self::$syncLogsRepository->hasTimeOut($productId);
+    //          CHECKS          //
+
+    /**
+     * Check if a given Moloni product has timeout
+     *
+     * @param int $moloniId
+     *
+     * @return bool
+     */
+    public static function moloniProductHasTimeout(int $moloniId): bool
+    {
+        return self::$syncLogsRepository->moloniProductHasTimeOut($moloniId);
     }
 
     /**
-     * Adds timeout to a given product
+     * Check if a given Prestashop product has timeout
      *
-     * @param int $productId Prestashop product id
+     * @param int $prestashopId
+     *
+     * @return bool
+     */
+    public static function prestashopProductHasTimeout(int $prestashopId): bool
+    {
+        return self::$syncLogsRepository->prestashopProductHasTimeOut($prestashopId);
+    }
+
+    //          SETS          //
+
+    /**
+     * Add product timeout
+     *
+     * @param int $moloniId
+     * @param int $prestashopId
      *
      * @return void
      */
-    public static function productAddTimeout(int $productId): void
+    public static function productAddTimeout(int $moloniId, int $prestashopId): void
+    {
+        self::addTimeout($moloniId, $prestashopId);
+    }
+
+    /**
+     * Adds timeout to a given moloni product
+     *
+     * @param int $moloniId Moloni product id
+     *
+     * @return void
+     */
+    public static function moloniProductAddTimeout(int $moloniId): void
+    {
+        self::addTimeout($moloniId);
+    }
+
+    /**
+     * Adds timeout to a given prestashop product
+     *
+     * @param int $prestashopId Prestashop product id
+     *
+     * @return void
+     */
+    public static function prestashopProductAddTimeout(int $prestashopId): void
+    {
+        self::addTimeout(0, $prestashopId);
+    }
+
+    //          PRIVATES          //
+
+    /**
+     * Add product timeout
+     *
+     * @param int|null $moloniId
+     * @param int|null $prestashopId
+     *
+     * @return void
+     */
+    private static function addTimeout(?int $moloniId = 0, ?int $prestashopId = 0): void
     {
         $shopId = (int)Shop::getContextShopID();
 
         $syncLog = new MoloniSyncLogs();
-        $syncLog->setEntityId($productId);
+        $syncLog->setMoloniId($moloniId);
+        $syncLog->setPrestashopId($prestashopId);
         $syncLog->setShopId($shopId);
         $syncLog->setTypeId(SyncLogsType::PRODUCT);
         $syncLog->setSyncDate(time());

@@ -54,8 +54,13 @@ class MoloniSyncLogsRepository extends EntityRepository
         }
     }
 
-    public function hasTimeOut($productId): bool
+    public function prestashopProductHasTimeOut($productId): bool
     {
-        return $this->findOneBy(['entityId' => $productId]) !== null;
+        return $this->findOneBy(['prestashopId' => $productId]) !== null;
+    }
+
+    public function moloniProductHasTimeOut($productId): bool
+    {
+        return $this->findOneBy(['moloniId' => $productId]) !== null;
     }
 }

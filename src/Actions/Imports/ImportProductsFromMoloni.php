@@ -65,6 +65,8 @@ class ImportProductsFromMoloni extends ImportProducts
                 continue;
             }
 
+            SyncLogs::moloniProductAddTimeout((int)$product['productId']);
+
             try {
                 if (empty($product['variants'])) {
                     $builder = new PrestashopProductSimple($product);
@@ -76,7 +78,7 @@ class ImportProductsFromMoloni extends ImportProducts
                     $builder->disableLogs();
                     $builder->insert();
 
-                    SyncLogs::productAddTimeout($builder->getPrestashopProductId());
+                    SyncLogs::prestashopProductAddTimeout($builder->getPrestashopProductId());
 
                     $builder->updateStock();
 
