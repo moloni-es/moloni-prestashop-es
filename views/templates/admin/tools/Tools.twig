@@ -142,7 +142,14 @@
 {% block javascripts %}
     <script>
         $(document).ready(function () {
-            window.moloniTools.startObservers();
+            let props = {
+                importProductsAction: "{{ path(importProductsRoute) }}",
+                importStocksAction: "{{ path(importStocksRoute) }}",
+                exportProductsAction: "{{ path(exportProductsRoute) }}",
+                exportStocksAction: "{{ path(exportStocksRoute) }}"
+            };
+
+            window.moloniTools.startObservers(props);
         });
     </script>
 {% endblock %}

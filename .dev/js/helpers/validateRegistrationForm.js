@@ -1,14 +1,38 @@
+import MakeRequest from "../tools/makeRequest";
+
 const ValidateRegistrationForm = ({
-    email,
-    businessType,
-    companyName,
-    vat,
-    country,
-    slug,
-    password,
-    passwordConfirmation,
-    serviceTerms,
+    $emailElem,
+    $businessTypeElem,
+    $companyNameElem,
+    $vatElem,
+    $countryElem,
+    $slugElem,
+    $passwordElem,
+    $passwordConfirmationElem,
+    $serviceTermsElem,
+    verifySlugAction,
+    verifyVatAction,
 }) => {
+    const verifySlug = async () => {
+        let resp = await MakeRequest(action, { page });
+        return JSON.parse(resp);
+    }
+
+    const verifyVat = async () => {
+        let resp = await MakeRequest(action, { page });
+        return JSON.parse(resp);
+    }
+
+    let email = $emailElem.val();
+    let businessType = $businessTypeElem.val();
+    let companyName = $companyNameElem.val();
+    let vat = $vatElem.val();
+    let country = $countryElem.val();
+    let slug = $slugElem.val();
+    let password = $passwordElem.val();
+    let passwordConfirmation = $passwordConfirmationElem.val();
+    let serviceTerms = $serviceTermsElem.is(":checked");
+
     try {
         if (email === '') {
             throw false;
@@ -38,7 +62,7 @@ const ValidateRegistrationForm = ({
             throw false;
         }
 
-        if (passwordConfirmation === '' || passwordConfirmation.length < 6) {
+        if ($passwordConfirmationElem === '' || $passwordConfirmationElem.length < 6) {
             throw false;
         }
 

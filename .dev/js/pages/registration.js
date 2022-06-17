@@ -6,10 +6,13 @@ export default class MoloniRegistration {
         this.registrationIdPrefix = 'MoloniRegistration_';
     }
 
-    startObservers() {
+    startObservers({verifySlugAction, verifyVatAction}) {
+        // Actions
+        this.verifySlugAction = verifySlugAction;
+        this.verifyVatAction = verifyVatAction;
+
         // Holders
         this.$businessTypeNameHolder = $('#registration_form_businessTypeName_row');
-        this.$passwordError = $('#registration_form_password_error');
 
         // Fields
         this.$email = $('#' + this.registrationIdPrefix + 'email');
@@ -25,42 +28,29 @@ export default class MoloniRegistration {
 
         // Actions
         this.$businessType.on('change', this.onBusinessChange.bind(this));
-        this.$password.on('keyup', this.onPasswordChange.bind(this));
-        this.$passwordConfirmation.on('keyup', this.onPasswordChange.bind(this));
         this.$companyName.on('keyup', this.onCompanyNameChange.bind(this));
 
         // Verify form
-        this.$email.on('change', this.verifyForm.bind(this));
-        this.$businessType.on('change', this.verifyForm.bind(this));
-        this.$companyName.on('change', this.verifyForm.bind(this));
-        this.$vat.on('change', this.verifyForm.bind(this));
-        this.$country.on('change', this.verifyForm.bind(this));
-        this.$slug.on('change', this.verifyForm.bind(this));
-        this.$password.on('change', this.verifyForm.bind(this));
-        this.$passwordConfirmation.on('keyup', this.verifyForm.bind(this));
-        this.$serviceTerms.on('change', this.verifyForm.bind(this));
+        this.$email
+            .add(this.$businessType)
+            .add(this.$companyName)
+            .add(this.$vat)
+            .add(this.$country)
+            .add(this.$slug)
+            .add(this.$serviceTerms)
+            .on('change', this.verifyForm.bind(this));
+        this.$password
+            .add(this.$passwordConfirmation)
+            .on('keyup', this.verifyForm.bind(this));
 
         this.onBusinessChange();
-        this.onPasswordChange();
         this.verifyForm();
     }
 
     onCompanyNameChange() {
         if (this.$companyName.val() !== '') {
             this.$slug.val(CreateSlug(event.target.value));
-        }
-    }
-
-    onPasswordChange() {
-        let password = this.$password.val();
-        let confirmPassword = this.$passwordConfirmation.val();
-
-        if (password !== '' && confirmPassword !== '') {
-            if (password === confirmPassword) {
-                this.$passwordError.slideUp(200);
-            } else {
-                this.$passwordError.slideDown(200);
-            }
+            this.$slug.trigger('change');
         }
     }
 
@@ -74,17 +64,18 @@ export default class MoloniRegistration {
 
     verifyForm() {
         let valid = ValidateRegistrationForm({
-            email: this.$email.val(),
-            businessType: this.$businessType.val(),
-            companyName: this.$companyName.val(),
-            vat: this.$vat.val(),
-            country: this.$country.val(),
-            slug: this.$slug.val(),
-            password: this.$password.val(),
-            passwordConfirmation: this.$passwordConfirmation.val(),
-            serviceTerms: this.$serviceTerms.is(":checked"),
+            $emailElem: this.$email,
+            $businessTypeElem: this.$businessType,
+            $companyNameElem: this.$companyName,
+            $vatElem: this.$vat,
+            $countryElem: this.$country,
+            $slugElem: this.$slug,
+            $passwordElem: this.$password,
+            $passwordConfirmationElem: this.$passwordConfirmation,
+            $serviceTermsElem: this.$serviceTerms,
+            verifySlugAction: this.verifyVatAction,
+            verifyVatAction: this.verifyVatAction,
         });
-
 
         if (valid) {
             this.$registerButton.removeAttr('disabled');

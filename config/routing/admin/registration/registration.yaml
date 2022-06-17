@@ -5,3 +5,16 @@ moloni_es_registration_home:
     _controller: 'Moloni\Controller\Admin\Registration\Registration::home'
     _legacy_controller: 'Moloni'
     _legacy_link: 'Moloni'
+
+moloni_es_registration_verify_slug:
+  path: /verifySlug
+  methods: [POST]
+  defaults:
+    _controller: 'Moloni\Controller\Admin\Registration\Registration::verifySlug'
+
+
+moloni_es_registration_verify_vat:
+  path: /verifyVat
+  methods: [POST]
+  defaults:
+    _controller: 'Moloni\Controller\Admin\Registration\Registration::verifyVat'

@@ -1,6 +1,6 @@
 import MakeRequest from '../makeRequest';
 
-const ExportProducts = async ({ action }) => {
+const ExportProducts = async (action) => {
     const actionButton = $('#action_overlay_button');
     const actionModal = $('#action_overlay_modal');
     const closeButton = actionModal.find('#action_overlay_button');
