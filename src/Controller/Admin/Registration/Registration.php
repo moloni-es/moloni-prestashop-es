@@ -31,6 +31,7 @@ use Moloni\Enums\MoloniRoutes;
 use Moloni\Exceptions\MoloniException;
 use Moloni\Form\Registration\RegistrationFormHandler;
 use PrestaShop\PrestaShop\Core\Form\FormHandlerInterface;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -45,7 +46,6 @@ class Registration extends MoloniController
         $registrationForm->handleRequest($request);
 
         if ($registrationForm->isSubmitted() && $registrationForm->isValid()) {
-
             try {
                 $registrationFormHandler->submit($registrationForm->getData());
 
@@ -69,7 +69,9 @@ class Registration extends MoloniController
             [
                 'form' => $registrationForm->createView(),
                 'img' => _MODULE_DIR_ . 'molonies/views/img/moloni_logo_colors.svg',
-                'login_route' => MoloniRoutes::LOGIN,
+                'loginRoute' => MoloniRoutes::LOGIN,
+                'verifySlugAction' => MoloniRoutes::REGISTRATION_VERIFY_SLUG,
+                'verifyVatAction' => MoloniRoutes::REGISTRATION_VERIFY_VAT,
             ]
         );
     }

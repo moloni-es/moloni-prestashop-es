@@ -81,6 +81,8 @@ class RegistrationFormHandler implements FormHandlerInterface
     }
 
     /**
+     * Submit account
+     *
      * @throws MoloniException
      */
     public function submit(array $data): void

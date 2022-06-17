@@ -19,12 +19,10 @@
             </div>
             <div class="modal-body">
                 <p>
-                    {{ 'This tool will fetch all your Moloni products that were updated on the last 7 days, and synchronize your Prestashop stocks with the ones on your Moloni account.'|trans({}, 'Modules.Molonies.Common') }}<br>
-                    {{ 'When the tool is finish, all your Prestashop stock will be updated to match the stock on your Moloni account.'|trans({}, 'Modules.Molonies.Common') }}<br>
-                </p>
-                <p>
+                    TODO!!!
                     {{ 'Please keep this window open until the process finishes.'|trans({}, 'Modules.Molonies.Common') }}
                 </p>
+                <br>
                 <p>
                     {{ 'Are you sure you want to continue? '|trans({}, 'Modules.Molonies.Common') }}
                 </p>
@@ -36,7 +34,6 @@
                     {{ 'Close'|trans({}, 'Modules.Molonies.Common') }}
                 </button>
                 <button class="btn btn-primary"
-                        data-href="{{ path(exportStocksRoute) }}"
                         data-dismiss="modal"
                         id="export_stocks_button">
                     {{ 'Export stocks'|trans({}, 'Modules.Molonies.Common') }}

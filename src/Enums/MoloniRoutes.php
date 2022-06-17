@@ -11,6 +11,8 @@ class MoloniRoutes
     public const LOGIN_COMPANY_SUBMIT = 'moloni_es_login_company_submit';
 
     public const REGISTRATION = 'moloni_es_registration_home';
+    public const REGISTRATION_VERIFY_VAT = 'moloni_es_registration_verify_vat';
+    public const REGISTRATION_VERIFY_SLUG = 'moloni_es_registration_verify_slug';
 
     public const ORDERS = 'moloni_es_orders_home';
     public const ORDERS_CREATE = 'moloni_es_orders_create';
@@ -63,6 +65,8 @@ class MoloniRoutes
         self::LOGIN,
         self::LOGIN_SUBMIT,
         self::REGISTRATION,
+        self::REGISTRATION_VERIFY_VAT,
+        self::REGISTRATION_VERIFY_SLUG,
     ];
 
     public static function isFullyAuthenticatedRoute(string $route): bool
