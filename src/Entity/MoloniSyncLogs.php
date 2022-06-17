@@ -49,11 +49,18 @@ class MoloniSyncLogs
     private $typeId;
 
     /**
-     * @var string
+     * @var int
      *
-     * @ORM\Column(name="entity_id", type="integer")
+     * @ORM\Column(name="prestashop_id", type="integer")
      */
-    private $entityId;
+    private $prestashopId;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="moloni_id", type="integer")
+     */
+    private $moloniId;
 
     /**
      * @var int
@@ -94,19 +101,35 @@ class MoloniSyncLogs
     }
 
     /**
-     * @return string
+     * @return int
      */
-    public function getEntityId(): string
+    public function getPrestashopId(): int
     {
-        return $this->entityId;
+        return $this->prestashopId;
     }
 
     /**
-     * @param string $entityId
+     * @param int $prestashopId
      */
-    public function setEntityId(string $entityId): void
+    public function setPrestashopId(int $prestashopId): void
     {
-        $this->entityId = $entityId;
+        $this->prestashopId = $prestashopId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMoloniId(): int
+    {
+        return $this->moloniId;
+    }
+
+    /**
+     * @param int $moloniId
+     */
+    public function setMoloniId(int $moloniId): void
+    {
+        $this->moloniId = $moloniId;
     }
 
     /**
@@ -149,7 +172,8 @@ class MoloniSyncLogs
         return [
             'id' => $this->getId(),
             'type_id' => $this->getTypeId(),
-            'entity_id' => $this->getEntityId(),
+            'prestashop_id' => $this->getPrestashopId(),
+            'moloni_id' => $this->getMoloniId(),
             'sync_date' => $this->getSyncDate(),
             'shop_id' => $this->getShopId(),
         ];

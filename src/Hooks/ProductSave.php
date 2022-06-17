@@ -52,7 +52,7 @@ class ProductSave extends AbstractHookAction
         }
 
         try {
-            SyncLogs::productAddTimeout($this->productId);
+            SyncLogs::prestashopProductAddTimeout($this->productId);
             $product = new Product($this->productId, true, Configuration::get('PS_LANG_DEFAULT'));
 
             if ($product->product_type === 'combinations') {
@@ -64,6 +64,8 @@ class ProductSave extends AbstractHookAction
             $productBuilder->search();
 
             if ($productBuilder->getMoloniProductId() !== 0) {
+                SyncLogs::moloniProductAddTimeout($productBuilder->getMoloniProductId());
+
                 if ((int)Settings::get('updateProductsToMoloni') === Boolean::YES) {
                     $productBuilder->update();
                 }
@@ -91,7 +93,7 @@ class ProductSave extends AbstractHookAction
             return false;
         }
 
-        if (SyncLogs::productHasTimeout($this->productId)) {
+        if (SyncLogs::prestashopProductHasTimeout($this->productId)) {
             return false;
         }
 

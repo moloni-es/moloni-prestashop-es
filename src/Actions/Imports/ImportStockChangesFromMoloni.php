@@ -66,6 +66,8 @@ class ImportStockChangesFromMoloni extends ImportProducts
         $data = $query['data']['products']['data'] ?? [];
 
         foreach ($data as $product) {
+            SyncLogs::moloniProductAddTimeout((int)$product['productId']);
+
             try {
                 if (empty($product['variants'])) {
                     $builder = new PrestashopProductSimple($product);
@@ -74,7 +76,7 @@ class ImportStockChangesFromMoloni extends ImportProducts
                 }
 
                 if ($builder->getPrestashopProductId() > 0) {
-                    SyncLogs::productAddTimeout($builder->getPrestashopProductId());
+                    SyncLogs::prestashopProductAddTimeout($builder->getPrestashopProductId());
 
                     $builder->disableLogs();
                     $builder->updateStock();
