@@ -13,7 +13,6 @@
     "check-phpstan": "php vendor/bin/phpstan analyse --configuration=tests/phpstan/phpstan.neon --memory-limit 10G",
     "auto-index": [
       "php -r \"copy('index.php', 'vendor/prestashop/autoindex/assets/index.php');\"",
-      "php -r \"copy('index.php', 'vendor/index.php');\"",
       "php vendor/bin/autoindex prestashop:add:index --exclude=vendor/php-cs-fixer,vendor/friendsofphp"
     ],
     "auto-header": "php vendor/bin/header-stamp --license=.dev/assets/license.txt --exclude=composer.json,vendor,node_modules",
