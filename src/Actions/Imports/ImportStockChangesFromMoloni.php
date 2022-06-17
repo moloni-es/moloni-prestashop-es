@@ -92,7 +92,7 @@ class ImportStockChangesFromMoloni extends ImportProducts
             }
         }
 
-        $logMsg = ['Products stock sync. Part {0}', ['{0}' => $this->page]];
+        $logMsg = ['Products stock import. Part {0}', ['{0}' => $this->page]];
         $logData = [
             'success' => $this->syncedProducts,
             'error' => $this->errorProducts,

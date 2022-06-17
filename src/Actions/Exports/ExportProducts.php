@@ -49,33 +49,29 @@ abstract class ExportProducts
     /**
      * @var int
      */
+    protected $languageId;
+
+    /**
+     * @var int
+     */
     protected $itemsPerPage = 50;
 
-    public function __construct(?int $page = 1)
+    public function __construct(?int $page = 1, ?int $languageId = 1)
     {
         $this->page = $page;
-    }
-
-    public function getCurrentPercentage(): int
-    {
-        if ($this->totalResults === 0) {
-            return 100;
-        }
-
-        $percentage = (($this->page * $this->itemsPerPage) / $this->totalResults) * 100;
-
-        return (int)$percentage;
+        $this->languageId = $languageId;
     }
 
     public function getHasMore(): bool
     {
-        return $this->totalResults > ($this->page * $this->itemsPerPage);
+        return $this->totalResults !== $this->itemsPerPage;
     }
 
-    public function getTotalResults(): int
+    public function getProcessedProducts()
     {
-        return $this->totalResults;
+        return (($this->page - 1) * $this->itemsPerPage) + $this->totalResults;
     }
+
 
     public function getErrorProducts(): array
     {

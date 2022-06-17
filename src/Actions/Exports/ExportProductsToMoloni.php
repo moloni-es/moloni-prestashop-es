@@ -21,12 +21,61 @@
  *
  * @noinspection PhpMultipleClassDeclarationsInspection
  */
+
 namespace Moloni\Actions\Exports;
+
+use Product;
+use Moloni\Tools\Logs;
+use Moloni\Tools\SyncLogs;
+use Moloni\Builders\MoloniProductSimple;
+use Moloni\Builders\MoloniProductWithVariants;
+use Moloni\Exceptions\Product\MoloniProductException;
 
 class ExportProductsToMoloni extends ExportProducts
 {
     public function handle(): void
     {
+        $start = ($this->page - 1) * $this->itemsPerPage;
+        $limit = $this->page * $this->itemsPerPage;
 
+        $products = Product::getProducts($this->languageId, $start, $limit, 'id_product', 'DESC', false, true);
+
+        $this->totalResults = count($products);
+
+        foreach ($products as $productData) {
+            SyncLogs::productAddTimeout((int)$productData['id_product']);
+
+            $product = new Product($productData['id_product'], true, $this->languageId);
+
+            try {
+                if ($product->product_type === 'combinations') {
+                    $productBuilder = new MoloniProductWithVariants($product);
+                } else {
+                    $productBuilder = new MoloniProductSimple($product);
+                }
+
+                if ($productBuilder->getMoloniProductId() === 0) {
+                    $productBuilder->disableLogs();
+                    $productBuilder->insert();
+
+                    $this->syncedProducts[] = $product['reference'];
+                } else {
+                    $this->errorProducts[] = [
+                        $product['reference'] => 'Product already exists in Moloni'
+                    ];
+                }
+            } catch (MoloniProductException $e) {
+                $this->errorProducts[] = [
+                    $product['reference'] => $e->getData()
+                ];
+            }
+        }
+
+        $logMsg = ['Products export. Part {0}', ['{0}' => $this->page]];
+        $logData = [
+            'success' => $this->syncedProducts,
+            'error' => $this->errorProducts,
+        ];
+        Logs::addInfoLog($logMsg, $logData);
     }
 }

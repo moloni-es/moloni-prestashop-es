@@ -78,7 +78,7 @@ class Tools extends MoloniController
         $response['hasMore'] = $tool->getHasMore();
 
         $response['overlayContent'] = $this->renderView(
-            '@Modules/molonies/views/templates/admin/tools/overlays/segments/ProductSyncContent.twig',
+            '@Modules/molonies/views/templates/admin/tools/overlays/segments/ProductImportContent.twig',
             [
                 'hasMore' => $tool->getHasMore(),
                 'totalResults' => $tool->getTotalResults(),
@@ -106,7 +106,7 @@ class Tools extends MoloniController
         $response['hasMore'] = $tool->getHasMore();
 
         $response['overlayContent'] = $this->renderView(
-            '@Modules/molonies/views/templates/admin/tools/overlays/segments/ProductSyncContent.twig',
+            '@Modules/molonies/views/templates/admin/tools/overlays/segments/ProductImportContent.twig',
             [
                 'hasMore' => $tool->getHasMore(),
                 'totalResults' => $tool->getTotalResults(),
@@ -128,17 +128,16 @@ class Tools extends MoloniController
             ]
         ];
 
-        $tool = new ExportProductsToMoloni($page);
+        $tool = new ExportProductsToMoloni($page, $this->getContextLangId());
         $tool->handle();
 
         $response['hasMore'] = $tool->getHasMore();
 
         $response['overlayContent'] = $this->renderView(
-            '@Modules/molonies/views/templates/admin/tools/overlays/segments/ProductSyncContent.twig',
+            '@Modules/molonies/views/templates/admin/tools/overlays/segments/ProductExportContent.twig',
             [
                 'hasMore' => $tool->getHasMore(),
-                'totalResults' => $tool->getTotalResults(),
-                'currentPercentage' => $tool->getCurrentPercentage(),
+                'processedProducts' => $tool->getProcessedProducts(),
             ]
         );
 
@@ -156,17 +155,16 @@ class Tools extends MoloniController
             ]
         ];
 
-        $tool = new ExportStocksToMoloni($page);
+        $tool = new ExportStocksToMoloni($page, $this->getContextLangId());
         $tool->handle();
 
         $response['hasMore'] = $tool->getHasMore();
 
         $response['overlayContent'] = $this->renderView(
-            '@Modules/molonies/views/templates/admin/tools/overlays/segments/ProductSyncContent.twig',
+            '@Modules/molonies/views/templates/admin/tools/overlays/segments/ProductExportContent.twig',
             [
                 'hasMore' => $tool->getHasMore(),
-                'totalResults' => $tool->getTotalResults(),
-                'currentPercentage' => $tool->getCurrentPercentage(),
+                'processedProducts' => $tool->getProcessedProducts(),
             ]
         );
 

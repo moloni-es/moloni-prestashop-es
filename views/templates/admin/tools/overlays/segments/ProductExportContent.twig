@@ -1,0 +1,23 @@
+<div>
+    <p>
+        {{ '{0} products processed'|trans({'{0}': processedProducts}, 'Modules.Molonies.Common') }}
+    </p>
+
+    {% if hasMore %}
+        <div class="spinner spinner-primary"></div>
+
+        <br>
+
+        <div class="alert alert-info" role="alert">
+            <p class="alert-text">
+                {{ 'Please wait, exporting in progress'|trans({}, 'Modules.Molonies.Common') }}
+            </p>
+        </div>
+    {% else %}
+        <div class="alert alert-success" role="alert">
+            <p class="alert-text">
+                {{ 'Process complete'|trans({}, 'Modules.Molonies.Common') }}
+            </p>
+        </div>
+    {% endif %}
+</div>
