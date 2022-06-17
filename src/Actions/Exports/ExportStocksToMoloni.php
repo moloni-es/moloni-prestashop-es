@@ -36,25 +36,28 @@ class ExportStocksToMoloni extends ExportProducts
     public function handle(): void
     {
         $start = ($this->page - 1) * $this->itemsPerPage;
-        $limit = $this->page * $this->itemsPerPage;
 
-        $products = Product::getProducts($this->languageId, $start, $limit, 'id_product', 'DESC', false, true);
+        $products = Product::getProducts($this->languageId, $start, $this->itemsPerPage, 'id_product', 'DESC', false, true);
 
         $this->totalResults = count($products);
 
         foreach ($products as $productData) {
+            if (empty($productData['reference'])) {
+                continue;
+            }
+
             SyncLogs::prestashopProductAddTimeout((int)$productData['id_product']);
 
             $product = new Product($productData['id_product'], true, $this->languageId);
 
             try {
                 if ($product->product_type === 'combinations') {
-
                     $productBuilder = new MoloniProductWithVariants($product);
-
                 } else {
                     $productBuilder = new MoloniProductSimple($product);
                 }
+
+                $productBuilder->search();
 
                 if ($productBuilder->getMoloniProductId() > 0) {
                     SyncLogs::moloniProductAddTimeout($productBuilder->getMoloniProductId());
@@ -62,15 +65,15 @@ class ExportStocksToMoloni extends ExportProducts
                     $productBuilder->disableLogs();
                     $productBuilder->updateStock();
 
-                    $this->syncedProducts[] = $product['reference'];
+                    $this->syncedProducts[] = $product->reference;
                 } else {
                     $this->errorProducts[] = [
-                        $product['reference'] => 'Product does not exist in Moloni'
+                        $product->reference => 'Product does not exist in Moloni'
                     ];
                 }
             } catch (MoloniProductException $e) {
                 $this->errorProducts[] = [
-                    $product['reference'] => $e->getData()
+                    $product->reference => $e->getData()
                 ];
             }
         }

@@ -54,7 +54,7 @@ abstract class ExportProducts
     /**
      * @var int
      */
-    protected $itemsPerPage = 50;
+    protected $itemsPerPage = 20;
 
     public function __construct(?int $page = 1, ?int $languageId = 1)
     {
@@ -64,7 +64,7 @@ abstract class ExportProducts
 
     public function getHasMore(): bool
     {
-        return $this->totalResults !== $this->itemsPerPage;
+        return $this->totalResults === $this->itemsPerPage;
     }
 
     public function getProcessedProducts()

@@ -1,6 +1,6 @@
-import MakeRequest from './makeRequest';
+import MakeRequest from '../makeRequest';
 
-const SyncProducts = async ({ action }) => {
+const ExportStocks = async ({ action }) => {
     const actionButton = $('#action_overlay_button');
     const actionModal = $('#action_overlay_modal');
     const closeButton = actionModal.find('#action_overlay_button');
@@ -50,4 +50,4 @@ const SyncProducts = async ({ action }) => {
     closeButton.show(200);
 }
 
-export default SyncProducts;
+export default ExportStocks;
