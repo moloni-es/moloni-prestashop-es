@@ -61,11 +61,7 @@ jobs:
         run: cd ./molonies && composer install --prefer-dist --no-progress --no-suggest --no-dev
 
       - name: Automatic fixes
-        run: | 
-          cd ./ && \
-          composer run auto-index && \
-          composer run auto-header && \
-          composer run auto-phpcs
+        run: cd ./ && composer run build
 
       - name: Zip realease folder
         run: zip -r molonies.zip ./molonies
