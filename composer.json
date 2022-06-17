@@ -1,46 +1,40 @@
 {
-  "name": "moloni/molonies",
-  "description": "Module for Prestashop integration",
-  "type": "prestashop-module",
-  "license": "OSL-3.0",
-  "authors": [
-    {
-      "name": "Moloni Espana",
-      "email": "plugins@moloni.com"
-    }
-  ],
-  "version": "v2.0",
-  "scripts": {
-    "check-phpstan": "php vendor/bin/phpstan analyse --configuration=tests/phpstan/phpstan.neon --memory-limit 10G",
-    "auto-index": "php vendor/bin/autoindex prestashop:add:index --exclude=vendor/php-cs-fixer,vendor/friendsofphp",
-    "auto-header": "php vendor/bin/header-stamp --license=.dev/assets/license.txt --exclude=vendor,node_modules",
-    "auto-phpcs": "vendor/bin/php-cs-fixer fix"
-  },
-  "minimum-stability": "stable",
-  "require-dev": {
-    "prestashop/php-dev-tools": "^4.2",
-    "phpstan/phpstan": "^1.5",
-    "phpunit/phpunit": "5.x",
-    "friendsofphp/php-cs-fixer": "^3.8"
-  },
-  "config": {
-    "preferred-install": "dist",
-    "prepend-autoloader": false,
-    "optimize-autoloader": true,
-    "platform": {
-      "php": "7.4"
-    }
-  },
-  "autoload": {
-    "psr-4": {
-      "Moloni\\": "src/"
-    }
-  },
-  "require": {
-    "php": ">=7.2",
-    "ext-curl": "*",
-    "ext-json": "*"
-  },
-  "extra": [],
-  "author": "PrestaShop"
+    "name": "moloni/molonies",
+    "description": "Module for Prestashop integration",
+    "type": "prestashop-module",
+    "license": "OSL-3.0",
+    "author": "Moloni",
+    "version": "v2.0",
+    "scripts": {
+        "check-phpstan": "php vendor/bin/phpstan analyse --configuration=tests/phpstan/phpstan.neon --memory-limit 10G",
+        "auto-index": "php vendor/bin/autoindex prestashop:add:index --exclude=vendor/php-cs-fixer,vendor/friendsofphp",
+        "auto-header": "php vendor/bin/header-stamp --license=.dev/assets/license.txt --exclude=vendor,node_modules",
+        "auto-phpcs": "vendor/bin/php-cs-fixer fix"
+    },
+    "minimum-stability": "stable",
+    "require-dev": {
+        "prestashop/php-dev-tools": "^4.2",
+        "phpstan/phpstan": "^1.5",
+        "phpunit/phpunit": "5.x",
+        "friendsofphp/php-cs-fixer": "^3.8"
+    },
+    "config": {
+        "preferred-install": "dist",
+        "prepend-autoloader": false,
+        "optimize-autoloader": true,
+        "platform": {
+            "php": "7.4"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Moloni\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=7.2",
+        "ext-curl": "*",
+        "ext-json": "*"
+    },
+    "extra": []
 }
