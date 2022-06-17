@@ -2,19 +2,19 @@
   "name": "moloni/molonies",
   "description": "Module for Prestashop integration",
   "type": "prestashop-module",
-  "license": "https://creativecommons.org/licenses/by-nd/4.0/",
+  "license": "OSL-3.0",
   "authors": [
     {
-      "name": "Moloni España",
+      "name": "Moloni Espana",
       "email": "plugins@moloni.com"
     }
   ],
   "version": "v2.0",
   "scripts": {
     "check-phpstan": "php vendor/bin/phpstan analyse --configuration=tests/phpstan/phpstan.neon --memory-limit 10G",
-    "auto-phpcs": "vendor/bin/php-cs-fixer fix",
-    "auto-index": "php vendor/bin/autoindex prestashop:add:index --exclude=vendor/php-cs-fixer",
-    "auto-header": "php vendor/bin/header-stamp --license=.dev/assets/license.txt --exclude=vendor,node_modules"
+    "auto-index": "php vendor/bin/autoindex prestashop:add:index --exclude=vendor/php-cs-fixer,vendor/friendsofphp",
+    "auto-header": "php vendor/bin/header-stamp --license=.dev/assets/license.txt --exclude=vendor,node_modules",
+    "auto-phpcs": "vendor/bin/php-cs-fixer fix"
   },
   "minimum-stability": "stable",
   "require-dev": {
@@ -41,5 +41,6 @@
     "ext-curl": "*",
     "ext-json": "*"
   },
-  "extra": {}
+  "extra": [],
+  "author": "PrestaShop"
 }
