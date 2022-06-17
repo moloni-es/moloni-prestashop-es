@@ -4,6 +4,12 @@
   "type": "prestashop-module",
   "license": "OSL-3.0",
   "author": "PrestaShop",
+  "authors": [
+    {
+      "name": "Moloni",
+      "email": "soporte@moloni.es"
+    }
+  ],
   "version": "v2.0",
   "scripts": {
     "check-phpstan": "php vendor/bin/phpstan analyse --configuration=tests/phpstan/phpstan.neon --memory-limit 10G",
