@@ -52,7 +52,7 @@ class Login extends MoloniController
         $hasOldTables = (new HasOldPluginTables())->handle();
 
         if ($hasOldTables) {
-            $msg = $this->trans('Error found in plugin tables, please contact customer support.', 'Modules.Molonies.Common');
+            $msg = $this->trans('Error found in plugin tables, please contact customer support.', 'Modules.Molonies.Errors');
 
             $this->addErrorMessage($msg);
         }
