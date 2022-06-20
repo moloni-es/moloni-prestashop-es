@@ -57,7 +57,9 @@ use Moloni\Tools\Logs;
 use Moloni\Tools\Settings;
 use Moloni\Traits\CountryTrait;
 use Order;
+use OrderCore;
 use OrderPayment as PrestashopOrderPayment;
+use PrestaShop\PrestaShop\Adapter\ContextStateManager;
 use Shop;
 
 class DocumentFromOrder implements BuilderInterface
@@ -941,13 +943,13 @@ class DocumentFromOrder implements BuilderInterface
     public function setCalculationMode(): DocumentFromOrder
     {
         switch ($this->order->round_type) {
-            case 1:
+            case OrderCore::ROUND_ITEM:
                 $calculationMode = CalculationMode::ITEM;
                 break;
-            case 2:
+            case OrderCore::ROUND_LINE:
                 $calculationMode = CalculationMode::LINE;
                 break;
-            case 3:
+            case OrderCore::ROUND_TOTAL:
                 $calculationMode = CalculationMode::DOCUMENT;
                 break;
             default:
@@ -1012,6 +1014,7 @@ class DocumentFromOrder implements BuilderInterface
             $orderProduct = new OrderProduct($product, $this->fiscalZone);
 
             $orderProduct
+                ->setDiscounts($this->discounts['product_discount'])
                 ->search();
 
             if ($orderProduct->getProductId() === 0) {
@@ -1021,23 +1024,6 @@ class DocumentFromOrder implements BuilderInterface
 
             $this->products[] = $orderProduct;
         }
-
-        return $this;
-    }
-
-    /**
-     * Defines document discounts
-     *
-     * @return DocumentFromOrder
-     */
-    public function setDiscounts(): DocumentFromOrder
-    {
-        $this->discounts = [
-            'financial_discount' => 0,
-            'special_discount' => 0,
-        ];
-
-        // todo: verificar cupões aqui
 
         return $this;
     }
@@ -1065,6 +1051,41 @@ class DocumentFromOrder implements BuilderInterface
 
             $this->shipping = $orderShipping;
         }
+
+        return $this;
+    }
+
+    /**
+     * Defines document discounts
+     *
+     * @return DocumentFromOrder
+     */
+    public function setDiscounts(): DocumentFromOrder
+    {
+        $this->discounts = [
+            'financial_discount' => 0,
+            'special_discount' => 0,
+        ];
+
+        $productDiscount = 0;
+
+        $cartRules = $this->order->getCartRules();
+
+        if (!empty($cartRules)) {
+            $productCount = count($this->order->getCartProducts());
+
+            foreach ($cartRules as $cartRule) {
+                if ((int)$cartRule['free_shipping'] === Boolean::YES) {
+                    continue;
+                }
+
+                $productDiscount += (float)$cartRule['value_tax_excl'];
+            }
+
+            $productDiscount /= $productCount;
+        }
+
+        $this->discounts['product_discount'] = $productDiscount;
 
         return $this;
     }
