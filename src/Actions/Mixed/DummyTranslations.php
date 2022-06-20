@@ -101,5 +101,6 @@ class DummyTranslations
         $this->translator->trans('An unexpected error occurred', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Could not find product in Moloni ({0})', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Error fetching product by id ({0})', [], 'Modules.Molonies.Errors');
+        $this->translator->trans('Could not close {0}, totals do not match ({1})', [], 'Modules.Molonies.Errors');
     }
 }
