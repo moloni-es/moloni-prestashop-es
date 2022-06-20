@@ -254,11 +254,11 @@ class RegistrationFormType extends TranslatorAwareType
 
     private function getMinLengthValidationMessage(): string
     {
-        return $this->trans('This field cannot be shorter than {0} characters',"Modules.Molonies.Common", ['{0}' => 6]);
+        return $this->trans('This field cannot be shorter than {0} characters', "Modules.Molonies.Common", ['{0}' => 6]);
     }
 
     private function getMaxLengthValidationMessage(): string
     {
-        return $this->trans('This field cannot be longer than {0} characters',"Modules.Molonies.Common", ['{0}' => 16]);
+        return $this->trans('This field cannot be longer than {0} characters', "Modules.Molonies.Common", ['{0}' => 16]);
     }
 }

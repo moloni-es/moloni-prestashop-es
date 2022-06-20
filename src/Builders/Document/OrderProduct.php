@@ -29,6 +29,7 @@ namespace Moloni\Builders\Document;
 use Configuration;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\Document\Helpers\CalculateDiscountPercentage;
+use Moloni\Builders\Document\Helpers\GetOrderProductTaxes;
 use Moloni\Builders\Interfaces\BuilderItemInterface;
 use Moloni\Builders\MoloniProductSimple;
 use Moloni\Builders\MoloniProductWithVariants;
@@ -42,8 +43,6 @@ use Moloni\Exceptions\Product\MoloniProductException;
 use Moloni\Tools\Settings;
 use Moloni\Tools\SyncLogs;
 use Product;
-use Tax;
-use TaxCalculator;
 
 class OrderProduct implements BuilderItemInterface
 {
@@ -287,7 +286,7 @@ class OrderProduct implements BuilderItemInterface
         $reference = $this->orderProduct['reference'];
 
         if (empty($reference)) {
-            $reference = (string)$this->orderProduct['product_id'] ;
+            $reference = (string)$this->orderProduct['product_id'];
         }
 
         $this->reference = $reference;
@@ -400,34 +399,10 @@ class OrderProduct implements BuilderItemInterface
      */
     public function setTaxes(): OrderProduct
     {
-        $taxes = [];
-
-        /** @var TaxCalculator $taxCalculator */
-        $taxCalculator = $this->orderProduct['tax_calculator'];
-
-        if (count($taxCalculator->taxes) > 0) {
-            $taxOrder = 1;
-
-            foreach ($taxCalculator->taxes as $tax) {
-                /** @var Tax $tax */
-                $taxBuilder = new OrderProductTax((float)$tax->rate, $this->fiscalZone, $taxOrder);
-
-                try {
-                    $taxBuilder
-                        ->search();
-
-                    if ($taxBuilder->getTaxId() === 0) {
-                        $taxBuilder
-                            ->insert();
-                    }
-                } catch (MoloniException $e) {
-                    throw new MoloniDocumentProductTaxException($e->getMessage(), $e->getIdentifiers(), $e->getData());
-                }
-
-                $taxes[] = $taxBuilder;
-
-                $taxOrder++;
-            }
+        try {
+            $taxes = (new GetOrderProductTaxes($this->orderProduct, $this->fiscalZone))->handle();
+        } catch (MoloniException $e) {
+            throw new MoloniDocumentProductTaxException($e->getMessage(), $e->getIdentifiers(), $e->getData());
         }
 
         if (empty($taxes)) {
