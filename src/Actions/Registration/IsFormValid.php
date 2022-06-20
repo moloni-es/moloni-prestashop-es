@@ -174,7 +174,7 @@ class IsFormValid
 
         // As an at least one lowercase letter
         if ((bool)preg_match("/[a-z]/", $this->formData['password']['first']) === false) {
-            $this->addError('password_first', $this->translator->trans('Password needs to have at least one uppercase letter', [], 'Modules.Molonies.Errors'));
+            $this->addError('password_first', $this->translator->trans('Password needs to have at least one lowercase letter', [], 'Modules.Molonies.Errors'));
         }
 
         // As at least one symbol
