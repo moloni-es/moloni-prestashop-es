@@ -210,12 +210,14 @@ class RegistrationFormType extends TranslatorAwareType
 
     private function setServiceTerms(): RegistrationFormType
     {
+        $label = $this->trans(
+            'I have read and accept the <a href="https://www.moloni.es/termsandconditions" target="_blank">Moloni Terms of Service</a> with the inclusion of the regulation act of the subcontractor according to article 28 of the Regulation.',
+            "Modules.Molonies.Common"
+        );
+
         $this->builder->add('serviceTerms', CheckboxType::class, [
             'required' => true,
-            'label' => $this->trans(
-                'I have read and accept the Moloni Terms of Service with the inclusion of the regulation act of the subcontractor according to article 28 of the Regulation.',
-                "Modules.Molonies.Common"
-            ),
+            'label' => $label,
             'attr' => [
                 'material_design' => true,
             ],
