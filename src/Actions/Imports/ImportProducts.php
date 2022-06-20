@@ -49,7 +49,7 @@ abstract class ImportProducts
     /**
      * @var int
      */
-    protected $itemsPerPage = 50;
+    protected $itemsPerPage = 20;
 
     public function __construct(?int $page = 1)
     {
