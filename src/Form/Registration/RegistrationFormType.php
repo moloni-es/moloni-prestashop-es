@@ -160,7 +160,7 @@ class RegistrationFormType extends TranslatorAwareType
     {
         $this->builder->add('username', TextType::class, [
             'label' => $this->trans('Name of person responsible for the account', "Modules.Molonies.Common"),
-            'required' => false,
+            'required' => true,
         ]);
 
         return $this;

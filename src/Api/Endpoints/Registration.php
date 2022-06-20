@@ -13,9 +13,9 @@ class Registration extends Endpoint
      */
     public function mutationCompanySignUp(?array $variables = []): array
     {
-        $query = 'mutation companySignUp($slug: String!)
+        $query = 'mutation companySignUp($data: CompanySignUp!)
         {
-            companySignUp(slug: $slug)
+            companySignUp(data: $data)
         }';
 
         return $this->simplePost($query, $variables);
