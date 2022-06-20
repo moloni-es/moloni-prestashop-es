@@ -28,6 +28,7 @@ namespace Moloni\Builders\Document;
 
 use Configuration;
 use Moloni\Api\MoloniApiClient;
+use Moloni\Builders\Document\Helpers\CalculateDiscountPercentage;
 use Moloni\Builders\Interfaces\BuilderItemInterface;
 use Moloni\Builders\MoloniProductSimple;
 use Moloni\Builders\MoloniProductWithVariants;
@@ -107,7 +108,7 @@ class OrderProduct implements BuilderItemInterface
      *
      * @var float
      */
-    protected $discount;
+    protected $discount = 0;
 
     /**
      * Product reference
@@ -257,8 +258,7 @@ class OrderProduct implements BuilderItemInterface
             ->setWarehouseId()
             ->setTaxes()
             ->setPrice()
-            ->setType()
-            ->setDiscounts();
+            ->setType();
 
         return $this;
     }
@@ -346,32 +346,32 @@ class OrderProduct implements BuilderItemInterface
     /**
      * Calculate discounts
      *
+     * @param float|null $cuponDiscountsValue
+     *
      * @return OrderProduct
      */
-    public function setDiscounts(): OrderProduct
+    public function setDiscounts(?float $cuponDiscountsValue = 0): OrderProduct
     {
         $discount = 0;
 
         if ((float)$this->orderProduct['reduction_percent'] > 0) {
-            $discount = (float)$this->orderProduct['reduction_percent'];
+            // If cupon value is set, revert percentage value
+            if ($cuponDiscountsValue > 0) {
+                $price = (float)$this->orderProduct['product_price'];
+
+                $discountedValue = $this->price * ((float)$this->orderProduct['reduction_percent'] / 100);
+                $discountedValue += $cuponDiscountsValue;
+
+                $discount = (new CalculateDiscountPercentage($price, $discountedValue))->handle();
+            } else {
+                $discount = (float)$this->orderProduct['reduction_percent'];
+            }
         } elseif ((float)$this->orderProduct['reduction_amount_tax_excl'] > 0) {
             $price = (float)$this->orderProduct['product_price'];
 
-            if ($price > 0) {
-                $discountedValue = (float)$this->orderProduct['reduction_amount_tax_excl'];
-                $discount = (1 - ($price / ($price + $discountedValue))) * 100;
-            } else {
-                $discount = 100;
-            }
-        }
+            $discountedValue = (float)$this->orderProduct['reduction_amount_tax_excl'] + $cuponDiscountsValue;
 
-        switch (true) {
-            case $discount > 100:
-                $discount = 100;
-                break;
-            case $discount < 0:
-                $discount = 0;
-                break;
+            $discount = (new CalculateDiscountPercentage($price, $discountedValue))->handle();
         }
 
         $this->discount = $discount;
