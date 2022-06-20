@@ -353,7 +353,7 @@ class PrestashopProductWithCombinations implements BuilderInterface
 
             $this->afterSave();
         } catch (PrestaShopException $e) {
-            throw new MoloniProductException('Error saving product ({0})', ['{0}' => $this->reference], [
+            throw new MoloniProductException('Error updating product ({0})', ['{0}' => $this->reference], [
                 'moloniProduct' => $this->moloniProduct
             ]);
         }
