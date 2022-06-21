@@ -32,9 +32,11 @@ use Moloni\Actions\Imports\ImportStockChangesFromMoloni;
 use Moloni\Actions\Tools\LogsListDetails;
 use Moloni\Actions\Tools\WebhookCreate;
 use Moloni\Actions\Tools\WebhookDeleteAll;
+use Moloni\Api\MoloniApi;
 use Moloni\Controller\Admin\MoloniController;
 use Moloni\Entity\MoloniLogs;
 use Moloni\Enums\Boolean;
+use Moloni\Enums\LogLevel;
 use Moloni\Enums\MoloniRoutes;
 use Moloni\Exceptions\MoloniException;
 use Moloni\Repository\MoloniLogsRepository;
@@ -42,10 +44,11 @@ use Moloni\Tools\Settings;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Tools as PrestashopTools;
 
 class Tools extends MoloniController
 {
-    public function home(Request $request): Response
+    public function home(): Response
     {
         return $this->render(
             '@Modules/molonies/views/templates/admin/tools/Tools.twig',
@@ -61,9 +64,9 @@ class Tools extends MoloniController
         );
     }
 
-    public function importProducts(Request $request): Response
+    public function importProducts(): Response
     {
-        $page = (int)$request->get('page', 1);
+        $page = (int)PrestashopTools::getValue('page', 1);
 
         $response = [
             'valid' => true,
@@ -89,9 +92,9 @@ class Tools extends MoloniController
         return new Response(json_encode($response));
     }
 
-    public function importStocks(Request $request): Response
+    public function importStocks(): Response
     {
-        $page = (int)$request->get('page', 1);
+        $page = (int)PrestashopTools::getValue('page', 1);
 
         $response = [
             'valid' => true,
@@ -117,9 +120,9 @@ class Tools extends MoloniController
         return new Response(json_encode($response));
     }
 
-    public function exportProducts(Request $request): Response
+    public function exportProducts(): Response
     {
-        $page = (int)$request->get('page', 1);
+        $page = (int)PrestashopTools::getValue('page', 1);
 
         $response = [
             'valid' => true,
@@ -144,9 +147,9 @@ class Tools extends MoloniController
         return new Response(json_encode($response));
     }
 
-    public function exportStocks(Request $request): Response
+    public function exportStocks(): Response
     {
-        $page = (int)$request->get('page', 1);
+        $page = (int)PrestashopTools::getValue('page', 1);
 
         $response = [
             'valid' => true,
@@ -171,7 +174,7 @@ class Tools extends MoloniController
         return new Response(json_encode($response));
     }
 
-    public function reinstallHooks(Request $request): RedirectResponse
+    public function reinstallHooks(): RedirectResponse
     {
         try {
             (new WebhookDeleteAll())->handle();
@@ -199,9 +202,11 @@ class Tools extends MoloniController
         return $this->redirectToTools();
     }
 
-    public function openLogs(Request $request): Response
+    public function openLogs(): Response
     {
-        $page = $request->get('page', 1);
+        $page = (int)PrestashopTools::getValue('page', 1);
+        $filters = PrestashopTools::getValue('filters', []);
+
         $logs = $paginator = [];
 
         /** @var MoloniLogsRepository $moloniLogsRepository */
@@ -211,7 +216,7 @@ class Tools extends MoloniController
             ->getRepository(MoloniLogs::class);
 
         try {
-            ['logs' => $logs, 'paginator' => $paginator] = $moloniLogsRepository->getAllPaginated($page, $this->moloniContext->getCompanyId());
+            ['logs' => $logs, 'paginator' => $paginator] = $moloniLogsRepository->getAllPaginated($page, $filters);
         } catch (Exception $e) {
             $msg = $this->trans('Error fetching logs list', 'Modules.Molonies.Errors');
 
@@ -223,11 +228,13 @@ class Tools extends MoloniController
         return $this->render(
             '@Modules/molonies/views/templates/admin/logs/Logs.twig',
             [
-                'logs' => $logs,
+                'logsArray' => $logs,
+                'logsLevelsArray' => LogLevel::getLogLevels(),
+                'filters' => $filters,
+                'paginator' => $paginator,
                 'toolsRoute' => MoloniRoutes::TOOLS,
                 'deleteLogsRoute' => MoloniRoutes::TOOLS_DELETE_LOGS,
                 'thisRoute' => MoloniRoutes::TOOLS_OPEN_LOGS,
-                'paginator' => $paginator,
             ]
         );
     }

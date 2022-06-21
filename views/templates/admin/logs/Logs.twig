@@ -8,82 +8,11 @@
         </h3>
         <div class="card-block overflow-auto">
             <table class="table table-striped table-bordered">
-                <thead>
-                <tr>
-                    <th scope="col">{{ 'Date'|trans({}, 'Modules.Molonies.Common') }}</th>
-                    <th scope="col" class="text-center">
-                        {{ 'Type'|trans({}, 'Modules.Molonies.Common') }}
-                    </th>
-                    <th scope="col">{{ 'Message'|trans({}, 'Modules.Molonies.Common') }}</th>
-                    <th scope="col" class="text-center">
-                        {{ 'Payload'|trans({}, 'Modules.Molonies.Common') }}
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
+                {# Table header #}
+                {% include '@Modules/molonies/views/templates/admin/logs/blocks/TableHeader.twig' %}
 
-                {% if logs %}
-                    {% for log in logs %}
-                        <tr>
-                            <td>
-                                {{ log.created_at|date("Y-m-d H:i:s")}}
-                            </td>
-                            <td class="text-center">
-                                {% if log.level == constant('Moloni\\Enums\\LogLevel::INFO') %}
-                                    <span class="badge badge-info">
-                                        {{ 'Information'|trans({}, 'Modules.Molonies.Common') }}
-                                    </span>
-                                {% elseif log.level == constant('Moloni\\Enums\\LogLevel::WARNING') %}
-                                    <span class="badge badge-warning">
-                                        {{ 'Warning'|trans({}, 'Modules.Molonies.Common') }}
-                                    </span>
-                                {% elseif log.level == constant('Moloni\\Enums\\LogLevel::ERROR') %}
-                                    <span class="badge badge-danger">
-                                        {{ 'Error'|trans({}, 'Modules.Molonies.Common') }}
-                                    </span>
-                                {% else %}
-                                    ---
-                                {% endif %}
-                            </td>
-                            <td>
-                                {% for message in log.message %}
-                                    {% if message[1] %}
-                                        {% set foo = {} %}
-
-                                        {% for key, value in message[1] %}
-                                            {% set foo = foo|merge({(key): value}) %}
-                                        {% endfor %}
-
-                                        {{ message[0]|trans(foo, 'Modules.Molonies.Common') }}
-                                    {% else %}
-                                        {{ message[0]|trans({}, 'Modules.Molonies.Common') }}
-                                    {% endif %}
-                                    <br>
-                                {% endfor %}
-                            </td>
-                            <td class="text-center">
-
-                                {# Overlay button #}
-                                <button type="button"
-                                        class="btn btn-outline-secondary btn-sm"
-                                        data-toggle="modal"
-                                        data-target="#log_{{ log.id }}">
-                                    <i class="material-icons">inventory</i>
-                                </button>
-
-                                {# Payload Overlay #}
-                                {% include '@Modules/molonies/views/templates/admin/logs/overlays/LogPayload.twig' with {'log_id': log.id, 'payload_data': log.extra} %}
-                            </td>
-                        </tr>
-                    {% endfor %}
-                {% else %}
-                    <tr>
-                        <td colspan="100%">
-                            {{ 'No information to show!'|trans({}, 'Modules.Molonies.Common') }}
-                        </td>
-                    </tr>
-                {% endif %}
-                </tbody>
+                {# Table body #}
+                {% include '@Modules/molonies/views/templates/admin/logs/blocks/TableBody.twig' %}
             </table>
 
             {# Delete Overlay #}
@@ -110,7 +39,7 @@
                 </a>
 
                 {# Refresh list #}
-                <a href="{{ path(thisRoute, {page: paginator.currentPage}) }}"
+                <a href="{{ path(thisRoute, {page: paginator.currentPage, filters: filters}) }}"
                    class="btn btn-outline-secondary">
                     {{ 'Refresh list'|trans({}, 'Modules.Molonies.Common') }}
                 </a>
@@ -122,7 +51,7 @@
 {% block javascripts %}
     <script>
         $(document).ready(function () {
-            window.moloniLogs.startObservers();
+            window.moloniLogs.startObservers("{{ path(thisRoute) }}");
         });
     </script>
 {% endblock %}

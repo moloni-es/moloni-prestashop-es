@@ -1,0 +1,53 @@
+<thead class="with-filters">
+<tr class="column-headers">
+    <th scope="col">
+        {{ 'Date'|trans({}, 'Modules.Molonies.Common') }}
+    </th>
+    <th scope="col" class="text-center">
+        {{ 'Type'|trans({}, 'Modules.Molonies.Common') }}
+    </th>
+    <th scope="col">
+        {{ 'Message'|trans({}, 'Modules.Molonies.Common') }}
+    </th>
+    <th scope="col" class="text-center">
+        {{ 'Payload'|trans({}, 'Modules.Molonies.Common') }}
+    </th>
+</tr>
+<tr class="column-filters">
+    <td>
+        <input type="date"
+               name="filters[created_date]"
+               value="{{ filters.created_date|default('') }}"
+               class="form-control">
+    </td>
+    <td>
+        <select aria-label="input"
+                name="filters[log_level]"
+                class="custom-select">
+            <option value=""></option>
+            {% for name, id in logsLevelsArray %}
+                <option value='{{ id }}'
+                        {% if id == filters.log_level|default('') %} selected {% endif %}>
+                    {{ name|trans({}, 'Modules.Molonies.Common') }}
+                </option>
+            {% endfor %}
+        </select>
+    </td>
+    <td></td>
+    <td class="text-center">
+        <button type="submit"
+                class="btn btn-primary"
+                id="filters_search"
+                disabled="">
+            <i class="material-icons">search</i>
+            {{ 'Search'|trans({}, 'Modules.Molonies.Common') }}
+        </button>
+
+        {% if filters is not empty %}
+            <a type="button" class="btn btn-link" href="{{ path(thisRoute) }}">
+                <i class="material-icons">clear</i> {{ 'Reset'|trans({}, 'Modules.Molonies.Common') }}
+            </a>
+        {% endif %}
+    </td>
+</tr>
+</thead>
