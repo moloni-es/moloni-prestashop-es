@@ -209,12 +209,13 @@ abstract class MoloniController extends FrameworkBundleAdminController implement
      * Redirect to Orders page
      *
      * @param int|null $page
+     * @param array|null $filters
      *
      * @return RedirectResponse
      */
-    public function redirectToOrders(?int $page = 1): RedirectResponse
+    public function redirectToOrders(?int $page = 1, ?array $filters = []): RedirectResponse
     {
-        return $this->redirectToRoute(MoloniRoutes::ORDERS, ['page' => $page]);
+        return $this->redirectToRoute(MoloniRoutes::ORDERS, ['page' => $page, 'filters' => $filters]);
     }
 
     /**

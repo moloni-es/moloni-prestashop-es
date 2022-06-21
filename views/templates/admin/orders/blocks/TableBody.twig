@@ -1,0 +1,65 @@
+<tbody>
+{% if orderArray %}
+    {% for order in orderArray %}
+        <tr>
+            <form action="{{ path(createDocumentRoute, {filters: filters}) }}" method="post">
+                <input type="hidden" name="orderId" value="{{ order.id_order }}">
+                <input type="hidden" name="page" value="{{ paginator.currentPage }}">
+                <td>{{ order.date_add }}</td>
+                <td>{{ order.reference }}</td>
+                <td>{{ order.firstname }} {{ order.lastname }}</td>
+                <td>{{ order.email }}</td>
+                <td>{{ order.state_name }}</td>
+                <td class="text-right">
+                    {{ order.total_paid_tax_incl|number_format(2, '.', ',') }}{{ order.currency }}
+                </td>
+                <td class="text-center">
+                    <select name="document_type">
+                        {% for typeName,typeId in documentTypes %}
+                            <option value='{{ typeId }}' {% if documentType == typeId %} selected {% endif %}>
+                                {{ typeName|trans({}, 'Modules.Molonies.Common') }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td class="text-center">
+                    <div class="btn-group">
+                        <button class="btn btn-sm btn-primary" onclick="this.form.submit();">
+                            <i class="material-icons">article</i>
+                            {{ 'Create document'|trans({}, 'Modules.Molonies.Common') }}
+                        </button>
+
+                        <button type="button"
+                                class="btn btn-sm btn-primary dropdown-toggle dropdown-toggle-split"
+                                data-toggle="dropdown"
+                                aria-haspopup="true"
+                                aria-expanded="false">
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+
+                        <div class="dropdown-menu menu-sm">
+                            <a class="dropdown-item" href="{{ order.view_url }}" target="_blank">
+                                <i class="material-icons">open_in_new</i>
+
+                                {{ 'View order'|trans({}, 'Modules.Molonies.Common') }}
+                            </a>
+                            <a class="dropdown-item"
+                               href="{{ path(discardOrderRoute, {orderId: order.id_order, page: paginator.currentPage, filters: filters}) }}">
+                                <i class="material-icons">remove_circle</i>
+
+                                {{ 'Discard order'|trans({}, 'Modules.Molonies.Common') }}
+                            </a>
+                        </div>
+                    </div>
+                </td>
+            </form>
+        </tr>
+    {% endfor %}
+{% else %}
+    <tr>
+        <td colspan="8">
+            {{ 'All your documents are already converted into documents!'|trans({}, 'Modules.Molonies.Common') }}
+        </td>
+    </tr>
+{% endif %}
+</tbody>
