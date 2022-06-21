@@ -34,14 +34,14 @@ class MoloniSettingsRepository extends EntityRepository
 {
     private $arraySettings = ['productSyncFields' , 'orderStatusToShow'];
 
-    public function getSettings(): array
+    public function getSettings(?int $companyId = 0): array
     {
         $settings = [];
 
         /**
          * @var MoloniSettings[] $settingsQuery
          */
-        $settingsQuery = $this->findAll();
+        $settingsQuery = $this->findBy(['companyId' => $companyId]);
 
         foreach ($settingsQuery as $setting) {
             $value = $setting->getValue();
@@ -62,13 +62,14 @@ class MoloniSettingsRepository extends EntityRepository
      *
      * @param array $submitData Submited data
      * @param int $shopId Shop id
+     * @param int $companyId Company id
      *
      * @return void
      *
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function saveSettings(array $submitData, int $shopId): void
+    public function saveSettings(array $submitData, int $shopId, int $companyId): void
     {
         $entityManager = $this->getEntityManager();
 
@@ -81,15 +82,16 @@ class MoloniSettingsRepository extends EntityRepository
                 $value = $value->format(Date::DATE_FORMAT);
             }
 
-            $setting = $this->findOneBy(['label' => $label]);
+            $setting = $this->findOneBy(['label' => $label, 'companyId' => $companyId]);
 
             if ($setting === null) {
                 $setting = new MoloniSettings();
             }
 
+            $setting->setShopId($shopId);
+            $setting->setCompanyId($companyId);
             $setting->setLabel($label);
             $setting->setValue($value);
-            $setting->setShopId($shopId);
 
             $entityManager->persist($setting);
             $entityManager->flush();
