@@ -26,6 +26,7 @@ declare(strict_types=1);
 
 namespace Moloni\Form\Settings;
 
+use Configuration;
 use DateTime;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
@@ -111,8 +112,9 @@ class SettingsFormDataProvider implements FormDataProviderInterface
     private function getPaidStatusIds(): array
     {
         $ids = [];
+        $languageId = (int)Configuration::get('PS_LANG_DEFAULT');
 
-        $states = OrderState::getOrderStates(1);
+        $states = OrderState::getOrderStates($languageId);
 
         foreach ($states as $state) {
             if ((int)$state['paid'] === 1) {

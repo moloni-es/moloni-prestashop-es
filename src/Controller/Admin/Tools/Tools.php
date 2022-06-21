@@ -134,7 +134,7 @@ class Tools extends MoloniController
         $response['hasMore'] = $tool->getHasMore();
 
         $response['overlayContent'] = $this->renderView(
-            '@Modules/molonies/views/templates/admin/tools/overlays/segments/ProductExportContent.twig',
+            '@Modules/molonies/views/templates/admin/tools/overlays/blocks/ProductExportContent.twig',
             [
                 'hasMore' => $tool->getHasMore(),
                 'processedProducts' => $tool->getProcessedProducts(),
@@ -161,7 +161,7 @@ class Tools extends MoloniController
         $response['hasMore'] = $tool->getHasMore();
 
         $response['overlayContent'] = $this->renderView(
-            '@Modules/molonies/views/templates/admin/tools/overlays/segments/ProductExportContent.twig',
+            '@Modules/molonies/views/templates/admin/tools/overlays/blocks/ProductExportContent.twig',
             [
                 'hasMore' => $tool->getHasMore(),
                 'processedProducts' => $tool->getProcessedProducts(),

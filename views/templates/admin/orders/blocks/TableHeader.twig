@@ -1,0 +1,82 @@
+<thead class="with-filters">
+    <tr class="column-headers">
+        <th scope="col">{{ 'Date'|trans({}, 'Modules.Molonies.Common') }}</th>
+        <th scope="col">{{ 'Reference'|trans({}, 'Modules.Molonies.Common') }}</th>
+        <th scope="col">{{ 'Customer'|trans({}, 'Modules.Molonies.Common') }}</th>
+        <th scope="col">{{ 'E-mail'|trans({}, 'Modules.Molonies.Common') }}</th>
+        <th scope="col">{{ 'Status'|trans({}, 'Modules.Molonies.Common') }}</th>
+        <th scope="col" class="text-right">
+            {{ 'Amount'|trans({}, 'Modules.Molonies.Common') }}
+        </th>
+        <th scope="col" class="text-center">
+            {{ 'Document Type'|trans({}, 'Modules.Molonies.Common') }}
+        </th>
+        <th scope="col" class="text-center">
+            {{ 'Actions'|trans({}, 'Modules.Molonies.Common') }}
+        </th>
+    </tr>
+    <tr class="column-filters">
+        <td>
+            <input type="date"
+                   name="filters[created_date]"
+                   value="{{ filters.created_date|default('') }}"
+                   class="form-control">
+        </td>
+        <td>
+            <input type="text"
+                   placeholder="{{ 'Search reference'|trans({}, 'Modules.Molonies.Common') }}"
+                   name="filters[order_reference]"
+                   value="{{ filters.order_reference|default('') }}"
+                   aria-label="input"
+                   class="form-control">
+        </td>
+        <td>
+            <input type="text"
+                   placeholder="{{ 'Search customer'|trans({}, 'Modules.Molonies.Common') }}"
+                   name="filters[customer_name]"
+                   value="{{ filters.customer_name|default('') }}"
+                   aria-label="input"
+                   class="form-control">
+        </td>
+        <td>
+            <input type="text"
+                   placeholder="{{ 'Search e-mail'|trans({}, 'Modules.Molonies.Common') }}"
+                   name="filters[customer_email]"
+                   value="{{ filters.customer_email|default('') }}"
+                   aria-label="input"
+                   class="form-control">
+        </td>
+        <td>
+            <select aria-label="input"
+                    name="filters[order_state]"
+                    class="custom-select">
+                <option value=""></option>
+
+                {% for orderState in orderStatesArray %}
+                    <option value='{{ orderState.id_order_state }}'
+                            {% if orderState.id_order_state == filters.order_state|default('') %} selected {% endif %}>
+                        {{ orderState.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </td>
+        <td></td>
+        <td></td>
+        <td class="text-center">
+            <button type="submit"
+                    class="btn btn-primary"
+                    id="filters_search"
+                    disabled="">
+                <i class="material-icons">search</i>
+                {{ 'Search'|trans({}, 'Modules.Molonies.Common') }}
+            </button>
+
+            {% if filters is not empty %}
+                <a type="button" class="btn btn-link" href="{{ path(thisRoute) }}">
+                    <i class="material-icons">clear</i> {{ 'Reset'|trans({}, 'Modules.Molonies.Common') }}
+                </a>
+            {% endif %}
+        </td>
+        </form>
+    </tr>
+</thead>

@@ -25,6 +25,8 @@
 namespace Moloni\Controller\Admin\Orders;
 
 use Currency;
+use Moloni\Actions\Orders\GetOrderListFilters;
+use OrderState;
 use Moloni\Actions\Orders\OrderCreateDocument;
 use Moloni\Actions\Orders\OrderDiscard;
 use Moloni\Controller\Admin\MoloniController;
@@ -41,27 +43,27 @@ use PrestaShopException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Tools;
 
 class Orders extends MoloniController
 {
     /**
      * Pending orders list
      *
-     * @param Request $request
-     *
      * @return Response
      */
-    public function home(Request $request): Response
+    public function home(): Response
     {
-        $page = $request->get('page', 1);
+        $page = Tools::getValue('page', 1);
+        $filters = Tools::getValue('filters', []);
 
         /** @var OrdersRepository $repository */
         $repository = $this->get('moloni.repository.orders');
+
         ['orders' => $orders, 'paginator' => $paginator] = $repository->getPendingOrdersPaginated(
             $page,
             $this->getContextLangId(),
-            Settings::get('orderDateCreated'),
-            Settings::get('orderStatusToShow')
+            (new GetOrderListFilters($filters))->handle()
         );
 
         foreach ($orders as &$order) {
@@ -76,12 +78,14 @@ class Orders extends MoloniController
             '@Modules/molonies/views/templates/admin/orders/Orders.twig',
             [
                 'orderArray' => $orders,
-                'documetTypes' => DocumentTypes::getDocumentsTypes(),
+                'orderStatesArray' => OrderState::getOrderStates($this->getContextLangId()),
+                'filters' => $filters,
+                'paginator' => $paginator,
                 'documentType' => Settings::get('documentType'),
+                'documentTypes' => DocumentTypes::getDocumentsTypes(),
                 'createDocumentRoute' => MoloniRoutes::ORDERS_CREATE,
                 'discardOrderRoute' => MoloniRoutes::ORDERS_DISCARD,
                 'thisRoute' => MoloniRoutes::ORDERS,
-                'paginator' => $paginator,
             ]
         );
     }
@@ -89,16 +93,16 @@ class Orders extends MoloniController
     /**
      * Create document form order
      *
-     * @param Request $request
-     *
      * @return RedirectResponse
      */
-    public function create(Request $request): RedirectResponse
+    public function create(): RedirectResponse
     {
-        $orderId = (int) $request->get('order_id', 0);
-        $documentType = $request->get('document_type');
-        $fromOrderPage = $request->get('from_order_page', false);
-        $page = $request->get('page');
+        $orderId = (int)Tools::getValue('orderId', 0);
+        $documentType = Tools::getValue('document_type');
+        $fromOrderPage = Tools::getValue('from_order_page', false);
+
+        $page = (int)Tools::getValue('page', 1);
+        $filters = Tools::getValue('filters', []);
 
         try {
             $action = new OrderCreateDocument($orderId, $this->getDoctrine()->getManager());
@@ -127,20 +131,19 @@ class Orders extends MoloniController
             return $this->redirectToAdminOrderPage($orderId);
         }
 
-        return $this->redirectToOrders($page);
+        return $this->redirectToOrders($page, $filters);
     }
 
     /**
      * Discard an order
      *
-     * @param Request $request
-     *
      * @return RedirectResponse
      */
-    public function discard(Request $request): RedirectResponse
+    public function discard(): RedirectResponse
     {
-        $orderId = $request->get('id', 0);
-        $page = $request->get('page', 1);
+        $orderId = (int)Tools::getValue('orderId', 0);
+        $page = (int)Tools::getValue('page', 1);
+        $filters = Tools::getValue('filters', []);
 
         try {
             $action = new OrderDiscard($orderId, $this->getDoctrine()->getManager());
@@ -158,6 +161,6 @@ class Orders extends MoloniController
             $this->addErrorMessage($msg);
         }
 
-        return $this->redirectToOrders($page);
+        return $this->redirectToOrders($page, $filters);
     }
 }

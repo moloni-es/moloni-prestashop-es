@@ -45,39 +45,32 @@ class OrdersRepository
         $this->databasePrefix = $databasePrefix;
     }
 
-    public function getPendingOrdersPaginated($page, $langId, $orderDateCreated, $orderStatus): array
+    public function getPendingOrdersPaginated($page, $langId, $filters): array
     {
         $expr = $this->connection->getExpressionBuilder();
 
         $ordersPerPage = 10;
         $offset = ($page - 1) * $ordersPerPage;
-        $paginatorQuery = $this
-            ->connection
-            ->createQueryBuilder()
+
+        $paginatorQuery = $this->connection->createQueryBuilder();
+        $paginatorQuery = $paginatorQuery
             ->addSelect('COUNT(*)')
-            ->from($this->databasePrefix . 'orders', 'oo')
-            ->leftJoin('oo', $this->databasePrefix . 'moloni_documents', 'mmdd', 'oo.id_order = mmdd.order_id')
-            ->where('mmdd.id is null');
+            ->from($this->databasePrefix . 'orders', 'o')
+            ->leftJoin('o', $this->databasePrefix . 'moloni_documents', 'md', 'o.id_order = md.order_id')
+            ->leftJoin('o', $this->databasePrefix . 'customer', 'c', 'o.id_customer = c.id_customer')
+            ->where('md.id is null');
 
-        if (!empty($orderDateCreated)) {
-            $paginatorQuery
-                ->andWhere('oo.date_add > :date_created')
-                ->setParameter('date_created', $orderDateCreated);
-        }
+        $this->applyFilters($paginatorQuery, $filters);
 
-        if (!empty($orderStatus)) {
-            $paginatorQuery->andWhere($expr->in('oo.current_state', $orderStatus));
-        }
-
-        $orders = $paginatorQuery->execute()
+        $orders = $paginatorQuery
+            ->execute()
             ->fetch()['COUNT(*)'];
 
         $numberOfPages = ceil($orders / $ordersPerPage);
         $numberOfPages = $numberOfPages <= 0 ? 1 : $numberOfPages;
 
-        $ordersQuery = $this
-            ->connection
-            ->createQueryBuilder()
+        $ordersQuery = $this->connection->createQueryBuilder();
+        $ordersQuery = $ordersQuery
             ->addSelect('o.id_order, o.reference,  o.date_add, o.id_customer, o.id_currency, o.total_paid_tax_incl, o.current_state, o.current_state')
             ->addSelect('c.email, c.firstname, c.lastname')
             ->addSelect('osl.name as state_name')
@@ -89,15 +82,7 @@ class OrdersRepository
             ->setParameter('languague_id', $langId)
             ->where($expr->isNull('document_id'));
 
-        if (!empty($orderDateCreated)) {
-            $ordersQuery
-                ->andWhere('o.date_add > :date_created')
-                ->setParameter('date_created', $orderDateCreated);
-        }
-
-        if (!empty($orderStatus)) {
-            $ordersQuery->andWhere($expr->in('o.current_state', $orderStatus));
-        }
+        $this->applyFilters($ordersQuery, $filters);
 
         $ordersQuery = $ordersQuery
             ->setMaxResults($ordersPerPage)
@@ -113,5 +98,42 @@ class OrdersRepository
                 'offset' => $offset,
             ],
         ];
+    }
+
+    private function applyFilters(QueryBuilder $query, array $filters): void
+    {
+        $expr = $this->connection->getExpressionBuilder();
+
+        if (!empty($filters['created_since'])) {
+            $query
+                ->andWhere('DATE(o.date_add) > :created_since')
+                ->setParameter('created_since', $filters['created_since']);
+        } elseif (!empty($filters['created_date'])) {
+            $query
+                ->andWhere('DATE(o.date_add) = :date_created')
+                ->setParameter('date_created', $filters['created_date']);
+        }
+
+        if (!empty($filters['order_state'])) {
+            $query->andWhere($expr->in('o.current_state', $filters['order_state']));
+        }
+
+        if (!empty($filters['order_reference'])) {
+            $query
+                ->andWhere($expr->like('o.reference', ':order_reference'))
+                ->setParameter('order_reference', '%' . $filters['order_reference'] . '%');
+        }
+
+        if (!empty($filters['customer_email'])) {
+            $query
+                ->andWhere($expr->like('c.email', ':customer_email'))
+                ->setParameter('customer_email', '%' . $filters['customer_email'] . '%');
+        }
+
+        if (!empty($filters['customer_name'])) {
+            $query
+                ->andWhere($expr->like('c.firstname', ':customer_name'))
+                ->setParameter('customer_name', '%' . $filters['customer_name'] . '%');
+        }
     }
 }
