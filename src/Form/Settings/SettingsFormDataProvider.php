@@ -26,8 +26,11 @@ declare(strict_types=1);
 
 namespace Moloni\Form\Settings;
 
-use Configuration;
+use Shop;
+use Store;
 use DateTime;
+use OrderState;
+use Configuration;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Moloni\Api\MoloniApi;
@@ -43,10 +46,7 @@ use Moloni\Enums\SyncFields;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Repository\MoloniSettingsRepository;
 use Moloni\Tools\Settings;
-use OrderState;
 use PrestaShop\PrestaShop\Core\Form\FormDataProviderInterface;
-use Shop;
-use Store;
 use Symfony\Component\Translation\TranslatorInterface;
 
 class SettingsFormDataProvider implements FormDataProviderInterface
@@ -68,6 +68,7 @@ class SettingsFormDataProvider implements FormDataProviderInterface
     private $documentTypes = [];
     private $fiscalZoneBasedOn = [];
     private $addresses = [];
+    private $companyName = '';
 
     public function __construct(
         TranslatorInterface $translator,
@@ -94,6 +95,8 @@ class SettingsFormDataProvider implements FormDataProviderInterface
         if (!isset($settings['productSyncFields'])) {
             $settings['productSyncFields'] = SyncFields::getDefaultFields();
         }
+
+        $settings['companyName'] = $this->getCompanyName();
 
         return $settings;
     }
@@ -138,6 +141,7 @@ class SettingsFormDataProvider implements FormDataProviderInterface
     public function loadMoloniAvailableSettings(): SettingsFormDataProvider
     {
         $measurementUnitsQuery = MoloniApiClient::measurementUnits()->queryMeasurementUnits();
+        $companyQuery = MoloniApiClient::companies()->queryCompany();
         $warehousesQuery = MoloniApiClient::warehouses()->queryWarehouses();
         $documentSetsQuery = MoloniApiClient::documentSets()->queryDocumentSets();
         $countriesQuery = MoloniApiClient::countries()->queryCountries([
@@ -199,6 +203,8 @@ class SettingsFormDataProvider implements FormDataProviderInterface
             $this->trans('Moloni company', 'Modules.Molonies.Settings') => LoadAddress::MOLONI,
             $this->trans('Custom address', 'Modules.Molonies.Settings') => LoadAddress::CUSTOM,
         ];
+
+        $this->companyName = $companyQuery['name'];
 
         if (!empty($this->stores)) {
             $this->addresses[$this->trans('Stores', 'Modules.Molonies.Settings')] = $this->stores;
@@ -315,5 +321,13 @@ class SettingsFormDataProvider implements FormDataProviderInterface
     public function getStores(): array
     {
         return $this->stores;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCompanyName(): string
+    {
+        return $this->companyName;
     }
 }
