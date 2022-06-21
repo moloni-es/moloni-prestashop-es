@@ -40,6 +40,7 @@ class MoloniRoutes
     public const ORDERS_DISCARD = 'moloni_es_orders_discard';
 
     public const DOCUMENTS = 'moloni_es_documents_home';
+    public const DOCUMENTS_VIEW = 'moloni_es_documents_view';
     public const DOCUMENTS_DOWNLOAD = 'moloni_es_documents_download';
     public const DOCUMENTS_RESTORE = 'moloni_es_documents_restore';
 
@@ -61,6 +62,7 @@ class MoloniRoutes
         self::ORDERS_CREATE,
         self::ORDERS_DISCARD,
         self::DOCUMENTS,
+        self::DOCUMENTS_VIEW,
         self::DOCUMENTS_DOWNLOAD,
         self::DOCUMENTS_RESTORE,
         self::TOOLS,

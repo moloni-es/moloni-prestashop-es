@@ -12,6 +12,12 @@ moloni_es_documents_download:
   defaults:
     _controller: 'Moloni\Controller\Admin\Documents\Documents::download'
 
+moloni_es_documents_view:
+  path: /view/{documentId}
+  methods: [GET]
+  defaults:
+    _controller: 'Moloni\Controller\Admin\Documents\Documents::view'
+
 moloni_es_documents_restore:
   path: /restore/{orderId}
   methods: [GET]

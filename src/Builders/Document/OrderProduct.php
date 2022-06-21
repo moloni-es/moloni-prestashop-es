@@ -26,6 +26,7 @@ declare(strict_types=1);
 
 namespace Moloni\Builders\Document;
 
+use Product;
 use Configuration;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\Document\Helpers\CalculateDiscountPercentage;
@@ -42,7 +43,6 @@ use Moloni\Exceptions\MoloniException;
 use Moloni\Exceptions\Product\MoloniProductException;
 use Moloni\Tools\Settings;
 use Moloni\Tools\SyncLogs;
-use Product;
 
 class OrderProduct implements BuilderItemInterface
 {

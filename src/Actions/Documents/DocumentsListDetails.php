@@ -26,10 +26,8 @@ namespace Moloni\Actions\Documents;
 
 use Order;
 use Currency;
-use Moloni\Api\MoloniApiClient;
 use Moloni\Enums\DocumentTypes;
 use Moloni\Enums\Domains;
-use Moloni\Exceptions\MoloniApiException;
 use PrestaShopDatabaseException;
 use PrestaShopException;
 
@@ -75,7 +73,7 @@ class DocumentsListDetails
                 continue;
             }
 
-            $moloniDocument = $this->fetchDocument($document['document_id'], $document['document_type']);
+            $moloniDocument = (new FetchDocumentById($document['document_id'], $document['document_type']))->handle();
 
             if (empty($moloniDocument)) {
                 $document['document_not_found'] = true;
@@ -90,62 +88,5 @@ class DocumentsListDetails
         }
 
         return $this->createdDocuments;
-    }
-
-    private function fetchDocument(int $documentId, string $documentType): array
-    {
-        $document = [];
-        $variables = [
-            'documentId' => $documentId
-        ];
-
-        try {
-            switch ($documentType) {
-                case DocumentTypes::INVOICES:
-                    $query = MoloniApiClient::invoice()->queryInvoice($variables);
-                    $query = $query['data']['invoice']['data'] ?? [];
-
-                    break;
-                case DocumentTypes::RECEIPTS:
-                    $query = MoloniApiClient::receipt()->queryReceipt($variables);
-                    $query = $query['data']['receipt']['data'] ?? [];
-
-                    break;
-                case DocumentTypes::PRO_FORMA_INVOICES:
-                    $query = MoloniApiClient::proFormaInvoice()->queryProFormaInvoice($variables);
-                    $query = $query['data']['proFormaInvoice']['data'] ?? [];
-
-                    break;
-                case DocumentTypes::PURCHASE_ORDERS:
-                    $query = MoloniApiClient::purchaseOrder()->queryPurchaseOrder($variables);
-                    $query = $query['data']['purchaseOrder']['data'] ?? [];
-
-                    break;
-                case DocumentTypes::SIMPLIFIED_INVOICES:
-                    $query = MoloniApiClient::simplifiedInvoice()->querySimplifiedInvoice($variables);
-                    $query = $query['data']['simplifiedInvoice']['data'] ?? [];
-
-                    break;
-                case DocumentTypes::ESTIMATE:
-                    $query = MoloniApiClient::estimate()->queryEstimate($variables);
-                    $query = $query['data']['estimate']['data'] ?? [];
-
-                    break;
-                case DocumentTypes::BILLS_OF_LADING:
-                    $query = MoloniApiClient::billsOfLading()->queryBillsOfLading($variables);
-                    $query = $query['data']['billsOfLading']['data'] ?? [];
-
-                    break;
-                default:
-                    $query = [];
-                    break;
-            }
-
-            $document = $query;
-        } catch (MoloniApiException $e) {
-            // no need to catch anything
-        }
-
-        return $document;
     }
 }

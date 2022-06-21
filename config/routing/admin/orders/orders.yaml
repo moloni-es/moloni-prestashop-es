@@ -8,12 +8,12 @@ moloni_es_orders_home:
 
 moloni_es_orders_create:
   path: /createDocument
-  methods: [POST]
+  methods: [GET, POST]
   defaults:
     _controller: 'Moloni\Controller\Admin\Orders\Orders::create'
 
 moloni_es_orders_discard:
   path: /clearInvoice
-  methods: [GET]
+  methods: [GET, POST]
   defaults:
     _controller: 'Moloni\Controller\Admin\Orders\Orders::discard'

@@ -188,7 +188,7 @@ abstract class MoloniController extends FrameworkBundleAdminController implement
      *
      * @return RedirectResponse
      */
-    protected function redirectToRegistration(): RedirectResponse
+    public function redirectToRegistration(): RedirectResponse
     {
         $this->deleteApp();
 
@@ -215,6 +215,20 @@ abstract class MoloniController extends FrameworkBundleAdminController implement
     public function redirectToOrders(?int $page = 1): RedirectResponse
     {
         return $this->redirectToRoute(MoloniRoutes::ORDERS, ['page' => $page]);
+    }
+
+    /**
+     * Redirect to Orders page
+     *
+     * @param int $orderId
+     *
+     * @return RedirectResponse
+     */
+    protected function redirectToAdminOrderPage(int $orderId): RedirectResponse
+    {
+        $link = $this->getAdminLink('AdminOrders', ['vieworder' => '', 'id_order' => $orderId]);
+
+        return $this->redirect($link);
     }
 
     /**
