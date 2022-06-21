@@ -24,6 +24,8 @@
 
 namespace Moloni\Repository;
 
+use DateTime;
+use Doctrine\ORM\QueryBuilder;
 use Exception;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
@@ -36,17 +38,18 @@ class MoloniDocumentsRepository extends EntityRepository
      *
      * @throws Exception
      */
-    public function getAllPaginated(?int $page = 1): array
+    public function getAllPaginated(?int $page = 1, ?array $filters = []): array
     {
         $documents = [];
         $documentsPerPage = 10;
 
-        $query = $this
-            ->createQueryBuilder('md')
-            ->orderBy('md.id', 'DESC')
-            ->getQuery();
+        $query = $this->createQueryBuilder('md');
 
-        $paginator = new Paginator($query, false);
+        $this->applyFilters($query, $filters);
+
+        $query->orderBy('md.id', 'DESC');
+
+        $paginator = new Paginator($query->getQuery(), false);
 
         $totalItems = $paginator->count();
         $totalItems = $totalItems === 0 ? 1 : $totalItems;
@@ -80,5 +83,33 @@ class MoloniDocumentsRepository extends EntityRepository
                 'offset' => $offset,
             ],
         ];
+    }
+
+    private function applyFilters(QueryBuilder $query, array $filters): void
+    {
+        if (!empty($filters['created_date'])) {
+            try {
+                $from = new DateTime($filters['created_date'] . " 00:00:00");
+                $to = new DateTime($filters['created_date'] . " 23:59:59");
+                $query
+                    ->andWhere('md.createdAt BETWEEN :from AND :to')
+                    ->setParameter('from', $from)
+                    ->setParameter('to', $to);
+            } catch (Exception $e) {
+                // catch nothing
+            }
+        }
+
+        if (!empty($filters['document_type'])) {
+            $query
+                ->andWhere('md.documentType = :document_type')
+                ->setParameter('document_type', $filters['document_type']);
+        }
+
+        if (!empty($filters['order_reference'])) {
+            $query
+                ->andWhere('md.orderReference LIKE :order_reference')
+                ->setParameter('order_reference', '%' . $filters['order_reference'] . '%');
+        }
     }
 }

@@ -24,12 +24,13 @@
 
 namespace Moloni\Controller\Admin\Documents;
 
+use Tools;
 use Exception;
+use PrestaShopException;
+use PrestaShopDatabaseException;
+use Moloni\Enums\DocumentTypes;
 use Moloni\Actions\Documents\FetchDocumentById;
 use Moloni\Enums\Domains;
-use Moloni\Exceptions\MoloniApiException;
-use PrestaShopDatabaseException;
-use PrestaShopException;
 use Moloni\Actions\Orders\OrderRestoreDiscard;
 use Moloni\Actions\Documents\DocumentsDownloadPdf;
 use Moloni\Actions\Documents\DocumentsListDetails;
@@ -40,7 +41,6 @@ use Moloni\Enums\MoloniRoutes;
 use Moloni\Exceptions\MoloniException;
 use Moloni\Repository\MoloniDocumentsRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class Documents extends MoloniController
@@ -48,13 +48,12 @@ class Documents extends MoloniController
     /**
      * Created documents list
      *
-     * @param Request $request
-     *
      * @return Response
      */
-    public function home(Request $request): Response
+    public function home(): Response
     {
-        $page = $request->get('page', 1);
+        $page = Tools::getValue('page', 1);
+        $filters = Tools::getValue('filters', []);
         $documents = $paginator = [];
 
         /** @var MoloniDocumentsRepository $moloniDocumentRepository */
@@ -64,7 +63,7 @@ class Documents extends MoloniController
             ->getRepository(MoloniDocuments::class);
 
         try {
-            ['documents' => $createdDocuments, 'paginator' => $paginator] = $moloniDocumentRepository->getAllPaginated($page);
+            ['documents' => $createdDocuments, 'paginator' => $paginator] = $moloniDocumentRepository->getAllPaginated($page, $filters);
 
             $company = MoloniApiClient::companies()->queryCompany();
             $documents = (new DocumentsListDetails($createdDocuments, $company))->handle();
@@ -78,10 +77,12 @@ class Documents extends MoloniController
             '@Modules/molonies/views/templates/admin/documents/Documents.twig',
             [
                 'documentArray' => $documents,
+                'documentTypeArray' => DocumentTypes::getDocumentsTypes(),
+                'filters' => $filters,
+                'paginator' => $paginator,
                 'downloadDocumentRoute' => MoloniRoutes::DOCUMENTS_DOWNLOAD,
                 'restoreDocumentRoute' => MoloniRoutes::DOCUMENTS_RESTORE,
                 'thisRoute' => MoloniRoutes::DOCUMENTS,
-                'paginator' => $paginator,
             ]
         );
     }
@@ -89,13 +90,12 @@ class Documents extends MoloniController
     /**
      * Get view link
      *
-     * @param Request $request
-     * @param int|null $documentId
-     *
      * @return RedirectResponse
      */
-    public function view(Request $request, ?int $documentId = 0): RedirectResponse
+    public function view(): RedirectResponse
     {
+        $documentId = (int)Tools::getValue('document_id', 0);
+
         /** @var MoloniDocuments|null $document */
         $document = $this->getDoctrine()
             ->getRepository(MoloniDocuments::class)
@@ -129,24 +129,18 @@ class Documents extends MoloniController
     /**
      * Get download link
      *
-     * @param Request $request
-     * @param int|null $documentId
-     *
      * @return RedirectResponse
      */
-    public function download(Request $request, ?int $documentId): RedirectResponse
+    public function download(): RedirectResponse
     {
-        $documentType = $request->get('documentType', '');
-        $page = $request->get('page', 1);
-
-        if (!is_numeric($documentId) || $documentId <= 0) {
-            $msg = $this->trans('ID is invalid', 'Modules.Molonies.Errors');
-            $this->addErrorMessage($msg);
-
-            return $this->redirectToDocuments($page);
-        }
+        $documentId = (int)Tools::getValue('document_id', 0);
+        $documentType = Tools::getValue('document_type', '');
 
         try {
+            if (!is_numeric($documentId) || $documentId <= 0) {
+                throw new MoloniException('ID is invalid');
+            }
+
             $url = (new DocumentsDownloadPdf($documentId, $documentType))->handle();
 
             if (empty($url)) {
@@ -157,7 +151,7 @@ class Documents extends MoloniController
 
             $this->addErrorMessage($msg, $e->getData());
 
-            return $this->redirectToDocuments($page);
+            return $this->redirectToDocuments();
         }
 
         return $this->redirect($url);
@@ -166,14 +160,13 @@ class Documents extends MoloniController
     /**
      * Restore discarded order
      *
-     * @param Request $request Request data
-     * @param int|null $orderId Order to restore
-     *
      * @return RedirectResponse
      */
-    public function restore(Request $request, ?int $orderId): RedirectResponse
+    public function restore(): RedirectResponse
     {
-        $page = $request->get('page', 1);
+        $orderId = (int)Tools::getValue('order_id', 0);
+        $page = (int)Tools::getValue('page', 1);
+        $filters = Tools::getValue('filters', []);
 
         try {
             $action = new OrderRestoreDiscard($orderId, $this->getDoctrine()->getManager());
@@ -191,6 +184,6 @@ class Documents extends MoloniController
             $this->addErrorMessage($msg);
         }
 
-        return $this->redirectToDocuments($page);
+        return $this->redirectToDocuments($page, $filters);
     }
 }

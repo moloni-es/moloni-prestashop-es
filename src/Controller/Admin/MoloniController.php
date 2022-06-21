@@ -236,12 +236,13 @@ abstract class MoloniController extends FrameworkBundleAdminController implement
      * Redirect to document settings page
      *
      * @param int|null $page
+     * @param array|null $filters
      *
      * @return RedirectResponse
      */
-    protected function redirectToDocuments(?int $page = 1): RedirectResponse
+    protected function redirectToDocuments(?int $page = 1, ?array $filters = []): RedirectResponse
     {
-        return $this->redirectToRoute(MoloniRoutes::DOCUMENTS, ['page' => $page]);
+        return $this->redirectToRoute(MoloniRoutes::DOCUMENTS, ['page' => $page, 'filters' => $filters]);
     }
 
     /**
