@@ -11,7 +11,11 @@
         {% endif %}
 
         <p>
-            Need help? <a href="{{ constant('Moloni\\Enums\\Domains::MOLONI_FAQS') }}" target="_blank">Check our FAQs</a>
+            {{ 'Need help?'|trans({}, 'Modules.Molonies.Common') }}
+            &nbsp
+            <a href="{{ constant('Moloni\\Enums\\Domains::MOLONI_FAQS') }}" target="_blank">
+                {{ 'Check our FAQs'|trans({}, 'Modules.Molonies.Common') }}
+            </a>
         </p>
     </div>
 {% endblock %}
