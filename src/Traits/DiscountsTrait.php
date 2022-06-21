@@ -22,23 +22,14 @@
  * @noinspection PhpMultipleClassDeclarationsInspection
  */
 
-namespace Moloni\Builders\Document\Helpers;
+namespace Moloni\Traits;
 
-class CalculateDiscountPercentage
+trait DiscountsTrait
 {
-    private $price;
-    private $discountedValue;
-
-    public function __construct($price, $discountedValue)
+    protected function calculateDiscountPercentage(?float $price = 0, ?float $discountedValue = 0)
     {
-        $this->price = $price;
-        $this->discountedValue = $discountedValue;
-    }
-
-    public function handle()
-    {
-        if ($this->price > 0) {
-            $discount = (1 - ($this->price / ($this->price + $this->discountedValue))) * 100;
+        if ($price > 0) {
+            $discount = (1 - ($price / ($price + $discountedValue))) * 100;
         } else {
             $discount = 100;
         }

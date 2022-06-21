@@ -26,10 +26,10 @@ declare(strict_types=1);
 
 namespace Moloni\Builders\Document;
 
+use Moloni\Traits\DiscountsTrait;
 use Product;
 use Configuration;
 use Moloni\Api\MoloniApiClient;
-use Moloni\Builders\Document\Helpers\CalculateDiscountPercentage;
 use Moloni\Builders\Document\Helpers\GetOrderProductTaxes;
 use Moloni\Builders\Interfaces\BuilderItemInterface;
 use Moloni\Builders\MoloniProductSimple;
@@ -46,6 +46,8 @@ use Moloni\Tools\SyncLogs;
 
 class OrderProduct implements BuilderItemInterface
 {
+    use DiscountsTrait;
+
     /**
      * Product id in Moloni
      *
@@ -361,7 +363,7 @@ class OrderProduct implements BuilderItemInterface
                 $discountedValue = $this->price * ((float)$this->orderProduct['reduction_percent'] / 100);
                 $discountedValue += $cuponDiscountsValue;
 
-                $discount = (new CalculateDiscountPercentage($price, $discountedValue))->handle();
+                $discount = $this->calculateDiscountPercentage($price, $discountedValue);
             } else {
                 $discount = (float)$this->orderProduct['reduction_percent'];
             }
@@ -370,7 +372,7 @@ class OrderProduct implements BuilderItemInterface
 
             $discountedValue = (float)$this->orderProduct['reduction_amount_tax_excl'] + $cuponDiscountsValue;
 
-            $discount = (new CalculateDiscountPercentage($price, $discountedValue))->handle();
+            $discount = $this->calculateDiscountPercentage($price, $discountedValue);
         }
 
         $this->discount = $discount;
