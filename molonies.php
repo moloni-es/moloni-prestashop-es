@@ -28,12 +28,15 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use Doctrine\Common\Persistence\ManagerRegistry as LegacyManagerRegistry;
-use Doctrine\Persistence\ManagerRegistry;
-use Moloni\Hooks\OrderStatusUpdate;
 use Moloni\Hooks\ProductSave;
+use Moloni\Hooks\AdminOrderButtons;
+use Moloni\Hooks\OrderStatusUpdate;
 use Moloni\Install\Installer;
 use Moloni\Services\MoloniContext;
+use PrestaShopBundle\Translation\DataCollectorTranslator;
+use Symfony\Bundle\FrameworkBundle\Routing\Router;
+use Doctrine\Common\Persistence\ManagerRegistry as LegacyManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 class MoloniEs extends Module
 {
@@ -265,6 +268,27 @@ class MoloniEs extends Module
             $doctrine = $this->get('doctrine');
 
             new OrderStatusUpdate($params['id_order'], $params['newOrderStatus'], $doctrine->getManager());
+        } catch (Exception $e) {
+            // Do nothing
+        }
+    }
+
+    /**
+     * displayAdminOrderTop
+     */
+    public function hookActionGetAdminOrderButtons($params): void
+    {
+        try {
+            $this->initContext();
+
+            /** @var ManagerRegistry|LegacyManagerRegistry $doctrine */
+            $doctrine = $this->get('doctrine');
+            /** @var Router $router */
+            $router = $this->get('router');
+            /** @var DataCollectorTranslator $translator */
+            $translator = $this->getTranslator();
+
+            new AdminOrderButtons($params, $router, $doctrine, $translator);
         } catch (Exception $e) {
             // Do nothing
         }

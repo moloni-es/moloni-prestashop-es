@@ -56,6 +56,7 @@ class Installer
         'actionOrderStatusUpdate',
         'actionProductAdd',
         'actionProductUpdate',
+        'actionGetAdminOrderButtons',
         'addWebserviceResources',
     ];
 

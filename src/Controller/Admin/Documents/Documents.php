@@ -25,6 +25,9 @@
 namespace Moloni\Controller\Admin\Documents;
 
 use Exception;
+use Moloni\Actions\Documents\FetchDocumentById;
+use Moloni\Enums\Domains;
+use Moloni\Exceptions\MoloniApiException;
 use PrestaShopDatabaseException;
 use PrestaShopException;
 use Moloni\Actions\Orders\OrderRestoreDiscard;
@@ -84,6 +87,46 @@ class Documents extends MoloniController
     }
 
     /**
+     * Get view link
+     *
+     * @param Request $request
+     * @param int|null $documentId
+     *
+     * @return RedirectResponse
+     */
+    public function view(Request $request, ?int $documentId = 0): RedirectResponse
+    {
+        /** @var MoloniDocuments|null $document */
+        $document = $this->getDoctrine()
+            ->getRepository(MoloniDocuments::class)
+            ->findOneBy(['documentId' => $documentId], ['id' => 'DESC']);
+
+        try {
+            if ($document === null) {
+                throw new MoloniException('Created document not found');
+            }
+
+            $moloniDocument = (new FetchDocumentById($document->getDocumentId(), $document->getDocumentType()))->handle();
+
+            if (empty($moloniDocument)) {
+                throw new MoloniException('Moloni document not found');
+            }
+
+            $company = MoloniApiClient::companies()->queryCompany();
+
+            $link = Domains::MOLONI_AC . '/' . $company['slug'] . '/' . $document->getDocumentType() . '/view/' . $document->getDocumentId();
+
+            return $this->redirect($link);
+        } catch (MoloniException $e) {
+            $msg = $this->trans($e->getMessage(), 'Modules.Molonies.Errors');
+
+            $this->addErrorMessage($msg);
+        }
+
+        return $this->redirectToOrders();
+    }
+
+    /**
      * Get download link
      *
      * @param Request $request
@@ -116,8 +159,6 @@ class Documents extends MoloniController
 
             return $this->redirectToDocuments($page);
         }
-
-
 
         return $this->redirect($url);
     }

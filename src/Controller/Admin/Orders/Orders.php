@@ -97,6 +97,7 @@ class Orders extends MoloniController
     {
         $orderId = (int) $request->get('order_id', 0);
         $documentType = $request->get('document_type');
+        $fromOrderPage = $request->get('from_order_page', false);
         $page = $request->get('page');
 
         try {
@@ -120,6 +121,10 @@ class Orders extends MoloniController
         } catch (PrestaShopDatabaseException|PrestaShopException $e) {
             $msg = $this->trans('Error fetching Prestashop order', 'Modules.Molonies.Errors');
             $this->addErrorMessage($msg);
+        }
+
+        if ($fromOrderPage) {
+            return $this->redirectToAdminOrderPage($orderId);
         }
 
         return $this->redirectToOrders($page);
