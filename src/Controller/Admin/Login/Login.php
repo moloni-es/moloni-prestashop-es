@@ -25,6 +25,7 @@
 namespace Moloni\Controller\Admin\Login;
 
 use Shop;
+use Tools;
 use Moloni\Api\MoloniApi;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Actions\Helpers\HasOldPluginTables;
@@ -116,9 +117,9 @@ class Login extends MoloniController
         return $this->redirect($url);
     }
 
-    public function retrieveCode(Request $request): RedirectResponse
+    public function retrieveCode(): RedirectResponse
     {
-        $code = $request->get('code', '');
+        $code = Tools::getValue('code', '');
 
         try {
             if (empty($code)) {
@@ -136,7 +137,7 @@ class Login extends MoloniController
         return $this->redirectToCompanySelect();
     }
 
-    public function companySelect(Request $request)
+    public function companySelect()
     {
         $companies = [];
 

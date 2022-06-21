@@ -24,6 +24,7 @@
 
 namespace Moloni\Controller\Admin\Registration;
 
+use Tools;
 use Moloni\Actions\Registration\IsFormValid;
 use Moloni\Controller\Admin\MoloniController;
 use Moloni\Enums\MoloniRoutes;
@@ -79,9 +80,9 @@ class Registration extends MoloniController
         );
     }
 
-    public function verifyForm(Request $request): Response
+    public function verifyForm(): Response
     {
-        $data = $request->get('MoloniRegistration', []);
+        $data = Tools::getValue('MoloniRegistration', []);
 
         $validator = new IsFormValid($data, $this->getContext()->getTranslator());
 

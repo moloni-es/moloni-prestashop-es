@@ -25,10 +25,11 @@
 namespace Moloni\Repository;
 
 use DateTime;
-use Doctrine\ORM\QueryBuilder;
 use Exception;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Moloni\Api\MoloniApi;
 use Moloni\Entity\MoloniDocuments;
 
 class MoloniDocumentsRepository extends EntityRepository
@@ -87,6 +88,10 @@ class MoloniDocumentsRepository extends EntityRepository
 
     private function applyFilters(QueryBuilder $query, array $filters): void
     {
+        $query
+            ->where('md.companyId = :company_id')
+            ->setParameter('company_id', MoloniApi::getCompanyId());
+
         if (!empty($filters['created_date'])) {
             try {
                 $from = new DateTime($filters['created_date'] . " 00:00:00");
