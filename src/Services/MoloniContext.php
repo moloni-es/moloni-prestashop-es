@@ -91,7 +91,7 @@ class MoloniContext
             ->getRepository(MoloniSettings::class);
 
         $this->app = $appRepository->getApp();
-        $this->settings = $settingsRepo->getSettings();
+        $this->settings = $settingsRepo->getSettings($this->getCompanyId());
 
         return $this;
     }
@@ -117,6 +117,10 @@ class MoloniContext
 
     public function getCompanyId(): int
     {
+        if ($this->app === null) {
+            return 0;
+        }
+
         return $this->app->getCompanyId();
     }
 }

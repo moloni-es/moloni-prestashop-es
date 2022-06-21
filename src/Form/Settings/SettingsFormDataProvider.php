@@ -30,6 +30,7 @@ use Configuration;
 use DateTime;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
+use Moloni\Api\MoloniApi;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Enums\Boolean;
 use Moloni\Enums\DocumentStatus;
@@ -104,7 +105,9 @@ class SettingsFormDataProvider implements FormDataProviderInterface
     public function setData(array $data): array
     {
         $shopId = (int)Shop::getContextShopID();
-        $this->settingsRepository->saveSettings($data, $shopId);
+        $companyId = MoloniApi::getCompanyId();
+
+        $this->settingsRepository->saveSettings($data, $shopId, $companyId);
 
         return $data;
     }

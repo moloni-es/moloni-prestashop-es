@@ -45,6 +45,14 @@ class MoloniSettings
     /**
      * @var int
      *
+     * @ORM\Column(name="company_id", type="integer")
+     */
+    private $companyId;
+
+
+    /**
+     * @var int
+     *
      * @ORM\Column(name="shop_id", type="integer")
      */
     private $shopId;
@@ -69,6 +77,22 @@ class MoloniSettings
     public function getId(): int
     {
         return $this->id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCompanyId(): int
+    {
+        return $this->companyId;
+    }
+
+    /**
+     * @param int $companyId
+     */
+    public function setCompanyId(int $companyId): void
+    {
+        $this->companyId = $companyId;
     }
 
     /**
@@ -126,6 +150,7 @@ class MoloniSettings
     {
         return [
             'id' => $this->getId(),
+            'company_id' => $this->getCompanyId(),
             'store_id' => $this->getShopId(),
             'label' => $this->getLabel(),
             'value' => $this->getValue(),
