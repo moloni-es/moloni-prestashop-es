@@ -1,0 +1,17 @@
+{% extends '@PrestaShop/Admin/layout.html.twig' %}
+
+{% block content %}
+    {% block plugin_content %}{% endblock %}
+
+    <div class="d-flex flex-column align-items-center">
+        {% if (companyName is defined) and  (companyName is not empty) %}
+            <b>
+                {{ companyName }}
+            </b>
+        {% endif %}
+
+        <p>
+            Need help? <a href="{{ constant('Moloni\\Enums\\Domains::MOLONI_FAQS') }}" target="_blank">Check our FAQs</a>
+        </p>
+    </div>
+{% endblock %}

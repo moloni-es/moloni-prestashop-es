@@ -81,6 +81,7 @@ class Orders extends MoloniController
                 'orderStatesArray' => OrderState::getOrderStates($this->getContextLangId()),
                 'filters' => $filters,
                 'paginator' => $paginator,
+                'companyName' => Settings::get('companyName'),
                 'documentType' => Settings::get('documentType'),
                 'documentTypes' => DocumentTypes::getDocumentsTypes(),
                 'createDocumentRoute' => MoloniRoutes::ORDERS_CREATE,
