@@ -31,6 +31,7 @@ use PrestaShopDatabaseException;
 use Moloni\Enums\DocumentTypes;
 use Moloni\Actions\Documents\FetchDocumentById;
 use Moloni\Enums\Domains;
+use Moloni\Tools\Settings;
 use Moloni\Actions\Orders\OrderRestoreDiscard;
 use Moloni\Actions\Documents\DocumentsDownloadPdf;
 use Moloni\Actions\Documents\DocumentsListDetails;
@@ -80,6 +81,7 @@ class Documents extends MoloniController
                 'documentTypeArray' => DocumentTypes::getDocumentsTypes(),
                 'filters' => $filters,
                 'paginator' => $paginator,
+                'companyName' => Settings::get('companyName'),
                 'downloadDocumentRoute' => MoloniRoutes::DOCUMENTS_DOWNLOAD,
                 'restoreDocumentRoute' => MoloniRoutes::DOCUMENTS_RESTORE,
                 'thisRoute' => MoloniRoutes::DOCUMENTS,

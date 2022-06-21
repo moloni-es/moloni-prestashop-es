@@ -25,6 +25,7 @@
 namespace Moloni\Controller\Admin\Tools;
 
 use Exception;
+use Tools as PrestashopTools;
 use Moloni\Actions\Exports\ExportProductsToMoloni;
 use Moloni\Actions\Exports\ExportStocksToMoloni;
 use Moloni\Actions\Imports\ImportProductsFromMoloni;
@@ -32,7 +33,6 @@ use Moloni\Actions\Imports\ImportStockChangesFromMoloni;
 use Moloni\Actions\Tools\LogsListDetails;
 use Moloni\Actions\Tools\WebhookCreate;
 use Moloni\Actions\Tools\WebhookDeleteAll;
-use Moloni\Api\MoloniApi;
 use Moloni\Controller\Admin\MoloniController;
 use Moloni\Entity\MoloniLogs;
 use Moloni\Enums\Boolean;
@@ -42,9 +42,7 @@ use Moloni\Exceptions\MoloniException;
 use Moloni\Repository\MoloniLogsRepository;
 use Moloni\Tools\Settings;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Tools as PrestashopTools;
 
 class Tools extends MoloniController
 {
@@ -53,6 +51,7 @@ class Tools extends MoloniController
         return $this->render(
             '@Modules/molonies/views/templates/admin/tools/Tools.twig',
             [
+                'companyName' => Settings::get('companyName'),
                 'importProductsRoute' => MoloniRoutes::TOOLS_IMPORT_PRODUCTS,
                 'importStocksRoute' => MoloniRoutes::TOOLS_IMPORT_STOCKS,
                 'exportProductsRoute' => MoloniRoutes::TOOLS_EXPORT_PRODUCTS,
@@ -232,6 +231,7 @@ class Tools extends MoloniController
                 'logsLevelsArray' => LogLevel::getLogLevels(),
                 'filters' => $filters,
                 'paginator' => $paginator,
+                'companyName' => Settings::get('companyName'),
                 'toolsRoute' => MoloniRoutes::TOOLS,
                 'deleteLogsRoute' => MoloniRoutes::TOOLS_DELETE_LOGS,
                 'thisRoute' => MoloniRoutes::TOOLS_OPEN_LOGS,
