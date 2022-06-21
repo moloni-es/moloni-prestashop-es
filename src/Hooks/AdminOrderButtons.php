@@ -28,11 +28,11 @@ use Moloni\Api\MoloniApi;
 use Moloni\Entity\MoloniDocuments;
 use Moloni\Enums\MoloniRoutes;
 use Moloni\Repository\MoloniDocumentsRepository;
+use PrestaShopBundle\Translation\Translator;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Common\Persistence\ManagerRegistry as LegacyManagerRegistry;
 use PrestaShop\PrestaShop\Core\Exception\TypeException;
-use PrestaShopBundle\Translation\DataCollectorTranslator;
 use PrestaShopBundle\Controller\Admin\Sell\Order\ActionsBarButton;
 use PrestaShopBundle\Controller\Admin\Sell\Order\ActionsBarButtonsCollection;
 
@@ -60,11 +60,11 @@ class AdminOrderButtons extends AbstractHookAction
      * @param array $params
      * @param Router $router
      * @param ManagerRegistry|LegacyManagerRegistry $doctrine
-     * @param DataCollectorTranslator $translator
+     * @param Translator $translator
      *
      * @throws TypeException
      */
-    public function __construct(array &$params, Router $router, $doctrine, DataCollectorTranslator  $translator)
+    public function __construct(array &$params, Router $router, $doctrine, Translator  $translator)
     {
         $this->router = $router;
         $this->translator = $translator;
