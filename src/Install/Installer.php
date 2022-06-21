@@ -158,24 +158,24 @@ class Installer
         $database = Db::getInstance();
 
         // Check if the table already exists
-        $query = $database->executeS("SHOW COLUMNS FROM `" . _DB_PREFIX_ . "_moloni_app` LIKE 'id'");
+        $query = $database->executeS("SHOW COLUMNS FROM `" . _DB_PREFIX_ . "moloni_app` LIKE 'id'");
 
         if (empty($query)) {
             return true;
         }
 
         // If so, check if new columns exist
-        $query = $database->executeS("SHOW COLUMNS FROM `" . _DB_PREFIX_ . "_moloni_app` LIKE 'access_time'");
+        $query = $database->executeS("SHOW COLUMNS FROM `" . _DB_PREFIX_ . "moloni_app` LIKE 'access_time'");
 
         if (!empty($query)) {
             return true;
         }
 
         // If not, drop old tables
-        $database->execute('DROP TABLE ' . _DB_PREFIX_ . '_moloni_app');
-        $database->execute('DROP TABLE ' . _DB_PREFIX_ . '_moloni_documents');
-        $database->execute('DROP TABLE ' . _DB_PREFIX_ . '_moloni_settings');
-        $database->execute('DROP TABLE ' . _DB_PREFIX_ . '_moloni_sync_logs');
+        $database->execute('DROP TABLE ' . _DB_PREFIX_ . 'moloni_app');
+        $database->execute('DROP TABLE ' . _DB_PREFIX_ . 'moloni_documents');
+        $database->execute('DROP TABLE ' . _DB_PREFIX_ . 'moloni_settings');
+        $database->execute('DROP TABLE ' . _DB_PREFIX_ . 'moloni_sync_logs');
 
         return true;
     }
