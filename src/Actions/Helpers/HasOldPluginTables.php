@@ -33,7 +33,7 @@ class HasOldPluginTables
         $database = Db::getInstance();
 
         try {
-            $query = $database->executeS("SHOW COLUMNS FROM `" . _DB_PREFIX_ . "_moloni_app` LIKE 'access_time'");
+            $query = $database->executeS("SHOW COLUMNS FROM `" . _DB_PREFIX_ . "moloni_app` LIKE 'access_time'");
         } catch (\PrestaShopDatabaseException $e) {
             return false;
         }
