@@ -33,7 +33,7 @@ use Moloni\Hooks\AdminOrderButtons;
 use Moloni\Hooks\OrderStatusUpdate;
 use Moloni\Install\Installer;
 use Moloni\Services\MoloniContext;
-use PrestaShopBundle\Translation\Translator;
+use PrestaShopBundle\Translation\TranslatorInterface;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Doctrine\Common\Persistence\ManagerRegistry as LegacyManagerRegistry;
 use Doctrine\Persistence\ManagerRegistry;
@@ -285,7 +285,7 @@ class MoloniEs extends Module
             $doctrine = $this->get('doctrine');
             /** @var Router $router */
             $router = $this->get('router');
-            /** @var Translator $translator */
+            /** @var TranslatorInterface  $translator */
             $translator = $this->getTranslator();
 
             new AdminOrderButtons($params, $router, $doctrine, $translator);

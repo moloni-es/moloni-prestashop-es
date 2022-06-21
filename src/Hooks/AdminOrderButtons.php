@@ -28,7 +28,7 @@ use Moloni\Api\MoloniApi;
 use Moloni\Entity\MoloniDocuments;
 use Moloni\Enums\MoloniRoutes;
 use Moloni\Repository\MoloniDocumentsRepository;
-use PrestaShopBundle\Translation\Translator;
+use PrestaShopBundle\Translation\TranslatorInterface;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Common\Persistence\ManagerRegistry as LegacyManagerRegistry;
@@ -60,11 +60,11 @@ class AdminOrderButtons extends AbstractHookAction
      * @param array $params
      * @param Router $router
      * @param ManagerRegistry|LegacyManagerRegistry $doctrine
-     * @param Translator $translator
+     * @param TranslatorInterface $translator
      *
      * @throws TypeException
      */
-    public function __construct(array &$params, Router $router, $doctrine, Translator  $translator)
+    public function __construct(array &$params, Router $router, $doctrine, TranslatorInterface  $translator)
     {
         $this->router = $router;
         $this->translator = $translator;
@@ -107,7 +107,7 @@ class AdminOrderButtons extends AbstractHookAction
     private function addViewButton(int $documentId): void
     {
         $href = $this->router->generate(MoloniRoutes::DOCUMENTS_VIEW, [
-            'documentId' => $documentId
+            'document_id' => $documentId
         ]);
 
         $title = $this->getMoloniLogo();

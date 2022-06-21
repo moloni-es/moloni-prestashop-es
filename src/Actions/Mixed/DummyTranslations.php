@@ -105,4 +105,15 @@ class DummyTranslations
         $this->translator->trans('Created document not found', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Moloni document not found', [], 'Modules.Molonies.Errors');
     }
+
+    public function common(): void
+    {
+        $this->translator->trans('Invoice', [], 'Modules.Molonies.Common');
+        $this->translator->trans('Invoice + Receipt', [], 'Modules.Molonies.Common');
+        $this->translator->trans('Purchase Order', [], 'Modules.Molonies.Common');
+        $this->translator->trans('Pro Forma Invoice', [], 'Modules.Molonies.Common');
+        $this->translator->trans('Simplified invoice', [], 'Modules.Molonies.Common');
+        $this->translator->trans('Budget', [], 'Modules.Molonies.Common');
+        $this->translator->trans('Bills of lading', [], 'Modules.Molonies.Common');
+    }
 }
