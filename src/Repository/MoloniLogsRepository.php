@@ -25,9 +25,11 @@
 namespace Moloni\Repository;
 
 use DateTime;
+use Doctrine\ORM\QueryBuilder;
 use Exception;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Moloni\Api\MoloniApi;
 use Moloni\Entity\MoloniSyncLogs;
 
 class MoloniLogsRepository extends EntityRepository
@@ -35,19 +37,18 @@ class MoloniLogsRepository extends EntityRepository
     /**
      * @throws Exception
      */
-    public function getAllPaginated(?int $page = 1, ?int $companyId = 0): array
+    public function getAllPaginated(?int $page = 1, ?array $filters = []): array
     {
         $logs = [];
         $logsPerPage = 10;
 
-        $query = $this
-            ->createQueryBuilder('l')
-            ->where('l.companyId = :company_id')
-            ->setParameter('company_id', $companyId)
-            ->orderBy('l.id', 'DESC')
-            ->getQuery();
+        $query = $this->createQueryBuilder('l');
 
-        $paginator = new Paginator($query, false);
+        $this->applyFilters($query, $filters);
+
+        $query->orderBy('l.id', 'DESC');
+
+        $paginator = new Paginator($query->getQuery(), false);
 
         $totalItems = $paginator->count();
         $totalItems = $totalItems === 0 ? 1 : $totalItems;
@@ -94,5 +95,39 @@ class MoloniLogsRepository extends EntityRepository
             ->setParameter('created_at', new DateTime('@' . strtotime("-1 week")))
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * Apply list query filters
+     *
+     * @param QueryBuilder $query
+     * @param array $filters
+     *
+     * @return void
+     */
+    private function applyFilters(QueryBuilder $query, array $filters): void
+    {
+        $query
+            ->where('l.companyId = :company_id')
+            ->setParameter('company_id', MoloniApi::getCompanyId());
+
+        if (!empty($filters['created_date'])) {
+            try {
+                $from = new DateTime($filters['created_date'] . " 00:00:00");
+                $to = new DateTime($filters['created_date'] . " 23:59:59");
+                $query
+                    ->andWhere('l.createdAt BETWEEN :from AND :to')
+                    ->setParameter('from', $from)
+                    ->setParameter('to', $to);
+            } catch (Exception $e) {
+                // catch nothing
+            }
+        }
+
+        if (!empty($filters['log_level'])) {
+            $query
+                ->andWhere('l.level = :log_level')
+                ->setParameter('log_level', $filters['log_level']);
+        }
     }
 }

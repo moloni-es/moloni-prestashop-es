@@ -30,4 +30,13 @@ class LogLevel
     public const WARNING = 2;
     public const ERROR = 3;
     public const HIDDEN = 4;
+
+    public static function getLogLevels(): array
+    {
+        return [
+            'Information' => self::INFO,
+            'Warning' => self::WARNING,
+            'Error' => self::ERROR,
+        ];
+    }
 }

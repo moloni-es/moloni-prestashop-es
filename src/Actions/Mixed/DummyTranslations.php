@@ -115,5 +115,9 @@ class DummyTranslations
         $this->translator->trans('Simplified invoice', [], 'Modules.Molonies.Common');
         $this->translator->trans('Budget', [], 'Modules.Molonies.Common');
         $this->translator->trans('Bills of lading', [], 'Modules.Molonies.Common');
+
+        $this->translator->trans('Error', [], 'Modules.Molonies.Common');
+        $this->translator->trans('Warning', [], 'Modules.Molonies.Common');
+        $this->translator->trans('Information', [], 'Modules.Molonies.Common');
     }
 }
