@@ -1,12 +1,12 @@
 <nav aria-label="navigation">
     <ul class="pagination justify-content-center mt-2">
         <li class="page-item {% if paginator.currentPage|default(1) == 1 %} disabled {% endif %}">
-            <a class="page-link" href="{{ path(thisRoute, {page: 1}) }}">1</a>
+            <a class="page-link" href="{{ path(thisRoute, {page: 1, filters: filters|default(null)}) }}">1</a>
         </li>
         <li class="page-item previous {% if paginator.currentPage|default(1) == 1 %} disabled {% endif %}">
             <a class="page-link"
                aria-label="Previous"
-               href="{{ path(thisRoute, {page: (paginator.currentPage|default(1) - 1)}) }}">
+               href="{{ path(thisRoute, {page: (paginator.currentPage|default(1) - 1), filters: filters|default(null)}) }}">
                 <span class="sr-only">Previous</span>
             </a>
         </li>
@@ -16,7 +16,7 @@
                     class="jump-to-page"
                     type="text"
                     value="{{ paginator.currentPage|default(1) }}"
-                    psurl="{{ path(thisRoute) }}"
+                    psurl="{{ path(thisRoute, {filters: filters|default(null)}) }}"
                     psmax="{{ paginator.numberOfPages|default(1) }}"
             />
         </li>
@@ -24,12 +24,13 @@
             <a class="page-link"
                aria-label="Next"
                id="pagination_next_url"
-               href="{{ path(thisRoute, {page: (paginator.currentPage|default(1) + 1)}) }}">
+               href="{{ path(thisRoute, {page: (paginator.currentPage|default(1) + 1), filters: filters|default(null)}) }}">
                 <span class="sr-only">Next</span>
             </a>
         </li>
         <li class="page-item {% if paginator.currentPage|default(1) == paginator.numberOfPages|default(1) %} disabled {% endif %}">
-            <a class="page-link" href="{{ path(thisRoute, {page: paginator.numberOfPages|default(1)}) }}">
+            <a class="page-link"
+               href="{{ path(thisRoute, {page: paginator.numberOfPages|default(1), filters: filters|default(null)}) }}">
                 {{ paginator.numberOfPages|default(1) }}
             </a>
         </li>
