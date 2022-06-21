@@ -36,6 +36,7 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
@@ -640,6 +641,16 @@ class SettingsFormType extends TranslatorAwareType
         return $this;
     }
 
+    private function companyName(): SettingsFormType
+    {
+        $this->builder->add('companyName', HiddenType::class, [
+            'label' => $this->trans('Company name', "Modules.Molonies.Settings"),
+            'required' => false,
+        ]);
+
+        return $this;
+    }
+
     private function alertEmail(): SettingsFormType
     {
         $this->builder->add('alertEmail', EmailType::class, [
@@ -721,7 +732,9 @@ class SettingsFormType extends TranslatorAwareType
 
     private function setAdvancedTab(): SettingsFormType
     {
-        $this->alertEmail();
+        $this
+            ->companyName()
+            ->alertEmail();
 
         return $this;
     }
