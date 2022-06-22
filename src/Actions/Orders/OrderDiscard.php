@@ -25,6 +25,7 @@
 namespace Moloni\Actions\Orders;
 
 use DateTime;
+use Moloni\Enums\DocumentIdentifiers;
 use Shop;
 use Moloni\Api\MoloniApi;
 use Moloni\Entity\MoloniOrderDocuments;
@@ -45,25 +46,10 @@ class OrderDiscard extends AbstractOrderAction
             throw new MoloniException('Order already dicarded or created!');
         }
 
-        $this->saveRecord(-1, MoloniApi::getCompanyId());
-    }
-
-    /**
-     * Save document record
-     *
-     * @param int $documentId
-     * @param int $companyId
-     *
-     * @return void
-     */
-    private function saveRecord(int $documentId, int $companyId): void
-    {
-        $shopId = (int)Shop::getContextShopID();
-
         $document = new MoloniOrderDocuments();
-        $document->setShopId($shopId);
-        $document->setDocumentId($documentId);
-        $document->setCompanyId($companyId);
+        $document->setShopId((int)Shop::getContextShopID());
+        $document->setDocumentId(DocumentIdentifiers::DISCARDED);
+        $document->setCompanyId(MoloniApi::getCompanyId());
         $document->setDocumentType('');
         $document->setOrderId($this->orderId);
         $document->setOrderReference($this->order->reference);
