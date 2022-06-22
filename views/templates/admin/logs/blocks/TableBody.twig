@@ -25,16 +25,18 @@
             </td>
             <td>
                 {% for message in log.message %}
-                    {% if message[1] %}
-                        {% set foo = {} %}
+                    {% set foo = {} %}
 
+                    {% if message[1] %}
                         {% for key, value in message[1] %}
                             {% set foo = foo|merge({(key): value}) %}
                         {% endfor %}
+                    {% endif %}
 
+                    {% if log.level == constant('Moloni\\Enums\\LogLevel::INFO') %}
                         {{ message[0]|trans(foo, 'Modules.Molonies.Common') }}
                     {% else %}
-                        {{ message[0]|trans({}, 'Modules.Molonies.Common') }}
+                        {{ message[0]|trans(foo, 'Modules.Molonies.Errors') }}
                     {% endif %}
                     <br>
                 {% endfor %}
