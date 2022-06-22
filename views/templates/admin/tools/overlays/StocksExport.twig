@@ -8,7 +8,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">
-                    {{ 'Export Prestashop stocks'|trans({}, 'Modules.Molonies.Common') }}
+                    {{ 'Update Moloni stocks'|trans({}, 'Modules.Molonies.Tools') }}
                 </h5>
                 <button type="button"
                         class="close"
@@ -19,24 +19,24 @@
             </div>
             <div class="modal-body">
                 <p>
-                    TODO!!!
-                    {{ 'Please keep this window open until the process finishes.'|trans({}, 'Modules.Molonies.Common') }}
+                    {{ 'This tool will cycle for all your Prestashop products and will insert manual stock movements in your Moloni account to make sure the stocks are equal in both platforms.'|trans({}, 'Modules.Molonies.Tools') }}<br>
+                    {{ 'When the tool is finish, all your Moloni stock will be updated to match the stock on your Prestashop store.'|trans({}, 'Modules.Molonies.Tools') }}
+                    {{ 'This may take a while, so, please keep this window open until the process finishes.'|trans({}, 'Modules.Molonies.Tools') }}
                 </p>
-                <br>
                 <p>
-                    {{ 'Are you sure you want to continue? '|trans({}, 'Modules.Molonies.Common') }}
+                    {{ 'Are you sure you want to continue?'|trans({}, 'Modules.Molonies.Tools') }}
                 </p>
             </div>
             <div class="modal-footer">
                 <button type="button"
                         class="btn btn-outline-secondary"
                         data-dismiss="modal">
-                    {{ 'Close'|trans({}, 'Modules.Molonies.Common') }}
+                    {{ 'Close'|trans({}, 'Modules.Molonies.Tools') }}
                 </button>
                 <button class="btn btn-primary"
                         data-dismiss="modal"
                         id="export_stocks_button">
-                    {{ 'Export stocks'|trans({}, 'Modules.Molonies.Common') }}
+                    {{ 'Export stocks'|trans({}, 'Modules.Molonies.Tools') }}
                 </button>
             </div>
         </div>

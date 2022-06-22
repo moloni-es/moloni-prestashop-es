@@ -8,7 +8,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">
-                    {{ 'Logout'|trans({}, 'Modules.Molonies.Common') }}
+                    {{ 'Logout'|trans({}, 'Modules.Molonies.Tools') }}
                 </h5>
                 <button type="button"
                         class="close"
@@ -19,20 +19,20 @@
             </div>
             <div class="modal-body">
                 <p>
-                    {{ 'Moloni authentication will be lost.'|trans({}, 'Modules.Molonies.Common') }}<br>
+                    {{ 'Moloni authentication will be lost.'|trans({}, 'Modules.Molonies.Tools') }}<br>
                 </p>
                 <p>
-                    {{ 'Are you sure you want to continue? '|trans({}, 'Modules.Molonies.Common') }}
+                    {{ 'Are you sure you want to continue?'|trans({}, 'Modules.Molonies.Tools') }}
                 </p>
             </div>
             <div class="modal-footer">
                 <button type="button"
                         class="btn btn-outline-secondary"
                         data-dismiss="modal">
-                    {{ 'Close'|trans({}, 'Modules.Molonies.Common') }}
+                    {{ 'Close'|trans({}, 'Modules.Molonies.Tools') }}
                 </button>
                 <a class="btn btn-danger" href="{{ path(logoutRoute) }}">
-                    {{ 'Logout'|trans({}, 'Modules.Molonies.Common') }}
+                    {{ 'Logout'|trans({}, 'Modules.Molonies.Tools') }}
                 </a>
             </div>
         </div>

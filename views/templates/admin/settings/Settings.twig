@@ -137,24 +137,46 @@
                              id="pills-automation"
                              role="tabpanel"
                              aria-labelledby="pills-automation-tab">
-                            <p class="h2">{{ 'Automatic actions from Prestashop'|trans({}, 'Modules.Molonies.Settings') }}</p>
-                            <p class="text-muted">{{ 'This actions happen when an action occours in your Prestashop Store.'|trans({}, 'Modules.Molonies.Settings') }}</p>
+
+                            <div class="form-group row mb-0">
+                                <label class="form-control-label"></label>
+                                <label class="col-sm h2">{{ 'Automatic actions from Prestashop'|trans({}, 'Modules.Molonies.Settings') }}</label>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="form-control-label"></label>
+                                <label class="col-sm text-muted">{{ 'This actions happen when an action occours in your Prestashop Store.'|trans({}, 'Modules.Molonies.Settings') }}</label>
+                            </div>
 
                             {{ form_row(form.syncStockToMoloni) }}
                             {{ form_row(form.syncStockToMoloniWarehouse) }}
                             {{ form_row(form.addProductsToMoloni) }}
                             {{ form_row(form.updateProductsToMoloni) }}
 
-                            <p class="h2">{{ 'Automatic actions from Moloni'|trans({}, 'Modules.Molonies.Settings') }}</p>
-                            <p class="text-muted">{{ 'This actions happen when an action occours in your Moloni account.'|trans({}, 'Modules.Molonies.Settings') }}</p>
+                            <div class="form-group row mb-0">
+                                <label class="form-control-label"></label>
+                                <label class="col-sm h2">{{ 'Automatic actions from Moloni'|trans({}, 'Modules.Molonies.Settings') }}</label>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="form-control-label"></label>
+                                <label class="col-sm text-muted">{{ 'This actions happen when an action occours in your Moloni account.'|trans({}, 'Modules.Molonies.Settings') }}</label>
+                            </div>
 
                             {{ form_row(form.syncStockToPrestashop) }}
                             {{ form_row(form.syncStockToPrestashopWarehouse) }}
                             {{ form_row(form.addProductsToPrestashop) }}
                             {{ form_row(form.updateProductsToPrestashop) }}
 
-                            <p class="h2">{{ 'Synchronization extras'|trans({}, 'Modules.Molonies.Settings') }}</p>
-                            <p class="text-muted">{{ 'This settings will be applied to all automatic actions.'|trans({}, 'Modules.Molonies.Settings') }}</p>
+                            <div class="form-group row mb-0">
+                                <label class="form-control-label"></label>
+                                <label class="col-sm h2">{{ 'Synchronization extras'|trans({}, 'Modules.Molonies.Settings') }}</label>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="form-control-label"></label>
+                                <label class="col-sm text-muted">{{ 'This settings will be applied to all automatic actions.'|trans({}, 'Modules.Molonies.Settings') }}</label>
+                            </div>
 
                             {{ form_row(form.productSyncFields) }}
                         </div>

@@ -25,20 +25,20 @@
             <td class="text-center">
                 {% if document.order_not_found  is defined %}
                     <span class="badge badge-danger">
-                                        {{ 'Order not found'|trans({}, 'Modules.Molonies.Errors') }}
-                                    </span>
+                        {{ 'Order not found'|trans({}, 'Modules.Molonies.Errors') }}
+                    </span>
                 {% elseif document.document_not_found is defined %}
                     <span class="badge badge-danger">
-                                        {{ 'Document not found'|trans({}, 'Modules.Molonies.Common') }}
-                                    </span>
+                        {{ 'Document not found'|trans({}, 'Modules.Molonies.Common') }}
+                    </span>
                 {% elseif document.order_discarded is defined %}
                     <span class="badge badge-warning">
-                                        {{ 'Discarted'|trans({}, 'Modules.Molonies.Common') }}
-                                    </span>
+                        {{ 'Discarted'|trans({}, 'Modules.Molonies.Common') }}
+                    </span>
                 {% elseif document.document_id > 0 %}
                     <span class="badge badge-success">
-                                        {{ 'Created'|trans({}, 'Modules.Molonies.Common') }}
-                                    </span>
+                        {{ 'Created'|trans({}, 'Modules.Molonies.Common') }}
+                    </span>
                 {% else %}
                     ---
                 {% endif %}
