@@ -214,9 +214,9 @@ class OrderProduct implements BuilderItemInterface
      */
     public function insert(): void
     {
-        try {
-            SyncLogs::prestashopProductAddTimeout((int)$this->orderProduct['product_id']);
+        SyncLogs::prestashopProductAddTimeout((int)$this->orderProduct['product_id']);
 
+        try {
             $product = new Product($this->orderProduct['product_id'], true, Configuration::get('PS_LANG_DEFAULT'));
 
             if ($product->product_type === 'combinations') {
@@ -465,6 +465,7 @@ class OrderProduct implements BuilderItemInterface
                     'field' => 'reference',
                     'value' => $this->reference,
                 ],
+                'includeVariants' => true
             ],
         ];
 
