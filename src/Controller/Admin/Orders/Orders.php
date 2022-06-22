@@ -118,7 +118,13 @@ class Orders extends MoloniController
             $msg = $this->trans($e->getMessage(), 'Modules.Molonies.Errors', $e->getIdentifiers());
             $this->addWarningMessage($msg, $e->getData());
         } catch (MoloniDocumentException|MoloniException $e) {
-            Logs::addErrorLog([$e->getMessage(), $e->getIdentifiers()], $e->getData());
+            $msg = $this->trans('Error creating document.', 'Modules.Molonies.Common');
+
+            if (isset($action)) {
+                $msg .= ' (' . $action->getOrder()->reference . ')';
+            }
+
+            Logs::addErrorLog([[$msg], [$e->getMessage(), $e->getIdentifiers()]], $e->getData());
 
             $msg = $this->trans($e->getMessage(), 'Modules.Molonies.Errors', $e->getIdentifiers());
             $this->addErrorMessage($msg, $e->getData());
