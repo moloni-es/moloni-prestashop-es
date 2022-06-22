@@ -26,10 +26,11 @@ declare(strict_types=1);
 
 namespace Moloni\Builders\Document;
 
-use Moloni\Traits\DiscountsTrait;
 use Product;
 use Configuration;
 use Moloni\Api\MoloniApiClient;
+use Moloni\Traits\DiscountsTrait;
+use Moloni\Entity\MoloniProductAssociations;
 use Moloni\Builders\Document\Helpers\GetOrderProductTaxes;
 use Moloni\Builders\Interfaces\BuilderItemInterface;
 use Moloni\Builders\MoloniProductSimple;
@@ -41,6 +42,7 @@ use Moloni\Exceptions\Document\MoloniDocumentProductTaxException;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\MoloniException;
 use Moloni\Exceptions\Product\MoloniProductException;
+use Moloni\Tools\ProductAssociations;
 use Moloni\Tools\Settings;
 use Moloni\Tools\SyncLogs;
 
@@ -228,7 +230,16 @@ class OrderProduct implements BuilderItemInterface
             throw new MoloniDocumentProductException($e->getMessage(), $e->getIdentifiers(), $e->getData());
         }
 
-        $this->productId = $productBuilder->getMoloniProductId();
+        // Has variants, we need id of variant alone
+        if ($productBuilder instanceof MoloniProductWithVariants) {
+            /** @var MoloniProductAssociations $association */
+            $association = ProductAssociations::findByPrestashopCombinationId((int)$this->orderProduct['product_attribute_id']);
+
+            $this->productId = $association->getMlVariantId();
+        } else {
+            $this->productId = $productBuilder->getMoloniProductId();
+        }
+
         $this->moloniProduct = $productBuilder->getMoloniProduct();
     }
 
