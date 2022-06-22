@@ -95,7 +95,7 @@
                         {{ form_widget(form.password.first) }}
 
                         <small class="form-text">
-                            {{ 'Between 6 and 16 characters, at least one uppercase letter, one symbol and one number'|trans({}, 'Modules.Molonies.Common') }}
+                            {{ 'Between 6 and 16 characters, at least one uppercase letter, one symbol and one number'|trans({}, 'Modules.Molonies.Signup') }}
                         </small>
 
                         <div class="invalid-feedback"></div>
@@ -123,11 +123,11 @@
             </div>
             <div class="moloni-registration--buttons">
                 <a class="btn btn-outline-secondary" href="{{ path(loginRoute) }}">
-                    {{ 'Cancel'|trans({}, 'Modules.Molonies.Common') }}
+                    {{ 'Cancel'|trans({}, 'Modules.Molonies.Signup') }}
                 </a>
 
                 <button type="button" class="btn btn-primary" id="verify_registration_form">
-                    {{ 'Register'|trans({}, 'Modules.Molonies.Common') }}
+                    {{ 'Register'|trans({}, 'Modules.Molonies.Signup') }}
                 </button>
             </div>
             <div style="display: none;">

@@ -86,7 +86,7 @@ class RegistrationFormType extends TranslatorAwareType
     private function setEmail(): RegistrationFormType
     {
         $this->builder->add('email', EmailType::class, [
-            'label' => $this->trans('E-mail', "Modules.Molonies.Common"),
+            'label' => $this->trans('E-mail', "Modules.Molonies.Signup"),
             'required' => true,
         ]);
 
@@ -96,14 +96,14 @@ class RegistrationFormType extends TranslatorAwareType
     private function setBusinessType(): RegistrationFormType
     {
         $this->builder->add('businessType', ChoiceType::class, [
-            'label' => $this->trans('Business type', "Modules.Molonies.Common"),
+            'label' => $this->trans('Business type', "Modules.Molonies.Signup"),
             'choices' => $this->options->getBusinessAreas(),
             'required' => true,
-            'placeholder' => $this->trans('Please select an option', "Modules.Molonies.Common"),
+            'placeholder' => $this->trans('Please select an option', "Modules.Molonies.Signup"),
         ]);
 
         $this->builder->add('businessTypeName', TextType::class, [
-            'label' => $this->trans('Business type name', "Modules.Molonies.Common"),
+            'label' => $this->trans('Business type name', "Modules.Molonies.Signup"),
             'required' => false,
         ]);
 
@@ -113,7 +113,7 @@ class RegistrationFormType extends TranslatorAwareType
     private function setCompanyName(): RegistrationFormType
     {
         $this->builder->add('companyName', TextType::class, [
-            'label' => $this->trans('Company name', "Modules.Molonies.Common"),
+            'label' => $this->trans('Company name', "Modules.Molonies.Signup"),
             'required' => true,
         ]);
 
@@ -123,7 +123,7 @@ class RegistrationFormType extends TranslatorAwareType
     private function setVat(): RegistrationFormType
     {
         $this->builder->add('vat', TextType::class, [
-            'label' => $this->trans('Vat', "Modules.Molonies.Common"),
+            'label' => $this->trans('Vat', "Modules.Molonies.Signup"),
             'required' => true,
         ]);
 
@@ -133,8 +133,8 @@ class RegistrationFormType extends TranslatorAwareType
     private function setCountry(): RegistrationFormType
     {
         $this->builder->add('country', ChoiceType::class, [
-            'label' => $this->trans('Country', "Modules.Molonies.Common"),
-            'placeholder' => $this->trans('Please select an option', "Modules.Molonies.Common"),
+            'label' => $this->trans('Country', "Modules.Molonies.Signup"),
+            'placeholder' => $this->trans('Please select an option', "Modules.Molonies.Signup"),
             'choices' => $this->options->getCountries(),
             'required' => true,
         ]);
@@ -145,7 +145,7 @@ class RegistrationFormType extends TranslatorAwareType
     private function setSlug(): RegistrationFormType
     {
         $this->builder->add('slug', TextType::class, [
-            'label' => $this->trans('Slug', "Modules.Molonies.Common"),
+            'label' => $this->trans('Slug', "Modules.Molonies.Signup"),
             'constraints' => [
                 new Length(['min' => 4]),
                 new NotBlank(),
@@ -159,7 +159,7 @@ class RegistrationFormType extends TranslatorAwareType
     private function setUserName(): RegistrationFormType
     {
         $this->builder->add('username', TextType::class, [
-            'label' => $this->trans('Name of person responsible for the account', "Modules.Molonies.Common"),
+            'label' => $this->trans('Name of person responsible for the account', "Modules.Molonies.Signup"),
             'required' => true,
         ]);
 
@@ -169,11 +169,11 @@ class RegistrationFormType extends TranslatorAwareType
     private function setPhone(): RegistrationFormType
     {
         $this->builder->add('phone', TelType::class, [
-            'label' => $this->trans('Phone', "Modules.Molonies.Common"),
+            'label' => $this->trans('Phone', "Modules.Molonies.Signup"),
             'label_attr' => [
                 'popover' => $this->trans(
                     'Do I have to fill in this field? We use your mobile number to validate your identity and if one day we need to get in touch quickly, the mobile is the most efficient way. We recommend filling in this field.',
-                    "Modules.Molonies.Common"
+                    "Modules.Molonies.Signup"
                 ),
             ],
             'required' => false,
@@ -186,7 +186,7 @@ class RegistrationFormType extends TranslatorAwareType
     {
         $this->builder->add('password', RepeatedType::class, [
             'type' => PasswordType::class,
-            'label' => $this->trans('Password', "Modules.Molonies.Common"),
+            'label' => $this->trans('Password', "Modules.Molonies.Signup"),
             'constraints' => [
                 new Length([
                     'min' => 6,
@@ -197,10 +197,10 @@ class RegistrationFormType extends TranslatorAwareType
                 new NotBlank(),
             ],
             'first_options' => [
-                'label' => $this->trans('Password', "Modules.Molonies.Common"),
+                'label' => $this->trans('Password', "Modules.Molonies.Signup"),
             ],
             'second_options' => [
-                'label' => $this->trans('Password confirmation', "Modules.Molonies.Common"),
+                'label' => $this->trans('Password confirmation', "Modules.Molonies.Signup"),
             ],
             'required' => true,
         ]);
@@ -212,7 +212,7 @@ class RegistrationFormType extends TranslatorAwareType
     {
         $label = $this->trans(
             'I have read and accept the <a href="https://www.moloni.es/termsandconditions" target="_blank">Moloni Terms of Service</a> with the inclusion of the regulation act of the subcontractor according to article 28 of the Regulation.',
-            "Modules.Molonies.Common"
+            "Modules.Molonies.Signup"
         );
 
         $this->builder->add('serviceTerms', CheckboxType::class, [
@@ -232,7 +232,7 @@ class RegistrationFormType extends TranslatorAwareType
             'required' => false,
             'label' => $this->trans(
                 'I want to receive email updates about Moloni',
-                "Modules.Molonies.Common"
+                "Modules.Molonies.Signup"
             ),
             'attr' => [
                 'material_design' => true,
@@ -248,17 +248,17 @@ class RegistrationFormType extends TranslatorAwareType
             'attr' => [
                 'class' => 'btn-primary',
             ],
-            'label' => $this->trans('Register', "Modules.Molonies.Common"),
+            'label' => $this->trans('Register', "Modules.Molonies.Signup"),
         ]);
     }
 
     private function getMinLengthValidationMessage(): string
     {
-        return $this->trans('This field cannot be shorter than {0} characters', "Modules.Molonies.Common", ['{0}' => 6]);
+        return $this->trans('This field cannot be shorter than {0} characters', "Modules.Molonies.Signup", ['{0}' => 6]);
     }
 
     private function getMaxLengthValidationMessage(): string
     {
-        return $this->trans('This field cannot be longer than {0} characters', "Modules.Molonies.Common", ['{0}' => 16]);
+        return $this->trans('This field cannot be longer than {0} characters', "Modules.Molonies.Signup", ['{0}' => 16]);
     }
 }
