@@ -64,13 +64,11 @@ class PrepareVariantPropertiesReturn
 
                     $propExists = $this->moloniPropertyGroup['properties'][$propExistsKey];
 
-                    $valueExistsKey = $this->findInValue($propExists['values'], $attribute);
+                    $valueExists = $this->findInCodeOrValue($propExists['values'], $attribute);
 
-                    if ($valueExistsKey === false) {
+                    if ($valueExists === false) {
                         throw new MoloniProductException('Failed to find matching property value for "{0}"', ['{0}' => $attribute]);
                     }
-
-                    $valueExists = $propExists['values'][$valueExistsKey];
 
                     $variantProperties[] = [
                         'propertyId' => $propExists['propertyId'],

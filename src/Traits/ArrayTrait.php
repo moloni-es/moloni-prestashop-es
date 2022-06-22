@@ -26,6 +26,17 @@ namespace Moloni\Traits;
 
 trait ArrayTrait
 {
+    private function findInCodeOrValue(array $array, string $needle)
+    {
+        foreach ($array as $value) {
+            if ($value['code'] === $needle || $value['value'] === $needle) {
+                return $value;
+            }
+        }
+
+        return false;
+    }
+
     private function findInValue(array $array, string $needle)
     {
         foreach ($array as $key => $value) {
