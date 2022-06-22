@@ -65,6 +65,7 @@ class UpdatePrestaProductStock
     private function handle(): void
     {
         $currentStock = (float)StockAvailable::getQuantityAvailableByProduct($this->prestaProductId);
+        $data = [];
 
         if ($this->newStock !== $currentStock) {
             StockAvailable::setQuantity($this->prestaProductId, $this->attributeId, $this->newStock);
@@ -78,10 +79,11 @@ class UpdatePrestaProductStock
             ];
         } else {
             $msg = ['Stock is already updated in Prestashop ({0})', ['{0}' => $this->prestaProductReference]];
+            $data = ['newStock' => $this->newStock, 'current' => $currentStock];
         }
 
         if ($this->shouldWriteLogs()) {
-            Logs::addInfoLog($msg);
+            Logs::addInfoLog($msg, $data);
         }
     }
 }
