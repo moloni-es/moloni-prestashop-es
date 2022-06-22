@@ -108,8 +108,7 @@ class Orders extends MoloniController
             $action = new OrderCreateDocument($orderId, $this->getDoctrine()->getManager());
             $action->handle($documentType);
 
-            $msg = $this->trans('Document created successfully.', 'Modules.Molonies.Common');
-            $msg .= ' (' . $action->getOrder()->reference . ')';
+            $msg = $this->trans('Document created successfully. ({0})', 'Modules.Molonies.Common', ['{0}' => $action->getOrder()->reference]);
 
             $this->addSuccessMessage($msg);
         } catch (MoloniDocumentWarning $e) {
