@@ -118,15 +118,13 @@ class Orders extends MoloniController
             $msg = $this->trans($e->getMessage(), 'Modules.Molonies.Errors', $e->getIdentifiers());
             $this->addWarningMessage($msg, $e->getData());
         } catch (MoloniDocumentException|MoloniException $e) {
-            $msg = $this->trans('Error creating document.', 'Modules.Molonies.Common');
+            $auxMessage = 'Error creating document ({0})';
+            $auxIdentifiers = ['{0}' => isset($action) ? $action->getOrder()->reference : ''];
 
-            if (isset($action)) {
-                $msg .= ' (' . $action->getOrder()->reference . ')';
-            }
+            Logs::addErrorLog([[$auxMessage, $auxIdentifiers], [$e->getMessage(), $e->getIdentifiers()]], $e->getData());
 
-            Logs::addErrorLog([[$msg], [$e->getMessage(), $e->getIdentifiers()]], $e->getData());
+            $msg = $this->trans($auxMessage, 'Modules.Molonies.Errors', $auxIdentifiers);
 
-            $msg = $this->trans($e->getMessage(), 'Modules.Molonies.Errors', $e->getIdentifiers());
             $this->addErrorMessage($msg, $e->getData());
         } catch (PrestaShopDatabaseException|PrestaShopException $e) {
             $msg = $this->trans('Error fetching Prestashop order', 'Modules.Molonies.Errors');

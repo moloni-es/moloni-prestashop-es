@@ -105,7 +105,10 @@ class DummyTranslations
         $this->translator->trans('Created document not found', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Moloni document not found', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Error getting prestashop order', [], 'Modules.Molonies.Errors');
-        $this->translator->trans('Error creating document.', [], 'Modules.Molonies.Errors');
+        $this->translator->trans('Error creating document ({0})', [], 'Modules.Molonies.Errors');
+        $this->translator->trans('Error updating Prestashop stock', [], 'Modules.Molonies.Errors');
+        $this->translator->trans('Error saving Prestashop product', [], 'Modules.Molonies.Errors');
+        $this->translator->trans('Error saving Moloni product', [], 'Modules.Molonies.Errors');
     }
 
     public function common(): void
