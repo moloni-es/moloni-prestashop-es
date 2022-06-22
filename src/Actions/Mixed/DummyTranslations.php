@@ -104,6 +104,7 @@ class DummyTranslations
         $this->translator->trans('Could not close {0}, totals do not match ({1})', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Created document not found', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Moloni document not found', [], 'Modules.Molonies.Errors');
+        $this->translator->trans('Error getting prestashop order', [], 'Modules.Molonies.Errors');
     }
 
     public function common(): void
@@ -119,5 +120,21 @@ class DummyTranslations
         $this->translator->trans('Error', [], 'Modules.Molonies.Common');
         $this->translator->trans('Warning', [], 'Modules.Molonies.Common');
         $this->translator->trans('Information', [], 'Modules.Molonies.Common');
+
+        $this->translator->trans('Stock is already updated in Moloni ({0})', [], 'Modules.Molonies.Common');
+        $this->translator->trans('Stock updated in Moloni (old: {0} | new: {1}) ({2})', [], 'Modules.Molonies.Common');
+        $this->translator->trans('Products export. Part {0}', [], 'Modules.Molonies.Common');
+        $this->translator->trans('Products stock export. Part {0}', [], 'Modules.Molonies.Common');
+        $this->translator->trans('Products import. Part {0}', [], 'Modules.Molonies.Common');
+        $this->translator->trans('Products stock import. Part {0}', [], 'Modules.Molonies.Common');
+        $this->translator->trans('{0} document created with success ({1})', [], 'Modules.Molonies.Common');
+        $this->translator->trans('Product created in Moloni ({0})', [], 'Modules.Molonies.Common');
+        $this->translator->trans('Product updated in Moloni ({0})', [], 'Modules.Molonies.Common');
+        $this->translator->trans('Stock is already updated in Prestashop ({0})', [], 'Modules.Molonies.Common');
+        $this->translator->trans('Stock updated in Prestashop (old: {0} | new: {1}) ({2})', [], 'Modules.Molonies.Common');
+        $this->translator->trans('Combination created in Prestashop ({0})', [], 'Modules.Molonies.Common');
+        $this->translator->trans('Combination updated in Prestashop ({0})', [], 'Modules.Molonies.Common');
+        $this->translator->trans('Product created in Prestashop ({0})', [], 'Modules.Molonies.Common');
+        $this->translator->trans('Product updated in Prestashop ({0})', [], 'Modules.Molonies.Common');
     }
 }
