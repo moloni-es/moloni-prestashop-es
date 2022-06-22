@@ -385,12 +385,8 @@ class Installer
     {
         $installSqlFiles = glob($this->module->getLocalPath() . '/src/Install/sql/install/*.sql');
 
-        $arg1 = 'Error loading installation files!';
-        $arg2 = [];
-        $arg3 = 'Modules.Molonies.Admin';
-
         if (empty($installSqlFiles)) {
-            throw new RuntimeException($this->module->getTranslator()->trans($arg1, $arg2, $arg3));
+            throw new RuntimeException($this->module->getTranslator()->trans('Error loading installation files!', [], 'Modules.Molonies.Admin'));
         }
 
         $database = Db::getInstance();
