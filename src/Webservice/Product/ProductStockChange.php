@@ -44,6 +44,12 @@ class ProductStockChange extends AbstractWebserviceAction
         try {
             $product = $this->fetchProductFromMoloni($this->productId);
 
+            // Should not sync child product by itself
+            if (!empty($product['parent'])) {
+                return;
+            }
+
+            // Should not sync ignored references
             if (StockSync::isIgnoredReference($product['reference'])) {
                 return;
             }

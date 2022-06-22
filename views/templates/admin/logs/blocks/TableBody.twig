@@ -9,16 +9,16 @@
             <td class="text-center">
                 {% if log.level == constant('Moloni\\Enums\\LogLevel::INFO') %}
                     <span class="badge badge-info">
-                                        {{ 'Information'|trans({}, 'Modules.Molonies.Common') }}
-                                    </span>
+                        {{ 'Information'|trans({}, 'Modules.Molonies.Common') }}
+                    </span>
                 {% elseif log.level == constant('Moloni\\Enums\\LogLevel::WARNING') %}
                     <span class="badge badge-warning">
-                                        {{ 'Warning'|trans({}, 'Modules.Molonies.Common') }}
-                                    </span>
+                        {{ 'Warning'|trans({}, 'Modules.Molonies.Common') }}
+                    </span>
                 {% elseif log.level == constant('Moloni\\Enums\\LogLevel::ERROR') %}
                     <span class="badge badge-danger">
-                                        {{ 'Error'|trans({}, 'Modules.Molonies.Common') }}
-                                    </span>
+                        {{ 'Error'|trans({}, 'Modules.Molonies.Common') }}
+                    </span>
                 {% else %}
                     ---
                 {% endif %}
