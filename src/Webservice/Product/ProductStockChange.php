@@ -48,8 +48,6 @@ class ProductStockChange extends AbstractWebserviceAction
                 return;
             }
 
-            SyncLogs::moloniProductAddTimeout($this->productId);
-
             if (empty($product['variants'])) {
                 $productBuilder = new PrestashopProductSimple($product);
             } else {
@@ -81,6 +79,8 @@ class ProductStockChange extends AbstractWebserviceAction
         if (SyncLogs::moloniProductHasTimeout($this->productId)) {
             return false;
         }
+
+        SyncLogs::moloniProductAddTimeout($this->productId);
 
         return $this->isAuthenticated();
     }
