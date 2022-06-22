@@ -134,7 +134,7 @@ class FindOrCreatePropertyGroup
                     if ($propExistsKey !== false) {
                         $propExists = $propertyGroupForUpdate['properties'][$propExistsKey];
 
-                        $valueExistsKey = $this->findInValueOrCode($propExists['values'], $attribute);
+                        $valueExistsKey = $this->findInCodeOrValue($propExists['values'], $attribute);
 
                         // Property value doesn't, add value
                         if ($valueExistsKey === false) {
@@ -286,25 +286,6 @@ class FindOrCreatePropertyGroup
     {
         foreach ($array as $value) {
             if ((int)$value['propertyGroupId'] === $needle) {
-                return $value;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Find a property group
-     *
-     * @param array $array
-     * @param int $needle
-     *
-     * @return false|mixed
-     */
-    private function findInValueOrCode(array $array, int $needle)
-    {
-        foreach ($array as $value) {
-            if ($value['value'] === $needle || $value['code'] === $needle) {
                 return $value;
             }
         }
