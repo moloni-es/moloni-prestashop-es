@@ -27,7 +27,7 @@ namespace Moloni\Actions\Orders;
 use DateTime;
 use Shop;
 use Moloni\Api\MoloniApi;
-use Moloni\Entity\MoloniDocuments;
+use Moloni\Entity\MoloniOrderDocuments;
 use Moloni\Exceptions\MoloniException;
 
 class OrderDiscard extends AbstractOrderAction
@@ -60,7 +60,7 @@ class OrderDiscard extends AbstractOrderAction
     {
         $shopId = (int)Shop::getContextShopID();
 
-        $document = new MoloniDocuments();
+        $document = new MoloniOrderDocuments();
         $document->setShopId($shopId);
         $document->setDocumentId($documentId);
         $document->setCompanyId($companyId);

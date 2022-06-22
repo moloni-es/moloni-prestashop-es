@@ -25,9 +25,9 @@
 namespace Moloni\Hooks;
 
 use Moloni\Api\MoloniApi;
-use Moloni\Entity\MoloniDocuments;
+use Moloni\Entity\MoloniOrderDocuments;
 use Moloni\Enums\MoloniRoutes;
-use Moloni\Repository\MoloniDocumentsRepository;
+use Moloni\Repository\MoloniOrderDocumentsRepository;
 use PrestaShopBundle\Translation\TranslatorInterface;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Doctrine\Persistence\ManagerRegistry;
@@ -50,7 +50,7 @@ class AdminOrderButtons extends AbstractHookAction
      */
     private $actionBar;
     /**
-     * @var MoloniDocumentsRepository
+     * @var MoloniOrderDocumentsRepository
      */
     private $moloniDocumentsRepository;
 
@@ -71,7 +71,7 @@ class AdminOrderButtons extends AbstractHookAction
 
         $this->actionBar = $params['actions_bar_buttons_collection'];
         $this->orderId = (int)$params['id_order'];
-        $this->moloniDocumentsRepository = $doctrine->getRepository(MoloniDocuments::class);
+        $this->moloniDocumentsRepository = $doctrine->getRepository(MoloniOrderDocuments::class);
 
         $this->handle();
     }
@@ -87,7 +87,7 @@ class AdminOrderButtons extends AbstractHookAction
             return;
         }
 
-        /** @var MoloniDocuments|null $document */
+        /** @var MoloniOrderDocuments|null $document */
         $document = $this->moloniDocumentsRepository->findOneBy(['orderId' => $this->orderId]);
 
         if ($document === null) {

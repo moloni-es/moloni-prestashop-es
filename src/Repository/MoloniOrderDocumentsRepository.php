@@ -30,9 +30,9 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Moloni\Api\MoloniApi;
-use Moloni\Entity\MoloniDocuments;
+use Moloni\Entity\MoloniOrderDocuments;
 
-class MoloniDocumentsRepository extends EntityRepository
+class MoloniOrderDocumentsRepository extends EntityRepository
 {
     /**
      * Paginated documents created by plugin
@@ -65,12 +65,12 @@ class MoloniDocumentsRepository extends EntityRepository
             ->setFirstResult($offset)
             ->setMaxResults($documentsPerPage);
 
-        /** @var MoloniDocuments[] $objects */
+        /** @var MoloniOrderDocuments[] $objects */
         $documentsObjects = $paginator
             ->getIterator()
             ->getArrayCopy();
 
-        /** @var MoloniDocuments $object */
+        /** @var MoloniOrderDocuments $object */
         foreach ($documentsObjects as $object) {
             $documents[] = $object->toArray();
         }

@@ -29,9 +29,9 @@ use PrestaShopDatabaseException;
 use PrestaShopException;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Persistence\ObjectRepository;
-use Moloni\Entity\MoloniDocuments;
+use Moloni\Entity\MoloniOrderDocuments;
 use Moloni\Exceptions\MoloniException;
-use Moloni\Repository\MoloniDocumentsRepository;
+use Moloni\Repository\MoloniOrderDocumentsRepository;
 
 abstract class AbstractOrderAction
 {
@@ -59,7 +59,7 @@ abstract class AbstractOrderAction
     /**
      * Documents entity repository
      *
-     * @var ObjectRepository|MoloniDocumentsRepository
+     * @var ObjectRepository|MoloniOrderDocumentsRepository
      */
     protected $documentRepository;
 
@@ -89,7 +89,7 @@ abstract class AbstractOrderAction
         $this->order = $order;
         $this->orderId = $orderId;
         $this->entityManager = $entityManager;
-        $this->documentRepository = $entityManager->getRepository(MoloniDocuments::class);
+        $this->documentRepository = $entityManager->getRepository(MoloniOrderDocuments::class);
     }
 
     //          Gets          //
