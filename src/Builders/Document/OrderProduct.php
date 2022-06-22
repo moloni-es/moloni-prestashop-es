@@ -250,6 +250,15 @@ class OrderProduct implements BuilderItemInterface
      */
     public function search(): OrderProduct
     {
+        if ((int)$this->orderProduct['product_attribute_id'] > 0) {
+            /** @var MoloniProductAssociations|null $moloniVariantId */
+            $moloniVariantId = ProductAssociations::findByPrestashopCombinationId((int)$this->orderProduct['product_attribute_id']);
+
+            if ($moloniVariantId !== null) {
+                return $this->getById($moloniVariantId->getMlVariantId());
+            }
+        }
+
         return $this->getByReference();
     }
 
@@ -449,6 +458,39 @@ class OrderProduct implements BuilderItemInterface
     }
 
     //          REQUESTS          //
+
+    /**
+     * Search product by variant id
+     *
+     * @param int $productId
+     *
+     * @return OrderProduct
+     *
+     * @throws MoloniDocumentProductException
+     */
+    protected function getById(int $productId): OrderProduct
+    {
+        $variables = [
+            'productId' => $productId
+        ];
+
+        try {
+            $query = MoloniApiClient::products()->queryProduct($variables);
+
+            $moloniProduct = $query['data']['product']['data'] ?? [];
+
+            if (!empty($moloniProduct)) {
+                $this->productId = (int)$moloniProduct['productId'];
+                $this->moloniProduct = $moloniProduct;
+            }
+        } catch (MoloniApiException $e) {
+            throw new MoloniDocumentProductException('Error fetching product by reference: ({0})', [
+                '{0}' => $this->reference
+            ], $e->getData());
+        }
+
+        return $this;
+    }
 
     /**
      * Search product by reference
