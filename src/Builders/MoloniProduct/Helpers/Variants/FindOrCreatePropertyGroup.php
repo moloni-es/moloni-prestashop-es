@@ -24,7 +24,6 @@
 
 namespace Moloni\Builders\MoloniProduct\Helpers\Variants;
 
-use Moloni\Exceptions\Product\MoloniProductException;
 use Product;
 use Configuration;
 use Moloni\Enums\Boolean;
@@ -32,6 +31,7 @@ use Moloni\Traits\StringTrait;
 use Moloni\Traits\ArrayTrait;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Exceptions\MoloniApiException;
+use Moloni\Exceptions\Product\MoloniProductException;
 
 class FindOrCreatePropertyGroup
 {
@@ -134,7 +134,7 @@ class FindOrCreatePropertyGroup
                     if ($propExistsKey !== false) {
                         $propExists = $propertyGroupForUpdate['properties'][$propExistsKey];
 
-                        $valueExistsKey = $this->findInValue($propExists['values'], $attribute);
+                        $valueExistsKey = $this->findInValueOrCode($propExists['values'], $attribute);
 
                         // Property value doesn't, add value
                         if ($valueExistsKey === false) {
@@ -185,7 +185,7 @@ class FindOrCreatePropertyGroup
                 if (empty($updatedGroup) || (int)$updatedGroup['propertyGroupId'] === 0) {
                     throw new MoloniProductException('Failed to update existing property group "{0}"', [
                         '{0}' => $bestPropertyGroup['name'] ?? ''
-                    ], ['mutation' => $mutation]);
+                    ], ['mutation' => $mutation, 'props' => $propertyGroupForUpdate]);
                 }
             } catch (MoloniApiException $e) {
                 throw new MoloniProductException('Failed to update existing property group "{0}"', [
@@ -198,60 +198,6 @@ class FindOrCreatePropertyGroup
 
         // This was a 100% match, we can return right away
         return (new PrepareVariantPropertiesReturn($bestPropertyGroup, $this->prestashopCombinations))->handle();
-    }
-
-    /**
-     * Get next attribute order
-     *
-     * @param array|null $properties
-     *
-     * @return int
-     */
-    private function getNextPropertyOrder(?array $properties = []): int
-    {
-        $lastOrder = 0;
-
-        if (!empty($properties)) {
-            $count = count($properties);
-            $lastIndex = $count - 1;
-
-            $lastOrder = $properties[$lastIndex]['ordering'] ?? 0;
-        }
-
-        return $lastOrder + 1;
-    }
-
-    /**
-     * Find a property group
-     *
-     * @param array $array
-     * @param int $needle
-     *
-     * @return false|mixed
-     */
-    private function findInPropertyGroup(array $array, int $needle)
-    {
-        foreach ($array as $value) {
-            if ((int)$value['propertyGroupId'] === $needle) {
-                return $value;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Orders matches in descending order
-     *
-     * @param array $matches
-     *
-     * @return void
-     */
-    private function orderMatches(array &$matches): void
-    {
-        $countColumn = array_column($matches, 'count');
-
-        array_multisort($countColumn, SORT_DESC, $matches);
     }
 
     /**
@@ -289,5 +235,80 @@ class FindOrCreatePropertyGroup
         }
 
         return $result;
+    }
+
+    //          AUXILIARY          //
+
+    /**
+     * Get next attribute order
+     *
+     * @param array|null $properties
+     *
+     * @return int
+     */
+    private function getNextPropertyOrder(?array $properties = []): int
+    {
+        $lastOrder = 0;
+
+        if (!empty($properties)) {
+            $count = count($properties);
+            $lastIndex = $count - 1;
+
+            $lastOrder = $properties[$lastIndex]['ordering'] ?? 0;
+        }
+
+        return $lastOrder + 1;
+    }
+
+    /**
+     * Orders matches in descending order
+     *
+     * @param array $matches
+     *
+     * @return void
+     */
+    private function orderMatches(array &$matches): void
+    {
+        $countColumn = array_column($matches, 'count');
+
+        array_multisort($countColumn, SORT_DESC, $matches);
+    }
+
+    /**
+     * Find an attribute
+     *
+     * @param array $array
+     * @param int $needle
+     *
+     * @return false|mixed
+     */
+    private function findInPropertyGroup(array $array, int $needle)
+    {
+        foreach ($array as $value) {
+            if ((int)$value['propertyGroupId'] === $needle) {
+                return $value;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Find a property group
+     *
+     * @param array $array
+     * @param int $needle
+     *
+     * @return false|mixed
+     */
+    private function findInValueOrCode(array $array, int $needle)
+    {
+        foreach ($array as $value) {
+            if ($value['value'] === $needle || $value['code'] === $needle) {
+                return $value;
+            }
+        }
+
+        return false;
     }
 }
