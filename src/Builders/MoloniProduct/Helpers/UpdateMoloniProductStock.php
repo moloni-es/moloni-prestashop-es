@@ -83,7 +83,10 @@ class UpdateMoloniProductStock
 
         if ($moloniStock === $this->newStock) {
             if ($this->shouldWriteLogs()) {
-                Logs::addInfoLog(['Stock is already updated in Moloni ({0})', ['{0}' => $this->reference]]);
+                Logs::addInfoLog(
+                    ['Stock is already updated in Moloni ({0})', ['{0}' => $this->reference]],
+                    ['newStock' => $this->newStock, 'current' => $moloniStock]
+                );
             }
 
             return;
