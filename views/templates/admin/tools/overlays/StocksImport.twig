@@ -8,7 +8,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">
-                    {{ 'Import Moloni stocks'|trans({}, 'Modules.Molonies.Common') }}
+                    {{ 'Import Moloni stocks'|trans({}, 'Modules.Molonies.Tools') }}
                 </h5>
                 <button type="button"
                         class="close"
@@ -19,26 +19,24 @@
             </div>
             <div class="modal-body">
                 <p>
-                    {{ 'This tool will fetch all your Moloni products that were updated on the last 7 days, and synchronize your Prestashop stocks with the ones on your Moloni account.'|trans({}, 'Modules.Molonies.Common') }}<br>
-                    {{ 'When the tool is finish, all your Prestashop stock will be updated to match the stock on your Moloni account.'|trans({}, 'Modules.Molonies.Common') }}<br>
+                    {{ 'This tool will fetch all your Moloni products that were updated on the last 7 days, and synchronize your Prestashop stocks with the ones on your Moloni account.'|trans({}, 'Modules.Molonies.Tools') }}<br>
+                    {{ 'When the tool is finish, all your Prestashop stock will be updated to match the stock on your Moloni account.'|trans({}, 'Modules.Molonies.Tools') }}<br>
+                    {{ 'Please keep this window open until the process finishes.'|trans({}, 'Modules.Molonies.Tools') }}
                 </p>
                 <p>
-                    {{ 'Please keep this window open until the process finishes.'|trans({}, 'Modules.Molonies.Common') }}
-                </p>
-                <p>
-                    {{ 'Are you sure you want to continue? '|trans({}, 'Modules.Molonies.Common') }}
+                    {{ 'Are you sure you want to continue? '|trans({}, 'Modules.Molonies.Tools') }}
                 </p>
             </div>
             <div class="modal-footer">
                 <button type="button"
                         class="btn btn-outline-secondary"
                         data-dismiss="modal">
-                    {{ 'Close'|trans({}, 'Modules.Molonies.Common') }}
+                    {{ 'Close'|trans({}, 'Modules.Molonies.Tools') }}
                 </button>
                 <button class="btn btn-primary"
                         data-dismiss="modal"
                         id="import_stocks_button">
-                    {{ 'Import stocks'|trans({}, 'Modules.Molonies.Common') }}
+                    {{ 'Import stocks'|trans({}, 'Modules.Molonies.Tools') }}
                 </button>
             </div>
         </div>

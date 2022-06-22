@@ -8,7 +8,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">
-                    {{ 'Export products'|trans({}, 'Modules.Molonies.Common') }}
+                    {{ 'Export products to Moloni'|trans({}, 'Modules.Molonies.Tools') }}
                 </h5>
                 <button type="button"
                         class="close"
@@ -19,24 +19,23 @@
             </div>
             <div class="modal-body">
                 <p>
-                    TODO!!!
-                    {{ 'Please keep this window open until the process finishes.'|trans({}, 'Modules.Molonies.Common') }}
+                    {{ 'This will fetch all the products in Prestashop store and create them in your Moloni account.'|trans({}, 'Modules.Molonies.Tools') }}<br>
+                    {{ 'This may take a while, so, please keep this window open until the process finishes.'|trans({}, 'Modules.Molonies.Tools') }}
                 </p>
-                <br>
                 <p>
-                    {{ 'Are you sure you want to continue? '|trans({}, 'Modules.Molonies.Common') }}
+                    {{ 'Are you sure you want to continue? '|trans({}, 'Modules.Molonies.Tools') }}
                 </p>
             </div>
             <div class="modal-footer">
                 <button type="button"
                         class="btn btn-outline-secondary"
                         data-dismiss="modal">
-                    {{ 'Close'|trans({}, 'Modules.Molonies.Common') }}
+                    {{ 'Close'|trans({}, 'Modules.Molonies.Tools') }}
                 </button>
                 <button class="btn btn-primary"
                         data-dismiss="modal"
                         id="export_products_button">
-                    {{ 'Export products'|trans({}, 'Modules.Molonies.Common') }}
+                    {{ 'Export products'|trans({}, 'Modules.Molonies.Tools') }}
                 </button>
             </div>
         </div>

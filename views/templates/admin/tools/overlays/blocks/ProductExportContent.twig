@@ -3,26 +3,26 @@
         <div class="d-flex align-items-center">
             <div class="spinner spinner-primary"></div>
             &nbsp
-            {{ '{0} products processed'|trans({'{0}': processedProducts}, 'Modules.Molonies.Common') }}
+            {{ '{0} products processed'|trans({'{0}': processedProducts}, 'Modules.Molonies.Tools') }}
         </div>
 
         <br>
 
         <div class="alert alert-info" role="alert">
             <p class="alert-text">
-                {{ 'Please wait, exporting in progress'|trans({}, 'Modules.Molonies.Common') }}
+                {{ 'Please wait, exporting in progress'|trans({}, 'Modules.Molonies.Tools') }}
             </p>
         </div>
     {% else %}
         <p>
-            {{ '{0} products processed'|trans({'{0}': processedProducts}, 'Modules.Molonies.Common') }}
+            {{ '{0} products processed'|trans({'{0}': processedProducts}, 'Modules.Molonies.Tools') }}
         </p>
 
         <br>
 
         <div class="alert alert-success" role="alert">
             <p class="alert-text">
-                {{ 'Process complete'|trans({}, 'Modules.Molonies.Common') }}
+                {{ 'Process complete'|trans({}, 'Modules.Molonies.Tools') }}
             </p>
         </div>
     {% endif %}
