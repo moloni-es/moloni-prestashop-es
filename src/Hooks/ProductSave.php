@@ -77,7 +77,7 @@ class ProductSave extends AbstractHookAction
                 $productBuilder->insert();
             }
         } catch (MoloniProductException $e) {
-            Logs::addErrorLog([$e->getMessage(), $e->getIdentifiers()], $e->getData());
+            Logs::addErrorLog([['Error saving Moloni product'], [$e->getMessage(), $e->getIdentifiers()]], $e->getData());
         }
     }
 

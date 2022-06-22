@@ -62,7 +62,7 @@ class ProductStockChange extends AbstractWebserviceAction
                 $productBuilder->updateStock();
             }
         } catch (MoloniProductException $e) {
-            Logs::addErrorLog([$e->getMessage(), $e->getIdentifiers()], $e->getData());
+            Logs::addErrorLog([['Error updating Prestashop stock'], [$e->getMessage(), $e->getIdentifiers()]], $e->getData());
         }
     }
 
