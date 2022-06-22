@@ -105,6 +105,7 @@ class DummyTranslations
         $this->translator->trans('Created document not found', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Moloni document not found', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Error getting prestashop order', [], 'Modules.Molonies.Errors');
+        $this->translator->trans('Error creating document.', [], 'Modules.Molonies.Errors');
     }
 
     public function common(): void
