@@ -24,9 +24,12 @@
 
 namespace Moloni\Controller\Admin\Orders;
 
+use Tools;
 use Currency;
-use Moloni\Actions\Orders\GetOrderListFilters;
 use OrderState;
+use PrestaShopException;
+use PrestaShopDatabaseException;
+use Moloni\Actions\Orders\GetOrderListFilters;
 use Moloni\Actions\Orders\OrderCreateDocument;
 use Moloni\Actions\Orders\OrderDiscard;
 use Moloni\Controller\Admin\MoloniController;
@@ -38,12 +41,8 @@ use Moloni\Exceptions\MoloniException;
 use Moloni\Repository\OrdersRepository;
 use Moloni\Tools\Logs;
 use Moloni\Tools\Settings;
-use PrestaShopDatabaseException;
-use PrestaShopException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Tools;
 
 class Orders extends MoloniController
 {

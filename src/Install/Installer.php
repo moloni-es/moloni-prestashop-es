@@ -23,18 +23,24 @@
 
 namespace Moloni\Install;
 
+use DateTime;
 use Db;
-use Exception;
-use Hook;
-use Language;
-use Moloni\Entity\MoloniApp;
-use Moloni\Repository\MoloniAppRepository;
-use MoloniEs;
-use PrestaShopDatabaseException;
-use PrestaShopException;
-use RuntimeException;
+use Moloni\Enums\DocumentIdentifiers;
+use Shop;
 use Tab;
+use Hook;
 use Tools;
+use Language;
+use MoloniEs;
+use Exception;
+use RuntimeException;
+use PrestaShopException;
+use PrestaShopDatabaseException;
+use Doctrine\Persistence\ObjectManager;
+use Moloni\Entity\MoloniApp;
+use Moloni\Entity\MoloniOrderDocuments;
+use Moloni\Repository\MoloniAppRepository;
+use Moloni\Repository\MoloniOrderDocumentsRepository;
 
 class Installer
 {
@@ -111,7 +117,7 @@ class Installer
      */
     public function install(): bool
     {
-        return $this->verifyInstall() && $this->createCommon();
+        return $this->detectOldPluginTables() && $this->createCommon() && $this->importOldPluginDocuments();
     }
 
     /**
@@ -144,7 +150,7 @@ class Installer
         return $this->destroyCommon();
     }
 
-    //        VERIFICATIONS        //
+    //        OLD PLUGIN ACTIONS        //
 
     /**
      * Some verifications to prevent old plugin errors
@@ -153,7 +159,7 @@ class Installer
      *
      * @throws PrestaShopDatabaseException
      */
-    private function verifyInstall(): bool
+    private function detectOldPluginTables(): bool
     {
         $database = Db::getInstance();
 
@@ -175,6 +181,70 @@ class Installer
         $database->execute('DROP TABLE ' . _DB_PREFIX_ . 'moloni_app');
         $database->execute('DROP TABLE ' . _DB_PREFIX_ . 'moloni_settings');
         $database->execute('DROP TABLE ' . _DB_PREFIX_ . 'moloni_sync_logs');
+
+        return true;
+    }
+
+    /**
+     * Imports old plugin documents to new plugin structure
+     *
+     * @return bool
+     *
+     * @throws Exception
+     * @throws PrestaShopDatabaseException
+     */
+    private function importOldPluginDocuments(): bool
+    {
+        $database = Db::getInstance();
+
+        $oldDocumentsTableExist = $database->executeS("SHOW TABLES LIKE '" . _DB_PREFIX_ . "moloni_documents'");
+
+        // Old documents table not found, do not continue
+        if (empty($oldDocumentsTableExist)) {
+            return true;
+        }
+
+        $oldDocumentsTableDocuments = $database->executeS("SELECT * FROM " . _DB_PREFIX_ . "moloni_documents");
+
+        // Old table has no documents, do not continue
+        if (empty($oldDocumentsTableDocuments)) {
+            return true;
+        }
+
+        /** @var MoloniOrderDocumentsRepository $orderDocumentsRepository */
+        $orderDocumentsRepository = $this->module->get('doctrine')->getRepository(MoloniOrderDocuments::class);
+
+        // New table already has documents, do not continue
+        if (!empty($orderDocumentsRepository->findOneBy([]))) {
+            return true;
+        }
+
+        /** @var ObjectManager $entityManager */
+        $entityManager = $this->module->get('doctrine')->getManager();
+        $shopId = (int)Shop::getContextShopID();
+
+        foreach ($oldDocumentsTableDocuments as $oldDocumentsTableDocument) {
+            $document = new MoloniOrderDocuments();
+
+            $document->setShopId($shopId);
+            $document->setCompanyId((int)$oldDocumentsTableDocument['company_id']);
+            $document->setOrderId((int)$oldDocumentsTableDocument['id_order']);
+
+            // Order is discarded in old plugin
+            if ((int)$oldDocumentsTableDocument['invoice_status'] === 2) {
+                $document->setDocumentId(DocumentIdentifiers::DISCARDED);
+            } else {
+                $document->setDocumentId((int)$oldDocumentsTableDocument['document_id']);
+            }
+
+            $document->setOrderReference($oldDocumentsTableDocument['order_ref']);
+            $document->setDocumentType($oldDocumentsTableDocument['invoice_type']);
+            $document->setCreatedAt(new DateTime($oldDocumentsTableDocument['invoice_date']));
+
+            // Save entry
+            $entityManager->persist($document);
+            $entityManager->flush();
+        }
 
         return true;
     }
@@ -244,20 +314,6 @@ class Installer
     }
 
     /**
-     * Loads databases query´s
-     *
-     * @param string $fileName
-     *
-     * @return string
-     */
-    private function getSqlStatements(string $fileName): string
-    {
-        $sqlStatements = Tools::file_get_contents($fileName);
-
-        return str_replace(['PREFIX_', 'ENGINE_TYPE'], [_DB_PREFIX_, _MYSQL_ENGINE_], $sqlStatements);
-    }
-
-    /**
      * Installs an tab
      *
      * @param string $className
@@ -299,6 +355,28 @@ class Installer
     }
 
     /**
+     * Deletes an tab
+     *
+     * @param string $className
+     *
+     * @return bool
+     */
+    private function uninstallTab(string $className): bool
+    {
+        try {
+            $tabId = (int) Tab::getIdFromClassName($className);
+
+            if ($tabId) {
+                (new Tab($tabId))->delete();
+            }
+        } catch (PrestaShopException $exception) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Reads sql files and executes
      *
      * @return bool
@@ -336,26 +414,20 @@ class Installer
         return true;
     }
 
+    //        AUXILIARY       //
+
     /**
-     * Deletes an tab
+     * Loads databases query´s
      *
-     * @param string $className
+     * @param string $fileName
      *
-     * @return bool
+     * @return string
      */
-    private function uninstallTab(string $className): bool
+    private function getSqlStatements(string $fileName): string
     {
-        try {
-            $tabId = (int) Tab::getIdFromClassName($className);
+        $sqlStatements = Tools::file_get_contents($fileName);
 
-            if ($tabId) {
-                (new Tab($tabId))->delete();
-            }
-        } catch (PrestaShopException $exception) {
-            return false;
-        }
-
-        return true;
+        return str_replace(['PREFIX_', 'ENGINE_TYPE'], [_DB_PREFIX_, _MYSQL_ENGINE_], $sqlStatements);
     }
 
     /**
@@ -367,7 +439,10 @@ class Installer
     {
         try {
             /** @var MoloniAppRepository $repository */
-            $repository = $this->module->get('doctrine')->getRepository(MoloniApp::class);
+            $repository = $this
+                ->module
+                ->get('doctrine')
+                ->getRepository(MoloniApp::class);
 
             $repository->deleteApp();
         } catch (Exception $e) {

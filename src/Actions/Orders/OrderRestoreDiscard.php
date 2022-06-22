@@ -25,6 +25,7 @@
 namespace Moloni\Actions\Orders;
 
 use Moloni\Entity\MoloniOrderDocuments;
+use Moloni\Enums\DocumentIdentifiers;
 use Moloni\Exceptions\MoloniException;
 
 class OrderRestoreDiscard extends AbstractOrderAction
@@ -37,7 +38,7 @@ class OrderRestoreDiscard extends AbstractOrderAction
     public function handle(): void
     {
         /** @var MoloniOrderDocuments|null $document */
-        $document = $this->documentRepository->findOneBy(['orderId' => $this->orderId, 'documentId' => -1]);
+        $document = $this->documentRepository->findOneBy(['orderId' => $this->orderId, 'documentId' => DocumentIdentifiers::DISCARDED]);
 
         if ($document === null) {
             throw new MoloniException('Discarded order not found!');
