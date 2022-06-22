@@ -173,7 +173,6 @@ class Installer
 
         // If not, drop old tables
         $database->execute('DROP TABLE ' . _DB_PREFIX_ . 'moloni_app');
-        $database->execute('DROP TABLE ' . _DB_PREFIX_ . 'moloni_documents');
         $database->execute('DROP TABLE ' . _DB_PREFIX_ . 'moloni_settings');
         $database->execute('DROP TABLE ' . _DB_PREFIX_ . 'moloni_sync_logs');
 
