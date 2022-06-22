@@ -36,11 +36,11 @@ use Moloni\Actions\Orders\OrderRestoreDiscard;
 use Moloni\Actions\Documents\DocumentsDownloadPdf;
 use Moloni\Actions\Documents\DocumentsListDetails;
 use Moloni\Controller\Admin\MoloniController;
-use Moloni\Entity\MoloniDocuments;
+use Moloni\Entity\MoloniOrderDocuments;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Enums\MoloniRoutes;
 use Moloni\Exceptions\MoloniException;
-use Moloni\Repository\MoloniDocumentsRepository;
+use Moloni\Repository\MoloniOrderDocumentsRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -57,11 +57,11 @@ class Documents extends MoloniController
         $filters = Tools::getValue('filters', []);
         $documents = $paginator = [];
 
-        /** @var MoloniDocumentsRepository $moloniDocumentRepository */
+        /** @var MoloniOrderDocumentsRepository $moloniDocumentRepository */
         $moloniDocumentRepository = $this
             ->getDoctrine()
             ->getManager()
-            ->getRepository(MoloniDocuments::class);
+            ->getRepository(MoloniOrderDocuments::class);
 
         try {
             ['documents' => $createdDocuments, 'paginator' => $paginator] = $moloniDocumentRepository->getAllPaginated($page, $filters);
@@ -98,9 +98,9 @@ class Documents extends MoloniController
     {
         $documentId = (int)Tools::getValue('document_id', 0);
 
-        /** @var MoloniDocuments|null $document */
+        /** @var MoloniOrderDocuments|null $document */
         $document = $this->getDoctrine()
-            ->getRepository(MoloniDocuments::class)
+            ->getRepository(MoloniOrderDocuments::class)
             ->findOneBy(['documentId' => $documentId], ['id' => 'DESC']);
 
         try {

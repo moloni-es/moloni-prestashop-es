@@ -36,7 +36,7 @@ use Moloni\Builders\Document\OrderPayment;
 use Moloni\Builders\Document\OrderProduct;
 use Moloni\Builders\Document\OrderShipping;
 use Moloni\Builders\Interfaces\BuilderInterface;
-use Moloni\Entity\MoloniDocuments;
+use Moloni\Entity\MoloniOrderDocuments;
 use Moloni\Enums\Boolean;
 use Moloni\Enums\CalculationMode;
 use Moloni\Enums\Countries;
@@ -1288,7 +1288,7 @@ class DocumentFromOrder implements BuilderInterface
         $shopId = (int)Shop::getContextShopID();
         $companyId = MoloniApi::getCompanyId();
 
-        $document = new MoloniDocuments();
+        $document = new MoloniOrderDocuments();
         $document->setShopId($shopId);
         $document->setDocumentId($this->documentId);
         $document->setCompanyId($companyId);

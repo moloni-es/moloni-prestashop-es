@@ -24,7 +24,7 @@
 
 namespace Moloni\Actions\Orders;
 
-use Moloni\Entity\MoloniDocuments;
+use Moloni\Entity\MoloniOrderDocuments;
 use Moloni\Exceptions\MoloniException;
 
 class OrderRestoreDiscard extends AbstractOrderAction
@@ -36,7 +36,7 @@ class OrderRestoreDiscard extends AbstractOrderAction
      */
     public function handle(): void
     {
-        /** @var MoloniDocuments|null $document */
+        /** @var MoloniOrderDocuments|null $document */
         $document = $this->documentRepository->findOneBy(['orderId' => $this->orderId, 'documentId' => -1]);
 
         if ($document === null) {
@@ -49,11 +49,11 @@ class OrderRestoreDiscard extends AbstractOrderAction
     /**
      * Delete saved record
      *
-     * @param MoloniDocuments $entity
+     * @param MoloniOrderDocuments $entity
      *
      * @return void
      */
-    private function deleteRecord(MoloniDocuments $entity): void
+    private function deleteRecord(MoloniOrderDocuments $entity): void
     {
         $this->entityManager->remove($entity);
         $this->entityManager->flush();
