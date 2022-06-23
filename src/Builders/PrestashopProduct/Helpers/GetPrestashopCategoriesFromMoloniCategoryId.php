@@ -22,108 +22,85 @@
  * @noinspection PhpMultipleClassDeclarationsInspection
  */
 
-namespace Moloni\Builders\PrestashopProduct;
+namespace Moloni\Builders\PrestashopProduct\Helpers;
 
 use Tools;
 use Category;
 use Configuration;
-use PrestaShopException;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\Product\MoloniProductCategoryException;
+use PrestaShopException;
 
-class ProductCategory
+class GetPrestashopCategoriesFromMoloniCategoryId
 {
-    /**
-     * Moloni category id
-     *
-     * @var int
-     */
-    protected $productCategoryId = 0;
+    private $moloniCategoryId;
 
-    /**
-     * Moloni categories names
-     *
-     * @var array
-     */
-    protected $productCategoriesNames = [];
-
-    /**
-     * Prestashop categories ids
-     *
-     * @var array
-     */
-    protected $categoriesIds = [];
-
-    /**
-     * Constructor
-     *
-     * @param int $productCategoryId
-     *
-     * @throws MoloniProductCategoryException
-     */
-    public function __construct(int $productCategoryId)
+    public function __construct(int $moloniCategoryId)
     {
-        $this->productCategoryId = $productCategoryId;
-
-        $this->init();
+        $this->moloniCategoryId = $moloniCategoryId;
     }
 
-    //          PUBLICS          //
-
     /**
-     * Search for Prestashop categories
+     * Handler
+     *
      * @throws MoloniProductCategoryException
      */
-    public function search(): void
+    public function handle(): array
     {
         //the root of all categories has id = 2
         $parentId = 2;
         $languageId = (int)Configuration::get('PS_LANG_DEFAULT');
 
-        foreach ($this->productCategoriesNames as $categoriesName) {
-            $query = Category::searchByNameAndParentCategoryId($languageId, $categoriesName, $parentId);
+        $prestashopCategoryIds = [$parentId];
+        $moloniCategoriesNames = $this->getMoloniCategoryTree();
+
+        foreach ($moloniCategoriesNames as $moloniCategoryName) {
+            $query = Category::searchByNameAndParentCategoryId($languageId, $moloniCategoryName, $parentId);
 
             if (empty($query)) {
                 $category = new Category();
-                $category->name = [$languageId => $categoriesName];
+                $category->name = [$languageId => $moloniCategoryName];
                 $category->id_parent = $parentId;
-                $category->link_rewrite = [$languageId => Tools::str2url($categoriesName)];
+                $category->link_rewrite = [$languageId => Tools::str2url($moloniCategoryName)];
 
                 try {
                     $category->save();
                 } catch (PrestaShopException $e) {
                     throw new MoloniProductCategoryException('Error creating Prestashop category', [], [
-                        'name' => $categoriesName,
+                        'name' => $moloniCategoryName,
                         'parentId' => $parentId,
                     ]);
                 }
 
-                array_unshift($this->categoriesIds, $category->id);
+                array_unshift($prestashopCategoryIds, $category->id);
 
                 $parentId = $category->id;
             } else {
                 $parentId = $query['id_category'];
 
-                array_unshift($this->categoriesIds, $query['id_category']);
+                array_unshift($prestashopCategoryIds, $query['id_category']);
             }
         }
+
+        return $prestashopCategoryIds;
     }
 
-    //          PRIVATES          //
-
     /**
+     * Fetch category tree names
+     *
      * @throws MoloniProductCategoryException
      */
-    protected function init(): void
+    protected function getMoloniCategoryTree(): array
     {
         $failsafe = 0;
-        $categoryId = $this->productCategoryId;
+        $categoryId = $this->moloniCategoryId;
+        $productCategoriesNames = [];
 
         do {
             $query = $this->getById($categoryId);
 
-            array_unshift($this->productCategoriesNames, $query['name']); //order needs to be inverted
+            array_unshift($productCategoriesNames, $query['name']); //order needs to be inverted
 
             if ($query['parent'] === null) {
                 break;
@@ -133,28 +110,16 @@ class ProductCategory
 
             $failsafe++;
         } while ($failsafe < 100);
+
+        return $productCategoriesNames;
     }
-
-    //          GETS          //
-
-    /**
-     * Gets Prestashop categories ids
-     *
-     * @return array
-     */
-    public function getCategoriesIds(): array
-    {
-        return $this->categoriesIds;
-    }
-
-    //          REQUESTS          //
 
     /**
      * Search for category by id
      *
      * @throws MoloniProductCategoryException
      */
-    protected function getById($categoryId): array
+    private function getById($categoryId): array
     {
         $variables = [
             'productCategoryId' => $categoryId
@@ -170,4 +135,3 @@ class ProductCategory
         return $query['data']['productCategory']['data'] ?? [];
     }
 }
-

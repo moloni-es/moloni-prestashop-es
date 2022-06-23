@@ -669,10 +669,22 @@ class MoloniProductSimple implements BuilderInterface
         $categoriesIds = $this->prestashopProduct->getCategories();
 
         if (!empty($categoriesIds)) {
-            $languageId = Configuration::get('PS_LANG_DEFAULT');
+            $languageId = (int)Configuration::get('PS_LANG_DEFAULT');
 
             foreach ($categoriesIds as $categoriesId) {
-                $categoriesNames[] = (new Category($categoriesId, $languageId))->name;
+                // Skip root categories
+                if (in_array((int)$categoriesId, [1, 2])) {
+                    continue;
+                }
+
+                $name = (new Category($categoriesId, $languageId))->name ?? '';
+
+                // For some reason sometimes this comes empty
+                if (empty($name)) {
+                    continue;
+                }
+
+                $categoriesNames[] = $name;
             }
         }
 
