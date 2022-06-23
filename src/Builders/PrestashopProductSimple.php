@@ -24,16 +24,16 @@
 
 namespace Moloni\Builders;
 
-use Moloni\Traits\LogsTrait;
 use Product;
 use Configuration;
 use PrestaShopException;
+use Moloni\Traits\LogsTrait;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\Interfaces\BuilderInterface;
-use Moloni\Builders\PrestashopProduct\ProductCategory;
 use Moloni\Builders\PrestashopProduct\Helpers\UpdatePrestaProductImage;
 use Moloni\Builders\PrestashopProduct\Helpers\UpdatePrestaProductStock;
 use Moloni\Builders\PrestashopProduct\Helpers\FindTaxGroupFromMoloniTax;
+use Moloni\Builders\PrestashopProduct\Helpers\GetPrestashopCategoriesFromMoloniCategoryId;
 use Moloni\Enums\Boolean;
 use Moloni\Enums\SyncFields;
 use Moloni\Exceptions\MoloniApiException;
@@ -415,10 +415,7 @@ class PrestashopProductSimple implements BuilderInterface
         $categoryId = $this->moloniProduct['productCategory']['productCategoryId'] ?? 0;
 
         if ($categoryId > 0 && $this->shouldSyncCategories()) {
-            $builder = new ProductCategory($categoryId);
-            $builder->search();
-
-            $this->categories = $builder->getCategoriesIds();
+            $this->categories = (new GetPrestashopCategoriesFromMoloniCategoryId($categoryId))->handle();
         }
 
         return $this;

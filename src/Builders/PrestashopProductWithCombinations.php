@@ -29,11 +29,11 @@ use Configuration;
 use PrestaShopException;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\Interfaces\BuilderInterface;
-use Moloni\Builders\PrestashopProduct\Helpers\FindTaxGroupFromMoloniTax;
-use Moloni\Builders\PrestashopProduct\Helpers\Combinations\CreateMappingsAfterPrestaProductCreateOrUpdate;
-use Moloni\Builders\PrestashopProduct\Helpers\Combinations\ProcessAttributesGroup;
 use Moloni\Builders\PrestashopProduct\Helpers\UpdatePrestaProductImage;
-use Moloni\Builders\PrestashopProduct\ProductCategory;
+use Moloni\Builders\PrestashopProduct\Helpers\FindTaxGroupFromMoloniTax;
+use Moloni\Builders\PrestashopProduct\Helpers\GetPrestashopCategoriesFromMoloniCategoryId;
+use Moloni\Builders\PrestashopProduct\Helpers\Combinations\ProcessAttributesGroup;
+use Moloni\Builders\PrestashopProduct\Helpers\Combinations\CreateMappingsAfterPrestaProductCreateOrUpdate;
 use Moloni\Builders\PrestashopProduct\ProductCombination;
 use Moloni\Enums\Boolean;
 use Moloni\Enums\SyncFields;
@@ -449,10 +449,7 @@ class PrestashopProductWithCombinations implements BuilderInterface
         $categoryId = $this->moloniProduct['productCategory']['productCategoryId'] ?? 0;
 
         if ($categoryId > 0 && $this->shouldSyncCategories()) {
-            $builder = new ProductCategory($categoryId);
-            $builder->search();
-
-            $this->categories = $builder->getCategoriesIds();
+            $this->categories = (new GetPrestashopCategoriesFromMoloniCategoryId($categoryId))->handle();
         }
 
         return $this;
