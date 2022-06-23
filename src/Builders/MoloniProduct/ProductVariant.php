@@ -80,6 +80,13 @@ class ProductVariant
     protected $name;
 
     /**
+     * Parent product name
+     *
+     * @var string
+     */
+    protected $parentName;
+
+    /**
      * Product reference
      *
      * @var string
@@ -148,11 +155,13 @@ class ProductVariant
      *
      * @param Combination $prestashopCombination
      * @param array|null $moloniParentProduct
+     * @param string|null $parentName
      */
-    public function __construct(Combination $prestashopCombination, ?array $moloniParentProduct = [])
+    public function __construct(Combination $prestashopCombination, ?string $parentName = '', ?array $moloniParentProduct = [])
     {
         $this->prestashopCombination = $prestashopCombination;
 
+        $this->parentName = $parentName;
         $this->moloniParentProduct = $moloniParentProduct;
         $this->allMoloniVariants = $moloniParentProduct['variants'] ?? [];
 
@@ -279,6 +288,9 @@ class ProductVariant
         switch (true) {
             case !empty($this->moloniVariant['name']):
                 $this->name = $this->moloniVariant['name'];
+                break;
+            case !empty($this->parentName):
+                $this->name = $this->parentName;
                 break;
             case !empty($this->reference):
                 $this->name = $this->reference;
