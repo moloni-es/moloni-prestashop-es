@@ -242,8 +242,7 @@ class MoloniProductWithVariants implements BuilderInterface
             ->setIdentifications()
             ->setMeasurementUnitId()
             ->setCoverImage()
-            ->setPropertyGroup()
-            ->setVariants();
+            ->setPropertyGroup();
 
         return $this;
     }
@@ -341,6 +340,16 @@ class MoloniProductWithVariants implements BuilderInterface
     }
 
     /**
+     * Run before actions
+     *
+     * @return void
+     */
+    protected function beforeAction(): void
+    {
+        $this->setVariants();
+    }
+
+    /**
      * Actions run before an update
      *
      * @return void
@@ -363,6 +372,8 @@ class MoloniProductWithVariants implements BuilderInterface
      */
     public function insert(): MoloniProductWithVariants
     {
+        $this->beforeAction();
+
         $props = $this->toArray();
 
         try {
@@ -399,6 +410,7 @@ class MoloniProductWithVariants implements BuilderInterface
      */
     public function update(): MoloniProductWithVariants
     {
+        $this->beforeAction();
         $this->beforeUpdate();
 
         $props = $this->toArray();
@@ -437,6 +449,8 @@ class MoloniProductWithVariants implements BuilderInterface
      */
     public function updateStock(): MoloniProductWithVariants
     {
+        $this->beforeAction();
+
         if (!$this->productExists() || !$this->productHasStock()) {
             return $this;
         }
@@ -811,6 +825,10 @@ class MoloniProductWithVariants implements BuilderInterface
      */
     public function setVariants(): MoloniProductWithVariants
     {
+        if (!empty($this->variants)) {
+            return $this;
+        }
+
         $prestashopCombinationsQuery = $this->prestashopProduct->getAttributeCombinations(null, false);
 
         foreach ($prestashopCombinationsQuery as $combinationQuery) {
