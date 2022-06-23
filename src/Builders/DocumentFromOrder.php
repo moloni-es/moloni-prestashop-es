@@ -538,18 +538,16 @@ class DocumentFromOrder implements BuilderInterface
                     throw new MoloniDocumentException('Document type not found');
             }
         } catch (MoloniApiException $e) {
-            throw new MoloniDocumentException('Error creating {0} document ({1})', [
+            throw new MoloniDocumentException('Error creating {0} document', [
                 '{0}' => $this->documentTypeName,
-                '{1}' => $this->ourReference,
             ], $e->getData());
         }
 
         $documentId = $moloniDocument['documentId'] ?? 0;
 
         if ($documentId === 0) {
-            throw new MoloniDocumentException('Error creating {0} document ({1})', [
+            throw new MoloniDocumentException('Error creating {0} document', [
                 '{0}' => $this->documentTypeName,
-                '{1}' => $this->ourReference,
             ], [
                 'document_props' => $this->createProps, 'result' => $mutation
             ]);
@@ -569,9 +567,8 @@ class DocumentFromOrder implements BuilderInterface
             if ($difference < 0.01) {
                 $this->closeDocument();
             } else {
-                throw new MoloniDocumentWarning('Could not close {0}, totals do not match ({1})', [
+                throw new MoloniDocumentWarning('Could not close {0}, totals do not match', [
                     '{0}' => $this->documentTypeName,
-                    '{1}' => $this->ourReference,
                 ], [
                     'documentProps' => $this->createProps,
                     'mutation' => $moloniDocument
@@ -642,9 +639,8 @@ class DocumentFromOrder implements BuilderInterface
             $documentId = $moloniDocument['documentId'] ?? 0;
 
             if ($documentId === 0) {
-                throw new MoloniApiException('Error closing {0} document ({1})', [
+                throw new MoloniApiException('Error closing {0} document', [
                     '{0}' => $this->documentTypeName,
-                    '{1}' => $this->ourReference,
                 ], [
                     'mutation' => $mutation, 'props' => $updateProps
                 ]);
@@ -656,9 +652,8 @@ class DocumentFromOrder implements BuilderInterface
                 $this->sendEmail();
             }
         } catch (MoloniApiException $e) {
-            throw new MoloniDocumentWarning('Error closing {0} document ({1})', [
+            throw new MoloniDocumentWarning('Error closing {0} document', [
                 '{0}' => $this->documentTypeName,
-                '{1}' => $this->ourReference,
             ], $e->getData());
         }
 
@@ -825,7 +820,7 @@ class DocumentFromOrder implements BuilderInterface
             try {
                 ['countryId' => $countryId, 'code' => $code] = $this->getMoloniCountryById((new Address($addressId))->id_country);
             } catch (MoloniApiException $e) {
-                throw new MoloniDocumentException('Error fetching document fiscal zone ({0})', ['{0}' => $this->ourReference], $e->getData());
+                throw new MoloniDocumentException('Error fetching document fiscal zone', [], $e->getData());
             }
 
             $fiscalZone = [
@@ -928,7 +923,7 @@ class DocumentFromOrder implements BuilderInterface
         try {
             $date = (new DateTime())->format('Y-m-d\TH:i:sP');
         } catch (\Exception $e) {
-            throw new MoloniDocumentException('Error occurred setting document dates ({0})', ['{0}' => $this->ourReference]);
+            throw new MoloniDocumentException('Error occurred setting document dates');
         }
 
         $this->dates = [

@@ -71,7 +71,7 @@ class OrderStatusUpdate extends AbstractHookAction
         } catch (MoloniDocumentException|MoloniException $e) {
             (new DocumentErrorMail(Settings::get('alertEmail'), ['order_id' => $this->orderId]))->handle();
 
-            $auxMessage = 'Error creating document ({0})';
+            $auxMessage = 'Error processing order ({0})';
             $auxIdentifiers = ['{0}' => isset($action) ? $action->getOrder()->reference : ''];
 
             Logs::addErrorLog([[$auxMessage, $auxIdentifiers], [$e->getMessage(), $e->getIdentifiers()]], $e->getData());
