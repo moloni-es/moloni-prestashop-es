@@ -834,7 +834,7 @@ class MoloniProductWithVariants implements BuilderInterface
         foreach ($prestashopCombinationsQuery as $combinationQuery) {
             $combination = new Combination($combinationQuery['id_product_attribute'], (int)Configuration::get('PS_LANG_DEFAULT'));
 
-            $builder = new ProductVariant($combination, $this->moloniProduct);
+            $builder = new ProductVariant($combination, $this->name, $this->moloniProduct);
             $builder
                 ->setParentHasStock($this->hasStock)
                 ->setWarehouseId($this->warehouseId)
