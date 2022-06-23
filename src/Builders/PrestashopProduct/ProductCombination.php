@@ -307,7 +307,8 @@ class ProductCombination implements BuilderInterface
             $this->afterSave();
         } catch (PrestaShopException $e) {
             throw new MoloniProductCombinationException('Error updating combination ({0})', ['{0}' => $this->reference], [
-                'moloniVariant' => $this->moloniVariant
+                'moloniVariant' => $this->moloniVariant,
+                'error' => $e->getMessage()
             ]);
         }
     }
@@ -443,7 +444,7 @@ class ProductCombination implements BuilderInterface
      */
     public function setPrice(): ProductCombination
     {
-        $this->price = $this->moloniParent['price'] - $this->moloniVariant['price'];
+        $this->price = round($this->moloniParent['price'] - $this->moloniVariant['price'], 5);
 
         return $this;
     }
