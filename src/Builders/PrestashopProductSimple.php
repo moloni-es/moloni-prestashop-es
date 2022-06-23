@@ -261,7 +261,6 @@ class PrestashopProductSimple implements BuilderInterface
             $product = new Product($productId, true, Configuration::get('PS_LANG_DEFAULT'));
         } else {
             $product = new Product();
-            $productId = 0;
         }
 
         $this->prestashopProduct = $product;
