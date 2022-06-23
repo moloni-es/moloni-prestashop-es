@@ -65,11 +65,15 @@ class OrderStatusUpdate extends AbstractHookAction
             $action = new OrderCreateDocument($this->orderId, $this->entityManager);
             $action->handle();
         } catch (MoloniDocumentWarning $e) {
-            (new DocumentWarningMail(Settings::get('alertEmail'), ['order_id' => $this->orderId]))->handle();
+            if (!empty(Settings::get('alertEmail'))) {
+                (new DocumentWarningMail(Settings::get('alertEmail'), ['order_id' => $this->orderId]))->handle();
+            }
 
             Logs::addWarningLog([$e->getMessage(), $e->getIdentifiers()], $e->getData(), $this->orderId);
         } catch (MoloniDocumentException|MoloniException $e) {
-            (new DocumentErrorMail(Settings::get('alertEmail'), ['order_id' => $this->orderId]))->handle();
+            if (!empty(Settings::get('alertEmail'))) {
+                (new DocumentErrorMail(Settings::get('alertEmail'), ['order_id' => $this->orderId]))->handle();
+            }
 
             $auxMessage = 'Error processing order ({0})';
             $auxIdentifiers = ['{0}' => isset($action) ? $action->getOrder()->reference : ''];

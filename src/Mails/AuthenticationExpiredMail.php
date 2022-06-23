@@ -32,10 +32,6 @@ class AuthenticationExpiredMail extends SendMail
 {
     public function handle(): void
     {
-        if (!empty($this->email)) {
-            return;
-        }
-
         Mail::Send(
             (int)(Configuration::get('PS_LANG_DEFAULT')), // defaut language id
             'authentication_expired', // email template file to be use

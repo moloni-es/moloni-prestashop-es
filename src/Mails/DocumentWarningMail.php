@@ -32,10 +32,6 @@ class DocumentWarningMail extends SendMail
 {
     public function handle(): void
     {
-        if (!empty($this->email)) {
-            return;
-        }
-
         $orderId = $this->data["order_id"] ?? 0;
 
         Mail::Send(
