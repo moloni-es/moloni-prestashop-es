@@ -333,7 +333,7 @@ class OrderDelivery implements BuilderItemInterface
     {
         $this->destinationAddress = $this->deliveryAddress->address1;
         $this->destinationAddress .= ' ';
-        $this->destinationAddress .= $this->deliveryAddress->address1;
+        $this->destinationAddress .= $this->deliveryAddress->address2;
 
         $this->destinationZipCode = $this->deliveryAddress->postcode;
         $this->destinationCity = $this->deliveryAddress->city;
