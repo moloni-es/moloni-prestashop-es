@@ -1,0 +1,36 @@
+version: '2'
+services:
+  mariadb:
+    image: docker.io/bitnami/mariadb:10.6
+    ports:
+      - '3307:3307'
+      - '3308:3306'
+    environment:
+      # ALLOW_EMPTY_PASSWORD is recommended only for development.
+      - ALLOW_EMPTY_PASSWORD=yes
+      - MARIADB_USER=bn_prestashop
+      - MARIADB_DATABASE=bitnami_prestashop
+    volumes:
+      - './database:/bitnami/mariadb'
+  prestashop:
+    image: docker.io/bitnami/prestashop:1.7
+    ports:
+      - '85:8080'
+      - '86:8443'
+    expose:
+      - 9000
+      - 9003
+    environment:
+      - PRESTASHOP_HOST=[your_ip]
+      - PRESTASHOP_DATABASE_HOST=mariadb
+      - PRESTASHOP_DATABASE_PORT_NUMBER=3306
+      - PRESTASHOP_DATABASE_USER=bn_prestashop
+      - PRESTASHOP_DATABASE_NAME=bitnami_prestashop
+      # ALLOW_EMPTY_PASSWORD is recommended only for development.
+      - ALLOW_EMPTY_PASSWORD=yes
+      - PRESTASHOP_PASSWORD=123456789
+      - PRESTASHOP_EMAIL=dev@moloni.com
+    volumes:
+      - ./site:/bitnami/prestashop
+    depends_on:
+      - mariadb
