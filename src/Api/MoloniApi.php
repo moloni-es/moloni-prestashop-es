@@ -179,11 +179,15 @@ class MoloniApi
             self::$entityManager->persist(self::$app);
             self::$entityManager->flush();
         } catch (BadResponseException|ORMException $e) {
-            (new AuthenticationExpiredMail(Settings::get('alertEmail'), ['message' => $e->getMessage()]))->handle();
+            if (!empty(Settings::get('alertEmail'))) {
+                (new AuthenticationExpiredMail(Settings::get('alertEmail'), ['message' => $e->getMessage()]))->handle();
+            }
 
             return false;
         } catch (MoloniLoginException $e) {
-            (new AuthenticationExpiredMail(Settings::get('alertEmail'), $e->getData()))->handle();
+            if (!empty(Settings::get('alertEmail'))) {
+                (new AuthenticationExpiredMail(Settings::get('alertEmail'), $e->getData()))->handle();
+            }
 
             return false;
         }
