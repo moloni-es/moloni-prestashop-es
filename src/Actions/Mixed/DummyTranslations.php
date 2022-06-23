@@ -101,14 +101,22 @@ class DummyTranslations
         $this->translator->trans('An unexpected error occurred', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Could not find product in Moloni ({0})', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Error fetching product by id ({0})', [], 'Modules.Molonies.Errors');
-        $this->translator->trans('Could not close {0}, totals do not match ({1})', [], 'Modules.Molonies.Errors');
+        $this->translator->trans('Could not close {0}, totals do not match', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Created document not found', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Moloni document not found', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Error getting prestashop order', [], 'Modules.Molonies.Errors');
-        $this->translator->trans('Error creating document ({0})', [], 'Modules.Molonies.Errors');
+        $this->translator->trans('Error processing order ({0})', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Error updating Prestashop stock', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Error saving Prestashop product', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Error saving Moloni product', [], 'Modules.Molonies.Errors');
+        $this->translator->trans('No document type selected. Please choose one in plugin settings.', [], 'Modules.Molonies.Errors');
+        $this->translator->trans('Error closing {0} document', [], 'Modules.Molonies.Errors');
+        $this->translator->trans('Error creating {0} document', [], 'Modules.Molonies.Errors');
+        $this->translator->trans('Error fetching document fiscal zone', [], 'Modules.Molonies.Errors');
+        $this->translator->trans('Error occurred setting document dates', [], 'Modules.Molonies.Errors');
+        $this->translator->trans('Could not find exchange rate: ({0})', [], 'Modules.Molonies.Errors');
+        $this->translator->trans('Error fetching exchange rate: ({0})', [], 'Modules.Molonies.Errors');
+        $this->translator->trans('Document type not found', [], 'Modules.Molonies.Errors');
     }
 
     public function common(): void
