@@ -186,6 +186,7 @@ class OrderProduct implements BuilderItemInterface
 
         $params = [
             'productId' => $this->productId,
+            'name' => $this->name,
             'price' => $this->price,
             'ordering' => $order,
             'qty' => $this->quantity,
