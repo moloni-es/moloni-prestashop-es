@@ -347,7 +347,7 @@ class OrderProduct implements BuilderItemInterface
      */
     public function setPrice(): OrderProduct
     {
-        $this->price = (float)($this->orderProduct['price'] ?? 0);
+        $this->price = (float)($this->orderProduct['product_price'] ?? 0);
         $this->priceWithTaxes = (float)($this->orderProduct['unit_price_tax_incl'] ?? 0);
 
         return $this;
