@@ -24,10 +24,6 @@
 
 namespace Moloni\Builders;
 
-use Moloni\Builders\Document\OrderProduct;
-use Moloni\Entity\MoloniProductAssociations;
-use Moloni\Exceptions\Document\MoloniDocumentProductException;
-use Moloni\Tools\ProductAssociations;
 use Product;
 use Address;
 use Category;
@@ -35,6 +31,8 @@ use Combination;
 use Configuration;
 use Country;
 use Image;
+use Moloni\Entity\MoloniProductAssociations;
+use Moloni\Tools\ProductAssociations;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\Interfaces\BuilderInterface;
 use Moloni\Builders\MoloniProduct\Helpers\Variants\CreateMappingsAfterMoloniProductCreateOrUpdate;
@@ -737,7 +735,19 @@ class MoloniProductWithVariants implements BuilderInterface
             $languageId = Configuration::get('PS_LANG_DEFAULT');
 
             foreach ($categoriesIds as $categoriesId) {
-                $categoriesNames[] = (new Category($categoriesId, $languageId))->name;
+                // Skip root categories
+                if (in_array((int)$categoriesId, [1, 2])) {
+                    continue;
+                }
+
+                $name = (new Category($categoriesId, $languageId))->name ?? '';
+
+                // For some reason sometimes this comes empty
+                if (empty($name)) {
+                    continue;
+                }
+
+                $categoriesNames[] = $name;
             }
         }
 
@@ -837,6 +847,10 @@ class MoloniProductWithVariants implements BuilderInterface
      */
     public function setVariants(): MoloniProductWithVariants
     {
+        if (!empty($this->variants)) {
+            return $this;
+        }
+
         foreach ($this->prestashopCombinations as $combination) {
             $builder = new ProductVariant($combination, $this->moloniProduct);
             $builder
@@ -1034,7 +1048,7 @@ class MoloniProductWithVariants implements BuilderInterface
      */
     protected function shouldSyncCategories(): bool
     {
-        return !$this->productExists() || in_array(SyncFields::CATEGORIES, $this->syncFields, true);
+        return in_array(SyncFields::CATEGORIES, $this->syncFields, true);
     }
 
     /**
