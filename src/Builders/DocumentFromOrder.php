@@ -466,6 +466,10 @@ class DocumentFromOrder implements BuilderInterface
      */
     protected function shouldAddShippingInformation(): bool
     {
+        if (DocumentTypes::requiresDelivery($this->documentType)) {
+            return true;
+        }
+
         return $this->useShipping === Boolean::YES && DocumentTypes::hasDelivery($this->documentType);
     }
 

@@ -50,6 +50,10 @@ class DocumentTypes
         self::BILLS_OF_LADING,
     ];
 
+    public const TYPES_REQUIRES_DELIVERY = [
+        self::BILLS_OF_LADING,
+    ];
+
     public const TYPES_WITH_PRODUCTS = [
         self::INVOICES,
         self::PURCHASE_ORDERS,
@@ -100,5 +104,10 @@ class DocumentTypes
     public static function hasDelivery(?string $documentType = ''): bool
     {
         return in_array($documentType, self::TYPES_WITH_DELIVERY, true);
+    }
+
+    public static function requiresDelivery(?string $documentType = ''): bool
+    {
+        return in_array($documentType, self::TYPES_REQUIRES_DELIVERY, true);
     }
 }
