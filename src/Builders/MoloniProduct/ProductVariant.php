@@ -276,7 +276,17 @@ class ProductVariant
      */
     public function setName(): ProductVariant
     {
-        $this->name = $this->moloniVariant['name'] ?? $this->reference ?? 'Variant';
+        switch (true) {
+            case !empty($this->moloniVariant['name']):
+                $this->name = $this->moloniVariant['name'];
+                break;
+            case !empty($this->reference):
+                $this->name = $this->reference;
+                break;
+            default:
+                $this->name =  'Variant';
+                break;
+        }
 
         return $this;
     }
