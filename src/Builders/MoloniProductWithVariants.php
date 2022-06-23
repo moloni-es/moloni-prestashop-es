@@ -24,6 +24,10 @@
 
 namespace Moloni\Builders;
 
+use Moloni\Builders\Document\OrderProduct;
+use Moloni\Entity\MoloniProductAssociations;
+use Moloni\Exceptions\Document\MoloniDocumentProductException;
+use Moloni\Tools\ProductAssociations;
 use Product;
 use Address;
 use Category;
@@ -396,7 +400,8 @@ class MoloniProductWithVariants implements BuilderInterface
                 $this->afterSave();
             } else {
                 throw new MoloniProductException('Error creating product ({0})', ['{0}' => $this->reference], [
-                    'mutation' => $mutation
+                    'mutation' => $mutation,
+                    '$props' => $props
                 ]);
             }
         } catch (MoloniApiException $e) {
@@ -472,6 +477,22 @@ class MoloniProductWithVariants implements BuilderInterface
      */
     public function search(): MoloniProductWithVariants
     {
+        /** @var MoloniProductAssociations[]|null $associations */
+        $associations = ProductAssociations::findByPrestashopProductId((int)$this->prestashopProduct->id);
+
+        // If we have associations
+        if (!empty($associations)) {
+            $this->getById($associations[0]->getMlProductId());
+
+            // If found, can return
+            if (!empty($this->moloniProduct)) {
+                return $this;
+            }
+
+            // Not found, delete associations
+            ProductAssociations::deleteByPrestashopId((int)$this->prestashopProduct->id);
+        }
+
         return $this->getByReference();
     }
 
@@ -871,6 +892,39 @@ class MoloniProductWithVariants implements BuilderInterface
     }
 
     //          REQUESTS          //
+
+    /**
+     * Search product by variant id
+     *
+     * @param int $productId
+     *
+     * @return MoloniProductWithVariants
+     *
+     * @throws MoloniProductException
+     */
+    protected function getById(int $productId): MoloniProductWithVariants
+    {
+        $variables = [
+            'productId' => $productId
+        ];
+
+        try {
+            $query = MoloniApiClient::products()->queryProduct($variables);
+
+            $moloniProduct = $query['data']['product']['data'] ?? [];
+
+            if (!empty($moloniProduct)) {
+                $this->moloniProduct = $moloniProduct;
+                $this->setHasStock($moloniProduct['hasStock']);
+            }
+        } catch (MoloniApiException $e) {
+            throw new MoloniProductException('Error fetching product by ID: ({0})', [
+                '{0}' => $this->reference
+            ], $e->getData());
+        }
+
+        return $this;
+    }
 
     /**
      * Finds by reference
