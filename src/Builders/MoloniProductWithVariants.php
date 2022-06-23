@@ -57,7 +57,9 @@ use Moloni\Traits\LogsTrait;
 
 class MoloniProductWithVariants implements BuilderInterface
 {
-    use LogsTrait;
+    use LogsTrait {
+        disableLogs as traitDisableLogs;
+    }
 
     /**
      * Moloni roduct
@@ -184,7 +186,7 @@ class MoloniProductWithVariants implements BuilderInterface
      *
      * @var ProductVariant[]
      */
-    protected $variants;
+    protected $variants = [];
 
 
     /**
@@ -200,13 +202,6 @@ class MoloniProductWithVariants implements BuilderInterface
      * @var Product
      */
     protected $prestashopProduct;
-
-    /**
-     * Combinations
-     *
-     * @var Combination[]
-     */
-    protected $prestashopCombinations;
 
     /**
      * Constructor
@@ -233,7 +228,6 @@ class MoloniProductWithVariants implements BuilderInterface
     {
         $this
             ->verifyPrestaProduct()
-            ->setCombinations()
             ->setVisibility()
             ->setName()
             ->setSummary()
@@ -248,7 +242,8 @@ class MoloniProductWithVariants implements BuilderInterface
             ->setIdentifications()
             ->setMeasurementUnitId()
             ->setCoverImage()
-            ->setPropertyGroup();
+            ->setPropertyGroup()
+            ->setVariants();
 
         return $this;
     }
@@ -346,16 +341,6 @@ class MoloniProductWithVariants implements BuilderInterface
     }
 
     /**
-     * Actions run before an actionn
-     *
-     * @return void
-     */
-    protected function beforeAction(): void
-    {
-        $this->setVariants();
-    }
-
-    /**
      * Actions run before an update
      *
      * @return void
@@ -378,8 +363,6 @@ class MoloniProductWithVariants implements BuilderInterface
      */
     public function insert(): MoloniProductWithVariants
     {
-        $this->beforeAction();
-
         $props = $this->toArray();
 
         try {
@@ -416,7 +399,6 @@ class MoloniProductWithVariants implements BuilderInterface
      */
     public function update(): MoloniProductWithVariants
     {
-        $this->beforeAction();
         $this->beforeUpdate();
 
         $props = $this->toArray();
@@ -455,8 +437,6 @@ class MoloniProductWithVariants implements BuilderInterface
      */
     public function updateStock(): MoloniProductWithVariants
     {
-        $this->beforeAction();
-
         if (!$this->productExists() || !$this->productHasStock()) {
             return $this;
         }
@@ -610,6 +590,10 @@ class MoloniProductWithVariants implements BuilderInterface
     public function setHasStock(bool $hasStock = null): MoloniProductWithVariants
     {
         $this->hasStock = $hasStock ?? (bool)Boolean::YES;
+
+        foreach ($this->variants as $variant) {
+            $variant->setParentHasStock($this->hasStock);
+        }
 
         return $this;
     }
@@ -807,26 +791,6 @@ class MoloniProductWithVariants implements BuilderInterface
     }
 
     /**
-     * Set product combinations
-     *
-     * @return $this
-     */
-    public function setCombinations(): MoloniProductWithVariants
-    {
-        $prestashopCombinations = [];
-
-        $query = $this->prestashopProduct->getAttributeCombinations(null, false);
-
-        foreach ($query as $value) {
-            $prestashopCombinations[] = new Combination($value['id_product_attribute'], Configuration::get('PS_LANG_DEFAULT'));
-        }
-
-        $this->prestashopCombinations = $prestashopCombinations;
-
-        return $this;
-    }
-
-    /**
      * Set property group
      *
      * @return MoloniProductWithVariants
@@ -847,20 +811,16 @@ class MoloniProductWithVariants implements BuilderInterface
      */
     public function setVariants(): MoloniProductWithVariants
     {
-        if (!empty($this->variants)) {
-            return $this;
-        }
+        $prestashopCombinationsQuery = $this->prestashopProduct->getAttributeCombinations(null, false);
 
-        foreach ($this->prestashopCombinations as $combination) {
+        foreach ($prestashopCombinationsQuery as $combinationQuery) {
+            $combination = new Combination($combinationQuery['id_product_attribute'], (int)Configuration::get('PS_LANG_DEFAULT'));
+
             $builder = new ProductVariant($combination, $this->moloniProduct);
             $builder
                 ->setParentHasStock($this->hasStock)
                 ->setWarehouseId($this->warehouseId)
                 ->setPropertyPairs($this->propertyGroup['variants'][(int)$combination->id] ?? []);
-
-            if (!$this->shouldWriteLogs()) {
-                $builder->disableLogs();
-            }
 
             $this->variants[] = $builder;
         }
@@ -903,6 +863,20 @@ class MoloniProductWithVariants implements BuilderInterface
         $this->identifications = $identifications;
 
         return $this;
+    }
+
+    /**
+     * Disable logs proxy
+     *
+     * @return void
+     */
+    public function disableLogs(): void
+    {
+        $this->traitDisableLogs();
+
+        foreach ($this->variants as $variant) {
+            $variant->disableLogs();
+        }
     }
 
     //          REQUESTS          //
