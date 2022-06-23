@@ -54,6 +54,13 @@ class ProductCombination implements BuilderInterface
     protected $moloniVariant;
 
     /**
+     * Moloni parent product
+     *
+     * @var array
+     */
+    protected $moloniParent;
+
+    /**
      * Prestashop product
      *
      * @var Product|null
@@ -150,12 +157,14 @@ class ProductCombination implements BuilderInterface
      * Constructor
      *
      * @param Product $prestashopProduct
+     * @param array $moloniParent
      * @param array $moloniVariant
      * @param array|null $syncFields
      */
-    public function __construct(Product $prestashopProduct, array $moloniVariant, ?array $syncFields = null)
+    public function __construct(Product $prestashopProduct, array $moloniParent, array $moloniVariant, ?array $syncFields = null)
     {
         $this->moloniVariant = $moloniVariant;
+        $this->moloniParent = $moloniParent;
         $this->prestashopProduct = $prestashopProduct;
 
         $this->syncFields = $syncFields ?? Settings::get('productSyncFields') ?? SyncFields::getDefaultFields();
@@ -434,7 +443,7 @@ class ProductCombination implements BuilderInterface
      */
     public function setPrice(): ProductCombination
     {
-        $this->price = $this->prestashopProduct->price - $this->moloniVariant['price'];
+        $this->price = $this->moloniParent['price'] - $this->moloniVariant['price'];
 
         return $this;
     }
