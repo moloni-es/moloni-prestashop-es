@@ -29,7 +29,9 @@
 
                     {% if message[1] %}
                         {% for key, value in message[1] %}
-                            {% set foo = foo|merge({(key): value}) %}
+                            {% set translatedValue = value|trans({}, 'Modules.Molonies.Common') %}
+
+                            {% set foo = foo|merge({(key): translatedValue}) %}
                         {% endfor %}
                     {% endif %}
 
