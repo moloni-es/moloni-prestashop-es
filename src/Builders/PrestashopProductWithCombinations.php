@@ -198,6 +198,7 @@ class PrestashopProductWithCombinations implements BuilderInterface
             ->setReference()
             ->fetchProductFromPresta()
             ->setImagePath()
+            ->setAttributes()
             ->setCombinations()
             ->setType()
             ->setName()
@@ -228,13 +229,6 @@ class PrestashopProductWithCombinations implements BuilderInterface
 
         if (!empty($this->imagePath) && $this->shouldSyncImage()) {
             new UpdatePrestaProductImage($this->prestashopProduct->id, $this->imagePath);
-        }
-
-        // Check if Moloni groups exist
-        try {
-            new ProcessAttributesGroup($this->moloniProduct['propertyGroup']);
-        } catch (PrestaShopException $e) {
-            throw new MoloniProductException('Error when creating product attributes', [], [$e->getMessage()]);
         }
 
         // Save combinations
@@ -613,6 +607,25 @@ class PrestashopProductWithCombinations implements BuilderInterface
         }
 
         $this->imagePath = $imagePath;
+
+        return $this;
+    }
+
+    /**
+     * Set attributes
+     *
+     * @return $this
+     *
+     * @throws MoloniProductException
+     */
+    public function setAttributes(): PrestashopProductWithCombinations
+    {
+        // Check if Moloni groups exist
+        try {
+            new ProcessAttributesGroup($this->moloniProduct['propertyGroup']);
+        } catch (PrestaShopException $e) {
+            throw new MoloniProductException('Error when creating product attributes', [], [$e->getMessage()]);
+        }
 
         return $this;
     }
