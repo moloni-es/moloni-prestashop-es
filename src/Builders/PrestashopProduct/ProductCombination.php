@@ -183,15 +183,15 @@ class ProductCombination implements BuilderInterface
     {
         $this
             ->setReference()
-            ->fetchCombinationFromPresta()
             ->setName()
             ->setHasStock()
             ->setStock()
             ->setPrice()
             ->setIdentifications()
             ->setImagePath()
+            ->setWarehouseId()
             ->setAttributes()
-            ->setWarehouseId();
+            ->fetchCombinationFromPresta();
 
         return $this;
     }
@@ -228,7 +228,7 @@ class ProductCombination implements BuilderInterface
     protected function fetchCombinationFromPresta(): ProductCombination
     {
         if ($this->parentExists()) {
-            $combination = (new FindOrCreateCombination($this->getMoloniVariantId(), $this->prestashopProduct->id, $this->reference))->handle();
+            $combination = (new FindOrCreateCombination($this->getMoloniVariantId(), $this->prestashopProduct, $this->reference, $this->attributes))->handle();
         } else {
             $combination = new Combination();
         }
