@@ -228,10 +228,11 @@ class MoloniProductWithVariants implements BuilderInterface
     {
         $this
             ->verifyPrestaProduct()
+            ->setReference()
+            ->fetchProductFromMoloni()
             ->setVisibility()
             ->setName()
             ->setSummary()
-            ->setReference()
             ->setCategory()
             ->setHasStock()
             ->setPrice()
@@ -242,7 +243,8 @@ class MoloniProductWithVariants implements BuilderInterface
             ->setIdentifications()
             ->setMeasurementUnitId()
             ->setCoverImage()
-            ->setPropertyGroup();
+            ->setPropertyGroup()
+            ->setVariants();
 
         return $this;
     }
@@ -340,16 +342,6 @@ class MoloniProductWithVariants implements BuilderInterface
     }
 
     /**
-     * Run before actions
-     *
-     * @return void
-     */
-    protected function beforeAction(): void
-    {
-        $this->setVariants();
-    }
-
-    /**
      * Actions run before an update
      *
      * @return void
@@ -363,6 +355,34 @@ class MoloniProductWithVariants implements BuilderInterface
         }
     }
 
+    /**
+     * Search product in Moloni
+     *
+     * @throws MoloniProductException
+     */
+    protected function fetchProductFromMoloni(): MoloniProductWithVariants
+    {
+        /** @var MoloniProductAssociations[]|null $associations */
+        $associations = ProductAssociations::findByPrestashopProductId((int)$this->prestashopProduct->id);
+
+        // If we have associations
+        if (!empty($associations)) {
+            $this->getById($associations[0]->getMlProductId());
+
+            // If found, can return
+            if (!empty($this->moloniProduct)) {
+                return $this;
+            }
+
+            // Not found, delete associations
+            ProductAssociations::deleteByPrestashopId((int)$this->prestashopProduct->id);
+        }
+
+        $this->getByReference();
+
+        return $this;
+    }
+
     //          PUBLICS          //
 
     /**
@@ -372,8 +392,6 @@ class MoloniProductWithVariants implements BuilderInterface
      */
     public function insert(): MoloniProductWithVariants
     {
-        $this->beforeAction();
-
         $props = $this->toArray();
 
         try {
@@ -410,7 +428,6 @@ class MoloniProductWithVariants implements BuilderInterface
      */
     public function update(): MoloniProductWithVariants
     {
-        $this->beforeAction();
         $this->beforeUpdate();
 
         $props = $this->toArray();
@@ -449,8 +466,6 @@ class MoloniProductWithVariants implements BuilderInterface
      */
     public function updateStock(): MoloniProductWithVariants
     {
-        $this->beforeAction();
-
         if (!$this->productExists() || !$this->productHasStock()) {
             return $this;
         }
@@ -460,32 +475,6 @@ class MoloniProductWithVariants implements BuilderInterface
         }
 
         return $this;
-    }
-
-    /**
-     * Search product in Moloni
-     *
-     * @throws MoloniProductException
-     */
-    public function search(): MoloniProductWithVariants
-    {
-        /** @var MoloniProductAssociations[]|null $associations */
-        $associations = ProductAssociations::findByPrestashopProductId((int)$this->prestashopProduct->id);
-
-        // If we have associations
-        if (!empty($associations)) {
-            $this->getById($associations[0]->getMlProductId());
-
-            // If found, can return
-            if (!empty($this->moloniProduct)) {
-                return $this;
-            }
-
-            // Not found, delete associations
-            ProductAssociations::deleteByPrestashopId((int)$this->prestashopProduct->id);
-        }
-
-        return $this->getByReference();
     }
 
     //          GETS          //
@@ -597,17 +586,13 @@ class MoloniProductWithVariants implements BuilderInterface
     /**
      * Set has stock
      *
-     * @param bool|null $hasStock
-     *
      * @return MoloniProductWithVariants
      */
-    public function setHasStock(bool $hasStock = null): MoloniProductWithVariants
+    public function setHasStock(): MoloniProductWithVariants
     {
-        $this->hasStock = $hasStock ?? (bool)Boolean::YES;
+        $hasStock = $this->moloniProduct['hasStock'] ?? (bool)Boolean::YES;
 
-        foreach ($this->variants as $variant) {
-            $variant->setParentHasStock($this->hasStock);
-        }
+        $this->hasStock = $hasStock;
 
         return $this;
     }
@@ -825,10 +810,6 @@ class MoloniProductWithVariants implements BuilderInterface
      */
     public function setVariants(): MoloniProductWithVariants
     {
-        if (!empty($this->variants)) {
-            return $this;
-        }
-
         $prestashopCombinationsQuery = $this->prestashopProduct->getAttributeCombinations(null, false);
 
         foreach ($prestashopCombinationsQuery as $combinationQuery) {
@@ -926,7 +907,6 @@ class MoloniProductWithVariants implements BuilderInterface
 
             if (!empty($moloniProduct)) {
                 $this->moloniProduct = $moloniProduct;
-                $this->setHasStock($moloniProduct['hasStock']);
             }
         } catch (MoloniApiException $e) {
             throw new MoloniProductException('Error fetching product by ID: ({0})', [
@@ -961,7 +941,6 @@ class MoloniProductWithVariants implements BuilderInterface
                 $moloniProduct = $query[0];
 
                 $this->moloniProduct = $moloniProduct;
-                $this->setHasStock($moloniProduct['hasStock']);
             }
         } catch (MoloniApiException $e) {
             throw new MoloniProductException('Error fetching product by reference: ({0})', ['{0}' => $this->reference], $e->getData());

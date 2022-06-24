@@ -215,11 +215,12 @@ class MoloniProductSimple implements BuilderInterface
     {
         $this
             ->verifyPrestaProduct()
+            ->setReference()
+            ->fetchProductFromMoloni()
             ->setCoverImage()
             ->setVisibility()
             ->setName()
             ->setSummary()
-            ->setReference()
             ->setCategory()
             ->setHasStock()
             ->setStock()
@@ -316,6 +317,18 @@ class MoloniProductSimple implements BuilderInterface
         }
     }
 
+    /**
+     * Search product in Moloni
+     *
+     * @throws MoloniProductException
+     */
+    protected function fetchProductFromMoloni(): MoloniProductSimple
+    {
+        $this->getByReference();
+
+        return $this;
+    }
+
     //          PUBLICS          //
 
     /**
@@ -407,16 +420,6 @@ class MoloniProductSimple implements BuilderInterface
         }
 
         return $this;
-    }
-
-    /**
-     * Search product in Moloni
-     *
-     * @throws MoloniProductException
-     */
-    public function search(): MoloniProductSimple
-    {
-        return $this->getByReference();
     }
 
     //          GETS          //
@@ -528,13 +531,11 @@ class MoloniProductSimple implements BuilderInterface
     /**
      * Set has stock
      *
-     * @param bool|null $hasStock
-     *
      * @return MoloniProductSimple
      */
-    public function setHasStock(bool $hasStock = null): MoloniProductSimple
+    public function setHasStock(): MoloniProductSimple
     {
-        $this->hasStock = $hasStock ?? (bool)Boolean::YES;
+        $this->hasStock = $this->moloniProduct['hasStock'] ?? (bool)Boolean::YES;
 
         return $this;
     }
@@ -806,7 +807,6 @@ class MoloniProductSimple implements BuilderInterface
                 $moloniProduct = $query[0];
 
                 $this->moloniProduct = $moloniProduct;
-                $this->setHasStock($moloniProduct['hasStock']);
             }
         } catch (MoloniApiException $e) {
             throw new MoloniProductException('Error fetching product by reference: ({0})', ['{0}' => $this->reference], $e->getData());

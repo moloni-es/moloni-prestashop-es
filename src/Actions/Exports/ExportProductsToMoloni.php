@@ -57,8 +57,6 @@ class ExportProductsToMoloni extends ExportProducts
                     $productBuilder = new MoloniProductSimple($product);
                 }
 
-                $productBuilder->search();
-
                 if ($productBuilder->getMoloniProductId() === 0) {
                     $productBuilder->disableLogs();
                     $productBuilder->insert();

@@ -47,7 +47,7 @@ class Login extends MoloniController
     public function home(): Response
     {
         $form = $this->createForm(LoginFormType::class, null, [
-            'url' => $this->generateUrl(MoloniRoutes::LOGIN)
+            'url' => $this->generateUrl(MoloniRoutes::LOGIN_SUBMIT)
         ]);
 
         $hasOldTables = (new HasOldPluginTables())->handle();

@@ -61,8 +61,6 @@ class ProductSave extends AbstractHookAction
                 $productBuilder = new MoloniProductSimple($product);
             }
 
-            $productBuilder->search();
-
             if ($productBuilder->getMoloniProductId() !== 0) {
                 SyncLogs::moloniProductAddTimeout($productBuilder->getMoloniProductId());
 
