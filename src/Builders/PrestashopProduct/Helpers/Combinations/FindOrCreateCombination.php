@@ -67,7 +67,6 @@ class FindOrCreateCombination
             return new Combination($combinationId);
         }
 
-
         $existingCombinations = $this->prestashopProduct->getAttributeCombinations();
 
         // Find by attribute match

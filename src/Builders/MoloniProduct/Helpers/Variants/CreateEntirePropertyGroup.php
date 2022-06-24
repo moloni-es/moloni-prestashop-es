@@ -118,15 +118,4 @@ class CreateEntirePropertyGroup
 
         return (new PrepareVariantPropertiesReturn($mutationData, $this->prestashopCombinations))->handle();
     }
-
-    private function findInCode(array $array, string $needle): bool
-    {
-        foreach ($array as $value) {
-            if ($value['code'] === $needle) {
-                return true;
-            }
-        }
-
-        return false;
-    }
 }
