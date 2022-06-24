@@ -339,6 +339,17 @@ class MoloniProductWithVariants implements BuilderInterface
         }
 
         new CreateMappingsAfterMoloniProductCreateOrUpdate($this->prestashopProduct, $this->moloniProduct, $this->variants);
+
+        // Update all variants values
+        foreach ($this->variants as $variant) {
+            // Update product with the one just added
+            $variant->setMoloniParent($this->moloniProduct);
+
+            // If was an insert, we need to get the id
+            if ($variant->getMoloniVariantId() === 0) {
+                $variant->setMoloniVariant();
+            }
+        }
     }
 
     /**
