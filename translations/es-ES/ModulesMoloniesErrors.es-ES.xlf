@@ -2,9 +2,439 @@
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
   <file original="admin745p3ar3j" source-language="es-ES" target-language="es-ES" datatype="plaintext">
     <body>
+      <trans-unit id="d89d8e3d9e49fc18bfae2e6b25736aad">
+        <source>Error fetching shipping by reference: ({0})</source>
+        <target>Error fetching shipping by reference: ({0})</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="7dc510b7bcc096ab355238159996832a">
+        <source>Shipping has no taxes applied. Please add an exemption reason in plugin settings.</source>
+        <target>Shipping has no taxes applied. Please add an exemption reason in plugin settings.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="4276f45c59f5247976410586ef7042d9">
+        <source>Error creating shipping product</source>
+        <target>Error creating shipping product</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="c64a39aa7cf3894c570a5300c2ac8a13">
+        <source>Request error</source>
+        <target>Request error</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="661a2c910f322ac1886cd81bec919251">
+        <source>Error paginating request</source>
+        <target>Error paginating request</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="0511ee0d41117aa7b4abaaf102aa513d">
+        <source>This field is required</source>
+        <target>Este campo es obligatorio</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="127013ec52b4e0a737a6d6836801cd47">
+        <source>E-mail is not valid</source>
+        <target>El e-mail no es válido</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="44b57473df30719bdaed6b4f3de9c810">
+        <source>VAT is not valid</source>
+        <target>Número de Identificación Fiscal no es válido</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="cfe6062038419f74c7d9e8b3a0150645">
+        <source>Slug has to have 4 or more characters</source>
+        <target>El slug tiene que tener 4 o más caracteres</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="23c440347e23570650575fce2456eb95">
+        <source>Slug is not valid</source>
+        <target>Slug no es válido</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="03ec9ea94e6d19081854251cfc940f9d">
+        <source>Password cannot be empty</source>
+        <target>La contraseña no puede estar vacía</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="3c5469d2ee89eddc561ce8b330d7950b">
+        <source>Password has to have 6 or more characters</source>
+        <target>La contraseña debe tener 6 o más caracteres</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="100e2b65a6bbd95e849c913e51984362">
+        <source>Password cannot have more than 16 characters</source>
+        <target>La contraseña no puede tener más de 16 caracteres</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="14c0acf57a4ea3f9dfaf6936402db705">
+        <source>Password needs to have at least one uppercase letter</source>
+        <target>La contraseña debe tener al menos una letra mayúscula</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="123de69b14f834c90fba3a5c9f72f5a6">
+        <source>Password needs to have at least one lowercase letter</source>
+        <target>La contraseña debe tener al menos una letra minúscula</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="934c3e644fde8e4878d4426ec02596c4">
+        <source>Password needs to have at least one symbol</source>
+        <target>La contraseña debe tener al menos un símbolo</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="5951f98d6d1931ec81292e820ba9dd7e">
+        <source>Password needs to have at least one number</source>
+        <target>La contraseña debe tener al menos un número</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="d65cd21c25016a7d5e5b580c0cac02c7">
+        <source>Password should not contain any white space</source>
+        <target>La contraseña no debe contener espacios en blanco</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="867cee98fdd724e7d5bc87f61ce657bc">
+        <source>Passwords do not match</source>
+        <target>Las contraseñas no coinciden</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="ecf86ca60b1e74dba70847c917f9250a">
+        <source>Discarded order not found!</source>
+        <target>Pedido de cliente descartado no encontrado</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="2739902b9a94da0a9537256c2aa9c905">
+        <source>Error fetching pdf token</source>
+        <target>Error al obtener el token del pdf</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="a61cb43682f5cca5e88ac9a0a0c4d8b9">
+        <source>ID is invalid</source>
+        <target>El ID no es válido</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="f5cddd80b6b6b6be80c8927826f4929c">
+        <source>Order does not exist!</source>
+        <target>El pedido de cliente no existe.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="d4a34e73bacffab7e6c2421167348c47">
+        <source>Error creating account</source>
+        <target>Error al crear la cuenta</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="e036834b56871d936327aeeb9e85ceae">
+        <source>Data is not valid</source>
+        <target>Los datos no son válidos</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="ecb1ff277bc9cec7595557589a2a22fe">
+        <source>Error creating webservice key</source>
+        <target>Error al crear webservice key</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="8902cc49562dce939aaa2d7da9d4a52f">
+        <source>Error creating {0} hook</source>
+        <target>Error al crear el hook {0}</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="ae3094b0ee59fb8f8e7c986ae66b643b">
+        <source>Error deleting hooks</source>
+        <target>Error al eliminar los hooks</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="4ea0fb010d99af427a02917d05647cd1">
+        <source>Code missing</source>
+        <target>Falta el código</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="b3f8e497f5c57907960947a369ba283f">
+        <source>Error fetching tokens</source>
+        <target>Error en la búsqueda de tokens</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="1140ce49382c35f8d1f0e60996a40632">
+        <source>The client credentials are invalid</source>
+        <target>Las credenciales del cliente no son válidas</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="ea7c54deb6e56859891ecf182540cb1c">
+        <source>Error creating category</source>
+        <target>Error al crear la familia</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="9d321f1b99ce6d6729d38f97d907cea3">
+        <source>Error fetching categories</source>
+        <target>Error en la búsqueda de familias</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="7dbce59eceb68dad4839ae8ef82bd387">
+        <source>Error creating tax: ({0} - {1})</source>
+        <target>Error al crear el impuesto: ({0} - {1})</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="2e87836a9bb2b980d511da849c2a32cb">
+        <source>Error fetching taxes</source>
+        <target>Error en la búsqueda de impuestos</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="e094e7f8a50c799de7106c56c508b621">
+        <source>Error creating customer ({0})</source>
+        <target>Error al crear el cliente ({0})</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="3c391bb3f8e062e2044a7d4cfd4f5d1c">
+        <source>Error fetching countries</source>
+        <target>Error en la búsqueda de países</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="50ce34d6b34cfdacae01adb178730493">
+        <source>Error fetching customer next number</source>
+        <target>Error al obtener el siguiente número de cliente</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="835af7bcec552930247d6344c58e6e7b">
+        <source>Error fetching customer by VAT: ({0})</source>
+        <target>Error al buscar el cliente por el NIF/DNI: ({0})</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="f7839a1d4a3db509392291fc30899212">
+        <source>Error fetching customer by e-mail: ({0})</source>
+        <target>Error al buscar el cliente por email: ({0})</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="5b93a9809de4ef3be831288ccbf22e3c">
+        <source>Error creating delivery method: ({0})</source>
+        <target>Error al crear el método de entrega: ({0})</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="a4c36d0f006ce29f4141f761c26926f0">
+        <source>Error getting load country</source>
+        <target>Error al obtener el país de carga</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="a91bf2051abdb5035d80d63e2bf80e4b">
+        <source>Error getting delivery country</source>
+        <target>Error al obtener el país de entrega</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="7332d7a46589d730db85699022afe396">
+        <source>Error fetching payment methods</source>
+        <target>Error en la búsqueda de métodos de pago</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="46adfef8937a4039690b99cabe5f6623">
+        <source>Error creating payment method: ({0})</source>
+        <target>Error al crear el método de pago: ({0})</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="967665dc0fce4b4bc180caf4a78bdde4">
+        <source>Error fetching product by reference: ({0})</source>
+        <target>Error al buscar el producto por referencia: ({0})</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="780c691365ae283f108201b182bdf259">
+        <source>Error creating {0} attribute group</source>
+        <target>Error al crear el grupo de atributos {0}</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="a95381a813e61e8cab619e663bc35cdb">
+        <source>Error fetching property groups</source>
+        <target>Error en la búsqueda de grupos de propiedades</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="e2265d6bf961fd955a2d2fd7eb65fb5b">
+        <source>Failed to update existing property group "{0}"</source>
+        <target>Error al actualizar el grupo de propiedades existente "{0}"</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="9be079fc09d3076c802147950c3540e8">
+        <source>Failed to find matching property name for "{0}".</source>
+        <target>No se ha encontrado un nombre de propiedad que coincida con "{0}".</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="322f37aa78620ec81a816763160fe3d0">
+        <source>Error creating stock movement ({0})</source>
+        <target>Error al crear el movimiento de stock ({0})</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="cdd9eef3cdeea1f403567afa1ec22dcb">
+        <source>Cannot update product in Moloni. Product types do not match</source>
+        <target>No se puede actualizar el producto en Moloni. Los tipos de productos no coinciden</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="d5e32e768f320b3275f5c018d80d0d55">
+        <source>Error creating product ({0})</source>
+        <target>Error al crear el producto ({0})</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="8ca47ff049d61d643a0b84f1d8c806f4">
+        <source>Error updating product ({0})</source>
+        <target>Error al actualizar el producto ({0})</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="fa4eecc0f2cf9aaafc6406533da2c586">
+        <source>Error fetching company data</source>
+        <target>Error al obtener los datos de la empresa</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="ad9a4179a1cf78587319d3a40155d3eb">
+        <source>Company does not have a default warehouse, please select one</source>
+        <target>Error al recuperar el almacén de la empresa por defecto</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="f28f7ad3dd61afca50c3cca1832f555a">
+        <source>Error fetching default company warehouse</source>
+        <target>Error al recuperar el almacén de la empresa por defecto</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="b05f29a9281946093a135ef4db2a04d4">
+        <source>Error creating Prestashop category</source>
+        <target>Error al crear una familia en Prestashop</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="5c554f349379f634743aeebf19b0d03e">
+        <source>Error getting product categories</source>
+        <target>Error al obtener las familias de productos</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="f6ad13f18bedacdf1d2d76fc7511abb9">
+        <source>Error creating combination ({0})</source>
+        <target>Error al crear la combinación ({0})</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="35d67081850ea5fc093c29448f38a32c">
+        <source>Error updating combination ({0})</source>
+        <target>Error al actualizar la combinación ({0})</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="16ab54fc571ffa70e7f6190fc164b260">
+        <source>Error when creating product attributes</source>
+        <target>Error al crear los atributos del producto</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="8b1e4c54293e841c3c6f2c9ef0762726">
+        <source>Could not fetch pdf link.</source>
+        <target>No se ha podido recuperar el enlace del pdf.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="6950aacc327f8fb7df1dcb6558f8e506">
+        <source>Code cannot be empty!</source>
+        <target>El código no puede estar vacío.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="868bba144b611cc4b20e14bfb1da7cb7">
+        <source>You have no companies!!</source>
+        <target>¡No tienes empresas!</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="205483ee01661c8acd2bb746ebce4221">
+        <source>Missing information in database</source>
+        <target>Falta información en la base de datos</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="9789e322478c6f2d59e93d020808642a">
+        <source>An unexpected error occurred</source>
+        <target>Se ha producido un error inesperado</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="a8245690e211475cb8dbda7d8308b0c1">
+        <source>Could not find product in Moloni ({0})</source>
+        <target>No se ha encontrado el producto en Moloni ({0})</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="1d3e6bc7e027606a1dbdf29906f69b92">
+        <source>Error fetching product by id ({0})</source>
+        <target>Error en la búsqueda del producto por el ID ({0})</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="349c66d17db15705b91571855de43932">
+        <source>Could not close {0}, totals do not match</source>
+        <target>No se ha podido cerrar {0}, los totales no coinciden</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="0c8d70bf558d2a4fa810c6cc5a8d7914">
+        <source>Created document not found</source>
+        <target>Documento creado no encontrado</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="2408a75dbe80747ae0a1e2584bc5679c">
+        <source>Moloni document not found</source>
+        <target>Documento Moloni no encontrado</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="3328846c311ff7af6907b9a6ee1b6a25">
+        <source>Error getting prestashop order</source>
+        <target>Error al recibir el pedido de prestashop</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="eedd2d3edfd58263f8bd29bdea21f076">
+        <source>Error processing order ({0})</source>
+        <target>Error al procesar el pedido ({0})</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="6d7e032e7adeb8c7c0f74ffba7c69184">
+        <source>Error updating Prestashop stock</source>
+        <target>Error al actualizar el stock de Prestashop</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="1631abd0acb0ffd03a2be4f39b15bd79">
+        <source>Error saving Prestashop product</source>
+        <target>Error al guardar el producto de Prestashop</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="6e6578554df412f64b637c7cf1ef9d2e">
+        <source>Error saving Moloni product</source>
+        <target>Error al guardar el producto de Moloni</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="8f18afb308a8e7eaa71151bdcd8ebfd7">
+        <source>No document type selected. Please choose one in plugin settings.</source>
+        <target>No has seleccionado ningún tipo de documento. Por favor, elige uno en la configuración del plugin.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="b1f1e0622d835195a43d0804ce9cfe37">
+        <source>Error closing {0} document</source>
+        <target>Error al cerrar {0} documento</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="9b4f6a19af5a424464de590c0dc2b366">
+        <source>Error creating {0} document</source>
+        <target>Error al crear {0} documento</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="dc5cf1c8eff0ef689916b9c238100ac2">
+        <source>Error fetching document fiscal zone</source>
+        <target>Error en la búsqueda de la zona fiscal del documento</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="4c7e2ead96b52ab8e6eab9f2ea8023d3">
+        <source>Error occurred setting document dates</source>
+        <target>Se ha detectado un error al establecer las fechas de los documentos</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="e6a878b6ab2d83ad05f2ecb33eb8be12">
+        <source>Could not find exchange rate: ({0})</source>
+        <target>No se ha podido encontrar el tipo de cambio: ({0})</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="c9bf8f4cd98868235189f398d5e75298">
+        <source>Error fetching exchange rate: ({0})</source>
+        <target>Error al buscar el tipo de cambio: ({0})</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="cc836d382fcc1853451f59f8423429bc">
+        <source>Document type not found</source>
+        <target>Tipo de documento no encontrado</target>
+        <note>Line: </note>
+      </trans-unit>
       <trans-unit id="67509542f3351ede1bd24dcdb31fb1df">
         <source>Error fetching logs list</source>
         <target> Error al obtener la lista de registros</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="8ba4357de0367107b1b58e31bf1d0933">
+        <source>Error found in plugin tables, please contact customer support.</source>
+        <target>Se ha encontrado un error en las tablas de datos del plugin, por favor, contacta con el servicio de atención al cliente.</target>
         <note>Line: </note>
       </trans-unit>
       <trans-unit id="cb1b164d9438d999056c79658de0d71c">
@@ -17,9 +447,9 @@
         <target> Haz clic para obtener más información</target>
         <note>Line: </note>
       </trans-unit>
-      <trans-unit id="a61cb43682f5cca5e88ac9a0a0c4d8b9">
-        <source>ID is invalid</source>
-        <target>El ID no es válido</target>
+      <trans-unit id="43412e5b88dc9c0e67396e8ecc56475c">
+        <source>Error fetching documents list</source>
+        <target>Error al obtener de la lista de documentos</target>
         <note>Line: </note>
       </trans-unit>
       <trans-unit id="62b5d95d6f1eb04022fe3c269b6bb15d">

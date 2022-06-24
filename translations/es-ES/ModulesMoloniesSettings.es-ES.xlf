@@ -2,11 +2,6 @@
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
   <file original="admin745p3ar3j" source-language="es-ES" target-language="es-ES" datatype="plaintext">
     <body>
-      <trans-unit id="e5f4798182df0d63799411ed04316673">
-        <source>Between 6 and 16 characters, at least one uppercase letter, one symbol and one number</source>
-        <target> Entre 6 y 16 caracteres, al menos una letra mayúscula, un símbolo y un número</target>
-        <note>Line: </note>
-      </trans-unit>
       <trans-unit id="bafd7322c6e97d25b6299b5d6fe8920b">
         <source>No</source>
         <target>No</target>
@@ -372,6 +367,11 @@ Puedes gestionar las series de documentos de tu empresa directamente en tu cuent
         <target>Elige qué almacén debe utilizarse al emitir los documentos.</target>
         <note>Line: </note>
       </trans-unit>
+      <trans-unit id="c281f92b77ba329f692077d23636f5c9">
+        <source>Company name</source>
+        <target>Nombre de la empresa</target>
+        <note>Line: </note>
+      </trans-unit>
       <trans-unit id="5a0c714514bf5b3d308285e907ffbba8">
         <source>Alert e-mail</source>
         <target>Alerta de e-mail</target>
@@ -450,11 +450,6 @@ Puedes gestionar las series de documentos de tu empresa directamente en tu cuent
       <trans-unit id="34fd9411e176ec8b01db3910a962bf1a">
         <source>This settings will be applied to all automatic actions.</source>
         <target>Esta configuración se aplicará a todas las acciones automáticas.</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="d31a032c8184903027dbe80e9b0e7410">
-        <source>Common settings</source>
-        <target>Ajustes habituales</target>
         <note>Line: </note>
       </trans-unit>
     </body>

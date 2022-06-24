@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="admin745p3ar3j" source-language="es-ES" target-language="es-ES" datatype="plaintext">
+    <body>
+      <trans-unit id="8625e1de7be14c39b1d14dc03d822497">
+        <source>Tools</source>
+        <target>Herramientas</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="0d5a8024cd5ac3ea58c88f2c44c95247">
+        <source>Import products from Moloni</source>
+        <target>Importar productos de Moloni</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="e25f084df9bdfcd6ae7abe7ec3dc703b">
+        <source>Use this tool to create all products from your Moloni account in your Prestashop store.</source>
+        <target>Utiliza esta herramienta para crear todos los productos de tu cuenta Moloni en tu tienda Prestashop.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="775b8596e6bf73b4c663ec955495049d">
+        <source>Import products to Prestashop</source>
+        <target>Importar productos a Prestashop</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="80c1944a52900aa60e9342d781541b66">
+        <source>Export products to Moloni</source>
+        <target>Exportar productos a Moloni</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="3d5ffd48def45423bd34d64e33daa99f">
+        <source>Synchronize Prestashop stocks with Moloni</source>
+        <target>Sincronizar los stocks de Prestashop con Moloni</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="d5b06deaddf90945e3adecfc26772af6">
+        <source>This tool will search for all the products that were updated in your Moloni account in the last seven days, and will update only the stock of the matching Prestashop products.</source>
+        <target>Esta herramienta busca todos los productos que fueron actualizados en tu cuenta de Moloni en los últimos siete días, y actualiza sólo el stock de los productos de Prestashop que coinciden.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="1925748d27aa6effccbb7436d5462fa3">
+        <source>Update Prestashop stocks</source>
+        <target>Actualizar los stocks de Prestashop</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="1ae6abb63d5f6a155f50512ecbcfecb0">
+        <source>Synchronize Moloni stocks with Prestashop</source>
+        <target>Sincronizar los stocks de Moloni con Prestashop</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="08257e562dfa72eba619a6c36b3d4f72">
+        <source>This tool will search for all the products in your Prestashop store and update the matching products in your Moloni account.</source>
+        <target>Esta herramienta busca todos los productos de tu tienda Prestashop y actualiza los productos coincidentes en tu cuenta Moloni.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="f40733707ce2229a3f4da69c58fe0a56">
+        <source>Update Moloni stocks</source>
+        <target>Actualizar stocks de Moloni</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="f1c95a82738b4469449377e91b61f4df">
+        <source>Reinstall webhooks</source>
+        <target>Reinstalar los webhooks</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="66fbbde59049118b3acb690a1812db1f">
+        <source>This tool is used to recreate the synchronization webhooks that run in Moloni.</source>
+        <target>Esta herramienta se utiliza para recrear los webhooks de sincronización que se ejecutan en Moloni.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="0b855b89c37708d51b36bb2eb6263af4">
+        <source>You should run this if for example your store URL changes or if the Prestashop access tokens for this module change.</source>
+        <target>Debes ejecutar esto si, por ejemplo, la URL de tu tienda cambia o si los tokens de acceso a Prestashop para este módulo cambian.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="ef9bd66e2148c02b9a2aa4b928d59f05">
+        <source>Consult logs</source>
+        <target>Consultar logs</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="ba97b9eee18d832a0123ec2c401dcd42">
+        <source>All plugin operations like document creation or stock synchronization are automatically logged.</source>
+        <target>Todas las operaciones del plugin, como la creación de documentos o la sincronización de stocks, se registran automáticamente.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="3b33cad1a0e5717629298b821c5cbe07">
+        <source>You can access all the logs using this tool to keep track on everything that happens.</source>
+        <target>Puedes acceder a todos los registros utilizando esta herramienta para hacer un seguimiento de todo lo que sucede.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="5850b5fc125e3eecae04a5412f2b054f">
+        <source>View logs</source>
+        <target>Ver logs</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="0323de4f66a1700e2173e9bcdce02715">
+        <source>Logout</source>
+        <target>Salir</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="af5b4f60def2e84220463bc687d72e54">
+        <source>Logout from the selected Moloni account. We will keep all the data regarding issued documents.</source>
+        <target>Cierra la sesión de la cuenta Moloni seleccionada. Guardamos todos los datos relativos a los documentos emitidos.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="28f79fb9fa4474affb470bee1b1774c8">
+        <source>This tool will cycle for all your Prestashop products and will insert manual stock movements in your Moloni account to make sure the stocks are equal in both platforms.</source>
+        <target>Esta herramienta realizará un ciclo para todos tus productos de Prestashop e introducirá los movimientos manuales de stock en tu cuenta de Moloni para asegurarse de que los stocks son iguales en ambas plataformas.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="b1d81f571df345b579b7beb94d822f68">
+        <source>When the tool is finish, all your Moloni stock will be updated to match the stock on your Prestashop store.</source>
+        <target>Cuando la herramienta esté finalizada, todo tu stock de Moloni se actualizará para que coincida con el stock de tu tienda Prestashop.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="99cba71e2f9c0f05b795fdcf4fe27800">
+        <source>This may take a while, so, please keep this window open until the process finishes.</source>
+        <target>Esto puede tardar un poco, así que, por favor, mantén esta ventana abierta hasta que el proceso termine.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="9102702625c28f417e9fced20e2bb5cb">
+        <source>Are you sure you want to continue?</source>
+        <target>¿Seguro que quieres continuar?</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="d3d2e617335f08df83599665eef8a418">
+        <source>Close</source>
+        <target>Cerrar</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="154bea2185f41b0e73d0ecb9b2fb077d">
+        <source>Export stocks</source>
+        <target>Exportar stocks</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="da99730120117414aa26bcff735bb1ff">
+        <source>Import Moloni stocks</source>
+        <target>Importar stocks Moloni</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="43f6558ff7d14c4a6a5db75a5db31b95">
+        <source>This tool will fetch all your Moloni products that were updated on the last 7 days, and synchronize your Prestashop stocks with the ones on your Moloni account.</source>
+        <target>Esta herramienta busca todos los productos de Moloni que han sido actualizados en los últimos 7 días, y sincroniza sus stocks de Prestashop con los de tu cuenta de Moloni.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="334d49f9f7576d982ff0dad8b64f3683">
+        <source>When the tool is finish, all your Prestashop stock will be updated to match the stock on your Moloni account.</source>
+        <target>Cuando la herramienta haya terminado, todo tu stock de Prestashop se actualizará para que coincida con el stock de tu cuenta Moloni.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="3714d8ced882d0a4372c1f32704d5b92">
+        <source>Please keep this window open until the process finishes.</source>
+        <target>Por favor, mantén esta ventana abierta hasta que termine el proceso.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="88062af3aba20177b6aa8cab54a68753">
+        <source>Are you sure you want to continue? </source>
+        <target>¿Seguro que quieres seguir?</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="fa62fe0fe0c35bcf2a3f3afcf8e2d6b3">
+        <source>Import stocks</source>
+        <target>Importar stocks</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="2c9c22490dc732786ccb086591856634">
+        <source>Action in progress.</source>
+        <target>Acción en curso.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="c6701602de1528fd79d5eff3e8eb1edd">
+        <source>Something went wrong!</source>
+        <target>¡Algo ha salido mal!</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="b2e28ca63ef095f6224ee6e2ecb96bf1">
+        <source>Please check logs for more information.</source>
+        <target>Consulta los logs para obtener más información.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="b836cbb696a48e55c89df3e1f5dcadda">
+        <source><![CDATA[We are processing your request.<br>Please wait until the process finishes!]]></source>
+        <target><![CDATA[Estamos gestionando tu solicitud.<br>¡Por favor, espera a que termine el proceso!]]></target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="e113c67ba07bd0d3597c70ffd2b12f14">
+        <source>Moloni authentication will be lost.</source>
+        <target>La autentificación de Moloni se perderá.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="c27778bfcd9b8c45d096eb9640a567f7">
+        <source>This will fetch all the products in Prestashop store and create them in your Moloni account.</source>
+        <target>Esto trae todos los productos de la tienda Prestashop y los creará en tu cuenta Moloni.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="c934a51b465c3328c310affd968d4604">
+        <source>Export products</source>
+        <target>Exportar productos</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="7c7d32085854a0439c97561729c97093">
+        <source>All your Moloni products will be created in your Prestashop store if they do not exist.</source>
+        <target>Todos tus productos Moloni serán creados en tu tienda Prestashop si no existen.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="6cada368407ea1c3a5e352895ef4c5ae">
+        <source>Import products</source>
+        <target>Importación de productos</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="19bc7ba72ef4e327ed6da4afb0a96b1c">
+        <source>Total results</source>
+        <target>Resultados totales</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="b7c454456bb33f0e7f09c65b8b47957d">
+        <source>Please wait, importing in progress</source>
+        <target>Por favor, espera, importación en curso</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="254cec87ba5d0dac94cf0bee486d7c6f">
+        <source>Process complete</source>
+        <target>Proceso completo</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="4e3b13c8a814d809ec9d88767c3eb33b">
+        <source>{0} products processed</source>
+        <target>{0} productos procesados</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="1a299291abb24001b9d354bcf12f78f3">
+        <source>Please wait, exporting in progress</source>
+        <target>Por favor, espera, exportación en curso</target>
+        <note>Line: </note>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

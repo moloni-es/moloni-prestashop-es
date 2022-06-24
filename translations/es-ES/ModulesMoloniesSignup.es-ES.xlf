@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="admin745p3ar3j" source-language="es-ES" target-language="es-ES" datatype="plaintext">
+    <body>
+      <trans-unit id="1e884e3078d9978e216a027ecd57fb34">
+        <source>E-mail</source>
+        <target>E-mail</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="56396cec5c858be914156d159a387592">
+        <source>Business type</source>
+        <target>Tipo de negocio</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="407deaabede956257901211b1e2ab6d2">
+        <source>Please select an option</source>
+        <target>Selecciona una opción</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="b7a9c90c16059f36a2a19d09b6050013">
+        <source>Business type name</source>
+        <target>Nombre del tipo de negocio</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="c281f92b77ba329f692077d23636f5c9">
+        <source>Company name</source>
+        <target>Nombre de la empresa</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="bfc1c6031e1fbadc9f486c6b93c34c01">
+        <source>Vat</source>
+        <target>NIF/DNI</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="59716c97497eb9694541f7c3d37b1a4d">
+        <source>Country</source>
+        <target>País</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="0c908588520b3ef787bce443fc2b507c">
+        <source>Slug</source>
+        <target>Slug</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="bde9be40e3b2f44a4d98f7874de8351e">
+        <source>Name of person responsible for the account</source>
+        <target>Nombre del responsable de la cuenta</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="bcc254b55c4a1babdf1dcb82c207506b">
+        <source>Phone</source>
+        <target>Teléfono</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="f2ed863122d937c1865d14a2ea5c075d">
+        <source>Do I have to fill in this field? We use your mobile number to validate your identity and if one day we need to get in touch quickly, the mobile is the most efficient way. We recommend filling in this field.</source>
+        <target>¿Tengo que rellenar este campo? Utilizamos el número de móvil para validar tu identidad y si un día necesitamos ponernos en contacto rápidamente, el móvil es la forma más eficaz. Te recomendamos que rellenes este campo.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="dc647eb65e6711e155375218212b3964">
+        <source>Password</source>
+        <target>Contraseña</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="1a08c8ca9af355a37e4b5d4595434211">
+        <source>Password confirmation</source>
+        <target>Confirmación de la contraseña</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="7d5afdeca687b875c7d6ab52809173e2">
+        <source><![CDATA[I have read and accept the <a href="https://www.moloni.es/termsandconditions" target="_blank">Moloni Terms of Service</a> with the inclusion of the regulation act of the subcontractor according to article 28 of the Regulation.]]></source>
+        <target>He leído y acepto las Condiciones de Servicio de Moloni con la inclusión del acta de regulación del subcontratista según el artículo 28 del Reglamento.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="7f6acb1c80cdad5bd80b36ee5fba7674">
+        <source>I want to receive email updates about Moloni</source>
+        <target>Quiero recibir actualizaciones por email sobre Moloni</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="0ba7583639a274c434bbe6ef797115a4">
+        <source>Register</source>
+        <target>Registro</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="ec9cea56ef6e010560f1850520ad3e93">
+        <source>This field cannot be shorter than {0} characters</source>
+        <target>Este campo no puede ser más corto que {0} caracteres</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="3afe9da47235889f4bf8faa804106b51">
+        <source>This field cannot be longer than {0} characters</source>
+        <target>Este campo no puede tener más de {0} caracteres</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="e5f4798182df0d63799411ed04316673">
+        <source>Between 6 and 16 characters, at least one uppercase letter, one symbol and one number</source>
+        <target>Entre 6 y 16 caracteres, al menos una letra mayúscula, un símbolo y un número</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="ea4788705e6873b424c65e91c2846b19">
+        <source>Cancel</source>
+        <target>Cancelar</target>
+        <note>Line: </note>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
