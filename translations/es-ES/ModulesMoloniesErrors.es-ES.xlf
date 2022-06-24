@@ -2,31 +2,6 @@
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
   <file original="admin745p3ar3j" source-language="es-ES" target-language="es-ES" datatype="plaintext">
     <body>
-      <trans-unit id="d89d8e3d9e49fc18bfae2e6b25736aad">
-        <source>Error fetching shipping by reference: ({0})</source>
-        <target>Error fetching shipping by reference: ({0})</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="7dc510b7bcc096ab355238159996832a">
-        <source>Shipping has no taxes applied. Please add an exemption reason in plugin settings.</source>
-        <target>Shipping has no taxes applied. Please add an exemption reason in plugin settings.</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="4276f45c59f5247976410586ef7042d9">
-        <source>Error creating shipping product</source>
-        <target>Error creating shipping product</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="c64a39aa7cf3894c570a5300c2ac8a13">
-        <source>Request error</source>
-        <target>Request error</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="661a2c910f322ac1886cd81bec919251">
-        <source>Error paginating request</source>
-        <target>Error paginating request</target>
-        <note>Line: </note>
-      </trans-unit>
       <trans-unit id="0511ee0d41117aa7b4abaaf102aa513d">
         <source>This field is required</source>
         <target>Este campo es obligatorio</target>
@@ -142,9 +117,19 @@
         <target>Error al eliminar los hooks</target>
         <note>Line: </note>
       </trans-unit>
+      <trans-unit id="661a2c910f322ac1886cd81bec919251">
+        <source>Error paginating request</source>
+        <target>Error al paginar el pedido</target>
+        <note>Line: </note>
+      </trans-unit>
       <trans-unit id="4ea0fb010d99af427a02917d05647cd1">
         <source>Code missing</source>
         <target>Falta el código</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="c64a39aa7cf3894c570a5300c2ac8a13">
+        <source>Request error</source>
+        <target>Error en el pedido</target>
         <note>Line: </note>
       </trans-unit>
       <trans-unit id="b3f8e497f5c57907960947a369ba283f">
@@ -230,6 +215,21 @@
       <trans-unit id="967665dc0fce4b4bc180caf4a78bdde4">
         <source>Error fetching product by reference: ({0})</source>
         <target>Error al buscar el producto por referencia: ({0})</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="4276f45c59f5247976410586ef7042d9">
+        <source>Error creating shipping product</source>
+        <target>Error al recibir el pedido de prestashop</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="7dc510b7bcc096ab355238159996832a">
+        <source>Shipping has no taxes applied. Please add an exemption reason in plugin settings.</source>
+        <target>Los gastos de envió del pedido no tiene impuestos. Por favor coloca el motivo de exención para los gastos de envió en las configuraciones del modulo. </target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="d89d8e3d9e49fc18bfae2e6b25736aad">
+        <source>Error fetching shipping by reference: ({0})</source>
+        <target>Error al encontrar el producto gastos de envió por la referencia: ({0})</target>
         <note>Line: </note>
       </trans-unit>
       <trans-unit id="780c691365ae283f108201b182bdf259">
