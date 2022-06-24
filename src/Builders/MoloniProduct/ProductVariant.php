@@ -438,6 +438,21 @@ class ProductVariant
         return $this;
     }
 
+    /**
+     * Set Moloni parent
+     *
+     * @param array $moloniParent
+     *
+     * @return ProductVariant
+     */
+    public function setMoloniParent(array $moloniParent): ProductVariant
+    {
+        $this->moloniParentProduct = $moloniParent;
+        $this->allMoloniVariants = $moloniParent['variants'] ?? [];
+
+        return $this;
+    }
+
     //          GETS          //
 
     /**
