@@ -31,12 +31,14 @@ class FindVariant
 {
     private $combinationId;
     private $combinationReference;
+    private $propertyPairs;
     private $allMoloniParentVariants;
 
-    public function __construct(int $combinationId, string $combinationReference, array $allMoloniParentVariants)
+    public function __construct(int $combinationId, string $combinationReference, array $allMoloniParentVariants, array $propertyPairs)
     {
         $this->combinationId = $combinationId;
         $this->combinationReference = $combinationReference;
+        $this->propertyPairs = $propertyPairs;
         $this->allMoloniParentVariants = $allMoloniParentVariants;
     }
 
@@ -57,7 +59,13 @@ class FindVariant
             }
         }
 
-        return $this->findVariantByReference($this->combinationReference);
+        $targetVariant = $this->findVariantByCombinationReference();
+
+        if (!empty($targetVariant)) {
+            return $targetVariant;
+        }
+
+        return $this->findVariantByPropertyPairs();
     }
 
     private function findVariantById(int $needle): array
@@ -75,16 +83,51 @@ class FindVariant
         return $variant;
     }
 
-    private function findVariantByReference(string $needle): array
+    private function findVariantByCombinationReference(): array
     {
         $variant = [];
 
         foreach ($this->allMoloniParentVariants as $parentVariant) {
-            if ($parentVariant['reference'] === $needle) {
+            if ($parentVariant['reference'] === $this->combinationReference) {
                 $variant = $parentVariant;
 
                 break;
             }
+        }
+
+        return $variant;
+    }
+
+    private function findVariantByPropertyPairs()
+    {
+        $variant = [];
+
+        foreach ($this->allMoloniParentVariants as $parentVariant) {
+            if (count($this->propertyPairs) !== count($parentVariant['propertyPairs'])) {
+                continue;
+            }
+
+            foreach ($this->propertyPairs as $propertyPair) {
+                $found = false;
+
+                foreach ($parentVariant['propertyPairs'] as $parentVariantPropertyPairs) {
+                    if ($propertyPair['propertyId'] === $parentVariantPropertyPairs['propertyId'] &&
+                        $propertyPair['propertyValueId'] === $parentVariantPropertyPairs['propertyValueId']) {
+                        $found = true;
+
+                        break;
+                    }
+                }
+
+                if (!$found) {
+                    continue 2;
+                }
+            }
+
+            // A match was found, return
+            $variant = $parentVariant;
+
+            break;
         }
 
         return $variant;

@@ -154,16 +154,18 @@ class ProductVariant
      * Constructor
      *
      * @param Combination $prestashopCombination
-     * @param array|null $moloniParentProduct
      * @param string|null $parentName
+     * @param array|null $moloniParentProduct
+     * @param array|null $propertyPairs
      */
-    public function __construct(Combination $prestashopCombination, ?string $parentName = '', ?array $moloniParentProduct = [])
+    public function __construct(Combination $prestashopCombination, ?string $parentName = '', ?array $moloniParentProduct = [], ?array $propertyPairs = [])
     {
         $this->prestashopCombination = $prestashopCombination;
 
         $this->parentName = $parentName;
         $this->moloniParentProduct = $moloniParentProduct;
         $this->allMoloniVariants = $moloniParentProduct['variants'] ?? [];
+        $this->propertyPairs = $propertyPairs;
 
         $this->init();
     }
@@ -256,7 +258,7 @@ class ProductVariant
     public function setMoloniVariant(): ProductVariant
     {
         if ($this->parentExists()) {
-            $variant = (new FindVariant($this->getPrestashopCombinationId(), $this->reference, $this->allMoloniVariants))->handle();
+            $variant = (new FindVariant($this->getPrestashopCombinationId(), $this->reference, $this->allMoloniVariants, $this->propertyPairs))->handle();
 
             if (!empty($variant)) {
                 $this->moloniVariant = $variant;
