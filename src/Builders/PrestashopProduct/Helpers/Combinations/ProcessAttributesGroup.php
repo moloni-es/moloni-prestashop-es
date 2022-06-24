@@ -72,11 +72,11 @@ class ProcessAttributesGroup
             }
 
             foreach ($group['values'] as $attribute) {
-                $attributeId = $this->getAttributeByName($attribute['value'], $groupId);
+                $attributeId = $this->getAttributeByName($attribute['code'], $groupId);
 
                 if (empty($attributeId)) {
                     $attributeObj = new Attribute(null, $this->languageId);
-                    $attributeObj->name = $attribute['value'];
+                    $attributeObj->name = $attribute['code'];
                     $attributeObj->id_attribute_group = $groupId;
                     $attributeObj->save();
                 }
