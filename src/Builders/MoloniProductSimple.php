@@ -272,6 +272,8 @@ class MoloniProductSimple implements BuilderInterface
 
         if (!empty($this->tax)) {
             $props['taxes'][] = $this->tax->toArray();
+        } else {
+            $props['taxes'] = [];
         }
 
         if (!empty($this->exemptionReason)) {
