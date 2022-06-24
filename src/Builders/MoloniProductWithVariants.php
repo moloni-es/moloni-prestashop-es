@@ -303,6 +303,10 @@ class MoloniProductWithVariants implements BuilderInterface
             // Check for unused variants that cannot be deleted
             foreach ($this->moloniProduct['variants'] as $existingVariant) {
                 foreach ($props['variants'] as $newVariant) {
+                    if (!isset($newVariant['productId'])) {
+                        continue;
+                    }
+
                     if ($existingVariant['productId'] === $newVariant['productId']) {
                         continue 2;
                     }

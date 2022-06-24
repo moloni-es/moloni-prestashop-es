@@ -266,6 +266,7 @@ class Products extends Endpoint
             priceWithTaxes
             hasStock
             stock
+            deletable
             warehouse
             {
                 warehouseId
