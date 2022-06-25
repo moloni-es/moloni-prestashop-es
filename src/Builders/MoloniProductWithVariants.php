@@ -338,12 +338,6 @@ class MoloniProductWithVariants implements BuilderInterface
      */
     protected function afterSave(): void
     {
-        if (!empty($this->coverImage) && $this->shouldSyncImage()) {
-            new UpdateMoloniVariantsProductImage($this->coverImage, $this->moloniProduct, $this->variants);
-        }
-
-        new CreateMappingsAfterMoloniProductCreateOrUpdate($this->prestashopProduct, $this->moloniProduct, $this->variants);
-
         // Update all variants values
         foreach ($this->variants as $variant) {
             // Update product with the one just added
@@ -354,6 +348,12 @@ class MoloniProductWithVariants implements BuilderInterface
                 $variant->setMoloniVariant();
             }
         }
+
+        if (!empty($this->coverImage) && $this->shouldSyncImage()) {
+            new UpdateMoloniVariantsProductImage($this->coverImage, $this->moloniProduct, $this->variants);
+        }
+
+        new CreateMappingsAfterMoloniProductCreateOrUpdate($this->prestashopProduct, $this->moloniProduct, $this->variants);
     }
 
     /**

@@ -26,14 +26,11 @@ namespace Moloni\Builders\MoloniProduct\Helpers\Variants;
 
 use Product;
 use Moloni\Enums\Boolean;
-use Moloni\Traits\VariantTrait;
 use Moloni\Tools\ProductAssociations;
 use Moloni\Builders\MoloniProduct\ProductVariant;
 
 class CreateMappingsAfterMoloniProductCreateOrUpdate
 {
-    use VariantTrait;
-
     private $variantsBuilders;
     private $prestashopProduct;
     private $moloniProductMutated;
@@ -68,13 +65,13 @@ class CreateMappingsAfterMoloniProductCreateOrUpdate
         ProductAssociations::deleteByMoloniId($moloniParentId);
 
         foreach ($this->variantsBuilders as $variantsBuilder) {
-            $insertedVariant = $this->findVariant($this->moloniProductMutated['variants'], $variantsBuilder->getPropertyPairs());
+            $insertedVariantId = $variantsBuilder->getMoloniVariantId();
 
-            if (!empty($insertedVariant)) {
+            if ($insertedVariantId > 0) {
                 ProductAssociations::add(
                     $moloniParentId,
                     $moloniParentReference,
-                    $insertedVariant['productId'],
+                    $insertedVariantId,
                     $this->prestashopProduct->id,
                     $this->prestashopProduct->reference,
                     $variantsBuilder->getPrestashopCombinationId(),
