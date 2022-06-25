@@ -27,7 +27,7 @@
                 {% for message in log.message %}
                     {% set foo = {} %}
 
-                    {% if message[1] %}
+                    {% if message[1] is defined %}
                         {% for key, value in message[1] %}
                             {% set translatedValue = value|trans({}, 'Modules.Molonies.Common') %}
 
