@@ -62,7 +62,6 @@ class Login extends MoloniController
             '@Modules/molonies/views/templates/admin/login/Login.twig',
             [
                 'form' => $form->createView(),
-                'img' => _MODULE_DIR_ . 'molonies/views/img/moloni_logo_colors.svg',
                 'registration_route' => MoloniRoutes::REGISTRATION,
                 'has_old_tables' => $hasOldTables,
             ]

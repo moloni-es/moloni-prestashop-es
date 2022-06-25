@@ -73,7 +73,6 @@ class Registration extends MoloniController
             '@Modules/molonies/views/templates/admin/registration/Registration.twig',
             [
                 'form' => $registrationForm->createView(),
-                'img' => _MODULE_DIR_ . 'molonies/views/img/moloni_logo_colors.svg',
                 'loginRoute' => MoloniRoutes::LOGIN,
                 'verifyFormAction' => MoloniRoutes::REGISTRATION_VERIFY_FORM,
             ]

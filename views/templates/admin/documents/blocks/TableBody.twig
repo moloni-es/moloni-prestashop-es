@@ -122,7 +122,8 @@
 {% else %}
     <tr>
         <td colspan="100%">
-            {{ 'No information to show!'|trans({}, 'Modules.Molonies.Common') }}
+            {# Empty state #}
+            {% include '@Modules/molonies/views/templates/admin/components/EmptyState.twig' with {'empty_state_text': 'No information to show!'|trans({}, 'Modules.Molonies.Common')}%}
         </td>
     </tr>
 {% endif %}
