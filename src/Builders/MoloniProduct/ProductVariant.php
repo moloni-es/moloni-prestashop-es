@@ -142,14 +142,6 @@ class ProductVariant
      */
     protected $image = [];
 
-
-    /**
-     * All variants that the parent product has
-     *
-     * @var array|null
-     */
-    protected $allMoloniVariants;
-
     /**
      * Constructor
      *
@@ -164,7 +156,6 @@ class ProductVariant
 
         $this->parentName = $parentName;
         $this->moloniParentProduct = $moloniParentProduct;
-        $this->allMoloniVariants = $moloniParentProduct['variants'] ?? [];
         $this->propertyPairs = $propertyPairs;
 
         $this->init();
@@ -258,7 +249,7 @@ class ProductVariant
     public function setMoloniVariant(): ProductVariant
     {
         if ($this->parentExists()) {
-            $variant = (new FindVariant($this->getPrestashopCombinationId(), $this->reference, $this->allMoloniVariants, $this->propertyPairs))->handle();
+            $variant = (new FindVariant($this->getPrestashopCombinationId(), $this->reference, $this->moloniParentProduct['variants'] ?? [], $this->propertyPairs))->handle();
 
             if (!empty($variant)) {
                 $this->moloniVariant = $variant;
@@ -448,7 +439,6 @@ class ProductVariant
     public function setMoloniParent(array $moloniParent): ProductVariant
     {
         $this->moloniParentProduct = $moloniParent;
-        $this->allMoloniVariants = $moloniParent['variants'] ?? [];
 
         return $this;
     }

@@ -24,21 +24,21 @@
 
 namespace Moloni\Builders\MoloniProduct\Helpers\Variants;
 
-use Moloni\Entity\MoloniProductAssociations;
 use Moloni\Tools\ProductAssociations;
+use Moloni\Entity\MoloniProductAssociations;
 
 class FindVariant
 {
     private $combinationId;
     private $combinationReference;
-    private $propertyPairs;
+    private $wantedPropertyPairs;
     private $allMoloniParentVariants;
 
-    public function __construct(int $combinationId, string $combinationReference, array $allMoloniParentVariants, array $propertyPairs)
+    public function __construct(int $combinationId, string $combinationReference, array $allMoloniParentVariants, array $wantedPropertyPairs)
     {
         $this->combinationId = $combinationId;
         $this->combinationReference = $combinationReference;
-        $this->propertyPairs = $propertyPairs;
+        $this->wantedPropertyPairs = $wantedPropertyPairs;
         $this->allMoloniParentVariants = $allMoloniParentVariants;
     }
 
@@ -103,11 +103,11 @@ class FindVariant
         $variant = [];
 
         foreach ($this->allMoloniParentVariants as $parentVariant) {
-            if (count($this->propertyPairs) !== count($parentVariant['propertyPairs'])) {
+            if (count($this->wantedPropertyPairs) !== count($parentVariant['propertyPairs'])) {
                 continue;
             }
 
-            foreach ($this->propertyPairs as $propertyPair) {
+            foreach ($this->wantedPropertyPairs as $propertyPair) {
                 $found = false;
 
                 foreach ($parentVariant['propertyPairs'] as $parentVariantPropertyPairs) {

@@ -24,18 +24,15 @@
 
 namespace Moloni\Builders\MoloniProduct\Helpers\Variants;
 
-use Configuration;
 use Image;
+use Configuration;
 use Moloni\Api\MoloniApi;
 use Moloni\Builders\MoloniProduct\ProductVariant;
 use Moloni\Enums\Boolean;
 use Moloni\Exceptions\MoloniApiException;
-use Moloni\Traits\VariantTrait;
 
 class UpdateMoloniVariantsProductImage
 {
-    use VariantTrait;
-
     private $languageId;
 
     private $coverImage;
@@ -85,7 +82,7 @@ class UpdateMoloniVariantsProductImage
 
         foreach ($this->moloniProductMutated['variants'] as $idx => $variant) {
             if ((int)$variant['visible'] === Boolean::YES) {
-                $builder = $this->findBuilder($this->variantBuilders, $variant['propertyPairs']);
+                $builder = $this->findBuilderByVariantId((int)$variant['productId']);
 
                 if ($builder) {
                     $variantImage = $builder->getImage();
@@ -121,6 +118,34 @@ class UpdateMoloniVariantsProductImage
         } catch (MoloniApiException $e) {
             // do not catch
         }
+    }
+
+    /**
+     * Find variant corresponding builder
+     *
+     * @param int $wantedVariantId
+     *
+     * @return ProductVariant|null
+     */
+    private function findBuilderByVariantId(int $wantedVariantId): ?ProductVariant
+    {
+        if (empty($this->variantBuilders) || $wantedVariantId === 0) {
+            return null;
+        }
+
+        $result = null;
+
+        foreach($this->variantBuilders as $builder) {
+            $builderVariantId = $builder->getMoloniVariantId();
+
+            if ($builderVariantId === $wantedVariantId) {
+                $result = $builder;
+
+                break;
+            }
+        }
+
+        return $result;
     }
 
     private function getMutation(): string
