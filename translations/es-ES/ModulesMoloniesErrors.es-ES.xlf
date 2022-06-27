@@ -427,6 +427,11 @@
         <target>Tipo de documento no encontrado</target>
         <note>Line: </note>
       </trans-unit>
+      <trans-unit id="2aff3fcd10cee43bea6cfb417c29c9b9">
+        <source>Warning processing order ({0})</source>
+        <target>Advertencia al procesar el pedido ({0})</target>
+        <note>Line: </note>
+      </trans-unit>
       <trans-unit id="67509542f3351ede1bd24dcdb31fb1df">
         <source>Error fetching logs list</source>
         <target> Error al obtener la lista de registros</target>
