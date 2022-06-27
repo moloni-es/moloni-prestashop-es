@@ -150,4 +150,15 @@ class DummyTranslations
         $this->translator->trans('Product created in Prestashop ({0})', [], 'Modules.Molonies.Common');
         $this->translator->trans('Product updated in Prestashop ({0})', [], 'Modules.Molonies.Common');
     }
+
+    public function settings(): void
+    {
+        $this->translator->trans('Invoice', [], 'Modules.Molonies.Settings');
+        $this->translator->trans('Invoice + Receipt', [], 'Modules.Molonies.Settings');
+        $this->translator->trans('Purchase Order', [], 'Modules.Molonies.Settings');
+        $this->translator->trans('Pro Forma Invoice', [], 'Modules.Molonies.Settings');
+        $this->translator->trans('Simplified invoice', [], 'Modules.Molonies.Settings');
+        $this->translator->trans('Budget', [], 'Modules.Molonies.Settings');
+        $this->translator->trans('Bills of lading', [], 'Modules.Molonies.Settings');
+    }
 }
