@@ -4,4 +4,4 @@ CREATE TABLE IF NOT EXISTS PREFIX_moloni_settings (
     `shop_id` int(11) NOT NULL,
     `label` varchar(250) NOT NULL,
     `value` varchar(250)
-    ) DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+    ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
