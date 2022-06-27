@@ -112,14 +112,14 @@ class PrestashopProductWithCombinations implements BuilderInterface
      *
      * @var string
      */
-    protected $ean13;
+    protected $ean13 = '';
 
     /**
      * Product price
      *
      * @var float
      */
-    protected $price;
+    protected $price = '';
 
     /**
      * Has stock
@@ -265,6 +265,8 @@ class PrestashopProductWithCombinations implements BuilderInterface
 
         $this->prestashopProduct->reference = $this->reference;
         $this->prestashopProduct->product_type = $this->type;
+        $this->prestashopProduct->ean13 = $this->ean13;
+        $this->prestashopProduct->isbn = $this->isbn;
 
         if (!empty($this->categories)) {
             $this->prestashopProduct->id_category_default = $this->categories[0];
