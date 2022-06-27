@@ -112,9 +112,13 @@ class Orders extends MoloniController
 
             $this->addSuccessMessage($msg);
         } catch (MoloniDocumentWarning $e) {
-            Logs::addWarningLog([$e->getMessage(), $e->getIdentifiers()], $e->getData());
+            $auxMessage = 'Warning processing order ({0})';
+            $auxIdentifiers = ['{0}' => isset($action) ? $action->getOrder()->reference : ''];
 
-            $msg = $this->trans($e->getMessage(), 'Modules.Molonies.Errors', $e->getIdentifiers());
+            Logs::addWarningLog([[$auxMessage, $auxIdentifiers], [$e->getMessage(), $e->getIdentifiers()]], $e->getData());
+
+            $msg = $this->trans($auxMessage, 'Modules.Molonies.Errors', $auxIdentifiers);
+
             $this->addWarningMessage($msg, $e->getData());
         } catch (MoloniDocumentException|MoloniException $e) {
             $auxMessage = 'Error processing order ({0})';

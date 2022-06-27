@@ -117,6 +117,7 @@ class DummyTranslations
         $this->translator->trans('Could not find exchange rate: ({0})', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Error fetching exchange rate: ({0})', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Document type not found', [], 'Modules.Molonies.Errors');
+        $this->translator->trans('Warning processing order ({0})', [], 'Modules.Molonies.Errors');
     }
 
     public function common(): void
