@@ -7,4 +7,4 @@ CREATE TABLE IF NOT EXISTS PREFIX_moloni_order_documents (
     `order_id` int(11) NOT NULL,
     `order_reference` varchar(60) NOT NULL,
     `created_at` datetime DEFAULT CURRENT_TIMESTAMP
-    ) DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+    ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;

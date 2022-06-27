@@ -5,4 +5,4 @@ CREATE TABLE IF NOT EXISTS PREFIX_moloni_sync_logs(
     `prestashop_id` INT(11) DEFAULT 0,
     `moloni_id` INT(11) DEFAULT 0,
     `sync_date` VARCHAR(250) NOT NULL
-    ) DEFAULT CHARSET = utf8 AUTO_INCREMENT = 1;
+    ) ENGINE=ENGINE_TYPE DEFAULT CHARSET = utf8 AUTO_INCREMENT = 1;
