@@ -6,5 +6,5 @@ CREATE TABLE IF NOT EXISTS PREFIX_moloni_logs (
     `level` tinyint(4) NOT NULL,
     `message` text NOT NULL,
     `extra` text,
-    `created_at` datetime DEFAULT CURRENT_TIMESTAMP
+    `created_at` datetime DEFAULT NULL
     ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;

@@ -6,5 +6,5 @@ CREATE TABLE IF NOT EXISTS PREFIX_moloni_order_documents (
     `document_type` varchar(60) DEFAULT NULL,
     `order_id` int(11) NOT NULL,
     `order_reference` varchar(60) NOT NULL,
-    `created_at` datetime DEFAULT CURRENT_TIMESTAMP
+    `created_at` datetime DEFAULT NULL
     ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
