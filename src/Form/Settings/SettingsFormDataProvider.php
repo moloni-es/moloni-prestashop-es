@@ -191,7 +191,9 @@ class SettingsFormDataProvider implements FormDataProviderInterface
             $this->trans('Closed', 'Modules.Molonies.Settings') => DocumentStatus::CLOSED,
         ];
 
-        $this->documentTypes = DocumentTypes::getDocumentsTypes();
+        foreach (DocumentTypes::getDocumentsTypes() as $name => $code) {
+            $this->documentTypes[$this->trans($name, 'Modules.Molonies.Settings')] = $code;
+        }
 
         $this->fiscalZoneBasedOn = [
             $this->trans('Billing', 'Modules.Molonies.Settings') => FiscalZone::BILLING,

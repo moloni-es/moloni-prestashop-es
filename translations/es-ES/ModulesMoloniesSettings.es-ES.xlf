@@ -392,6 +392,41 @@ Puedes gestionar las series de documentos de tu empresa directamente en tu cuent
         <target>Guardar</target>
         <note>Line: </note>
       </trans-unit>
+      <trans-unit id="466eadd40b3c10580e3ab4e8061161ce">
+        <source>Invoice</source>
+        <target>Factura</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="75a19f56f1a64cbc25e3e7eb7938c48d">
+        <source>Invoice + Receipt</source>
+        <target>Factura + Cobro de factura</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="56ea0ee77c2c6efe0131dfeea01705f5">
+        <source>Purchase Order</source>
+        <target>Pedido de cliente</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="62cf105626c8a1597d3585d2f2b87bcf">
+        <source>Pro Forma Invoice</source>
+        <target>Factura Proforma</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="1954f6efb99d0bf2ce2d1f142d494626">
+        <source>Simplified invoice</source>
+        <target>Factura simplificada</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="822bead6c149ffacbe7a12c44c3958ed">
+        <source>Budget</source>
+        <target>Presupuesto</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="2aa1320f04e187f0a7d9f826ad43bd1a">
+        <source>Bills of lading</source>
+        <target>Albarán</target>
+        <note>Line: </note>
+      </trans-unit>
       <trans-unit id="791f323b4d14b78da4e6388fd745ca37">
         <source>Your module settings were successfuly updated.</source>
         <target>La configuración de tu módulo se ha actualizado correctamente.</target>
