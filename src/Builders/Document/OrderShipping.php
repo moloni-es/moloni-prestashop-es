@@ -203,6 +203,7 @@ class OrderShipping implements BuilderItemInterface
         try {
             $params = [
                 'productCategoryId' => $this->categoryId,
+                'reference' => $this->reference,
                 'type' => $this->type,
                 'name' => $this->name,
                 'measurementUnitId' => $this->measurementUnit,
