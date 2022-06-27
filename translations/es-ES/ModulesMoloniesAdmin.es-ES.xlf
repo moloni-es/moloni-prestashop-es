@@ -17,6 +17,31 @@
         <target>¡Error al ejecutar la operación de %s!</target>
         <note>Line: </note>
       </trans-unit>
+      <trans-unit id="5811d9162f7a838934f757488d6cb918">
+        <source>Moloni Spain</source>
+        <target>Moloni España</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="7442e29d7d53e549b78d93c46b8cdcfc">
+        <source>Orders</source>
+        <target>Pedidos pendientes</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="f28128b38efbc6134dc40751ee21fd29">
+        <source>Documents</source>
+        <target>Documentos creados</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="f4f70727dc34561dfde1a3c529b6205c">
+        <source>Settings</source>
+        <target>Configuraciones</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="8625e1de7be14c39b1d14dc03d822497">
+        <source>Tools</source>
+        <target>Herramientas</target>
+        <note>Line: </note>
+      </trans-unit>
     </body>
   </file>
 </xliff>
