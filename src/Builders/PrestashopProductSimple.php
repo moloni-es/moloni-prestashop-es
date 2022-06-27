@@ -94,14 +94,14 @@ class PrestashopProductSimple implements BuilderInterface
      *
      * @var string
      */
-    protected $isbn;
+    protected $isbn = '';
 
     /**
      * Product ean13
      *
      * @var string
      */
-    protected $ean13;
+    protected $ean13 = '';
 
     /**
      * Product price
@@ -238,6 +238,8 @@ class PrestashopProductSimple implements BuilderInterface
 
         $this->prestashopProduct->reference = $this->reference;
         $this->prestashopProduct->product_type = $this->type;
+        $this->prestashopProduct->ean13 = $this->ean13;
+        $this->prestashopProduct->isbn = $this->isbn;
 
         if (!empty($this->categories)) {
             $this->prestashopProduct->id_category_default = $this->categories[0];
