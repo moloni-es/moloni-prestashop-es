@@ -115,7 +115,7 @@ class Orders extends MoloniController
             $auxMessage = 'Warning processing order ({0})';
             $auxIdentifiers = ['{0}' => isset($action) ? $action->getOrder()->reference : ''];
 
-            Logs::addWarningLog([[$auxMessage, $auxIdentifiers], [$e->getMessage(), $e->getIdentifiers()]], $e->getData());
+            Logs::addWarningLog([[$auxMessage, $auxIdentifiers], [$e->getMessage(), $e->getIdentifiers()]], $e->getData(), $orderId);
 
             $msg = $this->trans($auxMessage, 'Modules.Molonies.Errors', $auxIdentifiers);
 
@@ -124,7 +124,7 @@ class Orders extends MoloniController
             $auxMessage = 'Error processing order ({0})';
             $auxIdentifiers = ['{0}' => isset($action) ? $action->getOrder()->reference : ''];
 
-            Logs::addErrorLog([[$auxMessage, $auxIdentifiers], [$e->getMessage(), $e->getIdentifiers()]], $e->getData());
+            Logs::addErrorLog([[$auxMessage, $auxIdentifiers], [$e->getMessage(), $e->getIdentifiers()]], $e->getData(), $orderId);
 
             $msg = $this->trans($auxMessage, 'Modules.Molonies.Errors', $auxIdentifiers);
 
