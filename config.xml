@@ -2,7 +2,7 @@
 <module>
     <name>molonies</name>
     <displayName><![CDATA[Moloni España]]></displayName>
-    <version><![CDATA[2.0.39]]></version>
+    <version><![CDATA[2.0.40]]></version>
     <description><![CDATA[Automatic document creation with real time stock synchronization and powerful sales analysis.]]></description>
     <author><![CDATA[Moloni]]></author>
     <tab><![CDATA[administration]]></tab>
