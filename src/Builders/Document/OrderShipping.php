@@ -171,10 +171,13 @@ class OrderShipping implements BuilderItemInterface
     {
         $params = [
             'productId' => $this->productId,
+            'name' => $this->name,
             'price' => $this->price,
             'ordering' => $order,
             'qty' => $this->quantity,
             'discount' => $this->discount,
+            'taxes' => [],
+            'exemptionReason' => '',
         ];
 
         if (!empty($this->exemptionReason)) {
