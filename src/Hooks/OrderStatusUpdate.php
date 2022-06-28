@@ -103,7 +103,7 @@ class OrderStatusUpdate extends AbstractHookAction
             if ((int)$this->newOrderStatus->paid === Boolean::NO) {
                 return false;
             }
-        } elseif (!in_array($this->newOrderStatus->id, $orderStatusToShow, true)) {
+        } elseif (!in_array($this->newOrderStatus->id, $orderStatusToShow, false)) {
             return false;
         }
 
