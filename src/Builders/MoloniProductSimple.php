@@ -251,7 +251,9 @@ class MoloniProductSimple implements BuilderInterface
             'price' => $this->price,
             'summary' => $this->summary,
             'identifications' => $this->identifications,
-            'measurementUnitId' => $this->measurementUnitId
+            'measurementUnitId' => $this->measurementUnitId,
+            'taxes' => [],
+            'exemptionReason' => '',
         ];
 
         if (!$this->shouldSyncName()) {
@@ -272,8 +274,6 @@ class MoloniProductSimple implements BuilderInterface
 
         if (!empty($this->tax)) {
             $props['taxes'][] = $this->tax->toArray();
-        } else {
-            $props['taxes'] = [];
         }
 
         if (!empty($this->exemptionReason)) {
