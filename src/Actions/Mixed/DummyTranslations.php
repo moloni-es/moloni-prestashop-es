@@ -160,6 +160,12 @@ class DummyTranslations
         $this->translator->trans('Simplified invoice', [], 'Modules.Molonies.Settings');
         $this->translator->trans('Budget', [], 'Modules.Molonies.Settings');
         $this->translator->trans('Bills of lading', [], 'Modules.Molonies.Settings');
+
+        $this->translator->trans('Name', [], 'Modules.Molonies.Settings');
+        $this->translator->trans('Price', [], 'Modules.Molonies.Settings');
+        $this->translator->trans('Description', [], 'Modules.Molonies.Settings');
+        $this->translator->trans('Categories', [], 'Modules.Molonies.Settings');
+        $this->translator->trans('Image', [], 'Modules.Molonies.Settings');
     }
 
     public function admin(): void
