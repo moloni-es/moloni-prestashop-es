@@ -56,6 +56,7 @@ use Moloni\Exceptions\MoloniApiException;
 use Moloni\Tools\Logs;
 use Moloni\Tools\Settings;
 use Moloni\Traits\CountryTrait;
+use Moloni\Traits\DiscountsTrait;
 use Order;
 use OrderCore;
 use OrderPayment as PrestashopOrderPayment;
@@ -65,6 +66,7 @@ use Shop;
 class DocumentFromOrder implements BuilderInterface
 {
     use CountryTrait;
+    use DiscountsTrait;
 
     /**
      * Entity manager
@@ -1071,17 +1073,17 @@ class DocumentFromOrder implements BuilderInterface
         $cartRules = $this->order->getCartRules();
 
         if (!empty($cartRules)) {
-            $productCount = count($this->order->getCartProducts());
+            $accumulatedDiscount = 0;
 
             foreach ($cartRules as $cartRule) {
                 if ((int)$cartRule['free_shipping'] === Boolean::YES) {
                     continue;
                 }
 
-                $productDiscount += (float)$cartRule['value_tax_excl'];
+                $accumulatedDiscount += (float)$cartRule['value_tax_excl'];
             }
 
-            $productDiscount /= $productCount;
+            $productDiscount = $this->calculateDiscountPercentage((float)$this->order->total_products, $accumulatedDiscount);
         }
 
         $this->discounts['product_discount'] = $productDiscount;

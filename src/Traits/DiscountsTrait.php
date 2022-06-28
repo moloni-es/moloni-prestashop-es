@@ -26,10 +26,21 @@ namespace Moloni\Traits;
 
 trait DiscountsTrait
 {
+    protected function calculateDiscountedValue(?float $price = 0, ?float $discountedPercentage = 0)
+    {
+        $discountedValue = 0;
+
+        if ($price > 0) {
+            $discountedValue = $price * ($discountedPercentage / 100);
+        }
+
+        return $discountedValue;
+    }
+
     protected function calculateDiscountPercentage(?float $price = 0, ?float $discountedValue = 0)
     {
         if ($price > 0) {
-            $discount = (1 - ($price / ($price + $discountedValue))) * 100;
+            $discount = ($discountedValue / $price) * 100;
         } else {
             $discount = 100;
         }
