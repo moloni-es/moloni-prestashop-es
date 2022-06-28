@@ -191,18 +191,18 @@ class OrderProduct implements BuilderItemInterface
             'ordering' => $order,
             'qty' => $this->quantity,
             'discount' => $this->discount,
+            'taxes' => [],
+            'exemptionReason' => '',
         ];
 
-        if (!empty($this->exemptionReason)) {
-            $params['exemptionReason'] = $this->exemptionReason;
-        }
-
         if (!empty($this->taxes)) {
-            $params['taxes'] = [];
-
             foreach ($this->taxes as $tax) {
                 $params['taxes'][] = $tax->toArray();
             }
+        }
+
+        if (!empty($this->exemptionReason)) {
+            $params['exemptionReason'] = $this->exemptionReason;
         }
 
         return $params;
