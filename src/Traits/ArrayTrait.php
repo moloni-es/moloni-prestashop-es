@@ -37,11 +37,15 @@ trait ArrayTrait
         return false;
     }
 
-    private function findInCode(array $array, string $needle): bool
+    private function findInCode(array $array, string $needle, $cleanerFunction = null)
     {
         foreach ($array as $value) {
+            if ($cleanerFunction) {
+                $value['code'] = $cleanerFunction($value['code']);
+            }
+
             if ($value['code'] === $needle) {
-                return true;
+                return $value;
             }
         }
 
