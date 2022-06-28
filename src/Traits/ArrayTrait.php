@@ -40,7 +40,7 @@ trait ArrayTrait
     private function findInCode(array $array, string $needle, $cleanerFunction = null)
     {
         foreach ($array as $value) {
-            if ($cleanerFunction) {
+            if (is_callable($cleanerFunction)) {
                 $value['code'] = $cleanerFunction($value['code']);
             }
 
