@@ -182,7 +182,7 @@ class FindOrCreatePropertyGroup
 
                 $updatedGroup = $mutation['data']['propertyGroupUpdate']['data'] ?? [];
 
-                if (empty($updatedGroup) || (int)$updatedGroup['propertyGroupId'] === 0) {
+                if (empty($updatedGroup)) {
                     throw new MoloniProductException('Failed to update existing property group "{0}"', [
                         '{0}' => $bestPropertyGroup['name'] ?? ''
                     ], ['mutation' => $mutation, 'props' => $propertyGroupForUpdate]);
