@@ -259,7 +259,7 @@ class SettingsFormType extends TranslatorAwareType
             'multiple' => true,
             'expanded' => true,
             'required' => false,
-            'choices' => SyncFields::getSyncFields(),
+            'choices' => $this->options->getSyncFields(),
         ]);
 
         return $this;

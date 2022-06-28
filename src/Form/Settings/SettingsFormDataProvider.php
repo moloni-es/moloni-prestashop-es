@@ -67,6 +67,7 @@ class SettingsFormDataProvider implements FormDataProviderInterface
     private $status;
     private $documentTypes = [];
     private $fiscalZoneBasedOn = [];
+    private $syncFields = [];
     private $addresses = [];
     private $companyName = '';
 
@@ -193,6 +194,10 @@ class SettingsFormDataProvider implements FormDataProviderInterface
 
         foreach (DocumentTypes::getDocumentsTypes() as $name => $code) {
             $this->documentTypes[$this->trans($name, 'Modules.Molonies.Settings')] = $code;
+        }
+
+        foreach (SyncFields::getSyncFields() as $name => $code) {
+            $this->syncFields[$this->trans($name, 'Modules.Molonies.Settings')] = $code;
         }
 
         $this->fiscalZoneBasedOn = [
@@ -331,5 +336,13 @@ class SettingsFormDataProvider implements FormDataProviderInterface
     public function getCompanyName(): string
     {
         return $this->companyName;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSyncFields(): array
+    {
+        return $this->syncFields;
     }
 }

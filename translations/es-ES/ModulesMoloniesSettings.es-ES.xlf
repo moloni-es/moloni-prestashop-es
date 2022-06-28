@@ -427,6 +427,31 @@ Puedes gestionar las series de documentos de tu empresa directamente en tu cuent
         <target>Albarán</target>
         <note>Line: </note>
       </trans-unit>
+      <trans-unit id="49ee3087348e8d44e1feda1917443987">
+        <source>Name</source>
+        <target>Descripción</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="3601146c4e948c32b6424d2c0a7f0118">
+        <source>Price</source>
+        <target>Precio</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="b5a7adde1af5c87d7fd797b6245c2a39">
+        <source>Description</source>
+        <target>Resumen</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="af1b98adf7f686b84cd0b443e022b7a0">
+        <source>Categories</source>
+        <target>Famílias</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="be53a0541a6d36f6ecb879fa2c584b08">
+        <source>Image</source>
+        <target>Imagen</target>
+        <note>Line: </note>
+      </trans-unit>
       <trans-unit id="791f323b4d14b78da4e6388fd745ca37">
         <source>Your module settings were successfuly updated.</source>
         <target>La configuración de tu módulo se ha actualizado correctamente.</target>
