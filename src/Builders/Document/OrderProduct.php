@@ -374,8 +374,6 @@ class OrderProduct implements BuilderItemInterface
      */
     public function setDiscounts(?float $cuponDiscountsValue = 0): OrderProduct
     {
-        $discount = 0;
-
         if ((float)$this->orderProduct['reduction_percent'] > 0) {
             // If cupon value is set, revert percentage value
             if ($cuponDiscountsValue > 0) {
@@ -394,6 +392,8 @@ class OrderProduct implements BuilderItemInterface
             $discountedValue = (float)$this->orderProduct['reduction_amount_tax_excl'] + $cuponDiscountsValue;
 
             $discount = $this->calculateDiscountPercentage($price, $discountedValue);
+        } else {
+            $discount = $cuponDiscountsValue;
         }
 
         $this->discount = $discount;
