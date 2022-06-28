@@ -368,7 +368,7 @@ class DocumentFromOrder implements BuilderInterface
         }
 
         if (!empty($this->shipping) && $this->shouldAddProducts()) {
-            $order = count($props['products']);
+            $order = count($props['products'] ?? 1);
 
             $props['products'][] = $this->shipping->toArray($order);
         }
