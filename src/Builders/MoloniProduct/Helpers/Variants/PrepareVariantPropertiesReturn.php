@@ -52,9 +52,6 @@ class PrepareVariantPropertiesReturn
     public function handle(): array
     {
         $result = [];
-        $codeCleanerClosure = function ($string) {
-            return $this->cleanCodeString($string);
-        };
 
         foreach ($this->prestashopCombinations as $combinationId => $groups) {
             $variantProperties = [];
@@ -69,7 +66,7 @@ class PrepareVariantPropertiesReturn
 
                     $propExists = $this->moloniPropertyGroup['properties'][$propExistsKey];
 
-                    $valueExists = $this->findInCode($propExists['values'], $this->cleanCodeString($attribute), $codeCleanerClosure);
+                    $valueExists = $this->findInCode($propExists['values'], $this->cleanCodeString($attribute), [$this, 'cleanCodeString']);
 
                     if ($valueExists === false) {
                         throw new MoloniProductException('Failed to find matching property value for "{0}"', ['{0}' => $attribute]);

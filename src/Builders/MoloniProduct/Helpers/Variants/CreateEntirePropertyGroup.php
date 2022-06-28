@@ -55,9 +55,6 @@ class CreateEntirePropertyGroup
     public function handle(): array
     {
         $propsForInsert = [];
-        $codeCleanerClosure = function ($string) {
-            return $this->cleanCodeString($string);
-        };
 
         // Iterate over the shopify variants and prepare an array for insert into moloni
         foreach ($this->prestashopCombinations as $combinationGroups) {
@@ -73,7 +70,7 @@ class CreateEntirePropertyGroup
                     ];
 
                     if ($nameExistsKey !== false) {
-                        if (!$this->findInCode($propsForInsert[$nameExistsKey]['values'], $newValue['code'], $codeCleanerClosure)) {
+                        if (!$this->findInCode($propsForInsert[$nameExistsKey]['values'], $newValue['code'], [$this, 'cleanCodeString'])) {
                             $propsForInsert[$nameExistsKey]['values'][] = $newValue;
                         }
                     } else {
