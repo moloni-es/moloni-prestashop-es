@@ -263,6 +263,8 @@ class MoloniProductWithVariants implements BuilderInterface
             'identifications' => $this->identifications,
             'measurementUnitId' => $this->measurementUnitId,
             'variants' => [],
+            'taxes' => [],
+            'exemptionReason' => '',
         ];
 
         if ($this->shouldSyncName()) {
