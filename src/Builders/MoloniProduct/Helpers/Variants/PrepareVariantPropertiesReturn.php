@@ -24,12 +24,14 @@
 
 namespace Moloni\Builders\MoloniProduct\Helpers\Variants;
 
-use Moloni\Exceptions\Product\MoloniProductException;
 use Moloni\Traits\ArrayTrait;
+use Moloni\Traits\StringTrait;
+use Moloni\Exceptions\Product\MoloniProductException;
 
 class PrepareVariantPropertiesReturn
 {
     use ArrayTrait;
+    use StringTrait;
 
     private $moloniPropertyGroup;
     private $prestashopCombinations;
@@ -50,6 +52,9 @@ class PrepareVariantPropertiesReturn
     public function handle(): array
     {
         $result = [];
+        $codeCleanerClosure = function ($string) {
+            return $this->cleanCodeString($string);
+        };
 
         foreach ($this->prestashopCombinations as $combinationId => $groups) {
             $variantProperties = [];
@@ -64,7 +69,7 @@ class PrepareVariantPropertiesReturn
 
                     $propExists = $this->moloniPropertyGroup['properties'][$propExistsKey];
 
-                    $valueExists = $this->findInCodeOrValue($propExists['values'], $attribute);
+                    $valueExists = $this->findInCode($propExists['values'], $this->cleanCodeString($attribute), $codeCleanerClosure);
 
                     if ($valueExists === false) {
                         throw new MoloniProductException('Failed to find matching property value for "{0}"', ['{0}' => $attribute]);

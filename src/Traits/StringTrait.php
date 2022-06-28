@@ -28,6 +28,9 @@ trait StringTrait
 {
     private function cleanCodeString(string $string): string
     {
+        //Remove end and start spacing
+        $string = trim($string);
+
         // All chars upper case
         $string = strtoupper($string);
 

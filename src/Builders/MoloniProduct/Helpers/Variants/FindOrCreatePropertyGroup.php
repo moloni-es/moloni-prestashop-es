@@ -125,6 +125,10 @@ class FindOrCreatePropertyGroup
 
         $updateNeeded = false;
 
+        $codeCleanerClosure = function ($string) {
+            return $this->cleanCodeString($string);
+        };
+
         foreach ($this->prestashopCombinations as $combinationid => $groups) {
             foreach ($groups as $groupName => $attributes) {
                 foreach ($attributes as $attribute) {
@@ -134,7 +138,7 @@ class FindOrCreatePropertyGroup
                     if ($propExistsKey !== false) {
                         $propExists = $propertyGroupForUpdate['properties'][$propExistsKey];
 
-                        $valueExistsKey = $this->findInCodeOrValue($propExists['values'], $attribute);
+                        $valueExistsKey = $this->findInCode($propExists['values'], $this->cleanCodeString($attribute), $codeCleanerClosure);
 
                         // Property value doesn't, add value
                         if ($valueExistsKey === false) {
