@@ -315,29 +315,30 @@ class ProductVariant
      */
     public function setIdentifications(): ProductVariant
     {
-        $identifications = $this->moloniVariant['identifications'] ?? [];
-        $identificators = ['EAN13', 'ISBN'];
+        $identifications = [];
 
-        foreach ($identifications as $key => $identification) {
-            if (in_array($identification['type'], $identificators, true)) {
-                unset($identifications[$key]);
-            }
-        }
-
-        if (!empty($this->prestashopCombination->ean13)) {
+        if (!empty($this->prestashopProduct->ean13)) {
             $identifications[] = [
                 'type' => 'EAN13',
-                'text' => $this->prestashopCombination->ean13,
+                'text' => $this->prestashopProduct->ean13,
                 'favorite' => false
             ];
         }
 
-        if (!empty($this->prestashopCombination->isbn)) {
+        if (!empty($this->prestashopProduct->isbn)) {
             $identifications[] = [
                 'type' => 'ISBN',
-                'text' => $this->prestashopCombination->isbn,
+                'text' => $this->prestashopProduct->isbn,
                 'favorite' => false
             ];
+        }
+
+        if (isset($this->moloniProduct['identifications']) && !empty($this->moloniProduct['identifications'])) {
+            foreach ($this->moloniProduct['identifications']  as $identification) {
+                if (!in_array($identification['type'], ['EAN13', 'ISBN'], true)) {
+                    $identifications[] = $identification;
+                }
+            }
         }
 
         $this->identifications = $identifications;
