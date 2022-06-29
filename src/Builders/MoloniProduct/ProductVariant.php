@@ -317,18 +317,18 @@ class ProductVariant
     {
         $identifications = [];
 
-        if (!empty($this->prestashopProduct->ean13)) {
+        if (!empty($this->prestashopCombination->ean13)) {
             $identifications[] = [
                 'type' => 'EAN13',
-                'text' => $this->prestashopProduct->ean13,
+                'text' => $this->prestashopCombination->ean13,
                 'favorite' => false
             ];
         }
 
-        if (!empty($this->prestashopProduct->isbn)) {
+        if (!empty($this->prestashopCombination->isbn)) {
             $identifications[] = [
                 'type' => 'ISBN',
-                'text' => $this->prestashopProduct->isbn,
+                'text' => $this->prestashopCombination->isbn,
                 'favorite' => false
             ];
         }
