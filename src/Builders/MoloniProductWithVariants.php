@@ -584,7 +584,7 @@ class MoloniProductWithVariants implements BuilderInterface
      */
     public function setPrice(): MoloniProductWithVariants
     {
-        $this->price = $this->prestashopProduct->getPriceWithoutReduct(true, null, 2);
+        $this->price = $this->prestashopProduct->getPriceWithoutReduct(true, null, 5);
 
         return $this;
     }

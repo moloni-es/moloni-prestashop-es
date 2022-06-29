@@ -513,7 +513,7 @@ class MoloniProductSimple implements BuilderInterface
      */
     public function setPrice(): MoloniProductSimple
     {
-        $this->price = $this->prestashopProduct->getPriceWithoutReduct(true, null, 2);
+        $this->price = $this->prestashopProduct->getPriceWithoutReduct(true, null, 5);
 
         return $this;
     }
