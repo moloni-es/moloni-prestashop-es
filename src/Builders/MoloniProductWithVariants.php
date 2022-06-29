@@ -544,7 +544,7 @@ class MoloniProductWithVariants implements BuilderInterface
         $reference = $this->prestashopProduct->reference;
 
         if (empty($reference)) {
-            $reference = $this->prestashopProduct->id;
+            $reference = (string)$this->prestashopProduct->id;
         }
 
         $this->reference = $reference;
