@@ -179,15 +179,15 @@ class Tools extends MoloniController
             (new WebhookDeleteAll())->handle();
             $action = new WebhookCreate();
 
-            if (Settings::get('syncStockToPrestashop') === Boolean::YES) {
+            if ((int)Settings::get('syncStockToPrestashop') === Boolean::YES) {
                 $action->handle('Product', 'stockChanged');
             }
 
-            if (Settings::get('addProductsToPrestashop') === Boolean::YES) {
+            if ((int)Settings::get('addProductsToPrestashop') === Boolean::YES) {
                 $action->handle('Product', 'create');
             }
 
-            if (Settings::get('updateProductsToPrestashop') === Boolean::YES) {
+            if ((int)Settings::get('updateProductsToPrestashop') === Boolean::YES) {
                 $action->handle('Product', 'update');
             }
 
