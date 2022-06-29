@@ -857,14 +857,7 @@ class MoloniProductWithVariants implements BuilderInterface
      */
     public function setIdentifications(): MoloniProductWithVariants
     {
-        $identifications = $this->moloniProduct['identifications'] ?? [];
-        $identificators = ['EAN13', 'ISBN'];
-
-        foreach ($identifications as $key => $identification) {
-            if (in_array($identification['type'], $identificators, true)) {
-                unset($identifications[$key]);
-            }
-        }
+        $identifications = [];
 
         if (!empty($this->prestashopProduct->ean13)) {
             $identifications[] = [
@@ -880,6 +873,14 @@ class MoloniProductWithVariants implements BuilderInterface
                 'text' => $this->prestashopProduct->isbn,
                 'favorite' => false
             ];
+        }
+
+        if (isset($this->moloniProduct['identifications']) && !empty($this->moloniProduct['identifications'])) {
+            foreach ($this->moloniProduct['identifications']  as $identification) {
+                if (!in_array($identification['type'], ['EAN13', 'ISBN'], true)) {
+                    $identifications[] = $identification;
+                }
+            }
         }
 
         $this->identifications = $identifications;
