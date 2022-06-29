@@ -37,6 +37,7 @@ class WebhookCreate
 {
     private $key = '';
     private $url = '';
+    private $description = 'Moloni WebHooks key';
 
     /**
      * Creates moloni Webhook
@@ -106,7 +107,7 @@ class WebhookCreate
         $key = '';
 
         $dataBase = Db::getInstance();
-        $sql = 'SELECT * FROM ' . _DB_PREFIX_ . 'webservice_account WHERE description = "Moloni WebHooks key"';
+        $sql = 'SELECT * FROM ' . _DB_PREFIX_ . 'webservice_account WHERE description = "' . $this->description .'"';
         $query = $dataBase->getRow($sql);
 
 
@@ -126,7 +127,7 @@ class WebhookCreate
 
         $apiAccess = new WebserviceKey();
         $apiAccess->key = $randKey;
-        $apiAccess->description = 'Moloni WebHooks key';
+        $apiAccess->description = $this->description;
         $apiAccess->save();
 
         $permissions = [
