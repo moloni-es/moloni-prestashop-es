@@ -184,6 +184,7 @@ class Products extends Endpoint
             hasStock
             stock
             img
+            deletable
             identifications
             {
                 type
