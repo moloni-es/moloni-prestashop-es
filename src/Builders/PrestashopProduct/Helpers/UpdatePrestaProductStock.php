@@ -79,7 +79,12 @@ class UpdatePrestaProductStock
             ];
         } else {
             $msg = ['Stock is already updated in Prestashop ({0})', ['{0}' => $this->prestaProductReference]];
-            $data = ['newStock' => $this->newStock, 'current' => $currentStock];
+            $data = [
+                'newStock' => $this->newStock,
+                'current' => $currentStock,
+                'prestaProductId' => $this->prestaProductId,
+                'attributeId' => $this->attributeId,
+            ];
         }
 
         if ($this->shouldWriteLogs()) {
