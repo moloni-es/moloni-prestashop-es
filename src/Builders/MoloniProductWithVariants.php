@@ -466,7 +466,8 @@ class MoloniProductWithVariants implements BuilderInterface
                 $this->afterSave();
             } else {
                 throw new MoloniProductException('Error updating product ({0})', ['{0}' => $this->reference], [
-                    'mutation' => $mutation
+                    'mutation' => $mutation,
+                    'props' => $props,
                 ]);
             }
         } catch (MoloniApiException $e) {
@@ -955,9 +956,7 @@ class MoloniProductWithVariants implements BuilderInterface
                 ->queryProducts($variables);
 
             if (!empty($query)) {
-                $moloniProduct = $query[0];
-
-                $this->moloniProduct = $moloniProduct;
+                $this->moloniProduct = $query[0];
             }
         } catch (MoloniApiException $e) {
             throw new MoloniProductException('Error fetching product by reference: ({0})', ['{0}' => $this->reference], $e->getData());
