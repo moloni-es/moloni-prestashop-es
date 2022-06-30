@@ -128,6 +128,13 @@ class OrderShipping implements BuilderItemInterface
     protected $ficalZone;
 
     /**
+     * Shipping exchange rates
+     *
+     * @var array
+     */
+    protected $exchangeRate = [];
+
+    /**
      * Order data
      *
      * @var Order
@@ -186,6 +193,11 @@ class OrderShipping implements BuilderItemInterface
 
         if (!empty($this->taxes)) {
             $params['taxes'][] = $this->taxes->toArray();
+        }
+
+        if (!empty($this->exchangeRate)) {
+            // Invert exchage rate, because order currency !== company currency
+            $params['price'] *= (1 / $this->exchangeRate['exchange']);
         }
 
         return $params;
@@ -442,6 +454,20 @@ class OrderShipping implements BuilderItemInterface
     public function setMeasurementUnit(): OrderShipping
     {
         $this->measurementUnit = (int)(Settings::get('measurementUnit') ?? 0);
+
+        return $this;
+    }
+
+    /**
+     * Set shipping exchange rate
+     *
+     * @param array|null $exchangeRate
+     *
+     * @return OrderShipping
+     */
+    public function setExchangeRate(?array $exchangeRate = []): OrderShipping
+    {
+        $this->exchangeRate = $exchangeRate;
 
         return $this;
     }

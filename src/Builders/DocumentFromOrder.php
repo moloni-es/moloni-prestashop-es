@@ -397,9 +397,11 @@ class DocumentFromOrder implements BuilderInterface
         }
 
         if (!empty($this->exchangeRate)) {
-            $this->applyExchangeRate($props);
+            $props['currencyExchangeId'] = $this->exchangeRate['currencyExchangeId'];
+            $props['currencyExchangeExchange'] = $this->exchangeRate['exchange'];
         }
 
+        // Just Receipts things
         if ($this->documentType === DocumentTypes::RECEIPTS) {
             unset($props['expirationDate'], $props['ourReference'], $props['yourReference'], $props['expirationDate']);
 
@@ -409,38 +411,6 @@ class DocumentFromOrder implements BuilderInterface
         $this->createProps = ['data' => $props];
 
         return $this;
-    }
-
-    /**
-     * Apply exchage rate
-     *
-     * @param array $props
-     *
-     * @return void
-     */
-    protected function applyExchangeRate(array &$props): void
-    {
-        // Invert exchage rate
-        $value = 1 / $this->exchangeRate['exchange'];
-
-        if (!empty($props['products'] ?? [])) {
-            foreach ($props['products'] as &$product) {
-                $product['price'] *= $value;
-            }
-
-            unset($product);
-        }
-
-        if (!empty($props['payments'] ?? [])) {
-            foreach ($props['payments'] as &$payment) {
-                $payment['value'] *= $value;
-            }
-
-            unset($payment);
-        }
-
-        $props['currencyExchangeId'] = $this->exchangeRate['currencyExchangeId'];
-        $props['currencyExchangeExchange'] = $this->exchangeRate['exchange'];
     }
 
     //          VERIFICATIONS          //
@@ -1020,6 +990,7 @@ class DocumentFromOrder implements BuilderInterface
 
             $orderProduct
                 ->setDiscounts($this->discounts['product_discount'])
+                ->setExchangeRate($this->exchangeRate)
                 ->search();
 
             if ($orderProduct->getProductId() === 0) {
@@ -1047,6 +1018,7 @@ class DocumentFromOrder implements BuilderInterface
             $orderShipping = new OrderShipping($this->order, $this->fiscalZone);
 
             $orderShipping
+                ->setExchangeRate($this->exchangeRate)
                 ->search();
 
             if ($orderShipping->getProductId() === 0) {
@@ -1141,6 +1113,7 @@ class DocumentFromOrder implements BuilderInterface
             $payment = new OrderPayment($orderPayment);
 
             $payment
+                ->setExchangeRate($this->exchangeRate)
                 ->search();
 
             if ($payment->getPaymentMethodId() === 0) {

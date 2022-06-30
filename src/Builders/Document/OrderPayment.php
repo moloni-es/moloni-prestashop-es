@@ -61,6 +61,13 @@ class OrderPayment implements BuilderItemInterface
     protected $paymentTime;
 
     /**
+     * Order payment exchange rates
+     *
+     * @var array
+     */
+    protected $exchangeRate = [];
+
+    /**
      * Order payment
      *
      * @var PrestashopOrderPayment
@@ -88,12 +95,19 @@ class OrderPayment implements BuilderItemInterface
      */
     public function toArray(): array
     {
-        return [
+        $props = [
             'paymentMethodId' => $this->paymentMethodId,
             'paymentMethodName' => $this->name,
             'value' => $this->value,
             'date' => $this->paymentTime
         ];
+
+        if (!empty($this->exchangeRate)) {
+            // Invert exchage rate, because order currency !== company currency
+            $props['value'] *= (1 / $this->exchangeRate['exchange']);
+        }
+
+        return $props;
     }
 
     /**
@@ -205,6 +219,20 @@ class OrderPayment implements BuilderItemInterface
     public function setValue(): OrderPayment
     {
         $this->value = (float)($this->orderPayment->amount ?? 0);
+
+        return $this;
+    }
+
+    /**
+     * Set shipping exchange rate
+     *
+     * @param array|null $exchangeRate
+     *
+     * @return OrderPayment
+     */
+    public function setExchangeRate(?array $exchangeRate = []): OrderPayment
+    {
+        $this->exchangeRate = $exchangeRate;
 
         return $this;
     }
