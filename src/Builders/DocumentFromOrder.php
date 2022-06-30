@@ -298,6 +298,10 @@ class DocumentFromOrder implements BuilderInterface
         $this->documentId = 0;
         $this->documentTotal = 0;
         $this->documentExchageTotal = 0;
+
+        $this->relatedWith = [];
+        $this->relatedWithTotal = 0;
+
         $this->moloniDocument = [];
     }
 
@@ -672,12 +676,12 @@ class DocumentFromOrder implements BuilderInterface
      */
     public function addRelatedDocument(int $documentId, float $value): DocumentFromOrder
     {
-        $this->relatedWithTotal = $value;
+        $this->relatedWithTotal += $value;
 
-        $this->relatedWith = [[
+        $this->relatedWith[] = [
             'relatedDocumentId' => $documentId,
             'value' => $value,
-        ]];
+        ];
 
         return $this;
     }
