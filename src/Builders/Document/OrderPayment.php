@@ -224,7 +224,7 @@ class OrderPayment implements BuilderItemInterface
     }
 
     /**
-     * Set shipping exchange rate
+     * Set order payment exchange rate
      *
      * @param array|null $exchangeRate
      *
