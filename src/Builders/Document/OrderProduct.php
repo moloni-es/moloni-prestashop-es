@@ -142,11 +142,11 @@ class OrderProduct implements BuilderItemInterface
     protected $fiscalZone;
 
     /**
-     * Warehouse settings
+     * Product exchange rates
      *
-     * @var array|null Warehouse settings
+     * @var array
      */
-    protected $currencyExchange;
+    protected $exchangeRate = [];
 
     /**
      * Order product data
@@ -203,6 +203,11 @@ class OrderProduct implements BuilderItemInterface
 
         if (!empty($this->exemptionReason)) {
             $params['exemptionReason'] = $this->exemptionReason;
+        }
+
+        if (!empty($this->exchangeRate)) {
+            // Invert exchage rate, because order currency !== company currency
+            $params['price'] *= (1 / $this->exchangeRate['exchange']);
         }
 
         return $params;
@@ -366,47 +371,6 @@ class OrderProduct implements BuilderItemInterface
     }
 
     /**
-     * Calculate discounts
-     *
-     * @param float|null $cuponDiscountsPercentage
-     *
-     * @return OrderProduct
-     */
-    public function setDiscounts(?float $cuponDiscountsPercentage = 0): OrderProduct
-    {
-        if ((float)$this->orderProduct['reduction_percent'] > 0) {
-            // If cupon value is set, revert percentage value
-            if ($cuponDiscountsPercentage > 0) {
-                $price = (float)$this->orderProduct['product_price'];
-
-                $discountedValue = 0;
-                $discountedValue += $this->calculateDiscountedValue($price, (float)$this->orderProduct['reduction_percent']);
-                $discountedValue += $this->calculateDiscountedValue($price, $cuponDiscountsPercentage);
-
-                $discount = $this->calculateDiscountPercentage($price, $discountedValue);
-            } else {
-                $discount = (float)$this->orderProduct['reduction_percent'];
-            }
-        } elseif ((float)$this->orderProduct['reduction_amount_tax_excl'] > 0) {
-            $price = (float)$this->orderProduct['product_price'];
-
-            $discountedValue = (float)$this->orderProduct['reduction_amount_tax_excl'];
-
-            if ($cuponDiscountsPercentage > 0) {
-                $discountedValue += $this->calculateDiscountedValue($price, $cuponDiscountsPercentage);
-            }
-
-            $discount = $this->calculateDiscountPercentage($price, $discountedValue);
-        } else {
-            $discount = $cuponDiscountsPercentage;
-        }
-
-        $this->discount = $discount;
-
-        return $this;
-    }
-
-    /**
      * Define product quantity
      *
      * @return OrderProduct
@@ -459,6 +423,61 @@ class OrderProduct implements BuilderItemInterface
     public function setWarehouseId(): OrderProduct
     {
         $this->warehouseId = Settings::get('documentWarehouse');
+
+        return $this;
+    }
+
+    /**
+     * Calculate discounts
+     *
+     * @param float|null $cuponDiscountsPercentage
+     *
+     * @return OrderProduct
+     */
+    public function setDiscounts(?float $cuponDiscountsPercentage = 0): OrderProduct
+    {
+        if ((float)$this->orderProduct['reduction_percent'] > 0) {
+            // If cupon value is set, revert percentage value
+            if ($cuponDiscountsPercentage > 0) {
+                $price = (float)$this->orderProduct['product_price'];
+
+                $discountedValue = 0;
+                $discountedValue += $this->calculateDiscountedValue($price, (float)$this->orderProduct['reduction_percent']);
+                $discountedValue += $this->calculateDiscountedValue($price, $cuponDiscountsPercentage);
+
+                $discount = $this->calculateDiscountPercentage($price, $discountedValue);
+            } else {
+                $discount = (float)$this->orderProduct['reduction_percent'];
+            }
+        } elseif ((float)$this->orderProduct['reduction_amount_tax_excl'] > 0) {
+            $price = (float)$this->orderProduct['product_price'];
+
+            $discountedValue = (float)$this->orderProduct['reduction_amount_tax_excl'];
+
+            if ($cuponDiscountsPercentage > 0) {
+                $discountedValue += $this->calculateDiscountedValue($price, $cuponDiscountsPercentage);
+            }
+
+            $discount = $this->calculateDiscountPercentage($price, $discountedValue);
+        } else {
+            $discount = $cuponDiscountsPercentage;
+        }
+
+        $this->discount = $discount;
+
+        return $this;
+    }
+
+    /**
+     * Set shipping exchange rate
+     *
+     * @param array|null $exchangeRate
+     *
+     * @return OrderProduct
+     */
+    public function setExchangeRate(?array $exchangeRate = []): OrderProduct
+    {
+        $this->exchangeRate = $exchangeRate;
 
         return $this;
     }
