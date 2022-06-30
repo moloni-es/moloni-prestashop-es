@@ -34,7 +34,7 @@ export default class MoloniRegistration {
         this.onBusinessChange();
     }
 
-    onCompanyNameChange() {
+    onCompanyNameChange(event) {
         if (this.$companyName.val() !== '') {
             this.$slug.val(CreateSlug(event.target.value));
             this.$slug.trigger('change');
