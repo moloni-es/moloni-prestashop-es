@@ -432,6 +432,11 @@
         <target>Advertencia al procesar el pedido ({0})</target>
         <note>Line: </note>
       </trans-unit>
+      <trans-unit id="3b6ad5488a34c1daee960c12ff7d673a">
+        <source>Order already dicarded or created!</source>
+        <target>Pedido creado o descartado</target>
+        <note>Line: </note>
+      </trans-unit>
       <trans-unit id="67509542f3351ede1bd24dcdb31fb1df">
         <source>Error fetching logs list</source>
         <target> Error al obtener la lista de registros</target>
