@@ -27,6 +27,11 @@
         <target>Exportar productos a Moloni</target>
         <note>Line: </note>
       </trans-unit>
+      <trans-unit id="e221be99907798673b72a87bb267456d">
+        <source>Use this tool to create all products in your Prestashop store account in your Moloni account.</source>
+        <target>Utiliza esta herramienta para crear todos los productos de tu tienda Prestashop en tu cuenta Moloni.</target>
+        <note>Line: </note>
+      </trans-unit>
       <trans-unit id="3d5ffd48def45423bd34d64e33daa99f">
         <source>Synchronize Prestashop stocks with Moloni</source>
         <target>Sincronizar los stocks de Prestashop con Moloni</target>
