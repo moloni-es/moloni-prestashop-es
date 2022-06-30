@@ -118,6 +118,7 @@ class DummyTranslations
         $this->translator->trans('Error fetching exchange rate: ({0})', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Document type not found', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Warning processing order ({0})', [], 'Modules.Molonies.Errors');
+        $this->translator->trans('Order already dicarded or created!', [], 'Modules.Molonies.Errors');
     }
 
     public function common(): void
@@ -145,6 +146,7 @@ class DummyTranslations
         $this->translator->trans('Product updated in Moloni ({0})', [], 'Modules.Molonies.Common');
         $this->translator->trans('Stock is already updated in Prestashop ({0})', [], 'Modules.Molonies.Common');
         $this->translator->trans('Stock updated in Prestashop (old: {0} | new: {1}) ({2})', [], 'Modules.Molonies.Common');
+
         $this->translator->trans('Combination created in Prestashop ({0})', [], 'Modules.Molonies.Common');
         $this->translator->trans('Combination updated in Prestashop ({0})', [], 'Modules.Molonies.Common');
         $this->translator->trans('Product created in Prestashop ({0})', [], 'Modules.Molonies.Common');
