@@ -469,7 +469,7 @@ class OrderProduct implements BuilderItemInterface
     }
 
     /**
-     * Set shipping exchange rate
+     * Set product exchange rate
      *
      * @param array|null $exchangeRate
      *
