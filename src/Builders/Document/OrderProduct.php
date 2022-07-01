@@ -432,7 +432,8 @@ class OrderProduct implements BuilderItemInterface
             if (empty($exemption)) {
                 throw new MoloniDocumentProductTaxException(
                     'Product with reference ({0}) has no taxes applied. Please add an exemption reason in plugin settings.',
-                    ['{0}' => $this->reference]
+                    ['{0}' => $this->reference],
+                    ['order_product' => $this->orderProduct]
                 );
             }
 
