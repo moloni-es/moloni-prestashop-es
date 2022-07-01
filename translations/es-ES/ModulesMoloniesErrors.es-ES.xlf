@@ -437,6 +437,11 @@
         <target>Pedido creado o descartado</target>
         <note>Line: </note>
       </trans-unit>
+      <trans-unit id="5787c28b9a287243fbdc6b33a536fe4b">
+        <source>Product with reference ({0}) is invisible in Moloni. Please change the product visibility.</source>
+        <target>El producto con referencia ({0}) es invisible en Moloni. Cambie la visibilidad del producto.</target>
+        <note>Line: </note>
+      </trans-unit>
       <trans-unit id="67509542f3351ede1bd24dcdb31fb1df">
         <source>Error fetching logs list</source>
         <target> Error al obtener la lista de registros</target>

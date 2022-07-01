@@ -119,7 +119,7 @@ class DummyTranslations
         $this->translator->trans('Document type not found', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Warning processing order ({0})', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Order already dicarded or created!', [], 'Modules.Molonies.Errors');
-        $this->translator->trans('Product with reference ({0}) in invisible in Moloni. Please change the product visibility.', [], 'Modules.Molonies.Errors');
+        $this->translator->trans('Product with reference ({0}) is invisible in Moloni. Please change the product visibility.', [], 'Modules.Molonies.Errors');
     }
 
     public function common(): void
