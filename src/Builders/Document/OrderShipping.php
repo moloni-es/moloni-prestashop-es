@@ -24,15 +24,16 @@
 
 namespace Moloni\Builders\Document;
 
+use Order;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\Interfaces\BuilderItemInterface;
+use Moloni\Enums\Boolean;
 use Moloni\Enums\ProductType;
 use Moloni\Exceptions\Document\MoloniDocumentShippingException;
 use Moloni\Exceptions\Document\MoloniDocumentShippingTaxException;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\MoloniException;
 use Moloni\Tools\Settings;
-use Order;
 
 class OrderShipping implements BuilderItemInterface
 {
@@ -258,7 +259,11 @@ class OrderShipping implements BuilderItemInterface
      */
     public function search(): OrderShipping
     {
-        return $this->getByReference();
+        $this
+            ->getByReference()
+            ->afterSearch();
+
+        return $this;
     }
 
     //          PRIVATES          //
@@ -279,6 +284,28 @@ class OrderShipping implements BuilderItemInterface
             ->setPrice()
             ->setTaxes()
             ->setDiscounts();
+
+        return $this;
+    }
+
+    /**
+     * After search verifications
+     *
+     * @throws MoloniDocumentShippingException
+     */
+    protected function afterSearch(): OrderShipping
+    {
+        if (!empty($this->moloniProduct) && $this->moloniProduct['visible'] === Boolean::NO) {
+            throw new MoloniDocumentShippingException(
+                'Product with reference ({0}) in invisible in Moloni. Please change the product visibility.',
+                [
+                    '{0}' => $this->reference
+                ],
+                [
+                    'product' => $this->moloniProduct
+                ]
+            );
+        }
 
         return $this;
     }
@@ -488,6 +515,13 @@ class OrderShipping implements BuilderItemInterface
                 'search' => [
                     'field' => 'reference',
                     'value' => $this->reference,
+                ],
+                'filter' => [
+                    [
+                        'field' => 'visible',
+                        'comparison' => 'in',
+                        'value' => '[0, 1]'
+                    ],
                 ],
             ],
         ];

@@ -3,7 +3,7 @@
     {% for order in orderArray %}
         <tr>
             <form action="{{ path(createDocumentRoute, {filters: filters}) }}" method="post">
-                <input type="hidden" name="orderId" value="{{ order.id_order }}">
+                <input type="hidden" name="order_id" value="{{ order.id_order }}">
                 <input type="hidden" name="page" value="{{ paginator.currentPage }}">
                 <td>{{ order.date_add }}</td>
                 <td>{{ order.reference }}</td>

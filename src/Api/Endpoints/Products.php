@@ -174,6 +174,7 @@ class Products extends Endpoint
     private function getProductSegment(): string
     {
         return '
+            visible
             name
             productId
             type

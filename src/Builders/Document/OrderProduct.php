@@ -35,8 +35,9 @@ use Moloni\Builders\Document\Helpers\GetOrderProductTaxes;
 use Moloni\Builders\Interfaces\BuilderItemInterface;
 use Moloni\Builders\MoloniProductSimple;
 use Moloni\Builders\MoloniProductWithVariants;
-use Moloni\Enums\ProductInformation;
+use Moloni\Enums\Boolean;
 use Moloni\Enums\ProductType;
+use Moloni\Enums\ProductInformation;
 use Moloni\Exceptions\Document\MoloniDocumentProductException;
 use Moloni\Exceptions\Document\MoloniDocumentProductTaxException;
 use Moloni\Exceptions\MoloniApiException;
@@ -62,7 +63,7 @@ class OrderProduct implements BuilderItemInterface
      *
      * @var array
      */
-    protected $moloniProduct;
+    protected $moloniProduct = [];
 
     /**
      * Product warehouse id
@@ -261,11 +262,17 @@ class OrderProduct implements BuilderItemInterface
             $moloniVariantId = ProductAssociations::findByPrestashopCombinationId((int)$this->orderProduct['product_attribute_id']);
 
             if ($moloniVariantId !== null) {
-                return $this->getById($moloniVariantId->getMlVariantId());
+                $this->getById($moloniVariantId->getMlVariantId());
             }
         }
 
-        return $this->getByReference();
+        if (empty($this->moloniProduct)) {
+            $this->getByReference();
+        }
+
+        $this->afterSearch();
+
+        return $this;
     }
 
     //          PRIVATES          //
@@ -286,6 +293,28 @@ class OrderProduct implements BuilderItemInterface
             ->setTaxes()
             ->setPrice()
             ->setType();
+
+        return $this;
+    }
+
+    /**
+     * After search verifications
+     *
+     * @throws MoloniDocumentProductException
+     */
+    protected function afterSearch(): OrderProduct
+    {
+        if (!empty($this->moloniProduct) && $this->moloniProduct['visible'] === Boolean::NO) {
+            throw new MoloniDocumentProductException(
+                'Product with reference ({0}) in invisible in Moloni. Please change the product visibility.',
+                [
+                    '{0}' => $this->reference
+                ],
+                [
+                    'product' => $this->moloniProduct
+                ]
+            );
+        }
 
         return $this;
     }
@@ -531,6 +560,13 @@ class OrderProduct implements BuilderItemInterface
                 'search' => [
                     'field' => 'reference',
                     'value' => $this->reference,
+                ],
+                'filter' => [
+                    [
+                        'field' => 'visible',
+                        'comparison' => 'in',
+                        'value' => '[0, 1]'
+                    ],
                 ],
                 'includeVariants' => true
             ],
