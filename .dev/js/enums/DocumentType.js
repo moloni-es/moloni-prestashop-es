@@ -6,6 +6,7 @@ const DocumentType = {
     PRO_FORMA_INVOICES: 'proFormaInvoices',
     SIMPLIFIED_INVOICES: 'simplifiedInvoices',
     ESTIMATE: 'estimate',
+    BILLS_OF_LADING: 'billsOfLadings',
 }
 
 export {DocumentType};
