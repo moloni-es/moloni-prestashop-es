@@ -466,34 +466,25 @@ class OrderProduct implements BuilderItemInterface
      */
     public function setDiscounts(?float $cuponDiscountsPercentage = 0): OrderProduct
     {
+        $discount = 0;
+        $price = $this->price;
+
         if ((float)$this->orderProduct['reduction_percent'] > 0) {
-            // If cupon value is set, revert percentage value
-            if ($cuponDiscountsPercentage > 0) {
-                $price = (float)$this->orderProduct['product_price'];
+            $discount = (float)$this->orderProduct['reduction_percent'];
 
-                $discountedValue = 0;
-                $discountedValue += $this->calculateDiscountedValue($price, (float)$this->orderProduct['reduction_percent']);
-                $discountedValue += $this->calculateDiscountedValue($price, $cuponDiscountsPercentage);
-
-                $discount = $this->calculateDiscountPercentage($price, $discountedValue);
-            } else {
-                $discount = (float)$this->orderProduct['reduction_percent'];
-            }
+            // This types of discounts are already discounted from the product, so we need to add them to price
+            $price = $this->calculateOriginalPrice($price, $discount);
         } elseif ((float)$this->orderProduct['reduction_amount_tax_excl'] > 0) {
-            $price = (float)$this->orderProduct['product_price'];
+            // This types of discounts are already discounted from the product, so we need to add them to price
+            $price = (float)$this->orderProduct['product_price'] + (float)$this->orderProduct['reduction_amount_tax_excl'];
 
-            $discountedValue = (float)$this->orderProduct['reduction_amount_tax_excl'];
-
-            if ($cuponDiscountsPercentage > 0) {
-                $discountedValue += $this->calculateDiscountedValue($price, $cuponDiscountsPercentage);
-            }
-
-            $discount = $this->calculateDiscountPercentage($price, $discountedValue);
-        } else {
+            $discount = $this->calculateDiscountPercentage($price, (float)$this->orderProduct['reduction_amount_tax_excl']);
+        } elseif ($cuponDiscountsPercentage > 0) {
             $discount = $cuponDiscountsPercentage;
         }
 
         $this->discount = $discount;
+        $this->price = $price;
 
         return $this;
     }
