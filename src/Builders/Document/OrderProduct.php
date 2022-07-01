@@ -306,7 +306,7 @@ class OrderProduct implements BuilderItemInterface
     {
         if (!empty($this->moloniProduct) && $this->moloniProduct['visible'] === Boolean::NO) {
             throw new MoloniDocumentProductException(
-                'Product with reference ({0}) in invisible in Moloni. Please change the product visibility.',
+                'Product with reference ({0}) is invisible in Moloni. Please change the product visibility.',
                 [
                     '{0}' => $this->reference
                 ],
