@@ -1,3 +1,5 @@
+import DisableAllButtons from "../helpers/disableAllButtons";
+
 export default class Paginator {
     constructor() {
         this.startObservers();
@@ -23,6 +25,7 @@ export default class Paginator {
             return;
         }
 
+        DisableAllButtons();
         pageNumberInput.attr('disabled', true);
 
         if (page > psmax) {

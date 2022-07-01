@@ -1,3 +1,5 @@
+import DisableAllButtons from "../helpers/disableAllButtons";
+
 export default class Filters {
     constructor(action) {
         this.action = action;
@@ -26,6 +28,8 @@ export default class Filters {
 
     doSearch() {
         let data = this.$filtersInputElements.serialize();
+
+        DisableAllButtons();
 
         window.location.href = this.action + "&" + data;
     }
