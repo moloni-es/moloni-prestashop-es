@@ -118,6 +118,8 @@ class Orders extends MoloniController
             Logs::addWarningLog([[$auxMessage, $auxIdentifiers], [$e->getMessage(), $e->getIdentifiers()]], $e->getData(), $orderId);
 
             $msg = $this->trans($auxMessage, 'Modules.Molonies.Errors', $auxIdentifiers);
+            $msg .= '<br>';
+            $msg .= $this->trans($e->getMessage(), 'Modules.Molonies.Errors', $e->getIdentifiers());
 
             $this->addWarningMessage($msg, $e->getData());
         } catch (MoloniDocumentException|MoloniException $e) {
@@ -127,6 +129,8 @@ class Orders extends MoloniController
             Logs::addErrorLog([[$auxMessage, $auxIdentifiers], [$e->getMessage(), $e->getIdentifiers()]], $e->getData(), $orderId);
 
             $msg = $this->trans($auxMessage, 'Modules.Molonies.Errors', $auxIdentifiers);
+            $msg .= '<br>';
+            $msg .= $this->trans($e->getMessage(), 'Modules.Molonies.Errors', $e->getIdentifiers());
 
             $this->addErrorMessage($msg, $e->getData());
         } catch (PrestaShopDatabaseException|PrestaShopException $e) {
