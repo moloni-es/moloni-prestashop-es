@@ -479,8 +479,19 @@ class OrderProduct implements BuilderItemInterface
             $price = (float)$this->orderProduct['product_price'] + (float)$this->orderProduct['reduction_amount_tax_excl'];
 
             $discount = $this->calculateDiscountPercentage($price, (float)$this->orderProduct['reduction_amount_tax_excl']);
-        } elseif ($cuponDiscountsPercentage > 0) {
-            $discount = $cuponDiscountsPercentage;
+        }
+
+        if ($cuponDiscountsPercentage > 0) {
+            if ($discount > 0) {
+                // This discount needs to be calculated with inflated price
+                $discountValue = $this->calculateDiscountedValue($price, $discount);
+                // This discount needs to be calculated with previous discounts already applied
+                $discountValue += $this->calculateDiscountedValue($this->price, $cuponDiscountsPercentage);
+
+                $discount = $this->calculateDiscountPercentage($discountValue);
+            } else {
+                $discount = $cuponDiscountsPercentage;
+            }
         }
 
         $this->discount = $discount;
