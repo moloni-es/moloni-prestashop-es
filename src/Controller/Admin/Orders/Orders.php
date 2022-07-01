@@ -98,7 +98,7 @@ class Orders extends MoloniController
     public function create(): RedirectResponse
     {
         $orderId = (int)Tools::getValue('order_id', 0);
-        $documentType = Tools::getValue('document_type');
+        $documentType = Tools::getValue('document_type', null);
         $fromOrderPage = Tools::getValue('from_order_page', false);
 
         $page = (int)Tools::getValue('page', 1);
