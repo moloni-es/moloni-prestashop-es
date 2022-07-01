@@ -488,7 +488,7 @@ class OrderProduct implements BuilderItemInterface
                 // This discount needs to be calculated with previous discounts already applied
                 $discountValue += $this->calculateDiscountedValue($this->price, $cuponDiscountsPercentage);
 
-                $discount = $this->calculateDiscountPercentage($discountValue);
+                $discount = $this->calculateDiscountPercentage($price, $discountValue);
             } else {
                 $discount = $cuponDiscountsPercentage;
             }
