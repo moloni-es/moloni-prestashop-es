@@ -23,7 +23,6 @@
 
 namespace Moloni\Install;
 
-use DateTime;
 use Db;
 use Moloni\Enums\DocumentIdentifiers;
 use Shop;
@@ -36,11 +35,8 @@ use Exception;
 use RuntimeException;
 use PrestaShopException;
 use PrestaShopDatabaseException;
-use Doctrine\Persistence\ObjectManager;
 use Moloni\Entity\MoloniApp;
-use Moloni\Entity\MoloniOrderDocuments;
 use Moloni\Repository\MoloniAppRepository;
-use Moloni\Repository\MoloniOrderDocumentsRepository;
 
 class Installer
 {
@@ -211,39 +207,35 @@ class Installer
             return true;
         }
 
-        /** @var MoloniOrderDocumentsRepository $orderDocumentsRepository */
-        $orderDocumentsRepository = $this->module->get('doctrine')->getRepository(MoloniOrderDocuments::class);
+        $newDocumentsTableDocuments = $database->executeS("SELECT * FROM " . _DB_PREFIX_ . "moloni_order_documents LIMIT 1");
 
         // New table already has documents, do not continue
-        if (!empty($orderDocumentsRepository->findOneBy([]))) {
+        if (!empty($newDocumentsTableDocuments)) {
             return true;
         }
 
-        /** @var ObjectManager $entityManager */
-        $entityManager = $this->module->get('doctrine')->getManager();
         $shopId = (int)Shop::getContextShopID();
 
         foreach ($oldDocumentsTableDocuments as $oldDocumentsTableDocument) {
-            $document = new MoloniOrderDocuments();
-
-            $document->setShopId($shopId);
-            $document->setCompanyId((int)$oldDocumentsTableDocument['company_id']);
-            $document->setOrderId((int)$oldDocumentsTableDocument['id_order']);
-
             // Order is discarded in old plugin
             if ((int)$oldDocumentsTableDocument['invoice_status'] === 2) {
-                $document->setDocumentId(DocumentIdentifiers::DISCARDED);
+                $documentId = DocumentIdentifiers::DISCARDED;
             } else {
-                $document->setDocumentId((int)$oldDocumentsTableDocument['document_id']);
+                $documentId = (int)$oldDocumentsTableDocument['document_id'];
             }
 
-            $document->setOrderReference($oldDocumentsTableDocument['order_ref']);
-            $document->setDocumentType($oldDocumentsTableDocument['invoice_type']);
-            $document->setCreatedAt(new DateTime($oldDocumentsTableDocument['invoice_date']));
-
-            // Save entry
-            $entityManager->persist($document);
-            $entityManager->flush();
+            $database->insert(
+                'moloni_order_documents',
+                [
+                    'shop_id' => $shopId,
+                    'company_id' => (int)$oldDocumentsTableDocument['company_id'],
+                    'order_id' => (int)$oldDocumentsTableDocument['id_order'],
+                    'document_id' => $documentId,
+                    'order_reference' => $oldDocumentsTableDocument['order_ref'],
+                    'document_type' => $oldDocumentsTableDocument['invoice_type'],
+                    'created_at' => $oldDocumentsTableDocument['invoice_date'],
+                ]
+            );
         }
 
         return true;
