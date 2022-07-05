@@ -303,6 +303,7 @@ class DocumentFromOrder implements BuilderInterface
         $this->relatedWithTotal = 0;
 
         $this->moloniDocument = [];
+        $this->createProps = [];
     }
 
     //          PRIVATES          //
