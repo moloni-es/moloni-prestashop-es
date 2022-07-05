@@ -257,6 +257,12 @@ class Tools extends MoloniController
 
     public function logout(): RedirectResponse
     {
+        try {
+            (new WebhookDeleteAll())->handle();
+        } catch (MoloniException $e) {
+            // catch nothing
+        }
+
         return $this->redirectToLogin();
     }
 }
