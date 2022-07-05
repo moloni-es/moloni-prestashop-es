@@ -22,5 +22,10 @@ Company select
     -webkit-justify-content: center;
     -ms-flex-pack: center;
     justify-content: center;
+
+    img {
+      max-width: 100%;
+      object-fit: contain;
+    }
   }
 }
