@@ -1041,6 +1041,10 @@ class MoloniProductWithVariants implements BuilderInterface
      */
     protected function shouldSyncCategories(): bool
     {
+        if (!$this->productExists()) {
+            return true;
+        }
+
         return in_array(SyncFields::CATEGORIES, $this->syncFields, true);
     }
 
