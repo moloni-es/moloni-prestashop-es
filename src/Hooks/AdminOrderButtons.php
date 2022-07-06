@@ -28,6 +28,7 @@ use Moloni\Api\MoloniApi;
 use Moloni\Entity\MoloniOrderDocuments;
 use Moloni\Enums\MoloniRoutes;
 use Moloni\Repository\MoloniOrderDocumentsRepository;
+use PrestaShopBundle\Translation\Translator;
 use PrestaShopBundle\Translation\TranslatorInterface;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Doctrine\Persistence\ManagerRegistry;
@@ -60,11 +61,11 @@ class AdminOrderButtons extends AbstractHookAction
      * @param array $params
      * @param Router $router
      * @param ManagerRegistry|LegacyManagerRegistry $doctrine
-     * @param TranslatorInterface $translator
+     * @param TranslatorInterface|Translator $translator
      *
      * @throws TypeException
      */
-    public function __construct(array &$params, Router $router, $doctrine, TranslatorInterface  $translator)
+    public function __construct(array &$params, Router $router, $doctrine, $translator)
     {
         $this->router = $router;
         $this->translator = $translator;
