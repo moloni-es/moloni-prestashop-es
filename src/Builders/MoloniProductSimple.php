@@ -893,7 +893,11 @@ class MoloniProductSimple implements BuilderInterface
      */
     protected function shouldSyncCategories(): bool
     {
-        return in_array(SyncFields::CATEGORIES, $this->syncFields, true);
+        if (!$this->productExists()) {
+            return true;
+        }
+
+        return in_array(SyncFields::CATEGORIES, $this->syncFields, true) ;
     }
 
     /**
