@@ -50,7 +50,7 @@ VALUES  (@idLang, 'Translations exported sucessfully!', 'Traducciones exportadas
         (@idLang, 'No information to show!', 'No hay información que mostrar', 'ModulesMoloniesCommon'),
         (@idLang, 'Your account does not have access to any eligible company.', 'Tu cuenta no tiene acceso a ninguna empresa.', 'ModulesMoloniesCommon'),
         (@idLang, 'Create account', 'Crear una cuenta', 'ModulesMoloniesCommon'),
-        (@idLang, 'I don\''t have an account yet.', 'Todavía no tengo una cuenta.', 'ModulesMoloniesCommon'),
+        (@idLang, "I don\'t have an account yet.", 'Todavía no tengo una cuenta.', 'ModulesMoloniesCommon'),
         (@idLang, 'Discard order', 'Descartar pedido', 'ModulesMoloniesCommon'),
         (@idLang, 'Synchronize stocks', 'Sincronizar stocks ', 'ModulesMoloniesCommon'),
         (@idLang, 'Consult logs', 'Consultar logs', 'ModulesMoloniesCommon'),
