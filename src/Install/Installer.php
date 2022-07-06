@@ -445,6 +445,7 @@ class Installer
 
         $sqlStatement = 'SET @idLang = ' . $languageId . ';' . PHP_EOL;
         $sqlStatement .= $this->getSqlStatements($translationsFile[0]);
+        $sqlStatement = str_replace(["\n", "\r"], '', $sqlStatement);
 
         $database->execute($sqlStatement);
 
