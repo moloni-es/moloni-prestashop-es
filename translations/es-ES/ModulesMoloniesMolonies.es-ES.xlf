@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="admin745p3ar3j" source-language="es-ES" target-language="es-ES" datatype="plaintext">
+    <body>
+      <trans-unit id="5811d9162f7a838934f757488d6cb918">
+        <source>Moloni Spain</source>
+        <target>Moloni España</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="ae22059c109bd08cba6ddc9739a5f6d3">
+        <source>Automatic document creation with real time stock synchronization and powerful sales analysis.</source>
+        <target>Creación automática de documentos con sincronización de existencias en tiempo real y potente análisis de ventas.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="3a5b822a7c35cadd36379e837f03353a">
+        <source>Are you sure you want to unnistall this module?</source>
+        <target>¿Está seguro de que desea desinstalar este módulo?</target>
+        <note>Line: </note>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

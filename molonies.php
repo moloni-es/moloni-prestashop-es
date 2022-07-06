@@ -56,16 +56,16 @@ class MoloniEs extends Module
 
         parent::__construct();
 
-        $this->displayName = $this->trans('Moloni Spain', [], 'Modules.Molonies.Admin');
+        $this->displayName = $this->trans('Moloni Spain', [], 'Modules.Molonies.Molonies');
         $this->description = $this->trans(
             'Automatic document creation with real time stock synchronization and powerful sales analysis.',
             [],
-            'Modules.Molonies.Admin'
+            'Modules.Molonies.Molonies'
         );
         $this->confirmUninstall = $this->trans(
             'Are you sure you want to unnistall this module?',
             [],
-            'Modules.Molonies.Admin'
+            'Modules.Molonies.Molonies'
         );
 
         $this->autoload();
