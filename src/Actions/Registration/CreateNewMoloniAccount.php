@@ -31,6 +31,8 @@ use Moloni\Exceptions\MoloniException;
 
 class CreateNewMoloniAccount
 {
+    private $agentKey = '6ui8qs7jn3';
+
     private $formData;
 
     /**
@@ -53,22 +55,33 @@ class CreateNewMoloniAccount
     private function handle(): void
     {
         $props = [
-            'data' => [
-                'administratorName' => $this->formData['username'],
-                'administratorEmail' => $this->formData['email'],
-                'administratorPwd' => $this->formData['password'],
-                'administratorCell' => $this->formData['phone'],
-                'vat' => $this->formData['vat'],
-                'name' => $this->formData['companyName'],
-                'countryId' => $this->formData['country'],
-                'slug' => $this->formData['slug'],
-                'languageId' => Languages::ES,
-                'conditionsAccepted' => $this->formData['serviceTerms'],
-            ]
+            'agent' => $this->agentKey,
+            'administratorName' => $this->formData['username'],
+            'administratorEmail' => $this->formData['email'],
+            'administratorPwd' => $this->formData['password'],
+            'administratorCell' => $this->formData['phone'],
+            'vat' => $this->formData['vat'],
+            'name' => $this->formData['companyName'],
+            'slug' => $this->formData['slug'],
+            'countryId' => (int)$this->formData['country'],
+            'languageId' => Languages::ES,
+            'newsletterAccepted' => (bool)$this->formData['newsletter'],
+            'conditionsAccepted' => (bool)$this->formData['serviceTerms'],
+            'businessAreas' => [],
         ];
 
+        if ($this->formData['businessType'] === 'custom') {
+            $props['businessAreas'][] = [
+                'title' => $this->formData['businessTypeName']
+            ];
+        } else {
+            $props['businessAreas'][] = [
+                'businessAreaId' => $this->formData['businessType']
+            ];
+        }
+
         try {
-            $mutation = MoloniApiClient::registration()->mutationCompanySignUp($props);
+            $mutation = MoloniApiClient::registration()->mutationSignUpCompany(['data' => $props]);
         } catch (MoloniApiException $e) {
             throw new MoloniException('Error creating account', [], $e->getData());
         }
