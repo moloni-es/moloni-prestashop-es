@@ -33,11 +33,11 @@ class Registration extends Endpoint
      *
      * @throws MoloniApiException
      */
-    public function mutationCompanySignUp(?array $variables = []): array
+    public function mutationSignUpCompany(?array $variables = []): array
     {
-        $query = 'mutation companySignUp($data: CompanySignUp!)
+        $query = 'mutation signUpCompany($data: CompanySignUpInput!)
         {
-            companySignUp(data: $data)
+            signUpCompany(data: $data)
         }';
 
         return $this->simplePost($query, $variables);

@@ -64,7 +64,7 @@ class RegistrationFormDataProvider implements FormDataProviderInterface
     {
         $props = [
             'options' => [
-                'defaultLanguageId' => Languages::EN
+                'defaultLanguageId' => Languages::ES
             ]
         ];
 
