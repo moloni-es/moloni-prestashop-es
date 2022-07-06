@@ -110,10 +110,14 @@ class Installer
      * @return bool
      *
      * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
      */
     public function install(): bool
     {
-        return $this->detectOldPluginTables() && $this->createCommon() && $this->importOldPluginDocuments();
+        return $this->installTranslations()
+            && $this->detectOldPluginTables()
+            && $this->createCommon()
+            && $this->importOldPluginDocuments();
     }
 
     /**
@@ -255,13 +259,7 @@ class Installer
         }
 
         foreach ($this->tabs as $tab) {
-            $tabName = $this->module->getTranslator()->trans(
-                $tab['tabName'],
-                [],
-                'Modules.Molonies.Admin'
-            );
-
-            if (!$this->installTab($tab['name'], $tab['parent'], $tabName, $tab['logo'])) {
+            if (!$this->installTab($tab['name'], $tab['parent'], $tab['tabName'], $tab['logo'])) {
                 return false;
             }
         }
@@ -318,7 +316,7 @@ class Installer
     private function installTab(string $className, string $parentClassName, string $tabName, string $logo): bool
     {
         try {
-            $tabId = (int) Tab::getIdFromClassName($className);
+            $tabId = (int)Tab::getIdFromClassName($className);
 
             if (!$tabId) {
                 $tabId = null;
@@ -330,10 +328,17 @@ class Installer
             $tab->name = [];
 
             foreach (Language::getLanguages() as $lang) {
-                $tab->name[$lang['id_lang']] = $tabName;
+                $translatedTab = $this->module->getTranslator()->trans(
+                    $tabName,
+                    [],
+                    'Modules.Molonies.Admin',
+                    $lang['locale']
+                );
+
+                $tab->name[$lang['id_lang']] = $translatedTab ?? $tabName;
             }
 
-            $tab->id_parent = (int) Tab::getIdFromClassName($parentClassName);
+            $tab->id_parent = (int)Tab::getIdFromClassName($parentClassName);
             $tab->module = $this->module->name;
 
             if (!empty($logo)) {
@@ -356,7 +361,7 @@ class Installer
     private function uninstallTab(string $className): bool
     {
         try {
-            $tabId = (int) Tab::getIdFromClassName($className);
+            $tabId = (int)Tab::getIdFromClassName($className);
 
             if ($tabId) {
                 (new Tab($tabId))->delete();
@@ -398,6 +403,50 @@ class Installer
                 throw new RuntimeException(sprintf($msg, end($parts)));
             }
         }
+
+        return true;
+    }
+
+    /**
+     * Manually install translations on older instalations
+     *
+     * @return bool
+     *
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
+    private function installTranslations(): bool
+    {
+        // Instalation supports new translations loading, do nothing
+        if (version_compare(_PS_VERSION_, '1.7.8', ">=")) {
+            return true;
+        }
+
+        $database = Db::getInstance();
+
+        $sql = 'SELECT * FROM ' . _DB_PREFIX_ . 'translation
+                where `domain` like "ModulesMolonies%" LIMIT 1';
+
+        $translations = $database->executeS($sql);
+
+        // Translations already installed, do nothing
+        if (!empty($translations)) {
+            return true;
+        }
+
+        $languageId = Language::getIdByIso('ES');
+
+        // Spain's language not installed, do nothing
+        if ($languageId === null) {
+            return true;
+        }
+
+        $translationsFile = glob($this->module->getLocalPath() . '/src/Install/sql/translations/es.sql');
+
+        $sqlStatement = 'SET @idLang = ' . $languageId . ';' . PHP_EOL;
+        $sqlStatement .= $this->getSqlStatements($translationsFile[0]);
+
+        $database->execute($sqlStatement);
 
         return true;
     }
