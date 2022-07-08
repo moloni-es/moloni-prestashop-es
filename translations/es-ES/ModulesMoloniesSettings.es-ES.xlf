@@ -397,6 +397,11 @@ Puedes gestionar las series de documentos de tu empresa directamente en tu cuent
         <target>Factura</target>
         <note>Line: </note>
       </trans-unit>
+      <trans-unit id="d6d7c5a3f130174a472f0768c912a796">
+        <source>Receipt</source>
+        <target>Cobro de factura</target>
+        <note>Line: </note>
+      </trans-unit>
       <trans-unit id="75a19f56f1a64cbc25e3e7eb7938c48d">
         <source>Invoice + Receipt</source>
         <target>Factura + Cobro de factura</target>
