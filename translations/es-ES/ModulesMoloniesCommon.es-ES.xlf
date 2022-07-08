@@ -37,6 +37,11 @@
         <target>Factura</target>
         <note>Line: </note>
       </trans-unit>
+      <trans-unit id="d6d7c5a3f130174a472f0768c912a796">
+        <source>Receipt</source>
+        <target>Cobro de factura</target>
+        <note>Line: </note>
+      </trans-unit>
       <trans-unit id="75a19f56f1a64cbc25e3e7eb7938c48d">
         <source>Invoice + Receipt</source>
         <target>Factura + Cobro de factura</target>
@@ -322,16 +327,6 @@
         <target>Buscar email</target>
         <note>Line: </note>
       </trans-unit>
-      <trans-unit id="4bd9ef088a14b5f6fd9ef86e6f33037f">
-        <source>Need help?</source>
-        <target>¿Necesitas ayuda?</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="8d81b2b7f48df5ffee373cd8a07fad78">
-        <source>Check our FAQs</source>
-        <target>Consulta nuestras guías</target>
-        <note>Line: </note>
-      </trans-unit>
       <trans-unit id="4c89a4828cdeb4b0e246d7a5f6057d11">
         <source>I don't have an account yet.</source>
         <target>Todavía no tengo una cuenta.</target>
@@ -427,69 +422,14 @@
         <target>Datos de la operación</target>
         <note>Line: </note>
       </trans-unit>
+      <trans-unit id="4bd9ef088a14b5f6fd9ef86e6f33037f">
+        <source>Need help?</source>
+        <target>¿Necesitas ayuda?</target>
+        <note>Line: </note>
+      </trans-unit>
       <trans-unit id="237c9acb1e8d54011876aeb93045e445">
         <source>Check our tutorials</source>
         <target>Consulta nuestros tutoriales</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="867cee98fdd724e7d5bc87f61ce657bc">
-        <source>Passwords do not match</source>
-        <target>Las contraseñas no coinciden</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="19bc7ba72ef4e327ed6da4afb0a96b1c">
-        <source>Total results</source>
-        <target>Resultados totales </target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="b7c454456bb33f0e7f09c65b8b47957d">
-        <source>Please wait, importing in progress</source>
-        <target>Por favor, espera, importación en curso</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="254cec87ba5d0dac94cf0bee486d7c6f">
-        <source>Process complete</source>
-        <target>Proceso completo</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="5690482169be441ced17cf9967d74b80">
-        <source>Please wait, syncing in progress</source>
-        <target>Por favor, espera, sincronización en curso</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="4e3b13c8a814d809ec9d88767c3eb33b">
-        <source>{0} products processed</source>
-        <target>{0} productos procesados</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="1a299291abb24001b9d354bcf12f78f3">
-        <source>Please wait, exporting in progress</source>
-        <target>Por favor, espera, exportación en curso</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="4a2728d1b582d99a3b928afd3ea9992c">
-        <source>Synchronize stocks</source>
-        <target>Sincronizar stocks </target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="43f6558ff7d14c4a6a5db75a5db31b95">
-        <source>This tool will fetch all your Moloni products that were updated on the last 7 days, and synchronize your Prestashop stocks with the ones on your Moloni account.</source>
-        <target>Esta herramienta buscará todos tus productos de Moloni que fueron actualizados en los últimos 7 días, y sincronizará tus stocks de Prestashop con los de tu cuenta de Moloni.</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="334d49f9f7576d982ff0dad8b64f3683">
-        <source>When the tool is finish, all your Prestashop stock will be updated to match the stock on your Moloni account.</source>
-        <target>Cuando la herramienta finalice, todo tu stock de Prestashop será actualizado para que coincida con el stock de tu cuenta Moloni.</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="3714d8ced882d0a4372c1f32704d5b92">
-        <source>Please keep this window open until the process finishes.</source>
-        <target>Por favor, mantén esta ventana abierta hasta que termine el proceso.</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="88062af3aba20177b6aa8cab54a68753">
-        <source>Are you sure you want to continue? </source>
-        <target>¿Seguro que quieres continuar?</target>
         <note>Line: </note>
       </trans-unit>
     </body>

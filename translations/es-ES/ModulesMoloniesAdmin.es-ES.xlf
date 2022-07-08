@@ -2,21 +2,6 @@
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
   <file original="admin745p3ar3j" source-language="es-ES" target-language="es-ES" datatype="plaintext">
     <body>
-      <trans-unit id="5811d9162f7a838934f757488d6cb918">
-        <source>Moloni Spain</source>
-        <target>Moloni España</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="ae22059c109bd08cba6ddc9739a5f6d3">
-        <source>Automatic document creation with real time stock synchronization and powerful sales analysis.</source>
-        <target>Creación automática de documentos con sincronización de stocks en tiempo real y potente análisis de ventas.</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="3a5b822a7c35cadd36379e837f03353a">
-        <source>Are you sure you want to unnistall this module?</source>
-        <target>¿Estás seguro de que quieres anular la instalación de este módulo?</target>
-        <note>Line: </note>
-      </trans-unit>
       <trans-unit id="ce2b5243877d49672ef09ae84e15b0d8">
         <source>Error loading installation files!</source>
         <target>Error al cargar los archivos de instalación.</target>
@@ -25,6 +10,11 @@
       <trans-unit id="a94c16ec47e3e79d886e909ddab8e3f0">
         <source>Error executing operation from %s!</source>
         <target>¡Error al ejecutar la operación de %s!</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="5811d9162f7a838934f757488d6cb918">
+        <source>Moloni Spain</source>
+        <target>Moloni España</target>
         <note>Line: </note>
       </trans-unit>
       <trans-unit id="7442e29d7d53e549b78d93c46b8cdcfc">

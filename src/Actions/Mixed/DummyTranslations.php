@@ -125,6 +125,7 @@ class DummyTranslations
     public function common(): void
     {
         $this->translator->trans('Invoice', [], 'Modules.Molonies.Common');
+        $this->translator->trans('Receipt', [], 'Modules.Molonies.Common');
         $this->translator->trans('Invoice + Receipt', [], 'Modules.Molonies.Common');
         $this->translator->trans('Purchase Order', [], 'Modules.Molonies.Common');
         $this->translator->trans('Pro Forma Invoice', [], 'Modules.Molonies.Common');
@@ -157,6 +158,7 @@ class DummyTranslations
     public function settings(): void
     {
         $this->translator->trans('Invoice', [], 'Modules.Molonies.Settings');
+        $this->translator->trans('Receipt', [], 'Modules.Molonies.Settings');
         $this->translator->trans('Invoice + Receipt', [], 'Modules.Molonies.Settings');
         $this->translator->trans('Purchase Order', [], 'Modules.Molonies.Settings');
         $this->translator->trans('Pro Forma Invoice', [], 'Modules.Molonies.Settings');
