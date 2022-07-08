@@ -512,16 +512,17 @@ class OrderShipping implements BuilderItemInterface
     {
         $variables = [
             'options' => [
-                'search' => [
-                    'field' => 'reference',
-                    'value' => $this->reference,
-                ],
                 'filter' => [
                     [
                         'field' => 'visible',
                         'comparison' => 'in',
                         'value' => '[0, 1]'
                     ],
+                    [
+                        'field' => 'reference',
+                        'comparison' => 'eq',
+                        'value' => $this->reference
+                    ]
                 ],
             ],
         ];
