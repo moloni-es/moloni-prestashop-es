@@ -945,9 +945,12 @@ class MoloniProductWithVariants implements BuilderInterface
     {
         $variables = [
             'options' => [
-                'search' => [
-                    'field' => 'reference',
-                    'value' => $this->reference,
+                'filter' => [
+                    [
+                        'field' => 'reference',
+                        'comparison' => 'eq',
+                        'value' => $this->reference
+                    ]
                 ],
             ],
         ];
