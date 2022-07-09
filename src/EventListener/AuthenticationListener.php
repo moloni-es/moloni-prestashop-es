@@ -42,28 +42,26 @@ class AuthenticationListener
             /** @var MoloniController $actionController */
             $actionController = $controller[0];
 
-            if (!MoloniApi::hasValidCompany()) {
-                if (MoloniApi::hasValidAuthentication() && !MoloniRoutes::isPartiallyAuthenticatedRoute($route)) {
-                    $event->setController(function () use ($actionController) {
-                        return $actionController->redirectToCompanySelect();
-                    });
-
-                    return;
+            if (MoloniApi::hasValidAuthentication()) {
+                if (MoloniApi::hasValidCompany()) {
+                    if (!MoloniRoutes::isFullyAuthenticatedRoute($route)) {
+                        $event->setController(function () use ($actionController) {
+                            return $actionController->redirectToOrders();
+                        });
+                    }
+                } else {
+                    if (!MoloniRoutes::isPartiallyAuthenticatedRoute($route)) {
+                        $event->setController(function () use ($actionController) {
+                            return $actionController->redirectToCompanySelect();
+                        });
+                    }
                 }
-            }
-
-            if (MoloniRoutes::isFullyAuthenticatedRoute($route) && !MoloniApi::hasValidAuthentication()) {
-                $event->setController(function () use ($actionController) {
-                    return $actionController->redirectToLogin();
-                });
-
-                return;
-            }
-
-            if (MoloniRoutes::isNonAuthenticatedRoute($route) && MoloniApi::hasValidAuthentication()) {
-                $event->setController(function () use ($actionController) {
-                    return $actionController->redirectToOrders();
-                });
+            } else {
+                if (!MoloniRoutes::isNonAuthenticatedRoute($route)) {
+                    $event->setController(function () use ($actionController) {
+                        return $actionController->redirectToLogin();
+                    });
+                }
             }
         }
     }
