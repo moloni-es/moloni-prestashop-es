@@ -81,12 +81,12 @@ class MoloniRoutes
     public const ROUTES_PARTIALLY_AUTHENTICATED = [
         self::LOGIN_COMPANY_SELECT,
         self::LOGIN_COMPANY_SUBMIT,
-        self::LOGIN_RETRIEVE_CODE,
     ];
 
     public const ROUTES_NON_AUTHENTICATED = [
         self::LOGIN,
         self::LOGIN_SUBMIT,
+        self::LOGIN_RETRIEVE_CODE,
         self::REGISTRATION,
         self::REGISTRATION_VERIFY_FORM,
     ];
