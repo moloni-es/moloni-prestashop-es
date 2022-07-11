@@ -639,7 +639,7 @@ class PrestashopProductSimple implements BuilderInterface
      */
     protected function shouldSyncCategories(): bool
     {
-        return in_array(SyncFields::CATEGORIES, $this->syncFields, true);
+        return !$this->productExists() || in_array(SyncFields::CATEGORIES, $this->syncFields, true);
     }
 
     /**
