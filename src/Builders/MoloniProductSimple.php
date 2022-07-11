@@ -669,26 +669,33 @@ class MoloniProductSimple implements BuilderInterface
         }
 
         $categoriesNames = [];
-        $categoriesIds = $this->prestashopProduct->getCategories();
 
-        if (!empty($categoriesIds)) {
+        if (!empty($this->prestashopProduct->id_category_default)) {
             $languageId = (int)Configuration::get('PS_LANG_DEFAULT');
 
-            foreach ($categoriesIds as $categoriesId) {
-                // Skip root categories
-                if (in_array((int)$categoriesId, [1, 2])) {
-                    continue;
-                }
+            $categoryId = $this->prestashopProduct->id_category_default;
+            $failsafe = 0;
 
-                $name = (new Category($categoriesId, $languageId))->name ?? '';
+            do {
+                $categoryObj = new Category($categoryId, $languageId);
 
                 // For some reason sometimes this comes empty
-                if (empty($name)) {
-                    continue;
+                if (empty($categoryObj->name)) {
+                    break;
                 }
 
-                $categoriesNames[] = $name;
-            }
+                array_unshift($categoriesNames, $categoryObj->name);
+
+                // Skip root categories
+                if (in_array((int)$categoryObj->id_parent, [1, 2])) {
+                    break;
+                }
+
+                // Next category is this category parent
+                $categoryId = (int)$categoryObj->id_parent;
+
+                $failsafe++;
+            } while ($failsafe < 100 && $categoryId > 0);
         }
 
         if (empty($categoriesNames)) {
@@ -772,7 +779,7 @@ class MoloniProductSimple implements BuilderInterface
         }
 
         if (isset($this->moloniProduct['identifications']) && !empty($this->moloniProduct['identifications'])) {
-            foreach ($this->moloniProduct['identifications']  as $identification) {
+            foreach ($this->moloniProduct['identifications'] as $identification) {
                 if (!in_array($identification['type'], ['EAN13', 'ISBN'], true)) {
                     $identifications[] = $identification;
                 }
@@ -900,7 +907,7 @@ class MoloniProductSimple implements BuilderInterface
             return true;
         }
 
-        return in_array(SyncFields::CATEGORIES, $this->syncFields, true) ;
+        return in_array(SyncFields::CATEGORIES, $this->syncFields, true);
     }
 
     /**
