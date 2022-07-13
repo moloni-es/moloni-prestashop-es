@@ -55,7 +55,7 @@ class ProductSave extends AbstractHookAction
             SyncLogs::prestashopProductAddTimeout($this->productId);
             $product = new Product($this->productId, true, Configuration::get('PS_LANG_DEFAULT'));
 
-            if ($product->product_type === 'combinations') {
+            if ($product->product_type === 'combinations' && $product->hasCombinations()) {
                 $productBuilder = new MoloniProductWithVariants($product);
             } else {
                 $productBuilder = new MoloniProductSimple($product);

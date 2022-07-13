@@ -226,7 +226,7 @@ class OrderProduct implements BuilderItemInterface
         try {
             $product = new Product($this->orderProduct['product_id'], true, Configuration::get('PS_LANG_DEFAULT'));
 
-            if ($product->product_type === 'combinations') {
+            if ($product->product_type === 'combinations' && $product->hasCombinations()) {
                 $productBuilder = new MoloniProductWithVariants($product);
             } else {
                 $productBuilder = new MoloniProductSimple($product);
