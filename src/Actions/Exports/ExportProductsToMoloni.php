@@ -51,7 +51,7 @@ class ExportProductsToMoloni extends ExportProducts
             $product = new Product($productData['id_product'], true, $this->languageId);
 
             try {
-                if ($product->product_type === 'combinations') {
+                if ($product->product_type === 'combinations' && $product->hasCombinations()) {
                     $productBuilder = new MoloniProductWithVariants($product);
                 } else {
                     $productBuilder = new MoloniProductSimple($product);
