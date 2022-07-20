@@ -31,6 +31,7 @@ if (!defined('_PS_VERSION_')) {
 use Moloni\Hooks\ProductSave;
 use Moloni\Hooks\AdminOrderButtons;
 use Moloni\Hooks\OrderStatusUpdate;
+use Moloni\Hooks\ProductStockUpdate;
 use Moloni\Install\Installer;
 use Moloni\Services\MoloniContext;
 use PrestaShopBundle\Translation\TranslatorInterface;
@@ -49,7 +50,7 @@ class MoloniEs extends Module
         $this->tab = 'administration';
 
         $this->need_instance = 1;
-        $this->version = '2.0.73';
+        $this->version = '2.0.74';
         $this->ps_versions_compliancy = ['min' => '1.7.6', 'max' => _PS_VERSION_];
         $this->author = 'Moloni';
         $this->module_key = '63e30380b2942ec15c33bedd4f7ec90e';
@@ -251,6 +252,23 @@ class MoloniEs extends Module
         try {
             $this->initContext();
 
+            new ProductStockUpdate($params['id_product']);
+        } catch (Exception $e) {
+            // Do nothing
+        }
+    }
+
+    /**
+     * Called when a product stock is updated
+     *
+     * @param array $params
+     * @return void
+     */
+    public function hookActionUpdateQuantity(array $params): void
+    {
+        try {
+            $this->initContext();
+
             new ProductSave($params['id_product']);
         } catch (Exception $e) {
             // Do nothing
@@ -290,7 +308,7 @@ class MoloniEs extends Module
             $doctrine = $this->get('doctrine');
             /** @var Router $router */
             $router = $this->get('router');
-            /** @var TranslatorInterface  $translator */
+            /** @var TranslatorInterface $translator */
             $translator = $this->getTranslator();
 
             new AdminOrderButtons($params, $router, $doctrine, $translator);
