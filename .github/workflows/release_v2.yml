@@ -79,7 +79,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ steps.package-version.outputs.tag }}
-          release_name: Beta ${{ steps.package-version.outputs.title }}
+          release_name: ${{ steps.package-version.outputs.title }}
           body: ${{ steps.package-version.outputs.description }}
           draft: false
           prerelease: false
