@@ -78,6 +78,9 @@ class ProductStockUpdate extends AbstractHookAction
         }
     }
 
+    /**
+     * Let this conditions be the same to allow for updates or inserts if we are inserting or updating a product
+     */
     private function shouldExecuteHandle(): bool
     {
         if ($this->productId < 1) {

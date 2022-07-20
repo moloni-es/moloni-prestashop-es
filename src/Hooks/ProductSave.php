@@ -85,8 +85,7 @@ class ProductSave extends AbstractHookAction
         }
 
         if ((int)Settings::get('addProductsToMoloni') === Boolean::NO &&
-            (int)Settings::get('updateProductsToMoloni') === Boolean::NO &&
-            (int)Settings::get('syncStockToMoloni') === Boolean::NO) {
+            (int)Settings::get('updateProductsToMoloni') === Boolean::NO) {
             return false;
         }
 
