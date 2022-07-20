@@ -22,6 +22,8 @@
  * @noinspection PhpMultipleClassDeclarationsInspection
  */
 
+declare(strict_types=1);
+
 namespace Moloni\Tools;
 
 use Doctrine\ORM\EntityManager;
@@ -98,6 +100,11 @@ class SyncLogs
         return self::$syncLogsRepository->prestashopProductHasTimeOut($prestashopId);
     }
 
+    public static function prestashopProductStockHasTimeout(int $prestashopId): bool
+    {
+        return self::$syncLogsRepository->prestashopProductStockHasTimeout($prestashopId);
+    }
+
     //          SETS          //
 
     /**
@@ -111,6 +118,19 @@ class SyncLogs
     public static function productAddTimeout(int $moloniId, int $prestashopId): void
     {
         self::addTimeout($moloniId, $prestashopId);
+    }
+
+    /**
+     * Add log to a product stock update
+     *
+     * @param int $moloniId
+     * @param int $prestashopId
+     *
+     * @return void
+     */
+    public static function productStockAddTimeout(int $moloniId, int $prestashopId): void
+    {
+        self::addTimeout($moloniId, $prestashopId, SyncLogsType::PRODUCT_STOCK);
     }
 
     /**
@@ -141,22 +161,20 @@ class SyncLogs
 
     /**
      * Add product timeout
-     *
-     * @param int|null $moloniId
-     * @param int|null $prestashopId
-     *
-     * @return void
      */
-    private static function addTimeout(?int $moloniId = 0, ?int $prestashopId = 0): void
-    {
+    private static function addTimeout(
+        ?int $moloniId = 0,
+        ?int $prestashopId = 0,
+        int $type = SyncLogsType::PRODUCT
+    ): void {
         $shopId = (int)Shop::getContextShopID();
 
         $syncLog = new MoloniSyncLogs();
         $syncLog->setMoloniId($moloniId);
         $syncLog->setPrestashopId($prestashopId);
         $syncLog->setShopId($shopId);
-        $syncLog->setTypeId(SyncLogsType::PRODUCT);
-        $syncLog->setSyncDate(time());
+        $syncLog->setTypeId($type);
+        $syncLog->setSyncDate((string)time());
 
         try {
             self::$entityManager->persist($syncLog);

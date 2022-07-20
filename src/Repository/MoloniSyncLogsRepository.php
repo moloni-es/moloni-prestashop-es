@@ -22,11 +22,14 @@
  * @noinspection PhpMultipleClassDeclarationsInspection
  */
 
+declare(strict_types=1);
+
 namespace Moloni\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
+use Moloni\Enums\SyncLogsType;
 
 class MoloniSyncLogsRepository extends EntityRepository
 {
@@ -54,9 +57,25 @@ class MoloniSyncLogsRepository extends EntityRepository
         }
     }
 
-    public function prestashopProductHasTimeOut($productId): bool
+    /**
+     * Check if a product is locked for **stock sync**
+     */
+    public function prestashopProductStockHasTimeout(int $productId): bool
     {
-        return $this->findOneBy(['prestashopId' => $productId]) !== null;
+        return $this->prestashopProductHasTimeOut($productId, SyncLogsType::PRODUCT_STOCK);
+    }
+
+    /**
+     * Check if a product is locked for sync
+     */
+    public function prestashopProductHasTimeOut(int $productId, int $logType = SyncLogsType::PRODUCT): bool
+    {
+        $findConditions = [
+            'prestashopId' => $productId,
+            'typeId' => $logType
+        ];
+
+        return $this->findOneBy($findConditions) !== null;
     }
 
     public function moloniProductHasTimeOut($productId): bool

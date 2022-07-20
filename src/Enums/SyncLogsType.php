@@ -27,4 +27,5 @@ namespace Moloni\Enums;
 class SyncLogsType
 {
     public const PRODUCT = 1;
+    public const PRODUCT_STOCK = 2;
 }

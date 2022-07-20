@@ -34,7 +34,7 @@ use Moloni\Tools\Settings;
 use Moloni\Tools\SyncLogs;
 use Product;
 
-class ProductSave extends AbstractHookAction
+class ProductStockUpdate extends AbstractHookAction
 {
     private $productId;
 
@@ -64,8 +64,8 @@ class ProductSave extends AbstractHookAction
             if ($productBuilder->getMoloniProductId() !== 0) {
                 SyncLogs::moloniProductAddTimeout($productBuilder->getMoloniProductId());
 
-                if ((int)Settings::get('updateProductsToMoloni') === Boolean::YES) {
-                    $productBuilder->update();
+                if ((int)Settings::get('syncStockToMoloni') === Boolean::YES) {
+                    $productBuilder->updateStock();
                 }
             } elseif ((int)Settings::get('addProductsToMoloni') === Boolean::YES) {
                 $productBuilder->insert();
@@ -90,7 +90,7 @@ class ProductSave extends AbstractHookAction
             return false;
         }
 
-        if (SyncLogs::prestashopProductHasTimeout($this->productId)) {
+        if (SyncLogs::prestashopProductStockHasTimeout($this->productId)) {
             return false;
         }
 
