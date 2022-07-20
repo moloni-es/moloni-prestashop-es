@@ -43,7 +43,7 @@ class OrderDiscard extends AbstractOrderAction
     public function handle(): void
     {
         if ($this->documentRepository->findOneBy(['orderId' => $this->orderId])) {
-            throw new MoloniException('Order already dicarded or created!');
+            throw new MoloniException('Order already discarded or created!');
         }
 
         $document = new MoloniOrderDocuments();

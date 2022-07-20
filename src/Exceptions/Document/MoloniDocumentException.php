@@ -22,6 +22,8 @@
  * @noinspection PhpMultipleClassDeclarationsInspection
  */
 
+declare(strict_types=1);
+
 namespace Moloni\Exceptions\Document;
 
 use Exception;
@@ -30,11 +32,20 @@ class MoloniDocumentException extends Exception
 {
     protected $data;
     protected $identifiers;
+    protected $shouldCreateLog;
 
-    public function __construct($message, $identifiers = [], $data = [])
+    /**
+     * @param string $message
+     * @param array $identifiers
+     * @param array $data
+     * @param bool $shouldCreateLog
+     */
+    public function __construct($message, $identifiers = [], $data = [], bool $shouldCreateLog = true)
     {
         $this->data = $data;
         $this->identifiers = $identifiers;
+
+        $this->shouldCreateLog = $shouldCreateLog;
 
         parent::__construct($message);
     }
@@ -47,5 +58,10 @@ class MoloniDocumentException extends Exception
     public function getIdentifiers(): array
     {
         return $this->identifiers ?? [];
+    }
+
+    public function shoudCreateLog(): bool
+    {
+        return $this->shouldCreateLog;
     }
 }
