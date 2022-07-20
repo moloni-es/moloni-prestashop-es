@@ -72,16 +72,26 @@ class OrderStatusUpdate extends AbstractHookAction
             $auxMessage = 'Warning processing order ({0})';
             $auxIdentifiers = ['{0}' => isset($action) ? $action->getOrder()->reference : ''];
 
-            Logs::addWarningLog([[$auxMessage, $auxIdentifiers], [$e->getMessage(), $e->getIdentifiers()]], $e->getData(), $this->orderId);
+            Logs::addWarningLog(
+                [[$auxMessage, $auxIdentifiers], [$e->getMessage(), $e->getIdentifiers()]],
+                $e->getData(),
+                $this->orderId
+            );
         } catch (MoloniDocumentException|MoloniException $e) {
-            if (!empty(Settings::get('alertEmail'))) {
-                (new DocumentErrorMail(Settings::get('alertEmail'), ['order_id' => $this->orderId]))->handle();
+            if ($e->shoudCreateLog()) {
+                if (!empty(Settings::get('alertEmail'))) {
+                    (new DocumentErrorMail(Settings::get('alertEmail'), ['order_id' => $this->orderId]))->handle();
+                }
+
+                $auxMessage = 'Error processing order ({0})';
+                $auxIdentifiers = ['{0}' => isset($action) ? $action->getOrder()->reference : ''];
+
+                Logs::addErrorLog(
+                    [[$auxMessage, $auxIdentifiers], [$e->getMessage(), $e->getIdentifiers()]],
+                    $e->getData(),
+                    $this->orderId
+                );
             }
-
-            $auxMessage = 'Error processing order ({0})';
-            $auxIdentifiers = ['{0}' => isset($action) ? $action->getOrder()->reference : ''];
-
-            Logs::addErrorLog([[$auxMessage, $auxIdentifiers], [$e->getMessage(), $e->getIdentifiers()]], $e->getData(), $this->orderId);
         } catch (PrestaShopDatabaseException|PrestaShopException $e) {
             Logs::addErrorLog('Error getting prestashop order', ['message' => $e->getMessage()], $this->orderId);
         }

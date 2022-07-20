@@ -54,8 +54,14 @@ class OrderCreateDocument extends AbstractOrderAction
         /** @noinspection CallableParameterUseCaseInTypeContextInspection */
         $documentType = $documentType ?? Settings::get('documentType') ?? '';
 
-        if ($this->documentRepository->findOneBy(['orderId' => $this->orderId])) {
-            throw new MoloniException('Order already dicarded or created!');
+        $existingOrderDocument = $this->documentRepository->findOneBy(['orderId' => $this->orderId]);
+        if ($existingOrderDocument) {
+            throw new MoloniException(
+                'Order already discarded or created!',
+                $this->orderId,
+                $existingOrderDocument->toArray(),
+                false
+            );
         }
 
         $company = MoloniApiClient::companies()->queryCompany();

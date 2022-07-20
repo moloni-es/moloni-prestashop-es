@@ -433,7 +433,7 @@
         <note>Line: </note>
       </trans-unit>
       <trans-unit id="3b6ad5488a34c1daee960c12ff7d673a">
-        <source>Order already dicarded or created!</source>
+        <source>Order already discarded or created!</source>
         <target>Pedido creado o descartado</target>
         <note>Line: </note>
       </trans-unit>
