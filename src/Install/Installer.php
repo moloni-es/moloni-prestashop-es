@@ -157,7 +157,7 @@ class Installer
      */
     public function disable(): bool
     {
-        return true;#$this->destroyCommon();
+        return $this->destroyCommon();
     }
 
     //        OLD PLUGIN ACTIONS        //
