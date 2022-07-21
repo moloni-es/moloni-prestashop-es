@@ -11,6 +11,10 @@
                     <span class="badge badge-info">
                         {{ 'Information'|trans({}, 'Modules.Molonies.Common') }}
                     </span>
+                {% elseif log.level == constant('Moloni\\Enums\\LogLevel::STOCK') %}
+                    <span class="badge badge-info">
+                        {{ 'Stock'|trans({}, 'Modules.Molonies.Common') }}
+                    </span>
                 {% elseif log.level == constant('Moloni\\Enums\\LogLevel::WARNING') %}
                     <span class="badge badge-warning">
                         {{ 'Warning'|trans({}, 'Modules.Molonies.Common') }}

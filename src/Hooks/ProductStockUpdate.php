@@ -22,6 +22,8 @@
  * @noinspection PhpMultipleClassDeclarationsInspection
  */
 
+declare(strict_types=1);
+
 namespace Moloni\Hooks;
 
 use Configuration;
@@ -37,10 +39,16 @@ use Product;
 class ProductStockUpdate extends AbstractHookAction
 {
     private $productId;
+    private $variantId;
+    private $newQty;
 
-    public function __construct(int $productId)
+    private $productBuiilder;
+
+    public function __construct(int $productId, int $variantId, float $newQty)
     {
         $this->productId = $productId;
+        $this->variantId = $variantId;
+        $this->newQty = $newQty;
 
         $this->handle();
     }
@@ -56,19 +64,20 @@ class ProductStockUpdate extends AbstractHookAction
             $product = new Product($this->productId, true, Configuration::get('PS_LANG_DEFAULT'));
 
             if ($product->product_type === 'combinations' && $product->hasCombinations()) {
+                if (!$this->variantId) {
+                    return;
+                }
+
                 $productBuilder = new MoloniProductWithVariants($product);
+                if ($productBuilder->getMoloniProductId() !== 0) {
+                    $productBuilder->updateStock($this->variantId, $this->newQty);
+                }
             } else {
                 $productBuilder = new MoloniProductSimple($product);
-            }
-
-            if ($productBuilder->getMoloniProductId() !== 0) {
-                SyncLogs::moloniProductAddTimeout($productBuilder->getMoloniProductId());
-
-                if ((int)Settings::get('syncStockToMoloni') === Boolean::YES) {
+                if ($productBuilder->getMoloniProductId() !== 0) {
+                    $productBuilder->setStock($this->newQty);
                     $productBuilder->updateStock();
                 }
-            } elseif ((int)Settings::get('addProductsToMoloni') === Boolean::YES) {
-                $productBuilder->insert();
             }
         } catch (MoloniProductException $e) {
             Logs::addErrorLog(
@@ -77,7 +86,7 @@ class ProductStockUpdate extends AbstractHookAction
             );
         }
     }
-
+    
     /**
      * Let this conditions be the same to allow for updates or inserts if we are inserting or updating a product
      */
@@ -88,8 +97,11 @@ class ProductStockUpdate extends AbstractHookAction
         }
 
         if ((int)Settings::get('addProductsToMoloni') === Boolean::NO &&
-            (int)Settings::get('updateProductsToMoloni') === Boolean::NO &&
-            (int)Settings::get('syncStockToMoloni') === Boolean::NO) {
+            (int)Settings::get('updateProductsToMoloni') === Boolean::NO) {
+            return false;
+        }
+
+        if ((int)Settings::get('syncStockToMoloni') === Boolean::NO) {
             return false;
         }
 

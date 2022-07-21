@@ -41,6 +41,9 @@ use Doctrine\Persistence\ManagerRegistry;
 
 class MoloniEs extends Module
 {
+    /** @var bool */
+    private $openForHookQuantityUpdate = false;
+
     /**
      * Molonies constructor.
      */
@@ -233,8 +236,8 @@ class MoloniEs extends Module
     {
         try {
             $this->initContext();
-
             new ProductSave($params['id_product']);
+            $this->openForHookQuantityUpdate = true;
         } catch (Exception $e) {
             // Do nothing
         }
@@ -251,28 +254,29 @@ class MoloniEs extends Module
     {
         try {
             $this->initContext();
-
-            new ProductStockUpdate($params['id_product']);
+            new ProductSave($params['id_product']);
+            $this->openForHookQuantityUpdate = true;
         } catch (Exception $e) {
             // Do nothing
         }
     }
 
-    /**
-     * Called when a product stock is updated
-     *
-     * @param array $params
-     * @return void
-     */
-    public function hookActionUpdateQuantity(array $params): void
+    public function hookActionUpdateQuantity($params): bool
     {
         try {
-            $this->initContext();
+            if ($this->openForHookQuantityUpdate) {
+                $this->initContext();
 
-            new ProductSave($params['id_product']);
+                new ProductStockUpdate(
+                    (int)$params['id_product'],
+                    (int)$params['id_product_attribute'],
+                    (float)$params['quantity']
+                );
+            }
         } catch (Exception $e) {
             // Do nothing
         }
+        return true;
     }
 
     /**

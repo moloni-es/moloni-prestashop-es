@@ -284,10 +284,12 @@ class MoloniProductSimple implements BuilderInterface
             $props['productId'] = $this->getMoloniProductId();
         } elseif ($this->warehouseId > 0 && $this->productHasStock()) {
             $props['warehouseId'] = $this->warehouseId;
-            $props['warehouses'] = [[
-                'warehouseId' => $this->warehouseId,
-                'stock' => $this->stock,
-            ]];
+            $props['warehouses'] = [
+                [
+                    'warehouseId' => $this->warehouseId,
+                    'stock' => $this->stock,
+                ]
+            ];
         }
 
         return $props;
@@ -352,7 +354,8 @@ class MoloniProductSimple implements BuilderInterface
                 $this->moloniProduct = $moloniProduct;
 
                 if ($this->shouldWriteLogs()) {
-                    Logs::addInfoLog(['Product created in Moloni ({0})', ['{0}' => $this->reference]], ['props' => $props]);
+                    Logs::addInfoLog(['Product created in Moloni ({0})', ['{0}' => $this->reference]],
+                        ['props' => $props]);
                 }
 
                 $this->afterSave();
@@ -362,7 +365,8 @@ class MoloniProductSimple implements BuilderInterface
                 ]);
             }
         } catch (MoloniApiException $e) {
-            throw new MoloniProductException('Error creating product ({0})', ['{0}' => $this->reference], $e->getData());
+            throw new MoloniProductException('Error creating product ({0})', ['{0}' => $this->reference], $e->getData()
+            );
         }
 
         return $this;
@@ -390,7 +394,8 @@ class MoloniProductSimple implements BuilderInterface
                 $this->moloniProduct = $moloniProduct;
 
                 if ($this->shouldWriteLogs()) {
-                    Logs::addInfoLog(['Product updated in Moloni ({0})', ['{0}' => $this->reference]], ['props' => $props]);
+                    Logs::addInfoLog(['Product updated in Moloni ({0})', ['{0}' => $this->reference]],
+                        ['props' => $props]);
                 }
 
                 $this->afterSave();
@@ -400,7 +405,8 @@ class MoloniProductSimple implements BuilderInterface
                 ]);
             }
         } catch (MoloniApiException $e) {
-            throw new MoloniProductException('Error updating product ({0})', ['{0}' => $this->reference], $e->getData());
+            throw new MoloniProductException('Error updating product ({0})', ['{0}' => $this->reference], $e->getData()
+            );
         }
 
         return $this;
@@ -415,9 +421,20 @@ class MoloniProductSimple implements BuilderInterface
     {
         if ($this->productExists() && $this->productHasStock()) {
             try {
-                new UpdateMoloniProductStock($this->getMoloniProductId(), $this->warehouseId, $this->stock, $this->moloniProduct['warehouses'], $this->reference, $this->shouldWriteLogs());
+                new UpdateMoloniProductStock(
+                    $this->getMoloniProductId(),
+                    $this->warehouseId,
+                    $this->stock,
+                    $this->moloniProduct['warehouses'],
+                    $this->reference,
+                    $this->shouldWriteLogs()
+                );
             } catch (MoloniApiException $e) {
-                throw new MoloniProductException('Error creating stock movement ({0})', ['{0}' => $this->reference], $e->getData());
+                throw new MoloniProductException(
+                    'Error creating stock movement ({0})',
+                    ['{0}' => $this->reference],
+                    $e->getData()
+                );
             }
         }
 
@@ -547,10 +564,14 @@ class MoloniProductSimple implements BuilderInterface
      *
      * @return $this
      */
-    public function setStock(): MoloniProductSimple
+    public function setStock(?float $newStock = null): MoloniProductSimple
     {
-        $this->stock = StockAvailable::getQuantityAvailableByProduct($this->prestashopProduct->id);
+        if ($newStock) {
+            $this->stock = $newStock;
+            return $this;
+        }
 
+        $this->stock = StockAvailable::getQuantityAvailableByProduct($this->prestashopProduct->id);
         return $this;
     }
 
@@ -606,7 +627,6 @@ class MoloniProductSimple implements BuilderInterface
 
         if ($ecoTax > 0) {
             $this->price -= $ecoTax;
-
             //todo: what else is needed?
         }
 
@@ -822,7 +842,11 @@ class MoloniProductSimple implements BuilderInterface
                 $this->moloniProduct = $moloniProduct;
             }
         } catch (MoloniApiException $e) {
-            throw new MoloniProductException('Error fetching product by reference: ({0})', ['{0}' => $this->reference], $e->getData());
+            throw new MoloniProductException(
+                'Error fetching product by reference: ({0})',
+                ['{0}' => $this->reference],
+                $e->getData()
+            );
         }
 
         return $this;

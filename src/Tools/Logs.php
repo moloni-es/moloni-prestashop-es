@@ -66,6 +66,20 @@ class Logs
     }
 
     /**
+     * Add stocks log
+     *
+     * @param array|string|null $message
+     * @param array|null $data
+     * @param int|null $orderId
+     *
+     * @return void
+     */
+    public static function addStockLog($message, ?array $data = [], ?int $orderId = 0): void
+    {
+        self::addLog(LogLevel::STOCK, $message, $data, $orderId);
+    }
+
+    /**
      * Add warning log
      *
      * @param array|string|null $message

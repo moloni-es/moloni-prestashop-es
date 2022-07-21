@@ -58,8 +58,14 @@ class Installer
         'actionOrderStatusUpdate',
         'actionProductAdd',
         'actionProductUpdate',
+        'actionUpdateQuantity',
         'actionGetAdminOrderButtons',
         'addWebserviceResources',
+        'actionAdminProductsControllerSaveAfter',
+        'actionAdminProductsControllerProcessUpdateAfter',
+        'actionAdminProductsControllerProcessAddAfter',
+        'actionAdminProductsControllerCoreSaveAfter',
+        'actionA',
     ];
 
     /**
@@ -73,22 +79,26 @@ class Installer
             'parent' => 'SELL',
             'tabName' => 'Moloni Spain',
             'logo' => 'logo',
-        ], [
+        ],
+        [
             'name' => 'MoloniOrders',
             'parent' => 'Moloni',
             'tabName' => 'Orders',
             'logo' => '',
-        ], [
+        ],
+        [
             'name' => 'MoloniDocuments',
             'parent' => 'Moloni',
             'tabName' => 'Documents',
             'logo' => '',
-        ], [
+        ],
+        [
             'name' => 'MoloniSettings',
             'parent' => 'Moloni',
             'tabName' => 'Settings',
             'logo' => '',
-        ], [
+        ],
+        [
             'name' => 'MoloniTools',
             'parent' => 'Moloni',
             'tabName' => 'Tools',
@@ -147,7 +157,7 @@ class Installer
      */
     public function disable(): bool
     {
-        return $this->destroyCommon();
+        return true;#$this->destroyCommon();
     }
 
     //        OLD PLUGIN ACTIONS        //
@@ -211,7 +221,9 @@ class Installer
             return true;
         }
 
-        $newDocumentsTableDocuments = $database->executeS("SELECT * FROM " . _DB_PREFIX_ . "moloni_order_documents LIMIT 1");
+        $newDocumentsTableDocuments = $database->executeS(
+            "SELECT * FROM " . _DB_PREFIX_ . "moloni_order_documents LIMIT 1"
+        );
 
         // New table already has documents, do not continue
         if (!empty($newDocumentsTableDocuments)) {
@@ -264,11 +276,7 @@ class Installer
             }
         }
 
-        foreach ($this->hooks as $hookName) {
-            if (!$this->module->registerHook($hookName)) {
-                return false;
-            }
-        }
+        $this->registerHooks();
 
         return true;
     }
@@ -286,17 +294,7 @@ class Installer
             }
         }
 
-        foreach ($this->hooks as $hookName) {
-            try {
-                $name = Hook::getIdByName($hookName);
-            } catch (PrestaShopDatabaseException $e) {
-                continue;
-            }
-
-            if (!$this->module->unregisterHook($name)) {
-                return false;
-            }
-        }
+        $this->removeHooks();
 
         $this->removeLogin();
 
@@ -383,7 +381,9 @@ class Installer
         $installSqlFiles = glob($this->module->getLocalPath() . '/src/Install/sql/install/*.sql');
 
         if (empty($installSqlFiles)) {
-            throw new RuntimeException($this->module->getTranslator()->trans('Error loading installation files!', [], 'Modules.Molonies.Admin'));
+            throw new RuntimeException(
+                $this->module->getTranslator()->trans('Error loading installation files!', [], 'Modules.Molonies.Admin')
+            );
         }
 
         $database = Db::getInstance();
@@ -486,5 +486,33 @@ class Installer
         } catch (Exception $e) {
             // No need to catch
         }
+    }
+
+    public function registerHooks(): bool
+    {
+        foreach ($this->hooks as $hookName) {
+            if (!$this->module->registerHook($hookName)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public function removeHooks(): bool
+    {
+        foreach ($this->hooks as $hookName) {
+            try {
+                $name = Hook::getIdByName($hookName);
+            } catch (PrestaShopDatabaseException $e) {
+                continue;
+            }
+
+            if (!$this->module->unregisterHook($name)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

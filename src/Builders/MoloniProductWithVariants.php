@@ -355,7 +355,11 @@ class MoloniProductWithVariants implements BuilderInterface
             new UpdateMoloniVariantsProductImage($this->coverImage, $this->moloniProduct, $this->variants);
         }
 
-        new CreateMappingsAfterMoloniProductCreateOrUpdate($this->prestashopProduct, $this->moloniProduct, $this->variants);
+        new CreateMappingsAfterMoloniProductCreateOrUpdate(
+            $this->prestashopProduct,
+            $this->moloniProduct,
+            $this->variants
+        );
     }
 
     /**
@@ -421,7 +425,10 @@ class MoloniProductWithVariants implements BuilderInterface
                 $this->moloniProduct = $moloniProduct;
 
                 if ($this->shouldWriteLogs()) {
-                    Logs::addInfoLog(['Product created in Moloni ({0})', ['{0}' => $this->reference]], ['props' => $props]);
+                    Logs::addInfoLog(
+                        ['Product created in Moloni ({0})', ['{0}' => $this->reference]],
+                        ['props' => $props]
+                    );
                 }
 
                 $this->afterSave();
@@ -432,7 +439,8 @@ class MoloniProductWithVariants implements BuilderInterface
                 ]);
             }
         } catch (MoloniApiException $e) {
-            throw new MoloniProductException('Error creating product ({0})', ['{0}' => $this->reference], $e->getData());
+            throw new MoloniProductException('Error creating product ({0})', ['{0}' => $this->reference], $e->getData()
+            );
         }
 
         return $this;
@@ -460,7 +468,10 @@ class MoloniProductWithVariants implements BuilderInterface
                 $this->moloniProduct = $moloniProduct;
 
                 if ($this->shouldWriteLogs()) {
-                    Logs::addInfoLog(['Product updated in Moloni ({0})', ['{0}' => $this->reference]], ['props' => $props]);
+                    Logs::addInfoLog(
+                        ['Product updated in Moloni ({0})', ['{0}' => $this->reference]],
+                        ['props' => $props]
+                    );
                 }
 
                 $this->afterSave();
@@ -471,7 +482,11 @@ class MoloniProductWithVariants implements BuilderInterface
                 ]);
             }
         } catch (MoloniApiException $e) {
-            throw new MoloniProductException('Error updating product ({0})', ['{0}' => $this->reference], $e->getData());
+            throw new MoloniProductException(
+                'Error updating product ({0})',
+                ['{0}' => $this->reference],
+                $e->getData()
+            );
         }
 
         return $this;
@@ -482,14 +497,17 @@ class MoloniProductWithVariants implements BuilderInterface
      *
      * @throws MoloniProductException
      */
-    public function updateStock(): MoloniProductWithVariants
+    public function updateStock(int $variantId, ?float $newQty): MoloniProductWithVariants
     {
-        if (!$this->productExists() || !$this->productHasStock()) {
+        if ($variantId === 0 || !$this->productExists() || !$this->productHasStock()) {
             return $this;
         }
 
         foreach ($this->variants as $variant) {
-            $variant->updateStock();
+            if ($variant->getPrestashopCombinationId() === $variantId) {
+                $variant->setStock($newQty);
+                $variant->updateStock();
+            }
         }
 
         return $this;
@@ -667,7 +685,6 @@ class MoloniProductWithVariants implements BuilderInterface
 
         if ($ecoTax > 0) {
             $this->price -= $ecoTax;
-
             // todo: what else is needed?
         }
 
@@ -838,7 +855,10 @@ class MoloniProductWithVariants implements BuilderInterface
         $prestashopCombinationsQuery = $this->prestashopProduct->getAttributeCombinations(null, false);
 
         foreach ($prestashopCombinationsQuery as $combinationQuery) {
-            $combination = new Combination($combinationQuery['id_product_attribute'], (int)Configuration::get('PS_LANG_DEFAULT'));
+            $combination = new Combination(
+                $combinationQuery['id_product_attribute'],
+                (int)Configuration::get('PS_LANG_DEFAULT')
+            );
 
             $builder = new ProductVariant(
                 $combination,
@@ -970,7 +990,11 @@ class MoloniProductWithVariants implements BuilderInterface
                 $this->moloniProduct = $query[0];
             }
         } catch (MoloniApiException $e) {
-            throw new MoloniProductException('Error fetching product by reference: ({0})', ['{0}' => $this->reference], $e->getData());
+            throw new MoloniProductException(
+                'Error fetching product by reference: ({0})',
+                ['{0}' => $this->reference],
+                $e->getData()
+            );
         }
 
         return $this;

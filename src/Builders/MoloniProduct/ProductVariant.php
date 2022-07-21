@@ -150,8 +150,12 @@ class ProductVariant
      * @param array|null $moloniParentProduct
      * @param array|null $propertyPairs
      */
-    public function __construct(Combination $prestashopCombination, ?string $parentName = '', ?array $moloniParentProduct = [], ?array $propertyPairs = [])
-    {
+    public function __construct(
+        Combination $prestashopCombination,
+        ?string $parentName = '',
+        ?array $moloniParentProduct = [],
+        ?array $propertyPairs = []
+    ) {
         $this->prestashopCombination = $prestashopCombination;
 
         $this->parentName = $parentName;
@@ -201,17 +205,19 @@ class ProductVariant
 
         if ($this->variantExists()) {
             $props['productId'] = $this->getMoloniVariantId();
-        } else if ($this->parentHasStock()) {
-            $props['warehouseId'] = $this->warehouseId;
-            $warehouses = [
-                'warehouseId' => $this->warehouseId,
-            ];
+        } else {
+            if ($this->parentHasStock()) {
+                $props['warehouseId'] = $this->warehouseId;
+                $warehouses = [
+                    'warehouseId' => $this->warehouseId,
+                ];
 
-            if (!$this->parentExists()) {
-                $warehouses['stock'] = $this->stock;
+                if (!$this->parentExists()) {
+                    $warehouses['stock'] = $this->stock;
+                }
+
+                $props['warehouses'] = [$warehouses];
             }
-
-            $props['warehouses'] = [$warehouses];
         }
 
         return $props;
@@ -231,9 +237,20 @@ class ProductVariant
         }
 
         try {
-            new UpdateMoloniProductStock($this->getMoloniVariantId(), $this->warehouseId, $this->stock, $this->moloniVariant['warehouses'], $this->reference, $this->shouldWriteLogs());
+            new UpdateMoloniProductStock(
+                $this->getMoloniVariantId(),
+                $this->warehouseId,
+                $this->stock,
+                $this->moloniVariant['warehouses'],
+                $this->reference,
+                $this->shouldWriteLogs()
+            );
         } catch (MoloniApiException $e) {
-            throw new MoloniProductException('Error creating stock movement ({0})', ['{0}' => $this->reference], $e->getData());
+            throw new MoloniProductException(
+                'Error creating stock movement ({0})',
+                ['{0}' => $this->reference],
+                $e->getData()
+            );
         }
 
         return $this;
@@ -249,7 +266,12 @@ class ProductVariant
     public function setMoloniVariant(): ProductVariant
     {
         if ($this->parentExists()) {
-            $variant = (new FindVariant($this->getPrestashopCombinationId(), $this->reference, $this->moloniParentProduct['variants'] ?? [], $this->propertyPairs))->handle();
+            $variant = (new FindVariant(
+                $this->getPrestashopCombinationId(),
+                $this->reference,
+                $this->moloniParentProduct['variants'] ?? [],
+                $this->propertyPairs
+            ))->handle();
 
             if (!empty($variant)) {
                 $this->moloniVariant = $variant;
@@ -289,7 +311,7 @@ class ProductVariant
                 $this->name = $this->reference;
                 break;
             default:
-                $this->name =  'Variant';
+                $this->name = 'Variant';
                 break;
         }
 
@@ -334,7 +356,7 @@ class ProductVariant
         }
 
         if (isset($this->moloniProduct['identifications']) && !empty($this->moloniProduct['identifications'])) {
-            foreach ($this->moloniProduct['identifications']  as $identification) {
+            foreach ($this->moloniProduct['identifications'] as $identification) {
                 if (!in_array($identification['type'], ['EAN13', 'ISBN'], true)) {
                     $identifications[] = $identification;
                 }
@@ -353,7 +375,11 @@ class ProductVariant
      */
     public function setPrice(): ProductVariant
     {
-        $this->price = Product::getPriceStatic($this->prestashopCombination->id_product, false, $this->prestashopCombination->id);
+        $this->price = Product::getPriceStatic(
+            $this->prestashopCombination->id_product,
+            false,
+            $this->prestashopCombination->id
+        );
 
         return $this;
     }
@@ -388,12 +414,21 @@ class ProductVariant
     /**
      * Set variant stock
      *
+     * @param float|null $newStock
+     *
      * @return ProductVariant
      */
-    public function setStock(): ProductVariant
+    public function setStock(?float $newStock = null): ProductVariant
     {
-        $this->stock = StockAvailable::getQuantityAvailableByProduct($this->prestashopCombination->id_product, $this->prestashopCombination->id);
+        if ($newStock) {
+            $this->stock = $newStock;
+            return $this;
+        }
 
+        $this->stock = StockAvailable::getQuantityAvailableByProduct(
+            $this->prestashopCombination->id_product,
+            $this->prestashopCombination->id
+        );
         return $this;
     }
 
@@ -407,7 +442,12 @@ class ProductVariant
         $languageId = (int)Configuration::get('PS_LANG_DEFAULT');
         $shopId = (int)Shop::getContextShopID();
 
-        $image = Image::getBestImageAttribute($shopId, $languageId, $this->prestashopCombination->id_product, $this->prestashopCombination->id);
+        $image = Image::getBestImageAttribute(
+            $shopId,
+            $languageId,
+            $this->prestashopCombination->id_product,
+            $this->prestashopCombination->id
+        );
 
         if ($image) {
             $this->image = $image;

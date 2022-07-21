@@ -22,6 +22,8 @@
  * @noinspection PhpMultipleClassDeclarationsInspection
  */
 
+declare(strict_types=1);
+
 namespace Moloni\Builders\MoloniProduct\Helpers;
 
 use Moloni\Api\MoloniApiClient;
@@ -44,15 +46,21 @@ class UpdateMoloniProductStock
      *
      * @param int $moloniProductId
      * @param int $warehouseId
-     * @param float|int|null $newStock
+     * @param float $newStock
      * @param array $moloniProductWarehouses
      * @param string $reference
      * @param bool|null $writeLogs
      *
      * @throws MoloniApiException
      */
-    public function __construct(int $moloniProductId, int $warehouseId, $newStock, array $moloniProductWarehouses, string $reference, ?bool $writeLogs = true)
-    {
+    public function __construct(
+        int $moloniProductId,
+        int $warehouseId,
+        float $newStock,
+        array $moloniProductWarehouses,
+        string $reference,
+        ?bool $writeLogs = true
+    ) {
         $this->moloniProductId = $moloniProductId;
         $this->warehouseId = $warehouseId;
         $this->newStock = $newStock;
@@ -76,14 +84,13 @@ class UpdateMoloniProductStock
         foreach ($this->moloniProductWarehouses as $warehouse) {
             if ($warehouse['warehouseId'] === $this->warehouseId) {
                 $moloniStock = $warehouse['stock'];
-
                 break;
             }
         }
 
-        if ($moloniStock === $this->newStock) {
+        if ((float)$moloniStock === $this->newStock) {
             if ($this->shouldWriteLogs()) {
-                Logs::addInfoLog(
+                Logs::addStockLog(
                     ['Stock is already updated in Moloni ({0})', ['{0}' => $this->reference]],
                     ['newStock' => $this->newStock, 'current' => $moloniStock]
                 );
@@ -114,14 +121,15 @@ class UpdateMoloniProductStock
 
         if ($this->shouldWriteLogs()) {
             $message = [
-                'Stock updated in Moloni (old: {0} | new: {1}) ({2})', [
+                'Stock updated in Moloni (old: {0} | new: {1}) ({2})',
+                [
                     '{0}' => $moloniStock,
                     '{1}' => $this->newStock,
                     '{2}' => $this->reference,
                 ]
             ];
 
-            Logs::addInfoLog($message, ['mutation' => $mutation]);
+            Logs::addStockLog($message, ['mutation' => $mutation]);
         }
     }
 }
