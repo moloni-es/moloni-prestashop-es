@@ -88,7 +88,7 @@ class UpdatePrestaProductStock
         }
 
         if ($this->shouldWriteLogs()) {
-            Logs::addInfoLog($msg, $data);
+            Logs::addStockLog($msg, $data);
         }
     }
 }
