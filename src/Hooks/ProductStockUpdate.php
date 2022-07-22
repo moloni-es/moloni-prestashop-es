@@ -42,8 +42,6 @@ class ProductStockUpdate extends AbstractHookAction
     private $variantId;
     private $newQty;
 
-    private $productBuiilder;
-
     public function __construct(int $productId, int $variantId, float $newQty)
     {
         $this->productId = $productId;
@@ -86,7 +84,7 @@ class ProductStockUpdate extends AbstractHookAction
             );
         }
     }
-    
+
     /**
      * Let this conditions be the same to allow for updates or inserts if we are inserting or updating a product
      */

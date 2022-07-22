@@ -134,7 +134,11 @@ class FindOrCreatePropertyGroup
                     if ($propExistsKey !== false) {
                         $propExists = $propertyGroupForUpdate['properties'][$propExistsKey];
 
-                        $valueExistsKey = $this->findInCode($propExists['values'], $this->cleanCodeString($attribute), [$this, 'cleanCodeString']);
+                        $valueExistsKey = $this->findInCode(
+                            $propExists['values'],
+                            $this->cleanReferenceString($attribute),
+                            [$this, 'cleanReferenceString']
+                        );
 
                         // Property value doesn't, add value
                         if ($valueExistsKey === false) {
@@ -143,7 +147,7 @@ class FindOrCreatePropertyGroup
                             $nextOrdering = $this->getNextPropertyOrder($propExists['values']);
 
                             $propertyGroupForUpdate['properties'][$propExistsKey]['values'][] = [
-                                'code' => $this->cleanCodeString($attribute),
+                                'code' => $this->cleanReferenceString($attribute),
                                 'value' => $attribute,
                                 'ordering' => $nextOrdering,
                                 'visible' => Boolean::YES,
@@ -163,7 +167,7 @@ class FindOrCreatePropertyGroup
                             'visible' => Boolean::YES,
                             'values' => [
                                 [
-                                    'code' => $this->cleanCodeString($attribute),
+                                    'code' => $this->cleanReferenceString($attribute),
                                     'value' => $attribute,
                                     'visible' => Boolean::YES,
                                     'ordering' => 1,
@@ -178,7 +182,9 @@ class FindOrCreatePropertyGroup
         // There was stuff missing, we need to update the property group
         if ($updateNeeded) {
             try {
-                $mutation = MoloniApiClient::propertyGroups()->mutationPropertyGroupUpdate(['data' => $propertyGroupForUpdate]);
+                $mutation = MoloniApiClient::propertyGroups()->mutationPropertyGroupUpdate(
+                    ['data' => $propertyGroupForUpdate]
+                );
 
                 $updatedGroup = $mutation['data']['propertyGroupUpdate']['data'] ?? [];
 

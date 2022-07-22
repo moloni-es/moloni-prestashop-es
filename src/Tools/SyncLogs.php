@@ -120,6 +120,11 @@ class SyncLogs
         self::addTimeout($moloniId, $prestashopId);
     }
 
+    public static function prestashopProductRemoveTimeout(int $prestashopId): void
+    {
+        self::$syncLogsRepository->removePrestashopTimeout($prestashopId);
+    }
+
     /**
      * Add log to a product stock update
      *

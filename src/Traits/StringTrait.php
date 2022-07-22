@@ -26,6 +26,11 @@ namespace Moloni\Traits;
 
 trait StringTrait
 {
+    private function cleanReferenceString(string $string, int $truncate = 30): string
+    {
+        return substr($this->cleanCodeString($string), 0, $truncate);
+    }
+
     private function cleanCodeString(string $string): string
     {
         //Remove end and start spacing

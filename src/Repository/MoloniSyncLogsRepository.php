@@ -57,6 +57,17 @@ class MoloniSyncLogsRepository extends EntityRepository
         }
     }
 
+    public function removePrestashopTimeout(int $prestashopId): void
+    {
+        $results = $this->createQueryBuilder('s')
+            ->delete()
+            ->where('s.prestashopId = :prestashopId')
+            ->setParameter('prestashopId', $prestashopId)
+            ->getQuery();
+
+        $results->execute();
+    }
+
     /**
      * Check if a product is locked for **stock sync**
      */

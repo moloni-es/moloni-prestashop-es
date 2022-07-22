@@ -63,14 +63,18 @@ class CreateEntirePropertyGroup
                     $nameExistsKey = $this->findInName($propsForInsert, $groupName);
 
                     $newValue = [
-                        'code' => $this->cleanCodeString($attribute),
+                        'code' => $this->cleanReferenceString($attribute),
                         'value' => $attribute,
                         'ordering' => $nameExistsKey ? count($propsForInsert[$nameExistsKey]['values']) + 1 : 1,
                         'visible' => Boolean::YES,
                     ];
 
                     if ($nameExistsKey !== false) {
-                        if (!$this->findInCode($propsForInsert[$nameExistsKey]['values'], $newValue['code'], [$this, 'cleanCodeString'])) {
+                        if (!$this->findInCode(
+                            $propsForInsert[$nameExistsKey]['values'],
+                            $newValue['code'],
+                            [$this, 'cleanReferenceString']
+                        )) {
                             $propsForInsert[$nameExistsKey]['values'][] = $newValue;
                         }
                     } else {
@@ -111,10 +115,18 @@ class CreateEntirePropertyGroup
             $mutationData = $mutation['data']['propertyGroupCreate']['data'] ?? [];
 
             if (empty($mutationData)) {
-                throw new MoloniProductException('Error creating {0} attribute group', ['{0}' => $newGroupName], ['mutation' => $mutation]);
+                throw new MoloniProductException(
+                    'Error creating {0} attribute group',
+                    ['{0}' => $newGroupName],
+                    ['mutation' => $mutation]
+                );
             }
         } catch (MoloniApiException $e) {
-            throw new MoloniProductException('Error creating {0} attribute group', ['{0}' => $newGroupName], $e->getData());
+            throw new MoloniProductException(
+                'Error creating {0} attribute group',
+                ['{0}' => $newGroupName],
+                $e->getData()
+            );
         }
 
         return (new PrepareVariantPropertiesReturn($mutationData, $this->prestashopCombinations))->handle();

@@ -34,6 +34,7 @@ use Moloni\Hooks\OrderStatusUpdate;
 use Moloni\Hooks\ProductStockUpdate;
 use Moloni\Install\Installer;
 use Moloni\Services\MoloniContext;
+use Moloni\Tools\SyncLogs;
 use PrestaShopBundle\Translation\TranslatorInterface;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Doctrine\Common\Persistence\ManagerRegistry as LegacyManagerRegistry;
@@ -53,7 +54,7 @@ class MoloniEs extends Module
         $this->tab = 'administration';
 
         $this->need_instance = 1;
-        $this->version = '2.0.77';
+        $this->version = '2.0.78';
         $this->ps_versions_compliancy = ['min' => '1.7.6', 'max' => _PS_VERSION_];
         $this->author = 'Moloni';
         $this->module_key = '63e30380b2942ec15c33bedd4f7ec90e';
@@ -72,6 +73,8 @@ class MoloniEs extends Module
             'Modules.Molonies.Molonies'
         );
 
+//        $installer = new Moloni\Install\Installer($this);
+//        $installer->registerHooks();
         $this->autoload();
     }
 
@@ -223,6 +226,18 @@ class MoloniEs extends Module
                 'specific_management' => true,
             ],
         ];
+    }
+
+    public function hookActionAdminProductsControllerSaveBefore(): void
+    {
+        $productId = (int)$_POST['id_product'];
+        if ($productId > 0) {
+            try {
+                $this->initContext();
+                SyncLogs::prestashopProductRemoveTimeout($productId);
+            } catch (Exception $e) {
+            }
+        }
     }
 
     /**

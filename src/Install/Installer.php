@@ -61,11 +61,8 @@ class Installer
         'actionUpdateQuantity',
         'actionGetAdminOrderButtons',
         'addWebserviceResources',
+        'actionAdminProductsControllerSaveBefore',
         'actionAdminProductsControllerSaveAfter',
-        'actionAdminProductsControllerProcessUpdateAfter',
-        'actionAdminProductsControllerProcessAddAfter',
-        'actionAdminProductsControllerCoreSaveAfter',
-        'actionA',
     ];
 
     /**
