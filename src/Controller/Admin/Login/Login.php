@@ -42,6 +42,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class Login extends MoloniController
 {
     public function home(): Response

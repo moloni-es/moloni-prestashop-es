@@ -28,6 +28,10 @@ use Doctrine\ORM\EntityManager;
 use Moloni\Entity\MoloniProductAssociations;
 use Moloni\Repository\MoloniProductAssociationsRepository;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class ProductAssociations
 {
     /**

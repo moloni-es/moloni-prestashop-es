@@ -24,6 +24,10 @@
 
 namespace Moloni\Enums;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class ProductType
 {
     public const PRODUCT = 1;

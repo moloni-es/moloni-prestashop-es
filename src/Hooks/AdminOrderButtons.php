@@ -37,6 +37,10 @@ use PrestaShop\PrestaShop\Core\Exception\TypeException;
 use PrestaShopBundle\Controller\Admin\Sell\Order\ActionsBarButton;
 use PrestaShopBundle\Controller\Admin\Sell\Order\ActionsBarButtonsCollection;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class AdminOrderButtons extends AbstractHookAction
 {
     private $router;

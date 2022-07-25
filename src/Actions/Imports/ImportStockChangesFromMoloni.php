@@ -33,6 +33,10 @@ use Moloni\Exceptions\Product\MoloniProductException;
 use Moloni\Tools\Logs;
 use Moloni\Tools\SyncLogs;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class ImportStockChangesFromMoloni extends ImportProducts
 {
     public function handle(): void

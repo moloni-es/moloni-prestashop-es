@@ -24,6 +24,10 @@
 
 namespace Moloni\Enums;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class LogLevel
 {
     public const INFO = 1;

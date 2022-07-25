@@ -24,6 +24,10 @@
 
 namespace Moloni\Enums;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class DocumentIdentifiers
 {
     public const DISCARDED = -1;

@@ -34,6 +34,10 @@ use Moloni\Enums\SyncLogsType;
 use Moloni\Repository\MoloniSyncLogsRepository;
 use Shop;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class SyncLogs
 {
     /**

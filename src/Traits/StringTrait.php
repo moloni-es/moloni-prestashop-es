@@ -24,6 +24,10 @@
 
 namespace Moloni\Traits;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 trait StringTrait
 {
     private function cleanReferenceString(string $string, int $truncate = 30): string

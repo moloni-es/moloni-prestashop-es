@@ -2,6 +2,10 @@
 
 namespace Moloni\Actions\Tools;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class LogsListDetails
 {
     private $logs;

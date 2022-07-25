@@ -41,6 +41,10 @@ use Moloni\Tools\Settings;
 use Moloni\Traits\LogsTrait;
 use Moloni\Traits\AttributesTrait;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class ProductCombination implements BuilderInterface
 {
     use AttributesTrait;

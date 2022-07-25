@@ -24,6 +24,10 @@
 
 namespace Moloni\Actions\Imports;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 abstract class ImportProducts
 {
     /**

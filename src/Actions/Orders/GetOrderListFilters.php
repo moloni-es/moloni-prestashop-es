@@ -26,6 +26,10 @@ namespace Moloni\Actions\Orders;
 
 use Moloni\Tools\Settings;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class GetOrderListFilters
 {
     private $filters;

@@ -32,6 +32,10 @@ use PrestaShopBundle\Controller\Admin\FrameworkBundleAdminController;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 abstract class MoloniController extends FrameworkBundleAdminController implements MoloniControllerInterface
 {
     /**

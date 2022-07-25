@@ -27,6 +27,10 @@ namespace Moloni\Api\Endpoints;
 use Moloni\Api\MoloniApi;
 use Moloni\Exceptions\MoloniApiException;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 abstract class Endpoint
 {
     /**

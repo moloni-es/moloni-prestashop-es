@@ -30,6 +30,10 @@ use Moloni\Builders\Interfaces\BuilderItemInterface;
 use Moloni\Exceptions\Document\MoloniDocumentPaymentException;
 use Moloni\Exceptions\MoloniApiException;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class OrderPayment implements BuilderItemInterface
 {
     /**

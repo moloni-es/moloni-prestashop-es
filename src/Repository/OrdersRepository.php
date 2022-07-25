@@ -27,6 +27,10 @@ namespace Moloni\Repository;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class OrdersRepository
 {
     /**

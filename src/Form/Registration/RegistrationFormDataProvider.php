@@ -33,6 +33,10 @@ use PrestaShop\PrestaShop\Core\Form\FormDataProviderInterface;
 use Symfony\Component\OptionsResolver\Exception\UndefinedOptionsException;
 use Symfony\Component\Translation\TranslatorInterface;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class RegistrationFormDataProvider implements FormDataProviderInterface
 {
     private $translator;

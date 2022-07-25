@@ -34,6 +34,10 @@ use PrestaShopDatabaseException;
 use Shop;
 use Tools;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 abstract class PrestaImage
 {
     protected $languageId;

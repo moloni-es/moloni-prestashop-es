@@ -29,6 +29,10 @@ use Moloni\Tools\ProductAssociations;
 use Product;
 use Moloni\Builders\PrestashopProduct\ProductCombination;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class CreateMappingsAfterPrestaProductCreateOrUpdate
 {
     private $moloniProduct;

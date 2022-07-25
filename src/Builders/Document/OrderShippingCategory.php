@@ -26,6 +26,10 @@ namespace Moloni\Builders\Document;
 
 use Moloni\Builders\Common\CategoryFromName;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class OrderShippingCategory extends CategoryFromName
 {
 

@@ -49,6 +49,10 @@ use Moloni\Tools\Settings;
 use PrestaShop\PrestaShop\Core\Form\FormDataProviderInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class SettingsFormDataProvider implements FormDataProviderInterface
 {
     private $translator;

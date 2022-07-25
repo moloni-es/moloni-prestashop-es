@@ -27,6 +27,10 @@ namespace Moloni\Actions\Registration;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Exceptions\MoloniApiException;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class IsSlugValid
 {
     private $slug;

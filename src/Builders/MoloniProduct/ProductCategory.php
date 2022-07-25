@@ -26,6 +26,10 @@ namespace Moloni\Builders\MoloniProduct;
 
 use Moloni\Builders\Common\CategoryFromName;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class ProductCategory extends CategoryFromName
 {
 

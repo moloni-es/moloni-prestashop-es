@@ -24,6 +24,10 @@
 
 namespace Moloni\Enums;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class MoloniRoutes
 {
     public const LOGIN = 'moloni_es_login_home';

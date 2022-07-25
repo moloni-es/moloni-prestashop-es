@@ -32,6 +32,10 @@ use Moloni\Enums\SaftType;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\MoloniException;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class TaxFromRate implements BuilderItemInterface
 {
     /**

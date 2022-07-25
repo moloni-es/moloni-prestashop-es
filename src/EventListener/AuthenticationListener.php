@@ -30,6 +30,10 @@ use Moloni\Controller\Admin\MoloniController;
 use Moloni\Controller\Admin\MoloniControllerInterface;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class AuthenticationListener
 {
     public function onKernelController(FilterControllerEvent $event): void

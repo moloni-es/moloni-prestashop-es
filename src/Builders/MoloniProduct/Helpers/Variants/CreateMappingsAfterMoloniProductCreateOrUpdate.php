@@ -29,6 +29,10 @@ use Moloni\Enums\Boolean;
 use Moloni\Tools\ProductAssociations;
 use Moloni\Builders\MoloniProduct\ProductVariant;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class CreateMappingsAfterMoloniProductCreateOrUpdate
 {
     private $variantsBuilders;

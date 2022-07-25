@@ -24,6 +24,10 @@
 
 namespace Moloni\Traits;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 trait DiscountsTrait
 {
     protected function calculateOriginalPrice(?float $discountedPrice = 0, ?float $discountedPercentage = 0)

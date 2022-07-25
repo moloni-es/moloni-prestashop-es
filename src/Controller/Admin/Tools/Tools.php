@@ -44,6 +44,10 @@ use Moloni\Tools\Settings;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class Tools extends MoloniController
 {
     public function home(): Response

@@ -27,6 +27,10 @@ namespace Moloni\Builders\MoloniProduct\Helpers\Variants;
 use Moloni\Tools\ProductAssociations;
 use Moloni\Entity\MoloniProductAssociations;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class FindVariant
 {
     private $combinationId;

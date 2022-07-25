@@ -34,6 +34,10 @@ use Moloni\Tools\Settings;
 use Moloni\Tools\SyncLogs;
 use Product;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class ProductSave extends AbstractHookAction
 {
     private $productId;

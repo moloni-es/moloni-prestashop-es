@@ -33,6 +33,10 @@ use Moloni\Entity\MoloniOrderDocuments;
 use Moloni\Exceptions\MoloniException;
 use Moloni\Repository\MoloniOrderDocumentsRepository;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 abstract class AbstractOrderAction
 {
     /**

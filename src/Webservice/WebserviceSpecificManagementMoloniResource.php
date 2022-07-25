@@ -25,6 +25,10 @@ use Moloni\Webservice\Product\ProductCreate;
 use Moloni\Webservice\Product\ProductStockChange;
 use Moloni\Webservice\Product\ProductUpdate;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class WebserviceSpecificManagementMoloniResource implements WebserviceSpecificManagementInterface
 {
     /**

@@ -26,6 +26,10 @@ namespace Moloni\Actions\Helpers;
 
 use Db;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class HasOldPluginTables
 {
     public function handle(): bool

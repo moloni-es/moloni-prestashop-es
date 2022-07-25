@@ -29,6 +29,10 @@ use Moloni\Enums\Languages;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\MoloniException;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class CreateNewMoloniAccount
 {
     private $agentKey = '6ui8qs7jn3';

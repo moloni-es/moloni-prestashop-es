@@ -28,6 +28,10 @@ use Image;
 use PrestaShopDatabaseException;
 use PrestaShopException;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class UpdatePrestaProductImage extends PrestaImage
 {
     protected $prestashopProductId;

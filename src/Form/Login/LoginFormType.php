@@ -12,6 +12,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class LoginFormType extends TranslatorAwareType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)

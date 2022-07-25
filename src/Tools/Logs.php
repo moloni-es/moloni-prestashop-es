@@ -32,6 +32,10 @@ use Moloni\Entity\MoloniLogs;
 use Moloni\Enums\LogLevel;
 use Shop;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class Logs
 {
     /**

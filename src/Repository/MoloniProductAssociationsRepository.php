@@ -29,6 +29,10 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Moloni\Entity\MoloniProductAssociations;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class MoloniProductAssociationsRepository extends EntityRepository
 {
     public function addAssociation($mlProductId, $mlProductReference, $mlVariantId, $psProductId, $psProductReference, $psCombinationId, $psCombinationReference, $active): void

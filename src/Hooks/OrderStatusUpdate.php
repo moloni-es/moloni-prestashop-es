@@ -38,6 +38,10 @@ use OrderState;
 use PrestaShopDatabaseException;
 use PrestaShopException;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class OrderStatusUpdate extends AbstractHookAction
 {
     private $orderId;

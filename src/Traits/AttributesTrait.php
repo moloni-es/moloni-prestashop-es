@@ -28,6 +28,10 @@ use Attribute;
 use Configuration;
 use AttributeGroup;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 trait AttributesTrait
 {
     private $cacheGroup = [];

@@ -29,6 +29,10 @@ namespace Moloni\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 /**
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Moloni\Repository\MoloniAppRepository")

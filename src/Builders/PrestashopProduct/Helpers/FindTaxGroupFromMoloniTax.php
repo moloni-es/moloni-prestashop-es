@@ -27,6 +27,10 @@ namespace Moloni\Builders\PrestashopProduct\Helpers;
 use Country;
 use TaxRulesGroup;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class FindTaxGroupFromMoloniTax
 {
     private $moloniTax;

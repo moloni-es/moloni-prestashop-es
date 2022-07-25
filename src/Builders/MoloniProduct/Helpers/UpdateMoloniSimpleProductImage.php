@@ -29,6 +29,10 @@ use Configuration;
 use Moloni\Api\MoloniApi;
 use Moloni\Exceptions\MoloniApiException;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class UpdateMoloniSimpleProductImage
 {
     private $languageId;

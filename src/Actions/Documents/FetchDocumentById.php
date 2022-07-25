@@ -28,6 +28,10 @@ use Moloni\Api\MoloniApiClient;
 use Moloni\Enums\DocumentTypes;
 use Moloni\Exceptions\MoloniApiException;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class FetchDocumentById
 {
     private $documentId;

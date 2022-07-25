@@ -28,6 +28,10 @@ namespace Moloni\Exceptions;
 
 use Exception;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class MoloniException extends Exception
 {
     protected $data;

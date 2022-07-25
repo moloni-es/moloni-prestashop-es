@@ -31,6 +31,10 @@ use Moloni\Builders\MoloniProductSimple;
 use Moloni\Builders\MoloniProductWithVariants;
 use Moloni\Exceptions\Product\MoloniProductException;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class ExportProductsToMoloni extends ExportProducts
 {
     public function handle(): void

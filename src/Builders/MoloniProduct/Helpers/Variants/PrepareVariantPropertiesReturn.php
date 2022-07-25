@@ -28,6 +28,10 @@ use Moloni\Traits\ArrayTrait;
 use Moloni\Traits\StringTrait;
 use Moloni\Exceptions\Product\MoloniProductException;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class PrepareVariantPropertiesReturn
 {
     use ArrayTrait;

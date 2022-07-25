@@ -24,6 +24,10 @@
 
 namespace Moloni\Actions\Exports;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 abstract class ExportProducts
 {
     /**

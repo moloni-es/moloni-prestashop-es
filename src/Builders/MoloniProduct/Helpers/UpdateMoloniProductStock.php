@@ -31,6 +31,10 @@ use Moloni\Exceptions\MoloniApiException;
 use Moloni\Tools\Logs;
 use Moloni\Traits\LogsTrait;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class UpdateMoloniProductStock
 {
     use LogsTrait;

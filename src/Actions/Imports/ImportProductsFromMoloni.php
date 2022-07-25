@@ -33,6 +33,10 @@ use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\Product\MoloniProductException;
 use Moloni\Tools\SyncLogs;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class ImportProductsFromMoloni extends ImportProducts
 {
     public function handle(): void

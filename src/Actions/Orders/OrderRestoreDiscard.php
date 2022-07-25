@@ -28,6 +28,10 @@ use Moloni\Entity\MoloniOrderDocuments;
 use Moloni\Enums\DocumentIdentifiers;
 use Moloni\Exceptions\MoloniException;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class OrderRestoreDiscard extends AbstractOrderAction
 {
     /**

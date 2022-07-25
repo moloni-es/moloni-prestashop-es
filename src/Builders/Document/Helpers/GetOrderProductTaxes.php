@@ -29,6 +29,10 @@ use TaxCalculator;
 use Moloni\Exceptions\MoloniException;
 use Moloni\Builders\Document\OrderProductTax;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class GetOrderProductTaxes
 {
     private $orderProduct;

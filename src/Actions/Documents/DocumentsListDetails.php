@@ -31,6 +31,10 @@ use Moloni\Enums\Domains;
 use PrestaShopDatabaseException;
 use PrestaShopException;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class DocumentsListDetails
 {
     private $createdDocuments;

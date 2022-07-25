@@ -31,6 +31,10 @@ use PrestaShopException;
 use PrestaShopDatabaseException;
 use Moloni\Builders\PrestashopProduct\Helpers\PrestaImage;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class UpdatePrestaCombinationImage extends PrestaImage
 {
     protected $prestashopCombination;

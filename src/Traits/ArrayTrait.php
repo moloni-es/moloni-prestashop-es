@@ -24,6 +24,10 @@
 
 namespace Moloni\Traits;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 trait ArrayTrait
 {
     private function findInCodeOrValue(array $array, string $needle)

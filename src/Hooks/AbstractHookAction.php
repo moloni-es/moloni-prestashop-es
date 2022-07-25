@@ -26,6 +26,10 @@ namespace Moloni\Hooks;
 
 use Moloni\Api\MoloniApi;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 abstract class AbstractHookAction
 {
     protected function isAuthenticated(): bool

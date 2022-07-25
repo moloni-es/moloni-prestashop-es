@@ -33,6 +33,10 @@ use Moloni\Tools\Logs;
 use Moloni\Tools\Settings;
 use Moloni\Tools\SyncLogs;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class ProductCreate extends AbstractWebserviceAction
 {
     public function handle(): void

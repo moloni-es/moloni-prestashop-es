@@ -24,6 +24,10 @@
 
 namespace Moloni\Exceptions\Document;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class MoloniDocumentDeliveryException extends MoloniDocumentException
 {
 

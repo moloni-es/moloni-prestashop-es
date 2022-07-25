@@ -39,6 +39,10 @@ use Moloni\Exceptions\Product\MoloniProductException;
 use Moloni\Tools\Settings;
 use Moloni\Traits\LogsTrait;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class ProductVariant
 {
     use LogsTrait;

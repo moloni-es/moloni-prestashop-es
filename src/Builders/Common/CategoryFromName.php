@@ -30,6 +30,10 @@ use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\MoloniException;
 use Moloni\Exceptions\Product\MoloniProductCategoryException;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class CategoryFromName implements BuilderItemInterface
 {
     /**

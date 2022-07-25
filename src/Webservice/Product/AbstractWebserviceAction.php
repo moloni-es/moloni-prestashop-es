@@ -29,6 +29,10 @@ use Moloni\Api\MoloniApiClient;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\Product\MoloniProductException;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 abstract class AbstractWebserviceAction
 {
     protected $productId;

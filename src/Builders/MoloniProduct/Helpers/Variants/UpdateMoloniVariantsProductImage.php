@@ -31,6 +31,10 @@ use Moloni\Builders\MoloniProduct\ProductVariant;
 use Moloni\Enums\Boolean;
 use Moloni\Exceptions\MoloniApiException;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class UpdateMoloniVariantsProductImage
 {
     private $languageId;

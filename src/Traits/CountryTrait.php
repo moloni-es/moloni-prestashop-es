@@ -30,6 +30,10 @@ use Moloni\Enums\Countries;
 use Moloni\Enums\Languages;
 use Moloni\Exceptions\MoloniApiException;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 trait CountryTrait
 {
     /**

@@ -27,6 +27,10 @@ namespace Moloni\Repository;
 use Doctrine\ORM\EntityRepository;
 use Moloni\Entity\MoloniApp;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class MoloniAppRepository extends EntityRepository
 {
     public function getApp(): ?object

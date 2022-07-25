@@ -32,6 +32,10 @@ use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\Product\MoloniProductCategoryException;
 use PrestaShopException;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class GetPrestashopCategoriesFromMoloniCategoryId
 {
     private $moloniCategoryId;

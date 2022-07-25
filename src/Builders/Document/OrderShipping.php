@@ -35,6 +35,10 @@ use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\MoloniException;
 use Moloni\Tools\Settings;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class OrderShipping implements BuilderItemInterface
 {
     /**

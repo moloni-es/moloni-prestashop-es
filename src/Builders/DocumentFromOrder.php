@@ -63,6 +63,10 @@ use OrderPayment as PrestashopOrderPayment;
 use PrestaShop\PrestaShop\Adapter\ContextStateManager;
 use Shop;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class DocumentFromOrder implements BuilderInterface
 {
     use CountryTrait;

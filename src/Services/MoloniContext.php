@@ -35,6 +35,10 @@ use Moloni\Tools\ProductAssociations;
 use Moloni\Tools\Settings;
 use Moloni\Tools\SyncLogs;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class MoloniContext
 {
     /**

@@ -26,6 +26,10 @@ namespace Moloni\Builders\Document;
 
 use Moloni\Builders\Common\TaxFromRate;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class OrderShippingTax extends TaxFromRate
 {
 

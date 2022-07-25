@@ -30,6 +30,10 @@ use Configuration;
 use Moloni\Traits\AttributesTrait;
 use PrestaShopException;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class ProcessAttributesGroup
 {
     use AttributesTrait;

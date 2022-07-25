@@ -27,6 +27,10 @@ namespace Moloni\Api\Endpoints\Documents;
 use Moloni\Api\Endpoints\Endpoint;
 use Moloni\Exceptions\MoloniApiException;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class CreditNote extends Endpoint
 {
     /**

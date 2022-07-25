@@ -26,6 +26,10 @@ namespace Moloni\Actions\Registration;
 
 use Symfony\Component\Translation\TranslatorInterface;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class IsFormValid
 {
     private $formData;

@@ -32,6 +32,10 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 use Moloni\Api\MoloniApi;
 use Moloni\Entity\MoloniOrderDocuments;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class MoloniOrderDocumentsRepository extends EntityRepository
 {
     /**

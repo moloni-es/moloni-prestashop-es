@@ -30,6 +30,10 @@ use Doctrine\ORM\ORMException;
 use Moloni\Entity\MoloniSettings;
 use Moloni\Enums\Date;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class MoloniSettingsRepository extends EntityRepository
 {
     private $arraySettings = ['productSyncFields' , 'orderStatusToShow'];

@@ -31,6 +31,10 @@ use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Moloni\Enums\SyncLogsType;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class MoloniSyncLogsRepository extends EntityRepository
 {
     /**

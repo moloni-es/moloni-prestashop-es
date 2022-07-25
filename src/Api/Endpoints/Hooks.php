@@ -26,6 +26,10 @@ namespace Moloni\Api\Endpoints;
 
 use Moloni\Exceptions\MoloniApiException;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class Hooks extends Endpoint
 {
     /**

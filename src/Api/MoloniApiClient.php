@@ -56,6 +56,10 @@ use Moloni\Api\Endpoints\Taxes;
 use Moloni\Api\Endpoints\Timezones;
 use Moloni\Api\Endpoints\Warehouses;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class MoloniApiClient
 {
     //         Documents         //

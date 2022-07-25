@@ -34,6 +34,10 @@ use Moloni\Tools\Settings;
 use Moloni\Traits\CountryTrait;
 use Order;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class OrderCustomer implements BuilderItemInterface
 {
     use CountryTrait;

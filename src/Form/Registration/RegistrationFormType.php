@@ -41,6 +41,10 @@ use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class RegistrationFormType extends TranslatorAwareType
 {
     /** @var FormBuilderInterface */

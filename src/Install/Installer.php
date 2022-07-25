@@ -38,6 +38,10 @@ use PrestaShopDatabaseException;
 use Moloni\Entity\MoloniApp;
 use Moloni\Repository\MoloniAppRepository;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class Installer
 {
     /**

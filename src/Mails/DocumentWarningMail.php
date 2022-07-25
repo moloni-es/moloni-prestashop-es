@@ -28,6 +28,10 @@ use Configuration;
 use Mail;
 use Moloni\Enums\Domains;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class DocumentWarningMail extends SendMail
 {
     public function handle(): void

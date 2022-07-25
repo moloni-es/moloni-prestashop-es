@@ -30,6 +30,10 @@ use Moloni\Entity\MoloniProductAssociations;
 use Moloni\Tools\ProductAssociations;
 use Product;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class FindOrCreateCombination
 {
     private $moloniVariantId;

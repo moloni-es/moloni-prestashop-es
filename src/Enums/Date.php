@@ -24,6 +24,10 @@
 
 namespace Moloni\Enums;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class Date
 {
     public const DATETIME_FORMAT = "Y-m-d H:i:s";

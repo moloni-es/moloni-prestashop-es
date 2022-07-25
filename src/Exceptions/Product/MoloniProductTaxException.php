@@ -24,6 +24,10 @@
 
 namespace Moloni\Exceptions\Product;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class MoloniProductTaxException extends MoloniProductException
 {
 

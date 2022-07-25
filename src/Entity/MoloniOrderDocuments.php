@@ -27,6 +27,10 @@ namespace Moloni\Entity;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 /**
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Moloni\Repository\MoloniOrderDocumentsRepository")

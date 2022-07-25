@@ -44,6 +44,10 @@ use Moloni\Exceptions\Product\MoloniProductException;
 use Moloni\Tools\Logs;
 use Moloni\Tools\Settings;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class PrestashopProductWithCombinations implements BuilderInterface
 {
     use LogsTrait {

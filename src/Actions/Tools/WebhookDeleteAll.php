@@ -28,6 +28,10 @@ use Moloni\Api\MoloniApiClient;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\MoloniException;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class WebhookDeleteAll
 {
     /**

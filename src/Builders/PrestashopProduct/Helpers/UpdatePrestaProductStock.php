@@ -28,6 +28,10 @@ use Moloni\Tools\Logs;
 use Moloni\Traits\LogsTrait;
 use StockAvailable;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class UpdatePrestaProductStock
 {
     use LogsTrait;

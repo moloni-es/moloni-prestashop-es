@@ -34,6 +34,10 @@ use PrestaShop\PrestaShop\Core\Hook\HookDispatcherInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class SettingsFormHandler implements FormHandlerInterface
 {
     /**

@@ -51,6 +51,10 @@ use Moloni\Tools\Logs;
 use Moloni\Tools\Settings;
 use Moloni\Traits\LogsTrait;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class MoloniProductSimple implements BuilderInterface
 {
     use LogsTrait;
