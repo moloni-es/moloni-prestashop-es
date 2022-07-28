@@ -66,15 +66,17 @@ class GetOrderProductTaxes
             $taxOrder = 1;
 
             foreach ($taxCalculator->taxes as $tax) {
+                if ((float)$tax->rate === 0.0) {
+                    continue;
+                }
+
                 /** @var Tax $tax */
                 $taxBuilder = new OrderProductTax((float)$tax->rate, $this->fiscalZone, $taxOrder);
 
-                $taxBuilder
-                    ->search();
+                $taxBuilder->search();
 
                 if ($taxBuilder->getTaxId() === 0) {
-                    $taxBuilder
-                        ->insert();
+                    $taxBuilder->insert();
                 }
 
                 $taxes[] = $taxBuilder;
@@ -85,14 +87,16 @@ class GetOrderProductTaxes
             $taxValue = (100 * ((float)$this->orderProduct['unit_price_tax_incl'] - (float)$this->orderProduct['unit_price_tax_excl'])) / (float)$this->orderProduct['unit_price_tax_excl'];
             $taxValue = round($taxValue, 2);
 
+            if ((float)$taxValue === 0.0) {
+                return $taxes;
+            }
+
             $taxBuilder = new OrderProductTax($taxValue, $this->fiscalZone, 1);
 
-            $taxBuilder
-                ->search();
+            $taxBuilder->search();
 
             if ($taxBuilder->getTaxId() === 0) {
-                $taxBuilder
-                    ->insert();
+                $taxBuilder->insert();
             }
 
             $taxes[] = $taxBuilder;
