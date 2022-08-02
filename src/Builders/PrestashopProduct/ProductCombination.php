@@ -448,7 +448,7 @@ class ProductCombination implements BuilderInterface
      */
     public function setPrice(): ProductCombination
     {
-        $this->price = round($this->moloniParent['price'] - $this->moloniVariant['price'], 5);
+        $this->price = round($this->moloniVariant['price'] - $this->moloniParent['price'], 5);
 
         return $this;
     }
