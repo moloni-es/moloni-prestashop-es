@@ -68,7 +68,7 @@ class UpdatePrestaProductStock
      */
     private function handle(): void
     {
-        $currentStock = (float)StockAvailable::getQuantityAvailableByProduct($this->prestaProductId);
+        $currentStock = (float)StockAvailable::getQuantityAvailableByProduct($this->prestaProductId, $this->attributeId);
         $data = [];
 
         if ($this->newStock !== $currentStock) {
