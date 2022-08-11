@@ -407,6 +407,11 @@
         <target>Cerrar</target>
         <note>Line: </note>
       </trans-unit>
+      <trans-unit id="27ce7f8b5623b2e2df568d64cf051607">
+        <source>Stock</source>
+        <target>Stock</target>
+        <note>Line: </note>
+      </trans-unit>
       <trans-unit id="a1fa27779242b4902f7ae3bdd5c6d508">
         <source>Type</source>
         <target>Tipo</target>
