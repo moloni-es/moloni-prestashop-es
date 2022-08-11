@@ -29,12 +29,10 @@ use Category;
 use Configuration;
 use Country;
 use Image;
-use Product;
-use StockAvailable;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\Interfaces\BuilderInterface;
-use Moloni\Builders\MoloniProduct\Helpers\UpdateMoloniSimpleProductImage;
 use Moloni\Builders\MoloniProduct\Helpers\UpdateMoloniProductStock;
+use Moloni\Builders\MoloniProduct\Helpers\UpdateMoloniSimpleProductImage;
 use Moloni\Builders\MoloniProduct\ProductCategory;
 use Moloni\Builders\MoloniProduct\ProductTax;
 use Moloni\Enums\Boolean;
@@ -50,6 +48,8 @@ use Moloni\Exceptions\Product\MoloniProductTaxException;
 use Moloni\Tools\Logs;
 use Moloni\Tools\Settings;
 use Moloni\Traits\LogsTrait;
+use Product;
+use StockAvailable;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -65,7 +65,6 @@ class MoloniProductSimple implements BuilderInterface
      * @var array
      */
     protected $moloniProduct;
-
 
     /**
      * Visibility
@@ -179,7 +178,6 @@ class MoloniProductSimple implements BuilderInterface
      */
     protected $exemptionReason = '';
 
-
     /**
      * Fields that will be synced
      *
@@ -268,6 +266,10 @@ class MoloniProductSimple implements BuilderInterface
             unset($props['summary']);
         }
 
+        if (!$this->shouldSyncIdentifiers()) {
+            unset($props['identifications']);
+        }
+
         if (!$this->shouldSyncPrice()) {
             unset($props['price']);
         }
@@ -292,7 +294,7 @@ class MoloniProductSimple implements BuilderInterface
                 [
                     'warehouseId' => $this->warehouseId,
                     'stock' => $this->stock,
-                ]
+                ],
             ];
         }
 
@@ -458,7 +460,7 @@ class MoloniProductSimple implements BuilderInterface
             return 0;
         }
 
-        return (int)$this->moloniProduct['productId'];
+        return (int) $this->moloniProduct['productId'];
     }
 
     /**
@@ -495,7 +497,7 @@ class MoloniProductSimple implements BuilderInterface
         $reference = $this->prestashopProduct->reference;
 
         if (empty($reference)) {
-            $reference = (string)$this->prestashopProduct->id;
+            $reference = (string) $this->prestashopProduct->id;
         }
 
         $this->reference = $reference;
@@ -558,7 +560,7 @@ class MoloniProductSimple implements BuilderInterface
      */
     public function setHasStock(): MoloniProductSimple
     {
-        $this->hasStock = $this->moloniProduct['hasStock'] ?? (bool)Boolean::YES;
+        $this->hasStock = $this->moloniProduct['hasStock'] ?? (bool) Boolean::YES;
 
         return $this;
     }
@@ -572,10 +574,12 @@ class MoloniProductSimple implements BuilderInterface
     {
         if ($newStock) {
             $this->stock = $newStock;
+
             return $this;
         }
 
         $this->stock = StockAvailable::getQuantityAvailableByProduct($this->prestashopProduct->id);
+
         return $this;
     }
 
@@ -592,12 +596,12 @@ class MoloniProductSimple implements BuilderInterface
             $address = new Address();
             $address->id_country = Country::getByIso($mutation['fiscalZone']['fiscalZone'] ?? 'ES');
 
-            $taxRate = (float)$this->prestashopProduct->getTaxesRate($address);
+            $taxRate = (float) $this->prestashopProduct->getTaxesRate($address);
 
             if ($taxRate > 0) {
                 $fiscalZone = [
                     'code' => $mutation['fiscalZone']['fiscalZone'] ?? 'ES',
-                    'countryId' => $mutation['country']['countryId'] ?? Countries::SPAIN
+                    'countryId' => $mutation['country']['countryId'] ?? Countries::SPAIN,
                 ];
 
                 $taxBuilder = new ProductTax($taxRate, $fiscalZone, 1);
@@ -627,11 +631,11 @@ class MoloniProductSimple implements BuilderInterface
      */
     public function setEcoTax(): MoloniProductSimple
     {
-        $ecoTax = (float)$this->prestashopProduct->ecotax;
+        $ecoTax = (float) $this->prestashopProduct->ecotax;
 
         if ($ecoTax > 0) {
             $this->price -= $ecoTax;
-            //todo: what else is needed?
+            // todo: what else is needed?
         }
 
         $this->ecoTax = $ecoTax;
@@ -648,7 +652,7 @@ class MoloniProductSimple implements BuilderInterface
      */
     public function setWarehouseId(): MoloniProductSimple
     {
-        $warehouseId = (int)Settings::get('syncStockToMoloniWarehouse');
+        $warehouseId = (int) Settings::get('syncStockToMoloniWarehouse');
 
         if (in_array($warehouseId, [0, 1])) {
             $params = [
@@ -656,9 +660,9 @@ class MoloniProductSimple implements BuilderInterface
                     'filter' => [
                         'field' => 'isDefault',
                         'comparison' => 'eq',
-                        'value' => "1"
+                        'value' => '1',
                     ],
-                ]
+                ],
             ];
 
             try {
@@ -695,7 +699,7 @@ class MoloniProductSimple implements BuilderInterface
         $categoriesNames = [];
 
         if (!empty($this->prestashopProduct->id_category_default)) {
-            $languageId = (int)Configuration::get('PS_LANG_DEFAULT');
+            $languageId = (int) Configuration::get('PS_LANG_DEFAULT');
 
             $categoryId = $this->prestashopProduct->id_category_default;
             $failsafe = 0;
@@ -711,14 +715,14 @@ class MoloniProductSimple implements BuilderInterface
                 array_unshift($categoriesNames, $categoryObj->name);
 
                 // Skip root categories
-                if (in_array((int)$categoryObj->id_parent, [1, 2])) {
+                if (in_array((int) $categoryObj->id_parent, [1, 2])) {
                     break;
                 }
 
                 // Next category is this category parent
-                $categoryId = (int)$categoryObj->id_parent;
+                $categoryId = (int) $categoryObj->id_parent;
 
-                $failsafe++;
+                ++$failsafe;
             } while ($failsafe < 100 && $categoryId > 0);
         }
 
@@ -741,7 +745,7 @@ class MoloniProductSimple implements BuilderInterface
                 $parentId = $builder->getProductCategoryId();
             }
 
-            /** @noinspection PhpUndefinedVariableInspection */
+            /* @noinspection PhpUndefinedVariableInspection */
             $this->category = $builder;
         } catch (MoloniException $e) {
             throw new MoloniProductCategoryException($e->getMessage(), $e->getIdentifiers(), $e->getData());
@@ -757,7 +761,7 @@ class MoloniProductSimple implements BuilderInterface
      */
     public function setMeasurementUnitId(): MoloniProductSimple
     {
-        $this->measurementUnitId = (int)(Settings::get('measurementUnit') ?? 0);
+        $this->measurementUnitId = (int) (Settings::get('measurementUnit') ?? 0);
 
         return $this;
     }
@@ -790,7 +794,7 @@ class MoloniProductSimple implements BuilderInterface
             $identifications[] = [
                 'type' => 'EAN13',
                 'text' => $this->prestashopProduct->ean13,
-                'favorite' => false
+                'favorite' => false,
             ];
         }
 
@@ -798,7 +802,7 @@ class MoloniProductSimple implements BuilderInterface
             $identifications[] = [
                 'type' => 'ISBN',
                 'text' => $this->prestashopProduct->isbn,
-                'favorite' => false
+                'favorite' => false,
             ];
         }
 
@@ -830,8 +834,8 @@ class MoloniProductSimple implements BuilderInterface
                     [
                         'field' => 'reference',
                         'comparison' => 'eq',
-                        'value' => $this->reference
-                    ]
+                        'value' => $this->reference,
+                    ],
                 ],
             ],
         ];
@@ -936,6 +940,16 @@ class MoloniProductSimple implements BuilderInterface
         }
 
         return in_array(SyncFields::CATEGORIES, $this->syncFields, true);
+    }
+
+    /**
+     * Should sync product identifiers (ISBN, EAN)
+     *
+     * @return bool
+     */
+    protected function shouldSyncIdentifiers(): bool
+    {
+        return in_array(SyncFields::IDENTIFIERS, $this->syncFields, true);
     }
 
     /**

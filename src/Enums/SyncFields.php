@@ -35,6 +35,7 @@ class SyncFields
     public const DESCRIPTION = 'description';
     public const CATEGORIES = 'categories';
     public const IMAGE = 'image';
+    public const IDENTIFIERS = 'identifiers';
 
     public static function getSyncFields(): array
     {
@@ -43,6 +44,7 @@ class SyncFields
             'Price' => self::PRICE,
             'Description' => self::DESCRIPTION,
             'Categories' => self::CATEGORIES,
+            'Identifiers' => self::IDENTIFIERS,
             'Image' => self::IMAGE,
         ];
     }

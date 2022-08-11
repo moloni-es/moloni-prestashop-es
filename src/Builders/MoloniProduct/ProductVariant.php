@@ -24,20 +24,21 @@
 
 namespace Moloni\Builders\MoloniProduct;
 
-use Shop;
-use Image;
-use Product;
 use Combination;
 use Configuration;
-use StockAvailable;
+use Image;
 use Moloni\Builders\MoloniProduct\Helpers\UpdateMoloniProductStock;
 use Moloni\Builders\MoloniProduct\Helpers\Variants\FindVariant;
 use Moloni\Enums\Boolean;
 use Moloni\Enums\ProductVisibility;
+use Moloni\Enums\SyncFields;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\Product\MoloniProductException;
 use Moloni\Tools\Settings;
 use Moloni\Traits\LogsTrait;
+use Product;
+use Shop;
+use StockAvailable;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -67,7 +68,6 @@ class ProductVariant
      * @var Combination|null
      */
     protected $prestashopCombination;
-
 
     /**
      * Visibility
@@ -146,6 +146,14 @@ class ProductVariant
      */
     protected $image = [];
 
+
+    /**
+     * Fields that will be synced
+     *
+     * @var array
+     */
+    protected $syncFields;
+
     /**
      * Constructor
      *
@@ -153,18 +161,22 @@ class ProductVariant
      * @param string|null $parentName
      * @param array|null $moloniParentProduct
      * @param array|null $propertyPairs
+     * @param array|null $syncFields
      */
     public function __construct(
         Combination $prestashopCombination,
         ?string $parentName = '',
         ?array $moloniParentProduct = [],
-        ?array $propertyPairs = []
+        ?array $propertyPairs = [],
+        ?array $syncFields = null
     ) {
         $this->prestashopCombination = $prestashopCombination;
 
         $this->parentName = $parentName;
         $this->moloniParentProduct = $moloniParentProduct;
         $this->propertyPairs = $propertyPairs;
+
+        $this->syncFields = $syncFields;
 
         $this->init();
     }
@@ -202,10 +214,16 @@ class ProductVariant
         $props = [
             'visible' => $this->visibility,
             'name' => $this->name,
-            'price' => $this->price,
-            'identifications' => $this->identifications,
-            'propertyPairs' => $this->propertyPairs
+            'propertyPairs' => $this->propertyPairs,
         ];
+
+        if ($this->shouldSyncPrice()) {
+            $props['price'] = $this->price;
+        }
+
+        if ($this->shouldSyncIdentifiers()) {
+            $props['identifications'] = $this->identifications;
+        }
 
         if ($this->variantExists()) {
             $props['productId'] = $this->getMoloniVariantId();
@@ -347,7 +365,7 @@ class ProductVariant
             $identifications[] = [
                 'type' => 'EAN13',
                 'text' => $this->prestashopCombination->ean13,
-                'favorite' => false
+                'favorite' => false,
             ];
         }
 
@@ -355,7 +373,7 @@ class ProductVariant
             $identifications[] = [
                 'type' => 'ISBN',
                 'text' => $this->prestashopCombination->isbn,
-                'favorite' => false
+                'favorite' => false,
             ];
         }
 
@@ -397,7 +415,7 @@ class ProductVariant
      */
     public function setWarehouseId(?int $warehouseId = null): ProductVariant
     {
-        $this->warehouseId = (int)($warehouseId ?? Settings::get('syncStockToMoloniWarehouse') ?? 0);
+        $this->warehouseId = (int) ($warehouseId ?? Settings::get('syncStockToMoloniWarehouse') ?? 0);
 
         return $this;
     }
@@ -406,11 +424,12 @@ class ProductVariant
      * Set if variants has stock
      *
      * @param bool|null $parentHasStock
+     *
      * @return ProductVariant
      */
     public function setParentHasStock(?bool $parentHasStock = null): ProductVariant
     {
-        $this->parentHasStock = $parentHasStock ?? (bool)Boolean::YES;
+        $this->parentHasStock = $parentHasStock ?? (bool) Boolean::YES;
 
         return $this;
     }
@@ -426,6 +445,7 @@ class ProductVariant
     {
         if ($newStock) {
             $this->stock = $newStock;
+
             return $this;
         }
 
@@ -433,6 +453,7 @@ class ProductVariant
             $this->prestashopCombination->id_product,
             $this->prestashopCombination->id
         );
+
         return $this;
     }
 
@@ -443,8 +464,8 @@ class ProductVariant
      */
     public function setImage(): ProductVariant
     {
-        $languageId = (int)Configuration::get('PS_LANG_DEFAULT');
-        $shopId = (int)Shop::getContextShopID();
+        $languageId = (int) Configuration::get('PS_LANG_DEFAULT');
+        $shopId = (int) Shop::getContextShopID();
 
         $image = Image::getBestImageAttribute(
             $shopId,
@@ -501,7 +522,7 @@ class ProductVariant
             return 0;
         }
 
-        return (int)$this->moloniParentProduct['productId'];
+        return (int) $this->moloniParentProduct['productId'];
     }
 
     /**
@@ -515,7 +536,7 @@ class ProductVariant
             return 0;
         }
 
-        return (int)$this->moloniVariant['productId'];
+        return (int) $this->moloniVariant['productId'];
     }
 
     /**
@@ -556,6 +577,28 @@ class ProductVariant
     public function getImage(): array
     {
         return $this->image;
+    }
+
+    //          VERIFICATIONS          //
+
+    /**
+     * Should sync variant price
+     *
+     * @return bool
+     */
+    protected function shouldSyncPrice(): bool
+    {
+        return !$this->variantExists() || in_array(SyncFields::PRICE, $this->syncFields, true);
+    }
+
+    /**
+     * Should sync product identifiers (ISBN, EAN)
+     *
+     * @return bool
+     */
+    protected function shouldSyncIdentifiers(): bool
+    {
+        return in_array(SyncFields::IDENTIFIERS, $this->syncFields, true);
     }
 
     //          Auxiliary          //

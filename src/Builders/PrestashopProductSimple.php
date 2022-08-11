@@ -240,10 +240,13 @@ class PrestashopProductSimple implements BuilderInterface
             $this->prestashopProduct->price = $this->price;
         }
 
+        if ($this->shouldSyncIdentifiers()) {
+            $this->prestashopProduct->ean13 = $this->ean13;
+            $this->prestashopProduct->isbn = $this->isbn;
+        }
+
         $this->prestashopProduct->reference = $this->reference;
         $this->prestashopProduct->product_type = $this->type;
-        $this->prestashopProduct->ean13 = $this->ean13;
-        $this->prestashopProduct->isbn = $this->isbn;
 
         if (!empty($this->categories)) {
             $this->prestashopProduct->id_category_default = $this->categories[0];
@@ -644,6 +647,16 @@ class PrestashopProductSimple implements BuilderInterface
     protected function shouldSyncCategories(): bool
     {
         return !$this->productExists() || in_array(SyncFields::CATEGORIES, $this->syncFields, true);
+    }
+
+    /**
+     * Should sync product identifiers (ISBN, EAN)
+     *
+     * @return bool
+     */
+    protected function shouldSyncIdentifiers(): bool
+    {
+        return in_array(SyncFields::IDENTIFIERS, $this->syncFields, true);
     }
 
     /**

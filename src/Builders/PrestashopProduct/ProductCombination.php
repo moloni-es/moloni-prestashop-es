@@ -24,22 +24,22 @@
 
 namespace Moloni\Builders\PrestashopProduct;
 
-use Product;
 use Combination;
-use PrestaShopException;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\Interfaces\BuilderInterface;
-use Moloni\Builders\PrestashopProduct\Helpers\UpdatePrestaProductStock;
 use Moloni\Builders\PrestashopProduct\Helpers\Combinations\FindOrCreateCombination;
 use Moloni\Builders\PrestashopProduct\Helpers\Combinations\UpdatePrestaCombinationImage;
+use Moloni\Builders\PrestashopProduct\Helpers\UpdatePrestaProductStock;
 use Moloni\Enums\Boolean;
 use Moloni\Enums\SyncFields;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\Product\MoloniProductCombinationException;
 use Moloni\Tools\Logs;
 use Moloni\Tools\Settings;
-use Moloni\Traits\LogsTrait;
 use Moloni\Traits\AttributesTrait;
+use Moloni\Traits\LogsTrait;
+use PrestaShopException;
+use Product;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -77,7 +77,6 @@ class ProductCombination implements BuilderInterface
      * @var Combination|null
      */
     protected $prestashopCombination;
-
 
     /**
      * Variant name
@@ -148,7 +147,6 @@ class ProductCombination implements BuilderInterface
      * @var array
      */
     protected $attributes = [];
-
 
     /**
      * Fields that will be synced
@@ -253,10 +251,13 @@ class ProductCombination implements BuilderInterface
             $this->prestashopCombination->price = $this->price;
         }
 
+        if ($this->shouldSyncIdentifiers()) {
+            $this->prestashopCombination->ean13 = $this->ean13;
+            $this->prestashopCombination->isbn = $this->isbn;
+        }
+
         $this->prestashopCombination->reference = $this->reference;
         $this->prestashopCombination->id_product = $this->prestashopProduct->id;
-        $this->prestashopCombination->ean13 = $this->ean13;
-        $this->prestashopCombination->isbn = $this->isbn;
 
         return $this;
     }
@@ -328,7 +329,7 @@ class ProductCombination implements BuilderInterface
             return;
         }
 
-        new UpdatePrestaProductStock((int)$this->prestashopProduct->id, (int)$this->prestashopCombination->id, $this->reference, $this->stock, $this->shouldWriteLogs());
+        new UpdatePrestaProductStock((int) $this->prestashopProduct->id, (int) $this->prestashopCombination->id, $this->reference, $this->stock, $this->shouldWriteLogs());
     }
 
     //          GETS          //
@@ -354,7 +355,7 @@ class ProductCombination implements BuilderInterface
             return 0;
         }
 
-        return (int)$this->moloniVariant['productId'];
+        return (int) $this->moloniVariant['productId'];
     }
 
     /**
@@ -370,7 +371,7 @@ class ProductCombination implements BuilderInterface
      */
     public function getCombinationId(): int
     {
-        return (int)$this->prestashopCombination->id;
+        return (int) $this->prestashopCombination->id;
     }
 
     /**
@@ -468,9 +469,9 @@ class ProductCombination implements BuilderInterface
                     'filter' => [
                         'field' => 'isDefault',
                         'comparison' => 'eq',
-                        'value' => "1"
+                        'value' => '1',
                     ],
-                ]
+                ],
             ];
 
             try {
@@ -485,7 +486,7 @@ class ProductCombination implements BuilderInterface
             }
         }
 
-        $this->warehouseId = (int)$warehouseId;
+        $this->warehouseId = (int) $warehouseId;
 
         return $this;
     }
@@ -497,7 +498,7 @@ class ProductCombination implements BuilderInterface
      */
     public function setHasStock(): ProductCombination
     {
-        $this->hasStock = $this->moloniVariant['hasStock'] ?? (bool)Boolean::YES;
+        $this->hasStock = $this->moloniVariant['hasStock'] ?? (bool) Boolean::YES;
 
         return $this;
     }
@@ -513,12 +514,12 @@ class ProductCombination implements BuilderInterface
             $stock = 0;
 
             if ($this->warehouseId === 1) {
-                $stock = (float)($this->moloniVariant['stock'] ?? 0);
+                $stock = (float) ($this->moloniVariant['stock'] ?? 0);
             } else {
                 foreach ($this->moloniVariant['warehouses'] as $warehouse) {
-                    $stock = (float)$warehouse['stock'];
+                    $stock = (float) $warehouse['stock'];
 
-                    if ((int)$warehouse['warehouseId'] === $this->warehouseId) {
+                    if ((int) $warehouse['warehouseId'] === $this->warehouseId) {
                         break;
                     }
                 }
@@ -582,6 +583,16 @@ class ProductCombination implements BuilderInterface
     protected function shouldSyncPrice(): bool
     {
         return !$this->combinationExists() || in_array(SyncFields::PRICE, $this->syncFields, true);
+    }
+
+    /**
+     * Should sync product identifiers (ISBN, EAN)
+     *
+     * @return bool
+     */
+    protected function shouldSyncIdentifiers(): bool
+    {
+        return in_array(SyncFields::IDENTIFIERS, $this->syncFields, true);
     }
 
     /**

@@ -68,7 +68,7 @@ class SettingsFormHandler implements FormHandlerInterface
     public function getForm(): FormInterface
     {
         $formBuilder = $this->formFactory->createNamedBuilder(
-            "MoloniSettings",
+            'MoloniSettings',
             SettingsFormType::class
         );
 
@@ -81,6 +81,7 @@ class SettingsFormHandler implements FormHandlerInterface
     {
         $this->formDataProvider->setData($data);
         $this->createWebHooks($data);
+
         return [];
     }
 
