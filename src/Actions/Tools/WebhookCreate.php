@@ -111,7 +111,7 @@ class WebhookCreate
         $key = '';
 
         $dataBase = Db::getInstance();
-        $sql = 'SELECT * FROM ' . _DB_PREFIX_ . 'webservice_account WHERE description = "' . $this->description .'"';
+        $sql = 'SELECT * FROM ' . _DB_PREFIX_ . 'webservice_account WHERE description = "' . pSQL($this->description) .'"';
         $query = $dataBase->getRow($sql);
 
 
