@@ -1,37 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
-  <file original="admin745p3ar3j" source-language="es-ES" target-language="es-ES" datatype="plaintext">
+  <file original="administration" source-language="es-ES" target-language="es-ES" datatype="plaintext">
     <body>
-      <trans-unit id="f6858ff3741dc1c7ad8a2cd0fcea8b6d">
-        <source>View document</source>
-        <target>Ver documento</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="0c8ae58cc7e14e01f92e34ccfbd45f2e">
-        <source>Create document</source>
-        <target>Crear documento</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="6311ae17c1ee52b36e68aaf4ad066387">
-        <source>Other</source>
-        <target>Otros</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="76525f0f34b48475e5ca33f71d296f3b">
-        <source>Client ID</source>
-        <target>Client ID</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="734082edf44417dd19cc65943aa65c36">
-        <source>Client Secret</source>
-        <target>Client Secret</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="49ab28040dfa07f53544970c6d147e1e">
-        <source>Connect</source>
-        <target>Conectar</target>
-        <note>Line: </note>
-      </trans-unit>
       <trans-unit id="466eadd40b3c10580e3ab4e8061161ce">
         <source>Invoice</source>
         <target>Factura</target>
@@ -162,29 +132,14 @@
         <target>Producto actualizado en Prestashop ({0})</target>
         <note>Line: </note>
       </trans-unit>
-      <trans-unit id="2cd5f4dedebdbb0dd22c07d403b150fd">
-        <source>Webhooks reinstall was successful</source>
-        <target>La reinstalación de Webhooks se ha realizado con éxito</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="49d8305929013b44243a63f064091e6e">
-        <source>Older logs deleted</source>
-        <target>Logs antiguos eliminados</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="3ad4e878c2e8d330d1369eba18ad30dd">
-        <source>A confirmation email has been sent to your email address.</source>
-        <target>Se ha enviado un correo electrónico de confirmación a tu dirección de correo electrónico.</target>
+      <trans-unit id="3cdde9f08aa2ed20b962b648d5d1934d">
+        <source>Order restored with success.</source>
+        <target>Pedido recreado con éxito.</target>
         <note>Line: </note>
       </trans-unit>
       <trans-unit id="0e3ddcff7b4b131d6748fdd816e6cce9">
         <source>Company selected successfully</source>
         <target>Empresa seleccionada con éxito</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="3cdde9f08aa2ed20b962b648d5d1934d">
-        <source>Order restored with success.</source>
-        <target>Pedido recreado con éxito.</target>
         <note>Line: </note>
       </trans-unit>
       <trans-unit id="8157b101f74d46bfcdb88cb0946e3825">
@@ -195,6 +150,61 @@
       <trans-unit id="b341ab21c44305cdbc7ad20a96ee2b38">
         <source>Order discarded with success.</source>
         <target>Pedido descartado con éxito.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="3ad4e878c2e8d330d1369eba18ad30dd">
+        <source>A confirmation email has been sent to your email address.</source>
+        <target>Se ha enviado un correo electrónico de confirmación a tu dirección de correo electrónico.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="2cd5f4dedebdbb0dd22c07d403b150fd">
+        <source>Webhooks reinstall was successful</source>
+        <target>La reinstalación de Webhooks se ha realizado con éxito</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="49d8305929013b44243a63f064091e6e">
+        <source>Older logs deleted</source>
+        <target>Logs antiguos eliminados</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="76525f0f34b48475e5ca33f71d296f3b">
+        <source>Client ID</source>
+        <target>Client ID</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="734082edf44417dd19cc65943aa65c36">
+        <source>Client Secret</source>
+        <target>Client Secret</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="49ab28040dfa07f53544970c6d147e1e">
+        <source>Connect</source>
+        <target>Conectar</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="6311ae17c1ee52b36e68aaf4ad066387">
+        <source>Other</source>
+        <target>Otros</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="f6858ff3741dc1c7ad8a2cd0fcea8b6d">
+        <source>View document</source>
+        <target>Ver documento</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="0c8ae58cc7e14e01f92e34ccfbd45f2e">
+        <source>Create document</source>
+        <target>Crear documento</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="4bd9ef088a14b5f6fd9ef86e6f33037f">
+        <source>Need help?</source>
+        <target>¿Necesitas ayuda?</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="237c9acb1e8d54011876aeb93045e445">
+        <source>Check our tutorials</source>
+        <target>Consulta nuestros tutoriales</target>
         <note>Line: </note>
       </trans-unit>
       <trans-unit id="df27933c064013f2abe6ebebf0e98635">
@@ -297,46 +307,6 @@
         <target>Reset</target>
         <note>Line: </note>
       </trans-unit>
-      <trans-unit id="b429b01543ebc27e45fb0447c8828be2">
-        <source>Pending orders</source>
-        <target>Pedidos pendientes</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="9dd4d069db3578f505d7516d90541420">
-        <source>Discard order</source>
-        <target>Descartar pedido</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="c4d0532a2ff3843d9523ab5a5d58f12b">
-        <source>All your documents are already converted into documents!</source>
-        <target>¡Todos tus pedidos ya están convertidos en documentos!</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="4f67fe16b274bf31a67539fbedb8f8d3">
-        <source>Document Type</source>
-        <target>Tipo de documento</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="6861d21ea3a14378d5fab68eb542c76f">
-        <source>Search customer</source>
-        <target>Buscar cliente</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="8f536f5dd951b1c30c5908b58fd89887">
-        <source>Search e-mail</source>
-        <target>Buscar email</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="4c89a4828cdeb4b0e246d7a5f6057d11">
-        <source>I don't have an account yet.</source>
-        <target>Todavía no tengo una cuenta.</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="42369faa6a6b243aac58683f3874bf99">
-        <source>Create account</source>
-        <target>Crear una cuenta</target>
-        <note>Line: </note>
-      </trans-unit>
       <trans-unit id="dd7bf230fde8d4836917806aff6a6b27">
         <source>Address</source>
         <target>Dirección</target>
@@ -362,6 +332,16 @@
         <target>Tu cuenta no tiene acceso a ninguna empresa.</target>
         <note>Line: </note>
       </trans-unit>
+      <trans-unit id="4c89a4828cdeb4b0e246d7a5f6057d11">
+        <source>I don't have an account yet.</source>
+        <target>Todavía no tengo una cuenta.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="42369faa6a6b243aac58683f3874bf99">
+        <source>Create account</source>
+        <target>Crear una cuenta</target>
+        <note>Line: </note>
+      </trans-unit>
       <trans-unit id="b2d37ae1cedf42ff874289b721860af2">
         <source>Logs</source>
         <target>Logs</target>
@@ -375,6 +355,26 @@
       <trans-unit id="22b653bd8d2edcebb9e0036b4ac79262">
         <source>Go back</source>
         <target>Volver</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="27ce7f8b5623b2e2df568d64cf051607">
+        <source>Stock</source>
+        <target>Stock</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="a1fa27779242b4902f7ae3bdd5c6d508">
+        <source>Type</source>
+        <target>Tipo</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="4c2a8fe7eaf24721cc7a9f0175115bd4">
+        <source>Message</source>
+        <target>Mensaje</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="00f4e5788aab6d3546bb433842dbbefc">
+        <source>Payload</source>
+        <target>Datos de la operación</target>
         <note>Line: </note>
       </trans-unit>
       <trans-unit id="fb47fb1676de5b5b9c19acccf5b9e63b">
@@ -407,34 +407,34 @@
         <target>Cerrar</target>
         <note>Line: </note>
       </trans-unit>
-      <trans-unit id="27ce7f8b5623b2e2df568d64cf051607">
-        <source>Stock</source>
-        <target>Stock</target>
+      <trans-unit id="b429b01543ebc27e45fb0447c8828be2">
+        <source>Pending orders</source>
+        <target>Pedidos pendientes</target>
         <note>Line: </note>
       </trans-unit>
-      <trans-unit id="a1fa27779242b4902f7ae3bdd5c6d508">
-        <source>Type</source>
-        <target>Tipo</target>
+      <trans-unit id="9dd4d069db3578f505d7516d90541420">
+        <source>Discard order</source>
+        <target>Descartar pedido</target>
         <note>Line: </note>
       </trans-unit>
-      <trans-unit id="4c2a8fe7eaf24721cc7a9f0175115bd4">
-        <source>Message</source>
-        <target>Mensaje</target>
+      <trans-unit id="c4d0532a2ff3843d9523ab5a5d58f12b">
+        <source>All your documents are already converted into documents!</source>
+        <target>¡Todos tus pedidos ya están convertidos en documentos!</target>
         <note>Line: </note>
       </trans-unit>
-      <trans-unit id="00f4e5788aab6d3546bb433842dbbefc">
-        <source>Payload</source>
-        <target>Datos de la operación</target>
+      <trans-unit id="4f67fe16b274bf31a67539fbedb8f8d3">
+        <source>Document Type</source>
+        <target>Tipo de documento</target>
         <note>Line: </note>
       </trans-unit>
-      <trans-unit id="4bd9ef088a14b5f6fd9ef86e6f33037f">
-        <source>Need help?</source>
-        <target>¿Necesitas ayuda?</target>
+      <trans-unit id="6861d21ea3a14378d5fab68eb542c76f">
+        <source>Search customer</source>
+        <target>Buscar cliente</target>
         <note>Line: </note>
       </trans-unit>
-      <trans-unit id="237c9acb1e8d54011876aeb93045e445">
-        <source>Check our tutorials</source>
-        <target>Consulta nuestros tutoriales</target>
+      <trans-unit id="8f536f5dd951b1c30c5908b58fd89887">
+        <source>Search e-mail</source>
+        <target>Buscar email</target>
         <note>Line: </note>
       </trans-unit>
     </body>

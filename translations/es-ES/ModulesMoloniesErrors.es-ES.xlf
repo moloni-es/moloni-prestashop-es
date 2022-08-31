@@ -1,77 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
-  <file original="admin745p3ar3j" source-language="es-ES" target-language="es-ES" datatype="plaintext">
+  <file original="administration" source-language="es-ES" target-language="es-ES" datatype="plaintext">
     <body>
-      <trans-unit id="0511ee0d41117aa7b4abaaf102aa513d">
-        <source>This field is required</source>
-        <target>Este campo es obligatorio</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="127013ec52b4e0a737a6d6836801cd47">
-        <source>E-mail is not valid</source>
-        <target>El e-mail no es válido</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="44b57473df30719bdaed6b4f3de9c810">
-        <source>VAT is not valid</source>
-        <target>Número de Identificación Fiscal no es válido</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="cfe6062038419f74c7d9e8b3a0150645">
-        <source>Slug has to have 4 or more characters</source>
-        <target>El slug tiene que tener 4 o más caracteres</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="23c440347e23570650575fce2456eb95">
-        <source>Slug is not valid</source>
-        <target>Slug no es válido</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="03ec9ea94e6d19081854251cfc940f9d">
-        <source>Password cannot be empty</source>
-        <target>La contraseña no puede estar vacía</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="3c5469d2ee89eddc561ce8b330d7950b">
-        <source>Password has to have 6 or more characters</source>
-        <target>La contraseña debe tener 6 o más caracteres</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="100e2b65a6bbd95e849c913e51984362">
-        <source>Password cannot have more than 16 characters</source>
-        <target>La contraseña no puede tener más de 16 caracteres</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="14c0acf57a4ea3f9dfaf6936402db705">
-        <source>Password needs to have at least one uppercase letter</source>
-        <target>La contraseña debe tener al menos una letra mayúscula</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="123de69b14f834c90fba3a5c9f72f5a6">
-        <source>Password needs to have at least one lowercase letter</source>
-        <target>La contraseña debe tener al menos una letra minúscula</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="934c3e644fde8e4878d4426ec02596c4">
-        <source>Password needs to have at least one symbol</source>
-        <target>La contraseña debe tener al menos un símbolo</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="5951f98d6d1931ec81292e820ba9dd7e">
-        <source>Password needs to have at least one number</source>
-        <target>La contraseña debe tener al menos un número</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="d65cd21c25016a7d5e5b580c0cac02c7">
-        <source>Password should not contain any white space</source>
-        <target>La contraseña no debe contener espacios en blanco</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="867cee98fdd724e7d5bc87f61ce657bc">
-        <source>Passwords do not match</source>
-        <target>Las contraseñas no coinciden</target>
-        <note>Line: </note>
-      </trans-unit>
       <trans-unit id="ecf86ca60b1e74dba70847c917f9250a">
         <source>Discarded order not found!</source>
         <target>Pedido de cliente descartado no encontrado</target>
@@ -442,9 +372,89 @@
         <target>El producto con referencia ({0}) es invisible en Moloni. Cambie la visibilidad del producto.</target>
         <note>Line: </note>
       </trans-unit>
-      <trans-unit id="67509542f3351ede1bd24dcdb31fb1df">
-        <source>Error fetching logs list</source>
-        <target> Error al obtener la lista de registros</target>
+      <trans-unit id="6adb7f2ed09247b8fe5412ea32c7e9b7">
+        <source>Product with reference ({0}) has no taxes applied. Please add an exemption reason in plugin settings.</source>
+        <target>El producto con referencia ({0}) no tiene impuestos aplicados. Por favor, añade un motivo de exención en la configuración del plugin.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="0511ee0d41117aa7b4abaaf102aa513d">
+        <source>This field is required</source>
+        <target>Este campo es obligatorio</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="127013ec52b4e0a737a6d6836801cd47">
+        <source>E-mail is not valid</source>
+        <target>El e-mail no es válido</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="44b57473df30719bdaed6b4f3de9c810">
+        <source>VAT is not valid</source>
+        <target>Número de Identificación Fiscal no es válido</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="cfe6062038419f74c7d9e8b3a0150645">
+        <source>Slug has to have 4 or more characters</source>
+        <target>El slug tiene que tener 4 o más caracteres</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="23c440347e23570650575fce2456eb95">
+        <source>Slug is not valid</source>
+        <target>Slug no es válido</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="03ec9ea94e6d19081854251cfc940f9d">
+        <source>Password cannot be empty</source>
+        <target>La contraseña no puede estar vacía</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="3c5469d2ee89eddc561ce8b330d7950b">
+        <source>Password has to have 6 or more characters</source>
+        <target>La contraseña debe tener 6 o más caracteres</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="100e2b65a6bbd95e849c913e51984362">
+        <source>Password cannot have more than 16 characters</source>
+        <target>La contraseña no puede tener más de 16 caracteres</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="14c0acf57a4ea3f9dfaf6936402db705">
+        <source>Password needs to have at least one uppercase letter</source>
+        <target>La contraseña debe tener al menos una letra mayúscula</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="123de69b14f834c90fba3a5c9f72f5a6">
+        <source>Password needs to have at least one lowercase letter</source>
+        <target>La contraseña debe tener al menos una letra minúscula</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="934c3e644fde8e4878d4426ec02596c4">
+        <source>Password needs to have at least one symbol</source>
+        <target>La contraseña debe tener al menos un símbolo</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="5951f98d6d1931ec81292e820ba9dd7e">
+        <source>Password needs to have at least one number</source>
+        <target>La contraseña debe tener al menos un número</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="d65cd21c25016a7d5e5b580c0cac02c7">
+        <source>Password should not contain any white space</source>
+        <target>La contraseña no debe contener espacios en blanco</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="867cee98fdd724e7d5bc87f61ce657bc">
+        <source>Passwords do not match</source>
+        <target>Las contraseñas no coinciden</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="43412e5b88dc9c0e67396e8ecc56475c">
+        <source>Error fetching documents list</source>
+        <target>Error al obtener de la lista de documentos</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="62b5d95d6f1eb04022fe3c269b6bb15d">
+        <source>Error fetching Prestashop order</source>
+        <target>Error al recuperar un pedido en Prestashop</target>
         <note>Line: </note>
       </trans-unit>
       <trans-unit id="8ba4357de0367107b1b58e31bf1d0933">
@@ -462,14 +472,9 @@
         <target> Haz clic para obtener más información</target>
         <note>Line: </note>
       </trans-unit>
-      <trans-unit id="43412e5b88dc9c0e67396e8ecc56475c">
-        <source>Error fetching documents list</source>
-        <target>Error al obtener de la lista de documentos</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="62b5d95d6f1eb04022fe3c269b6bb15d">
-        <source>Error fetching Prestashop order</source>
-        <target>Error al recuperar un pedido en Prestashop</target>
+      <trans-unit id="67509542f3351ede1bd24dcdb31fb1df">
+        <source>Error fetching logs list</source>
+        <target> Error al obtener la lista de registros</target>
         <note>Line: </note>
       </trans-unit>
       <trans-unit id="24909e87dc242b9dd539e10609b8b050">

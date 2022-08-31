@@ -124,6 +124,7 @@ class DummyTranslations
         $this->translator->trans('Warning processing order ({0})', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Order already discarded or created!', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Product with reference ({0}) is invisible in Moloni. Please change the product visibility.', [], 'Modules.Molonies.Errors');
+        $this->translator->trans('Product with reference ({0}) has no taxes applied. Please add an exemption reason in plugin settings.', [], 'Modules.Molonies.Errors');
     }
 
     public function common(): void

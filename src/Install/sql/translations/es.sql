@@ -399,5 +399,6 @@ VALUES  (@idLang, 'Translations exported sucessfully!', 'Traducciones exportadas
         (@idLang, 'Use this tool to create all products in your Prestashop store account in your Moloni account.', 'Utiliza esta herramienta para crear todos los productos de tu tienda Prestashop en tu cuenta Moloni.', 'ModulesMoloniesTools'),
         (@idLang, 'Order already dicarded or created!', 'Pedido creado o descartado', 'ModulesMoloniesErrors'),
         (@idLang, 'Product with reference ({0}) is invisible in Moloni. Please change the product visibility.', 'El producto con referencia ({0}) es invisible en Moloni. Cambie la visibilidad del producto.', 'ModulesMoloniesErrors'),
+        (@idLang, 'Product with reference ({0}) has no taxes applied. Please add an exemption reason in plugin settings.', 'El producto con referencia ({0}) no tiene impuestos aplicados. Por favor, añade un motivo de exención en la configuración del plugin.', 'ModulesMoloniesErrors'),
         (@idLang, 'Moloni Spain', 'Moloni España', 'ModulesMoloniesMolonies'),
         (@idLang, 'Are you sure you want to unnistall this module?', '¿Está seguro de que desea desinstalar este módulo?', 'ModulesMoloniesMolonies');
