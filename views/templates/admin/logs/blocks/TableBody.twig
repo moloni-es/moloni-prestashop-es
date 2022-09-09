@@ -41,6 +41,8 @@
 
                     {% if log.level == constant('Moloni\\Enums\\LogLevel::INFO') %}
                         {{ message[0]|trans(foo, 'Modules.Molonies.Common') }}
+                    {% elseif log.level == constant('Moloni\\Enums\\LogLevel::STOCK') %}
+                        {{ message[0]|trans(foo, 'Modules.Molonies.Common') }}
                     {% else %}
                         {{ message[0]|trans(foo, 'Modules.Molonies.Errors') }}
                     {% endif %}
