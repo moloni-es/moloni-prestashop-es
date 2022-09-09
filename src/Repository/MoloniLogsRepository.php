@@ -133,5 +133,11 @@ class MoloniLogsRepository extends EntityRepository
                 ->andWhere('l.level = :log_level')
                 ->setParameter('log_level', $filters['log_level']);
         }
+
+        if (!empty($filters['message_text'])) {
+            $query
+                ->andWhere('l.message LIKE :message_text')
+                ->setParameter('message_text', '%' . $filters['message_text'] . '%');
+        }
     }
 }

@@ -33,7 +33,12 @@
             {% endfor %}
         </select>
     </td>
-    <td></td>
+    <td>
+        <input type="text"
+               class="form-control"
+               value="{{ filters.message_text|default('') }}"
+               name="filters[message_text]"/>
+    </td>
     <td class="text-center">
         <button type="submit"
                 class="btn btn-primary"
