@@ -46,6 +46,12 @@ class ProductStockChange extends AbstractWebserviceAction
         }
 
         try {
+            /**
+             *  Moloni triggers webhooks before stock movements are persisted
+             *  This delay gives us some leeway to mitigate this kind of issues
+             */
+            sleep(1);
+
             $product = $this->fetchProductFromMoloni($this->productId);
 
             // Should not sync child product by itself
