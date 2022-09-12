@@ -24,25 +24,26 @@
 
 namespace Moloni\Builders;
 
-use Product;
 use Configuration;
-use PrestaShopException;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\Interfaces\BuilderInterface;
-use Moloni\Builders\PrestashopProduct\Helpers\UpdatePrestaProductImage;
+use Moloni\Builders\PrestashopProduct\Helpers\Combinations\CreateMappingsAfterPrestaProductCreateOrUpdate;
+use Moloni\Builders\PrestashopProduct\Helpers\Combinations\ProcessAttributesGroup;
 use Moloni\Builders\PrestashopProduct\Helpers\FindTaxGroupFromMoloniTax;
 use Moloni\Builders\PrestashopProduct\Helpers\GetPrestashopCategoriesFromMoloniCategoryId;
-use Moloni\Builders\PrestashopProduct\Helpers\Combinations\ProcessAttributesGroup;
-use Moloni\Builders\PrestashopProduct\Helpers\Combinations\CreateMappingsAfterPrestaProductCreateOrUpdate;
+use Moloni\Builders\PrestashopProduct\Helpers\UpdatePrestaProductImage;
 use Moloni\Builders\PrestashopProduct\ProductCombination;
 use Moloni\Enums\Boolean;
+use Moloni\Enums\ProductVisibility;
 use Moloni\Enums\SyncFields;
-use Moloni\Traits\LogsTrait;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\Product\MoloniProductCategoryException;
 use Moloni\Exceptions\Product\MoloniProductException;
 use Moloni\Tools\Logs;
 use Moloni\Tools\Settings;
+use Moloni\Traits\LogsTrait;
+use PrestaShopException;
+use Product;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -68,6 +69,12 @@ class PrestashopProductWithCombinations implements BuilderInterface
      */
     protected $prestashopProduct;
 
+    /**
+     * Visibility
+     *
+     * @var string
+     */
+    protected $visibility;
 
     /**
      * Product name
@@ -201,6 +208,7 @@ class PrestashopProductWithCombinations implements BuilderInterface
         $this
             ->setReference()
             ->fetchProductFromPresta()
+            ->setVisibility()
             ->setImagePath()
             ->setAttributes()
             ->setCombinations()
@@ -255,6 +263,10 @@ class PrestashopProductWithCombinations implements BuilderInterface
      */
     protected function fillPrestaProduct(): PrestashopProductWithCombinations
     {
+        if ($this->shouldSyncVisibility()) {
+            $this->prestashopProduct->visibility = $this->visibility;
+        }
+
         if ($this->shouldSyncName()) {
             $this->prestashopProduct->name = $this->name;
         }
@@ -415,6 +427,22 @@ class PrestashopProductWithCombinations implements BuilderInterface
     }
 
     //          SETS          //
+
+    /**
+     * Set product visibility
+     *
+     * @return PrestashopProductWithCombinations
+     */
+    public function setVisibility(): PrestashopProductWithCombinations
+    {
+        if ((int) $this->moloniProduct['visible'] === ProductVisibility::VISIBLE) {
+            $this->visibility = 'both';
+        } else {
+            $this->visibility = 'none';
+        }
+
+        return $this;
+    }
 
     /**
      * Set product name
@@ -749,6 +777,16 @@ class PrestashopProductWithCombinations implements BuilderInterface
     protected function shouldSyncImage(): bool
     {
         return in_array(SyncFields::IMAGE, $this->syncFields, true);
+    }
+
+    /**
+     * Should sync product visibility
+     *
+     * @return bool
+     */
+    protected function shouldSyncVisibility(): bool
+    {
+        return in_array(SyncFields::VISIBILITY, $this->syncFields, true);
     }
 
     //          Auxiliary          //

@@ -258,6 +258,10 @@ class MoloniProductSimple implements BuilderInterface
             'exemptionReason' => '',
         ];
 
+        if (!$this->shouldSyncVisibility()) {
+            unset($props['visible']);
+        }
+
         if (!$this->shouldSyncName()) {
             unset($props['name']);
         }
@@ -482,7 +486,11 @@ class MoloniProductSimple implements BuilderInterface
      */
     public function setVisibility(): MoloniProductSimple
     {
-        $this->visibility = ProductVisibility::VISIBLE;
+        if ($this->prestashopProduct->visibility === 'none') {
+            $this->visibility = ProductVisibility::HIDDEN;
+        } else {
+            $this->visibility = ProductVisibility::VISIBLE;
+        }
 
         return $this;
     }
@@ -960,5 +968,15 @@ class MoloniProductSimple implements BuilderInterface
     protected function shouldSyncImage(): bool
     {
         return in_array(SyncFields::IMAGE, $this->syncFields, true);
+    }
+
+    /**
+     * Should sync product visibility
+     *
+     * @return bool
+     */
+    protected function shouldSyncVisibility(): bool
+    {
+        return in_array(SyncFields::VISIBILITY, $this->syncFields, true);
     }
 }

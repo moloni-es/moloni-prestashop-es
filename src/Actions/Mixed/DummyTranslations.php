@@ -177,6 +177,7 @@ class DummyTranslations
         $this->translator->trans('Categories', [], 'Modules.Molonies.Settings');
         $this->translator->trans('Image', [], 'Modules.Molonies.Settings');
         $this->translator->trans('Identifiers', [], 'Modules.Molonies.Settings');
+        $this->translator->trans('Visibility', [], 'Modules.Molonies.Settings');
     }
 
     public function admin(): void

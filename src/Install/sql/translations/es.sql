@@ -395,6 +395,7 @@ VALUES  (@idLang, 'Translations exported sucessfully!', 'Traducciones exportadas
         (@idLang, 'Price', 'Precio', 'ModulesMoloniesSettings'),
         (@idLang, 'Name', 'Descripción', 'ModulesMoloniesSettings'),
         (@idLang, 'Identifiers', 'Identificadores', 'ModulesMoloniesSettings'),
+        (@idLang, 'Visibility', 'Visibilidad', 'ModulesMoloniesSettings'),
         (@idLang, 'Automatic document creation with real time stock synchronization and powerful sales analysis.', 'Creación automática de documentos con sincronización de stocks en tiempo real y potente análisis de ventas.', 'ModulesMoloniesAdmin'),
         (@idLang, 'Use this tool to create all products in your Prestashop store account in your Moloni account.', 'Utiliza esta herramienta para crear todos los productos de tu tienda Prestashop en tu cuenta Moloni.', 'ModulesMoloniesTools'),
         (@idLang, 'Order already dicarded or created!', 'Pedido creado o descartado', 'ModulesMoloniesErrors'),

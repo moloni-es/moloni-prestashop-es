@@ -259,7 +259,6 @@ class MoloniProductWithVariants implements BuilderInterface
     protected function toArray(): array
     {
         $props = [
-            'visible' => $this->visibility,
             'type' => $this->type,
             'reference' => $this->reference,
             'measurementUnitId' => $this->measurementUnitId,
@@ -267,6 +266,10 @@ class MoloniProductWithVariants implements BuilderInterface
             'taxes' => [],
             'exemptionReason' => '',
         ];
+
+        if ($this->shouldSyncVisibility()) {
+            $props['visible'] = $this->visibility;
+        }
 
         if ($this->shouldSyncName()) {
             $props['name'] = $this->name;
@@ -553,7 +556,11 @@ class MoloniProductWithVariants implements BuilderInterface
      */
     public function setVisibility(): MoloniProductWithVariants
     {
-        $this->visibility = ProductVisibility::VISIBLE;
+        if ($this->prestashopProduct->visibility === 'none') {
+            $this->visibility = ProductVisibility::HIDDEN;
+        } else {
+            $this->visibility = ProductVisibility::VISIBLE;
+        }
 
         return $this;
     }
@@ -1106,5 +1113,15 @@ class MoloniProductWithVariants implements BuilderInterface
     protected function shouldSyncImage(): bool
     {
         return in_array(SyncFields::IMAGE, $this->syncFields, true);
+    }
+
+    /**
+     * Should sync product visibility
+     *
+     * @return bool
+     */
+    protected function shouldSyncVisibility(): bool
+    {
+        return in_array(SyncFields::VISIBILITY, $this->syncFields, true);
     }
 }
