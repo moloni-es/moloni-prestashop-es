@@ -40,7 +40,6 @@ if (!defined('_PS_VERSION_')) {
 class FindOrCreatePropertyGroup
 {
     use ArrayTrait;
-    use StringTrait;
 
     /**
      * @var array
@@ -138,10 +137,9 @@ class FindOrCreatePropertyGroup
                     if ($propExistsKey !== false) {
                         $propExists = $propertyGroupForUpdate['properties'][$propExistsKey];
 
-                        $valueExistsKey = $this->findInCode(
+                        $valueExistsKey = $this->findInCodeWithFallback(
                             $propExists['values'],
-                            $this->cleanReferenceString($attribute),
-                            [$this, 'cleanReferenceString']
+                            $attribute
                         );
 
                         // Property value doesn't, add value

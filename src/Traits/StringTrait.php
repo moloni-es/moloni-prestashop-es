@@ -50,4 +50,20 @@ trait StringTrait
         // Replaces all spaces with hyphens
         return str_replace(['  ', ' '], [' ', '-'], $string);
     }
+
+    private function cleanCodeStringLegacy(string $string): string
+    {
+        // Remove end and start spacing
+        $string = trim($string);
+
+        // All chars upper case
+        $string = strtoupper($string);
+
+        // Replaces all spaces with hyphens.
+        $string = str_replace(' ', '-', $string);
+
+        // Removes special chars
+        return preg_replace('/[^A-Za-z0-9\-]/', '', $string);
+    }
 }
+

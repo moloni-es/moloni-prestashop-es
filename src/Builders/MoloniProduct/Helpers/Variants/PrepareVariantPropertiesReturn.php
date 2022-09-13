@@ -35,7 +35,6 @@ if (!defined('_PS_VERSION_')) {
 class PrepareVariantPropertiesReturn
 {
     use ArrayTrait;
-    use StringTrait;
 
     private $moloniPropertyGroup;
     private $prestashopCombinations;
@@ -70,7 +69,7 @@ class PrepareVariantPropertiesReturn
 
                     $propExists = $this->moloniPropertyGroup['properties'][$propExistsKey];
 
-                    $valueExists = $this->findInCode($propExists['values'], $this->cleanReferenceString($attribute), [$this, 'cleanReferenceString']);
+                    $valueExists = $this->findInCodeWithFallback($propExists['values'], $attribute);
 
                     if ($valueExists === false) {
                         throw new MoloniProductException('Failed to find matching property value for "{0}"', ['{0}' => $attribute]);

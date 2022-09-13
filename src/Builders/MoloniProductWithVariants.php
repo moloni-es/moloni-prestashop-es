@@ -38,7 +38,6 @@ use Moloni\Builders\MoloniProduct\Helpers\Variants\UpdateMoloniVariantsProductIm
 use Moloni\Builders\MoloniProduct\ProductCategory;
 use Moloni\Builders\MoloniProduct\ProductTax;
 use Moloni\Builders\MoloniProduct\ProductVariant;
-use Moloni\Entity\MoloniProductAssociations;
 use Moloni\Enums\Boolean;
 use Moloni\Enums\Countries;
 use Moloni\Enums\ProductType;
@@ -391,22 +390,6 @@ class MoloniProductWithVariants implements BuilderInterface
      */
     protected function fetchProductFromMoloni(): MoloniProductWithVariants
     {
-        /** @var MoloniProductAssociations[]|null $associations */
-        $associations = ProductAssociations::findByPrestashopProductId((int) $this->prestashopProduct->id);
-
-        // If we have associations
-        if (!empty($associations)) {
-            $this->getById($associations[0]->getMlProductId());
-
-            // If found, can return
-            if (!empty($this->moloniProduct)) {
-                return $this;
-            }
-
-            // Not found, delete associations
-            ProductAssociations::deleteByPrestashopId((int) $this->prestashopProduct->id);
-        }
-
         $this->getByReference();
 
         return $this;

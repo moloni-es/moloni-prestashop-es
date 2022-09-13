@@ -38,7 +38,6 @@ if (!defined('_PS_VERSION_')) {
 class CreateEntirePropertyGroup
 {
     use ArrayTrait;
-    use StringTrait;
 
     private $moloniPropertyGroups;
     private $prestashopCombinations;

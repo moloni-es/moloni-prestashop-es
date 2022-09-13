@@ -30,6 +30,8 @@ if (!defined('_PS_VERSION_')) {
 
 trait ArrayTrait
 {
+    use StringTrait;
+
     private function findInCodeOrValue(array $array, string $needle)
     {
         foreach ($array as $value) {
@@ -39,6 +41,25 @@ trait ArrayTrait
         }
 
         return false;
+    }
+
+    private function findInCodeWithFallback(array $array, string $needle)
+    {
+        $valueExistsKey = $this->findInCode(
+            $array,
+            $this->cleanReferenceString($needle),
+            [$this, 'cleanReferenceString']
+        );
+
+        if (!$valueExistsKey) {
+            $valueExistsKey = $this->findInCode(
+                $array,
+                $this->cleanCodeStringLegacy($needle),
+                [$this, 'cleanCodeStringLegacy']
+            );
+        }
+
+        return $valueExistsKey;
     }
 
     private function findInCode(array $array, string $needle, $cleanerFunction = null)
