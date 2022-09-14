@@ -488,15 +488,19 @@ class MoloniProductWithVariants implements BuilderInterface
      *
      * @throws MoloniProductException
      */
-    public function updateStock(int $variantId, ?float $newQty): MoloniProductWithVariants
+    public function updateStock(?int $variantId = 0, ?float $newQty = null): MoloniProductWithVariants
     {
-        if ($variantId === 0 || !$this->productExists() || !$this->productHasStock()) {
+        if (!$this->productExists() || !$this->productHasStock()) {
             return $this;
         }
 
         foreach ($this->variants as $variant) {
-            if ($variant->getPrestashopCombinationId() === $variantId) {
-                $variant->setStock($newQty);
+            if ($variantId > 0) {
+                if ($variant->getPrestashopCombinationId() === $variantId) {
+                    $variant->setStock($newQty);
+                    $variant->updateStock();
+                }
+            } else {
                 $variant->updateStock();
             }
         }
