@@ -14,7 +14,7 @@ export default class MoloniTools {
         exportStocksAction
     }) {
         $('#import_products_button').on('click', ImportProducts.bind(this,importProductsAction));
-        $('#import_stocks_button').on('click', ImportStocks.bind(this,importProductsAction));
+        $('#import_stocks_button').on('click', ImportStocks.bind(this,importStocksAction));
         $('#export_products_button').on('click', ExportProducts.bind(this,exportProductsAction));
         $('#export_stocks_button').on('click', ExportStocks.bind(this,exportStocksAction));
     }
