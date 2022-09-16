@@ -841,7 +841,7 @@ class MoloniProductWithVariants implements BuilderInterface
     public function setPropertyGroup(): MoloniProductWithVariants
     {
         if ($this->productExists()) {
-            $targetId = $this->moloniProduct['propertyGroupId'] ?? '';
+            $targetId = $this->moloniProduct['propertyGroup']['propertyGroupId'] ?? '';
 
             $this->propertyGroup = (new GetOrUpdatePropertyGroup($this->prestashopProduct, $targetId))->handle();
         } else {
