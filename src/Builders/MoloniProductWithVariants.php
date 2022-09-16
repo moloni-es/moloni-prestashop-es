@@ -34,6 +34,7 @@ use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\Interfaces\BuilderInterface;
 use Moloni\Builders\MoloniProduct\Helpers\Variants\CreateMappingsAfterMoloniProductCreateOrUpdate;
 use Moloni\Builders\MoloniProduct\Helpers\Variants\FindOrCreatePropertyGroup;
+use Moloni\Builders\MoloniProduct\Helpers\Variants\GetOrUpdatePropertyGroup;
 use Moloni\Builders\MoloniProduct\Helpers\Variants\UpdateMoloniVariantsProductImage;
 use Moloni\Builders\MoloniProduct\ProductCategory;
 use Moloni\Builders\MoloniProduct\ProductTax;
@@ -839,7 +840,13 @@ class MoloniProductWithVariants implements BuilderInterface
      */
     public function setPropertyGroup(): MoloniProductWithVariants
     {
-        $this->propertyGroup = (new FindOrCreatePropertyGroup($this->prestashopProduct))->handle();
+        if ($this->productExists()) {
+            $targetId = $this->moloniProduct['propertyGroupId'] ?? '';
+
+            $this->propertyGroup = (new GetOrUpdatePropertyGroup($this->prestashopProduct, $targetId))->handle();
+        } else {
+            $this->propertyGroup = (new FindOrCreatePropertyGroup($this->prestashopProduct))->handle();
+        }
 
         return $this;
     }
