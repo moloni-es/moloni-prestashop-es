@@ -80,6 +80,7 @@ class DummyTranslations
         $this->translator->trans('Shipping has no taxes applied. Please add an exemption reason in plugin settings.', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Error fetching shipping by reference: ({0})', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Error creating {0} attribute group', [], 'Modules.Molonies.Errors');
+        $this->translator->trans('Error fetching property group', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Error fetching property groups', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Failed to update existing property group "{0}"', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Failed to find matching property name for "{0}".', [], 'Modules.Molonies.Errors');
