@@ -167,6 +167,11 @@
         <target>Error al crear el grupo de atributos {0}</target>
         <note>Line: </note>
       </trans-unit>
+      <trans-unit id="ff794edc6aaa62b9b41b57d9e32e2263">
+        <source>Error fetching property group</source>
+        <target>Error en la búsqueda de grupo de propiedade</target>
+        <note>Line: </note>
+      </trans-unit>
       <trans-unit id="a95381a813e61e8cab619e663bc35cdb">
         <source>Error fetching property groups</source>
         <target>Error en la búsqueda de grupos de propiedades</target>

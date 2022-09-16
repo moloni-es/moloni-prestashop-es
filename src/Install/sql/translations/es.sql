@@ -359,6 +359,7 @@ VALUES  (@idLang, 'Translations exported sucessfully!', 'Traducciones exportadas
         (@idLang, 'Error updating product ({0})', 'Error al actualizar el producto ({0})', 'ModulesMoloniesErrors'),
         (@idLang, 'Failed to find matching property name for \"{0}\".', 'No se ha encontrado un nombre de propiedad que coincida con \"{0}\".', 'ModulesMoloniesErrors'),
         (@idLang, 'Failed to update existing property group \"{0}\"', 'Error al actualizar el grupo de propiedades existente \"{0}\"', 'ModulesMoloniesErrors'),
+        (@idLang, 'Error fetching property group', 'Error en la búsqueda de grupos de propiedades', 'ModulesMoloniesErrors'),
         (@idLang, 'Error fetching property groups', 'Error en la búsqueda de grupos de propiedades', 'ModulesMoloniesErrors'),
         (@idLang, 'Error creating {0} attribute group', 'Error al crear el grupo de atributos {0}', 'ModulesMoloniesErrors'),
         (@idLang, 'Error getting delivery country', 'Error al obtener el país de entrega', 'ModulesMoloniesErrors'),
