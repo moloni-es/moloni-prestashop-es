@@ -214,7 +214,6 @@ class ProductVariant
         $props = [
             'visible' => $this->visibility,
             'name' => $this->name,
-            'propertyPairs' => $this->propertyPairs,
         ];
 
         if ($this->shouldSyncPrice()) {
@@ -228,6 +227,8 @@ class ProductVariant
         if ($this->variantExists()) {
             $props['productId'] = $this->getMoloniVariantId();
         } else {
+            $props['propertyPairs'] = $this->propertyPairs;
+
             if ($this->parentHasStock()) {
                 $props['warehouseId'] = $this->warehouseId;
                 $warehouses = [
