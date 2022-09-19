@@ -22,3 +22,6 @@ moloni_es_tools:
   resource: "tools/tools.yaml"
   prefix: /tools
 
+moloni_es_debug:
+  resource: "debug/debug.yaml"
+  prefix: /debug

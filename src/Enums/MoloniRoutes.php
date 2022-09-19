@@ -61,6 +61,15 @@ class MoloniRoutes
 
     public const SETTINGS = 'moloni_es_settings_home';
 
+    public const DEBUG = 'moloni_es_debug_home';
+    public const DEBUG_CHECK_ATTRIBUTES = 'moloni_es_debug_check_attributes';
+    public const DEBUG_UPDATE_STOCK_FROM_MOLONI = 'moloni_es_debug_update_stock_from_moloni';
+    public const DEBUG_INSERT_PRODUCT_FROM_MOLONI = 'moloni_es_debug_insert_product_from_moloni';
+    public const DEBUG_UPDATE_PRODUCT_FROM_MOLONI = 'moloni_es_debug_update_product_from_moloni';
+    public const DEBUG_UPDATE_STOCK_FROM_PRESTASHOP = 'moloni_es_debug_update_stock_from_prestashop';
+    public const DEBUG_INSERT_PRODUCT_FROM_PRESTASHOP = 'moloni_es_debug_insert_product_from_prestashop';
+    public const DEBUG_UPDATE_PRODUCT_FROM_PRESTASHOP = 'moloni_es_debug_update_product_from_prestashop';
+
     public const ROUTES_FULLY_AUTHENTICATED = [
         self::ORDERS,
         self::ORDERS_CREATE,
@@ -80,6 +89,15 @@ class MoloniRoutes
         self::TOOLS_LOGOUT,
         self::TOOLS_EXPORT,
         self::SETTINGS,
+
+        self::DEBUG,
+        self::DEBUG_CHECK_ATTRIBUTES,
+        self::DEBUG_UPDATE_STOCK_FROM_MOLONI,
+        self::DEBUG_INSERT_PRODUCT_FROM_MOLONI,
+        self::DEBUG_UPDATE_PRODUCT_FROM_MOLONI,
+        self::DEBUG_UPDATE_STOCK_FROM_PRESTASHOP,
+        self::DEBUG_INSERT_PRODUCT_FROM_PRESTASHOP,
+        self::DEBUG_UPDATE_PRODUCT_FROM_PRESTASHOP,
     ];
 
     public const ROUTES_PARTIALLY_AUTHENTICATED = [

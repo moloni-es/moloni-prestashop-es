@@ -1,0 +1,162 @@
+{% extends '@PrestaShop/Admin/layout.html.twig' %}
+
+{% block content %}
+    {# Messages #}
+    {% include '@Modules/molonies/views/templates/admin/debug/blocks/Messages.twig' %}
+
+    {# Actions #}
+    <div class="card">
+        <div class="card-header">
+            <i class="material-icons">adb</i>
+            Debug
+        </div>
+        <div class="card-block">
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Action</th>
+                    <th style="width: 300px;">Input</th>
+                    <th style="width: 150px;">Submit</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <form action="{{ path(checkAttributesValidity) }}" method="post">
+                        <td>
+                            Check attributes
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" name="dummy_input" disabled/>
+                        </td>
+                        <td class="d-flex justify-content-center">
+                            <button type="submit" class="btn btn-primary">
+                                Submit
+                            </button>
+                        </td>
+                    </form>
+                </tr>
+                <tr>
+                    <form action="{{ path(updateStockFromPrestashop) }}" method="post">
+                        <td>
+                            Update stock in Moloni
+                        </td>
+                        <td>
+                            <input placeholder="Prestashop product id"
+                                   type="text"
+                                   class="form-control"
+                                   name="product_id"/>
+                        </td>
+                        <td class="d-flex justify-content-center">
+                            <button type="submit" class="btn btn-primary">
+                                Submit
+                            </button>
+                        </td>
+                    </form>
+                </tr>
+                <tr>
+                    <form action="{{ path(updateProductFromPrestashop) }}" method="post">
+                        <td>
+                            Update product in Moloni
+                        </td>
+                        <td>
+                            <input placeholder="Prestashop product id"
+                                   type="text"
+                                   class="form-control"
+                                   name="product_id"/>
+                        </td>
+                        <td class="d-flex justify-content-center">
+                            <button type="submit" class="btn btn-primary">
+                                Submit
+                            </button>
+                        </td>
+                    </form>
+                </tr>
+                <tr>
+                    <form action="{{ path(insertProductFromPrestashop) }}" method="post">
+                        <td>
+                            Insert product in Moloni
+                        </td>
+                        <td>
+                            <input placeholder="Prestashop product id"
+                                   type="text"
+                                   class="form-control"
+                                   name="product_id"/>
+                        </td>
+                        <td class="d-flex justify-content-center">
+                            <button type="submit" class="btn btn-primary">
+                                Submit
+                            </button>
+                        </td>
+                    </form>
+                </tr>
+                <tr>
+                    <form action="{{ path(updateStockFromMoloni) }}" method="post">
+                        <td>
+                            Update stock in Prestashop
+                        </td>
+                        <td>
+                            <input placeholder="Moloni product id"
+                                   type="text"
+                                   class="form-control"
+                                   name="product_id"/>
+                        </td>
+                        <td class="d-flex justify-content-center">
+                            <button type="submit" class="btn btn-primary">
+                                Submit
+                            </button>
+                        </td>
+                    </form>
+                </tr>
+                <tr>
+                    <form action="{{ path(updateProductFromMoloni) }}" method="post">
+                        <td>
+                            Update product in Prestashop
+                        </td>
+                        <td>
+                            <input placeholder="Moloni product id"
+                                   type="text"
+                                   class="form-control"
+                                   name="product_id"/>
+                        </td>
+                        <td class="d-flex justify-content-center">
+                            <button type="submit" class="btn btn-primary">
+                                Submit
+                            </button>
+                        </td>
+                    </form>
+                </tr>
+                <tr>
+                    <form action="{{ path(insertProductFromMoloni) }}" method="post">
+                        <td>
+                            Insert product in Prestashop
+                        </td>
+                        <td>
+                            <input placeholder="Moloni product id"
+                                   type="text"
+                                   class="form-control"
+                                   name="product_id"/>
+                        </td>
+                        <td class="d-flex justify-content-center">
+                            <button type="submit" class="btn btn-primary">
+                                Submit
+                            </button>
+                        </td>
+                    </form>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="card-footer d-flex justify-content-end">
+            <a type="button" class="btn btn-outline-secondary"
+               href="{{ path(orders) }}">
+                Back to orders
+            </a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $(document).ready(function () {});
+    </script>
+{% endblock %}

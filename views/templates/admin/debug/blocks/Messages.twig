@@ -1,0 +1,20 @@
+{% if data %}
+    {% if data.valid %}
+        {% set class = 'alert-success' %}
+    {% else %}
+        {% set class = 'alert-danger' %}
+    {% endif %}
+
+    <div class="alert {{ class }}" role="alert">
+        {% if data.message is defined %}
+            <p class="alert-text">
+                <b>Message:</b> {{ data.message }}
+            </p>
+        {% endif %}
+
+        <b class="alert-text">Result:</b>
+        <pre>
+                {{ data.result|json_encode(constant('JSON_PRETTY_PRINT')) }}
+            </pre>
+    </div>
+{% endif %}
