@@ -78,6 +78,7 @@ class GetOrUpdatePropertyGroup
             throw new MoloniProductException('Error fetching property group', [], $e->getData());
         }
 
+        /** Propery group is not found, exit process immediately */
         if (empty($moloniPropertyGroup)) {
             throw new MoloniProductException('Error fetching property group', [], $queryParams);
         }
