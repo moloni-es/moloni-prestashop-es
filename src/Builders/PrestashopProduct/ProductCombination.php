@@ -186,12 +186,12 @@ class ProductCombination implements BuilderInterface
         $this
             ->setReference()
             ->setName()
+            ->setWarehouseId()
             ->setHasStock()
             ->setStock()
             ->setPrice()
             ->setIdentifications()
             ->setImagePath()
-            ->setWarehouseId()
             ->setAttributes()
             ->fetchCombinationFromPresta();
 
