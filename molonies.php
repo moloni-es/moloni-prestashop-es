@@ -28,17 +28,17 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use Moloni\Hooks\ProductSave;
+use Doctrine\Common\Persistence\ManagerRegistry as LegacyManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Moloni\Hooks\AdminOrderButtons;
 use Moloni\Hooks\OrderStatusUpdate;
+use Moloni\Hooks\ProductSave;
 use Moloni\Hooks\ProductStockUpdate;
 use Moloni\Install\Installer;
 use Moloni\Services\MoloniContext;
 use Moloni\Tools\SyncLogs;
 use PrestaShopBundle\Translation\TranslatorInterface;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
-use Doctrine\Common\Persistence\ManagerRegistry as LegacyManagerRegistry;
-use Doctrine\Persistence\ManagerRegistry;
 
 class MoloniEs extends Module
 {
@@ -54,7 +54,7 @@ class MoloniEs extends Module
         $this->tab = 'administration';
 
         $this->need_instance = 1;
-        $this->version = '2.1.4';
+        $this->version = '2.1.5';
         $this->ps_versions_compliancy = ['min' => '1.7.6', 'max' => _PS_VERSION_];
         $this->author = 'Moloni';
         $this->module_key = '63e30380b2942ec15c33bedd4f7ec90e';
@@ -74,6 +74,16 @@ class MoloniEs extends Module
         );
 
         $this->autoload();
+    }
+
+    /**
+     * Plugin settings shortcut
+     *
+     * @return void
+     */
+    public function getContent(): void
+    {
+        Tools::redirectAdmin($this->context->link->getAdminLink('MoloniSettings'));
     }
 
     /**
