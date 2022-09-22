@@ -400,7 +400,7 @@ class Debug extends MoloniController
             }
 
             if ($productBuilder->getMoloniProductId() === 0) {
-                $productBuilder->update();
+                $productBuilder->insert();
             } else {
                 throw new MoloniProductException('Product already exists', null, [$productId]);
             }
