@@ -36,20 +36,6 @@ moloni_es_tools_export_stocks:
   defaults:
     _controller: 'Moloni\Controller\Admin\Tools\Tools::exportStocks'
 
-moloni_es_tools_open_logs:
-  path: /openLogs
-  methods: [GET]
-  defaults:
-    _controller: 'Moloni\Controller\Admin\Tools\Tools::openLogs'
-    _legacy_controller: 'MoloniTools'
-    _legacy_link: 'MoloniTools'
-
-moloni_es_tools_delete_logs:
-  path: /deleteLogs
-  methods: [GET]
-  defaults:
-    _controller: 'Moloni\Controller\Admin\Tools\Tools::deleteLogs'
-
 moloni_es_tools_logout:
   path: /logout
   methods: [GET]

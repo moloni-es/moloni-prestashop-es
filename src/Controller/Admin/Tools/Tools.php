@@ -24,22 +24,17 @@
 
 namespace Moloni\Controller\Admin\Tools;
 
-use Exception;
 use Tools as PrestashopTools;
 use Moloni\Actions\Exports\ExportProductsToMoloni;
 use Moloni\Actions\Exports\ExportStocksToMoloni;
 use Moloni\Actions\Imports\ImportProductsFromMoloni;
 use Moloni\Actions\Imports\ImportStockChangesFromMoloni;
-use Moloni\Actions\Tools\LogsListDetails;
 use Moloni\Actions\Tools\WebhookCreate;
 use Moloni\Actions\Tools\WebhookDeleteAll;
 use Moloni\Controller\Admin\MoloniController;
-use Moloni\Entity\MoloniLogs;
 use Moloni\Enums\Boolean;
-use Moloni\Enums\LogLevel;
 use Moloni\Enums\MoloniRoutes;
 use Moloni\Exceptions\MoloniException;
-use Moloni\Repository\MoloniLogsRepository;
 use Moloni\Tools\Settings;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -62,6 +57,7 @@ class Tools extends MoloniController
                 'exportStocksRoute' => MoloniRoutes::TOOLS_EXPORT_STOCKS,
                 'reinstallHooksRoute' => MoloniRoutes::TOOLS_REINSTALL_HOOKS,
                 'openLogsRoute' => MoloniRoutes::TOOLS_OPEN_LOGS,
+                'logsRoute' => MoloniRoutes::LOGS,
                 'logoutRoute' => MoloniRoutes::TOOLS_LOGOUT,
             ]
         );
@@ -203,60 +199,6 @@ class Tools extends MoloniController
         }
 
         return $this->redirectToTools();
-    }
-
-    public function openLogs(): Response
-    {
-        $page = (int)PrestashopTools::getValue('page', 1);
-        $filters = PrestashopTools::getValue('filters', []);
-
-        $logs = $paginator = [];
-
-        /** @var MoloniLogsRepository $moloniLogsRepository */
-        $moloniLogsRepository = $this
-            ->getDoctrine()
-            ->getManager()
-            ->getRepository(MoloniLogs::class);
-
-        try {
-            ['logs' => $logs, 'paginator' => $paginator] = $moloniLogsRepository->getAllPaginated($page, $filters);
-        } catch (Exception $e) {
-            $msg = $this->trans('Error fetching logs list', 'Modules.Molonies.Errors');
-
-            $this->addErrorMessage($msg);
-        }
-
-        $logs = (new LogsListDetails($logs))->handle();
-
-        return $this->render(
-            '@Modules/molonies/views/templates/admin/logs/Logs.twig',
-            [
-                'logsArray' => $logs,
-                'logsLevelsArray' => LogLevel::getLogLevels(),
-                'filters' => $filters,
-                'paginator' => $paginator,
-                'companyName' => Settings::get('companyName'),
-                'toolsRoute' => MoloniRoutes::TOOLS,
-                'deleteLogsRoute' => MoloniRoutes::TOOLS_DELETE_LOGS,
-                'thisRoute' => MoloniRoutes::TOOLS_OPEN_LOGS,
-            ]
-        );
-    }
-
-    public function deleteLogs(): RedirectResponse
-    {
-        /** @var MoloniLogsRepository $moloniLogsRepository */
-        $moloniLogsRepository = $this
-            ->getDoctrine()
-            ->getManager()
-            ->getRepository(MoloniLogs::class);
-
-        $moloniLogsRepository->deleteOlderLogs();
-
-        $msg = $this->trans('Older logs deleted', 'Modules.Molonies.Common');
-        $this->addSuccessMessage($msg);
-
-        return $this->redirectToLogs();
     }
 
     public function logout(): RedirectResponse

@@ -268,7 +268,7 @@ abstract class MoloniController extends FrameworkBundleAdminController implement
      */
     protected function redirectToLogs(?array $filters = []): RedirectResponse
     {
-        return $this->redirectToRoute(MoloniRoutes::TOOLS_OPEN_LOGS, ['filters' => $filters]);
+        return $this->redirectToRoute(MoloniRoutes::LOGS, ['filters' => $filters]);
     }
 
     /**

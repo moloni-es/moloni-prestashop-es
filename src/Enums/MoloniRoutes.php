@@ -54,10 +54,11 @@ class MoloniRoutes
     public const TOOLS_EXPORT_PRODUCTS = 'moloni_es_tools_export_products';
     public const TOOLS_EXPORT_STOCKS = 'moloni_es_tools_export_stocks';
     public const TOOLS_REINSTALL_HOOKS = 'moloni_es_tools_reinstall_hooks';
-    public const TOOLS_OPEN_LOGS = 'moloni_es_tools_open_logs';
-    public const TOOLS_DELETE_LOGS = 'moloni_es_tools_delete_logs';
     public const TOOLS_LOGOUT = 'moloni_es_tools_logout';
     public const TOOLS_EXPORT = 'moloni_es_tools_export';
+
+    public const LOGS = 'moloni_es_logs_home';
+    public const LOGS_DELETE = 'moloni_es_logs_delete';
 
     public const SETTINGS = 'moloni_es_settings_home';
 

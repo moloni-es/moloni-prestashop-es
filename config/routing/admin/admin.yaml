@@ -18,6 +18,10 @@ moloni_es_settings:
   resource: "settings/settings.yaml"
   prefix: /settings
 
+moloni_es_logs:
+  resource: "logs/logs.yaml"
+  prefix: /logs
+
 moloni_es_tools:
   resource: "tools/tools.yaml"
   prefix: /tools
