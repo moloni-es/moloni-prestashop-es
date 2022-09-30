@@ -85,10 +85,10 @@ class MoloniRoutes
         self::TOOLS_EXPORT_PRODUCTS,
         self::TOOLS_EXPORT_STOCKS,
         self::TOOLS_REINSTALL_HOOKS,
-        self::TOOLS_OPEN_LOGS,
-        self::TOOLS_DELETE_LOGS,
         self::TOOLS_LOGOUT,
         self::TOOLS_EXPORT,
+        self::LOGS,
+        self::LOGS_DELETE,
         self::SETTINGS,
 
         self::DEBUG,

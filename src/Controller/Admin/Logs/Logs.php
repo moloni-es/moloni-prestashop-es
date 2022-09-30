@@ -26,7 +26,8 @@ declare(strict_types=1);
 
 namespace Moloni\Controller\Admin\Logs;
 
-use Tools as PrestashopTools;
+use Exception;
+use Tools;
 use Moloni\Actions\Tools\LogsListDetails;
 use Moloni\Controller\Admin\MoloniController;
 use Moloni\Entity\MoloniLogs;
@@ -41,12 +42,12 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class Logs  extends MoloniController
+class Logs extends MoloniController
 {
     public function home(): Response
     {
-        $page = (int)PrestashopTools::getValue('page', 1);
-        $filters = PrestashopTools::getValue('filters', []);
+        $page = (int)Tools::getValue('page', 1);
+        $filters = Tools::getValue('filters', []);
 
         $logs = $paginator = [];
 
