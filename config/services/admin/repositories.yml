@@ -9,6 +9,12 @@ services:
       - '@doctrine.dbal.default_connection'
       - '%database_prefix%'
 
+  moloni.repository.products:
+    class: Moloni\Repository\ProductsRepository
+    arguments:
+      - '@doctrine.dbal.default_connection'
+      - '%database_prefix%'
+
   moloni.repository.settings:
     class: Moloni\Repository\MoloniSettingsRepository
     factory: [ '@doctrine.orm.default_entity_manager', getRepository ]

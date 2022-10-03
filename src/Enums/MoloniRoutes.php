@@ -60,6 +60,10 @@ class MoloniRoutes
     public const LOGS = 'moloni_es_logs_home';
     public const LOGS_DELETE = 'moloni_es_logs_delete';
 
+    public const PRODUCTS = 'moloni_es_products_home';
+    public const PRODUCTS_EXPORT_PRODUCT = 'moloni_es_products_export_product';
+    public const PRODUCTS_IMPORT_STOCK = 'moloni_es_products_import_stock';
+
     public const SETTINGS = 'moloni_es_settings_home';
 
     public const DEBUG = 'moloni_es_debug_home';
@@ -89,6 +93,9 @@ class MoloniRoutes
         self::TOOLS_EXPORT,
         self::LOGS,
         self::LOGS_DELETE,
+        self::PRODUCTS,
+        self::PRODUCTS_EXPORT_PRODUCT,
+        self::PRODUCTS_IMPORT_STOCK,
         self::SETTINGS,
 
         self::DEBUG,

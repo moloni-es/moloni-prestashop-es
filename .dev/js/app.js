@@ -5,6 +5,7 @@ import MoloniTools from './pages/tools'
 import MoloniLogs from './pages/logs'
 import MoloniLogin from './pages/login'
 import MoloniRegistration from './pages/registration'
+import MoloniProducts from "./pages/products";
 
 $(document).ready(() => {
     window.moloniSettings = new MoloniSettings();
@@ -14,4 +15,5 @@ $(document).ready(() => {
     window.moloniLogs = new MoloniLogs();
     window.moloniLogin = new MoloniLogin();
     window.moloniRegistration = new MoloniRegistration();
+    window.moloniProducts = new MoloniProducts();
 });

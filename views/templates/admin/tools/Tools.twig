@@ -89,6 +89,23 @@
                     </a>
                 </div>
             </div>
+
+            <div class="d-flex border-top">
+                <div class="ml-py-2">
+                    <b>{{ "List products"|trans({}, 'Modules.Molonies.Tools') }}</b>
+
+                    <p class="small-text text-muted">
+                        {{ "List all prestashop products and the corresponding Moloni product."|trans({}, 'Modules.Molonies.Tools') }}<br>
+                        {{ "This page allow to verify if the product stock are updated, if they exist in Moloni and if there are some problems."|trans({}, 'Modules.Molonies.Tools') }}
+                    </p>
+                </div>
+                <div class="d-flex justify-content-center align-items-center ml-auto">
+                    <a class="btn btn-primary" href="{{ path(productsRoutes) }}">
+                        {{ 'View products'|trans({}, 'Modules.Molonies.Tools') }}
+                    </a>
+                </div>
+            </div>
+
             <div class="d-flex border-top">
                 <div class="ml-py-2">
                     <b>{{ "Consult logs"|trans({}, 'Modules.Molonies.Tools') }}</b>

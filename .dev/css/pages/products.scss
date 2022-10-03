@@ -1,0 +1,22 @@
+/*
+Products list
+*/
+
+.product__row {
+  transition: 0.3s ease-in;
+}
+
+.product__row--new {
+  background-color: #cbf2d4 !important;
+}
+
+.product__row--error {
+  background-color: #fbc6c3 !important;
+}
+
+.product__row--disabled {
+  pointer-events: none;
+  opacity: 0.5;
+
+  cursor: wait !important;
+}

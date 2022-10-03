@@ -22,6 +22,10 @@ moloni_es_logs:
   resource: "logs/logs.yaml"
   prefix: /logs
 
+moloni_es_products:
+  resource: "products/products.yaml"
+  prefix: /products
+
 moloni_es_tools:
   resource: "tools/tools.yaml"
   prefix: /tools

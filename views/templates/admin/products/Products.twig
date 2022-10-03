@@ -1,0 +1,50 @@
+{% extends '@Modules/molonies/views/templates/admin/Layout.twig' %}
+
+{% block plugin_content %}
+    <div class="card">
+        <h3 class="card-header">
+            <i class="material-icons">sync</i>
+            {{ 'Prestashop products'|trans({}, 'Modules.Molonies.Common') }}
+        </h3>
+        <div class="card-block overflow-auto">
+            <table class="table table-striped table-bordered">
+                {# Table header #}
+                {% include '@Modules/molonies/views/templates/admin/products/blocks/TableHeader.twig' %}
+
+                {# Table body #}
+                {% include '@Modules/molonies/views/templates/admin/products/blocks/TableBody.twig' %}
+            </table>
+
+            {# Paginator #}
+            {% include '@Modules/molonies/views/templates/admin/components/Paginator.twig' %}
+        </div>
+
+        <div class="card-footer">
+            <div class="d-flex justify-content-end">
+                {# Go to tools #}
+                <a href="{{ path(toolsRoute) }}"
+                   class="btn btn-primary mr-2">
+                    {{ 'Go back'|trans({}, 'Modules.Molonies.Common') }}
+                </a>
+
+                {# Refresh list #}
+                <a href="{{ path(thisRoute, {page: paginator.currentPage, filters: filters}) }}"
+                   class="btn btn-outline-secondary">
+                    {{ 'Refresh list'|trans({}, 'Modules.Molonies.Common') }}
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $(document).ready(function () {
+            window.moloniProducts.startObservers({
+                thisRoute: "{{ path(thisRoute) }}",
+                ImportStockRoute: "{{ path(productsImportStockRoute) }}",
+                ExportProductRoute: "{{ path(productsExportProductRoute) }}"
+            });
+        });
+    </script>
+{% endblock %}
