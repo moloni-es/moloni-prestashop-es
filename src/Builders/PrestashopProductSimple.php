@@ -29,6 +29,7 @@ use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\Interfaces\BuilderInterface;
 use Moloni\Builders\PrestashopProduct\Helpers\FindTaxGroupFromMoloniTax;
 use Moloni\Builders\PrestashopProduct\Helpers\GetPrestashopCategoriesFromMoloniCategoryId;
+use Moloni\Builders\PrestashopProduct\Helpers\ParseMoloniStock;
 use Moloni\Builders\PrestashopProduct\Helpers\UpdatePrestaProductImage;
 use Moloni\Builders\PrestashopProduct\Helpers\UpdatePrestaProductStock;
 use Moloni\Enums\Boolean;
@@ -569,21 +570,7 @@ class PrestashopProductSimple implements BuilderInterface
     public function setStock(): PrestashopProductSimple
     {
         if ($this->productHasStock()) {
-            $stock = 0;
-
-            if ($this->warehouseId === 1) {
-                $stock = (float)($this->moloniProduct['stock'] ?? 0);
-            } else {
-                foreach ($this->moloniProduct['warehouses'] as $warehouse) {
-                    $stock = (float)$warehouse['stock'];
-
-                    if ((int)$warehouse['warehouseId'] === $this->warehouseId) {
-                        break;
-                    }
-                }
-            }
-
-            $this->stock = $stock;
+            $this->stock = (new ParseMoloniStock($this->moloniProduct, $this->warehouseId))->getStock();
         }
 
         return $this;

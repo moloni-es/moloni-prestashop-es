@@ -31,6 +31,7 @@ use Moloni\Builders\PrestashopProduct\Helpers\Combinations\CreateMappingsAfterPr
 use Moloni\Builders\PrestashopProduct\Helpers\Combinations\ProcessAttributesGroup;
 use Moloni\Builders\PrestashopProduct\Helpers\FindTaxGroupFromMoloniTax;
 use Moloni\Builders\PrestashopProduct\Helpers\GetPrestashopCategoriesFromMoloniCategoryId;
+use Moloni\Builders\PrestashopProduct\Helpers\ParseMoloniStock;
 use Moloni\Builders\PrestashopProduct\Helpers\UpdatePrestaProductImage;
 use Moloni\Builders\PrestashopProduct\ProductCombination;
 use Moloni\Enums\Boolean;
@@ -610,21 +611,7 @@ class PrestashopProductWithCombinations implements BuilderInterface
     public function setStock(): PrestashopProductWithCombinations
     {
         if ($this->productHasStock()) {
-            $stock = 0;
-
-            if ($this->warehouseId === 1) {
-                $stock = (float)($this->moloniProduct['stock'] ?? 0);
-            } else {
-                foreach ($this->moloniProduct['warehouses'] as $warehouse) {
-                    $stock = (float)$warehouse['stock'];
-
-                    if ((int)$warehouse['warehouseId'] === $this->warehouseId) {
-                        break;
-                    }
-                }
-            }
-
-            $this->stock = $stock;
+            $this->stock = (new ParseMoloniStock($this->moloniProduct, $this->warehouseId))->getStock();
         }
 
         return $this;

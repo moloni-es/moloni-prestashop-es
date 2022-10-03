@@ -29,6 +29,7 @@ use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\Interfaces\BuilderInterface;
 use Moloni\Builders\PrestashopProduct\Helpers\Combinations\FindOrCreateCombination;
 use Moloni\Builders\PrestashopProduct\Helpers\Combinations\UpdatePrestaCombinationImage;
+use Moloni\Builders\PrestashopProduct\Helpers\ParseMoloniStock;
 use Moloni\Builders\PrestashopProduct\Helpers\UpdatePrestaProductStock;
 use Moloni\Enums\Boolean;
 use Moloni\Enums\SyncFields;
@@ -511,21 +512,7 @@ class ProductCombination implements BuilderInterface
     public function setStock(): ProductCombination
     {
         if ($this->combinationHasStock()) {
-            $stock = 0;
-
-            if ($this->warehouseId === 1) {
-                $stock = (float) ($this->moloniVariant['stock'] ?? 0);
-            } else {
-                foreach ($this->moloniVariant['warehouses'] as $warehouse) {
-                    $stock = (float) $warehouse['stock'];
-
-                    if ((int) $warehouse['warehouseId'] === $this->warehouseId) {
-                        break;
-                    }
-                }
-            }
-
-            $this->stock = $stock;
+            $this->stock = (new ParseMoloniStock($this->moloniVariant, $this->warehouseId))->getStock();
         }
 
         return $this;
