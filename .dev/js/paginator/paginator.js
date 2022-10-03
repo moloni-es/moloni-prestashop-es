@@ -32,7 +32,7 @@ export default class Paginator {
             page = psmax;
         }
 
-        if (page < 0) {
+        if (page <= 0) {
             page = 1;
         }
 
