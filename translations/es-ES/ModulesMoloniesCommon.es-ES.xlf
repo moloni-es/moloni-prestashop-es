@@ -132,6 +132,16 @@
         <target>Producto actualizado en Prestashop ({0})</target>
         <note>Line: </note>
       </trans-unit>
+      <trans-unit id="b9208b03bcc9eb4a336258dcdcb66207">
+        <source>Combinations</source>
+        <target>Con combinaciones</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="1fbb1e3943c2c6c560247ac8f9289780">
+        <source>Simple</source>
+        <target>Simple</target>
+        <note>Line: </note>
+      </trans-unit>
       <trans-unit id="3cdde9f08aa2ed20b962b648d5d1934d">
         <source>Order restored with success.</source>
         <target>Pedido recreado con éxito.</target>
@@ -140,6 +150,11 @@
       <trans-unit id="0e3ddcff7b4b131d6748fdd816e6cce9">
         <source>Company selected successfully</source>
         <target>Empresa seleccionada con éxito</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="49d8305929013b44243a63f064091e6e">
+        <source>Older logs deleted</source>
+        <target>Logs antiguos eliminados</target>
         <note>Line: </note>
       </trans-unit>
       <trans-unit id="8157b101f74d46bfcdb88cb0946e3825">
@@ -160,11 +175,6 @@
       <trans-unit id="2cd5f4dedebdbb0dd22c07d403b150fd">
         <source>Webhooks reinstall was successful</source>
         <target>La reinstalación de Webhooks se ha realizado con éxito</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="49d8305929013b44243a63f064091e6e">
-        <source>Older logs deleted</source>
-        <target>Logs antiguos eliminados</target>
         <note>Line: </note>
       </trans-unit>
       <trans-unit id="76525f0f34b48475e5ca33f71d296f3b">
@@ -435,6 +445,41 @@
       <trans-unit id="8f536f5dd951b1c30c5908b58fd89887">
         <source>Search e-mail</source>
         <target>Buscar email</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="05e39040555dcd57e52c5979ba604161">
+        <source>Prestashop products</source>
+        <target>Productos prestashop</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="ddbd0f07634b3a8c6a49d7de9b8804b2">
+        <source>View in Prestashop</source>
+        <target>Ver en Prestashop</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="06fb4f46f4c78a0fa56e60259036cab1">
+        <source>View in Moloni</source>
+        <target>Ver en Moloni</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="2f80fac2e1a1973252afda7ff15f131e">
+        <source>Export product to Moloni</source>
+        <target>Exportar producto a Moloni</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="a84ff7fec971bc478551a1b6a63a971b">
+        <source>Import stock from Moloni</source>
+        <target>Importar stock de Moloni</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="49ee3087348e8d44e1feda1917443987">
+        <source>Name</source>
+        <target>Descripción</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="d254861f20bb59d58db872722e57ba9c">
+        <source>Notices</source>
+        <target>Avisos</target>
         <note>Line: </note>
       </trans-unit>
     </body>

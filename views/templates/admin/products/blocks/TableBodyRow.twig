@@ -13,7 +13,7 @@
     <td>
         {% if product.notices %}
             {% for notice in product.notices %}
-                {{ notice[0]|trans(notice[1]|default({}), 'Modules.Molonies.Common') }} <br>
+                {{ notice[0]|trans(notice[1]|default({}), 'Modules.Molonies.Errors') }} <br>
             {% endfor %}
         {% else %}
             ---
@@ -26,7 +26,7 @@
                     data-toggle="dropdown"
                     aria-haspopup="true"
                     aria-expanded="false">
-                {{ 'All options'|trans({}, 'Modules.Molonies.Common') }}
+                {{ 'Actions'|trans({}, 'Modules.Molonies.Common') }}
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                 <a class="dropdown-item"

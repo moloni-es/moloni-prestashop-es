@@ -382,6 +382,41 @@
         <target>El producto con referencia ({0}) no tiene impuestos aplicados. Por favor, añade un motivo de exención en la configuración del plugin.</target>
         <note>Line: </note>
       </trans-unit>
+      <trans-unit id="a64c7136527063716106461061652181">
+        <source>Product already exists</source>
+        <target>El producto ya existe</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="dfbe69c6d9568ecb0e65e7b32ed92a3a">
+        <source>Product not found</source>
+        <target>Producto no encontrado</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="baaad87516e6cf024ee1aac24034172f">
+        <source>Product types do not match.</source>
+        <target>Los tipos de productos no coinciden.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="88803846fca7049b69a92f16e479864b">
+        <source>Product without stock active in Moloni.</source>
+        <target>Producto sin stock activo en Moloni.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="0bc4d32194eb1d78d4daab4b475e50e9">
+        <source>Product stock do not match (Moloni: {0}, Prestashop: {1}).</source>
+        <target>El stock del producto no coincide (Moloni: {0}, Prestashop: {1}).</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="34766d5c990eccded6e02a2cacb507bc">
+        <source>Product does not exist in current Moloni company.</source>
+        <target>El producto no existe en la empresa Moloni actual.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="801c01c3577f2023467458851b093a4c">
+        <source>Product is invisible in Moloni. Cannot be used in document creation.</source>
+        <target>El producto es invisible en Moloni. No se puede utilizar en la creación de documentos.</target>
+        <note>Line: </note>
+      </trans-unit>
       <trans-unit id="0511ee0d41117aa7b4abaaf102aa513d">
         <source>This field is required</source>
         <target>Este campo es obligatorio</target>
@@ -472,14 +507,14 @@
         <target>¡El formulario no es válido!</target>
         <note>Line: </note>
       </trans-unit>
-      <trans-unit id="3c3d541c3569616652fc8b09aaa2502a">
-        <source>Click for more information</source>
-        <target> Haz clic para obtener más información</target>
-        <note>Line: </note>
-      </trans-unit>
       <trans-unit id="67509542f3351ede1bd24dcdb31fb1df">
         <source>Error fetching logs list</source>
         <target> Error al obtener la lista de registros</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="3c3d541c3569616652fc8b09aaa2502a">
+        <source>Click for more information</source>
+        <target> Haz clic para obtener más información</target>
         <note>Line: </note>
       </trans-unit>
       <trans-unit id="24909e87dc242b9dd539e10609b8b050">

@@ -77,6 +77,26 @@
         <target>Debes ejecutar esto si, por ejemplo, la URL de tu tienda cambia o si los tokens de acceso a Prestashop para este módulo cambian.</target>
         <note>Line: </note>
       </trans-unit>
+      <trans-unit id="73fead45625dc98bc663a2222913e1b2">
+        <source>List products</source>
+        <target>Listar productos</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="f6ec5a9cd6cb9295f0cf82fbcb7450eb">
+        <source>List all prestashop products and the corresponding Moloni product.</source>
+        <target>Enumere todos los productos prestashop y el producto Moloni correspondiente.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="165892b0dd0f77bf0da24767469b4325">
+        <source>This page allow to verify if the product stock are updated, if they exist in Moloni or if there are some problems.</source>
+        <target>Esta página permite verificar si el stock de productos está actualizado, si existen en Moloni o si hay algún problema.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="c61ab4204f572e9b3aa84a040e0dab31">
+        <source>View products</source>
+        <target>Ver productos</target>
+        <note>Line: </note>
+      </trans-unit>
       <trans-unit id="ef9bd66e2148c02b9a2aa4b928d59f05">
         <source>Consult logs</source>
         <target>Consultar logs</target>
