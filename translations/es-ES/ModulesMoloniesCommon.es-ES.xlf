@@ -482,6 +482,11 @@
         <target>Avisos</target>
         <note>Line: </note>
       </trans-unit>
+      <trans-unit id="a15e9d627362cb8837d0b910bc53a55e">
+        <source>Search by name</source>
+        <target>Buscar por nombre</target>
+        <note>Line: </note>
+      </trans-unit>
     </body>
   </file>
 </xliff>

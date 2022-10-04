@@ -409,6 +409,7 @@ VALUES  (@idLang, 'Translations exported sucessfully!', 'Traducciones exportadas
         (@idLang, 'View in Moloni', 'Ver en Moloni', 'ModulesMoloniesCommon'),
         (@idLang, 'Export product to Moloni', 'Exportar producto a Moloni', 'ModulesMoloniesCommon'),
         (@idLang, 'Import stock from Moloni', 'Importar stock de Moloni', 'ModulesMoloniesCommon'),
+        (@idLang, 'Search by name', 'Buscar por nombre', 'ModulesMoloniesCommon'),
         (@idLang, 'Name', 'Descripción', 'ModulesMoloniesCommon'),
         (@idLang, 'Notices', 'Avisos', 'ModulesMoloniesCommon'),
         (@idLang, 'Product already exists', 'El producto ya existe', 'ModulesMoloniesErrors'),

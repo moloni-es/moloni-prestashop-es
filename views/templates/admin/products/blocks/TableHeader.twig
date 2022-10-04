@@ -19,12 +19,14 @@
     <td>
         <input type="text"
                class="form-control"
+               placeholder="{{ 'Search by name'|trans({}, 'Modules.Molonies.Common') }}"
                value="{{ filters.name|default('') }}"
                name="filters[name]"/>
     </td>
     <td>
         <input type="text"
                class="form-control"
+               placeholder="{{ 'Search reference'|trans({}, 'Modules.Molonies.Common') }}"
                value="{{ filters.reference|default('') }}"
                name="filters[reference]"/>
     </td>
