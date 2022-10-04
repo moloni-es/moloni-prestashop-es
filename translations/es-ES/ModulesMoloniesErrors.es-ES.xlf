@@ -407,6 +407,16 @@
         <target>El stock del producto no coincide (Moloni: {0}, Prestashop: {1}).</target>
         <note>Line: </note>
       </trans-unit>
+      <trans-unit id="b7aae0f90f41b45cf6b27d2aa544af65">
+        <source>Product combination stock do not match (Moloni: {0}, Prestashop: {1}).</source>
+        <target>El stock de combinación de productos no coincide (Moloni: {0}, Prestashop: {1}).</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="8b37fa5b1c70534c680797f226b5328a">
+        <source>Combination not found ({0}).</source>
+        <target>Combinación no encontrada ({0}).</target>
+        <note>Line: </note>
+      </trans-unit>
       <trans-unit id="34766d5c990eccded6e02a2cacb507bc">
         <source>Product does not exist in current Moloni company.</source>
         <target>El producto no existe en la empresa Moloni actual.</target>

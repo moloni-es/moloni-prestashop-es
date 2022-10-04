@@ -126,12 +126,13 @@ class DummyTranslations
         $this->translator->trans('Order already discarded or created!', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Product with reference ({0}) is invisible in Moloni. Please change the product visibility.', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Product with reference ({0}) has no taxes applied. Please add an exemption reason in plugin settings.', [], 'Modules.Molonies.Errors');
-
         $this->translator->trans('Product already exists', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Product not found', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Product types do not match.', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Product without stock active in Moloni.', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Product stock do not match (Moloni: {0}, Prestashop: {1}).', [], 'Modules.Molonies.Errors');
+        $this->translator->trans('Product combination stock do not match (Moloni: {0}, Prestashop: {1}).', [], 'Modules.Molonies.Errors');
+        $this->translator->trans('Combination not found ({0}).', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Product does not exist in current Moloni company.', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Product is invisible in Moloni. Cannot be used in document creation.', [], 'Modules.Molonies.Errors');
     }

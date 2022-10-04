@@ -414,6 +414,8 @@ VALUES  (@idLang, 'Translations exported sucessfully!', 'Traducciones exportadas
         (@idLang, 'Product already exists', 'El producto ya existe', 'ModulesMoloniesErrors'),
         (@idLang, 'Product not found', 'Producto no encontrado', 'ModulesMoloniesErrors'),
         (@idLang, 'Product types do not match.', 'Los tipos de productos no coinciden.', 'ModulesMoloniesErrors'),
+        (@idLang, 'Product combination stock do not match (Moloni: {0}, Prestashop: {1}).', 'El stock de combinación de productos no coincide (Moloni: {0}, Prestashop: {1}).', 'ModulesMoloniesErrors'),
+        (@idLang, 'Combination not found ({0}).', 'Combinación no encontrada ({0}).', 'ModulesMoloniesErrors'),
         (@idLang, 'Product without stock active in Moloni.', 'Producto sin stock activo en Moloni.', 'ModulesMoloniesErrors'),
         (@idLang, 'Product stock do not match (Moloni: {0}, Prestashop: {1}).', 'El stock del producto no coincide (Moloni: {0}, Prestashop: {1}).', 'ModulesMoloniesErrors'),
         (@idLang, 'Product does not exist in current Moloni company.', 'El producto no existe en la empresa Moloni actual.', 'ModulesMoloniesErrors'),
