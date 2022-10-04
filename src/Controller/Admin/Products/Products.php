@@ -126,7 +126,7 @@ class Products extends MoloniController
             if ($prestaProductId > 0) {
                 SyncLogs::prestashopProductAddTimeout($prestaProductId);
 
-                $productBuilder->update();
+                $productBuilder->updateStock();
             } else {
                 throw new MoloniProductException('Product does not exist', null, [$productId]);
             }
