@@ -11,13 +11,9 @@ moloni_es_products_export_product:
   methods: [POST]
   defaults:
     _controller: 'Moloni\Controller\Admin\Products\Products::exportProduct'
-    _legacy_controller: 'MoloniTools'
-    _legacy_link: 'MoloniTools'
 
 moloni_es_products_import_stock:
   path: /importStock
   methods: [POST]
   defaults:
     _controller: 'Moloni\Controller\Admin\Products\Products::importStock'
-    _legacy_controller: 'MoloniTools'
-    _legacy_link: 'MoloniTools'
