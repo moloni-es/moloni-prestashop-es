@@ -155,15 +155,11 @@ class VerifyProductForList
                 return;
             }
 
-            $visibleProducts = 0;
-
             foreach ($this->moloniProduct['variants'] as $variant) {
                 /** Invisible products are skipped */
                 if ((int)$variant['visible'] === Boolean::NO) {
                     continue;
                 }
-
-                $visibleProducts++;
 
                 /** Find combination based on Moloni variant */
                 $combination = (new FindOrCreateCombination(
