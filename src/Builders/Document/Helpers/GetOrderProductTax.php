@@ -25,7 +25,6 @@
 namespace Moloni\Builders\Document\Helpers;
 
 use Tax;
-use TaxCalculator;
 use Moloni\Exceptions\MoloniException;
 use Moloni\Builders\Document\OrderProductTax;
 
@@ -33,7 +32,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class GetOrderProductTaxes
+class GetOrderProductTax
 {
     private $orderProduct;
     private $fiscalZone;
@@ -53,44 +52,21 @@ class GetOrderProductTaxes
     /**
      * Handler
      *
+     * @return OrderProductTax|null
+     *
      * @throws MoloniException
      */
-    public function handle(): array
+    public function handle(): ?OrderProductTax
     {
-        $taxes = [];
+        $taxBuilder = null;
+        $taxValue = (float)($this->orderProduct['tax_rate'] ?? 0);
 
-        /** @var TaxCalculator $taxCalculator */
-        $taxCalculator = $this->orderProduct['tax_calculator'];
-
-        if (count($taxCalculator->taxes) > 0) {
-            $taxOrder = 1;
-
-            foreach ($taxCalculator->taxes as $tax) {
-                if ((float)$tax->rate === 0.0) {
-                    continue;
-                }
-
-                /** @var Tax $tax */
-                $taxBuilder = new OrderProductTax((float)$tax->rate, $this->fiscalZone, $taxOrder);
-
-                $taxBuilder->search();
-
-                if ($taxBuilder->getTaxId() === 0) {
-                    $taxBuilder->insert();
-                }
-
-                $taxes[] = $taxBuilder;
-
-                $taxOrder++;
-            }
-        } elseif ($this->orderProduct['unit_price_tax_incl'] !== $this->orderProduct['unit_price_tax_excl']) {
+        if ((int)$taxValue === 0 && $this->orderProduct['unit_price_tax_incl'] !== $this->orderProduct['unit_price_tax_excl']) {
             $taxValue = (100 * ((float)$this->orderProduct['unit_price_tax_incl'] - (float)$this->orderProduct['unit_price_tax_excl'])) / (float)$this->orderProduct['unit_price_tax_excl'];
             $taxValue = round($taxValue, 2);
+        }
 
-            if ((float)$taxValue === 0.0) {
-                return $taxes;
-            }
-
+        if ($taxValue > 0) {
             $taxBuilder = new OrderProductTax($taxValue, $this->fiscalZone, 1);
 
             $taxBuilder->search();
@@ -98,10 +74,8 @@ class GetOrderProductTaxes
             if ($taxBuilder->getTaxId() === 0) {
                 $taxBuilder->insert();
             }
-
-            $taxes[] = $taxBuilder;
         }
 
-        return $taxes;
+        return $taxBuilder;
     }
 }

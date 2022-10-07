@@ -31,7 +31,7 @@ use Configuration;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Traits\DiscountsTrait;
 use Moloni\Entity\MoloniProductAssociations;
-use Moloni\Builders\Document\Helpers\GetOrderProductTaxes;
+use Moloni\Builders\Document\Helpers\GetOrderProductTax;
 use Moloni\Builders\Interfaces\BuilderItemInterface;
 use Moloni\Builders\MoloniProductSimple;
 use Moloni\Builders\MoloniProductWithVariants;
@@ -425,12 +425,12 @@ class OrderProduct implements BuilderItemInterface
     public function setTaxes(): OrderProduct
     {
         try {
-            $taxes = (new GetOrderProductTaxes($this->orderProduct, $this->fiscalZone))->handle();
+            $tax = (new GetOrderProductTax($this->orderProduct, $this->fiscalZone))->handle();
         } catch (MoloniException $e) {
             throw new MoloniDocumentProductTaxException($e->getMessage(), $e->getIdentifiers(), $e->getData());
         }
 
-        if (empty($taxes)) {
+        if (empty($tax)) {
             $exemption = Settings::get('exemptionReasonProduct');
 
             if (empty($exemption)) {
@@ -443,7 +443,7 @@ class OrderProduct implements BuilderItemInterface
 
             $this->exemptionReason = $exemption;
         } else {
-            $this->taxes = $taxes;
+            $this->taxes = [$tax];
         }
 
         return $this;

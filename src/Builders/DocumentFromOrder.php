@@ -988,7 +988,7 @@ class DocumentFromOrder implements BuilderInterface
      */
     public function setProducts(): DocumentFromOrder
     {
-        $products = $this->order->getCartProducts();
+        $products = $this->order->getOrderDetailList();
 
         foreach ($products as $product) {
             $orderProduct = new OrderProduct($product, $this->fiscalZone);
