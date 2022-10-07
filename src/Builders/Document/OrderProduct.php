@@ -344,7 +344,7 @@ class OrderProduct implements BuilderItemInterface
      */
     public function setReference(): OrderProduct
     {
-        $reference = $this->orderProduct['reference'];
+        $reference = $this->orderProduct['product_reference'];
 
         if (empty($reference)) {
             $reference = (string)$this->orderProduct['product_id'];
