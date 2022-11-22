@@ -15,7 +15,7 @@
     "@babel/core": "^7.17.10",
     "@babel/eslint-parser": "^7.17.0",
     "@popperjs/core": "^2.11.5",
-    "@symfony/webpack-encore": "^1.8.2",
+    "@symfony/webpack-encore": "^4.1.1",
     "autoprefixer": "^10.4.7",
     "babel-loader": "^8.2.5",
     "bootstrap": "^5.1.3",
