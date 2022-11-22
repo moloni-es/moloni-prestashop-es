@@ -41,12 +41,24 @@ class ExportProductsToMoloni extends ExportProducts
     {
         $start = ($this->page - 1) * $this->itemsPerPage;
 
-        $products = Product::getProducts($this->languageId, $start, $this->itemsPerPage, 'id_product', 'DESC', false, true);
+        $products = Product::getProducts(
+            $this->languageId,
+            $start,
+            $this->itemsPerPage,
+            'id_product',
+            'DESC',
+            false,
+            true
+        );
 
         $this->totalResults = count($products);
 
         foreach ($products as $productData) {
             if (empty($productData['reference'])) {
+                $this->errorProducts[] = [
+                    $productData['id_product'] => 'Product has no reference in Prestashop.'
+                ];
+
                 continue;
             }
 
@@ -83,6 +95,7 @@ class ExportProductsToMoloni extends ExportProducts
             'success' => $this->syncedProducts,
             'error' => $this->errorProducts,
         ];
+
         Logs::addInfoLog($logMsg, $logData);
     }
 }
