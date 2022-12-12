@@ -187,7 +187,9 @@ class OrderProduct implements BuilderItemInterface
      */
     public function toArray(?int $order = 1): array
     {
-        $this->setName();
+        $this
+            ->setName()
+            ->addTimeout();
 
         $params = [
             'productId' => $this->productId,
@@ -321,6 +323,18 @@ class OrderProduct implements BuilderItemInterface
         }
 
         return $this;
+    }
+
+    /**
+     * Add timeout to prevent hooks inconsistencies
+     *
+     * @return void
+     */
+    protected function addTimeout(): void
+    {
+        if ((int)Settings::get('syncStockToPrestashop') === Boolean::YES) {
+            SyncLogs::moloniProductAddTimeout($this->productId ?? 0);
+        }
     }
 
     //          GETS          //
