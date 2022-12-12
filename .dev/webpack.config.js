@@ -14,17 +14,17 @@ const DeployAppJS = Path.resolve(__dirname, '../views/js/');
 console.log(`Adding ${DevAppCSS}`);
 
 if (!Encore.isRuntimeEnvironmentConfigured()) {
-  Encore.configureRuntimeEnvironment(process.env.NODE_ENV || 'production');
+    Encore.configureRuntimeEnvironment(process.env.NODE_ENV || 'production');
 }
 
 Encore
-  .setOutputPath(DeployDir)
-  .setPublicPath('/views')
-  .addEntry('js/app', DevAppJS)
-  .addStyleEntry('css/app', DevAppCSS)
-  .enableBuildNotifications()
-  .enableSassLoader()
-  .enablePostCssLoader()
-  .disableSingleRuntimeChunk()
+.setOutputPath(DeployDir)
+.setPublicPath('/views')
+.addEntry('js/app', DevAppJS)
+.addStyleEntry('css/app', DevAppCSS)
+.enableBuildNotifications()
+.enableSassLoader()
+.enablePostCssLoader()
+.disableSingleRuntimeChunk()
 
 module.exports = Encore.getWebpackConfig();
