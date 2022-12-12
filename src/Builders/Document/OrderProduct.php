@@ -333,7 +333,7 @@ class OrderProduct implements BuilderItemInterface
     protected function addTimeout(): void
     {
         if ((int)Settings::get('syncStockToPrestashop') === Boolean::YES) {
-            SyncLogs::moloniProductAddTimeout($this->productId ?? 0);
+            SyncLogs::moloniProductAddTimeout($this->productId);
         }
     }
 
