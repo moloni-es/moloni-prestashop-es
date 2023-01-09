@@ -681,7 +681,7 @@ class PrestashopProductWithCombinations implements BuilderInterface
      */
     public function setTaxRulesGroupId(): PrestashopProductWithCombinations
     {
-        if (!empty($this->moloniProduct['taxes']) && $this->productExists()) {
+        if (!empty($this->moloniProduct['taxes']) && !$this->productExists()) {
             $moloniTax = $this->moloniProduct['taxes'][0]['tax'] ?? [];
 
             $this->taxRulesGroupId = (new FindTaxGroupFromMoloniTax($moloniTax))->handle();
