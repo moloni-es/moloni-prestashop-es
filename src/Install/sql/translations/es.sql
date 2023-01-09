@@ -305,6 +305,7 @@ VALUES  (@idLang, 'Translations exported sucessfully!', 'Traducciones exportadas
         (@idLang, 'Products stock export. Part {0}', 'Exportación de stock de productos. Parte {0}', 'ModulesMoloniesCommon'),
         (@idLang, 'Products export. Part {0}', 'Exportación de productos. Parte {0}', 'ModulesMoloniesCommon'),
         (@idLang, 'Stock updated in Moloni (old: {0} | new: {1}) ({2})', 'Stock actualizado en Moloni (antiguo: {0} | nuevo: {1}) ({2})', 'ModulesMoloniesCommon'),
+        (@idLang, 'Something went wrong updating stock ({0})', 'Algo salió mal al actualizar el inventario ({0})', 'ModulesMoloniesCommon'),
         (@idLang, 'Stock is already updated in Moloni ({0})', 'El stock ya está actualizado en Moloni ({0})', 'ModulesMoloniesCommon'),
         (@idLang, 'Budget', 'Presupuesto', 'ModulesMoloniesCommon'),
         (@idLang, 'Purchase Order', 'Pedido de cliente', 'ModulesMoloniesCommon'),
