@@ -40,9 +40,10 @@ use Moloni\Enums\DocumentStatus;
 use Moloni\Enums\DocumentTypes;
 use Moloni\Enums\FiscalZone;
 use Moloni\Enums\Languages;
-use Moloni\Enums\LoadAddress;
-use Moloni\Enums\ProductInformation;
 use Moloni\Enums\SyncFields;
+use Moloni\Enums\LoadAddress;
+use Moloni\Enums\DocumentReference;
+use Moloni\Enums\ProductInformation;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Repository\MoloniSettingsRepository;
 use Moloni\Tools\Settings;
@@ -64,6 +65,7 @@ class SettingsFormDataProvider implements FormDataProviderInterface
     private $stores = [];
     private $warehouses = [];
     private $documentSets = [];
+    private $documentReference = [];
     private $countries = [];
     private $orderStatus = [];
     private $yesNo = [];
@@ -203,6 +205,11 @@ class SettingsFormDataProvider implements FormDataProviderInterface
         foreach (SyncFields::getSyncFields() as $name => $code) {
             $this->syncFields[$this->trans($name, 'Modules.Molonies.Settings')] = $code;
         }
+
+        $this->documentReference = [
+            $this->trans('Order reference', 'Modules.Molonies.Settings') => DocumentReference::REFERENCE,
+            $this->trans('Order ID', 'Modules.Molonies.Settings') => DocumentReference::ID,
+        ];
 
         $this->fiscalZoneBasedOn = [
             $this->trans('Billing', 'Modules.Molonies.Settings') => FiscalZone::BILLING,
@@ -348,5 +355,13 @@ class SettingsFormDataProvider implements FormDataProviderInterface
     public function getSyncFields(): array
     {
         return $this->syncFields;
+    }
+
+    /**
+     * @return array
+     */
+    public function getDocumentReference(): array
+    {
+        return $this->documentReference;
     }
 }

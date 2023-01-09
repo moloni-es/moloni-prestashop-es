@@ -102,6 +102,16 @@
         <target>Cerrado</target>
         <note>Line: </note>
       </trans-unit>
+      <trans-unit id="5d4710f9a8250b13164a82c94d5b00d1">
+        <source>Order reference</source>
+        <target>Referencia del pedido</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="d79cf3f429596f77db95c65074663a54">
+        <source>Order ID</source>
+        <target>ID del pedido</target>
+        <note>Line: </note>
+      </trans-unit>
       <trans-unit id="780c462e85ba4399a5d42e88f69a15ca">
         <source>Billing</source>
         <target>Facturación</target>
@@ -311,6 +321,16 @@ Puedes gestionar las series de documentos de tu empresa directamente en tu cuent
       <trans-unit id="9cd1af4533c8dc7a7cd67aade4bf7bc4">
         <source>Select which type of document you want to issue automatically.</source>
         <target>Selecciona el tipo de documento que quieres emitir automáticamente.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="d4ab17e24ec6debe5e15f9b35b1737e4">
+        <source>Document reference</source>
+        <target>Referencia del documento</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="10403f4309d24a383e458094243d2a32">
+        <source>Value used for document reference.</source>
+        <target>Valor utilizado para la referencia del documento</target>
         <note>Line: </note>
       </trans-unit>
       <trans-unit id="414c3c9ec7a65076ad9440960f3ed02b">

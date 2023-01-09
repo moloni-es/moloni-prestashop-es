@@ -40,6 +40,7 @@ use Moloni\Entity\MoloniOrderDocuments;
 use Moloni\Enums\Boolean;
 use Moloni\Enums\CalculationMode;
 use Moloni\Enums\Countries;
+use Moloni\Enums\DocumentReference;
 use Moloni\Enums\DocumentStatus;
 use Moloni\Enums\DocumentTypes;
 use Moloni\Enums\FiscalZone;
@@ -961,7 +962,17 @@ class DocumentFromOrder implements BuilderInterface
      */
     public function setOurReference(): DocumentFromOrder
     {
-        $this->ourReference = $this->order->reference;
+        switch (Settings::get('documentReference')) {
+            case DocumentReference::ID:
+                $reference = (string)$this->order->id;
+                break;
+            case DocumentReference::REFERENCE:
+            default:
+                $reference = $this->order->reference;
+                break;
+        }
+
+        $this->ourReference = $reference;
 
         return $this;
     }

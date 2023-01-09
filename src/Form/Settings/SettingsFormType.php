@@ -388,6 +388,25 @@ class SettingsFormType extends TranslatorAwareType
         return $this;
     }
 
+    private function documentReference(): SettingsFormType
+    {
+        $this->builder
+            ->add('documentReference', ChoiceType::class, [
+                'label' => $this->trans('Document reference', "Modules.Molonies.Settings"),
+                'label_attr' => [
+                    'popover' => $this->trans(
+                        'Value used for document reference.',
+                        "Modules.Molonies.Settings"
+                    ),
+                ],
+                'choices' => $this->options->getDocumentReference(),
+                'placeholder' => false,
+                'required' => true,
+            ]);
+
+        return $this;
+    }
+
     private function documentStatus(): SettingsFormType
     {
         $this->builder
@@ -687,6 +706,7 @@ class SettingsFormType extends TranslatorAwareType
         $this
             ->documentSet()
             ->documentType()
+            ->documentReference()
             ->documentStatus()
             ->fiscalZoneBasedOn()
             ->shippingInformation()
