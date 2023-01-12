@@ -124,14 +124,26 @@ class UpdateMoloniProductStock
         }
 
         if ($this->shouldWriteLogs()) {
-            $message = [
-                'Stock updated in Moloni (old: {0} | new: {1}) ({2})',
-                [
-                    '{0}' => $moloniStock,
-                    '{1}' => $this->newStock,
-                    '{2}' => $this->reference,
-                ]
-            ];
+            if (
+                isset($mutation['data']['stockMovementManualEntryCreate']['data']['stockMovementId']) ||
+                isset($mutation['data']['stockMovementManualExitCreate']['data']['stockMovementId'])
+            ) {
+                $message = [
+                    'Stock updated in Moloni (old: {0} | new: {1}) ({2})',
+                    [
+                        '{0}' => $moloniStock,
+                        '{1}' => $this->newStock,
+                        '{2}' => $this->reference,
+                    ]
+                ];
+            } else {
+                $message = [
+                    'Something went wrong updating stock ({0})',
+                    [
+                        '{0}' => $this->reference,
+                    ]
+                ];
+            }
 
             Logs::addStockLog($message, ['mutation' => $mutation]);
         }

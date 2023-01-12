@@ -112,6 +112,11 @@
         <target>Stock actualizado en Prestashop (antiguo: {0} | nuevo: {1}) ({2})</target>
         <note>Line: </note>
       </trans-unit>
+      <trans-unit id="e008166577c8bd4838acea9caea04f69">
+        <source>Something went wrong updating stock ({0})</source>
+        <target>Algo salió mal al actualizar el inventario ({0})</target>
+        <note>Line: </note>
+      </trans-unit>
       <trans-unit id="71bdae89e1ae75d851471e4efa1aa5ab">
         <source>Combination created in Prestashop ({0})</source>
         <target>Combinación creada en Prestashop ({0})</target>

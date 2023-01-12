@@ -56,6 +56,11 @@ class ProductAssociations
 
     //          RETRIEVES          //
 
+    public static function findAll(): array
+    {
+        return self::$associationRepository->findAll();
+    }
+
     public static function findByMoloniParentId($parentId): array
     {
         return self::$associationRepository->findBy(['mlProductId' => $parentId]);

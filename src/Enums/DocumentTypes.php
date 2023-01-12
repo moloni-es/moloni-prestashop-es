@@ -70,10 +70,10 @@ class DocumentTypes
     public const TYPES_NAMES = [
         self::INVOICES => 'Invoice',
         self::RECEIPTS => 'Receipt',
-        self::PURCHASE_ORDERS => 'Purchase order',
-        self::PRO_FORMA_INVOICES => 'Pro forma invoice',
+        self::PURCHASE_ORDERS => 'Purchase Order',
+        self::PRO_FORMA_INVOICES => 'Pro Forma Invoice',
         self::SIMPLIFIED_INVOICES => 'Simplified invoice',
-        self::ESTIMATE => 'Estimate',
+        self::ESTIMATE => 'Budget',
         self::BILLS_OF_LADING => 'Bills of lading',
     ];
 

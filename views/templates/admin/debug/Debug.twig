@@ -28,7 +28,7 @@
                         <td>
                             <input type="text" class="form-control" name="dummy_input" disabled/>
                         </td>
-                        <td class="d-flex justify-content-center">
+                        <td class="text-center">
                             <button type="submit" class="btn btn-primary">
                                 Submit
                             </button>
@@ -46,7 +46,7 @@
                                    class="form-control"
                                    name="product_id"/>
                         </td>
-                        <td class="d-flex justify-content-center">
+                        <td class="text-center">
                             <button type="submit" class="btn btn-primary">
                                 Submit
                             </button>
@@ -64,7 +64,7 @@
                                    class="form-control"
                                    name="product_id"/>
                         </td>
-                        <td class="d-flex justify-content-center">
+                        <td class="text-center">
                             <button type="submit" class="btn btn-primary">
                                 Submit
                             </button>
@@ -82,7 +82,7 @@
                                    class="form-control"
                                    name="product_id"/>
                         </td>
-                        <td class="d-flex justify-content-center">
+                        <td class="text-center">
                             <button type="submit" class="btn btn-primary">
                                 Submit
                             </button>
@@ -100,7 +100,7 @@
                                    class="form-control"
                                    name="product_id"/>
                         </td>
-                        <td class="d-flex justify-content-center">
+                        <td class="text-center">
                             <button type="submit" class="btn btn-primary">
                                 Submit
                             </button>
@@ -118,7 +118,7 @@
                                    class="form-control"
                                    name="product_id"/>
                         </td>
-                        <td class="d-flex justify-content-center">
+                        <td class="text-center">
                             <button type="submit" class="btn btn-primary">
                                 Submit
                             </button>
@@ -136,7 +136,35 @@
                                    class="form-control"
                                    name="product_id"/>
                         </td>
-                        <td class="d-flex justify-content-center">
+                        <td class="text-center">
+                            <button type="submit" class="btn btn-primary">
+                                Submit
+                            </button>
+                        </td>
+                    </form>
+                </tr>
+                <tr>
+                    <form action="{{ path(dumpProductAssociations) }}" method="post">
+                        <td>
+                            Dump product associations table
+                        </td>
+                        <td>
+                            <div class="form-select mb-1">
+                                <select class="form-control custom-select"
+                                        name="type_id">
+                                    <option value="ALL" selected>All results</option>
+                                    <option value="MOLONI_PRODUCT">Moloni product</option>
+                                    <option value="MOLONI_VARIANT">Moloni variant</option>
+                                    <option value="PRESTASHOP_PRODUCT">Prestashop product</option>
+                                    <option value="PRESTASHOP_COMBINATION">Prestashop combination</option>
+                                </select>
+                            </div>
+                            <input placeholder="Moloni product id"
+                                   type="text"
+                                   class="form-control"
+                                   name="product_id"/>
+                        </td>
+                        <td class="text-center">
                             <button type="submit" class="btn btn-primary">
                                 Submit
                             </button>

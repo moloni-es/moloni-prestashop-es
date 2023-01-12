@@ -163,6 +163,7 @@ class DummyTranslations
         $this->translator->trans('Product updated in Moloni ({0})', [], 'Modules.Molonies.Common');
         $this->translator->trans('Stock is already updated in Prestashop ({0})', [], 'Modules.Molonies.Common');
         $this->translator->trans('Stock updated in Prestashop (old: {0} | new: {1}) ({2})', [], 'Modules.Molonies.Common');
+        $this->translator->trans('Something went wrong updating stock ({0})', [], 'Modules.Molonies.Common');
 
         $this->translator->trans('Combination created in Prestashop ({0})', [], 'Modules.Molonies.Common');
         $this->translator->trans('Combination updated in Prestashop ({0})', [], 'Modules.Molonies.Common');
