@@ -74,6 +74,7 @@ class MoloniRoutes
     public const DEBUG_UPDATE_STOCK_FROM_PRESTASHOP = 'moloni_es_debug_update_stock_from_prestashop';
     public const DEBUG_INSERT_PRODUCT_FROM_PRESTASHOP = 'moloni_es_debug_insert_product_from_prestashop';
     public const DEBUG_UPDATE_PRODUCT_FROM_PRESTASHOP = 'moloni_es_debug_update_product_from_prestashop';
+    public const DEBUG_DUMP_PRODUCT_ASSOCIATIONS = 'moloni_es_debug_dump_product_associations';
 
     public const ROUTES_FULLY_AUTHENTICATED = [
         self::ORDERS,
@@ -106,6 +107,7 @@ class MoloniRoutes
         self::DEBUG_UPDATE_STOCK_FROM_PRESTASHOP,
         self::DEBUG_INSERT_PRODUCT_FROM_PRESTASHOP,
         self::DEBUG_UPDATE_PRODUCT_FROM_PRESTASHOP,
+        self::DEBUG_DUMP_PRODUCT_ASSOCIATIONS,
     ];
 
     public const ROUTES_PARTIALLY_AUTHENTICATED = [

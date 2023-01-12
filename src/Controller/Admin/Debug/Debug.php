@@ -30,6 +30,8 @@ use Configuration;
 use Moloni\Tools\SyncLogs;
 use Moloni\Enums\MoloniRoutes;
 use Moloni\Api\MoloniApiClient;
+use Moloni\Tools\ProductAssociations;
+use Moloni\Entity\MoloniProductAssociations;
 use Moloni\Controller\Admin\MoloniController;
 use Moloni\Builders\MoloniProductSimple;
 use Moloni\Builders\MoloniProductWithVariants;
@@ -64,6 +66,7 @@ class Debug extends MoloniController
                 'updateStockFromPrestashop' => MoloniRoutes::DEBUG_UPDATE_STOCK_FROM_PRESTASHOP,
                 'updateProductFromPrestashop' => MoloniRoutes::DEBUG_UPDATE_PRODUCT_FROM_PRESTASHOP,
                 'insertProductFromPrestashop' => MoloniRoutes::DEBUG_INSERT_PRODUCT_FROM_PRESTASHOP,
+                'dumpProductAssociations' => MoloniRoutes::DEBUG_DUMP_PRODUCT_ASSOCIATIONS,
                 'orders' => MoloniRoutes::ORDERS,
                 'data' => $data,
             ]
@@ -416,6 +419,47 @@ class Debug extends MoloniController
                 'result' => $e->getData(),
             ];
         }
+
+        return $this->home($response);
+    }
+
+    /**
+     * Dump product associations table
+     */
+    public function dumpProductAssociations(): Response
+    {
+        $results = [];
+        $productId = (int)Tools::getValue('product_id', 0);
+        $type = Tools::getValue('type_id', '');
+
+        switch ($type) {
+            case 'MOLONI_PRODUCT':
+                $result = ProductAssociations::findByMoloniParentId($productId);
+                break;
+            case 'MOLONI_VARIANT':
+                $result = ProductAssociations::findByMoloniVariantId($productId);
+                break;
+            case 'PRESTASHOP_PRODUCT':
+                $result = ProductAssociations::findByPrestashopProductId($productId);
+                break;
+            case 'PRESTASHOP_COMBINATION':
+                $result = ProductAssociations::findByPrestashopCombinationId($productId);
+                break;
+            case 'ALL':
+            default:
+                $result = ProductAssociations::findAll();
+                break;
+        }
+
+        /** @var MoloniProductAssociations[] $result */
+        foreach ($result as $association) {
+            $results[] = $association->toArray();
+        }
+
+        $response = [
+            'valid' => 1,
+            'result' => json_encode($results),
+        ];
 
         return $this->home($response);
     }
