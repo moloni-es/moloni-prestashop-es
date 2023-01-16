@@ -538,11 +538,11 @@ class MoloniProductWithVariants implements BuilderInterface
     /**
      * Moloni variant getter
      *
-     * @param $combinationId
+     * @param int|null $combinationId Prestashop combination id
      *
      * @return array
      */
-    public function getVariant($combinationId): array
+    public function getVariant(?int $combinationId = 0): array
     {
         $mlVariant = [];
 
