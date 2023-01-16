@@ -35,6 +35,7 @@ use Moloni\Actions\Orders\OrderDiscard;
 use Moloni\Controller\Admin\MoloniController;
 use Moloni\Enums\DocumentTypes;
 use Moloni\Enums\MoloniRoutes;
+use Moloni\Enums\DocumentReference;
 use Moloni\Exceptions\Document\MoloniDocumentException;
 use Moloni\Exceptions\Document\MoloniDocumentWarning;
 use Moloni\Exceptions\MoloniException;
@@ -117,7 +118,12 @@ class Orders extends MoloniController
             $this->addSuccessMessage($msg);
         } catch (MoloniDocumentWarning $e) {
             $auxMessage = 'Warning processing order ({0})';
-            $auxIdentifiers = ['{0}' => isset($action) ? $action->getOrder()->reference : ''];
+
+            if (Settings::get('documentReference') === DocumentReference::ID || !isset($action)) {
+                $auxIdentifiers = ['{0}' => $orderId];
+            } else {
+                $auxIdentifiers = ['{0}' => $action->getOrder()->reference];
+            }
 
             Logs::addWarningLog([[$auxMessage, $auxIdentifiers], [$e->getMessage(), $e->getIdentifiers()]], $e->getData(), $orderId);
 
@@ -128,7 +134,12 @@ class Orders extends MoloniController
             $this->addWarningMessage($msg, $e->getData());
         } catch (MoloniDocumentException|MoloniException $e) {
             $auxMessage = 'Error processing order ({0})';
-            $auxIdentifiers = ['{0}' => isset($action) ? $action->getOrder()->reference : ''];
+
+            if (Settings::get('documentReference') === DocumentReference::ID || !isset($action)) {
+                $auxIdentifiers = ['{0}' => $orderId];
+            } else {
+                $auxIdentifiers = ['{0}' => $action->getOrder()->reference];
+            }
 
             Logs::addErrorLog([[$auxMessage, $auxIdentifiers], [$e->getMessage(), $e->getIdentifiers()]], $e->getData(), $orderId);
 

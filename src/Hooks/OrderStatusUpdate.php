@@ -1,4 +1,5 @@
 <?php
+
 /**
  * 2022 - Moloni.com
  *
@@ -27,6 +28,7 @@ namespace Moloni\Hooks;
 use Doctrine\Persistence\ObjectManager;
 use Moloni\Actions\Orders\OrderCreateDocument;
 use Moloni\Enums\Boolean;
+use Moloni\Enums\DocumentReference;
 use Moloni\Exceptions\Document\MoloniDocumentException;
 use Moloni\Exceptions\Document\MoloniDocumentWarning;
 use Moloni\Exceptions\MoloniException;
@@ -74,21 +76,31 @@ class OrderStatusUpdate extends AbstractHookAction
             }
 
             $auxMessage = 'Warning processing order ({0})';
-            $auxIdentifiers = ['{0}' => isset($action) ? $action->getOrder()->reference : ''];
+
+            if (Settings::get('documentReference') === DocumentReference::ID || !isset($action)) {
+                $auxIdentifiers = ['{0}' => $this->orderId];
+            } else {
+                $auxIdentifiers = ['{0}' => $action->getOrder()->reference];
+            }
 
             Logs::addWarningLog(
                 [[$auxMessage, $auxIdentifiers], [$e->getMessage(), $e->getIdentifiers()]],
                 $e->getData(),
                 $this->orderId
             );
-        } catch (MoloniDocumentException|MoloniException $e) {
+        } catch (MoloniDocumentException | MoloniException $e) {
             if ($e->shoudCreateLog()) {
                 if (!empty(Settings::get('alertEmail'))) {
                     (new DocumentErrorMail(Settings::get('alertEmail'), ['order_id' => $this->orderId]))->handle();
                 }
 
                 $auxMessage = 'Error processing order ({0})';
-                $auxIdentifiers = ['{0}' => isset($action) ? $action->getOrder()->reference : ''];
+
+                if (Settings::get('documentReference') === DocumentReference::ID || !isset($action)) {
+                    $auxIdentifiers = ['{0}' => $this->orderId];
+                } else {
+                    $auxIdentifiers = ['{0}' => $action->getOrder()->reference];
+                }
 
                 Logs::addErrorLog(
                     [[$auxMessage, $auxIdentifiers], [$e->getMessage(), $e->getIdentifiers()]],
@@ -96,7 +108,7 @@ class OrderStatusUpdate extends AbstractHookAction
                     $this->orderId
                 );
             }
-        } catch (PrestaShopDatabaseException|PrestaShopException $e) {
+        } catch (PrestaShopDatabaseException | PrestaShopException $e) {
             Logs::addErrorLog('Error getting prestashop order', ['message' => $e->getMessage()], $this->orderId);
         }
     }
