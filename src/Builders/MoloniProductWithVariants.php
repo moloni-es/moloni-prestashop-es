@@ -544,17 +544,13 @@ class MoloniProductWithVariants implements BuilderInterface
      */
     public function getVariant(?int $combinationId = 0): array
     {
-        $mlVariant = [];
-
         foreach ($this->variants as $variant) {
             if ($variant->getPrestashopCombinationId() === $combinationId) {
-                $mlVariant = $variant->getMoloniVariant();
-
-                break;
+                return $variant->getMoloniVariant();
             }
         }
 
-        return $mlVariant;
+        return [];
     }
 
     //          SETS          //
