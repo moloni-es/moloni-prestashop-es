@@ -551,6 +551,20 @@ class ProductVariant
     }
 
     /**
+     * Get variant data
+     *
+     * @return array
+     */
+    public function getMoloniVariant(): array
+    {
+        if (empty($this->moloniVariant)) {
+            return [];
+        }
+
+        return $this->moloniVariant;
+    }
+
+    /**
      * Get variant property pairs
      *
      * @return array

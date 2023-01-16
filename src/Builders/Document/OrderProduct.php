@@ -35,6 +35,8 @@ use Moloni\Builders\Document\Helpers\GetOrderProductTax;
 use Moloni\Builders\Interfaces\BuilderItemInterface;
 use Moloni\Builders\MoloniProductSimple;
 use Moloni\Builders\MoloniProductWithVariants;
+use Moloni\Builders\MoloniProduct\Helpers\Variants\FindVariant;
+use Moloni\Builders\MoloniProduct\Helpers\Variants\GetOrUpdatePropertyGroup;
 use Moloni\Enums\Boolean;
 use Moloni\Enums\ProductType;
 use Moloni\Enums\ProductInformation;
@@ -270,9 +272,11 @@ class OrderProduct implements BuilderItemInterface
             if ($moloniVariantId !== null) {
                 $this->getById($moloniVariantId->getMlVariantId());
             }
-        }
 
-        if (empty($this->moloniProduct)) {
+            if (empty($this->moloniProduct)) {
+                $this->getByProductParent();
+            }
+        } else {
             $this->getByReference();
         }
 
@@ -607,6 +611,106 @@ class OrderProduct implements BuilderItemInterface
                 '{0}' => $this->reference
             ], $e->getData());
         }
+
+        return $this;
+    }
+
+    /**
+     * Search product in moloni by parent
+     *
+     * @return OrderProduct
+     *
+     * @throws MoloniDocumentProductException
+     */
+    protected function getByProductParent(): OrderProduct
+    {
+        /** Let's try to find Moloni product by parent */
+        $combinationId = (int)$this->orderProduct['product_attribute_id'];
+        $psParent = new Product((int)$this->orderProduct['product_id'], true, Configuration::get('PS_LANG_DEFAULT'));
+        $reference = empty($psParent->reference) ? $psParent->id : $psParent->reference;
+
+        $variables = [
+            'options' => [
+                'filter' => [
+                    [
+                        'field' => 'visible',
+                        'comparison' => 'in',
+                        'value' => '[0, 1]'
+                    ],
+                    [
+                        'field' => 'reference',
+                        'comparison' => 'eq',
+                        'value' => $reference
+                    ]
+                ],
+                'includeVariants' => false
+            ],
+        ];
+
+        try {
+            $query = MoloniApiClient::products()->queryProducts($variables);
+        } catch (MoloniApiException $e) {
+            throw new MoloniDocumentProductException('Error fetching product by reference: ({0})', [
+                '{0}' => $reference
+            ], $e->getData());
+        }
+
+        /** Product really does not exist, can return */
+        if (empty($query)) {
+            return $this;
+        }
+
+        $mlProduct = $query[0];
+
+        /** For some reason the prodcut is simple in Moloni, use that one */
+        if (empty($mlProduct['variants'])) {
+            $this->productId = (int)$mlProduct['productId'];
+            $this->moloniProduct = $mlProduct;
+
+            return $this;
+        }
+
+        $targetId = $mlProduct['propertyGroup']['propertyGroupId'] ?? '';
+
+        try {
+            $propertyGroup = (new GetOrUpdatePropertyGroup($psParent, $targetId))->handle();
+        } catch (MoloniProductException $e) {
+            throw new MoloniDocumentProductException($e->getMessage(), $e->getIdentifiers(), $e->getData());
+        }
+
+        $variant = (new FindVariant(
+            $combinationId,
+            $this->orderProduct['product_reference'],
+            $mlProduct['variants'],
+            $propertyGroup['variants'][$combinationId] ?? []
+        ))->handle();
+
+        /** Variant already exists in Moloni, use that one */
+        if (!empty($variant)) {
+            $this->productId = $variant['productId'];
+            $this->moloniProduct = $variant;
+
+            return $this;
+        }
+
+        SyncLogs::moloniProductAddTimeout((int)$mlProduct['productId']);
+        SyncLogs::prestashopProductAddTimeout((int)$psParent->id);
+
+        try {
+            $productBuilder = new MoloniProductWithVariants($psParent);
+            $productBuilder->update();
+        } catch (MoloniProductException $e) {
+            throw new MoloniDocumentProductException($e->getMessage(), $e->getIdentifiers(), $e->getData());
+        }
+
+        $variant = $productBuilder->getVariant($combinationId);
+
+        if (empty($variant)) {
+            throw new MoloniDocumentProductException('Could not find variant after update.');
+        }
+
+        $this->productId = $variant['productId'];
+        $this->moloniProduct = $variant;
 
         return $this;
     }
