@@ -58,6 +58,7 @@ class Installer
      */
     private $hooks = [
         'actionAdminControllerSetMedia',
+        'actionPaymentConfirmation',
         'actionOrderStatusUpdate',
         'actionProductAdd',
         'actionProductUpdate',
@@ -65,6 +66,7 @@ class Installer
         'actionGetAdminOrderButtons',
         'addWebserviceResources',
         'actionAdminProductsControllerSaveBefore',
+        'actionAdminProductsControllerSaveAfter',
     ];
 
     /**
