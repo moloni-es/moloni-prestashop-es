@@ -1,0 +1,54 @@
+services:
+  moloni.controller.debug:
+    class: Moloni\Controller\Admin\Debug\Debug
+    tags: ['controller.service_arguments']
+    arguments:
+        - '@moloni.services.context'
+
+  moloni.controller.documents:
+    class: Moloni\Controller\Admin\Documents\Documents
+    tags: ['controller.service_arguments']
+    arguments:
+      - '@moloni.services.context'
+
+  moloni.controller.login:
+    class: Moloni\Controller\Admin\Login\Login
+    tags: ['controller.service_arguments']
+    arguments:
+      - '@moloni.services.context'
+
+  moloni.controller.logs:
+    class: Moloni\Controller\Admin\Logs\Logs
+    tags: ['controller.service_arguments']
+    arguments:
+      - '@moloni.services.context'
+
+  moloni.controller.orders:
+    class: Moloni\Controller\Admin\Orders\Orders
+    tags: ['controller.service_arguments']
+    arguments:
+      - '@moloni.services.context'
+
+  moloni.controller.products:
+    class: Moloni\Controller\Admin\Products\Products
+    tags: ['controller.service_arguments']
+    arguments:
+      - '@moloni.services.context'
+
+  moloni.controller.registration:
+    class: Moloni\Controller\Admin\Registration\Registration
+    tags: ['controller.service_arguments']
+    arguments:
+      - '@moloni.services.context'
+
+  moloni.controller.settings:
+    class: Moloni\Controller\Admin\Settings\Settings
+    tags: ['controller.service_arguments']
+    arguments:
+      - '@moloni.services.context'
+
+  moloni.controller.tools:
+    class: Moloni\Controller\Admin\Tools\Tools
+    tags: ['controller.service_arguments']
+    arguments:
+      - '@moloni.services.context'

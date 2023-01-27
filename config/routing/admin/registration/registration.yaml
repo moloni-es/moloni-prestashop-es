@@ -2,7 +2,7 @@ moloni_es_registration_home:
   path: /
   methods: [GET,POST]
   defaults:
-    _controller: 'Moloni\Controller\Admin\Registration\Registration::home'
+    _controller: moloni.controller.registration:home
     _legacy_controller: 'Moloni'
     _legacy_link: 'Moloni'
 
@@ -10,4 +10,4 @@ moloni_es_registration_verify_form:
   path: /verifySlug
   methods: [POST]
   defaults:
-    _controller: 'Moloni\Controller\Admin\Registration\Registration::verifyForm'
+    _controller: moloni.controller.registration:verifyForm

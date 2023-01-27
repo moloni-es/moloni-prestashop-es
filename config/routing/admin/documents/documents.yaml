@@ -2,7 +2,7 @@ moloni_es_documents_home:
   path: /
   methods: [GET]
   defaults:
-    _controller: 'Moloni\Controller\Admin\Documents\Documents::home'
+    _controller: moloni.controller.documents:home
     _legacy_controller: 'MoloniDocuments'
     _legacy_link: 'MoloniDocuments'
 
@@ -10,16 +10,16 @@ moloni_es_documents_download:
   path: /download/
   methods: [GET]
   defaults:
-    _controller: 'Moloni\Controller\Admin\Documents\Documents::download'
+    _controller: moloni.controller.documents:download
 
 moloni_es_documents_view:
   path: /view/
   methods: [GET]
   defaults:
-    _controller: 'Moloni\Controller\Admin\Documents\Documents::view'
+    _controller: moloni.controller.documents:view
 
 moloni_es_documents_restore:
   path: /restore/
   methods: [GET]
   defaults:
-    _controller: 'Moloni\Controller\Admin\Documents\Documents::restore'
+    _controller: moloni.controller.documents:restore
