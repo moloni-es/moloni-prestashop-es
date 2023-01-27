@@ -3,4 +3,3 @@ imports:
   - { resource: services/admin/services.yml }
   - { resource: services/admin/listeners.yml }
   - { resource: services/admin/forms.yml }
-  - { resource: services/admin/controllers.yml }

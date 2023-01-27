@@ -2,7 +2,7 @@ moloni_es_tools_home:
   path: /
   methods: [GET]
   defaults:
-    _controller: moloni.controller.tools:home
+    _controller: 'Moloni\Controller\Admin\Tools\Tools::home'
     _legacy_controller: 'MoloniTools'
     _legacy_link: 'MoloniTools'
 
@@ -10,34 +10,34 @@ moloni_es_tools_reinstall_hooks:
   path: /reinstallHooks
   methods: [GET]
   defaults:
-    _controller: moloni.controller.tools:reinstallHooks
+    _controller: 'Moloni\Controller\Admin\Tools\Tools::reinstallHooks'
 
 moloni_es_tools_import_products:
   path: /importProducts
   methods: [POST]
   defaults:
-    _controller: moloni.controller.tools:importProducts
+    _controller: 'Moloni\Controller\Admin\Tools\Tools::importProducts'
 
 moloni_es_tools_import_stocks:
   path: /importStocks
   methods: [POST]
   defaults:
-    _controller: moloni.controller.tools:importStocks
+    _controller: 'Moloni\Controller\Admin\Tools\Tools::importStocks'
 
 moloni_es_tools_export_products:
   path: /exportProducts
   methods: [POST]
   defaults:
-    _controller: moloni.controller.tools:exportProducts
+    _controller: 'Moloni\Controller\Admin\Tools\Tools::exportProducts'
 
 moloni_es_tools_export_stocks:
   path: /exportStocks
   methods: [POST]
   defaults:
-    _controller: moloni.controller.tools:exportStocks
+    _controller: 'Moloni\Controller\Admin\Tools\Tools::exportStocks'
 
 moloni_es_tools_logout:
   path: /logout
   methods: [GET]
   defaults:
-    _controller: moloni.controller.tools:logout
+    _controller: 'Moloni\Controller\Admin\Tools\Tools::logout'

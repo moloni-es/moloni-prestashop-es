@@ -29,6 +29,7 @@ use Moloni\Enums\MoloniRoutes;
 use Moloni\Repository\MoloniAppRepository;
 use Moloni\Services\MoloniContext;
 use PrestaShopBundle\Controller\Admin\FrameworkBundleAdminController;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 if (!defined('_PS_VERSION_')) {
@@ -44,11 +45,18 @@ abstract class MoloniController extends FrameworkBundleAdminController implement
      */
     protected $moloniContext;
 
-    public function __construct(MoloniContext $context)
+    /**
+     * Start our service
+     *
+     * @param ContainerInterface|null $container
+     *
+     * @return void
+     */
+    public function setContainer(ContainerInterface $container = null): void
     {
-        parent::__construct();
+        parent::setContainer($container);
 
-        $this->moloniContext = $context;
+        $this->moloniContext = $this->get('moloni.services.context');
     }
 
     //          Privates          //
