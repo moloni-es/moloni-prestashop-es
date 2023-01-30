@@ -28,6 +28,7 @@ use Moloni\Api\MoloniApi;
 use Moloni\Enums\MoloniRoutes;
 use Moloni\Controller\Admin\MoloniController;
 use Moloni\Controller\Admin\MoloniControllerInterface;
+use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 
 if (!defined('_PS_VERSION_')) {
@@ -36,7 +37,14 @@ if (!defined('_PS_VERSION_')) {
 
 class AuthenticationListener
 {
-    public function onKernelController(FilterControllerEvent $event): void
+    /**
+     * On event
+     *
+     * @param ControllerEvent|FilterControllerEvent $event
+     *
+     * @return void
+     */
+    public function onKernelController($event): void
     {
         $controller = $event->getController();
 
