@@ -25,9 +25,10 @@
                         {{ 'Please check logs for more information.'|trans({}, 'Modules.Molonies.Tools') }}
                     </p>
                 </div>
-                <div id="action_overlay_spinner">
-                    {{ 'We are processing your request.<br>Please wait until the process finishes!'|trans({}, 'Modules.Molonies.Tools') }}
-                    <div class="spinner"></div>
+                <div id="action_overlay_spinner" class="d-flex">
+                    {{ 'We are processing your request.<br>Please wait until the process finishes!'|trans({}, 'Modules.Molonies.Tools')|raw }}
+                    <br>
+                    <div class="spinner ml-4"></div>
                 </div>
             </div>
             <div class="modal-footer">
