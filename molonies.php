@@ -28,8 +28,8 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use Doctrine\Common\Persistence\ManagerRegistry as LegacyManagerRegistry;
-use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Registry;
+use Moloni\Exceptions\MoloniException;
 use Moloni\Hooks\AdminOrderButtons;
 use Moloni\Hooks\OrderStatusUpdate;
 use Moloni\Hooks\ProductSave;
@@ -314,8 +314,7 @@ class MoloniEs extends Module
         try {
             $this->initContext();
 
-            /** @var ManagerRegistry|LegacyManagerRegistry $doctrine */
-            $doctrine = $this->get('doctrine');
+            $doctrine = $this->getDoctrine();
 
             new OrderStatusUpdate($params['id_order'], $params['newOrderStatus'], $doctrine->getManager());
         } catch (Exception $e) {
@@ -331,12 +330,10 @@ class MoloniEs extends Module
         try {
             $this->initContext();
 
-            /** @var ManagerRegistry|LegacyManagerRegistry $doctrine */
-            $doctrine = $this->get('doctrine');
-            /** @var Router $router */
-            $router = $this->get('router');
             /** @var TranslatorInterface $translator */
             $translator = $this->getTranslator();
+            $doctrine = $this->getDoctrine();
+            $router = $this->getRouter();
 
             new AdminOrderButtons($params, $router, $doctrine, $translator);
         } catch (Exception $e) {
@@ -353,10 +350,52 @@ class MoloniEs extends Module
      */
     private function initContext(): void
     {
-        /** @var ManagerRegistry|LegacyManagerRegistry $doctrine */
-        $doctrine = $this->get('doctrine');
+        $doctrine = $this->getDoctrine();
 
         new MoloniContext($doctrine->getManager());
+    }
+
+    /**
+     * Get doctrine
+     *
+     * @return Router
+     *
+     * @throws Exception
+     */
+    private function getRouter()
+    {
+        /** @var Router|false $router */
+        $router = $this->get('router');
+
+        if (empty($router)) {
+            $router = $this->getContainer()->get('router');
+        }
+
+        if (empty($router)) {
+            throw new MoloniException('Error loading router');
+        }
+
+        return $router;
+    }
+
+    /**
+     * Get router
+     *
+     * @throws Exception
+     */
+    private function getDoctrine() {
+        /** @var Registry|false $doctrine */
+        $doctrine = $this->get('doctrine');
+
+        if (empty($doctrine)) {
+            $doctrine = $this->getContainer()->get('doctrine');
+        }
+
+        if (empty($doctrine)) {
+            throw new MoloniException('Error loading doctrine');
+        }
+
+        return $doctrine;
     }
 
     /**
