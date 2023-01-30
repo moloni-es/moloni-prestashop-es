@@ -22,254 +22,348 @@
  * @noinspection PhpMultipleClassDeclarationsInspection
  */
 
-namespace Moloni\Controller\Admin;
-
-use Moloni\Entity\MoloniApp;
-use Moloni\Enums\MoloniRoutes;
-use Moloni\Repository\MoloniAppRepository;
-use Moloni\Services\MoloniContext;
-use PrestaShopBundle\Controller\Admin\FrameworkBundleAdminController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+declare(strict_types=1);
 
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-abstract class MoloniController extends FrameworkBundleAdminController implements MoloniControllerInterface
-{
-    /**
-     * Moloni plugin context
-     *
-     * @var MoloniContext
-     */
-    protected $moloniContext;
+use Doctrine\Common\Persistence\ManagerRegistry as LegacyManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
+use Moloni\Hooks\AdminOrderButtons;
+use Moloni\Hooks\OrderStatusUpdate;
+use Moloni\Hooks\ProductSave;
+use Moloni\Hooks\ProductStockUpdate;
+use Moloni\Install\Installer;
+use Moloni\Services\MoloniContext;
+use Moloni\Tools\SyncLogs;
+use PrestaShopBundle\Translation\TranslatorInterface;
+use Symfony\Bundle\FrameworkBundle\Routing\Router;
 
-    public function __construct(MoloniContext $context)
+class MoloniEs extends Module
+{
+    /** @var bool */
+    private $openForHookQuantityUpdate = false;
+
+    /**
+     * Molonies constructor.
+     */
+    public function __construct()
     {
+        $this->name = 'molonies';
+        $this->tab = 'administration';
+
+        $this->need_instance = 1;
+        $this->version = '2.2.2';
+        $this->ps_versions_compliancy = ['min' => '1.7.6', 'max' => _PS_VERSION_];
+        $this->author = 'Moloni';
+        $this->module_key = '63e30380b2942ec15c33bedd4f7ec90e';
+
         parent::__construct();
 
-        $this->moloniContext = $context;
-    }
+        $this->displayName = $this->trans('Moloni Spain', [], 'Modules.Molonies.Molonies');
+        $this->description = $this->trans(
+            'Automatic document creation with real time stock synchronization and powerful sales analysis.',
+            [],
+            'Modules.Molonies.Molonies'
+        );
+        $this->confirmUninstall = $this->trans(
+            'Are you sure you want to unnistall this module?',
+            [],
+            'Modules.Molonies.Molonies'
+        );
 
-    //          Privates          //
-
-    /**
-     * Creates payload message to show user
-     *
-     * @param array $errors
-     *
-     * @return string
-     */
-    private function getErrorPayload(array $errors): string
-    {
-        $msg = $this->trans('Click for more information', 'Modules.Molonies.Errors');
-
-        $error = ' </br>';
-        $error .= '<a onclick="$(\'#toggleDiv\').toggle(200);" href="#">' . $msg . '</a>';
-        $error .= '</br>';
-
-        $error .= '<div style="display: none;" id="toggleDiv">';
-
-        foreach ($errors as $key => $value) {
-            $error .= '<br>';
-            $error .= '    <b>' . $key . ': </b>';
-            $error .= '    <pre>' . print_r($value, true) . '</pre>';
-            $error .= '</br>';
-        }
-
-        $error .= '</div>';
-
-        return $error;
+        $this->autoload();
     }
 
     /**
-     * Delete app instance
+     * Plugin settings shortcut
      *
      * @return void
      */
-    private function deleteApp(): void
+    public function getContent(): void
     {
-        /** @var MoloniAppRepository $repository */
-        $repository = $this
-            ->getDoctrine()
-            ->getManager()
-            ->getRepository(MoloniApp::class);
-
-        $repository->deleteApp();
+        Tools::redirectAdmin($this->context->link->getAdminLink('MoloniSettings'));
     }
 
-    //          Messages          //
-
     /**
-     * Adds message to the user
-     *
-     * @param string $message
-     * @param string $type
+     * Enable new translations module
      *
      * @return bool
      */
-    private function addFlashMessage(string $message, string $type): bool
+    public function isUsingNewTranslationSystem(): bool
     {
-        if (empty($message) || empty($type)) {
+        return true;
+    }
+
+    /**
+     * Install plugin
+     *
+     * @return bool
+     */
+    public function install(): bool
+    {
+        if (!parent::install()) {
             return false;
         }
 
-        $this->addFlash($type, $message);
+        try {
+            if (!(new Installer($this))->install()) {
+                return false;
+            }
+        } catch (Exception $exception) {
+            $this->_errors[] = $exception->getMessage();
+
+            return false;
+        }
 
         return true;
     }
 
     /**
-     * Adds success message to the user
-     *
-     * @param string $message
+     * Uninstall plugin
      *
      * @return bool
      */
-    protected function addSuccessMessage(string $message): bool
+    public function uninstall(): bool
     {
-        return $this->addFlashMessage($message, 'success');
-    }
-
-    /**
-     * Adds warning message to the user
-     *
-     * @param string $message
-     * @param array|null $error Error data
-     *
-     * @return bool
-     */
-    protected function addWarningMessage(string $message, ?array $error = []): bool
-    {
-        if (!empty($error)) {
-            $message .= $this->getErrorPayload($error);
+        if (!parent::uninstall()) {
+            return false;
         }
 
-        return $this->addFlashMessage($message, 'warning');
+        try {
+            if (!(new Installer($this))->uninstall()) {
+                return false;
+            }
+        } catch (Exception $exception) {
+            $this->_errors[] = $exception->getMessage();
+
+            return false;
+        }
+
+        return true;
     }
 
     /**
-     * Adds error message to the user
+     * Enable plugin
      *
-     * @param string $message Error message
-     * @param array|null $error Error data
+     * @param bool $force_all
      *
      * @return bool
      */
-    protected function addErrorMessage(string $message, ?array $error = []): bool
+    public function enable($force_all = false): bool
     {
-        if (!empty($error)) {
-            $message .= $this->getErrorPayload($error);
+        if (!parent::enable($force_all)) {
+            return false;
         }
 
-        return $this->addFlashMessage($message, 'error');
-    }
+        try {
+            if (!(new Installer($this))->enable()) {
+                return false;
+            }
+        } catch (Exception $exception) {
+            $this->_errors[] = $exception->getMessage();
 
-    //          Redirects          //
+            return false;
+        }
 
-    /**
-     * Redirect to log in page
-     *
-     * @return RedirectResponse
-     */
-    public function redirectToLogin(): RedirectResponse
-    {
-        $this->deleteApp();
-
-        return $this->redirectToRoute(MoloniRoutes::LOGIN);
+        return true;
     }
 
     /**
-     * Redirect to registration page
+     * Disable plugin
      *
-     * @return RedirectResponse
+     * @param bool|null $force_all
+     *
+     * @return bool
      */
-    public function redirectToRegistration(): RedirectResponse
+    public function disable($force_all = false): bool
     {
-        $this->deleteApp();
+        if (!parent::disable($force_all)) {
+            return false;
+        }
 
-        return $this->redirectToRoute(MoloniRoutes::REGISTRATION);
+        try {
+            if (!(new Installer($this))->disable()) {
+                return false;
+            }
+        } catch (Exception $exception) {
+            $this->_errors[] = $exception->getMessage();
+
+            return false;
+        }
+
+        return true;
     }
 
     /**
-     * Redirect to company select page
+     * Add out CSS and JS files to the backend
      *
-     * @return RedirectResponse
+     * @return void
      */
-    public function redirectToCompanySelect(): RedirectResponse
+    public function hookActionAdminControllerSetMedia(): void
     {
-        return $this->redirectToRoute(MoloniRoutes::LOGIN_COMPANY_SELECT);
+        $action = $this->context->controller->php_self ?? '';
+
+        $this->context->controller->addCSS($this->_path . 'views/css/moloni-icons.css');
+
+        if (strpos($action, 'Moloni') === 0) {
+            $this->context->controller->addJS($this->_path . 'views/js/app.js');
+            $this->context->controller->addCSS($this->_path . 'views/css/app.css');
+        }
     }
 
     /**
-     * Redirect to Orders page
+     * Add endpoints to Prestashop Webservices
      *
-     * @param int|null $page
-     * @param array|null $filters
-     *
-     * @return RedirectResponse
+     * @return array[]
      */
-    public function redirectToOrders(?int $page = 1, ?array $filters = []): RedirectResponse
+    public function hookAddWebserviceResources(): array
     {
-        return $this->redirectToRoute(MoloniRoutes::ORDERS, ['page' => $page, 'filters' => $filters]);
+        try {
+            $this->initContext();
+        } catch (Exception $e) {
+            // todo: catch this?
+        }
+
+        include_once _PS_MODULE_DIR_ . 'molonies/src/Webservice/WebserviceSpecificManagementMoloniResource.php';
+
+        return [
+            'moloniresource' => [
+                'description' => 'Moloni sync resource',
+                'specific_management' => true,
+            ],
+        ];
+    }
+
+    public function hookActionAdminProductsControllerSaveBefore(): void
+    {
+        $productId = (int)$_POST['id_product'];
+        if ($productId > 0) {
+            try {
+                $this->initContext();
+                SyncLogs::prestashopProductRemoveTimeout($productId);
+            } catch (Exception $e) {
+            }
+        }
     }
 
     /**
-     * Redirect to Orders page
+     * Called after creating a product
      *
-     * @param int $orderId
+     * @param array $params
      *
-     * @return RedirectResponse
+     * @return void
      */
-    protected function redirectToAdminOrderPage(int $orderId): RedirectResponse
+    public function hookActionProductAdd(array $params): void
     {
-        $link = $this->getAdminLink('AdminOrders', ['vieworder' => '', 'id_order' => $orderId]);
-
-        return $this->redirect($link);
+        try {
+            $this->initContext();
+            new ProductSave($params['id_product']);
+            $this->openForHookQuantityUpdate = true;
+        } catch (Exception $e) {
+            // Do nothing
+        }
     }
 
     /**
-     * Redirect to document settings page
+     * Called after updating a product
      *
-     * @param int|null $page
-     * @param array|null $filters
+     * @param array $params
      *
-     * @return RedirectResponse
+     * @return void
      */
-    protected function redirectToDocuments(?int $page = 1, ?array $filters = []): RedirectResponse
+    public function hookActionProductUpdate(array $params): void
     {
-        return $this->redirectToRoute(MoloniRoutes::DOCUMENTS, ['page' => $page, 'filters' => $filters]);
+        try {
+            $this->initContext();
+            new ProductSave($params['id_product']);
+            $this->openForHookQuantityUpdate = true;
+        } catch (Exception $e) {
+            // Do nothing
+        }
+    }
+
+    public function hookActionUpdateQuantity($params): bool
+    {
+        try {
+            if ($this->openForHookQuantityUpdate) {
+                $this->initContext();
+
+                new ProductStockUpdate(
+                    (int)$params['id_product'],
+                    (int)$params['id_product_attribute'],
+                    (float)$params['quantity']
+                );
+            }
+        } catch (Exception $e) {
+            // Do nothing
+        }
+        return true;
     }
 
     /**
-     * Redirect to Tool settings page
+     * Called after an order is paid
      *
-     * @return RedirectResponse
+     * @param array $params
+     *
+     * @return void
      */
-    protected function redirectToTools(): RedirectResponse
+    public function hookActionOrderStatusUpdate(array $params): void
     {
-        return $this->redirectToRoute(MoloniRoutes::TOOLS);
+        try {
+            $this->initContext();
+
+            /** @var ManagerRegistry|LegacyManagerRegistry $doctrine */
+            $doctrine = $this->get('doctrine');
+
+            new OrderStatusUpdate($params['id_order'], $params['newOrderStatus'], $doctrine->getManager());
+        } catch (Exception $e) {
+            // Do nothing
+        }
     }
 
     /**
-     * Redirect to log's page
-     *
-     * @param array|null $filters
-     *
-     * @return RedirectResponse
+     * displayAdminOrderTop
      */
-    protected function redirectToLogs(?array $filters = []): RedirectResponse
+    public function hookActionGetAdminOrderButtons($params): void
     {
-        return $this->redirectToRoute(MoloniRoutes::LOGS, ['filters' => $filters]);
+        try {
+            $this->initContext();
+
+            /** @var ManagerRegistry|LegacyManagerRegistry $doctrine */
+            $doctrine = $this->get('doctrine');
+            /** @var Router $router */
+            $router = $this->get('router');
+            /** @var TranslatorInterface $translator */
+            $translator = $this->getTranslator();
+
+            new AdminOrderButtons($params, $router, $doctrine, $translator);
+        } catch (Exception $e) {
+            // Do nothing
+        }
+    }
+
+    //          Privates          //
+
+    /**
+     * Init Moloni plugin context for in hooks
+     *
+     * @throws Exception
+     */
+    private function initContext(): void
+    {
+        /** @var ManagerRegistry|LegacyManagerRegistry $doctrine */
+        $doctrine = $this->get('doctrine');
+
+        new MoloniContext($doctrine->getManager());
     }
 
     /**
-     * Redirect to Settings Page
-     *
-     * @return RedirectResponse
+     * Inits Autoload
      */
-    protected function redirectToSettings(): RedirectResponse
+    private function autoload(): void
     {
-        return $this->redirectToRoute(MoloniRoutes::SETTINGS);
+        require_once __DIR__ . '/vendor/autoload.php';
     }
 }
