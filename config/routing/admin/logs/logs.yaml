@@ -2,7 +2,7 @@ moloni_es_logs_home:
   path: /
   methods: [GET]
   defaults:
-    _controller: 'Moloni\Controller\Admin\Logs\Logs::home'
+    _controller: moloni.controller.logs:home
     _legacy_controller: 'MoloniTools'
     _legacy_link: 'MoloniTools'
 
@@ -10,4 +10,4 @@ moloni_es_logs_delete:
   path: /deleteLogs
   methods: [GET]
   defaults:
-    _controller: 'Moloni\Controller\Admin\Logs\Logs::deleteLogs'
+    _controller: moloni.controller.logs:deleteLogs
