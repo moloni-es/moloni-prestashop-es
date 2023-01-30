@@ -24,13 +24,13 @@
 
 namespace Moloni\Controller\Admin\Registration;
 
+use Moloni\Services\MoloniContext;
 use Tools;
 use Moloni\Actions\Registration\IsFormValid;
 use Moloni\Controller\Admin\MoloniController;
 use Moloni\Enums\MoloniRoutes;
 use Moloni\Exceptions\MoloniException;
 use Moloni\Form\Registration\RegistrationFormHandler;
-use PrestaShop\PrestaShop\Core\Form\FormHandlerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -40,12 +40,26 @@ if (!defined('_PS_VERSION_')) {
 
 class Registration extends MoloniController
 {
+    /**
+     * Registration form handler
+     *
+     * @var RegistrationFormHandler
+     */
+    private $formHandler;
+
+    /**
+     * Constructor
+     */
+    public function __construct(MoloniContext $context, RegistrationFormHandler $formHandler)
+    {
+        parent::__construct($context);
+
+        $this->formHandler = $formHandler;
+    }
+
     public function home(Request $request)
     {
-        /** @var RegistrationFormHandler $registrationFormHandler */
-        $registrationFormHandler = $this->getRegistrationFormHandler();
-
-        $registrationForm = $registrationFormHandler->getForm();
+        $registrationForm = $this->formHandler->getForm();
         $registrationForm->handleRequest($request);
 
         if ($registrationForm->isSubmitted() && $registrationForm->isValid()) {
@@ -56,7 +70,7 @@ class Registration extends MoloniController
                     throw new MoloniException('An unexpected error occurred', [], ['errors' => $validator->getErrors()]);
                 }
 
-                $registrationFormHandler->submit($registrationForm->getData());
+                $this->formHandler->submit($registrationForm->getData());
 
                 $this->addSuccessMessage(
                     $this->trans(
@@ -98,10 +112,5 @@ class Registration extends MoloniController
         ];
 
         return new Response(json_encode($response));
-    }
-
-    private function getRegistrationFormHandler(): FormHandlerInterface
-    {
-        return $this->get('moloni.registration.form');
     }
 }

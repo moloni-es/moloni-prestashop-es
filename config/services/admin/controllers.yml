@@ -28,24 +28,28 @@ services:
     tags: ['controller.service_arguments']
     arguments:
       - '@moloni.services.context'
+      - '@moloni.repository.orders'
 
   moloni.controller.products:
     class: Moloni\Controller\Admin\Products\Products
     tags: ['controller.service_arguments']
     arguments:
       - '@moloni.services.context'
+      - '@moloni.repository.products'
 
   moloni.controller.registration:
     class: Moloni\Controller\Admin\Registration\Registration
     tags: ['controller.service_arguments']
     arguments:
       - '@moloni.services.context'
+      - '@moloni.registration.form'
 
   moloni.controller.settings:
     class: Moloni\Controller\Admin\Settings\Settings
     tags: ['controller.service_arguments']
     arguments:
       - '@moloni.services.context'
+      - '@moloni.settings.form'
 
   moloni.controller.tools:
     class: Moloni\Controller\Admin\Tools\Tools
