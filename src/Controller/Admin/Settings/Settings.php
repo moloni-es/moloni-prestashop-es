@@ -26,7 +26,6 @@ namespace Moloni\Controller\Admin\Settings;
 
 use Moloni\Controller\Admin\MoloniController;
 use Moloni\Form\Settings\SettingsFormHandler;
-use Moloni\Services\MoloniContext;
 use Moloni\Tools\Settings as SettingsTools;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,23 +36,16 @@ if (!defined('_PS_VERSION_')) {
 
 class Settings extends MoloniController
 {
-    private $formHandler;
-
-    public function __construct(MoloniContext $context, SettingsFormHandler $formHandler)
-    {
-        parent::__construct($context);
-
-        $this->formHandler = $formHandler;
-    }
-
     public function home(Request $request): Response
     {
-        $settingsForm = $this->formHandler->getForm();
+        $settingsFormHandler = $this->getSettingsFormHandler();
+
+        $settingsForm = $settingsFormHandler->getForm();
         $settingsForm->handleRequest($request);
 
         if ($settingsForm->isSubmitted() && $settingsForm->isValid()) {
             try {
-                $errors = $this->formHandler->save($settingsForm->getData());
+                $errors = $settingsFormHandler->save($settingsForm->getData());
             } catch (\Exception $e) {
                 $errors = [];
                 $errors[] = $e->getMessage();
@@ -79,5 +71,10 @@ class Settings extends MoloniController
                 'companyName' => SettingsTools::get('companyName'),
             ]
         );
+    }
+
+    private function getSettingsFormHandler()
+    {
+        return $this->get('moloni.settings.form');
     }
 }

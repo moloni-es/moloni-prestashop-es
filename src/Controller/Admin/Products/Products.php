@@ -52,30 +52,16 @@ if (!defined('_PS_VERSION_')) {
 
 class Products extends MoloniController
 {
-    /**
-     * Products repository
-     *
-     * @var ProductsRepository
-     */
-    private $productsRepository;
-
-    /**
-     * Constructor
-     */
-    public function __construct(MoloniContext $context, ProductsRepository $productsRepository)
-    {
-        parent::__construct($context);
-
-        $this->productsRepository =$productsRepository;
-    }
-
     public function home(): Response
     {
         $page = (int)Tools::getValue('page', 1);
         $filters = Tools::getValue('filters', []);
         $productsArray = [];
 
-        ['products' => $products, 'paginator' => $paginator] = $this->productsRepository->getProductsPaginated(
+        /** @var ProductsRepository $repository */
+        $repository = $this->get('moloni.repository.products');
+
+        ['products' => $products, 'paginator' => $paginator] = $repository->getProductsPaginated(
             $page,
             $this->getContextLangId(),
             $this->getContextShopId(),

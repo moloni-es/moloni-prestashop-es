@@ -52,24 +52,6 @@ if (!defined('_PS_VERSION_')) {
 
 class Orders extends MoloniController
 {
-
-    /**
-     * Orders repository
-     *
-     * @var OrdersRepository
-     */
-    private $ordersRepository;
-
-    /**
-     * Constructor
-     */
-    public function __construct(MoloniContext $context, OrdersRepository $ordersRepository)
-    {
-        parent::__construct($context);
-
-        $this->ordersRepository = $ordersRepository;
-    }
-
     /**
      * Pending orders list
      *
@@ -80,7 +62,10 @@ class Orders extends MoloniController
         $page = Tools::getValue('page', 1);
         $filters = Tools::getValue('filters', []);
 
-        ['orders' => $orders, 'paginator' => $paginator] = $this->ordersRepository->getPendingOrdersPaginated(
+        /** @var OrdersRepository $repository */
+        $repository = $this->get('moloni.repository.orders');
+
+        ['orders' => $orders, 'paginator' => $paginator] = $repository->getPendingOrdersPaginated(
             $page,
             $this->getContextLangId(),
             (new GetOrderListFilters($filters))->handle()

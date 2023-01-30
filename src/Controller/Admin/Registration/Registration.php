@@ -24,7 +24,6 @@
 
 namespace Moloni\Controller\Admin\Registration;
 
-use Moloni\Services\MoloniContext;
 use Tools;
 use Moloni\Actions\Registration\IsFormValid;
 use Moloni\Controller\Admin\MoloniController;
@@ -40,26 +39,12 @@ if (!defined('_PS_VERSION_')) {
 
 class Registration extends MoloniController
 {
-    /**
-     * Registration form handler
-     *
-     * @var RegistrationFormHandler
-     */
-    private $formHandler;
-
-    /**
-     * Constructor
-     */
-    public function __construct(MoloniContext $context, RegistrationFormHandler $formHandler)
-    {
-        parent::__construct($context);
-
-        $this->formHandler = $formHandler;
-    }
-
     public function home(Request $request)
     {
-        $registrationForm = $this->formHandler->getForm();
+        /** @var RegistrationFormHandler $registrationFormHandler */
+        $registrationFormHandler = $this->getRegistrationFormHandler();
+
+        $registrationForm = $registrationFormHandler->getForm();
         $registrationForm->handleRequest($request);
 
         if ($registrationForm->isSubmitted() && $registrationForm->isValid()) {
@@ -70,7 +55,7 @@ class Registration extends MoloniController
                     throw new MoloniException('An unexpected error occurred', [], ['errors' => $validator->getErrors()]);
                 }
 
-                $this->formHandler->submit($registrationForm->getData());
+                $registrationFormHandler->submit($registrationForm->getData());
 
                 $this->addSuccessMessage(
                     $this->trans(
@@ -112,5 +97,10 @@ class Registration extends MoloniController
         ];
 
         return new Response(json_encode($response));
+    }
+
+    private function getRegistrationFormHandler()
+    {
+        return $this->get('moloni.registration.form');
     }
 }
