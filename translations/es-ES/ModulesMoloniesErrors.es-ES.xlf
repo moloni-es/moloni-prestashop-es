@@ -427,6 +427,11 @@
         <target>El producto es invisible en Moloni. No se puede utilizar en la creación de documentos.</target>
         <note>Line: </note>
       </trans-unit>
+      <trans-unit id="af25aad0af958e6ced0ba8cfcb2a99cd">
+        <source>Error on hook "{0}"</source>
+        <target>Error en hook "{0}"</target>
+        <note>Line: </note>
+      </trans-unit>
       <trans-unit id="0511ee0d41117aa7b4abaaf102aa513d">
         <source>This field is required</source>
         <target>Este campo es obligatorio</target>

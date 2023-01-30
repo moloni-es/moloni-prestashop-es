@@ -135,6 +135,7 @@ class DummyTranslations
         $this->translator->trans('Combination not found ({0}).', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Product does not exist in current Moloni company.', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Product is invisible in Moloni. Cannot be used in document creation.', [], 'Modules.Molonies.Errors');
+        $this->translator->trans('Error on hook "{0}"', [], 'Modules.Molonies.Errors');
     }
 
     public function common(): void

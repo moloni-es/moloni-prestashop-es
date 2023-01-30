@@ -84,6 +84,10 @@ class MoloniApi
      */
     public static function getCompanyId(): int
     {
+        if (empty(self::$app)) {
+            return 0;
+        }
+
         return self::$app->getCompanyId() ?? 0;
     }
 

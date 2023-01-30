@@ -30,6 +30,7 @@ if (!defined('_PS_VERSION_')) {
 
 use Doctrine\Common\Persistence\ManagerRegistry as LegacyManagerRegistry;
 use Doctrine\Persistence\ManagerRegistry;
+use Moloni\Exceptions\MoloniException;
 use Moloni\Hooks\AdminOrderButtons;
 use Moloni\Hooks\OrderStatusUpdate;
 use Moloni\Hooks\ProductSave;
@@ -54,7 +55,7 @@ class MoloniEs extends Module
         $this->tab = 'administration';
 
         $this->need_instance = 1;
-        $this->version = '2.2.2';
+        $this->version = '2.2.3';
         $this->ps_versions_compliancy = ['min' => '1.7.6', 'max' => _PS_VERSION_];
         $this->author = 'Moloni';
         $this->module_key = '63e30380b2942ec15c33bedd4f7ec90e';
@@ -223,7 +224,7 @@ class MoloniEs extends Module
         try {
             $this->initContext();
         } catch (Exception $e) {
-            // todo: catch this?
+            return [];
         }
 
         include_once _PS_MODULE_DIR_ . 'molonies/src/Webservice/WebserviceSpecificManagementMoloniResource.php';
@@ -244,6 +245,7 @@ class MoloniEs extends Module
                 $this->initContext();
                 SyncLogs::prestashopProductRemoveTimeout($productId);
             } catch (Exception $e) {
+                // Do nothing
             }
         }
     }
@@ -299,6 +301,7 @@ class MoloniEs extends Module
         } catch (Exception $e) {
             // Do nothing
         }
+
         return true;
     }
 
@@ -353,8 +356,16 @@ class MoloniEs extends Module
      */
     private function initContext(): void
     {
-        /** @var ManagerRegistry|LegacyManagerRegistry $doctrine */
+        /** @var ManagerRegistry|LegacyManagerRegistry|false $doctrine */
         $doctrine = $this->get('doctrine');
+
+        if (empty($doctrine)) {
+            $doctrine = $this->getContainer()->get('doctrine');
+        }
+
+        if (empty($doctrine)) {
+            throw new MoloniException('Error loading doctrine');
+        }
 
         new MoloniContext($doctrine->getManager());
     }
