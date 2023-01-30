@@ -2,7 +2,7 @@ moloni_es_orders_home:
   path: /
   methods: [GET]
   defaults:
-    _controller: moloni.controller.orders:home
+    _controller: 'Moloni\Controller\Admin\Orders\Orders::home'
     _legacy_controller: 'MoloniOrders'
     _legacy_link: 'MoloniOrders'
 
@@ -10,10 +10,10 @@ moloni_es_orders_create:
   path: /createDocument
   methods: [GET, POST]
   defaults:
-    _controller: moloni.controller.orders:create
+    _controller: 'Moloni\Controller\Admin\Orders\Orders::create'
 
 moloni_es_orders_discard:
   path: /clearInvoice
   methods: [GET, POST]
   defaults:
-    _controller: moloni.controller.orders:discard
+    _controller: 'Moloni\Controller\Admin\Orders\Orders::discard'

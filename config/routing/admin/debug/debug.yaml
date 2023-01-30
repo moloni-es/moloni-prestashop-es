@@ -2,7 +2,7 @@ moloni_es_debug_home:
   path: /
   methods: [GET,POST]
   defaults:
-    _controller: moloni.controller.debug:home
+    _controller: 'Moloni\Controller\Admin\Debug\Debug::home'
     _legacy_controller: 'Moloni'
     _legacy_link: 'Moloni'
 
@@ -10,7 +10,7 @@ moloni_es_debug_check_attributes:
   path: /checkAttributesValidity
   methods: [GET,POST]
   defaults:
-    _controller: moloni.controller.debug:checkAttributesValidity
+    _controller: 'Moloni\Controller\Admin\Debug\Debug::checkAttributesValidity'
     _legacy_controller: 'Moloni'
     _legacy_link: 'Moloni'
 
@@ -18,7 +18,7 @@ moloni_es_debug_update_stock_from_moloni:
   path: /updateStockFromMoloni
   methods: [GET,POST]
   defaults:
-    _controller: moloni.controller.debug:updateStockFromMoloni
+    _controller: 'Moloni\Controller\Admin\Debug\Debug::updateStockFromMoloni'
     _legacy_controller: 'Moloni'
     _legacy_link: 'Moloni'
 
@@ -26,7 +26,7 @@ moloni_es_debug_update_product_from_moloni:
   path: /updateProductFromMoloni
   methods: [GET,POST]
   defaults:
-    _controller: moloni.controller.debug:updateProductFromMoloni
+    _controller: 'Moloni\Controller\Admin\Debug\Debug::updateProductFromMoloni'
     _legacy_controller: 'Moloni'
     _legacy_link: 'Moloni'
 
@@ -34,7 +34,7 @@ moloni_es_debug_insert_product_from_moloni:
   path: /insertProductFromMoloni
   methods: [ GET,POST ]
   defaults:
-    _controller: moloni.controller.debug:insertProductFromMoloni
+    _controller: 'Moloni\Controller\Admin\Debug\Debug::insertProductFromMoloni'
     _legacy_controller: 'Moloni'
     _legacy_link: 'Moloni'
 
@@ -42,7 +42,7 @@ moloni_es_debug_update_stock_from_prestashop:
   path: /updateStockFromPrestashop
   methods: [GET,POST]
   defaults:
-    _controller: moloni.controller.debug:updateStockFromPrestashop
+    _controller: 'Moloni\Controller\Admin\Debug\Debug::updateStockFromPrestashop'
     _legacy_controller: 'Moloni'
     _legacy_link: 'Moloni'
 
@@ -50,7 +50,7 @@ moloni_es_debug_update_product_from_prestashop:
   path: /updateProductFromPrestashop
   methods: [GET,POST]
   defaults:
-    _controller: moloni.controller.debug:updateProductFromPrestashop
+    _controller: 'Moloni\Controller\Admin\Debug\Debug::updateProductFromPrestashop'
     _legacy_controller: 'Moloni'
     _legacy_link: 'Moloni'
 
@@ -58,7 +58,7 @@ moloni_es_debug_insert_product_from_prestashop:
   path: /insertProductFromPrestashop
   methods: [ GET,POST ]
   defaults:
-    _controller: moloni.controller.debug:insertProductFromPrestashop
+    _controller: 'Moloni\Controller\Admin\Debug\Debug::insertProductFromPrestashop'
     _legacy_controller: 'Moloni'
     _legacy_link: 'Moloni'
 
@@ -66,6 +66,6 @@ moloni_es_debug_dump_product_associations:
   path: /dumpProductAssociations
   methods: [ GET,POST ]
   defaults:
-    _controller: moloni.controller.debug:dumpProductAssociations
+    _controller: 'Moloni\Controller\Admin\Debug\Debug::dumpProductAssociations'
     _legacy_controller: 'Moloni'
     _legacy_link: 'Moloni'
