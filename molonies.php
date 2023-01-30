@@ -223,7 +223,7 @@ class MoloniEs extends Module
         try {
             $this->initContext();
         } catch (Exception $e) {
-            // todo: catch this?
+            return [];
         }
 
         include_once _PS_MODULE_DIR_ . 'molonies/src/Webservice/WebserviceSpecificManagementMoloniResource.php';
