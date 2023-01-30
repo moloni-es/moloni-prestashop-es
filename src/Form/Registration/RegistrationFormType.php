@@ -53,7 +53,14 @@ class RegistrationFormType extends TranslatorAwareType
     /** @var RegistrationFormDataProvider */
     private $options;
 
-    public function __construct(TranslatorInterface $translator, array $locales, RegistrationFormDataProvider $dataProvider)
+    /**
+     * Construct
+     *
+     * @param TranslatorInterface|\Symfony\Contracts\Translation\TranslatorInterface $translator
+     * @param array $locales
+     * @param RegistrationFormDataProvider $dataProvider
+     */
+    public function __construct($translator, array $locales, RegistrationFormDataProvider $dataProvider)
     {
         $this->options = $dataProvider;
 

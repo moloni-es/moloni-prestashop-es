@@ -23,7 +23,6 @@
  * @noinspection PhpReturnValueOfMethodIsNeverUsedInspection
  */
 
-
 declare(strict_types=1);
 
 namespace Moloni\Form\Settings;
@@ -55,7 +54,14 @@ class SettingsFormType extends TranslatorAwareType
     /** @var SettingsFormDataProvider */
     private $options;
 
-    public function __construct(TranslatorInterface $translator, array $locales, SettingsFormDataProvider $dataProvider)
+    /**
+     * Constructor
+     *
+     * @param TranslatorInterface|\Symfony\Contracts\Translation\TranslatorInterface $translator
+     * @param array $locales
+     * @param SettingsFormDataProvider $dataProvider
+     */
+    public function __construct($translator, array $locales, SettingsFormDataProvider $dataProvider)
     {
         $this->options = $dataProvider;
 
