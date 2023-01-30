@@ -25,6 +25,7 @@
 namespace Moloni\Traits;
 
 use Attribute;
+use ProductAttribute;
 use Configuration;
 use AttributeGroup;
 
@@ -48,7 +49,11 @@ trait AttributesTrait
     private function getAttributeByName(string $name, int $groupId): int
     {
         if (empty($this->cacheAttribute)) {
-            $this->cacheAttribute = Attribute::getAttributes(Configuration::get('PS_LANG_DEFAULT'));
+            if (version_compare(_PS_VERSION_, '8') >= 0) {
+                $this->cacheAttribute = ProductAttribute::getAttributes(Configuration::get('PS_LANG_DEFAULT'));
+            } else {
+                $this->cacheAttribute = Attribute::getAttributes(Configuration::get('PS_LANG_DEFAULT'));
+            }
         }
 
         $idAttribute = 0;
