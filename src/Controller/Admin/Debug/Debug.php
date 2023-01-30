@@ -175,7 +175,7 @@ class Debug extends MoloniController
             $response = [
                 'valid' => 0,
                 'message' => $e->getMessage(),
-                'result' => $e->getData(),
+                'result' => json_encode($e->getData(), JSON_PRETTY_PRINT),
             ];
         }
 
@@ -228,7 +228,7 @@ class Debug extends MoloniController
             $response = [
                 'valid' => 0,
                 'message' => $e->getMessage(),
-                'result' => $e->getData(),
+                'result' => json_encode($e->getData(), JSON_PRETTY_PRINT),
             ];
         }
 
@@ -279,7 +279,7 @@ class Debug extends MoloniController
             $response = [
                 'valid' => 0,
                 'message' => $e->getMessage(),
-                'result' => $e->getData(),
+                'result' => json_encode($e->getData(), JSON_PRETTY_PRINT),
             ];
         }
 
@@ -326,7 +326,7 @@ class Debug extends MoloniController
             $response = [
                 'valid' => 0,
                 'message' => $e->getMessage(),
-                'result' => $e->getData(),
+                'result' => json_encode($e->getData(), JSON_PRETTY_PRINT),
             ];
         }
 
@@ -373,7 +373,7 @@ class Debug extends MoloniController
             $response = [
                 'valid' => 0,
                 'message' => $e->getMessage(),
-                'result' => $e->getData(),
+                'result' => json_encode($e->getData(), JSON_PRETTY_PRINT),
             ];
         }
 
@@ -416,7 +416,7 @@ class Debug extends MoloniController
             $response = [
                 'valid' => 0,
                 'message' => $e->getMessage(),
-                'result' => $e->getData(),
+                'result' => json_encode($e->getData(), JSON_PRETTY_PRINT),
             ];
         }
 
