@@ -348,7 +348,13 @@ class ProductVariant
      */
     public function setReference(): ProductVariant
     {
-        $this->reference = $this->prestashopCombination->reference;
+        $reference = $this->prestashopCombination->reference;
+
+        if (empty($reference)) {
+            $reference = '';
+        }
+
+        $this->reference = $reference;
 
         return $this;
     }

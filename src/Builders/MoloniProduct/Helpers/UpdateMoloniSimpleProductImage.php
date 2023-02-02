@@ -71,7 +71,7 @@ class UpdateMoloniSimpleProductImage
             ]
         ];
 
-        $file = _PS_BASE_URL_ . _THEME_PROD_DIR_ . $image->getExistingImgPath() . ".jpg";
+        $file = _PS_BASE_URL_ . _THEME_PROD_DIR_ . $image->getExistingImgPath() . "." . $image->image_format;
 
         try {
             $operations = ['query' => $this->getMutation(), 'variables' => $props];

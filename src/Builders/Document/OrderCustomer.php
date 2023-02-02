@@ -24,15 +24,16 @@
 
 namespace Moloni\Builders\Document;
 
+use Order;
 use Address;
 use Customer;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\Interfaces\BuilderItemInterface;
+use Moloni\Enums\Countries;
 use Moloni\Exceptions\Document\MoloniDocumentCustomerException;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Tools\Settings;
 use Moloni\Traits\CountryTrait;
-use Order;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -310,6 +311,14 @@ class OrderCustomer implements BuilderItemInterface
             default:
                 $vat = null;
                 break;
+        }
+
+        if ($this->countryId === Countries::SPAIN && !empty($vat)) {
+            $vat = ltrim($vat, 'ES');
+
+            if (!\Moloni\Helpers\Customer::isVatEsValid($vat)) {
+                $vat = null;
+            }
         }
 
         $this->vat = $vat;
