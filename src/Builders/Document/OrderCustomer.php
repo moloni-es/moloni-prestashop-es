@@ -348,36 +348,22 @@ class OrderCustomer implements BuilderItemInterface
     public function setNumber(): OrderCustomer
     {
         try {
+            $neddle = Settings::get('clientPrefix') ?? '';
+            $neddle .= '%';
+
             $params = [
                 'options' => [
                     'filter' => [
                         'field' => 'number',
                         'comparison' => 'like',
-                        'value' => Settings::get('ClientPrefix') . '%',
-                    ],
-                    'order' => [
-                        'field' => 'createdAt',
-                        'sort' => 'DESC',
-                    ],
-                    'pagination' => [
-                        'page' => 1,
-                        'qty' => 1,
-                    ],
+                        'value' => $neddle,
+                    ]
                 ],
             ];
 
-            $query = MoloniApiClient::customers()
-                ->queryCustomers($params);
+            $query = MoloniApiClient::customers()->queryCustomerNextNumber($params);
 
-            if (!empty($query)) {
-                // go straight for the first result because we only ask for 1
-                $lastNumber = substr($query[0]['number'], strlen(Settings::get('ClientPrefix')));
-
-                $number = ++$lastNumber;
-                $number = Settings::get('ClientPrefix') . $number;
-            } else {
-                $number = Settings::get('ClientPrefix') . '1';
-            }
+            $number = $query['data']['customerNextNumber']['data'] ?? 1;
         } catch (MoloniApiException $e) {
             throw new MoloniDocumentCustomerException('Error fetching customer next number', [], $e->getData());
         }

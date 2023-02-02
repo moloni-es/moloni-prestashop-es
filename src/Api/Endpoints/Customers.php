@@ -157,4 +157,31 @@ class Customers extends Endpoint
 
         return $this->paginatedPost($query, $variables, 'customers');
     }
+
+    /**
+     * Gets the next number available for customers
+     *
+     * @param array|null $variables variables of the request
+     *
+     * @return array Api data
+     *
+     * @throws MoloniApiException
+     */
+    public function queryCustomerNextNumber(?array $variables = []): array
+    {
+        $query = 'query customerNextNumber($companyId: Int!, $options: GetNextCustomerNumberOptions)
+        {
+            customerNextNumber(companyId: $companyId, options: $options)
+            {
+                data
+                errors
+                {
+                    field
+                    msg
+                }
+            }
+        }';
+
+        return $this->simplePost($query, $variables);
+    }
 }
