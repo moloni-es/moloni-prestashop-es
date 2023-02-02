@@ -288,7 +288,11 @@ class MoloniApi
 
             if (!empty($files)) {
                 foreach ($files as $idx => $file) {
-                    $postBody->addFile(new PostFile((string)$idx, fopen($file, 'rb')));
+                    $rawImage = fopen($file, 'rb');
+
+                    if (!empty($rawImage)) {
+                        $postBody->addFile(new PostFile((string)$idx, $rawImage));
+                    }
                 }
             }
 
