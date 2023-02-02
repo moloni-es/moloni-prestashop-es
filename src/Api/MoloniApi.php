@@ -288,6 +288,10 @@ class MoloniApi
 
             if (!empty($files)) {
                 foreach ($files as $idx => $file) {
+                    if (!file_exists($file)) {
+                        continue;
+                    }
+
                     $rawImage = fopen($file, 'rb');
 
                     if (!empty($rawImage)) {
