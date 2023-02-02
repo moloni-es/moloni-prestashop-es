@@ -71,7 +71,7 @@ class UpdateMoloniVariantsProductImage
         $counter = 0;
 
         $image = new Image($this->coverImage['id_image'], $this->languageId);
-        $files[] = _PS_BASE_URL_ . _THEME_PROD_DIR_ . $image->getExistingImgPath() . "." . $image->image_format;
+        $files[] = _PS_PROD_IMG_DIR_ . $image->getExistingImgPath() . "." . $image->image_format;
         $map = '{ "0": ["variables.data.img"]';
 
         $props = [
@@ -93,7 +93,7 @@ class UpdateMoloniVariantsProductImage
 
                     if (!empty($variantImage)) {
                         $image = new Image($variantImage['id_image'], $this->languageId);
-                        $files[] = _PS_BASE_URL_ . _THEME_PROD_DIR_ . $image->getExistingImgPath() . "." . $image->image_format;
+                        $files[] = _PS_PROD_IMG_DIR_ . $image->getExistingImgPath() . "." . $image->image_format;;
 
                         $map .= ', "' . $counter . '": ["variables.data.variants.' . $idx . '.img"]';
 
