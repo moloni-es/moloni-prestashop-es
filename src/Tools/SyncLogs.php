@@ -176,7 +176,7 @@ class SyncLogs
         ?int $prestashopId = 0,
         int $type = SyncLogsType::PRODUCT
     ): void {
-        $shopId = (int)Shop::getContextShopID();
+        $shopId = (int)(Shop::getContextShopID() ?? 0);
 
         $syncLog = new MoloniSyncLogs();
         $syncLog->setMoloniId($moloniId);
