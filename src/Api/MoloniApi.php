@@ -223,11 +223,13 @@ class MoloniApi
         ];
 
         if (self::$app) {
-            if (isset($data['variables']) && !isset($data['variables']['companyId'])) {
+            if (!empty(self::$app->getCompanyId()) && isset($data['variables']) && !isset($data['variables']['companyId'])) {
                 $data['variables']['companyId'] = self::$app->getCompanyId();
             }
 
-            $headers['Authorization'] = 'bearer ' . self::$app->getAccessToken();
+            if (!empty(self::$app->getAccessToken())) {
+                $headers['Authorization'] = 'bearer ' . self::$app->getAccessToken();
+            }
         }
 
         try {
