@@ -102,6 +102,8 @@ class Login extends MoloniController
         $moloniApp->setClientId($clientId);
         $moloniApp->setClientSecret($clientSecret);
         $moloniApp->setCompanyId(0);
+        $moloniApp->setAccessToken("");
+        $moloniApp->setRefreshToken("");
         $moloniApp->setShopId(Shop::getContextShopID() ?? 0);
         $moloniApp->setAccessTime(0);
 
