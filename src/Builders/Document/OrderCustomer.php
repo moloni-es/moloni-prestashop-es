@@ -363,12 +363,17 @@ class OrderCustomer implements BuilderItemInterface
 
             $query = MoloniApiClient::customers()->queryCustomerNextNumber($params);
 
-            $number = $query['data']['customerNextNumber']['data'] ?? 1;
+            if (isset($query['data']['customerNextNumber']['data']) && !empty($query['data']['customerNextNumber']['data'])) {
+                $number = $query['data']['customerNextNumber']['data'];
+            } else {
+                $number = Settings::get('clientPrefix') ?? '';
+                $number .= '1';
+            }
         } catch (MoloniApiException $e) {
             throw new MoloniDocumentCustomerException('Error fetching customer next number', [], $e->getData());
         }
 
-        $this->number = $number;
+        $this->number = (string)$number;
 
         return $this;
     }
