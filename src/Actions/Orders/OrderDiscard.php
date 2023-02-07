@@ -24,9 +24,11 @@
 
 namespace Moloni\Actions\Orders;
 
+use Shop;
 use DateTime;
 use Moloni\Enums\DocumentIdentifiers;
-use Shop;
+use Moloni\Enums\DocumentReference;
+use Moloni\Tools\Settings;
 use Moloni\Api\MoloniApi;
 use Moloni\Entity\MoloniOrderDocuments;
 use Moloni\Exceptions\MoloniException;
@@ -56,10 +58,25 @@ class OrderDiscard extends AbstractOrderAction
         $document->setCompanyId(MoloniApi::getCompanyId());
         $document->setDocumentType('');
         $document->setOrderId($this->orderId);
-        $document->setOrderReference($this->order->reference);
+        $document->setOrderReference($this->getReference());
         $document->setCreatedAt(new DateTime());
 
         $this->entityManager->persist($document);
         $this->entityManager->flush();
+    }
+
+    private function getReference(): string
+    {
+        switch (Settings::get('documentReference')) {
+            case DocumentReference::ID:
+                $reference = (string)$this->order->id;
+                break;
+            case DocumentReference::REFERENCE:
+            default:
+                $reference = $this->order->reference;
+                break;
+        }
+
+        return $reference ?? '';
     }
 }
