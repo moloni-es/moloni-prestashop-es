@@ -86,6 +86,10 @@ class MoloniSettingsRepository extends EntityRepository
                 $value = $value->format(Date::DATE_FORMAT);
             }
 
+            if (is_null($value)) {
+                $value = '';
+            }
+
             $setting = $this->findOneBy(['label' => $label, 'companyId' => $companyId]);
 
             if ($setting === null) {

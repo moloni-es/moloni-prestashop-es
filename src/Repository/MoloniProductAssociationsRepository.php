@@ -40,14 +40,14 @@ class MoloniProductAssociationsRepository extends EntityRepository
         $entityManager = $this->getEntityManager();
 
         $association = new MoloniProductAssociations();
-        $association->setMlProductId($mlProductId);
-        $association->setMlProductReference($mlProductReference);
-        $association->setMlVariantId($mlVariantId);
-        $association->setPsProductId($psProductId);
-        $association->setPsProductReference($psProductReference);
-        $association->setPsCombinationId($psCombinationId);
-        $association->setPsCombinationReference($psCombinationReference);
-        $association->setActive($active);
+        $association->setMlProductId($mlProductId ?? 0);
+        $association->setMlProductReference($mlProductReference ?? '');
+        $association->setMlVariantId($mlVariantId ?? 0);
+        $association->setPsProductId($psProductId ?? 0);
+        $association->setPsProductReference($psProductReference ?? '');
+        $association->setPsCombinationId($psCombinationId ?? 0);
+        $association->setPsCombinationReference($psCombinationReference ?? '');
+        $association->setActive($active ?? 1);
 
         try {
             $entityManager->persist($association);

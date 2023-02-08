@@ -14,7 +14,7 @@
 
         <b class="alert-text">Result:</b>
         <pre>
-                {{ data.result }}
-            </pre>
+            {{ data.result|json_encode(constant('JSON_PRETTY_PRINT')) }}
+        </pre>
     </div>
 {% endif %}
