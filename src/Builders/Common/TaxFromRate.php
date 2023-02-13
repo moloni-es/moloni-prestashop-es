@@ -279,7 +279,7 @@ class TaxFromRate implements BuilderItemInterface
 
             return $query['data']['fiscalZoneTaxSettings']['fiscalZoneModes'][0] ?? [];
         } catch (MoloniApiException $e) {
-            throw new MoloniException('Error fetching fiscal zone tax Settings', [], $e->getData());
+            throw new MoloniException('Error fetching fiscal zone tax settings', [], $e->getData());
         }
     }
 
