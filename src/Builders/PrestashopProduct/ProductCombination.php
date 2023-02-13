@@ -257,7 +257,10 @@ class ProductCombination implements BuilderInterface
             $this->prestashopCombination->isbn = $this->isbn;
         }
 
-        $this->prestashopCombination->reference = $this->reference;
+        if (!$this->combinationExists()) {
+            $this->prestashopCombination->reference = $this->reference;
+        }
+
         $this->prestashopCombination->id_product = $this->prestashopProduct->id;
 
         return $this;

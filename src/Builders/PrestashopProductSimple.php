@@ -258,7 +258,10 @@ class PrestashopProductSimple implements BuilderInterface
             $this->prestashopProduct->isbn = $this->isbn;
         }
 
-        $this->prestashopProduct->reference = $this->reference;
+        if (!$this->productExists()) {
+            $this->prestashopProduct->reference = $this->reference;
+        }
+        
         $this->prestashopProduct->product_type = $this->type;
 
         if (!empty($this->categories)) {
