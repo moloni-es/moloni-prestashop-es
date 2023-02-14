@@ -432,6 +432,11 @@
         <target>Error en hook "{0}"</target>
         <note>Line: </note>
       </trans-unit>
+      <trans-unit id="4776874d3ab58b9d1fb4c386b97fea69">
+        <source>Error fetching fiscal zone tax settings</source>
+        <target>Error al obtener la configuración de impuestos de la zona fiscal</target>
+        <note>Line: </note>
+      </trans-unit>
       <trans-unit id="0511ee0d41117aa7b4abaaf102aa513d">
         <source>This field is required</source>
         <target>Este campo es obligatorio</target>

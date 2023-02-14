@@ -258,7 +258,10 @@ class PrestashopProductSimple implements BuilderInterface
             $this->prestashopProduct->isbn = $this->isbn;
         }
 
-        $this->prestashopProduct->reference = $this->reference;
+        if (!$this->productExists()) {
+            $this->prestashopProduct->reference = $this->reference;
+        }
+        
         $this->prestashopProduct->product_type = $this->type;
 
         if (!empty($this->categories)) {
@@ -282,7 +285,11 @@ class PrestashopProductSimple implements BuilderInterface
         if ($productId > 0) {
             $product = new Product($productId, true, Configuration::get('PS_LANG_DEFAULT'));
         } else {
-            $product = new Product();
+            if (is_numeric($this->reference)) {
+                $product = new Product((int)$this->reference, true, Configuration::get('PS_LANG_DEFAULT'));
+            } else {
+                $product = new Product();
+            }
         }
 
         $this->prestashopProduct = $product;

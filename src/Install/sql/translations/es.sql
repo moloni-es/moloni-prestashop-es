@@ -421,6 +421,7 @@ VALUES  (@idLang, 'Translations exported sucessfully!', 'Traducciones exportadas
         (@idLang, 'Error on hook "{0}"', 'Error en hook "{0}"', 'ModulesMoloniesErrors'),
         (@idLang, 'Product not found', 'Producto no encontrado', 'ModulesMoloniesErrors'),
         (@idLang, 'Product types do not match.', 'Los tipos de productos no coinciden.', 'ModulesMoloniesErrors'),
+        (@idLang, 'Error fetching fiscal zone tax settings', 'Error al obtener la configuración de impuestos de la zona fiscal', 'ModulesMoloniesErrors'),
         (@idLang, 'Product combination stock do not match (Moloni: {0}, Prestashop: {1}).', 'El stock de combinación de productos no coincide (Moloni: {0}, Prestashop: {1}).', 'ModulesMoloniesErrors'),
         (@idLang, 'Combination not found ({0}).', 'Combinación no encontrada ({0}).', 'ModulesMoloniesErrors'),
         (@idLang, 'Product without stock active in Moloni.', 'Producto sin stock activo en Moloni.', 'ModulesMoloniesErrors'),

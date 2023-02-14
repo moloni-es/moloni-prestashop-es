@@ -128,13 +128,18 @@ class TaxFromRate implements BuilderItemInterface
                     'name' => $this->name,
                     'fiscalZone' => $this->fiscalZone['code'],
                     'fiscalZoneFinanceType' => 1,
-                    'fiscalZoneFinanceTypeMode' => 'NOR',
                     'countryId' => $this->fiscalZone['countryId'],
                     'type' => $this->type,
                     'isDefault' => false,
                     'value' => $this->value,
                 ]
             ];
+
+            $fiscalZoneSettings = $this->getFiscalZoneTaxSettings();
+
+            if (!empty($fiscalZoneSettings) && in_array($fiscalZoneSettings['visible'], ['TYPESELECTED', 'ALWAYS']) && $fiscalZoneSettings['type'] === 'VALUES') {
+                $params['data']['fiscalZoneFinanceTypeMode'] = 'NOR';
+            }
 
             $mutation = MoloniApiClient::taxes()->mutationTaxCreate($params);
 
@@ -255,6 +260,28 @@ class TaxFromRate implements BuilderItemInterface
     }
 
     //          REQUESTS          //
+
+    /**
+     * Search for fiscal zone tax settings
+     *
+     * @return array
+     *
+     * @throws MoloniException
+     */
+    public function getFiscalZoneTaxSettings(): array
+    {
+        $variables = [
+            'fiscalZone' => $this->fiscalZone['code'] ?? ''
+        ];
+
+        try {
+            $query = MoloniApiClient::fiscalZone()->queryFiscalZoneTaxSettings($variables);
+
+            return $query['data']['fiscalZoneTaxSettings']['fiscalZoneModes'][0] ?? [];
+        } catch (MoloniApiException $e) {
+            throw new MoloniException('Error fetching fiscal zone tax settings', [], $e->getData());
+        }
+    }
 
     /**
      * Search for taxes by value and fiscal zone
