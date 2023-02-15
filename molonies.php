@@ -104,6 +104,13 @@ class MoloniEs extends Module
      */
     public function install(): bool
     {
+        /** @url https://devdocs.prestashop-project.org/8/modules/creation/tutorial/#the-install-method */
+        if (Shop::isFeatureActive()) {
+            try {
+                Shop::setContext(Shop::CONTEXT_ALL);
+            } catch (PrestaShopException $e) {}
+        }
+
         if (!parent::install()) {
             return false;
         }
