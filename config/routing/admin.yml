@@ -1,0 +1,35 @@
+moloni_es_registration:
+  resource: "admin/registration/registration.yml"
+  prefix: /registration
+
+moloni_es_login:
+  resource: "admin/login/login.yml"
+  prefix: /login
+
+moloni_es_orders:
+  resource: "admin/orders/orders.yml"
+  prefix: /orders
+
+moloni_es_documents:
+  resource: "admin/documents/documents.yml"
+  prefix: /documents
+
+moloni_es_settings:
+  resource: "admin/settings/settings.yml"
+  prefix: /settings
+
+moloni_es_tools:
+  resource: "admin/tools/tools.yml"
+  prefix: /tools
+
+moloni_es_logs:
+  resource: "admin/logs/logs.yml"
+  prefix: /logs
+
+moloni_es_products:
+  resource: "admin/products/products.yml"
+  prefix: /products
+
+moloni_es_debug:
+  resource: "admin/debug/debug.yml"
+  prefix: /debug
