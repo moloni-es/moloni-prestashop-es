@@ -50,7 +50,7 @@ class ImportStockChangesFromMoloni extends ImportProducts
                 'filter' => [
                     'field' => 'hasStock',
                     'comparison' => 'eq',
-                    'value' => 'true',
+                    'value' => '1',
                 ],
                 'pagination' => [
                     'page' => $this->page,
