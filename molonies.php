@@ -55,7 +55,7 @@ class MoloniEs extends Module
         $this->tab = 'administration';
 
         $this->need_instance = 1;
-        $this->version = '2.3.0';
+        $this->version = '2.3.1';
         $this->ps_versions_compliancy = ['min' => '1.7.6', 'max' => _PS_VERSION_];
         $this->author = 'Moloni';
         $this->module_key = '63e30380b2942ec15c33bedd4f7ec90e';
@@ -104,6 +104,13 @@ class MoloniEs extends Module
      */
     public function install(): bool
     {
+        /** @url https://devdocs.prestashop-project.org/8/modules/creation/tutorial/#the-install-method */
+        if (Shop::isFeatureActive()) {
+            try {
+                Shop::setContext(Shop::CONTEXT_ALL);
+            } catch (PrestaShopException $e) {}
+        }
+
         if (!parent::install()) {
             return false;
         }
