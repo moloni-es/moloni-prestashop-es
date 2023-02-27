@@ -212,9 +212,9 @@
         <target>Importar stocks Moloni</target>
         <note>Line: </note>
       </trans-unit>
-      <trans-unit id="43f6558ff7d14c4a6a5db75a5db31b95">
-        <source>This tool will fetch all your Moloni products that were updated on the last 7 days, and synchronize your Prestashop stocks with the ones on your Moloni account.</source>
-        <target>Esta herramienta busca todos los productos de Moloni que han sido actualizados en los últimos 7 días, y sincroniza sus stocks de Prestashop con los de tu cuenta de Moloni.</target>
+      <trans-unit id="4299daba79045e402103dbeb21917768">
+        <source>This tool will fetch all your Moloni products and synchronize your Prestashop stocks with the ones on your Moloni account.</source>
+        <target>Esta herramienta buscará todos tus productos de Moloni y sincronizará tus stocks de Prestashop con los de tu cuenta de Moloni.</target>
         <note>Line: </note>
       </trans-unit>
       <trans-unit id="334d49f9f7576d982ff0dad8b64f3683">
