@@ -262,6 +262,7 @@ class SettingsFormType extends TranslatorAwareType
             ],
             'multiple' => true,
             'expanded' => true,
+            'empty_data' => '',
             'required' => false,
             'choices' => $this->options->getSyncFields(),
         ]);

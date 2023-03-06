@@ -92,7 +92,11 @@ class SettingsFormDataProvider implements FormDataProviderInterface
         $settings = Settings::getAll();
 
         if (isset($settings['orderDateCreated'])) {
-            $settings['orderDateCreated'] = new DateTime($settings['orderDateCreated']);
+            if (empty($settings['orderDateCreated'])) {
+                $settings['orderDateCreated'] = null;
+            } else {
+                $settings['orderDateCreated'] = new DateTime($settings['orderDateCreated']);
+            }
         }
 
         if (!isset($settings['orderStatusToShow'])) {

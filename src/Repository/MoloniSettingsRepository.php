@@ -51,11 +51,7 @@ class MoloniSettingsRepository extends EntityRepository
             $value = $setting->getValue();
             $label = $setting->getLabel();
 
-            if (!empty($value) && in_array($label, $this->arraySettings)) {
-                $value = unserialize($value, ['allowed_classes' => false]);
-            }
-
-            $settings[$label] = $value;
+            $settings[$label] = $this->getOptionValue($label, $value);
         }
 
         return $settings;
@@ -79,7 +75,7 @@ class MoloniSettingsRepository extends EntityRepository
 
         foreach ($submitData as $label => $value) {
             if (is_array($value)) {
-                $value = serialize($value);
+                $value = json_encode($value);
             }
 
             if (is_object($value) && $label === 'orderDateCreated') {
@@ -104,5 +100,40 @@ class MoloniSettingsRepository extends EntityRepository
             $entityManager->persist($setting);
             $entityManager->flush();
         }
+    }
+
+    /**
+     * Get safe value to load
+     *
+     * @param string|null $label
+     * @param string|null $value
+     *
+     * @return array|string|null
+     */
+    private function getOptionValue(?string $label = '', ?string $value = '')
+    {
+        if (in_array($label, $this->arraySettings)) {
+            if (empty($value)) {
+                return [];
+            }
+
+            $tempValue = json_decode($value, true);
+
+            if (is_array($tempValue)) {
+                return $tempValue;
+            }
+
+            /** Depretaced stuff */
+            $tempValue = unserialize($value, ['allowed_classes' => false]);
+
+            if (is_array($tempValue)) {
+                return $tempValue;
+            }
+
+            /** Better safe than sorry */
+            return [];
+        }
+
+        return $value;
     }
 }
