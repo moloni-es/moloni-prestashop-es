@@ -280,7 +280,7 @@ class OrderDelivery implements BuilderItemInterface
      */
     protected function setName(): OrderDelivery
     {
-        $this->name = $this->orderCarrier->name;
+        $this->name = $this->orderCarrier->name ?? 'Envío';
 
         return $this;
     }
