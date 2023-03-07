@@ -73,6 +73,7 @@ class DummyTranslations
         $this->translator->trans('Error creating delivery method: ({0})', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Error getting load country', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Error getting delivery country', [], 'Modules.Molonies.Errors');
+        $this->translator->trans('Error fetching delivery methods', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Error fetching payment methods', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Error creating payment method: ({0})', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Error fetching product by reference: ({0})', [], 'Modules.Molonies.Errors');

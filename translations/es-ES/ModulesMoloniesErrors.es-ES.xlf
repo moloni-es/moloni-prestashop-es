@@ -132,6 +132,11 @@
         <target>Error al obtener el país de entrega</target>
         <note>Line: </note>
       </trans-unit>
+      <trans-unit id="3dbb0b01767587f1ac410ba25c15eec7">
+        <source>Error fetching delivery methods</source>
+        <target>Error al obtener los métodos de entrega</target>
+        <note>Line: </note>
+      </trans-unit>
       <trans-unit id="7332d7a46589d730db85699022afe396">
         <source>Error fetching payment methods</source>
         <target>Error en la búsqueda de métodos de pago</target>

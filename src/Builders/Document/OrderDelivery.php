@@ -393,7 +393,7 @@ class OrderDelivery implements BuilderItemInterface
                 $this->deliveryMethodId = $query[0]['deliveryMethodId'];
             }
         } catch (MoloniApiException $e) {
-            throw new MoloniDocumentDeliveryException('Error fetching payment methods', [], $e->getData());
+            throw new MoloniDocumentDeliveryException('Error fetching delivery methods', [], $e->getData());
         }
 
         return $this;

@@ -204,6 +204,7 @@ VALUES  (@idLang, 'Translations exported sucessfully!', 'Traducciones exportadas
         (@idLang, 'Cannot update product in Moloni. Product types do not match', 'No se puede actualizar el producto en Moloni. Los tipos de productos no coinciden', 'ModulesMoloniesErrors'),
         (@idLang, 'Error creating stock movement ({0})', 'Error al crear el movimiento de stock ({0})', 'ModulesMoloniesErrors'),
         (@idLang, 'Error fetching payment methods', 'Error en la búsqueda de métodos de pago', 'ModulesMoloniesErrors'),
+        (@idLang, 'Error fetching delivery methods', 'Error al obtener los métodos de entrega', 'ModulesMoloniesErrors'),
         (@idLang, 'Automatic document creation with real time stock synchronization and powerful sales analysis.', 'Creación automática de documentos con sincronización de existencias en tiempo real y potente análisis de ventas.', 'ModulesMoloniesMolonies'),
         (@idLang, 'Moloni España', 'Moloni España', 'ModulesMoloniesMolonies'),
         (@idLang, 'Company name', 'Nombre de la empresa', 'ModulesMoloniesSettings'),
