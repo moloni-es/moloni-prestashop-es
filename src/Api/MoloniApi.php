@@ -59,6 +59,13 @@ class MoloniApi
      */
     private static $client;
 
+    /**
+     * Plugin identifier
+     *
+     * @var string
+     */
+    private static $userAgent = 'PrestashopPlugin/2.0';
+
     public function __construct(EntityManager $entityManager, ?MoloniApp $app)
     {
         self::$app = $app;
@@ -91,6 +98,28 @@ class MoloniApi
         return self::$app->getCompanyId() ?? 0;
     }
 
+    //          Privates          //
+
+    /**
+     * Create a new Guzzle client
+     *
+     * @return void
+     */
+    public static function initClient()
+    {
+        $headers = ['User-Agent' => self::$userAgent];
+
+        self::$client = new Client();
+
+        $defaultHeaders = self::$client->getDefaultOption('headers');
+
+        if (is_array($defaultHeaders)) {
+            $headers = array_merge($defaultHeaders, $headers);
+        }
+
+        self::$client->setDefaultOption('headers', $headers);
+    }
+
     //          Requests          //
 
     /**
@@ -109,7 +138,7 @@ class MoloniApi
         }
 
         if (!self::$client) {
-            self::$client = new Client();
+            self::initClient();
         }
 
         $url = Domains::MOLONI_API . '/auth/grant';
@@ -156,7 +185,7 @@ class MoloniApi
     public static function refreshTokens(): bool
     {
         if (!self::$client) {
-            self::$client = new Client();
+            self::initClient();
         }
 
         $url = Domains::MOLONI_API . '/auth/grant';
@@ -215,7 +244,7 @@ class MoloniApi
     public static function post(?array $data = []): array
     {
         if (!self::$client) {
-            self::$client = new Client();
+            self::initClient();
         }
 
         $headers = [
@@ -268,7 +297,7 @@ class MoloniApi
     public static function postWithFile(?array $operations = [], ?string $map = '', ?array $files = []): array
     {
         if (!self::$client) {
-            self::$client = new Client();
+            self::initClient();
         }
 
         if (isset($operations['variables']) && !isset($operations['variables']['companyId'])) {
