@@ -814,9 +814,17 @@ class MoloniProductSimple implements BuilderInterface
             ];
         }
 
+        if (!empty($this->prestashopProduct->upc)) {
+            $identifications[] = [
+                'type' => 'UPCA',
+                'text' => $this->prestashopProduct->upc,
+                'favorite' => false,
+            ];
+        }
+
         if (isset($this->moloniProduct['identifications']) && !empty($this->moloniProduct['identifications'])) {
             foreach ($this->moloniProduct['identifications'] as $identification) {
-                if (!in_array($identification['type'], ['EAN13', 'ISBN'], true)) {
+                if (!in_array($identification['type'], ['EAN13', 'ISBN', 'UPCA'], true)) {
                     $identifications[] = $identification;
                 }
             }

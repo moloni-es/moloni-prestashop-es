@@ -127,11 +127,18 @@ class PrestashopProductWithCombinations implements BuilderInterface
     protected $ean13 = '';
 
     /**
+     * Product UPC-A
+     *
+     * @var string
+     */
+    protected $upc = '';
+
+    /**
      * Product price
      *
      * @var float
      */
-    protected $price = '';
+    protected $price = 0.0;
 
     /**
      * Has stock
@@ -283,6 +290,7 @@ class PrestashopProductWithCombinations implements BuilderInterface
         if ($this->shouldSyncIdentifiers()) {
             $this->prestashopProduct->ean13 = $this->ean13;
             $this->prestashopProduct->isbn = $this->isbn;
+            $this->prestashopProduct->upc = $this->upc;
         }
 
         if (!$this->productExists()) {
@@ -527,25 +535,27 @@ class PrestashopProductWithCombinations implements BuilderInterface
     {
         $isbn = '';
         $ean13 = '';
+        $upc = '';
 
         if (!empty($this->moloniProduct['identifications'])) {
             foreach ($this->moloniProduct['identifications'] as $identification) {
-                if ($identification['type'] === 'ISBN') {
-                    $isbn = $identification['text'];
-
-                    continue;
-                }
-
-                if ($identification['type'] === 'EAN13') {
-                    $ean13 = $identification['text'];
-
-                    continue;
+                switch ($identification['type']) {
+                    case 'ISBN':
+                        $isbn = $identification['text'];
+                        break;
+                    case 'EAN13':
+                        $ean13 = $identification['text'];
+                        break;
+                    case 'UPCA':
+                        $upc = $identification['text'];
+                        break;
                 }
             }
         }
 
         $this->isbn = $isbn;
         $this->ean13 = $ean13;
+        $this->upc = $upc;
 
         return $this;
     }
