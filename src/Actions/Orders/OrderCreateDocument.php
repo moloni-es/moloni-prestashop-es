@@ -89,7 +89,11 @@ class OrderCreateDocument extends AbstractOrderAction
                 ->setDocumentStatus()
                 ->setSendEmail()
                 ->setShippingInformation()
-                ->addRelatedDocument($billOfLading->getDocumentId(), $billOfLading->getDocumentTotal());
+                ->addRelatedDocument(
+                    $billOfLading->getDocumentId(),
+                    $billOfLading->getDocumentTotal(),
+                    $billOfLading->getDocumentProducts()
+                );
 
             unset($billOfLading);
         } else {
@@ -107,7 +111,11 @@ class OrderCreateDocument extends AbstractOrderAction
             $receipt = clone $builder;
 
             $receipt
-                ->addRelatedDocument($builder->getDocumentId(), $builder->getDocumentTotal())
+                ->addRelatedDocument(
+                    $builder->getDocumentId(),
+                    $builder->getDocumentTotal(),
+                    $builder->getDocumentProducts()
+                )
                 ->setDocumentType(DocumentTypes::RECEIPTS)
                 ->setDocumentStatus(DocumentStatus::CLOSED)
                 ->setSendEmail()

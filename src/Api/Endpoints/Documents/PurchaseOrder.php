@@ -179,6 +179,11 @@ class PurchaseOrder extends Endpoint
                             documentSetName
                             totalValue
                             currencyExchangeTotalValue
+                            products
+                            {
+                                documentProductId
+                                productId
+                            }   
                         }
                         errors
                         {
@@ -211,6 +216,11 @@ class PurchaseOrder extends Endpoint
                     documentId
                     status
                     currencyExchangeTotalValue
+                    products
+                    {
+                        documentProductId
+                        productId
+                    }   
                 }
                 errors
                 {

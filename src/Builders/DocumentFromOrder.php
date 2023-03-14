@@ -118,13 +118,6 @@ class DocumentFromOrder implements BuilderInterface
     protected $relatedWith = [];
 
     /**
-     * Related documents total
-     *
-     * @var float
-     */
-    protected $relatedWithTotal = 0;
-
-    /**
      * Document type
      *
      * @var string
@@ -305,7 +298,6 @@ class DocumentFromOrder implements BuilderInterface
         $this->documentExchageTotal = 0;
 
         $this->relatedWith = [];
-        $this->relatedWithTotal = 0;
 
         $this->moloniDocument = [];
         $this->createProps = [];
@@ -392,26 +384,59 @@ class DocumentFromOrder implements BuilderInterface
         }
 
         if (!empty($this->relatedWith)) {
+            $relatedWithTotal = 0.0;
             $props['relatedWith'] = [];
 
             foreach ($this->relatedWith as $related) {
+                $relatedWithTotal += $related['value'];
+
                 $props['relatedWith'][] = [
-                    'relatedDocumentId' => $related['relatedDocumentId'],
+                    'relatedDocumentId' => $related['documentId'],
                     'value' => $related['value'],
                 ];
+
+                /** Associate products from both documents */
+                if (!empty($related['products']) && !empty($props['products'])) {
+                    /**
+                     * If multiple documents are associated, the need a global product counter
+                     * Starts in -1 because the first thing we do is to increment its value
+                     */
+                    $currentProductIndex = -1;
+
+                    /**
+                     * Associate products from both documents
+                     * We assume that the order of the documents is the same (beware if tring to do custom stuff)
+                     */
+                    foreach ($related['products'] as $associatedProduct) {
+                        $currentProductIndex++;
+
+                        /** To avoid errors, check lenght */
+                        if (!isset($props['products'][$currentProductIndex])) {
+                            continue;
+                        }
+
+                        /** Ids have to match */
+                        if ((int)$props['products'][$currentProductIndex]['productId'] !== (int)$associatedProduct['productId']) {
+                            continue;
+                        }
+
+                        $props['products'][$currentProductIndex]['relatedDocumentId'] = (int)$related['documentId'];
+                        $props['products'][$currentProductIndex]['relatedDocumentProductId'] = (int)$associatedProduct['documentProductId'];
+                    }
+                }
+            }
+
+            /** Just Receipts things */
+            if ($this->documentType === DocumentTypes::RECEIPTS) {
+                unset($props['expirationDate'], $props['ourReference'], $props['yourReference'], $props['expirationDate']);
+
+                $props['totalValue'] = $relatedWithTotal;
             }
         }
 
         if (!empty($this->exchangeRate)) {
             $props['currencyExchangeId'] = $this->exchangeRate['currencyExchangeId'];
             $props['currencyExchangeExchange'] = $this->exchangeRate['exchange'];
-        }
-
-        // Just Receipts things
-        if ($this->documentType === DocumentTypes::RECEIPTS) {
-            unset($props['expirationDate'], $props['ourReference'], $props['yourReference'], $props['expirationDate']);
-
-            $props['totalValue'] = $this->relatedWithTotal;
         }
 
         $this->createProps = ['data' => $props];
@@ -643,20 +668,20 @@ class DocumentFromOrder implements BuilderInterface
     }
 
     /**
-     * Add related document
+     * Associate a document wiht the current one
      *
-     * @param int $documentId
-     * @param float $value
+     * @param int $documentId Document id to associate
+     * @param float $value Total value to associate
+     * @param array $products Document products
      *
      * @return $this
      */
-    public function addRelatedDocument(int $documentId, float $value): DocumentFromOrder
+    public function addRelatedDocument(int $documentId, float $value, array $products = []): DocumentFromOrder
     {
-        $this->relatedWithTotal += $value;
-
         $this->relatedWith[] = [
-            'relatedDocumentId' => $documentId,
+            'documentId' => $documentId,
             'value' => $value,
+            'products' => $products
         ];
 
         return $this;
@@ -704,6 +729,16 @@ class DocumentFromOrder implements BuilderInterface
     public function getDocumentTotal(): float
     {
         return $this->documentTotal;
+    }
+
+    /**
+     * Get created document products
+     *
+     * @return array
+     */
+    public function getDocumentProducts(): array
+    {
+        return $this->moloniDocument['products'] ?? [];
     }
 
     //          SETS          //

@@ -176,6 +176,11 @@ class CreditNote extends Endpoint
                             entityName
                             documentSetName
                             totalValue
+                            products
+                            {
+                                documentProductId
+                                productId
+                            }
                         }
                         errors
                         {
