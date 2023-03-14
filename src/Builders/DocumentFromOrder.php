@@ -917,7 +917,7 @@ class DocumentFromOrder implements BuilderInterface
 
             if ($customer->getCustomerId() === 0) {
                 $customer->insert();
-            } elseif (Settings::get('clientUpdate') === Boolean::YES) {
+            } elseif ((int)Settings::get('clientUpdate') === Boolean::YES) {
                 $customer->update();
             }
 
