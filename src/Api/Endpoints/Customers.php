@@ -65,6 +65,38 @@ class Customers extends Endpoint
     }
 
     /**
+     * Creates a costumer
+     *
+     * @param array|null $variables variables of the request
+     *
+     * @return array Api data
+     *
+     * @throws MoloniApiException
+     */
+    public function mutationCustomerUpdate(?array $variables = []): array
+    {
+        $query = 'mutation customerUpdate($companyId: Int!,$data: CustomerUpdate!)
+        {
+            customerUpdate(companyId: $companyId,data: $data)
+            {
+                data
+                {
+                    customerId
+                    name
+                    vat
+                }
+                errors
+                {
+                    field
+                    msg
+                }
+            }
+        }';
+
+        return $this->simplePost($query, $variables);
+    }
+
+    /**
      * Gets costumer information
      *
      * @param array|null $variables variables of the request

@@ -97,6 +97,11 @@
         <target>Error al crear el cliente ({0})</target>
         <note>Line: </note>
       </trans-unit>
+      <trans-unit id="49d2f1e026c7f6036cf1fcc9ab1f463a">
+        <source>Error updating customer ({0})</source>
+        <target>Error al actualizar el cliente ({0})</target>
+        <note>Line: </note>
+      </trans-unit>
       <trans-unit id="3c391bb3f8e062e2044a7d4cfd4f5d1c">
         <source>Error fetching countries</source>
         <target>Error en la búsqueda de países</target>

@@ -913,13 +913,12 @@ class DocumentFromOrder implements BuilderInterface
     {
         if ($this->order->id_customer) {
             $customer = new OrderCustomer($this->order);
-
-            $customer
-                ->search();
+            $customer->search();
 
             if ($customer->getCustomerId() === 0) {
-                $customer
-                    ->insert();
+                $customer->insert();
+            } elseif (Settings::get('clientUpdate') === Boolean::YES) {
+                $customer->update();
             }
 
             $this->customer = $customer;

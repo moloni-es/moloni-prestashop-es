@@ -66,6 +66,7 @@ class DummyTranslations
         $this->translator->trans('Error creating tax: ({0} - {1})', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Error fetching taxes', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Error creating customer ({0})', [], 'Modules.Molonies.Errors');
+        $this->translator->trans('Error updating customer ({0})', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Error fetching countries', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Error fetching customer next number', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Error fetching customer by VAT: ({0})', [], 'Modules.Molonies.Errors');

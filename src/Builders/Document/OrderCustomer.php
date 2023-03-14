@@ -185,13 +185,7 @@ class OrderCustomer implements BuilderItemInterface
      */
     public function insert(): OrderCustomer
     {
-        $this
-            ->setNumber()
-            ->setWebsite()
-            ->setPhone()
-            ->setAddress()
-            ->setCity()
-            ->setZipCode();
+        $this->setNumber();
 
         try {
             $params = [
@@ -221,7 +215,47 @@ class OrderCustomer implements BuilderItemInterface
                 throw new MoloniDocumentCustomerException('Error creating customer ({0})', ['{0}' => $this->name], ['params' => $params, 'response' => $mutation]);
             }
         } catch (MoloniApiException $e) {
-            throw new MoloniDocumentCustomerException('Error creating customer: ({0})', ['{0}' => $this->name], $e->getData());
+            throw new MoloniDocumentCustomerException('Error creating customer ({0})', ['{0}' => $this->name], $e->getData());
+        }
+
+        return $this;
+    }
+
+    /**
+     * Update a customer in Moloni
+     *
+     * @throws MoloniDocumentCustomerException
+     */
+    public function update(): OrderCustomer
+    {
+        try {
+            $params = [
+                'data' => [
+                    'customerId' => $this->customerId,
+                    'name' => $this->name,
+                    'address' => $this->address,
+                    'city' => $this->city,
+                    'zipCode' => $this->zipCode,
+                    'email' => !empty($this->email) ? $this->email : null,
+                    'website' => !empty($this->website) ? $this->website : null,
+                    'phone' => $this->phone,
+                    'countryId' => $this->countryId,
+                    'languageId' => $this->languageId,
+                ],
+            ];
+
+            $mutation = MoloniApiClient::customers()
+                ->mutationCustomerUpdate($params);
+
+            $costumerId = $mutation['data']['customerUpdate']['data']['customerId'] ?? 0;
+
+            if ((int)$costumerId > 0) {
+                $this->customerId = (int)$costumerId;
+            } else {
+                throw new MoloniDocumentCustomerException('Error updating customer ({0})', ['{0}' => $this->name], ['params' => $params, 'response' => $mutation]);
+            }
+        } catch (MoloniApiException $e) {
+            throw new MoloniDocumentCustomerException('Error updating customer ({0})', ['{0}' => $this->name], $e->getData());
         }
 
         return $this;
@@ -254,7 +288,12 @@ class OrderCustomer implements BuilderItemInterface
             ->setName()
             ->setLanguageAndCountryId()
             ->setVat()
-            ->setEmail();
+            ->setEmail()
+            ->setWebsite()
+            ->setPhone()
+            ->setAddress()
+            ->setCity()
+            ->setZipCode();
 
         return $this;
     }

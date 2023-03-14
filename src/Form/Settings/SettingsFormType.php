@@ -349,6 +349,24 @@ class SettingsFormType extends TranslatorAwareType
         return $this;
     }
 
+    private function clientUpdate(): SettingsFormType
+    {
+        $this->builder->add('clientUpdate', ChoiceType::class, [
+            'label' => $this->trans('Update customer', "Modules.Molonies.Settings"),
+            'label_attr' => [
+                'popover' => $this->trans(
+                    'Update client when it already exists in Moloni account.',
+                    "Modules.Molonies.Settings"
+                ),
+            ],
+            'choices' => $this->options->getYesNo(),
+            'placeholder' => false,
+            'required' => false,
+        ]);
+
+        return $this;
+    }
+
     private function documentSet(): SettingsFormType
     {
         $this->builder
@@ -718,6 +736,7 @@ class SettingsFormType extends TranslatorAwareType
             ->measurementUnit()
             ->documentWarehouse()
             ->clientPrefix()
+            ->clientUpdate()
             // When document stauts is closed
             ->billOfLading()
             ->loadAddress()

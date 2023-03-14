@@ -301,6 +301,16 @@
                             Esto es útil para identificar fácilmente qué clientes fueron creados por este módulo.]]></target>
         <note>Line: </note>
       </trans-unit>
+      <trans-unit id="77d539e5a8800ce533c4768ccd282250">
+        <source>Update customer</source>
+        <target>Actualizar cliente</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="081bc8cb5dfbca5aea85e8790f45abab">
+        <source>Update client when it already exists in Moloni account.</source>
+        <target>Actualice el cliente cuando ya exista en la cuenta de Moloni.</target>
+        <note>Line: </note>
+      </trans-unit>
       <trans-unit id="33bf4dcf572fe687ed1607bcf4620eca">
         <source>Document set</source>
         <target>Serie de documentos</target>
