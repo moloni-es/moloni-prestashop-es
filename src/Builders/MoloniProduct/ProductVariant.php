@@ -368,11 +368,33 @@ class ProductVariant
     {
         $identifications = [];
 
+        $isEanFav = false;
+        $isIsbnFav = false;
+        $isUpcaFav = false;
+
+        if (isset($this->moloniProduct['identifications']) && !empty($this->moloniProduct['identifications'])) {
+            foreach ($this->moloniProduct['identifications'] as $identification) {
+                switch ($identification['type']) {
+                    case 'ISBN':
+                        $isIsbnFav = $identification['favorite'];
+                        continue 2;
+                    case 'EAN13':
+                        $isEanFav = $identification['favorite'];
+                        continue 2;
+                    case 'UPCA':
+                        $isUpcaFav = $identification['favorite'];
+                        continue 2;
+                }
+
+                $identifications[] = $identification;
+            }
+        }
+
         if (!empty($this->prestashopCombination->ean13)) {
             $identifications[] = [
                 'type' => 'EAN13',
                 'text' => $this->prestashopCombination->ean13,
-                'favorite' => false,
+                'favorite' => $isEanFav,
             ];
         }
 
@@ -380,7 +402,7 @@ class ProductVariant
             $identifications[] = [
                 'type' => 'ISBN',
                 'text' => $this->prestashopCombination->isbn,
-                'favorite' => false,
+                'favorite' => $isIsbnFav,
             ];
         }
 
@@ -388,16 +410,8 @@ class ProductVariant
             $identifications[] = [
                 'type' => 'UPCA',
                 'text' => $this->prestashopCombination->upc,
-                'favorite' => false,
+                'favorite' => $isUpcaFav,
             ];
-        }
-
-        if (isset($this->moloniProduct['identifications']) && !empty($this->moloniProduct['identifications'])) {
-            foreach ($this->moloniProduct['identifications'] as $identification) {
-                if (!in_array($identification['type'], ['EAN13', 'ISBN', 'UPCA'], true)) {
-                    $identifications[] = $identification;
-                }
-            }
         }
 
         $this->identifications = $identifications;
