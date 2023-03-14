@@ -113,6 +113,7 @@ class MoloniRoutes
     public const ROUTES_PARTIALLY_AUTHENTICATED = [
         self::LOGIN_COMPANY_SELECT,
         self::LOGIN_COMPANY_SUBMIT,
+        self::TOOLS_LOGOUT,
     ];
 
     public const ROUTES_NON_AUTHENTICATED = [

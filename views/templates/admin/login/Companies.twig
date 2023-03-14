@@ -2,66 +2,82 @@
 
 {% block plugin_content %}
 
-    {% if companies %}
-        <div class="container">
+    <div class="container">
+        {% if companies %}
             <div class="d-flex flex-row flex-wrap justify-content-center moloni-company--wrapper">
-                {% for company in companies %}
-                    <div class="card moloni-company--card">
-                        <div class="card-header">
-                            {{ company.name }}
-                        </div>
-                        <div class="card-block moloni-company--image">
-                            {% if company.img1 %}
-                                <img src="{{ media_api_url }}{{ company.img1 }}" height="auto" alt="Company logo">
-                            {% else %}
-                                <img src="{{ default_img }}" height="auto" alt="Company logo">
-                            {% endif %}
-                        </div>
-                        <div class="card-block moloni-company--information">
+                    {% for company in companies %}
+                        <div class="card moloni-company--card">
+                            <div class="card-header">
+                                {{ company.name }}
+                            </div>
+                            <div class="card-block moloni-company--image">
+                                {% if company.img1 %}
+                                    <img src="{{ media_api_url }}{{ company.img1 }}" height="auto" alt="Company logo">
+                                {% else %}
+                                    <img src="{{ default_img }}" height="auto" alt="Company logo">
+                                {% endif %}
+                            </div>
+                            <div class="card-block moloni-company--information">
+                                {% if company.email %}
+                                    <p>
+                                        {{ 'E-mail'|trans({}, 'Modules.Molonies.Common') }}: {{ company.email|default('') }}
+                                    </p>
+                                {% endif %}
 
-                            {% if company.email %}
-                                <p>
-                                    {{ 'E-mail'|trans({}, 'Modules.Molonies.Common') }}: {{ company.email|default('') }}
-                                </p>
-                            {% endif %}
-
-                            {% if company.address %}
-                                <p>
-                                    {{ 'Address'|trans({}, 'Modules.Molonies.Common') }}
-                                    : {{ company.address|default('') }}
-                                </p>
-                            {% endif %}
+                                {% if company.address %}
+                                    <p>
+                                        {{ 'Address'|trans({}, 'Modules.Molonies.Common') }}
+                                        : {{ company.address|default('') }}
+                                    </p>
+                                {% endif %}
 
 
-                            {% if company.zipCode %}
-                                <p>
-                                    {{ 'Zip-Code'|trans({}, 'Modules.Molonies.Common') }}
-                                    : {{ company.zipCode|default('') }}
-                                </p>
-                            {% endif %}
+                                {% if company.zipCode %}
+                                    <p>
+                                        {{ 'Zip-Code'|trans({}, 'Modules.Molonies.Common') }}
+                                        : {{ company.zipCode|default('') }}
+                                    </p>
+                                {% endif %}
 
-                            {% if company.country.title %}
-                                <p>
-                                    {{ 'Country'|trans({}, 'Modules.Molonies.Common') }}
-                                    : {{ company.country.title|default('') }}
-                                </p>
-                            {% endif %}
-                        </div>
-                        <div class="card-footer">
-                            <div class="d-flex justify-content-end">
-                                <a href="{{ path(submit_route, {companyId: company.companyId}) }}"
-                                   class="btn btn-primary">
-                                    {{ 'Select this company'|trans({}, 'Modules.Molonies.Common') }}
-                                </a>
+                                {% if company.country.title %}
+                                    <p>
+                                        {{ 'Country'|trans({}, 'Modules.Molonies.Common') }}
+                                        : {{ company.country.title|default('') }}
+                                    </p>
+                                {% endif %}
+                            </div>
+                            <div class="card-footer">
+                                <div class="d-flex justify-content-end">
+                                    <a href="{{ path(submit_route, {companyId: company.companyId}) }}"
+                                       class="btn btn-primary">
+                                        {{ 'Select this company'|trans({}, 'Modules.Molonies.Common') }}
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                {% endfor %}
+                    {% endfor %}
+                </div>
+        {% else %}
+            <div class="no-companies__wrapper">
+                <img class="no-companies__image" src="{{ no_companies }}" height="auto" alt="Company logo">
+
+                <div class="no-companies__title">
+                    {{ 'Your account does not have access to any eligible company.'|trans({}, 'Modules.Molonies.Common') }}
+                </div>
+
+                <div class="no-companies__message">
+                    {{ 'Please confirm that your account has access to an active company with a plan that allows you to access the plugins.'|trans({}, 'Modules.Molonies.Common') }}
+                </div>
+                <div class="no-companies__help">
+                    {{ 'Learn more about our plans at:'|trans({}, 'Modules.Molonies.Common') }}
+                    <a href="https://www.moloni.es/plansandprices" target="_blank">https://www.moloni.es/plansandprices</a>
+                </div>
+
+                <a href="{{ path(logoutRoute) }}"
+                   class="btn btn-primary">
+                    {{ 'Back to login'|trans({}, 'Modules.Molonies.Common') }}
+                </a>
             </div>
-        </div>
-    {% else %}
-        <div>
-            {{ 'Your account does not have access to any eligible company.'|trans({}, 'Modules.Molonies.Common') }}
-        </div>
-    {% endif %}
+        {% endif %}
+    </div>
 {% endblock %}
