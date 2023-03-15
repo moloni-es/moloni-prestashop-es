@@ -236,7 +236,6 @@ class OrderCustomer implements BuilderItemInterface
                     'address' => $this->address,
                     'city' => $this->city,
                     'zipCode' => $this->zipCode,
-                    'email' => !empty($this->email) ? $this->email : null,
                     'website' => !empty($this->website) ? $this->website : null,
                     'phone' => $this->phone,
                     'countryId' => $this->countryId,
