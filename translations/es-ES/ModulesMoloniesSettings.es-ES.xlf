@@ -308,7 +308,7 @@
       </trans-unit>
       <trans-unit id="081bc8cb5dfbca5aea85e8790f45abab">
         <source>Update client when it already exists in Moloni account.</source>
-        <target>Actualice el cliente cuando ya exista en la cuenta de Moloni.</target>
+        <target>Actualizar el cliente cuando ya existe en Moloni.</target>
         <note>Line: </note>
       </trans-unit>
       <trans-unit id="33bf4dcf572fe687ed1607bcf4620eca">
