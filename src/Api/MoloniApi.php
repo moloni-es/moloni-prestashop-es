@@ -24,10 +24,10 @@
 
 namespace Moloni\Api;
 
-use RuntimeException;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ParseException;
 use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Post\PostFile;
 use Moloni\Entity\MoloniApp;
@@ -281,7 +281,7 @@ class MoloniApi
         } catch (BadResponseException $e) {
             try {
                 $response = $e->getResponse() ? $e->getResponse()->json() : [];
-            } catch (RuntimeException $e) {
+            } catch (ParseException $e) {
                 $response = [];
             }
 
