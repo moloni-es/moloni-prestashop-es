@@ -4,18 +4,21 @@ services:
     autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
   moloni.repository.orders:
+    public: true
     class: Moloni\Repository\OrdersRepository
     arguments:
       - '@doctrine.dbal.default_connection'
       - '%database_prefix%'
 
   moloni.repository.products:
+    public: true
     class: Moloni\Repository\ProductsRepository
     arguments:
       - '@doctrine.dbal.default_connection'
       - '%database_prefix%'
 
   moloni.repository.settings:
+    public: true
     class: Moloni\Repository\MoloniSettingsRepository
     factory: [ '@doctrine.orm.default_entity_manager', getRepository ]
     arguments:
