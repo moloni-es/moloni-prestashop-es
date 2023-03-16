@@ -37,7 +37,6 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
@@ -53,7 +52,15 @@ class RegistrationFormType extends TranslatorAwareType
     /** @var RegistrationFormDataProvider */
     private $options;
 
-    public function __construct(TranslatorInterface $translator, array $locales, RegistrationFormDataProvider $dataProvider)
+
+    /**
+     * Construct
+     *
+     * @param \Symfony\Component\Translation\TranslatorInterface|\Symfony\Contracts\Translation\TranslatorInterface $translator
+     * @param array $locales
+     * @param RegistrationFormDataProvider $dataProvider
+     */
+    public function __construct($translator, array $locales, RegistrationFormDataProvider $dataProvider)
     {
         $this->options = $dataProvider;
 

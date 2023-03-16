@@ -28,7 +28,6 @@ declare(strict_types=1);
 
 namespace Moloni\Form\Settings;
 
-use Moloni\Enums\SyncFields;
 use Moloni\Exceptions\MoloniApiException;
 use PrestaShopBundle\Form\Admin\Type\TranslatorAwareType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -38,7 +37,6 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Translation\TranslatorInterface;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -55,8 +53,14 @@ class SettingsFormType extends TranslatorAwareType
     /** @var SettingsFormDataProvider */
     private $options;
 
-    public function __construct(TranslatorInterface $translator, array $locales, SettingsFormDataProvider $dataProvider)
-    {
+    /**
+     * Constructor
+     *
+     * @param \Symfony\Component\Translation\TranslatorInterface|\Symfony\Contracts\Translation\TranslatorInterface $translator
+     * @param array $locales
+     * @param SettingsFormDataProvider $dataProvider
+     */
+    public function __construct($translator, array $locales, SettingsFormDataProvider $dataProvider)    {
         $this->options = $dataProvider;
 
         parent::__construct($translator, $locales);
