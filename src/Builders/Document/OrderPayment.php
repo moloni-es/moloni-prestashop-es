@@ -210,7 +210,13 @@ class OrderPayment implements BuilderItemInterface
      */
     public function setName(): OrderPayment
     {
-        $this->name = $this->orderPayment->payment_method ?? 'Método de pago';
+        $name = $this->orderPayment->payment_method;
+
+        if (empty($name)) {
+            $name = 'Método de pago';
+        }
+
+        $this->name = $name;
 
         return $this;
     }
