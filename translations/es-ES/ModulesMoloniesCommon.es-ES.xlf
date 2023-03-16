@@ -347,6 +347,21 @@
         <target>Tu cuenta no tiene acceso a ninguna empresa.</target>
         <note>Line: </note>
       </trans-unit>
+      <trans-unit id="5904c3e30447e5bb0c4d25fd6a07e434">
+        <source>Please confirm that your account has access to an active company with a plan that allows you to access the plugins.</source>
+        <target>Confirma que tu cuenta tiene acceso a una empresa activa con un plan que te permite acceder a los plugins.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="7112c932d53a451a6aa64e5e9386efa2">
+        <source>Learn more about our plans at:</source>
+        <target>Conoce más sobre nuestros planes en:</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="463e58c1d35fb5a4a8d717c99a60d257">
+        <source>Back to login</source>
+        <target>Volver al inicio sesión</target>
+        <note>Line: </note>
+      </trans-unit>
       <trans-unit id="4c89a4828cdeb4b0e246d7a5f6057d11">
         <source>I don't have an account yet.</source>
         <target>Todavía no tengo una cuenta.</target>

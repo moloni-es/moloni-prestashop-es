@@ -280,7 +280,7 @@ class OrderDelivery implements BuilderItemInterface
      */
     protected function setName(): OrderDelivery
     {
-        $this->name = $this->orderCarrier->name;
+        $this->name = $this->orderCarrier->name ?? 'Envío';
 
         return $this;
     }
@@ -393,7 +393,7 @@ class OrderDelivery implements BuilderItemInterface
                 $this->deliveryMethodId = $query[0]['deliveryMethodId'];
             }
         } catch (MoloniApiException $e) {
-            throw new MoloniDocumentDeliveryException('Error fetching payment methods', [], $e->getData());
+            throw new MoloniDocumentDeliveryException('Error fetching delivery methods', [], $e->getData());
         }
 
         return $this;

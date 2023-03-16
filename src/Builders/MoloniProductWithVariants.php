@@ -918,11 +918,33 @@ class MoloniProductWithVariants implements BuilderInterface
     {
         $identifications = [];
 
+        $isEanFav = false;
+        $isIsbnFav = false;
+        $isUpcaFav = false;
+
+        if (isset($this->moloniProduct['identifications']) && !empty($this->moloniProduct['identifications'])) {
+            foreach ($this->moloniProduct['identifications'] as $identification) {
+                switch ($identification['type']) {
+                    case 'ISBN':
+                        $isIsbnFav = $identification['favorite'];
+                        continue 2;
+                    case 'EAN13':
+                        $isEanFav = $identification['favorite'];
+                        continue 2;
+                    case 'UPCA':
+                        $isUpcaFav = $identification['favorite'];
+                        continue 2;
+                }
+
+                $identifications[] = $identification;
+            }
+        }
+
         if (!empty($this->prestashopProduct->ean13)) {
             $identifications[] = [
                 'type' => 'EAN13',
                 'text' => $this->prestashopProduct->ean13,
-                'favorite' => false,
+                'favorite' => $isEanFav,
             ];
         }
 
@@ -930,16 +952,16 @@ class MoloniProductWithVariants implements BuilderInterface
             $identifications[] = [
                 'type' => 'ISBN',
                 'text' => $this->prestashopProduct->isbn,
-                'favorite' => false,
+                'favorite' => $isIsbnFav,
             ];
         }
 
-        if (isset($this->moloniProduct['identifications']) && !empty($this->moloniProduct['identifications'])) {
-            foreach ($this->moloniProduct['identifications'] as $identification) {
-                if (!in_array($identification['type'], ['EAN13', 'ISBN'], true)) {
-                    $identifications[] = $identification;
-                }
-            }
+        if (!empty($this->prestashopProduct->upc)) {
+            $identifications[] = [
+                'type' => 'UPCA',
+                'text' => $this->prestashopProduct->upc,
+                'favorite' => $isUpcaFav,
+            ];
         }
 
         $this->identifications = $identifications;

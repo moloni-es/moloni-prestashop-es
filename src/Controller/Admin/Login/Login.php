@@ -183,7 +183,9 @@ class Login extends MoloniController
             [
                 'companies' => $companies,
                 'submit_route' => MoloniRoutes::LOGIN_COMPANY_SUBMIT,
+                'logoutRoute' => MoloniRoutes::TOOLS_LOGOUT,
                 'default_img' => _MODULE_DIR_ . 'molonies/views/img/companyDefault.png',
+                'no_companies' => _MODULE_DIR_ . 'molonies/views/img/no_companies.svg',
                 'media_api_url' => Domains::MOLONI_MEDIA_API,
             ]
         );

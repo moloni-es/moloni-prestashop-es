@@ -127,6 +127,11 @@ class BillsOfLading extends Endpoint
                         documentSetName
                         ourReference
                         currencyExchangeTotalValue
+                        products
+                        {
+                            documentProductId
+                            productId
+                        }
                     }
                 }
             }';
@@ -158,7 +163,12 @@ class BillsOfLading extends Endpoint
                 {
                     documentId
                     status
-                    currencyExchangeTotalValue                              
+                    currencyExchangeTotalValue        
+                    products
+                    {
+                        documentProductId
+                        productId
+                    }
                 }
             }
         }';

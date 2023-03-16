@@ -176,6 +176,11 @@ class Invoice extends Endpoint
                         documentSetName
                         ourReference
                         currencyExchangeTotalValue
+                        products
+                        {
+                            documentProductId
+                            productId
+                        }  
                     }
                 }
             }';
@@ -207,7 +212,12 @@ class Invoice extends Endpoint
                 {
                     documentId
                     status         
-                    currencyExchangeTotalValue                     
+                    currencyExchangeTotalValue
+                    products
+                    {
+                        documentProductId
+                        productId
+                    }                     
                 }
             }
         }';
