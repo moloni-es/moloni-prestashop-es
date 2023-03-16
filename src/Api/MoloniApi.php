@@ -348,7 +348,11 @@ class MoloniApi
 
             return $response;
         } catch (BadResponseException $e) {
-            $response = $e->getResponse() ? $e->getResponse()->json() : [];
+            try {
+                $response = $e->getResponse() ? $e->getResponse()->json() : [];
+            } catch (ParseException $e) {
+                $response = [];
+            }
 
             throw new MoloniApiException('Request error', [], ['data' => $operations, 'response' => $response]);
         }
