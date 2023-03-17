@@ -31,9 +31,13 @@ if (!defined('_PS_VERSION_')) {
 
 class WebserviceSpecificManagementMoloniResource implements WebserviceSpecificManagementInterface
 {
+    /** @var WebserviceOutputBuilder */
     protected $objOutput;
+
+    /** @var string */
     protected $output;
 
+    /** @var WebserviceRequest */
     protected $wsObject;
 
     /**
@@ -85,7 +89,7 @@ class WebserviceSpecificManagementMoloniResource implements WebserviceSpecificMa
      * Manages the incoming requests
      * Switches between operations
      */
-    public function manage(): void
+    public function manage()
     {
         $request = file_get_contents('php://input');
         $request = json_decode($request, true);
@@ -93,7 +97,7 @@ class WebserviceSpecificManagementMoloniResource implements WebserviceSpecificMa
         if (!isset($request['model'], $request['operation'], $request['productId']) || $request['model'] !== 'Product') {
             $this->output = 'Bad request';
 
-            return;
+            return $this->wsObject->getOutputEnabled();
         }
 
         switch ($request['operation']) {
@@ -109,6 +113,8 @@ class WebserviceSpecificManagementMoloniResource implements WebserviceSpecificMa
         }
 
         $this->output = 'Acknowledge';
+
+        return $this->wsObject->getOutputEnabled();
     }
 
     /**

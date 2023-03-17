@@ -231,7 +231,7 @@ class MoloniEs extends Module
         try {
             $this->initContext();
         } catch (Exception $e) {
-            //
+            // catch nothing
         }
 
         return [
