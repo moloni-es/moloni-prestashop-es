@@ -31,23 +31,18 @@ if (!defined('_PS_VERSION_')) {
 
 class WebserviceSpecificManagementMoloniResource implements WebserviceSpecificManagementInterface
 {
-    /**
-     * @var WebserviceOutputBuilder
-     */
     protected $objOutput;
     protected $output;
 
-    /**
-     * @var WebserviceRequest
-     */
     protected $wsObject;
 
     /**
      * Interface method
      *
+     * @param WebserviceOutputBuilderCore|WebserviceOutputBuilder $obj
      * @return $this
      */
-    public function setObjectOutput(WebserviceOutputBuilderCore $obj): WebserviceSpecificManagementMoloniResource
+    public function setObjectOutput($obj): WebserviceSpecificManagementMoloniResource
     {
         $this->objOutput = $obj;
 
@@ -57,9 +52,9 @@ class WebserviceSpecificManagementMoloniResource implements WebserviceSpecificMa
     /**
      * Interface method
      *
-     * @return WebserviceOutputBuilder
+     * @return WebserviceOutputBuilderCore|WebserviceOutputBuilder
      */
-    public function getObjectOutput(): WebserviceOutputBuilder
+    public function getObjectOutput()
     {
         return $this->objOutput;
     }
@@ -67,9 +62,11 @@ class WebserviceSpecificManagementMoloniResource implements WebserviceSpecificMa
     /**
      * Interface method
      *
+     * @param WebserviceRequestCore|WebserviceRequest $obj
+     *
      * @return $this
      */
-    public function setWsObject(WebserviceRequestCore $obj): WebserviceSpecificManagementMoloniResource
+    public function setWsObject($obj): WebserviceSpecificManagementMoloniResource
     {
         $this->wsObject = $obj;
 
@@ -78,10 +75,8 @@ class WebserviceSpecificManagementMoloniResource implements WebserviceSpecificMa
 
     /**
      * Interface method
-     *
-     * @return WebserviceRequest
      */
-    public function getWsObject(): WebserviceRequest
+    public function getWsObject()
     {
         return $this->wsObject;
     }

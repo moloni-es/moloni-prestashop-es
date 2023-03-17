@@ -28,8 +28,6 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use Doctrine\Common\Persistence\ManagerRegistry as LegacyManagerRegistry;
-use Doctrine\Persistence\ManagerRegistry;
 use Moloni\Exceptions\MoloniException;
 use Moloni\Hooks\AdminOrderButtons;
 use Moloni\Hooks\OrderStatusUpdate;
@@ -40,6 +38,8 @@ use Moloni\Services\MoloniContext;
 use Moloni\Tools\SyncLogs;
 use PrestaShopBundle\Translation\TranslatorInterface;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
+
+include_once _PS_MODULE_DIR_ . 'molonies/src/Webservice/WebserviceSpecificManagementMoloniResource.php';
 
 class MoloniEs extends Module
 {
@@ -231,10 +231,8 @@ class MoloniEs extends Module
         try {
             $this->initContext();
         } catch (Exception $e) {
-            return [];
+            //
         }
-
-        include_once _PS_MODULE_DIR_ . 'molonies/src/Webservice/WebserviceSpecificManagementMoloniResource.php';
 
         return [
             'moloniresource' => [
