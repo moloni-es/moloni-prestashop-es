@@ -8,6 +8,10 @@ use GuzzleHttp\Exception\GuzzleException;
 use Moloni\Enums\Domains;
 use Moloni\Exceptions\MoloniApiException;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class Guzzle6 extends GuzzleAbstract implements GuzzleInterface
 {
     public function __construct()

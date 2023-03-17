@@ -5,6 +5,10 @@ namespace Moloni\Guzzle;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Helpers\Version;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class GuzzleWrapper
 {
     /**

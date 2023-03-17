@@ -4,6 +4,10 @@ namespace Moloni\Guzzle;
 
 use GuzzleHttp\Client;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 abstract class GuzzleAbstract
 {
     /**

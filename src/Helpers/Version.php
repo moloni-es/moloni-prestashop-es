@@ -2,6 +2,10 @@
 
 namespace Moloni\Helpers;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class Version
 {
     public static function isPrestashopNewVersion(): bool

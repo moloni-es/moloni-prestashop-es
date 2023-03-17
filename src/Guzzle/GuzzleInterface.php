@@ -4,6 +4,10 @@ namespace Moloni\Guzzle;
 
 use Moloni\Exceptions\MoloniApiException;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 interface GuzzleInterface
 {
     /**
