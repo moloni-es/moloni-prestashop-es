@@ -102,6 +102,9 @@ class MoloniApi
         }
 
         $url = Domains::MOLONI_API . '/auth/grant';
+        $headers = [
+            'Content-Type' => 'application/json',
+        ];
         $params = [
             'grantType' => 'authorization_code',
             'apiClientId' => self::$app->getClientId(),
@@ -110,7 +113,7 @@ class MoloniApi
         ];
 
         try {
-            $body = GuzzleWrapper::post($url, [], $params);
+            $body = GuzzleWrapper::post($url, $headers, $params);
         } catch (MoloniApiException $e) {
             throw new MoloniLoginException("The client credentials are invalid", [], $e->getData());
         }
@@ -144,6 +147,9 @@ class MoloniApi
     public static function refreshTokens(): bool
     {
         $url = Domains::MOLONI_API . '/auth/grant';
+        $headers = [
+            'Content-Type' => 'application/json',
+        ];
         $params = [
             'grantType' => 'refresh_token',
             'apiClientId' => self::$app->getClientId(),
@@ -152,7 +158,7 @@ class MoloniApi
         ];
 
         try {
-            $body = GuzzleWrapper::post($url, [], $params);
+            $body = GuzzleWrapper::post($url, $headers, $params);
 
             if (empty($body)) {
                 throw new MoloniLoginException('Request error');
