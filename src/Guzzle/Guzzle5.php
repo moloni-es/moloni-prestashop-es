@@ -48,7 +48,7 @@ class Guzzle5 extends GuzzleAbstract implements GuzzleInterface
             return null;
         }
 
-        return json_decode($request->getBody()->getContents(), false);
+        return json_decode($request->getBody()->getContents(), true);
     }
 
     public function postWithFile(?array $operations = [], ?string $map = '', ?array $files = [], ?string $accessToken = '')
