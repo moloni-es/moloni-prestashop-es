@@ -27,8 +27,10 @@ namespace Moloni\Builders\PrestashopProduct\Helpers\Combinations;
 use Attribute;
 use AttributeGroup;
 use Configuration;
+use Moloni\Helpers\Version;
 use Moloni\Traits\AttributesTrait;
 use PrestaShopException;
+use ProductAttribute;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -79,7 +81,12 @@ class ProcessAttributesGroup
                 $attributeId = $this->getAttributeByName($attribute['value'], $groupId);
 
                 if (empty($attributeId)) {
-                    $attributeObj = new Attribute(null, $this->languageId);
+                    if (Version::isPrestashopNewVersion()) {
+                        $attributeObj = new ProductAttribute(null, $this->languageId);
+                    } else {
+                        $attributeObj = new Attribute(null, $this->languageId);
+                    }
+
                     $attributeObj->name = $attribute['value'];
                     $attributeObj->id_attribute_group = $groupId;
                     $attributeObj->save();
