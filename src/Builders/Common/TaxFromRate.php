@@ -293,9 +293,16 @@ class TaxFromRate implements BuilderItemInterface
         $variables = [
             'options' => [
                 'filter' => [
-                    'field' => 'value',
-                    'comparison' => 'eq',
-                    'value' => (string)$this->value
+                    [
+                        'field' => 'value',
+                        'comparison' => 'eq',
+                        'value' => (string)$this->value
+                    ],
+                    [
+                        'field' => 'flags',
+                        'comparison' => 'eq',
+                        'value' => '0'
+                    ]
                 ],
                 'search' => [
                     'field' => 'fiscalZone',
@@ -308,12 +315,8 @@ class TaxFromRate implements BuilderItemInterface
             $query = MoloniApiClient::taxes()
                 ->queryTaxes($variables);
 
-            foreach ($query as $tax) {
-                if (empty($tax['flags'])) {
-                    $this->taxId = $tax['taxId'];
-
-                    break;
-                }
+            if (!empty($query) && isset($query[0]['taxId'])) {
+                $this->taxId = $query[0]['taxId'];
             }
         } catch (MoloniApiException $e) {
             throw new MoloniException('Error fetching taxes', [], $e->getData());
