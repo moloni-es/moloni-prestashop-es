@@ -358,6 +358,7 @@ class PrestashopProductWithCombinations implements BuilderInterface
             $this->afterSave();
         } catch (PrestaShopException $e) {
             throw new MoloniProductException('Error creating product ({0})', ['{0}' => $this->reference], [
+                'message' => $e->getMessage(),
                 'moloniProduct' => $this->moloniProduct
             ]);
         }
@@ -385,6 +386,7 @@ class PrestashopProductWithCombinations implements BuilderInterface
             $this->afterSave();
         } catch (PrestaShopException $e) {
             throw new MoloniProductException('Error updating product ({0})', ['{0}' => $this->reference], [
+                'message' => $e->getMessage(),
                 'moloniProduct' => $this->moloniProduct
             ]);
         }

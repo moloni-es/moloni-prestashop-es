@@ -298,6 +298,7 @@ class ProductCombination implements BuilderInterface
             $this->afterSave();
         } catch (PrestaShopException $e) {
             throw new MoloniProductCombinationException('Error creating combination ({0})', ['{0}' => $this->reference], [
+                'message' => $e->getMessage(),
                 'moloniVariant' => $this->moloniVariant
             ]);
         }
@@ -324,8 +325,8 @@ class ProductCombination implements BuilderInterface
             $this->afterSave();
         } catch (PrestaShopException $e) {
             throw new MoloniProductCombinationException('Error updating combination ({0})', ['{0}' => $this->reference], [
-                'moloniVariant' => $this->moloniVariant,
-                'error' => $e->getMessage()
+                'message' => $e->getMessage(),
+                'moloniVariant' => $this->moloniVariant
             ]);
         }
     }
