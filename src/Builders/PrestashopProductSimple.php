@@ -483,6 +483,7 @@ class PrestashopProductSimple implements BuilderInterface
     public function setDescription(): PrestashopProductSimple
     {
         $this->description = $this->moloniProduct['summary'] ?? '';
+        $this->description = substr($this->description, 0, 800);
 
         return $this;
     }

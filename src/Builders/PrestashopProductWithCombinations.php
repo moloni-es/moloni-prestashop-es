@@ -524,6 +524,7 @@ class PrestashopProductWithCombinations implements BuilderInterface
     public function setDescription(): PrestashopProductWithCombinations
     {
         $this->description = $this->moloniProduct['summary'] ?? '';
+        $this->description = substr($this->description, 0, 800);
 
         return $this;
     }
