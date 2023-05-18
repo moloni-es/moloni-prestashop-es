@@ -293,7 +293,7 @@ class PrestashopProductSimple implements BuilderInterface
         if ($productId > 0) {
             $product = new Product($productId, true, Configuration::get('PS_LANG_DEFAULT'));
         } else {
-            if (is_numeric($this->reference)) {
+            if ((int)Settings::get('productReferenceFallback') === Boolean::YES && is_numeric($this->reference)) {
                 $product = new Product((int)$this->reference, true, Configuration::get('PS_LANG_DEFAULT'));
             } else {
                 $product = new Product();

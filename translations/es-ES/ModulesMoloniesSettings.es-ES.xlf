@@ -497,6 +497,16 @@ Puedes gestionar las series de documentos de tu empresa directamente en tu cuent
         <target>example@email.com</target>
         <note>Line: </note>
       </trans-unit>
+      <trans-unit id="bd55e1389452643550cd1dd80b4310b0">
+        <source>Enable reference fallback</source>
+        <target>Activar el fallback de referencia</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="84897a6b41693465ed50c3b72e472463">
+        <source>When synchronizing products from Moloni if the reference is numeric and no products are found in Prestashop, the plugin will try and find an Prestashop product by an ID that matches the numeric reference. This is useful if products do not have a reference set in Prestashop.</source>
+        <target>Al sincronizar productos desde Moloni, si la referencia es numérica y no se encuentra ningún producto en Prestashop, el plugin intentará encontrar un producto de Prestashop con un ID que coincida con la referencia numérica. Esto es útil si los productos no tienen una referencia definida en Prestashop.</target>
+        <note>Line: </note>
+      </trans-unit>
       <trans-unit id="c9cc8cce247e49bae79f15173ce97354">
         <source>Save</source>
         <target>Guardar</target>
