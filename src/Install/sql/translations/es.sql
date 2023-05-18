@@ -131,6 +131,8 @@ VALUES  (@idLang, 'Translations exported sucessfully!', 'Traducciones exportadas
         (@idLang, 'Product exemption reason', 'Motivo de exención del producto', 'ModulesMoloniesSettings'),
         (@idLang, 'Measure unit', 'Unidad de medida', 'ModulesMoloniesSettings'),
         (@idLang, 'Alert e-mail', 'Alerta de e-mail', 'ModulesMoloniesSettings'),
+        (@idLang, 'Enable reference fallback', 'Activar el fallback de referencia', 'ModulesMoloniesSettings'),
+        (@idLang, 'When synchronizing products from Moloni if the reference is numeric and no products are found in Prestashop, the plugin will try and find an Prestashop product by an ID that matches the numeric reference. This is useful if products do not have a reference set in Prestashop.', 'Al sincronizar productos desde Moloni, si la referencia es numérica y no se encuentra ningún producto en Prestashop, el plugin intentará encontrar un producto de Prestashop con un ID que coincida con la referencia numérica. Esto es útil si los productos no tienen una referencia definida en Prestashop.', 'ModulesMoloniesSettings'),
         (@idLang, 'Save', 'Guardar', 'ModulesMoloniesSettings'),
         (@idLang, 'Automation', 'Automatización', 'ModulesMoloniesSettings'),
         (@idLang, 'Documents', 'Documentos', 'ModulesMoloniesSettings'),

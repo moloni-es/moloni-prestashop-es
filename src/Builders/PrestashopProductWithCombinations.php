@@ -320,7 +320,7 @@ class PrestashopProductWithCombinations implements BuilderInterface
         if ($productId > 0) {
             $product = new Product($productId, true, Configuration::get('PS_LANG_DEFAULT'));
         } else {
-            if (is_numeric($this->reference)) {
+            if ((int)Settings::get('productReferenceFallback') === Boolean::YES && is_numeric($this->reference)) {
                 $product = new Product((int)$this->reference, true, Configuration::get('PS_LANG_DEFAULT'));
             } else {
                 $product = new Product();
@@ -358,6 +358,7 @@ class PrestashopProductWithCombinations implements BuilderInterface
             $this->afterSave();
         } catch (PrestaShopException $e) {
             throw new MoloniProductException('Error creating product ({0})', ['{0}' => $this->reference], [
+                'message' => $e->getMessage(),
                 'moloniProduct' => $this->moloniProduct
             ]);
         }
@@ -385,6 +386,7 @@ class PrestashopProductWithCombinations implements BuilderInterface
             $this->afterSave();
         } catch (PrestaShopException $e) {
             throw new MoloniProductException('Error updating product ({0})', ['{0}' => $this->reference], [
+                'message' => $e->getMessage(),
                 'moloniProduct' => $this->moloniProduct
             ]);
         }
@@ -522,6 +524,7 @@ class PrestashopProductWithCombinations implements BuilderInterface
     public function setDescription(): PrestashopProductWithCombinations
     {
         $this->description = $this->moloniProduct['summary'] ?? '';
+        $this->description = substr($this->description, 0, 800);
 
         return $this;
     }
