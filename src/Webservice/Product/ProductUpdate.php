@@ -72,12 +72,6 @@ class ProductUpdate extends AbstractWebserviceAction
 
                     $productBuilder->update();
                 }
-            } elseif ((int)Settings::get('addProductsToPrestashop') === Boolean::YES) {
-                $productBuilder->insert();
-
-                SyncLogs::prestashopProductAddTimeout($productBuilder->getPrestashopProductId());
-
-                $productBuilder->updateStock();
             }
         } catch (MoloniProductException $e) {
             Logs::addErrorLog([['Error saving Prestashop product'], [$e->getMessage(), $e->getIdentifiers()]], $e->getData());

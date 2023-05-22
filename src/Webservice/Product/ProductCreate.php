@@ -72,12 +72,7 @@ class ProductCreate extends AbstractWebserviceAction
                 SyncLogs::prestashopProductAddTimeout($productBuilder->getPrestashopProductId());
 
                 $productBuilder->updateStock();
-            } elseif ((int)Settings::get('updateProductsToPrestashop') === Boolean::YES && !SyncLogs::prestashopProductHasTimeout($prestaProductId)) {
-                SyncLogs::prestashopProductAddTimeout($prestaProductId);
-
-                $productBuilder->update();
             }
-
         } catch (MoloniProductException $e) {
             Logs::addErrorLog([['Error saving Prestashop product'], [$e->getMessage(), $e->getIdentifiers()]], $e->getData());
         }
