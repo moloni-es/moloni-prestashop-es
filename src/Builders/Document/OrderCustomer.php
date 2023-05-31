@@ -334,6 +334,8 @@ class OrderCustomer implements BuilderItemInterface
      * Sets customer VAT
      *
      * @return OrderCustomer
+     *
+     * @throws MoloniDocumentCustomerException
      */
     public function setVat(): OrderCustomer
     {
@@ -355,7 +357,7 @@ class OrderCustomer implements BuilderItemInterface
             $vat = ltrim($vat, 'ES');
 
             if (!\Moloni\Helpers\Customer::isVatEsValid($vat)) {
-                $vat = null;
+                throw new MoloniDocumentCustomerException('Customer has invalid VAT for Spain.', [], ['vat' => $vat]);
             }
         }
 

@@ -69,6 +69,7 @@ class DummyTranslations
         $this->translator->trans('Error updating customer ({0})', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Error fetching countries', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Error fetching customer next number', [], 'Modules.Molonies.Errors');
+        $this->translator->trans('Customer has invalid VAT for Spain.', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Error fetching customer by VAT: ({0})', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Error fetching customer by e-mail: ({0})', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Error creating delivery method: ({0})', [], 'Modules.Molonies.Errors');

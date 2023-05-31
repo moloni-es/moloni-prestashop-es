@@ -112,6 +112,11 @@
         <target>Error al obtener el siguiente número de cliente</target>
         <note>Line: </note>
       </trans-unit>
+      <trans-unit id="53b0ac594294159ace6991963818aed0">
+        <source>Customer has invalid VAT for Spain.</source>
+        <target>Cliente con NIF inválido en España</target>
+        <note>Line: </note>
+      </trans-unit>
       <trans-unit id="835af7bcec552930247d6344c58e6e7b">
         <source>Error fetching customer by VAT: ({0})</source>
         <target>Error al buscar el cliente por el NIF/DNI: ({0})</target>

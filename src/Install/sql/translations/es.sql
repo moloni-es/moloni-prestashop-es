@@ -358,6 +358,7 @@ VALUES  (@idLang, 'Translations exported sucessfully!', 'Traducciones exportadas
         (@idLang, 'Error updating customer ({0})', 'Error al actualizar el cliente ({0})', 'ModulesMoloniesErrors'),
         (@idLang, 'Error fetching countries', 'Error en la búsqueda de países', 'ModulesMoloniesErrors'),
         (@idLang, 'Error fetching customer next number', 'Error al obtener el siguiente número de cliente', 'ModulesMoloniesErrors'),
+        (@idLang, 'Customer has invalid VAT for Spain.', 'Cliente con NIF inválido en España', 'ModulesMoloniesErrors'),
         (@idLang, 'Error fetching customer by VAT: ({0})', 'Error al buscar el cliente por el NIF/DNI: ({0})', 'ModulesMoloniesErrors'),
         (@idLang, 'Error fetching customer by e-mail: ({0})', 'Error al buscar el cliente por email: ({0})', 'ModulesMoloniesErrors'),
         (@idLang, 'Error creating delivery method: ({0})', 'Error al crear el método de entrega: ({0})', 'ModulesMoloniesErrors'),
