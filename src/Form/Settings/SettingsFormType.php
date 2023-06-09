@@ -94,6 +94,7 @@ class SettingsFormType extends TranslatorAwareType
                             Ex.: Update a product in Prestashop from 0 stock to 20, and a stock movement will be create in Moloni for that product.',
                     "Modules.Molonies.Settings"
                 ),
+                'class' => 'border-0'
             ],
             'required' => false,
             'choices' => $this->options->getYesNo(),
@@ -116,6 +117,7 @@ class SettingsFormType extends TranslatorAwareType
                             This warehouse will be used when a product is inserted or updated <b>in Prestashop.</b>',
                     "Modules.Molonies.Settings"
                 ),
+                'class' => 'border-0'
             ],
             'choices' => [
                 $this->trans('Default warehouse', "Modules.Molonies.Settings") => 1,
@@ -141,6 +143,7 @@ class SettingsFormType extends TranslatorAwareType
                             Ex.: Insert a new product in Prestashop and that same product will be automaticaly created in Moloni.',
                     "Modules.Molonies.Settings"
                 ),
+                'class' => 'border-0'
             ],
             'choices' => $this->options->getYesNo(),
             'required' => false,
@@ -160,6 +163,7 @@ class SettingsFormType extends TranslatorAwareType
                             Ex.: Update a product in Prestashop and that same product will be automaticaly created or updated in Moloni.',
                     "Modules.Molonies.Settings"
                 ),
+                'class' => 'border-0'
             ],
             'choices' => $this->options->getYesNo(),
             'required' => false,
@@ -179,6 +183,7 @@ class SettingsFormType extends TranslatorAwareType
                             Ex.: Update a product in Moloni from 0 stock to 20 and the product stock in Prestashop will be updated.',
                     "Modules.Molonies.Settings"
                 ),
+                'class' => 'border-0'
             ],
             'required' => false,
             'placeholder' => false,
@@ -199,6 +204,7 @@ class SettingsFormType extends TranslatorAwareType
                                 This warehouse will be used when a product is inserted or updated <b>in Moloni.</b>',
                         "Modules.Molonies.Settings"
                     ),
+                    'class' => 'border-0'
                 ],
                 'choices' => [
                     $this->trans('Accumulated stock', "Modules.Molonies.Settings") => 1,
@@ -221,6 +227,7 @@ class SettingsFormType extends TranslatorAwareType
                             Ex.: Insert a new product in Moloni and that same product will be automaticaly created in Prestashop.',
                     "Modules.Molonies.Settings"
                 ),
+                'class' => 'border-0'
             ],
             'choices' => $this->options->getYesNo(),
             'required' => false,
@@ -240,6 +247,7 @@ class SettingsFormType extends TranslatorAwareType
                             Ex.: Update a product in Moloni and that same product will be automaticaly created or updated in Prestashop.',
                     "Modules.Molonies.Settings"
                 ),
+                'class' => 'border-0'
             ],
             'required' => false,
             'placeholder' => false,
@@ -259,6 +267,7 @@ class SettingsFormType extends TranslatorAwareType
                             This is useful to have for example different prices on your online store and in your Moloni account, or different names.',
                     "Modules.Molonies.Settings"
                 ),
+                'class' => 'border-0'
             ],
             'multiple' => true,
             'expanded' => true,
@@ -281,6 +290,7 @@ class SettingsFormType extends TranslatorAwareType
                             If you are migrating from an old invoicing software to Moloni, you may choose to list only orders after a selected date.',
                     "Modules.Molonies.Settings"
                 ),
+                'class' => 'border-0'
             ],
             'placeholder' => false,
             'required' => false,
@@ -299,6 +309,7 @@ class SettingsFormType extends TranslatorAwareType
                             If you have the option <b>"Auto create documents"</b> activated, when an order passes in one of the selected states, we will try to automatically create a document for it.',
                     "Modules.Molonies.Settings"
                 ),
+                'class' => 'border-0'
             ],
             'multiple' => true,
             'expanded' => true,
@@ -318,6 +329,7 @@ class SettingsFormType extends TranslatorAwareType
                     'When a Prestashop order passes on a status that is select in the "orders" configuration tab, the module will try to automaticaly create a document for that order.',
                     "Modules.Molonies.Settings"
                 ),
+                'class' => 'border-0'
             ],
             'choices' => $this->options->getYesNo(),
             'help' => $this->trans(
@@ -342,6 +354,7 @@ class SettingsFormType extends TranslatorAwareType
                             This is useful to easily identify which customers were created by this module.',
                     "Modules.Molonies.Settings"
                 ),
+                'class' => 'border-0'
             ],
             'required' => false
         ]);
@@ -358,6 +371,7 @@ class SettingsFormType extends TranslatorAwareType
                     'Update client when it already exists in Moloni account.',
                     "Modules.Molonies.Settings"
                 ),
+                'class' => 'border-0'
             ],
             'choices' => $this->options->getYesNo(),
             'placeholder' => false,
@@ -378,6 +392,7 @@ class SettingsFormType extends TranslatorAwareType
                                 You can manage your company document sets directly in your Moloni account.',
                         "Modules.Molonies.Settings"
                     ),
+                    'class' => 'border-0'
                 ],
                 'required' => true,
                 'choices' => $this->options->getDocumentSets(),
@@ -397,6 +412,7 @@ class SettingsFormType extends TranslatorAwareType
                         'Select which type of document you want to issue automatically.',
                         "Modules.Molonies.Settings"
                     ),
+                    'class' => 'border-0'
                 ],
                 'required' => true,
                 'choices' => $this->options->getDocumentTypes(),
@@ -417,6 +433,7 @@ class SettingsFormType extends TranslatorAwareType
                         'Value used for document reference.',
                         "Modules.Molonies.Settings"
                     ),
+                    'class' => 'border-0'
                 ],
                 'choices' => $this->options->getDocumentReference(),
                 'placeholder' => false,
@@ -437,6 +454,7 @@ class SettingsFormType extends TranslatorAwareType
                             <br><br>Before closing the document we will first confirm that the total value of the order matches with total value of the document.',
                         "Modules.Molonies.Settings"
                     ),
+                    'class' => 'border-0'
                 ],
                 'choices' => $this->options->getStatus(),
                 'placeholder' => false,
@@ -456,6 +474,7 @@ class SettingsFormType extends TranslatorAwareType
                         'Select which fiscal zone should be used for new taxes that need to be created.',
                         "Modules.Molonies.Settings"
                     ),
+                    'class' => 'border-0'
                 ],
                 'choices' => $this->options->getFiscalZoneBasedOn(),
                 'placeholder' => false,
@@ -474,6 +493,7 @@ class SettingsFormType extends TranslatorAwareType
                     'If the seleceted document type shipping information is optional, you can use this option to choose if you want to include it or not.',
                     "Modules.Molonies.Settings"
                 ),
+                'class' => 'border-0'
             ],
             'choices' => $this->options->getYesNo(),
             'placeholder' => false,
@@ -492,6 +512,7 @@ class SettingsFormType extends TranslatorAwareType
                     'Choose if you want to create a Bill of Lading associated with the main document.',
                     "Modules.Molonies.Settings"
                 ),
+                'class' => 'border-0'
             ],
             'choices' => $this->options->getYesNo(),
             'placeholder' => false,
@@ -512,6 +533,7 @@ class SettingsFormType extends TranslatorAwareType
                                 You can select between your company address, your store addresses or set a custom one.',
                         "Modules.Molonies.Settings"
                     ),
+                    'class' => 'border-0'
                 ],
                 'choices' => $this->options->getAddresses(),
                 'placeholder' => false,
@@ -583,6 +605,7 @@ class SettingsFormType extends TranslatorAwareType
                         'When a document is inserted and correctly closed in Moloni an e-mail with the document will be sent to the customer.',
                         "Modules.Molonies.Settings"
                     ),
+                    'class' => 'border-0'
                 ],
                 'choices' => $this->options->getYesNo(),
                 'placeholder' => false,
@@ -602,6 +625,7 @@ class SettingsFormType extends TranslatorAwareType
                         'Choose if the product should use the name and description set in Moloni or in your store.',
                         "Modules.Molonies.Settings"
                     ),
+                    'class' => 'border-0'
                 ],
                 'choices' => $this->options->getProductInformation(),
                 'placeholder' => false,
@@ -621,6 +645,7 @@ class SettingsFormType extends TranslatorAwareType
                         'This exemption reason will be used when a <b>product</b> does not have a defined tax on the order that you are trying to issue.',
                         "Modules.Molonies.Settings"
                     ),
+                    'class' => 'border-0'
                 ],
                 'required' => false
             ]);
@@ -638,6 +663,7 @@ class SettingsFormType extends TranslatorAwareType
                         'This exemption reason will be used when your order <b>shipping</b> does not have a defined tax on the order that you are trying to issue.',
                         "Modules.Molonies.Settings"
                     ),
+                    'class' => 'border-0'
                 ],
                 'required' => false
             ]);
@@ -659,6 +685,7 @@ class SettingsFormType extends TranslatorAwareType
                                You can manage your measurement units in your Moloni account.',
                         "Modules.Molonies.Settings"
                     ),
+                    'class' => 'border-0'
                 ],
             ]);
 
@@ -674,6 +701,7 @@ class SettingsFormType extends TranslatorAwareType
                     'Choose which warehouse should be used when issuing documents.',
                     "Modules.Molonies.Settings"
                 ),
+                'class' => 'border-0'
             ],
             'choices' => $this->options->getWarehouses(),
             'required' => true,
@@ -719,6 +747,7 @@ class SettingsFormType extends TranslatorAwareType
                     'When synchronizing products from Moloni if the reference is numeric and no products are found in Prestashop, the plugin will try and find an Prestashop product by an ID that matches the numeric reference. This is useful if products do not have a reference set in Prestashop.',
                     "Modules.Molonies.Settings"
                 ),
+                'class' => 'border-0'
             ],
             'choices' => $this->options->getYesNo(),
             'placeholder' => false,
