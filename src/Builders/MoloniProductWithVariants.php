@@ -860,17 +860,21 @@ class MoloniProductWithVariants implements BuilderInterface
     {
         if ($this->productExists()) {
             $targetId = $this->moloniProduct['propertyGroup']['propertyGroupId'] ?? '';
+        } else {
+            $targetId = '';
+        }
 
+        if (empty($targetId)) {
+            /**
+             * Find or create the most suitable group for this new product
+             */
+            $this->propertyGroup = (new FindOrCreatePropertyGroup($this->prestashopProduct))->handle();
+        } else {
             /**
              * Product already exists, so it has property group assigned
              * So we need to get the property group and update it if needed
              */
             $this->propertyGroup = (new GetOrUpdatePropertyGroup($this->prestashopProduct, $targetId))->handle();
-        } else {
-            /**
-             * Find or create the most suitable group for this new product
-             */
-            $this->propertyGroup = (new FindOrCreatePropertyGroup($this->prestashopProduct))->handle();
         }
 
         return $this;
