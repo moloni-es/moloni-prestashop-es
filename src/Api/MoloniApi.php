@@ -262,6 +262,10 @@ class MoloniApi
             }
         }
 
+        if (empty($data['variables'])) {
+            unset($data['variables']);
+        }
+
         try {
             $request = self::$client->post(
                 Domains::MOLONI_API,
