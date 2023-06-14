@@ -134,7 +134,7 @@ class Login extends MoloniController
             MoloniApi::login($code);
         } catch (MoloniException $e) {
             $msg = $this->trans($e->getMessage(), 'Modules.Molonies.Errors', $e->getIdentifiers());
-            $this->addErrorMessage($msg);
+            $this->addErrorMessage($msg, $e->getData());
 
             return $this->redirectToLogin();
         }
@@ -173,7 +173,7 @@ class Login extends MoloniController
             }
         } catch (MoloniException $e) {
             $msg = $this->trans($e->getMessage(), 'Modules.Molonies.Errors', $e->getIdentifiers());
-            $this->addErrorMessage($msg);
+            $this->addErrorMessage($msg, $e->getData());
 
             return $this->redirectToLogin();
         }
@@ -216,7 +216,7 @@ class Login extends MoloniController
             $this->addSuccessMessage($msg);
         } catch (MoloniException $e) {
             $msg = $this->trans($e->getMessage(), 'Modules.Molonies.Errors', $e->getIdentifiers());
-            $this->addErrorMessage($msg);
+            $this->addErrorMessage($msg, $e->getData());
 
             return $this->redirectToCompanySelect();
         }
