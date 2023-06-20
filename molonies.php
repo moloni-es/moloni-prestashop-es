@@ -55,7 +55,7 @@ class MoloniEs extends Module
         $this->tab = 'administration';
 
         $this->need_instance = 1;
-        $this->version = '2.3.50';
+        $this->version = '2.3.51';
         $this->ps_versions_compliancy = ['min' => '1.7.6', 'max' => _PS_VERSION_];
         $this->author = 'Moloni';
         $this->module_key = '63e30380b2942ec15c33bedd4f7ec90e';
