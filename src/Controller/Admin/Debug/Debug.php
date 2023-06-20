@@ -31,6 +31,7 @@ use Moloni\Tools\SyncLogs;
 use Moloni\Enums\MoloniRoutes;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Tools\ProductAssociations;
+use Moloni\Entity\MoloniOrderDocuments;
 use Moloni\Entity\MoloniProductAssociations;
 use Moloni\Controller\Admin\MoloniController;
 use Moloni\Builders\MoloniProductSimple;
@@ -39,6 +40,7 @@ use Moloni\Builders\PrestashopProductSimple;
 use Moloni\Builders\PrestashopProductWithCombinations;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\Product\MoloniProductException;
+use Moloni\Repository\MoloniOrderDocumentsRepository;
 use Symfony\Component\HttpFoundation\Response;
 
 if (!defined('_PS_VERSION_')) {
@@ -54,12 +56,13 @@ class Debug extends MoloniController
      *
      * @return Response
      */
-    public function home(array $data = []): Response
+    public function home(?array $data = []): Response
     {
         return $this->render(
             '@Modules/molonies/views/templates/admin/debug/Debug.twig',
             [
                 'checkAttributesValidity' => MoloniRoutes::DEBUG_CHECK_ATTRIBUTES,
+                'deleteOrderDocument' => MoloniRoutes::DEBUG_DELETE_ORDER_DOCUMENT,
                 'updateStockFromMoloni' => MoloniRoutes::DEBUG_UPDATE_STOCK_FROM_MOLONI,
                 'updateProductFromMoloni' => MoloniRoutes::DEBUG_UPDATE_PRODUCT_FROM_MOLONI,
                 'insertProductFromMoloni' => MoloniRoutes::DEBUG_INSERT_PRODUCT_FROM_MOLONI,
@@ -126,6 +129,31 @@ class Debug extends MoloniController
                 'processed_products' => count($products),
                 'flaged_products' => $productsToVerify,
             ],
+        ];
+
+        return $this->home($response);
+    }
+
+    /**
+     * Checks if attributes with all upper-case letters are being used
+     *
+     * @return Response
+     */
+    public function deleteOrderDocument(): Response
+    {
+        $orderId = (int)Tools::getValue('order_id', 0);
+
+        /** @var MoloniOrderDocumentsRepository $repository */
+        $repository = $this
+            ->getDoctrine()
+            ->getManager()
+            ->getRepository(MoloniOrderDocuments::class);
+
+        $repository->deleteByOrderId($orderId);
+
+        $response = [
+            'valid' => 1,
+            'result' => 'Done :)'
         ];
 
         return $this->home($response);

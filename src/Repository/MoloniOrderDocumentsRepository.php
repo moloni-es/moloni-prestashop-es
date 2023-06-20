@@ -90,6 +90,25 @@ class MoloniOrderDocumentsRepository extends EntityRepository
         ];
     }
 
+    /**
+     * Delete an document entry by order ID
+     *
+     * @param $orderId
+     *
+     * @return void
+     */
+    public function deleteByOrderId($orderId): void
+    {
+        $this->createQueryBuilder('md')
+            ->delete()
+            ->where('md.orderId = :order_id')
+            ->setParameter('order_id', $orderId)
+            ->getQuery()
+            ->getResult();
+    }
+
+    //         Privates         //
+
     private function applyFilters(QueryBuilder $query, array $filters): void
     {
         $query
