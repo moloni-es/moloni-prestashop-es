@@ -68,6 +68,7 @@ class MoloniRoutes
 
     public const DEBUG = 'moloni_es_debug_home';
     public const DEBUG_CHECK_ATTRIBUTES = 'moloni_es_debug_check_attributes';
+    public const DEBUG_DELETE_ORDER_DOCUMENT = 'moloni_es_debug_delete_order_document';
     public const DEBUG_UPDATE_STOCK_FROM_MOLONI = 'moloni_es_debug_update_stock_from_moloni';
     public const DEBUG_INSERT_PRODUCT_FROM_MOLONI = 'moloni_es_debug_insert_product_from_moloni';
     public const DEBUG_UPDATE_PRODUCT_FROM_MOLONI = 'moloni_es_debug_update_product_from_moloni';
@@ -101,6 +102,7 @@ class MoloniRoutes
 
         self::DEBUG,
         self::DEBUG_CHECK_ATTRIBUTES,
+        self::DEBUG_DELETE_ORDER_DOCUMENT,
         self::DEBUG_UPDATE_STOCK_FROM_MOLONI,
         self::DEBUG_INSERT_PRODUCT_FROM_MOLONI,
         self::DEBUG_UPDATE_PRODUCT_FROM_MOLONI,
