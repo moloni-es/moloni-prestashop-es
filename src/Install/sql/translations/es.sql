@@ -436,6 +436,7 @@ VALUES  (@idLang, 'Translations exported sucessfully!', 'Traducciones exportadas
         (@idLang, 'Product without stock active in Moloni.', 'Producto sin stock activo en Moloni.', 'ModulesMoloniesErrors'),
         (@idLang, 'Product stock do not match (Moloni: {0}, Prestashop: {1}).', 'El stock del producto no coincide (Moloni: {0}, Prestashop: {1}).', 'ModulesMoloniesErrors'),
         (@idLang, 'Product does not exist in current Moloni company.', 'El producto no existe en la empresa Moloni actual.', 'ModulesMoloniesErrors'),
+        (@idLang, 'Error saving product image', 'Error al guardar la imagen del producto', 'ModulesMoloniesErrors'),
         (@idLang, 'Product is invisible in Moloni. Cannot be used in document creation.', 'El producto es invisible en Moloni. No se puede utilizar en la creación de documentos.', 'ModulesMoloniesErrors'),
         (@idLang, 'List products', 'Listar productos', 'ModulesMoloniesTools'),
         (@idLang, 'List all prestashop products and the corresponding Moloni product.', 'Enumere todos los productos prestashop y el producto Moloni correspondiente.', 'ModulesMoloniesTools'),

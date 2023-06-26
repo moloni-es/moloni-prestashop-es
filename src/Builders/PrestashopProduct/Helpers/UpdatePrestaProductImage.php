@@ -25,6 +25,7 @@
 namespace Moloni\Builders\PrestashopProduct\Helpers;
 
 use Image;
+use Moloni\Tools\Logs;
 use PrestaShopDatabaseException;
 use PrestaShopException;
 
@@ -65,6 +66,12 @@ class UpdatePrestaProductImage extends PrestaImage
             try {
                 $image->save();
             } catch (PrestaShopException $e) {
+                Logs::addErrorLog('Error saving product image', [
+                    'message' => $e->getMessage(),
+                    'moloniImagePath' => $this->moloniImagePath,
+                    'prestashopProductId' => $this->prestashopProductId,
+                ]);
+
                 return;
             }
         }
@@ -72,6 +79,12 @@ class UpdatePrestaProductImage extends PrestaImage
         try {
             $this->saveImage($image);
         } catch (PrestaShopDatabaseException $e) {
+            Logs::addErrorLog('Error saving product image', [
+                'message' => $e->getMessage(),
+                'moloniImagePath' => $this->moloniImagePath,
+                'prestashopProductId' => $this->prestashopProductId,
+            ]);
+
             return;
         }
     }

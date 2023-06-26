@@ -452,6 +452,11 @@
         <target>Error al obtener la configuración de impuestos de la zona fiscal</target>
         <note>Line: </note>
       </trans-unit>
+      <trans-unit id="1dde9f68f65790879230c4e697d2d24a">
+        <source>Error saving product image</source>
+        <target>Error al guardar la imagen del producto</target>
+        <note>Line: </note>
+      </trans-unit>
       <trans-unit id="0511ee0d41117aa7b4abaaf102aa513d">
         <source>This field is required</source>
         <target>Este campo es obligatorio</target>

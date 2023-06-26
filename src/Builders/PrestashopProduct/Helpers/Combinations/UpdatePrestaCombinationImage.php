@@ -29,6 +29,7 @@ use Image;
 use Combination;
 use PrestaShopException;
 use PrestaShopDatabaseException;
+use Moloni\Tools\Logs;
 use Moloni\Builders\PrestashopProduct\Helpers\PrestaImage;
 
 if (!defined('_PS_VERSION_')) {
@@ -68,7 +69,12 @@ class UpdatePrestaCombinationImage extends PrestaImage
             try {
                 $image->save();
             } catch (PrestaShopException $e) {
-                // todo: write log?
+                Logs::addErrorLog('Error saving product image', [
+                    'message' => $e->getMessage(),
+                    'moloniImagePath' => $this->moloniImagePath,
+                    'prestashopCombination' => $this->prestashopCombination,
+                ]);
+
                 return;
             }
 
@@ -78,7 +84,13 @@ class UpdatePrestaCombinationImage extends PrestaImage
         try {
             $this->saveImage($image);
         } catch (PrestaShopDatabaseException $e) {
-            // todo: write log?
+            Logs::addErrorLog('Error saving product image', [
+                'message' => $e->getMessage(),
+                'moloniImagePath' => $this->moloniImagePath,
+                'prestashopCombination' => $this->prestashopCombination,
+            ]);
+
+
             return;
         }
     }
