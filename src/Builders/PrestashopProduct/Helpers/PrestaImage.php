@@ -62,9 +62,15 @@ abstract class PrestaImage
     protected function saveImage(Image $image): void
     {
         $imageUrl = Domains::MOLONI_MEDIA_API . $this->moloniImagePath;
+        $imageUrl = urldecode(trim($imageUrl));
 
         $tmpDir = Configuration::get('_PS_TMP_IMG_DIR_');
         $tmpFile = tempnam($tmpDir, 'ps_import');
+
+        if (empty($tmpFile)) {
+            $tmpFile = tempnam("/tmp", 'ps_import');
+        }
+
         $path = $image->getPathForCreation();
 
         $origTmpfile = $tmpFile;
