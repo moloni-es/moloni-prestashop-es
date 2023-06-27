@@ -52,6 +52,12 @@ class FindTaxGroupFromMoloniTax
 
         foreach ($taxes as $id => $tax) {
             if ($value === (float)$tax) {
+                $taxRuleGroupObject = new TaxRulesGroup($id);
+
+                if (!empty($taxRuleGroupObject->deleted) || empty($taxRuleGroupObject->active)) {
+                    continue;
+                }
+
                 $taxRulesGroupId = $id;
 
                 break;

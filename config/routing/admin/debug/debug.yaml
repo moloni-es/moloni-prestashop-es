@@ -6,11 +6,11 @@ moloni_es_debug_home:
     _legacy_controller: 'Moloni'
     _legacy_link: 'Moloni'
 
-moloni_es_debug_check_attributes:
-  path: /checkAttributesValidity
+moloni_es_debug_multipurpose:
+  path: /multipurpose
   methods: [GET,POST]
   defaults:
-    _controller: 'Moloni\Controller\Admin\Debug\Debug::checkAttributesValidity'
+    _controller: 'Moloni\Controller\Admin\Debug\Debug::multipurpose'
     _legacy_controller: 'Moloni'
     _legacy_link: 'Moloni'
 

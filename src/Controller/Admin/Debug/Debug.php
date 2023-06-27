@@ -24,6 +24,8 @@
 
 namespace Moloni\Controller\Admin\Debug;
 
+use Country;
+use TaxRulesGroup;
 use Tools;
 use Product;
 use Configuration;
@@ -61,7 +63,7 @@ class Debug extends MoloniController
         return $this->render(
             '@Modules/molonies/views/templates/admin/debug/Debug.twig',
             [
-                'checkAttributesValidity' => MoloniRoutes::DEBUG_CHECK_ATTRIBUTES,
+                'multipurpose' => MoloniRoutes::DEBUG_MULTIPURPOSE,
                 'deleteOrderDocument' => MoloniRoutes::DEBUG_DELETE_ORDER_DOCUMENT,
                 'updateStockFromMoloni' => MoloniRoutes::DEBUG_UPDATE_STOCK_FROM_MOLONI,
                 'updateProductFromMoloni' => MoloniRoutes::DEBUG_UPDATE_PRODUCT_FROM_MOLONI,
@@ -77,57 +79,36 @@ class Debug extends MoloniController
     }
 
     /**
-     * Checks if attributes with all upper-case letters are being used
+     * Multipurpose action to debug user problems
      *
      * @return Response
      */
-    public function checkAttributesValidity(): Response
+    public function multipurpose(): Response
     {
-        $products = Product::getProducts(
-            Configuration::get('PS_LANG_DEFAULT'),
-            0,
-            700,
-            'id_product',
-            'DESC',
-            false,
-            true
-        );
+        $taxRulesGroupId = 0;
 
-        $productsToVerify = [];
+        $fiscalZone = 'es';
+        $countryId = Country::getByIso($fiscalZone);
+        $value = 21.0;
 
-        foreach ($products as $product) {
-            $productId = (int) $product['id_product'];
+        $taxes = array_reverse(TaxRulesGroup::getAssociatedTaxRatesByIdCountry($countryId), true);
 
-            // We only want to verify products with attributes
-            if ($product['product_type'] !== 'combinations') {
-                continue;
-            }
+        foreach ($taxes as $id => $tax) {
+            if ($value === (float)$tax) {
+                $taxRulesGroupId = $id;
 
-            $productAttributtes = Product::getAttributesInformationsByProduct($productId);
-
-            if (!empty($productAttributtes)) {
-                foreach ($productAttributtes as $productAttributte) {
-                    $attributeName = $productAttributte['attribute'];
-
-                    // Remove all numbers from name
-                    $attributeName = preg_replace('/[0-9]+/', '', $attributeName);
-
-                    // Check if the name is all upper-cased. If so flag this product to verify
-                    if (!empty($attributeName) && ctype_upper($attributeName)) {
-                        // Add product to list to verify manually
-                        $productsToVerify[$productId] = $productAttributtes;
-
-                        break;
-                    }
-                }
+                break;
             }
         }
 
         $response = [
             'valid' => 1,
             'result' => [
-                'processed_products' => count($products),
-                'flaged_products' => $productsToVerify,
+                'fiscalZone' => $fiscalZone,
+                'countryId' => $countryId,
+                'value' => $value,
+                'taxes' => $taxes,
+                'taxRulesGroupId' => $taxRulesGroupId,
             ],
         ];
 
