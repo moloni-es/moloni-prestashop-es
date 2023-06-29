@@ -52,8 +52,7 @@ class GetPrestashopCategoriesFromMoloniCategoryId
      */
     public function handle(): array
     {
-        //the root of all categories has id = 2
-        $parentId = 2;
+        $parentId = Category::getRootCategory()->id;
         $languageId = (int)Configuration::get('PS_LANG_DEFAULT');
 
         $prestashopCategoryIds = [$parentId];
