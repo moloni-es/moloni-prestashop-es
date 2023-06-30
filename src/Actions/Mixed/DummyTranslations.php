@@ -142,6 +142,7 @@ class DummyTranslations
         $this->translator->trans('Error fetching fiscal zone tax settings', [], 'Modules.Molonies.Errors');
 
         $this->translator->trans('Error saving product image', [], 'Modules.Molonies.Errors');
+        $this->translator->trans('Tax not found in Moloni. Please create the correct tax for {0} ({1} || {2})', [], 'Modules.Molonies.Errors');
     }
 
     public function common(): void

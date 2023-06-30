@@ -58,13 +58,7 @@ class GetOrderProductTax
      */
     public function handle(): ?OrderProductTax
     {
-        $taxBuilder = null;
         $taxValue = (float)($this->orderProduct['tax_rate'] ?? 0);
-
-        if ((int)$taxValue === 0 && $this->orderProduct['unit_price_tax_incl'] !== $this->orderProduct['unit_price_tax_excl']) {
-            $taxValue = (100 * ((float)$this->orderProduct['unit_price_tax_incl'] - (float)$this->orderProduct['unit_price_tax_excl'])) / (float)$this->orderProduct['unit_price_tax_excl'];
-            $taxValue = round($taxValue, 2);
-        }
 
         if ($taxValue > 0) {
             $taxBuilder = new OrderProductTax($taxValue, $this->fiscalZone, 1);
@@ -74,8 +68,47 @@ class GetOrderProductTax
             if ($taxBuilder->getTaxId() === 0) {
                 $taxBuilder->insert();
             }
+
+            return $taxBuilder;
         }
 
-        return $taxBuilder;
+        /** Fallback tax percentage calculation */
+        if ($this->orderProduct['unit_price_tax_incl'] !== $this->orderProduct['unit_price_tax_excl']) {
+            $taxValue = (100 * ((float)$this->orderProduct['unit_price_tax_incl'] - (float)$this->orderProduct['unit_price_tax_excl'])) / (float)$this->orderProduct['unit_price_tax_excl'];
+
+            $roundOne = round($taxValue, 1);
+
+            $taxBuilder = new OrderProductTax($roundOne, $this->fiscalZone, 1);
+            $taxBuilder->search();
+
+            if ($taxBuilder->getTaxId() > 0) {
+                return $taxBuilder;
+            }
+
+            $roundZero = round($taxValue, 0);
+
+            $taxBuilder = new OrderProductTax($roundZero, $this->fiscalZone, 1);
+            $taxBuilder->search();
+
+            if ($taxBuilder->getTaxId() > 0) {
+                return $taxBuilder;
+            }
+
+            $message = 'Tax not found in Moloni. Please create the correct tax for {0} ({1} || {2})';
+            $identifiers = [
+                '{0}' => $this->fiscalZone,
+                '{1}' => $roundOne,
+                '{2}' => $roundZero
+            ];
+            $data = [
+                'original' => $taxValue,
+                'round_one' => $roundOne,
+                'round_zero' => $roundZero,
+            ];
+
+            throw new MoloniException($message, $identifiers, $data);
+        }
+
+        return null;
     }
 }
