@@ -96,7 +96,7 @@ class GetOrderProductTax
 
             $message = 'Tax not found in Moloni. Please create the correct tax for {0} ({1} || {2})';
             $identifiers = [
-                '{0}' => $this->fiscalZone,
+                '{0}' => $this->fiscalZone['code'],
                 '{1}' => $roundOne,
                 '{2}' => $roundZero
             ];
