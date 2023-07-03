@@ -457,6 +457,11 @@
         <target>Error al guardar la imagen del producto</target>
         <note>Line: </note>
       </trans-unit>
+      <trans-unit id="c2c69a078eccbd696192075d73abd8dd">
+        <source>Tax not found in Moloni. Please create the correct tax for {0} ({1} || {2})</source>
+        <target>Impuesto no escontrado en Moloni. Cree el impuesto correcto {0} ({1} || {2})</target>
+        <note>Line: </note>
+      </trans-unit>
       <trans-unit id="0511ee0d41117aa7b4abaaf102aa513d">
         <source>This field is required</source>
         <target>Este campo es obligatorio</target>
