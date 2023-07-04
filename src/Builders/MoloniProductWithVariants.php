@@ -767,7 +767,8 @@ class MoloniProductWithVariants implements BuilderInterface
         $categoriesNames = [];
 
         if (!empty($this->prestashopProduct->id_category_default)) {
-            $languageId = (int) Configuration::get('PS_LANG_DEFAULT');
+            $languageId = (int)Configuration::get('PS_LANG_DEFAULT');
+            $rootCategoryId = (int)Category::getRootCategory()->id;
 
             $categoryId = $this->prestashopProduct->id_category_default;
             $failsafe = 0;
@@ -782,13 +783,13 @@ class MoloniProductWithVariants implements BuilderInterface
 
                 array_unshift($categoriesNames, $categoryObj->name);
 
-                // Skip root categories
-                if (in_array((int) $categoryObj->id_parent, [1, 2])) {
+                // Skip root category
+                if ((int)$categoryObj->id_parent === $rootCategoryId) {
                     break;
                 }
 
                 // Next category is this category parent
-                $categoryId = (int) $categoryObj->id_parent;
+                $categoryId = (int)$categoryObj->id_parent;
 
                 ++$failsafe;
             } while ($failsafe < 100 && $categoryId > 0);
