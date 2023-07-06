@@ -70,40 +70,65 @@ class Installer
     ];
 
     /**
-     * Tabs list
+     * Plugin tabs list
      *
      * @var array[]
      */
     private $tabs = [
         [
-            'name' => 'Moloni',
-            'parent' => 'SELL',
-            'tabName' => 'Moloni Spain',
-            'logo' => 'logo',
+            'class_name' => 'Moloni',
+            'parent_class_name' => 'SELL',
+            'name' => [
+                'en' => 'Moloni Spain',
+                'es' => 'Moloni España',
+            ],
+            'wording' => 'Moloni Spain',
+            'wording_domain' => 'Modules.Molonies.Admin',
+            'icon' => 'logo',
         ],
         [
-            'name' => 'MoloniOrders',
-            'parent' => 'Moloni',
-            'tabName' => 'Orders',
-            'logo' => '',
+            'class_name' => 'MoloniOrders',
+            'parent_class_name' => 'Moloni',
+            'name' => [
+                'en' => 'Orders',
+                'es' => 'Pedidos pendientes',
+            ],
+            'wording' => 'Orders',
+            'wording_domain' => 'Modules.Molonies.Admin',
+            'icon' => '',
         ],
         [
-            'name' => 'MoloniDocuments',
-            'parent' => 'Moloni',
-            'tabName' => 'Documents',
-            'logo' => '',
+            'class_name' => 'MoloniDocuments',
+            'parent_class_name' => 'Moloni',
+            'name' => [
+                'en' => 'Documents',
+                'es' => 'Documentos creados',
+            ],
+            'wording' => 'Documents',
+            'wording_domain' => 'Modules.Molonies.Admin',
+            'icon' => '',
         ],
         [
-            'name' => 'MoloniSettings',
-            'parent' => 'Moloni',
-            'tabName' => 'Settings',
-            'logo' => '',
+            'class_name' => 'MoloniSettings',
+            'parent_class_name' => 'Moloni',
+            'name' => [
+                'en' => 'Settings',
+                'es' => 'Configuraciones',
+            ],
+            'wording' => 'Settings',
+            'wording_domain' => 'Modules.Molonies.Admin',
+            'icon' => '',
         ],
         [
-            'name' => 'MoloniTools',
-            'parent' => 'Moloni',
-            'tabName' => 'Tools',
-            'logo' => '',
+            'class_name' => 'MoloniTools',
+            'parent_class_name' => 'Moloni',
+            'name' => [
+                'en' => 'Tools',
+                'es' => 'Herramientas',
+            ],
+            'wording' => 'Tools',
+            'wording_domain' => 'Modules.Molonies.Admin',
+            'icon' => '',
         ],
     ];
 
@@ -272,7 +297,7 @@ class Installer
         }
 
         foreach ($this->tabs as $tab) {
-            if (!$this->installTab($tab['name'], $tab['parent'], $tab['tabName'], $tab['logo'])) {
+            if (!$this->installTab($tab)) {
                 return false;
             }
         }
@@ -289,14 +314,7 @@ class Installer
      */
     private function destroyCommon(): bool
     {
-        foreach ($this->tabs as $tab) {
-            if (!$this->uninstallTab($tab['name'])) {
-                return false;
-            }
-        }
-
         $this->removeHooks();
-
         $this->removeLogin();
 
         return true;
@@ -305,71 +323,34 @@ class Installer
     /**
      * Installs an tab
      *
-     * @param string $className
-     * @param string $parentClassName
-     * @param string $tabName
-     * @param string $logo
+     * @param array $newTab
      *
      * @return bool
      */
-    private function installTab(string $className, string $parentClassName, string $tabName, string $logo): bool
+    private function installTab(array $newTab): bool
     {
-        try {
-            $tabId = (int)Tab::getIdFromClassName($className);
+        $tabId = (int)Tab::getIdFromClassName($newTab['class_name']);
+        $parentTabId = (int)Tab::getIdFromClassName($newTab['parent_class_name']);
 
-            if (!$tabId) {
+        try {
+            if (empty($tabId)) {
                 $tabId = null;
             }
 
             $tab = new Tab($tabId);
             $tab->active = true;
-            $tab->class_name = $className;
-            $tab->name = [];
-
-            foreach (Language::getLanguages() as $lang) {
-                $translatedTab = $this->module->getTranslator()->trans(
-                    $tabName,
-                    [],
-                    'Modules.Molonies.Admin',
-                    $lang['locale']
-                );
-
-                $tab->name[$lang['id_lang']] = $translatedTab ?? $tabName;
-            }
-
-            $tab->id_parent = (int)Tab::getIdFromClassName($parentClassName);
+            $tab->class_name = $newTab['class_name'];
+            $tab->name = $this->getTabNames($newTab['name']);
+            $tab->wording = $newTab['wording'];
+            $tab->wording_domain = $newTab['wording_domain'];
+            $tab->id_parent = $parentTabId;
             $tab->module = $this->module->name;
-
-            if (!empty($logo)) {
-                $tab->icon = $logo;
-            }
+            $tab->icon = $newTab['icon'];
 
             return $tab->save();
         } catch (PrestaShopException $exception) {
             return false;
         }
-    }
-
-    /**
-     * Deletes an tab
-     *
-     * @param string $className
-     *
-     * @return bool
-     */
-    private function uninstallTab(string $className): bool
-    {
-        try {
-            $tabId = (int)Tab::getIdFromClassName($className);
-
-            if ($tabId) {
-                (new Tab($tabId))->delete();
-            }
-        } catch (PrestaShopException $exception) {
-            return false;
-        }
-
-        return true;
     }
 
     /**
@@ -470,6 +451,30 @@ class Installer
     }
 
     /**
+     * Get tab names
+     *
+     * @param array $names
+     *
+     * @return array
+     */
+    private function getTabNames(array $names): array
+    {
+        $translatedNames = [];
+
+        foreach (Language::getLanguages() as $lang) {
+            if (array_key_exists($lang['iso_code'], $names)) {
+                /** Apply translated name */
+                $translatedNames[$lang['id_lang']] = $names[$lang['iso_code']];
+            } else {
+                /** Get the first name available in the array */
+                $translatedNames[$lang['id_lang']] = reset($names);
+            }
+        }
+
+        return $translatedNames;
+    }
+
+    /**
      * Remove login credentials
      *
      * @return void
@@ -489,18 +494,16 @@ class Installer
         }
     }
 
-    public function registerHooks(): bool
+    private function registerHooks(): void
     {
         foreach ($this->hooks as $hookName) {
             if (!$this->module->registerHook($hookName)) {
-                return false;
+                return;
             }
         }
-
-        return true;
     }
 
-    public function removeHooks(): bool
+    private function removeHooks(): void
     {
         foreach ($this->hooks as $hookName) {
             try {
@@ -510,10 +513,8 @@ class Installer
             }
 
             if (!$this->module->unregisterHook($name)) {
-                return false;
+                return;
             }
         }
-
-        return true;
     }
 }
