@@ -68,6 +68,7 @@ class ProductUpdate extends AbstractWebserviceAction
 
             if ($prestaProductId > 0) {
                 if (!SyncLogs::prestashopProductHasTimeout($prestaProductId)) {
+                    SyncLogs::moloniProductAddTimeout($this->productId);
                     SyncLogs::prestashopProductAddTimeout($prestaProductId);
 
                     $productBuilder->update();
@@ -91,8 +92,6 @@ class ProductUpdate extends AbstractWebserviceAction
         if (SyncLogs::moloniProductHasTimeout($this->productId)) {
             return false;
         }
-
-        SyncLogs::moloniProductAddTimeout($this->productId);
 
         return $this->isAuthenticated();
     }
