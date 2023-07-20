@@ -67,6 +67,8 @@ class ProductCreate extends AbstractWebserviceAction
             $prestaProductId = $productBuilder->getPrestashopProductId();
 
             if ($prestaProductId === 0) {
+                SyncLogs::moloniProductAddTimeout($this->productId);
+
                 $productBuilder->insert();
 
                 SyncLogs::prestashopProductAddTimeout($productBuilder->getPrestashopProductId());
@@ -91,8 +93,6 @@ class ProductCreate extends AbstractWebserviceAction
         if (SyncLogs::moloniProductHasTimeout($this->productId)) {
             return false;
         }
-
-        SyncLogs::moloniProductAddTimeout($this->productId);
 
         return $this->isAuthenticated();
     }

@@ -73,6 +73,7 @@ class ProductStockChange extends AbstractWebserviceAction
             $prestaProductId = $productBuilder->getPrestashopProductId();
 
             if ($prestaProductId > 0 && !SyncLogs::prestashopProductHasTimeout($prestaProductId)) {
+                SyncLogs::moloniProductAddTimeout($this->productId);
                 SyncLogs::prestashopProductAddTimeout($prestaProductId);
 
                 $productBuilder->updateStock();
@@ -95,8 +96,6 @@ class ProductStockChange extends AbstractWebserviceAction
         if (SyncLogs::moloniProductHasTimeout($this->productId)) {
             return false;
         }
-
-        SyncLogs::moloniProductAddTimeout($this->productId);
 
         return $this->isAuthenticated();
     }
