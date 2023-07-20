@@ -55,7 +55,7 @@ class MoloniEs extends Module
         $this->tab = 'administration';
 
         $this->need_instance = 1;
-        $this->version = '2.3.58';
+        $this->version = '2.3.59';
         $this->ps_versions_compliancy = ['min' => '1.7.6', 'max' => _PS_VERSION_];
         $this->author = 'Moloni';
         $this->module_key = '63e30380b2942ec15c33bedd4f7ec90e';
@@ -217,7 +217,7 @@ class MoloniEs extends Module
 
         if (strpos($action, 'Moloni') === 0) {
             $this->context->controller->addJS($this->_path . 'views/js/app.js?v=' . $this->version);
-            $this->context->controller->addCSS($this->_path . 'views/css/app.css?v=' . $this->version);
+            $this->context->controller->addCSS($this->_path . 'views/css/app.css');
         }
     }
 
