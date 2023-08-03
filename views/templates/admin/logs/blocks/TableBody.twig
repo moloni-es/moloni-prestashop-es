@@ -23,6 +23,10 @@
                     <span class="badge badge-danger">
                         {{ 'Error'|trans({}, 'Modules.Molonies.Common') }}
                     </span>
+                {% elseif log.level == constant('Moloni\\Enums\\LogLevel::DEBUG') %}
+                    <span class="badge badge-warning">
+                        {{ 'Debug'|trans({}, 'Modules.Molonies.Common') }}
+                    </span>
                 {% else %}
                     ---
                 {% endif %}
