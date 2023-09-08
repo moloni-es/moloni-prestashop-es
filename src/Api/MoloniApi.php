@@ -286,7 +286,10 @@ class MoloniApi
             try {
                 $response = $e->getResponse() ? $e->getResponse()->json() : [];
             } catch (ParseException $e) {
-                $response = [];
+                $response = [
+                    'type' => 'exception:ParseException',
+                    'message' => $e->getMessage()
+                ];
             }
 
             throw new MoloniApiException('Request error', [], ['data' => $data, 'response' => $response]);
