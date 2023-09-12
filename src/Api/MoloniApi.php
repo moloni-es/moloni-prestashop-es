@@ -288,7 +288,8 @@ class MoloniApi
             } catch (ParseException $e) {
                 $response = [
                     'type' => 'exception:ParseException',
-                    'message' => $e->getMessage()
+                    'message' => $e->getMessage(),
+                    'response' => $e->getResponse(),
                 ];
             }
 

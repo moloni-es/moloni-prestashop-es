@@ -158,6 +158,10 @@ class Login extends MoloniController
             }
 
             foreach ($queryCompanies as $company) {
+                if (!isset($company['company']['companyId'])) {
+                    continue;
+                }
+
                 $variables = [
                     'companyId' => $company['company']['companyId'],
                     'options' => [
