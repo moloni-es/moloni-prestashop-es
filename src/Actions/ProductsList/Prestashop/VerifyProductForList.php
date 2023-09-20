@@ -1,5 +1,4 @@
 <?php
-
 /**
  * 2022 - Moloni.com
  *
@@ -25,17 +24,17 @@
 
 declare(strict_types=1);
 
-namespace Moloni\Actions\ProductsList;
+namespace Moloni\Actions\ProductsList\Prestashop;
 
+use Moloni\Api\MoloniApiClient;
+use Moloni\Builders\PrestashopProduct\Helpers\Combinations\FindOrCreateCombination;
+use Moloni\Builders\PrestashopProduct\Helpers\ParseMoloniStock;
+use Moloni\Enums\Boolean;
+use Moloni\Enums\Domains;
+use Moloni\Exceptions\MoloniApiException;
+use Moloni\Traits\AttributesTrait;
 use Product;
 use StockAvailable;
-use Moloni\Traits\AttributesTrait;
-use Moloni\Enums\Domains;
-use Moloni\Enums\Boolean;
-use Moloni\Api\MoloniApiClient;
-use Moloni\Exceptions\MoloniApiException;
-use Moloni\Builders\PrestashopProduct\Helpers\ParseMoloniStock;
-use Moloni\Builders\PrestashopProduct\Helpers\Combinations\FindOrCreateCombination;
 
 class VerifyProductForList
 {
@@ -80,10 +79,9 @@ class VerifyProductForList
         $this->warehouseId = $warehouseId;
         $this->slug = $slug;
 
-        $this->run();
     }
 
-    private function run(): void
+    public function run(): void
     {
         $this->parsedProduct['prestashop_id'] = $this->prestaProduct->id;
         $this->parsedProduct['moloni_id'] = 0;

@@ -1,7 +1,6 @@
 <?php
-
 /**
- * 2022 - Moloni.com
+ * 2023 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -28,70 +27,44 @@ declare(strict_types=1);
 namespace Moloni\Controller\Admin\Products;
 
 use Tools;
-use Product;
-use Configuration;
+use Moloni\Actions\ProductsList\Moloni\VerifyProductForList;
+use Symfony\Component\HttpFoundation\Response;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\PrestashopProductSimple;
 use Moloni\Builders\PrestashopProductWithCombinations;
 use Moloni\Exceptions\MoloniApiException;
-use Moloni\Builders\MoloniProductSimple;
-use Moloni\Builders\MoloniProductWithVariants;
 use Moloni\Exceptions\Product\MoloniProductException;
-use Moloni\Repository\ProductsRepository;
 use Moloni\Tools\SyncLogs;
-use Moloni\Controller\Admin\MoloniController;
-use Moloni\Enums\MoloniRoutes;
 use Moloni\Tools\Settings;
-use Moloni\Actions\ProductsList\VerifyProductForList;
-use Symfony\Component\HttpFoundation\Response;
+use Moloni\Enums\MoloniRoutes;
+use Moloni\Controller\Admin\MoloniController;
+use Moloni\Actions\ProductsList\Moloni\FetchMoloniProductsPaginated;
 
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class Products extends MoloniController
+class MoloniProducts extends MoloniController
 {
     public function home(): Response
     {
         $page = (int)Tools::getValue('page', 1);
         $filters = Tools::getValue('filters', []);
-        $productsArray = [];
 
-        /** @var ProductsRepository $repository */
-        $repository = $this->get('moloni.repository.products');
-
-        ['products' => $products, 'paginator' => $paginator] = $repository->getProductsPaginated(
-            $page,
-            $this->getContextLangId(),
-            $this->getContextShopId(),
-            $filters
-        );
-
-        try {
-            $slug = MoloniApiClient::companies()->queryCompany()['slug'];
-        } catch (MoloniApiException $e) {
-            $slug = '';
-        }
-
-        $warehouseId = (int)Settings::get('syncStockToPrestashopWarehouse');
-
-        foreach ($products as $product) {
-            $obj = new Product($product['id_product'], false, $this->getContextLangId());
-
-            $productsArray[] = (new VerifyProductForList($obj, $warehouseId, $slug))->getParsedProduct();
-        }
+        $service = new FetchMoloniProductsPaginated($page, $filters);
+        $service->run();
 
         return $this->render(
-            '@Modules/molonies/views/templates/admin/products/Products.twig',
+            '@Modules/molonies/views/templates/admin/products/moloni/Products.twig',
             [
-                'productsArray' => $productsArray,
+                'productsArray' => $service->getProducts(),
                 'filters' => $filters,
-                'paginator' => $paginator,
+                'paginator' => $service->getPaginator(),
                 'companyName' => Settings::get('companyName'),
-                'productsImportStockRoute' => MoloniRoutes::PRODUCTS_IMPORT_STOCK,
-                'productsExportProductRoute' => MoloniRoutes::PRODUCTS_EXPORT_PRODUCT,
+                'importStockRoute' => MoloniRoutes::MOLONI_PRODUCTS_IMPORT_STOCK,
+                'importProductRoute' => MoloniRoutes::MOLONI_PRODUCTS_IMPORT_PRODUCT,
                 'toolsRoute' => MoloniRoutes::TOOLS,
-                'thisRoute' => MoloniRoutes::PRODUCTS,
+                'thisRoute' => MoloniRoutes::MOLONI_PRODUCTS,
             ]
         );
     }
@@ -131,7 +104,7 @@ class Products extends MoloniController
                 throw new MoloniProductException('Product does not exist', null, [$productId]);
             }
 
-            $response = $this->getCommonResponse($prestaProductId);
+            $response = $this->getCommonResponse($moloniProduct);
         } catch (MoloniProductException | MoloniApiException $e) {
             $response = [
                 'valid' => 0,
@@ -144,33 +117,41 @@ class Products extends MoloniController
         return new Response(json_encode($response));
     }
 
-    public function exportProduct(): Response
+    public function importProduct(): Response
     {
         $productId = (int)Tools::getValue('product_id', 0);
 
-        SyncLogs::prestashopProductAddTimeout($productId);
+        $variables = [
+            'productId' => $productId,
+        ];
+
+        SyncLogs::moloniProductAddTimeout($productId);
 
         try {
-            $product = new Product($productId, true, Configuration::get('PS_LANG_DEFAULT'));
+            $query = MoloniApiClient::products()->queryProduct($variables);
 
-            if (empty($product->id)) {
-                throw new MoloniProductException('Product not found', null, [$productId]);
+            $moloniProduct = $query['data']['product']['data'] ?? [];
+
+            if (empty($moloniProduct)) {
+                throw new MoloniProductException('Product not found', null, $variables);
             }
 
-            if ($product->product_type === 'combinations' && $product->hasCombinations()) {
-                $productBuilder = new MoloniProductWithVariants($product);
+            if (empty($moloniProduct['variants'])) {
+                $productBuilder = new PrestashopProductSimple($moloniProduct);
             } else {
-                $productBuilder = new MoloniProductSimple($product);
+                $productBuilder = new PrestashopProductWithCombinations($moloniProduct);
             }
 
-            if ($productBuilder->getMoloniProductId() === 0) {
+            $prestaProductId = $productBuilder->getPrestashopProductId();
+
+            if ($prestaProductId === 0) {
                 $productBuilder->insert();
             } else {
-                throw new MoloniProductException('Product already exists', null, [$productId]);
+                throw new MoloniProductException('Product already exists', null, ['prestashopId' => $prestaProductId, 'moloniId' => $productId]);
             }
 
-            $response = $this->getCommonResponse($productId);
-        } catch (MoloniProductException $e) {
+            $response = $this->getCommonResponse($moloniProduct);
+        } catch (MoloniProductException | MoloniApiException $e) {
             $response = [
                 'valid' => 0,
                 'message' => $this->trans($e->getMessage(), 'Modules.Molonies.Errors'),
@@ -182,7 +163,7 @@ class Products extends MoloniController
         return new Response(json_encode($response));
     }
 
-    private function getCommonResponse($prestaProductId): array
+    private function getCommonResponse(array $moloniProduct): array
     {
         try {
             $slug = MoloniApiClient::companies()->queryCompany()['slug'];
@@ -192,17 +173,17 @@ class Products extends MoloniController
 
         $warehouseId = (int)Settings::get('syncStockToPrestashopWarehouse');
 
-        $obj = new Product($prestaProductId, false, $this->getContextLangId());
-        $product = (new VerifyProductForList($obj, $warehouseId, $slug))->getParsedProduct();
+        $service = new VerifyProductForList($moloniProduct, $warehouseId, $slug);
+        $service->run();
 
         return [
             'valid' => 1,
             'message' => '',
             'result' => '',
             'productRow' => $this->renderView(
-                '@Modules/molonies/views/templates/admin/products/blocks/TableBodyRow.twig',
+                '@Modules/molonies/views/templates/admin/products/moloni/blocks/TableBodyRow.twig',
                 [
-                    'product' => $product,
+                    'product' => $service->getParsedProduct(),
                 ]
             )
         ];

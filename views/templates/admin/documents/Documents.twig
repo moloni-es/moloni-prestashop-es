@@ -32,7 +32,7 @@
 {% block javascripts %}
     <script>
         $(document).ready(function () {
-            window.moloniDocuments.startObservers("{{ path(thisRoute) }}");
+            window.moloni.Documents.startObservers("{{ path(thisRoute) }}");
         });
     </script>
 {% endblock %}

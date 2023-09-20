@@ -1,19 +1,23 @@
-import MoloniSettings from './pages/settings'
-import MoloniOrders from './pages/orders'
-import MoloniDocuments from './pages/documents'
-import MoloniTools from './pages/tools'
-import MoloniLogs from './pages/logs'
-import MoloniLogin from './pages/login'
-import MoloniRegistration from './pages/registration'
-import MoloniProducts from "./pages/products";
+import Settings from './pages/settings'
+import Orders from './pages/orders'
+import Documents from './pages/documents'
+import Tools from './pages/tools'
+import Logs from './pages/logs'
+import Login from './pages/login'
+import Registration from './pages/registration'
+import PrestashopProducts from "./pages/prestashopProducts";
+import MoloniProducts from "./pages/moloniProducts";
 
 $(document).ready(() => {
-    window.moloniSettings = new MoloniSettings();
-    window.moloniOrders = new MoloniOrders();
-    window.moloniDocuments = new MoloniDocuments();
-    window.moloniTools = new MoloniTools();
-    window.moloniLogs = new MoloniLogs();
-    window.moloniLogin = new MoloniLogin();
-    window.moloniRegistration = new MoloniRegistration();
-    window.moloniProducts = new MoloniProducts();
+    window.moloni = {};
+
+    window.moloni.Settings = new Settings();
+    window.moloni.Orders = new Orders();
+    window.moloni.Documents = new Documents();
+    window.moloni.Tools = new Tools();
+    window.moloni.Logs = new Logs();
+    window.moloni.Login = new Login();
+    window.moloni.Registration = new Registration();
+    window.moloni.PrestashopProducts = new PrestashopProducts();
+    window.moloni.MoloniProducts = new MoloniProducts();
 });

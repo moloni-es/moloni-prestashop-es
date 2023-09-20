@@ -1,7 +1,7 @@
 import Paginator from "../paginator/paginator";
 import Filters from "../filters/filters";
 
-export default class MoloniDocuments {
+export default class Documents {
     constructor() {}
 
     startObservers(thisAction) {

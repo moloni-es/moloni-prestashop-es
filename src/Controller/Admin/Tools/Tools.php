@@ -56,7 +56,8 @@ class Tools extends MoloniController
                 'exportProductsRoute' => MoloniRoutes::TOOLS_EXPORT_PRODUCTS,
                 'exportStocksRoute' => MoloniRoutes::TOOLS_EXPORT_STOCKS,
                 'reinstallHooksRoute' => MoloniRoutes::TOOLS_REINSTALL_HOOKS,
-                'productsRoutes' => MoloniRoutes::PRODUCTS,
+                'productsPrestashopRoutes' => MoloniRoutes::PRESTASHOP_PRODUCTS,
+                'productsMoloniRoutes' => MoloniRoutes::MOLONI_PRODUCTS,
                 'logsRoute' => MoloniRoutes::LOGS,
                 'logoutRoute' => MoloniRoutes::TOOLS_LOGOUT,
             ]
