@@ -35,6 +35,7 @@ use Moloni\Enums\Boolean;
 use Moloni\Enums\SyncFields;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\Product\MoloniProductCombinationException;
+use Moloni\Helpers\Warehouse;
 use Moloni\Tools\Logs;
 use Moloni\Tools\Settings;
 use Moloni\Traits\AttributesTrait;
@@ -479,29 +480,10 @@ class ProductCombination implements BuilderInterface
         $warehouseId = Settings::get('syncStockToPrestashopWarehouse');
 
         if (empty($warehouseId)) {
-            $params = [
-                'options' => [
-                    'filter' => [
-                        'field' => 'isDefault',
-                        'comparison' => 'eq',
-                        'value' => '1',
-                    ],
-                ],
-            ];
-
-            try {
-                $mutation = MoloniApiClient::warehouses()
-                    ->queryWarehouses($params);
-
-                if (!empty($mutation)) {
-                    $warehouseId = $mutation[0]['warehouseId'];
-                }
-            } catch (MoloniApiException $e) {
-                $warehouseId = 1;
-            }
+            $warehouseId = Warehouse::getCompanyDefaultWarehouse();
         }
 
-        $this->warehouseId = (int) $warehouseId;
+        $this->warehouseId = (int)$warehouseId;
 
         return $this;
     }

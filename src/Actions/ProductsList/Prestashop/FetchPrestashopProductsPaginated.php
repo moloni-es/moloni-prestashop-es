@@ -26,11 +26,12 @@ declare(strict_types=1);
 
 namespace Moloni\Actions\ProductsList\Prestashop;
 
+use Moloni\Helpers\Warehouse;
+use Product;
+use Moloni\Tools\Settings;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Repository\ProductsRepository;
-use Moloni\Tools\Settings;
-use Product;
 
 class FetchPrestashopProductsPaginated
 {
@@ -92,26 +93,7 @@ class FetchPrestashopProductsPaginated
             return $warehouseId;
         }
 
-        $params = [
-            'options' => [
-                'filter' => [
-                    'field' => 'isDefault',
-                    'comparison' => 'eq',
-                    'value' => '1',
-                ],
-            ],
-        ];
-
-        try {
-            $query = MoloniApiClient::warehouses()->queryWarehouses($params);
-
-            if (!empty($query)) {
-                return (int)$query[0]['warehouseId'];
-            }
-        } catch (MoloniApiException $e) {
-        }
-
-        return 0;
+        return Warehouse::getCompanyDefaultWarehouse();
     }
 
     //         QUERIES         //

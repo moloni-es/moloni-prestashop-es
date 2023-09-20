@@ -28,6 +28,7 @@ declare(strict_types=1);
 namespace Moloni\Controller\Admin\Products;
 
 use Configuration;
+use Moloni\Helpers\Warehouse;
 use Tools;
 use Product;
 use Symfony\Component\HttpFoundation\Response;
@@ -157,27 +158,11 @@ class PrestashopProducts extends MoloniController
     {
         $warehouseId = (int)Settings::get('syncStockToMoloniWarehouse');
 
-        if (in_array($warehouseId, [0, 1])) {
-            $params = [
-                'options' => [
-                    'filter' => [
-                        'field' => 'isDefault',
-                        'comparison' => 'eq',
-                        'value' => '1',
-                    ],
-                ],
-            ];
-
-            try {
-                $query = MoloniApiClient::warehouses()->queryWarehouses($params);
-
-                if (!empty($query)) {
-                    return (int)$query[0]['warehouseId'];
-                }
-            } catch (MoloniApiException $e) {}
+        if ($warehouseId > 1) {
+            return $warehouseId;
         }
 
-        return 0;
+        return Warehouse::getCompanyDefaultWarehouse();
     }
 
     private function getCommonResponse($prestaProductId): array
