@@ -14,7 +14,7 @@ export default class MoloniProducts {
         new Filters(thisRoute);
 
         $('.product__row').each((index, rowHtml) => {
-            // this.loadRowObservers($(rowHtml));
+            this.loadRowObservers($(rowHtml));
         });
     }
 
