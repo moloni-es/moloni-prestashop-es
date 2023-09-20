@@ -26,31 +26,24 @@ declare(strict_types=1);
 
 namespace Moloni\Helpers;
 
-use Moloni\Api\MoloniApiClient;
-use Moloni\Exceptions\MoloniApiException;
-
-class Warehouse
+class Stock
 {
-    public static function getCompanyDefaultWarehouse(): int
+    public static function getMoloniStock(array $moloniProduct, ?int $warehouseId = 0): float
     {
-        $params = [
-            'options' => [
-                'filter' => [
-                    'field' => 'isDefault',
-                    'comparison' => 'eq',
-                    'value' => '1',
-                ],
-            ],
-        ];
+        $stock = 0.0;
 
-        try {
-            $query = MoloniApiClient::warehouses()->queryWarehouses($params);
+        if ($warehouseId === 1) {
+            $stock = (float)($moloniProduct['stock'] ?? 0);
+        } else {
+            foreach ($moloniProduct['warehouses'] as $warehouse) {
+                if ((int)$warehouse['warehouseId'] === $warehouseId) {
+                    $stock = (float)$warehouse['stock'];
 
-            if (!empty($query)) {
-                return (int)$query[0]['warehouseId'];
+                    break;
+                }
             }
-        } catch (MoloniApiException $e) {}
+        }
 
-        return 0;
+        return $stock;
     }
 }

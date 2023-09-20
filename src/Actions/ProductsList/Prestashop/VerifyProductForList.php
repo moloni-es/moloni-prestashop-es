@@ -28,10 +28,10 @@ namespace Moloni\Actions\ProductsList\Prestashop;
 
 use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\PrestashopProduct\Helpers\Combinations\FindOrCreateCombination;
-use Moloni\Builders\PrestashopProduct\Helpers\ParseMoloniStock;
 use Moloni\Enums\Boolean;
 use Moloni\Enums\Domains;
 use Moloni\Exceptions\MoloniApiException;
+use Moloni\Helpers\Stock;
 use Moloni\Traits\AttributesTrait;
 use Product;
 use StockAvailable;
@@ -189,7 +189,7 @@ class VerifyProductForList
 
     private function checkVariantStock($variant, $combinationId)
     {
-        $moloniProductStock = (new ParseMoloniStock($variant, $this->warehouseId))->getStock();
+        $moloniProductStock = Stock::getMoloniStock($variant, $this->warehouseId);
         $prestashopStock = (float)StockAvailable::getQuantityAvailableByProduct(
             $this->prestaProduct->id,
             $combinationId
@@ -208,8 +208,7 @@ class VerifyProductForList
     private function checkSimpleStock()
     {
         $prestashopStock = (float)StockAvailable::getQuantityAvailableByProduct($this->prestaProduct->id);
-        $moloniProductStock = (new ParseMoloniStock($this->moloniProduct, $this->warehouseId))
-            ->getStock();
+        $moloniProductStock = Stock::getMoloniStock($this->moloniProduct, $this->warehouseId);
 
         if ($prestashopStock !== $moloniProductStock) {
             $this->parsedProduct['notices'][] = [

@@ -25,16 +25,14 @@
 namespace Moloni\Builders\PrestashopProduct;
 
 use Combination;
-use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\Interfaces\BuilderInterface;
 use Moloni\Builders\PrestashopProduct\Helpers\Combinations\FindOrCreateCombination;
 use Moloni\Builders\PrestashopProduct\Helpers\Combinations\UpdatePrestaCombinationImage;
-use Moloni\Builders\PrestashopProduct\Helpers\ParseMoloniStock;
 use Moloni\Builders\PrestashopProduct\Helpers\UpdatePrestaProductStock;
 use Moloni\Enums\Boolean;
 use Moloni\Enums\SyncFields;
-use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\Product\MoloniProductCombinationException;
+use Moloni\Helpers\Stock;
 use Moloni\Helpers\Warehouse;
 use Moloni\Tools\Logs;
 use Moloni\Tools\Settings;
@@ -508,7 +506,7 @@ class ProductCombination implements BuilderInterface
     public function setStock(): ProductCombination
     {
         if ($this->combinationHasStock()) {
-            $this->stock = (new ParseMoloniStock($this->moloniVariant, $this->warehouseId))->getStock();
+            $this->stock = Stock::getMoloniStock($this->moloniVariant, $this->warehouseId);
         }
 
         return $this;

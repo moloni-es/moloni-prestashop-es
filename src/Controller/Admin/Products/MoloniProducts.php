@@ -26,6 +26,7 @@ declare(strict_types=1);
 
 namespace Moloni\Controller\Admin\Products;
 
+use Moloni\Helpers\Warehouse;
 use Tools;
 use Moloni\Actions\ProductsList\Moloni\VerifyProductForList;
 use Symfony\Component\HttpFoundation\Response;

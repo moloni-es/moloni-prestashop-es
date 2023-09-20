@@ -25,21 +25,19 @@
 namespace Moloni\Builders;
 
 use Configuration;
-use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\Interfaces\BuilderInterface;
 use Moloni\Builders\PrestashopProduct\Helpers\Combinations\CreateMappingsAfterPrestaProductCreateOrUpdate;
 use Moloni\Builders\PrestashopProduct\Helpers\Combinations\ProcessAttributesGroup;
 use Moloni\Builders\PrestashopProduct\Helpers\FindTaxGroupFromMoloniTax;
 use Moloni\Builders\PrestashopProduct\Helpers\GetPrestashopCategoriesFromMoloniCategoryId;
-use Moloni\Builders\PrestashopProduct\Helpers\ParseMoloniStock;
 use Moloni\Builders\PrestashopProduct\Helpers\UpdatePrestaProductImage;
 use Moloni\Builders\PrestashopProduct\ProductCombination;
 use Moloni\Enums\Boolean;
 use Moloni\Enums\ProductVisibility;
 use Moloni\Enums\SyncFields;
-use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\Product\MoloniProductCategoryException;
 use Moloni\Exceptions\Product\MoloniProductException;
+use Moloni\Helpers\Stock;
 use Moloni\Helpers\Warehouse;
 use Moloni\Tools\Logs;
 use Moloni\Tools\Settings;
@@ -614,7 +612,7 @@ class PrestashopProductWithCombinations implements BuilderInterface
     public function setStock(): PrestashopProductWithCombinations
     {
         if ($this->productHasStock()) {
-            $this->stock = (new ParseMoloniStock($this->moloniProduct, $this->warehouseId))->getStock();
+            $this->stock = Stock::getMoloniStock($this->moloniProduct, $this->warehouseId);
         }
 
         return $this;
