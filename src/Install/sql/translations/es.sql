@@ -440,7 +440,7 @@ VALUES  (@idLang, 'Translations exported sucessfully!', 'Traducciones exportadas
         (@idLang, 'Product stock do not match (Moloni: {0}, Prestashop: {1}).', 'El stock del producto no coincide (Moloni: {0}, Prestashop: {1}).', 'ModulesMoloniesErrors'),
         (@idLang, 'Product does not exist in current Moloni company.', 'El producto no existe en la empresa Moloni actual.', 'ModulesMoloniesErrors'),
         (@idLang, 'Product does not exist in current Prestashop store.', 'El producto no existe en la tienda Prestashop actual.', 'ModulesMoloniesErrors'),
-        (@idLang, 'Product does not have a reference set in Prestashop.', 'El producto no tiene referencia establecida en Prestashop.', 'ModulesMoloniesErrors'),
+        (@idLang, 'Product does not have a reference set in Prestashop.', 'El producto no tiene una referencia establecida en Prestashop.', 'ModulesMoloniesErrors'),
         (@idLang, 'Error saving product image', 'Error al guardar la imagen del producto', 'ModulesMoloniesErrors'),
         (@idLang, 'Tax not found in Moloni. Please create the correct tax for {0} ({1} || {2})', 'Impuesto no escontrado en Moloni. Cree el impuesto correcto {0} ({1} || {2})', 'ModulesMoloniesErrors'),
         (@idLang, 'Product is invisible in Moloni. Cannot be used in document creation.', 'El producto es invisible en Moloni. No se puede utilizar en la creación de documentos.', 'ModulesMoloniesErrors'),
