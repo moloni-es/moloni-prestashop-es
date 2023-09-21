@@ -27,7 +27,7 @@ export default class MoloniProducts {
         let actionsBtn = row.find('.dropdown-toggle');
 
         row.find('.import--product').on('click', () => {
-            this.doAction(this.ExportProductRoute, moloniId, actionsBtn, row);
+            this.doAction(this.ImportProductRoute, moloniId, actionsBtn, row);
         });
 
         row.find('.import--stock').on('click', () => {
