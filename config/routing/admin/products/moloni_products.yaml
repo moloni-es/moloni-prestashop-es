@@ -7,7 +7,7 @@ moloni_es_moloni_products_home:
     _legacy_link: 'MoloniTools'
 
 moloni_es_moloni_products_import_product:
-  path: /exportProduct
+  path: /importProduct
   methods: [POST]
   defaults:
     _controller: 'Moloni\Controller\Admin\Products\MoloniProducts::importProduct'
