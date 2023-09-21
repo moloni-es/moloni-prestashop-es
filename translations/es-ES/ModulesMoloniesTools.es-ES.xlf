@@ -77,9 +77,9 @@
         <target>Debes ejecutar esto si, por ejemplo, la URL de tu tienda cambia o si los tokens de acceso a Prestashop para este módulo cambian.</target>
         <note>Line: </note>
       </trans-unit>
-      <trans-unit id="73fead45625dc98bc663a2222913e1b2">
-        <source>List products</source>
-        <target>Listar productos</target>
+      <trans-unit id="51b966c00a01a69a3139a0e20a09b826">
+        <source>List Prestashop products</source>
+        <target>Listar productos Prestashop</target>
         <note>Line: </note>
       </trans-unit>
       <trans-unit id="f6ec5a9cd6cb9295f0cf82fbcb7450eb">
@@ -92,9 +92,29 @@
         <target>Esta página permite verificar si el stock de productos está actualizado, si existen en Moloni o si hay algún problema.</target>
         <note>Line: </note>
       </trans-unit>
-      <trans-unit id="c61ab4204f572e9b3aa84a040e0dab31">
-        <source>View products</source>
-        <target>Ver productos</target>
+      <trans-unit id="d1905fe1e7d1104f025e7fd79936b44f">
+        <source>View Prestashop products</source>
+        <target>Ver productos Prestashop</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="84e8ca3d819b5f8b3b2fac04b0d4af16">
+        <source>List Moloni products</source>
+        <target>Listar productos Moloni</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="ace48456848460cf256389a12f84f59a">
+        <source>List all Moloni products and the corresponding Prestashop product.</source>
+        <target>Enumere todos los productos Moloni y el producto Prestashop correspondiente.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="4af2e7661a856bbcebf0fce46d385f05">
+        <source>This page allow to verify if the product stock are updated, if they exist in Prestashop or if there are some problems.</source>
+        <target>Esta página permite verificar si el stock de productos está actualizado, si existen en Prestashop o si hay algún problema.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="8d379fb36cb00064d23a9a3bb38d9a91">
+        <source>View Moloni products</source>
+        <target>Ver productos Moloni</target>
         <note>Line: </note>
       </trans-unit>
       <trans-unit id="ef9bd66e2148c02b9a2aa4b928d59f05">
