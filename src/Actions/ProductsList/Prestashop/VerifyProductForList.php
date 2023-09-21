@@ -32,6 +32,7 @@ use Moloni\Enums\Boolean;
 use Moloni\Enums\Domains;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Helpers\Stock;
+use Moloni\Tools\Settings;
 use Moloni\Traits\AttributesTrait;
 use Product;
 use StockAvailable;
@@ -50,7 +51,6 @@ class VerifyProductForList
      */
     private $moloniProduct = [];
 
-
     /**
      * @var Product
      */
@@ -67,6 +67,11 @@ class VerifyProductForList
     private $slug;
 
     /**
+     * @var int
+     */
+    private $productReferenceFallback;
+
+    /**
      * Constructor
      *
      * @param Product $prestaProduct
@@ -79,6 +84,7 @@ class VerifyProductForList
         $this->warehouseId = $warehouseId;
         $this->slug = $slug;
 
+        $this->productReferenceFallback = (int)Settings::get('productReferenceFallback');
     }
 
     public function run(): void
@@ -100,15 +106,20 @@ class VerifyProductForList
     private function verifyMoloniProduct()
     {
         if (empty($this->moloniProduct)) {
-            $this->parsedProduct['notices'][] = ['Product does not exist in current Moloni company.'];
-            $this->parsedProduct['missing_product'] = true;
+            if (empty($this->prestaProduct->reference) && $this->productReferenceFallback === Boolean::NO) {
+                $this->parsedProduct['notices'][] = ['Product does not have a reference set in Prestashop.'];
+                $this->parsedProduct['missing_product'] = false;
+            } else {
+                $this->parsedProduct['notices'][] = ['Product does not exist in current Moloni company.'];
+                $this->parsedProduct['missing_product'] = true;
+            }
 
             return;
         }
 
         if ((int)$this->moloniProduct['visible'] === Boolean::NO) {
             $this->parsedProduct['notices'][] = [
-                'Product is invisible in Moloni. Cannot be used in document creation.'
+                'Product is invisible in Moloni. Cannot be used in document creation.',
             ];
         }
 
@@ -154,7 +165,7 @@ class VerifyProductForList
             }
 
             foreach ($this->moloniProduct['variants'] as $variant) {
-                /** Invisible products are skipped */
+                /* Invisible products are skipped */
                 if ((int)$variant['visible'] === Boolean::NO) {
                     continue;
                 }
@@ -167,10 +178,10 @@ class VerifyProductForList
                     $this->getAttributes($variant)
                 ))->handle();
 
-                /** Couldn´t match variant to any existing combination */
+                /* Couldn´t match variant to any existing combination */
                 if (empty($combination->id)) {
                     $this->parsedProduct['notices'][] = [
-                        'Combination not found ({0}).', ['{0}' => $variant['reference']]
+                        'Combination not found ({0}).', ['{0}' => $variant['reference']],
                     ];
 
                     continue;
@@ -197,8 +208,8 @@ class VerifyProductForList
 
         if ($prestashopStock !== $moloniProductStock) {
             $this->parsedProduct['notices'][] = [
-                "Product combination stock do not match (Moloni: {0}, Prestashop: {1}).",
-                ['{0}' => $moloniProductStock, '{1}' => $prestashopStock]
+                'Product combination stock do not match (Moloni: {0}, Prestashop: {1}).',
+                ['{0}' => $moloniProductStock, '{1}' => $prestashopStock],
             ];
 
             $this->parsedProduct['uneven_stock'] = true;
@@ -212,8 +223,8 @@ class VerifyProductForList
 
         if ($prestashopStock !== $moloniProductStock) {
             $this->parsedProduct['notices'][] = [
-                "Product stock do not match (Moloni: {0}, Prestashop: {1}).",
-                ['{0}' => $moloniProductStock, '{1}' => $prestashopStock]
+                'Product stock do not match (Moloni: {0}, Prestashop: {1}).',
+                ['{0}' => $moloniProductStock, '{1}' => $prestashopStock],
             ];
 
             $this->parsedProduct['uneven_stock'] = true;
@@ -246,18 +257,28 @@ class VerifyProductForList
 
     private function findByReference()
     {
+        $reference = $this->prestaProduct->reference;
+
+        if (empty($reference) && $this->productReferenceFallback === Boolean::YES) {
+            $reference = $this->prestaProduct->id;
+        }
+
+        if (empty($reference)) {
+            return;
+        }
+
         $variables = [
             'options' => [
                 'filter' => [
                     [
                         'field' => 'visible',
                         'comparison' => 'in',
-                        'value' => '[0, 1]'
+                        'value' => '[0, 1]',
                     ],
                     [
                         'field' => 'reference',
                         'comparison' => 'eq',
-                        'value' => $this->prestaProduct->reference,
+                        'value' => $reference,
                     ],
                 ],
             ],

@@ -26,7 +26,9 @@ declare(strict_types=1);
 
 namespace Moloni\Actions\ProductsList\Moloni;
 
+use Moloni\Enums\Boolean;
 use Moloni\Helpers\Stock;
+use Moloni\Tools\Settings;
 use Product;
 use Combination;
 use Configuration;
@@ -49,9 +51,10 @@ class VerifyProductForList
 
     private $slug;
 
-
     private $psLanguageId;
     private $psManagesStock;
+
+    private $productReferenceFallback;
 
     public function __construct(array $moloniProduct, int $warehouseId, string $slug)
     {
@@ -61,6 +64,7 @@ class VerifyProductForList
 
         $this->psLanguageId = Configuration::get('PS_LANG_DEFAULT');
         $this->psManagesStock = Configuration::get('PS_STOCK_MANAGEMENT');
+        $this->productReferenceFallback = (int)Settings::get('productReferenceFallback');
     }
 
     //         PUBLICS         //
@@ -160,11 +164,18 @@ class VerifyProductForList
     {
         $productId = (int)Product::getIdByReference($this->moloniProduct['reference']);
 
-        if (empty($productId)) {
-            return null;
+        if (!empty($productId)) {
+            $this->prestaProduct = new Product($productId, true, $this->psLanguageId);
+            return;
         }
 
-        $this->prestaProduct = new Product($productId, true, $this->psLanguageId);
+        if ($this->productReferenceFallback === Boolean::YES && is_numeric($this->moloniProduct['reference'])) {
+            $tryAndMatch = new Product((int)$this->moloniProduct['reference'], true, $this->psLanguageId);
+
+            if (!empty($tryAndMatch->id)) {
+                $this->prestaProduct = $tryAndMatch;
+            }
+        }
     }
 
 

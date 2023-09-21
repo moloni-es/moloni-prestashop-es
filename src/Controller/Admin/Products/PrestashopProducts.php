@@ -28,10 +28,6 @@ declare(strict_types=1);
 namespace Moloni\Controller\Admin\Products;
 
 use Configuration;
-use Moloni\Helpers\Warehouse;
-use Tools;
-use Product;
-use Symfony\Component\HttpFoundation\Response;
 use Moloni\Actions\ProductsList\Prestashop\FetchPrestashopProductsPaginated;
 use Moloni\Actions\ProductsList\Prestashop\VerifyProductForList;
 use Moloni\Api\MoloniApiClient;
@@ -41,9 +37,13 @@ use Moloni\Controller\Admin\MoloniController;
 use Moloni\Enums\MoloniRoutes;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\Product\MoloniProductException;
+use Moloni\Helpers\Warehouse;
 use Moloni\Repository\ProductsRepository;
 use Moloni\Tools\Settings;
 use Moloni\Tools\SyncLogs;
+use Product;
+use Symfony\Component\HttpFoundation\Response;
+use Tools;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -70,6 +70,7 @@ class PrestashopProducts extends MoloniController
                 'filters' => $filters,
                 'paginator' => $service->getPaginator(),
                 'companyName' => Settings::get('companyName'),
+                'productReferenceFallbackActive' => (int)Settings::get('productReferenceFallback'),
                 'exportStockRoute' => MoloniRoutes::PRESTASHOP_PRODUCTS_EXPORT_STOCK,
                 'exportProductRoute' => MoloniRoutes::PRESTASHOP_PRODUCTS_EXPORT_PRODUCT,
                 'toolsRoute' => MoloniRoutes::TOOLS,
@@ -189,7 +190,7 @@ class PrestashopProducts extends MoloniController
                 [
                     'product' => $service->getParsedProduct(),
                 ]
-            )
+            ),
         ];
     }
 }

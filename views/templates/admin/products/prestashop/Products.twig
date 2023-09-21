@@ -1,6 +1,14 @@
 {% extends '@Modules/molonies/views/templates/admin/Layout.twig' %}
 
 {% block plugin_content %}
+    {% if productReferenceFallbackActive %}
+        <div class="alert alert-info" role="alert">
+            <p class="alert-text">
+                {{ 'Product reference fallback is active. (search by prestashop ID if reference is empty)'|trans({}, 'Modules.Molonies.Products') }}
+            </p>
+        </div>
+    {% endif %}
+
     <div class="card">
         <h3 class="card-header">
             <i class="material-icons mi-store">store</i>
