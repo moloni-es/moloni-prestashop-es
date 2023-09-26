@@ -429,7 +429,7 @@
       </trans-unit>
       <trans-unit id="38dd3f5748c30826e8d86100335ab96a">
         <source>Product does not have a reference set in Prestashop.</source>
-        <target>El producto no tiene una referencia establecida en Prestashop.</target>
+        <target>El producto no tiene referencia establecida en Prestashop.</target>
         <note>Line: </note>
       </trans-unit>
       <trans-unit id="8b37fa5b1c70534c680797f226b5328a">
