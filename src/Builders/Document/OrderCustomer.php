@@ -355,6 +355,7 @@ class OrderCustomer implements BuilderItemInterface
 
         if ($this->countryId === Countries::SPAIN && !empty($vat)) {
             $vat = ltrim($vat, 'ES');
+            $vat = strtoupper($vat);
 
             if (!\Moloni\Helpers\Customer::isVatEsValid($vat)) {
                 throw new MoloniDocumentCustomerException('Customer has invalid VAT for Spain.', [], ['vat' => $vat]);

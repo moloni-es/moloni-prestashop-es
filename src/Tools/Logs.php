@@ -24,13 +24,13 @@
 
 namespace Moloni\Tools;
 
+use Shop;
 use DateTime;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
 use Moloni\Api\MoloniApi;
 use Moloni\Entity\MoloniLogs;
 use Moloni\Enums\LogLevel;
-use Shop;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -109,6 +109,20 @@ class Logs
     public static function addErrorLog($message, ?array $data = [], ?int $orderId = 0): void
     {
         self::addLog(LogLevel::ERROR, $message, $data, $orderId);
+    }
+
+    /**
+     * Add debug log
+     *
+     * @param array|string|null $message
+     * @param array|null $data
+     * @param int|null $orderId
+     *
+     * @return void
+     */
+    public static function addDebugLog($message, ?array $data = [], ?int $orderId = 0): void
+    {
+        self::addLog(LogLevel::DEBUG, $message, $data, $orderId);
     }
 
     /**
