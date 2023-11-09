@@ -52,6 +52,7 @@ class Countries extends Endpoint
                     countryId
                     iso3166_1
                     title
+                    ordering
                     language
                     {
                         languageId

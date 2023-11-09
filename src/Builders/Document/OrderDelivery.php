@@ -310,7 +310,7 @@ class OrderDelivery implements BuilderItemInterface
             $store = new Store($loadAddressSetting);
 
             try {
-                ['countryId' => $countryId] = $this->getMoloniCountryById($store->id_country);
+                ['countryId' => $countryId] = $this->getMoloniCountryById($store->id_country, $store->id_state);
             } catch (MoloniApiException $e) {
                 throw new MoloniDocumentDeliveryException('Error getting load country', [], $e->getData());
             }
@@ -343,7 +343,7 @@ class OrderDelivery implements BuilderItemInterface
         $this->destinationCity = $this->deliveryAddress->city;
 
         try {
-            ['countryId' => $countryId] = $this->getMoloniCountryById($this->deliveryAddress->id_country);
+            ['countryId' => $countryId] = $this->getMoloniCountryById($this->deliveryAddress->id_country, $this->deliveryAddress->id_state);
 
             $this->destinationCountry = $countryId;
         } catch (MoloniAPIException $e) {

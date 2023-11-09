@@ -24,6 +24,7 @@
 
 namespace Moloni\Traits;
 
+use State;
 use Country;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Enums\Countries;
@@ -41,34 +42,68 @@ trait CountryTrait
      *
      * @throws MoloniApiException
      */
-    public function getMoloniCountryById(?int $prestashopCountryId = 0): array
+    public function getMoloniCountryById(?int $prestashopCountryId = 0, ?int $prestashopStateId = 0): array
     {
-        $countryId = Countries::SPAIN;
-        $languageId = Languages::ES;
-        $countryIso = Country::getIsoById($prestashopCountryId);
+        $countryIso = Country::getIsoById($prestashopCountryId) ?? '';
 
-        if (!empty($countryIso)) {
-            $variables = [
-                'options' => [
-                    'search' => [
-                        'field' => 'iso3166_1',
-                        'value' => $countryIso,
-                    ],
+        $default = ['countryId' => Countries::SPAIN, 'languageId' => Languages::ES, 'code' => strtoupper($countryIso)];
+
+        /** Early return */
+        if (empty($countryIso)) {
+            return $default;
+        }
+
+        $variables = [
+            'options' => [
+                'search' => [
+                    'field' => 'iso3166_1',
+                    'value' => $countryIso,
                 ],
+                'order' => [
+                    [
+                        'field' => 'ordering',
+                        'sort' => 'ASC'
+                    ]
+                ],
+                'defaultLanguageId' => Languages::EN
+            ],
+        ];
+
+        $targetCountries = MoloniApiClient::countries()->queryCountries($variables);
+
+        /** Early return */
+        if (empty($targetCountries)) {
+            return $default;
+        }
+
+        /** Return the only one found */
+        if (count($targetCountries) === 1) {
+            return [
+                'countryId' => $targetCountries[0]['countryId'],
+                'languageId' => $targetCountries[0]['language']['languageId'],
+                'code' => strtoupper($countryIso)
             ];
+        }
 
-            $query = MoloniApiClient::countries()
-                ->queryCountries($variables);
+        $state = State::getNameById($prestashopStateId) ?? '';
+        $state = strtolower($state);
 
-            foreach ($query as $country) {
-                // todo fix multiple countries with same iso
-                $countryId = (int) $country['countryId'];
-                $languageId = (int) $country['language']['languageId'];
-
-                break;
+        /** Try to find the best match */
+        foreach ($targetCountries as $targetCountry) {
+            if ($state === strtolower($targetCountry['title'])) {
+                return [
+                    'countryId' => $targetCountry['countryId'],
+                    'languageId' => $targetCountry['language']['languageId'],
+                    'code' => strtoupper($countryIso)
+                ];
             }
         }
 
-        return ['countryId' => $countryId, 'languageId' => $languageId, 'code' => strtoupper($countryIso)];
+        /** Fallback */
+        return [
+            'countryId' => $targetCountries[0]['countryId'],
+            'languageId' => $targetCountries[0]['language']['languageId'],
+            'code' => strtoupper($countryIso)
+        ];
     }
 }
