@@ -327,7 +327,14 @@ class MoloniProductSimple implements BuilderInterface
     protected function beforeUpdate(): void
     {
         if (!$this->moloniProduct['deletable'] && !empty($this->moloniProduct['variants']) && $this->productExists()) {
-            throw new MoloniProductException('Cannot update product in Moloni. Product types do not match');
+            throw new MoloniProductException(
+                'Cannot update product in Moloni. Product types do not match',
+                null,
+                [
+                    'moloniProductId' => $this->getMoloniProductId(),
+                    'prestashopProductId' => $this->prestashopProduct->id
+                ]
+            );
         }
     }
 

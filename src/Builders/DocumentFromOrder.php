@@ -374,7 +374,7 @@ class DocumentFromOrder implements BuilderInterface
         if (!empty($this->shipping) && $this->shouldAddProducts()) {
             $order = count($props['products'] ?? 1);
             $order++;
-            
+
             $props['products'][] = $this->shipping->toArray($order);
         }
 
@@ -836,7 +836,9 @@ class DocumentFromOrder implements BuilderInterface
 
         if ($addressId > 0) {
             try {
-                ['countryId' => $countryId, 'code' => $code] = $this->getMoloniCountryById((new Address($addressId))->id_country);
+                $psAddress = new Address($addressId);
+
+                ['countryId' => $countryId, 'code' => $code] = $this->getMoloniCountryById($psAddress->id_country, $psAddress->id_state);
             } catch (MoloniApiException $e) {
                 throw new MoloniDocumentException('Error fetching document fiscal zone', [], $e->getData());
             }

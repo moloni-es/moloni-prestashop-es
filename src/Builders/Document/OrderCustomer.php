@@ -319,7 +319,7 @@ class OrderCustomer implements BuilderItemInterface
     public function setLanguageAndCountryId(): OrderCustomer
     {
         try {
-            ['countryId' => $countryId, 'languageId' => $languageId] = $this->getMoloniCountryById($this->billingAddress->id_country);
+            ['countryId' => $countryId, 'languageId' => $languageId] = $this->getMoloniCountryById($this->billingAddress->id_country, $this->billingAddress->id_state);
         } catch (MoloniAPIException $e) {
             throw new MoloniDocumentCustomerException('Error fetching countries', [], $e->getData());
         }
