@@ -325,7 +325,12 @@ class OrderCustomer implements BuilderItemInterface
         }
 
         $this->countryId = $countryId;
-        $this->languageId = $languageId;
+
+        if (!empty(Settings::get('clientLanguage'))) {
+            $this->languageId = (int)Settings::get('clientLanguage');
+        } else {
+            $this->languageId = $languageId;
+        }
 
         return $this;
     }

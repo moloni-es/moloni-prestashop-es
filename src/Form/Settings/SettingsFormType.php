@@ -367,6 +367,24 @@ class SettingsFormType extends TranslatorAwareType
         return $this;
     }
 
+    private function clientLanguage(): SettingsFormType
+    {
+        $this->builder->add('clientLanguage', ChoiceType::class, [
+            'label' => $this->trans('Customer language', "Modules.Molonies.Settings"),
+            'label_attr' => [
+                'popover' => $this->trans(
+                    "Default language for customer's",
+                    "Modules.Molonies.Settings"
+                ),
+            ],
+            'choices' => $this->options->getCustomerLanguage(),
+            'placeholder' => false,
+            'required' => false,
+        ]);
+
+        return $this;
+    }
+
     private function documentSet(): SettingsFormType
     {
         $this->builder
@@ -755,6 +773,7 @@ class SettingsFormType extends TranslatorAwareType
             ->documentWarehouse()
             ->clientPrefix()
             ->clientUpdate()
+            ->clientLanguage()
             // When document stauts is closed
             ->billOfLading()
             ->loadAddress()
