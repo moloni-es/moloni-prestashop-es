@@ -287,6 +287,10 @@ class PrestashopProductWithCombinations implements BuilderInterface
             $this->prestashopProduct->price = $this->price;
         }
 
+        if (empty($this->prestashopProduct->link_rewrite)) {
+            $this->prestashopProduct->link_rewrite = $this->linkRewrite();
+        }
+
         if ($this->shouldSyncIdentifiers()) {
             $this->prestashopProduct->ean13 = $this->ean13;
             $this->prestashopProduct->isbn = $this->isbn;
@@ -816,5 +820,15 @@ class PrestashopProductWithCombinations implements BuilderInterface
     protected function productHasStock(): bool
     {
         return $this->hasStock === true;
+    }
+
+    /**
+     * Cleans link rewrite field
+     *
+     * @return string
+     */
+    private function linkRewrite(): string
+    {
+        return preg_replace('/[^A-Za-z0-9\-]/', '', $this->name);
     }
 }
