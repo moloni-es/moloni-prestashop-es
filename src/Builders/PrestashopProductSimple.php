@@ -260,6 +260,10 @@ class PrestashopProductSimple implements BuilderInterface
             $this->prestashopProduct->price = $this->price;
         }
 
+        if (empty($this->prestashopProduct->link_rewrite)) {
+            $this->prestashopProduct->link_rewrite = $this->linkRewrite();
+        }
+
         if ($this->shouldSyncIdentifiers()) {
             $this->prestashopProduct->ean13 = $this->ean13;
             $this->prestashopProduct->isbn = $this->isbn;
@@ -269,7 +273,7 @@ class PrestashopProductSimple implements BuilderInterface
         if (!$this->productExists()) {
             $this->prestashopProduct->reference = $this->reference;
         }
-        
+
         $this->prestashopProduct->product_type = $this->type;
 
         if (!empty($this->categories)) {
@@ -734,5 +738,15 @@ class PrestashopProductSimple implements BuilderInterface
     protected function productHasStock(): bool
     {
         return $this->hasStock === true;
+    }
+
+    /**
+     * Cleans link rewrite field
+     *
+     * @return string
+     */
+    private function linkRewrite(): string
+    {
+        return preg_replace('/[^A-Za-z0-9\-]/', '', $this->name);
     }
 }
