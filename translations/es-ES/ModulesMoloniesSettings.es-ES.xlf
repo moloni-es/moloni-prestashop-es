@@ -137,6 +137,31 @@
         <target>Dirección personalizada </target>
         <note>Line: </note>
       </trans-unit>
+      <trans-unit id="086247a9b57fde6eefee2a0c4752242d">
+        <source>Automatic</source>
+        <target>Automático</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="4994a8ffeba4ac3140beb89e8d41f174">
+        <source>Language</source>
+        <target>Idioma</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="30e32c7c4cf434e9c75e60c14c442541">
+        <source>Portuguese</source>
+        <target>Portugués</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="cb5480c32e71778852b08ae1e8712775">
+        <source>Spanish</source>
+        <target>Español</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="78463a384a5aa4fad5fa73e2f506ecfc">
+        <source>English</source>
+        <target>Inglés</target>
+        <note>Line: </note>
+      </trans-unit>
       <trans-unit id="821b8ee6937cec96c30fdafbfe836d68">
         <source>Stores</source>
         <target>Tiendas</target>
@@ -309,6 +334,16 @@
       <trans-unit id="081bc8cb5dfbca5aea85e8790f45abab">
         <source>Update client when it already exists in Moloni account.</source>
         <target>Actualizar el cliente cuando ya existe en Moloni.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="00ab643bcacb386d73bb44c80575cadb">
+        <source>Customer language</source>
+        <target>Idioma del cliente</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="b9cae52ef3f48103413896f6e3e50cab">
+        <source>Default language for customer's</source>
+        <target>Idioma predeterminado para el cliente</target>
         <note>Line: </note>
       </trans-unit>
       <trans-unit id="33bf4dcf572fe687ed1607bcf4620eca">

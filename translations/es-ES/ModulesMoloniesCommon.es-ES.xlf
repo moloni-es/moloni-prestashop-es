@@ -392,6 +392,11 @@
         <target>Stock</target>
         <note>Line: </note>
       </trans-unit>
+      <trans-unit id="a603905470e2a5b8c13e96b579ef0dba">
+        <source>Debug</source>
+        <target>Debug</target>
+        <note>Line: </note>
+      </trans-unit>
       <trans-unit id="a1fa27779242b4902f7ae3bdd5c6d508">
         <source>Type</source>
         <target>Tipo</target>
