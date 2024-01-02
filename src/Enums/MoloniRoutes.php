@@ -60,9 +60,13 @@ class MoloniRoutes
     public const LOGS = 'moloni_es_logs_home';
     public const LOGS_DELETE = 'moloni_es_logs_delete';
 
-    public const PRODUCTS = 'moloni_es_products_home';
-    public const PRODUCTS_EXPORT_PRODUCT = 'moloni_es_products_export_product';
-    public const PRODUCTS_IMPORT_STOCK = 'moloni_es_products_import_stock';
+    public const MOLONI_PRODUCTS = 'moloni_es_moloni_products_home';
+    public const MOLONI_PRODUCTS_IMPORT_PRODUCT = 'moloni_es_moloni_products_import_product';
+    public const MOLONI_PRODUCTS_IMPORT_STOCK = 'moloni_es_moloni_products_import_stock';
+
+    public const PRESTASHOP_PRODUCTS = 'moloni_es_prestashop_products_home';
+    public const PRESTASHOP_PRODUCTS_EXPORT_PRODUCT = 'moloni_es_prestashop_products_export_product';
+    public const PRESTASHOP_PRODUCTS_EXPORT_STOCK = 'moloni_es_prestashop_products_export_stock';
 
     public const SETTINGS = 'moloni_es_settings_home';
 
@@ -95,9 +99,12 @@ class MoloniRoutes
         self::TOOLS_EXPORT,
         self::LOGS,
         self::LOGS_DELETE,
-        self::PRODUCTS,
-        self::PRODUCTS_EXPORT_PRODUCT,
-        self::PRODUCTS_IMPORT_STOCK,
+        self::PRESTASHOP_PRODUCTS,
+        self::PRESTASHOP_PRODUCTS_EXPORT_PRODUCT,
+        self::PRESTASHOP_PRODUCTS_EXPORT_STOCK,
+        self::MOLONI_PRODUCTS,
+        self::MOLONI_PRODUCTS_IMPORT_PRODUCT,
+        self::MOLONI_PRODUCTS_IMPORT_STOCK,
         self::SETTINGS,
 
         self::DEBUG,

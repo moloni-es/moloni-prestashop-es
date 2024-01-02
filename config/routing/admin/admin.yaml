@@ -26,9 +26,13 @@ moloni_es_logs:
   resource: "logs/logs.yaml"
   prefix: /logs
 
-moloni_es_products:
-  resource: "products/products.yaml"
-  prefix: /products
+moloni_es_prestashop_products:
+  resource: "products/prestashop_products.yaml"
+  prefix: /products/prestashop
+
+moloni_es_moloni_products:
+  resource: "products/moloni_products.yaml"
+  prefix: /products/moloni
 
 moloni_es_debug:
   resource: "debug/debug.yaml"

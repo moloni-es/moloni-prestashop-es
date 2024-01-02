@@ -3,7 +3,7 @@ import {DocumentStatus} from '../enums/DocumentStatus';
 import {DocumentType} from '../enums/DocumentType';
 import {Boolean} from '../enums/Boolean';
 
-export default class MoloniSettings {
+export default class Settings {
     constructor() {
         this.settingIdPrefix = 'MoloniSettings_';
     }

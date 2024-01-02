@@ -1,0 +1,58 @@
+<tr class="product__row"
+    data-prestashop-id="{{ product.prestashop_id }}"
+    data-moloni-id="{{ product.moloni_id }}">
+    <td>
+        {{ product.name }}
+    </td>
+    <td>
+        {{ product.reference }}
+    </td>
+    <td>
+        {{ product.type|trans({}, 'Modules.Molonies.Common') }}
+    </td>
+    <td>
+        {% if product.notices %}
+            {% for notice in product.notices %}
+                {{ notice[0]|trans(notice[1]|default({}), 'Modules.Molonies.Errors') }} <br>
+            {% endfor %}
+        {% else %}
+            ---
+        {% endif %}
+    </td>
+    <td class="text-center">
+        <div class="btn-group">
+            <button class="btn btn-primary dropdown-toggle"
+                    type="button"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false">
+                {{ 'Actions'|trans({}, 'Modules.Molonies.Common') }}
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                <a class="dropdown-item"
+                   href="{{ getAdminLink('AdminProducts', true, {'id_product': product.prestashop_id, 'updateproduct': ''}) }}"
+                   target="_blank">
+                    {{ 'View in Prestashop'|trans({}, 'Modules.Molonies.Common') }}
+                </a>
+
+                {% if product.moloni_url is defined %}
+                    <a class="dropdown-item" href="{{ product.moloni_url }}" target="_blank">
+                        {{ 'View in Moloni'|trans({}, 'Modules.Molonies.Common') }}
+                    </a>
+                {% endif %}
+
+                {% if product.missing_product %}
+                    <button class="dropdown-item export--product" target="_blank">
+                        {{ 'Export product to Moloni'|trans({}, 'Modules.Molonies.Common') }}
+                    </button>
+                {% endif %}
+
+                {% if product.uneven_stock %}
+                    <button class="dropdown-item export--stock" target="_blank">
+                        {{ 'Export stock to Moloni'|trans({}, 'Modules.Molonies.Common') }}
+                    </button>
+                {% endif %}
+            </div>
+        </div>
+    </td>
+</tr>

@@ -1,0 +1,19 @@
+moloni_es_prestashop_products_home:
+  path: /
+  methods: [GET]
+  defaults:
+    _controller: 'Moloni\Controller\Admin\Products\PrestashopProducts::home'
+    _legacy_controller: 'MoloniTools'
+    _legacy_link: 'MoloniTools'
+
+moloni_es_prestashop_products_export_product:
+  path: /exportProduct
+  methods: [POST]
+  defaults:
+    _controller: 'Moloni\Controller\Admin\Products\PrestashopProducts::exportProduct'
+
+moloni_es_prestashop_products_export_stock:
+  path: /exportStock
+  methods: [POST]
+  defaults:
+    _controller: 'Moloni\Controller\Admin\Products\PrestashopProducts::exportStock'
