@@ -2,7 +2,7 @@ import CreateSlug from "../helpers/createSlug";
 import MakeRequest from "../helpers/makeRequest";
 import DrawRegistrationErrors from "../helpers/drawRegistrationErrors";
 
-export default class MoloniRegistration {
+export default class Registration {
     constructor() {
         this.registrationIdPrefix = 'MoloniRegistration_';
     }

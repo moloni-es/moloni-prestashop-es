@@ -92,7 +92,7 @@
 
             <div class="d-flex border-top">
                 <div class="ml-py-2">
-                    <b>{{ "List products"|trans({}, 'Modules.Molonies.Tools') }}</b>
+                    <b>{{ "List Prestashop products"|trans({}, 'Modules.Molonies.Tools') }}</b>
 
                     <p class="small-text text-muted">
                         {{ "List all prestashop products and the corresponding Moloni product."|trans({}, 'Modules.Molonies.Tools') }}<br>
@@ -100,8 +100,24 @@
                     </p>
                 </div>
                 <div class="d-flex justify-content-center align-items-center ml-auto">
-                    <a class="btn btn-primary" href="{{ path(productsRoutes) }}">
-                        {{ 'View products'|trans({}, 'Modules.Molonies.Tools') }}
+                    <a class="btn btn-primary" href="{{ path(productsPrestashopRoutes) }}">
+                        {{ 'View Prestashop products'|trans({}, 'Modules.Molonies.Tools') }}
+                    </a>
+                </div>
+            </div>
+
+            <div class="d-flex border-top">
+                <div class="ml-py-2">
+                    <b>{{ "List Moloni products"|trans({}, 'Modules.Molonies.Tools') }}</b>
+
+                    <p class="small-text text-muted">
+                        {{ "List all Moloni products and the corresponding Prestashop product."|trans({}, 'Modules.Molonies.Tools') }}<br>
+                        {{ "This page allow to verify if the product stock are updated, if they exist in Prestashop or if there are some problems."|trans({}, 'Modules.Molonies.Tools') }}
+                    </p>
+                </div>
+                <div class="d-flex justify-content-center align-items-center ml-auto">
+                    <a class="btn btn-primary" href="{{ path(productsMoloniRoutes) }}">
+                        {{ 'View Moloni products'|trans({}, 'Modules.Molonies.Tools') }}
                     </a>
                 </div>
             </div>
@@ -169,7 +185,7 @@
                 exportStocksAction: "{{ path(exportStocksRoute) }}"
             };
 
-            window.moloniTools.startObservers(props);
+            window.moloni.Tools.startObservers(props);
         });
     </script>
 {% endblock %}

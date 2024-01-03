@@ -25,16 +25,15 @@
 namespace Moloni\Builders\PrestashopProduct;
 
 use Combination;
-use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\Interfaces\BuilderInterface;
 use Moloni\Builders\PrestashopProduct\Helpers\Combinations\FindOrCreateCombination;
 use Moloni\Builders\PrestashopProduct\Helpers\Combinations\UpdatePrestaCombinationImage;
-use Moloni\Builders\PrestashopProduct\Helpers\ParseMoloniStock;
 use Moloni\Builders\PrestashopProduct\Helpers\UpdatePrestaProductStock;
 use Moloni\Enums\Boolean;
 use Moloni\Enums\SyncFields;
-use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\Product\MoloniProductCombinationException;
+use Moloni\Helpers\Stock;
+use Moloni\Helpers\Warehouse;
 use Moloni\Tools\Logs;
 use Moloni\Tools\Settings;
 use Moloni\Traits\AttributesTrait;
@@ -479,29 +478,10 @@ class ProductCombination implements BuilderInterface
         $warehouseId = Settings::get('syncStockToPrestashopWarehouse');
 
         if (empty($warehouseId)) {
-            $params = [
-                'options' => [
-                    'filter' => [
-                        'field' => 'isDefault',
-                        'comparison' => 'eq',
-                        'value' => '1',
-                    ],
-                ],
-            ];
-
-            try {
-                $mutation = MoloniApiClient::warehouses()
-                    ->queryWarehouses($params);
-
-                if (!empty($mutation)) {
-                    $warehouseId = $mutation[0]['warehouseId'];
-                }
-            } catch (MoloniApiException $e) {
-                $warehouseId = 1;
-            }
+            $warehouseId = Warehouse::getCompanyDefaultWarehouse();
         }
 
-        $this->warehouseId = (int) $warehouseId;
+        $this->warehouseId = (int)$warehouseId;
 
         return $this;
     }
@@ -526,7 +506,7 @@ class ProductCombination implements BuilderInterface
     public function setStock(): ProductCombination
     {
         if ($this->combinationHasStock()) {
-            $this->stock = (new ParseMoloniStock($this->moloniVariant, $this->warehouseId))->getStock();
+            $this->stock = Stock::getMoloniStock($this->moloniVariant, $this->warehouseId);
         }
 
         return $this;

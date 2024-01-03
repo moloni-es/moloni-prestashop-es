@@ -46,10 +46,10 @@
 {% block javascripts %}
 <script>
     $(document).ready(function () {
-        window.moloniLogin.startObservers();
+        window.moloni.Login.startObservers();
 
         {% if has_old_tables %}
-            window.moloniLogin.disableLogin();
+            window.moloni.Login.disableLogin();
         {% endif %}
     });
 </script>

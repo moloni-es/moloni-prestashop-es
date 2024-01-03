@@ -135,8 +135,10 @@ class DummyTranslations
         $this->translator->trans('Product without stock active in Moloni.', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Product stock do not match (Moloni: {0}, Prestashop: {1}).', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Product combination stock do not match (Moloni: {0}, Prestashop: {1}).', [], 'Modules.Molonies.Errors');
+        $this->translator->trans('Product does not have a reference set in Prestashop.', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Combination not found ({0}).', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Product does not exist in current Moloni company.', [], 'Modules.Molonies.Errors');
+        $this->translator->trans('Product does not exist in current Prestashop store.', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Product is invisible in Moloni. Cannot be used in document creation.', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Error on hook "{0}"', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Error fetching fiscal zone tax settings', [], 'Modules.Molonies.Errors');

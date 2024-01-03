@@ -1,0 +1,19 @@
+moloni_es_moloni_products_home:
+  path: /
+  methods: [GET]
+  defaults:
+    _controller: 'Moloni\Controller\Admin\Products\MoloniProducts::home'
+    _legacy_controller: 'MoloniTools'
+    _legacy_link: 'MoloniTools'
+
+moloni_es_moloni_products_import_product:
+  path: /importProduct
+  methods: [POST]
+  defaults:
+    _controller: 'Moloni\Controller\Admin\Products\MoloniProducts::importProduct'
+
+moloni_es_moloni_products_import_stock:
+  path: /importStock
+  methods: [POST]
+  defaults:
+    _controller: 'Moloni\Controller\Admin\Products\MoloniProducts::importStock'

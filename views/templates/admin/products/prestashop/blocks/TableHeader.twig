@@ -1,0 +1,51 @@
+<thead class="with-filters">
+<tr class="column-headers">
+    <th scope="col">
+        {{ 'Name'|trans({}, 'Modules.Molonies.Common') }}
+    </th>
+    <th scope="col">
+        {{ 'Reference'|trans({}, 'Modules.Molonies.Common') }}
+    </th>
+    <th scope="col" class="text-center">
+        {{ 'Type'|trans({}, 'Modules.Molonies.Common') }}
+    </th>
+    <th scope="col">
+        {{ 'Notices'|trans({}, 'Modules.Molonies.Common') }}
+    </th>
+    <th scope="col" class="text-center"></th>
+</tr>
+
+<tr class="column-filters">
+    <td>
+        <input type="text"
+               class="form-control"
+               placeholder="{{ 'Search by name'|trans({}, 'Modules.Molonies.Common') }}"
+               value="{{ filters.name|default('') }}"
+               name="filters[name]"/>
+    </td>
+    <td>
+        <input type="text"
+               class="form-control"
+               placeholder="{{ 'Search reference'|trans({}, 'Modules.Molonies.Common') }}"
+               value="{{ filters.reference|default('') }}"
+               name="filters[reference]"/>
+    </td>
+    <td></td>
+    <td></td>
+    <td class="text-center">
+        <button type="submit"
+                class="btn btn-primary"
+                id="filters_search"
+                disabled="">
+            <i class="material-icons">search</i>
+            {{ 'Search'|trans({}, 'Modules.Molonies.Common') }}
+        </button>
+
+        {% if filters is not empty %}
+            <a type="button" class="btn btn-link" href="{{ path(thisRoute) }}">
+                <i class="material-icons">clear</i> {{ 'Reset'|trans({}, 'Modules.Molonies.Common') }}
+            </a>
+        {% endif %}
+    </td>
+</tr>
+</thead>

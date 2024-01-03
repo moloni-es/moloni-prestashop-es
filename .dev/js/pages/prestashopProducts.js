@@ -2,13 +2,12 @@ import Paginator from "../paginator/paginator";
 import Filters from "../filters/filters";
 import MakeRequest from "../helpers/makeRequest";
 
-export default class MoloniProducts {
+export default class PrestashopProducts {
     constructor() {
     }
 
-    startObservers({thisRoute, ExportStockRoute, ImportStockRoute, ExportProductRoute}) {
+    startObservers({thisRoute, ExportStockRoute, ExportProductRoute}) {
         this.ExportStockRoute = ExportStockRoute;
-        this.ImportStockRoute = ImportStockRoute;
         this.ExportProductRoute = ExportProductRoute;
 
         new Paginator();
@@ -25,7 +24,6 @@ export default class MoloniProducts {
         }
 
         let prestaId = row.attr('data-prestashop-id');
-        let moloniId = row.attr('data-moloni-id');
         let actionsBtn = row.find('.dropdown-toggle');
 
         row.find('.export--product').on('click', () => {
@@ -34,10 +32,6 @@ export default class MoloniProducts {
 
         row.find('.export--stock').on('click', () => {
             this.doAction(this.ExportStockRoute, prestaId, actionsBtn, row);
-        });
-
-        row.find('.import--stock').on('click', () => {
-            this.doAction(this.ImportStockRoute, moloniId, actionsBtn, row);
         });
     }
 

@@ -1,4 +1,4 @@
-export default class MoloniLogin {
+export default class Login {
     constructor() {}
 
     startObservers() {

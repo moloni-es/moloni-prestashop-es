@@ -3,7 +3,7 @@ import ImportStocks from '../tools/imports/importStocks';
 import ExportProducts from '../tools/exports/exportProducts';
 import ExportStocks from '../tools/exports/exportStocks';
 
-export default class MoloniTools {
+export default class Tools {
     constructor() {
     }
 

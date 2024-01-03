@@ -90,8 +90,7 @@ class SettingsFormType extends TranslatorAwareType
             'label' => $this->trans('Synchronize stocks', "Modules.Molonies.Settings"),
             'label_attr' => [
                 'popover' => $this->trans(
-                    'Choose to synchronize the product when a Prestashop product is updated.<br><br>
-                            Ex.: Update a product in Prestashop from 0 stock to 20, and a stock movement will be create in Moloni for that product.',
+                    'Choose to synchronize the product when a Prestashop product is updated. <br><br> Ex.: Update a product in Prestashop from 0 stock to 20, and a stock movement will be create in Moloni for that product.',
                     "Modules.Molonies.Settings"
                 ),
             ],
@@ -112,8 +111,7 @@ class SettingsFormType extends TranslatorAwareType
             'label' => $this->trans('Warehouse', "Modules.Molonies.Settings"),
             'label_attr' => [
                 'popover' => $this->trans(
-                    'Select which warehouse will be used during the product insert process or during the product stock synchronization process.
-                            This warehouse will be used when a product is inserted or updated <b>in Prestashop.</b>',
+                    'Select which warehouse will be used during the product insert process or during the product stock synchronization process. This warehouse will be used when a product is inserted or updated <b>in Prestashop.</b>',
                     "Modules.Molonies.Settings"
                 ),
             ],
@@ -137,8 +135,7 @@ class SettingsFormType extends TranslatorAwareType
             'label' => $this->trans('Create products', "Modules.Molonies.Settings"),
             'label_attr' => [
                 'popover' => $this->trans(
-                    'Choose if a product should be created in Moloni when it is <b>created</b> in Prestashop.<br><br>
-                            Ex.: Insert a new product in Prestashop and that same product will be automaticaly created in Moloni.',
+                    'Choose if a product should be created in Moloni when it is <b>created</b> in Prestashop. <br><br> Ex.: Insert a new product in Prestashop and that same product will be automaticaly created in Moloni.',
                     "Modules.Molonies.Settings"
                 ),
             ],
@@ -156,8 +153,7 @@ class SettingsFormType extends TranslatorAwareType
             'label' => $this->trans('Update products', "Modules.Molonies.Settings"),
             'label_attr' => [
                 'popover' => $this->trans(
-                    'Choose if a product should be updated in Moloni when it is <b>updated</b> in Prestashop.<br><br>
-                            Ex.: Update a product in Prestashop and that same product will be automaticaly created or updated in Moloni.',
+                    'Choose if a product should be updated in Moloni when it is <b>updated</b> in Prestashop. <br><br> Ex.: Update a product in Prestashop and that same product will be automaticaly created or updated in Moloni.',
                     "Modules.Molonies.Settings"
                 ),
             ],
@@ -175,8 +171,7 @@ class SettingsFormType extends TranslatorAwareType
             'label' => $this->trans('Synchronize stocks', "Modules.Molonies.Settings"),
             'label_attr' => [
                 'popover' => $this->trans(
-                    'Choose to synchronize the product when a Moloni product is updated.<br><br>
-                            Ex.: Update a product in Moloni from 0 stock to 20 and the product stock in Prestashop will be updated.',
+                    'Choose to synchronize the product when a Moloni product is updated. <br><br> Ex.: Update a product in Moloni from 0 stock to 20 and the product stock in Prestashop will be updated.',
                     "Modules.Molonies.Settings"
                 ),
             ],
@@ -195,8 +190,7 @@ class SettingsFormType extends TranslatorAwareType
                 'label' => $this->trans('Warehouse', "Modules.Molonies.Settings"),
                 'label_attr' => [
                     'popover' => $this->trans(
-                        'Select which warehouse will be used during the product insert process or during the product stock synchronization process.<br><br>
-                                This warehouse will be used when a product is inserted or updated <b>in Moloni.</b>',
+                        'Select which warehouse will be used during the product insert process or during the product stock synchronization process. <br><br> This warehouse will be used when a product is inserted or updated <b>in Moloni.</b>',
                         "Modules.Molonies.Settings"
                     ),
                 ],
@@ -217,8 +211,7 @@ class SettingsFormType extends TranslatorAwareType
             'label' => $this->trans('Create products', "Modules.Molonies.Settings"),
             'label_attr' => [
                 'popover' => $this->trans(
-                    'Choose if a product should be created in Prestashop when it is <b>created</b> in Moloni.<br><br>
-                            Ex.: Insert a new product in Moloni and that same product will be automaticaly created in Prestashop.',
+                    'Choose if a product should be created in Prestashop when it is <b>created</b> in Moloni. <br><br> Ex.: Insert a new product in Moloni and that same product will be automaticaly created in Prestashop.',
                     "Modules.Molonies.Settings"
                 ),
             ],
@@ -236,8 +229,7 @@ class SettingsFormType extends TranslatorAwareType
             'label' => $this->trans('Update products', "Modules.Molonies.Settings"),
             'label_attr' => [
                 'popover' => $this->trans(
-                    'Choose if a product should be updated in Prestashop when it is <b>updated</b> in Moloni.<br><br>
-                            Ex.: Update a product in Moloni and that same product will be automaticaly created or updated in Prestashop.',
+                    'Choose if a product should be updated in Prestashop when it is <b>updated</b> in Moloni. <br><br> Ex.: Update a product in Moloni and that same product will be automaticaly created or updated in Prestashop.',
                     "Modules.Molonies.Settings"
                 ),
             ],
@@ -255,8 +247,7 @@ class SettingsFormType extends TranslatorAwareType
             'label' => $this->trans('Product fields', "Modules.Molonies.Settings"),
             'label_attr' => [
                 'popover' => $this->trans(
-                    'You can select which fields should be updated when a product update occurs.<br><br>
-                            This is useful to have for example different prices on your online store and in your Moloni account, or different names.',
+                    'You can select which fields should be updated when a product update occurs. <br><br> This is useful to have for example different prices on your online store and in your Moloni account, or different names.',
                     "Modules.Molonies.Settings"
                 ),
             ],
@@ -277,8 +268,7 @@ class SettingsFormType extends TranslatorAwareType
             'label' => $this->trans('Orders since', "Modules.Molonies.Settings"),
             'label_attr' => [
                 'popover' => $this->trans(
-                    'By default, we will list all orders that were not converted into Moloni documents.<br><br>
-                            If you are migrating from an old invoicing software to Moloni, you may choose to list only orders after a selected date.',
+                    'By default, we will list all orders that were not converted into Moloni documents. <br><br> If you are migrating from an old invoicing software to Moloni, you may choose to list only orders after a selected date.',
                     "Modules.Molonies.Settings"
                 ),
             ],
@@ -295,8 +285,7 @@ class SettingsFormType extends TranslatorAwareType
             'label' => $this->trans('Order status', "Modules.Molonies.Settings"),
             'label_attr' => [
                 'popover' => $this->trans(
-                    'When an order is in one of the following selected status, it will become available to be converted into a document.<br><br>
-                            If you have the option <b>"Auto create documents"</b> activated, when an order passes in one of the selected states, we will try to automatically create a document for it.',
+                    'When an order is in one of the following selected status, it will become available to be converted into a document. <br><br> If you have the option <b>"Auto create documents"</b> activated, when an order passes in one of the selected states, we will try to automatically create a document for it.',
                     "Modules.Molonies.Settings"
                 ),
             ],
@@ -337,9 +326,7 @@ class SettingsFormType extends TranslatorAwareType
             'label' => $this->trans('Customer code prefix', "Modules.Molonies.Settings"),
             'label_attr' => [
                 'popover' => $this->trans(
-                    'A customer needs to have a unique identifier in Moloni, and you can use this option to add a prefix to that identifier.<br><br>
-                            If you set a prefix of "PS_", your customer numbers will be incremented for example as PS_1, PS_2, PS_3, etc.<br><br>
-                            This is useful to easily identify which customers were created by this module.',
+                    'A customer needs to have a unique identifier in Moloni, and you can use this option to add a prefix to that identifier. <br><br> If you set a prefix of "PS_", your customer numbers will be incremented for example as PS_1, PS_2, PS_3, etc. <br><br> This is useful to easily identify which customers were created by this module.',
                     "Modules.Molonies.Settings"
                 ),
             ],
@@ -367,6 +354,24 @@ class SettingsFormType extends TranslatorAwareType
         return $this;
     }
 
+    private function clientLanguage(): SettingsFormType
+    {
+        $this->builder->add('clientLanguage', ChoiceType::class, [
+            'label' => $this->trans('Customer language', "Modules.Molonies.Settings"),
+            'label_attr' => [
+                'popover' => $this->trans(
+                    "Default language for customer's",
+                    "Modules.Molonies.Settings"
+                ),
+            ],
+            'choices' => $this->options->getCustomerLanguage(),
+            'placeholder' => false,
+            'required' => false,
+        ]);
+
+        return $this;
+    }
+
     private function documentSet(): SettingsFormType
     {
         $this->builder
@@ -374,8 +379,7 @@ class SettingsFormType extends TranslatorAwareType
                 'label' => $this->trans('Document set', "Modules.Molonies.Settings"),
                 'label_attr' => [
                     'popover' => $this->trans(
-                        'Select which Moloni document set you want to use for your documents.<br><br>
-                                You can manage your company document sets directly in your Moloni account.',
+                        'Select which Moloni document set you want to use for your documents. <br><br> You can manage your company document sets directly in your Moloni account.',
                         "Modules.Molonies.Settings"
                     ),
                 ],
@@ -433,8 +437,7 @@ class SettingsFormType extends TranslatorAwareType
                 'label' => $this->trans('Document status', "Modules.Molonies.Settings"),
                 'label_attr' => [
                     'popover' => $this->trans(
-                        'You can issue your documents as draft and close them later, or you can insert them directly as closed.
-                            <br><br>Before closing the document we will first confirm that the total value of the order matches with total value of the document.',
+                        'You can issue your documents as draft and close them later, or you can insert them directly as closed. <br><br> Before closing the document we will first confirm that the total value of the order matches with total value of the document.',
                         "Modules.Molonies.Settings"
                     ),
                 ],
@@ -508,8 +511,7 @@ class SettingsFormType extends TranslatorAwareType
                 'label' => $this->trans('Loading address', "Modules.Molonies.Settings"),
                 'label_attr' => [
                     'popover' => $this->trans(
-                        'Select which shipping address should be used for your shipping documents<br>
-                                You can select between your company address, your store addresses or set a custom one.',
+                        'Select which shipping address should be used for your shipping documents <br> You can select between your company address, your store addresses or set a custom one.',
                         "Modules.Molonies.Settings"
                     ),
                 ],
@@ -655,8 +657,7 @@ class SettingsFormType extends TranslatorAwareType
                 'placeholder' => $this->trans('Please select an option', "Modules.Molonies.Settings"),
                 'label_attr' => [
                     'popover' => $this->trans(
-                        'Choose which measurement unit should be used by default on your Products.<br><br>
-                               You can manage your measurement units in your Moloni account.',
+                        'Choose which measurement unit should be used by default on your Products. <br><br> You can manage your measurement units in your Moloni account.',
                         "Modules.Molonies.Settings"
                     ),
                 ],
@@ -755,6 +756,7 @@ class SettingsFormType extends TranslatorAwareType
             ->documentWarehouse()
             ->clientPrefix()
             ->clientUpdate()
+            ->clientLanguage()
             // When document stauts is closed
             ->billOfLading()
             ->loadAddress()

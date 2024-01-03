@@ -25,21 +25,20 @@
 namespace Moloni\Builders;
 
 use Configuration;
-use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\Interfaces\BuilderInterface;
 use Moloni\Builders\PrestashopProduct\Helpers\Combinations\CreateMappingsAfterPrestaProductCreateOrUpdate;
 use Moloni\Builders\PrestashopProduct\Helpers\Combinations\ProcessAttributesGroup;
 use Moloni\Builders\PrestashopProduct\Helpers\FindTaxGroupFromMoloniTax;
 use Moloni\Builders\PrestashopProduct\Helpers\GetPrestashopCategoriesFromMoloniCategoryId;
-use Moloni\Builders\PrestashopProduct\Helpers\ParseMoloniStock;
 use Moloni\Builders\PrestashopProduct\Helpers\UpdatePrestaProductImage;
 use Moloni\Builders\PrestashopProduct\ProductCombination;
 use Moloni\Enums\Boolean;
 use Moloni\Enums\ProductVisibility;
 use Moloni\Enums\SyncFields;
-use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\Product\MoloniProductCategoryException;
 use Moloni\Exceptions\Product\MoloniProductException;
+use Moloni\Helpers\Stock;
+use Moloni\Helpers\Warehouse;
 use Moloni\Tools\Logs;
 use Moloni\Tools\Settings;
 use Moloni\Traits\LogsTrait;
@@ -589,25 +588,7 @@ class PrestashopProductWithCombinations implements BuilderInterface
         $warehouseId = Settings::get('syncStockToPrestashopWarehouse');
 
         if (empty($warehouseId)) {
-            $params = [
-                'options' => [
-                    'filter' => [
-                        'field' => 'isDefault',
-                        'comparison' => 'eq',
-                        'value' => "1"
-                    ],
-                ]
-            ];
-
-            try {
-                $mutation = MoloniApiClient::warehouses()->queryWarehouses($params);
-
-                if (!empty($mutation)) {
-                    $warehouseId = $mutation[0]['warehouseId'];
-                }
-            } catch (MoloniApiException $e) {
-                $warehouseId = 1;
-            }
+            $warehouseId = Warehouse::getCompanyDefaultWarehouse();
         }
 
         $this->warehouseId = (int)$warehouseId;
@@ -635,7 +616,7 @@ class PrestashopProductWithCombinations implements BuilderInterface
     public function setStock(): PrestashopProductWithCombinations
     {
         if ($this->productHasStock()) {
-            $this->stock = (new ParseMoloniStock($this->moloniProduct, $this->warehouseId))->getStock();
+            $this->stock = Stock::getMoloniStock($this->moloniProduct, $this->warehouseId);
         }
 
         return $this;

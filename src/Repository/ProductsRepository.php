@@ -114,8 +114,8 @@ class ProductsRepository
 
         if (!empty($filters['reference'])) {
             $query
-                ->andWhere($expr->like('p.reference', ':reference'))
-                ->setParameter('reference', '%' . $filters['reference'] . '%');
+                ->andWhere('p.reference = :reference')
+                ->setParameter('reference', $filters['reference']);
         }
 
         if (!empty($filters['name'])) {

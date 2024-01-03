@@ -28,7 +28,8 @@ use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\Interfaces\BuilderItemInterface;
 use Moloni\Enums\Boolean;
 use Moloni\Enums\Countries;
-use Moloni\Enums\SaftType;
+use Moloni\Enums\TaxFiscalZoneType;
+use Moloni\Enums\TaxType;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\MoloniException;
 
@@ -46,11 +47,18 @@ class TaxFromRate implements BuilderItemInterface
     protected $taxId = 0;
 
     /**
-     * Tax saft type
+     * Tax type
      *
      * @var int
      */
     protected $type;
+
+    /**
+     * Fiscal zone finance type
+     *
+     * @var int
+     */
+    protected $fiscalZoneType;
 
     /**
      * Tax name
@@ -127,7 +135,7 @@ class TaxFromRate implements BuilderItemInterface
                     'visible' => Boolean::YES,
                     'name' => $this->name,
                     'fiscalZone' => $this->fiscalZone['code'],
-                    'fiscalZoneFinanceType' => 1,
+                    'fiscalZoneFinanceType' => $this->fiscalZoneType,
                     'countryId' => $this->fiscalZone['countryId'],
                     'type' => $this->type,
                     'isDefault' => false,
@@ -203,6 +211,7 @@ class TaxFromRate implements BuilderItemInterface
     {
         $this
             ->setType()
+            ->setFiscalZoneType()
             ->setComulative()
             ->setName();
 
@@ -230,7 +239,19 @@ class TaxFromRate implements BuilderItemInterface
      */
     public function setType(): TaxFromRate
     {
-        $this->type = SaftType::IVA;
+        $this->type = TaxType::PERCENTAGE;
+
+        return $this;
+    }
+
+    /**
+     * Defines tax type
+     *
+     * @return $this
+     */
+    public function setFiscalZoneType(): TaxFromRate
+    {
+        $this->fiscalZoneType = TaxFiscalZoneType::VAT;
 
         return $this;
     }
@@ -302,6 +323,16 @@ class TaxFromRate implements BuilderItemInterface
                         'field' => 'flags',
                         'comparison' => 'eq',
                         'value' => '0'
+                    ],
+                    [
+                        'field' => 'type',
+                        'comparison' => 'eq',
+                        'value' => (string)$this->type
+                    ],
+                    [
+                        'field' => 'fiscalZoneFinanceType',
+                        'comparison' => 'eq',
+                        'value' => (string)$this->fiscalZoneType
                     ]
                 ],
                 'search' => [

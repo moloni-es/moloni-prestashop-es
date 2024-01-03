@@ -75,6 +75,7 @@ class SettingsFormDataProvider implements FormDataProviderInterface
     private $fiscalZoneBasedOn = [];
     private $syncFields = [];
     private $addresses = [];
+    private $customerLanguage = [];
     private $companyName = '';
 
     public function __construct(
@@ -226,6 +227,16 @@ class SettingsFormDataProvider implements FormDataProviderInterface
             $this->trans('Custom address', 'Modules.Molonies.Settings') => LoadAddress::CUSTOM,
         ];
 
+        $this->customerLanguage = [
+            $this->trans('Automatic', 'Modules.Molonies.Settings') => 0,
+            $this->trans('Language', 'Modules.Molonies.Settings') => [
+                $this->trans('Portuguese', 'Modules.Molonies.Settings') => Languages::PT,
+                $this->trans('Spanish', 'Modules.Molonies.Settings') => Languages::ES,
+                $this->trans('English', 'Modules.Molonies.Settings') => Languages::EN,
+            ]
+        ];
+
+
         $this->companyName = $companyQuery['name'];
 
         if (!empty($this->stores)) {
@@ -367,5 +378,13 @@ class SettingsFormDataProvider implements FormDataProviderInterface
     public function getDocumentReference(): array
     {
         return $this->documentReference;
+    }
+
+    /**
+     * @return array
+     */
+    public function getCustomerLanguage(): array
+    {
+        return $this->customerLanguage;
     }
 }

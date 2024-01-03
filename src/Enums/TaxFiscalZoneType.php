@@ -28,9 +28,9 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class SaftType
+class TaxFiscalZoneType
 {
-    public const IVA = 1;
-    public const IS = 2;
+    public const VAT = 1;
+    public const STAMP_TAX = 2;
     public const OTHER = 3;
 }

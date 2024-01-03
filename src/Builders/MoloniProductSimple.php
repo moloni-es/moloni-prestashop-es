@@ -45,6 +45,7 @@ use Moloni\Exceptions\MoloniException;
 use Moloni\Exceptions\Product\MoloniProductCategoryException;
 use Moloni\Exceptions\Product\MoloniProductException;
 use Moloni\Exceptions\Product\MoloniProductTaxException;
+use Moloni\Helpers\Warehouse;
 use Moloni\Tools\Logs;
 use Moloni\Tools\Settings;
 use Moloni\Traits\LogsTrait;
@@ -670,26 +671,10 @@ class MoloniProductSimple implements BuilderInterface
         $warehouseId = (int) Settings::get('syncStockToMoloniWarehouse');
 
         if (in_array($warehouseId, [0, 1])) {
-            $params = [
-                'options' => [
-                    'filter' => [
-                        'field' => 'isDefault',
-                        'comparison' => 'eq',
-                        'value' => '1',
-                    ],
-                ],
-            ];
+            $warehouseId = Warehouse::getCompanyDefaultWarehouse();
 
-            try {
-                $query = MoloniApiClient::warehouses()->queryWarehouses($params);
-
-                if (!empty($query)) {
-                    $warehouseId = $query[0]['warehouseId'];
-                } else {
-                    throw new MoloniProductException('Company does not have a default warehouse, please select one');
-                }
-            } catch (MoloniApiException $e) {
-                throw new MoloniProductException('Error fetching default company warehouse', [], $e->getData());
+            if (empty($warehouseId)) {
+                throw new MoloniProductException('Company does not have a default warehouse, please select one');
             }
         }
 
