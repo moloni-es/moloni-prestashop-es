@@ -24,11 +24,11 @@
 
 namespace Moloni\Actions\Orders;
 
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
 use Order;
 use PrestaShopDatabaseException;
 use PrestaShopException;
-use Doctrine\Persistence\ObjectManager;
-use Doctrine\Persistence\ObjectRepository;
 use Moloni\Entity\MoloniOrderDocuments;
 use Moloni\Exceptions\MoloniException;
 use Moloni\Repository\MoloniOrderDocumentsRepository;
@@ -56,14 +56,14 @@ abstract class AbstractOrderAction
     /**
      * Entity manager
      *
-     * @var ObjectManager
+     * @var EntityManager
      */
     protected $entityManager;
 
     /**
      * Documents entity repository
      *
-     * @var ObjectRepository|MoloniOrderDocumentsRepository
+     * @var EntityRepository|MoloniOrderDocumentsRepository
      */
     protected $documentRepository;
 
@@ -71,13 +71,13 @@ abstract class AbstractOrderAction
      * Constructor
      *
      * @param int|string|null $orderId
-     * @param ObjectManager $entityManager
+     * @param EntityManager $entityManager
      *
      * @throws MoloniException
      * @throws PrestaShopDatabaseException
      * @throws PrestaShopException
      */
-    public function __construct($orderId, ObjectManager $entityManager)
+    public function __construct($orderId, EntityManager $entityManager)
     {
         if (!is_numeric($orderId) || $orderId < 0) {
 

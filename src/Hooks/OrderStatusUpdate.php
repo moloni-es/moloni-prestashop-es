@@ -25,7 +25,7 @@
 
 namespace Moloni\Hooks;
 
-use Doctrine\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManager;
 use Moloni\Actions\Orders\OrderCreateDocument;
 use Moloni\Enums\Boolean;
 use Moloni\Enums\DocumentReference;
@@ -52,7 +52,7 @@ class OrderStatusUpdate extends AbstractHookAction
 
     private $entityManager;
 
-    public function __construct(int $orderId, OrderState $newOrderStatus, ObjectManager $entityManager)
+    public function __construct(int $orderId, OrderState $newOrderStatus, EntityManager $entityManager)
     {
         $this->orderId = $orderId;
         $this->newOrderStatus = $newOrderStatus;

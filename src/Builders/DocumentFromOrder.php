@@ -27,7 +27,7 @@ namespace Moloni\Builders;
 use Address;
 use Currency;
 use DateTime;
-use Doctrine\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManager;
 use Moloni\Api\MoloniApi;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\Document\OrderCustomer;
@@ -76,7 +76,7 @@ class DocumentFromOrder implements BuilderInterface
     /**
      * Entity manager
      *
-     * @var ObjectManager
+     * @var EntityManager
      */
     protected $entityManager;
 
@@ -277,7 +277,7 @@ class DocumentFromOrder implements BuilderInterface
      *
      * @throws MoloniDocumentException
      */
-    public function __construct(Order $order, array $company, ObjectManager $entityManager)
+    public function __construct(Order $order, array $company, EntityManager $entityManager)
     {
         $this->order = $order;
         $this->company = $company;
