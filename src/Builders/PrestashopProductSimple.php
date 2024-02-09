@@ -548,6 +548,10 @@ class PrestashopProductSimple implements BuilderInterface
 
         if (empty($warehouseId)) {
             $warehouseId = Warehouse::getCompanyDefaultWarehouse();
+
+            if (empty($warehouseId)) {
+                $warehouseId = 1;
+            }
         }
 
         $this->warehouseId = (int)$warehouseId;
