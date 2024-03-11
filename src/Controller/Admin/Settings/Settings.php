@@ -72,7 +72,7 @@ class Settings extends MoloniController
         );
     }
 
-    private function getSettingsFormHandler(): FormHandlerInterface
+    private function getSettingsFormHandler(): object
     {
         return $this->get('moloni.settings.form');
     }

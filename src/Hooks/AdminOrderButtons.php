@@ -64,7 +64,7 @@ class AdminOrderButtons extends AbstractHookAction
      *
      * @param array $params
      * @param Router $router
-     * @param ManagerRegistry|LegacyManagerRegistry $doctrine
+     * @param ManagerRegistry|object|LegacyManagerRegistry $doctrine
      * @param TranslatorInterface|Translator $translator
      *
      * @throws TypeException

@@ -31,23 +31,22 @@ if (!defined('_PS_VERSION_')) {
 
 class WebserviceSpecificManagementMoloniResource implements WebserviceSpecificManagementInterface
 {
-    /**
-     * @var WebserviceOutputBuilder
-     */
+    /** @var WebserviceOutputBuilder */
     protected $objOutput;
+
+    /** @var string */
     protected $output;
 
-    /**
-     * @var WebserviceRequest
-     */
+    /** @var WebserviceRequest */
     protected $wsObject;
 
     /**
      * Interface method
      *
+     * @param WebserviceOutputBuilderCore|WebserviceOutputBuilder $obj
      * @return $this
      */
-    public function setObjectOutput(WebserviceOutputBuilderCore $obj): WebserviceSpecificManagementMoloniResource
+    public function setObjectOutput($obj): WebserviceSpecificManagementMoloniResource
     {
         $this->objOutput = $obj;
 
@@ -57,9 +56,9 @@ class WebserviceSpecificManagementMoloniResource implements WebserviceSpecificMa
     /**
      * Interface method
      *
-     * @return WebserviceOutputBuilder
+     * @return WebserviceOutputBuilderCore|WebserviceOutputBuilder
      */
-    public function getObjectOutput(): WebserviceOutputBuilder
+    public function getObjectOutput()
     {
         return $this->objOutput;
     }
@@ -67,9 +66,11 @@ class WebserviceSpecificManagementMoloniResource implements WebserviceSpecificMa
     /**
      * Interface method
      *
+     * @param WebserviceRequestCore|WebserviceRequest $obj
+     *
      * @return $this
      */
-    public function setWsObject(WebserviceRequestCore $obj): WebserviceSpecificManagementMoloniResource
+    public function setWsObject($obj): WebserviceSpecificManagementMoloniResource
     {
         $this->wsObject = $obj;
 
@@ -78,10 +79,8 @@ class WebserviceSpecificManagementMoloniResource implements WebserviceSpecificMa
 
     /**
      * Interface method
-     *
-     * @return WebserviceRequest
      */
-    public function getWsObject(): WebserviceRequest
+    public function getWsObject()
     {
         return $this->wsObject;
     }
@@ -90,7 +89,7 @@ class WebserviceSpecificManagementMoloniResource implements WebserviceSpecificMa
      * Manages the incoming requests
      * Switches between operations
      */
-    public function manage(): void
+    public function manage()
     {
         $request = file_get_contents('php://input');
         $request = json_decode($request, true);
@@ -98,7 +97,7 @@ class WebserviceSpecificManagementMoloniResource implements WebserviceSpecificMa
         if (!isset($request['model'], $request['operation'], $request['productId']) || $request['model'] !== 'Product') {
             $this->output = 'Bad request';
 
-            return;
+            return $this->wsObject->getOutputEnabled();
         }
 
         switch ($request['operation']) {
@@ -114,6 +113,8 @@ class WebserviceSpecificManagementMoloniResource implements WebserviceSpecificMa
         }
 
         $this->output = 'Acknowledge';
+
+        return $this->wsObject->getOutputEnabled();
     }
 
     /**

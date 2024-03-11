@@ -100,7 +100,7 @@ class Registration extends MoloniController
         return new Response(json_encode($response));
     }
 
-    private function getRegistrationFormHandler(): FormHandlerInterface
+    private function getRegistrationFormHandler(): object
     {
         return $this->get('moloni.registration.form');
     }
