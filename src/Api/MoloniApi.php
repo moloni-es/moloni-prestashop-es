@@ -224,6 +224,10 @@ class MoloniApi
             }
         }
 
+        if (empty($data['variables'])) {
+            unset($data['variables']);
+        }
+
         $body = GuzzleWrapper::post(Domains::MOLONI_API, $headers, $data);
 
         return empty($body) ? [] : $body;
