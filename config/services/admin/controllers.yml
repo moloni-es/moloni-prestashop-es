@@ -29,11 +29,18 @@ services:
     arguments:
       - '@moloni.services.context'
 
-  Moloni\Controller\Admin\Products\Products:
-    class: Moloni\Controller\Admin\Products\Products
+  Moloni\Controller\Admin\Products\MoloniProducts:
+    class: Moloni\Controller\Admin\Products\MoloniProducts
     tags: ['controller.service_arguments']
     arguments:
       - '@moloni.services.context'
+
+  Moloni\Controller\Admin\Products\PrestashopProducts:
+    class: Moloni\Controller\Admin\Products\PrestashopProducts
+    tags: ['controller.service_arguments']
+    arguments:
+      - '@moloni.services.context'
+
 
   Moloni\Controller\Admin\Registration\Registration:
     class: Moloni\Controller\Admin\Registration\Registration
