@@ -28,8 +28,6 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use Doctrine\Common\Persistence\ManagerRegistry as LegacyManagerRegistry;
-use Doctrine\Persistence\ManagerRegistry;
 use Moloni\Exceptions\MoloniException;
 use Moloni\Hooks\AdminOrderButtons;
 use Moloni\Hooks\OrderStatusUpdate;
@@ -40,6 +38,8 @@ use Moloni\Services\MoloniContext;
 use Moloni\Tools\SyncLogs;
 use PrestaShopBundle\Translation\TranslatorInterface;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
+
+include_once _PS_MODULE_DIR_ . 'molonies/src/Webservice/WebserviceSpecificManagementMoloniResource.php';
 
 class MoloniEs extends Module
 {
@@ -55,7 +55,7 @@ class MoloniEs extends Module
         $this->tab = 'administration';
 
         $this->need_instance = 1;
-        $this->version = '2.4.02';
+        $this->version = '2.5.00';
         $this->ps_versions_compliancy = ['min' => '1.7.6', 'max' => _PS_VERSION_];
         $this->author = 'Moloni';
         $this->module_key = '63e30380b2942ec15c33bedd4f7ec90e';
@@ -231,10 +231,8 @@ class MoloniEs extends Module
         try {
             $this->initContext();
         } catch (Exception $e) {
-            return [];
+            // catch nothing
         }
-
-        include_once _PS_MODULE_DIR_ . 'molonies/src/Webservice/WebserviceSpecificManagementMoloniResource.php';
 
         return [
             'moloniresource' => [
@@ -324,8 +322,7 @@ class MoloniEs extends Module
         try {
             $this->initContext();
 
-            /** @var ManagerRegistry|LegacyManagerRegistry $doctrine */
-            $doctrine = $this->get('doctrine');
+            $doctrine = $this->getDoctrine();
 
             new OrderStatusUpdate($params['id_order'], $params['newOrderStatus'], $doctrine->getManager());
         } catch (Exception $e) {
@@ -341,12 +338,10 @@ class MoloniEs extends Module
         try {
             $this->initContext();
 
-            /** @var ManagerRegistry|LegacyManagerRegistry $doctrine */
-            $doctrine = $this->get('doctrine');
-            /** @var Router $router */
-            $router = $this->get('router');
             /** @var TranslatorInterface $translator */
             $translator = $this->getTranslator();
+            $doctrine = $this->getDoctrine();
+            $router = $this->getRouter();
 
             new AdminOrderButtons($params, $router, $doctrine, $translator);
         } catch (Exception $e) {
@@ -363,7 +358,46 @@ class MoloniEs extends Module
      */
     private function initContext(): void
     {
-        /** @var ManagerRegistry|LegacyManagerRegistry|false $doctrine */
+        $doctrine = $this->getDoctrine();
+
+        if (empty($doctrine)) {
+            throw new MoloniException('Error loading doctrine');
+        }
+
+        new MoloniContext($doctrine->getManager());
+    }
+
+
+    /**
+     * Get doctrine
+     *
+     * @return Router
+     *
+     * @throws Exception
+     */
+    private function getRouter()
+    {
+        /** @var Router|false $router */
+        $router = $this->get('router');
+
+        if (empty($router)) {
+            $router = $this->getContainer()->get('router');
+        }
+
+        if (empty($router)) {
+            throw new MoloniException('Error loading router');
+        }
+
+        return $router;
+    }
+
+    /**
+     * Get router
+     *
+     * @throws Exception
+     */
+    private function getDoctrine(): object
+    {
         $doctrine = $this->get('doctrine');
 
         if (empty($doctrine)) {
@@ -374,7 +408,7 @@ class MoloniEs extends Module
             throw new MoloniException('Error loading doctrine');
         }
 
-        new MoloniContext($doctrine->getManager());
+        return $doctrine;
     }
 
     /**

@@ -26,14 +26,11 @@ namespace Moloni\Api;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ParseException;
-use GuzzleHttp\Exception\BadResponseException;
-use GuzzleHttp\Post\PostFile;
 use Moloni\Entity\MoloniApp;
 use Moloni\Enums\Domains;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\MoloniLoginException;
+use Moloni\Guzzle\GuzzleWrapper;
 use Moloni\Mails\AuthenticationExpiredMail;
 use Moloni\Tools\Settings;
 
@@ -54,18 +51,6 @@ class MoloniApi
      * @var MoloniApp|null
      */
     private static $app;
-
-    /**
-     * @var Client|null
-     */
-    private static $client;
-
-    /**
-     * Plugin identifier
-     *
-     * @var string
-     */
-    private static $userAgent = 'PrestashopPlugin/2.0';
 
     public function __construct(EntityManager $entityManager, ?MoloniApp $app)
     {
@@ -99,28 +84,6 @@ class MoloniApi
         return self::$app->getCompanyId() ?? 0;
     }
 
-    //          Privates          //
-
-    /**
-     * Create a new Guzzle client
-     *
-     * @return void
-     */
-    public static function initClient()
-    {
-        $headers = ['User-Agent' => self::$userAgent];
-
-        self::$client = new Client();
-
-        $defaultHeaders = self::$client->getDefaultOption('headers');
-
-        if (is_array($defaultHeaders)) {
-            $headers = array_merge($defaultHeaders, $headers);
-        }
-
-        self::$client->setDefaultOption('headers', $headers);
-    }
-
     //          Requests          //
 
     /**
@@ -138,11 +101,10 @@ class MoloniApi
             throw new MoloniLoginException('Code missing');
         }
 
-        if (!self::$client) {
-            self::initClient();
-        }
-
         $url = Domains::MOLONI_API . '/auth/grant';
+        $headers = [
+            'Content-Type' => 'application/json',
+        ];
         $params = [
             'grantType' => 'authorization_code',
             'apiClientId' => self::$app->getClientId(),
@@ -151,26 +113,25 @@ class MoloniApi
         ];
 
         try {
-            $request = self::$client->post($url, ['body' => $params]);
+            $body = GuzzleWrapper::post($url, $headers, $params);
+        } catch (MoloniApiException $e) {
+            throw new MoloniLoginException("The client credentials are invalid", [], $e->getData());
+        }
 
-            if ($request === null) {
-                throw new MoloniLoginException('Request error');
-            }
+        if (empty($body)) {
+            throw new MoloniLoginException('Request error');
+        }
+        if (!$body['accessToken'] || !$body['refreshToken']) {
+            throw new MoloniLoginException('Error fetching tokens', [], ['response' => $body]);
+        }
 
-            $body = json_decode($request->getBody()->getContents(), false);
-
-            if (!$body->accessToken || !$body->refreshToken) {
-                throw new MoloniLoginException('Error fetching tokens', [], ['response' => $body]);
-            }
-
-            self::$app->setAccessToken($body->accessToken);
-            self::$app->setRefreshToken($body->refreshToken);
+        try {
+            self::$app->setAccessToken($body['accessToken']);
+            self::$app->setRefreshToken($body['refreshToken']);
             self::$app->setAccessTime(time());
 
             self::$entityManager->persist(self::$app);
             self::$entityManager->flush();
-        } catch (BadResponseException $e) {
-            throw new MoloniLoginException("The client credentials are invalid", [], ['response' => $e->getResponse()->json(), 'params' => $params]);
         } catch (ORMException $e) {
             throw new MoloniLoginException($e->getMessage());
         }
@@ -185,11 +146,10 @@ class MoloniApi
      */
     public static function refreshTokens(): bool
     {
-        if (!self::$client) {
-            self::initClient();
-        }
-
         $url = Domains::MOLONI_API . '/auth/grant';
+        $headers = [
+            'Content-Type' => 'application/json',
+        ];
         $params = [
             'grantType' => 'refresh_token',
             'apiClientId' => self::$app->getClientId(),
@@ -198,25 +158,16 @@ class MoloniApi
         ];
 
         try {
-            $request = self::$client->post($url, ['body' => $params]);
+            $body = GuzzleWrapper::post($url, $headers, $params);
 
-            if ($request === null) {
+            if (empty($body)) {
                 throw new MoloniLoginException('Request error');
             }
 
-            $body = json_decode($request->getBody()->getContents(), false);
-
-            if (!$body->accessToken || !$body->refreshToken) {
+            if (!$body['accessToken'] || !$body['refreshToken']) {
                 throw new MoloniLoginException('Error fetching tokens', [], ['response' => $body]);
             }
-
-            self::$app->setAccessToken($body->accessToken);
-            self::$app->setRefreshToken($body->refreshToken);
-            self::$app->setAccessTime(time());
-
-            self::$entityManager->persist(self::$app);
-            self::$entityManager->flush();
-        } catch (BadResponseException|ORMException $e) {
+        } catch (MoloniApiException $e) {
             if (!empty(Settings::get('alertEmail'))) {
                 (new AuthenticationExpiredMail(Settings::get('alertEmail'), ['message' => $e->getMessage()]))->handle();
             }
@@ -225,6 +176,21 @@ class MoloniApi
         } catch (MoloniLoginException $e) {
             if (!empty(Settings::get('alertEmail'))) {
                 (new AuthenticationExpiredMail(Settings::get('alertEmail'), $e->getData()))->handle();
+            }
+
+            return false;
+        }
+
+        try {
+            self::$app->setAccessToken($body['accessToken']);
+            self::$app->setRefreshToken($body['refreshToken']);
+            self::$app->setAccessTime(time());
+
+            self::$entityManager->persist(self::$app);
+            self::$entityManager->flush();
+        } catch (ORMException $e) {
+            if (!empty(Settings::get('alertEmail'))) {
+                (new AuthenticationExpiredMail(Settings::get('alertEmail'), ['message' => $e->getMessage()]))->handle();
             }
 
             return false;
@@ -244,10 +210,6 @@ class MoloniApi
      */
     public static function post(?array $data = []): array
     {
-        if (!self::$client) {
-            self::initClient();
-        }
-
         $headers = [
             'Content-Type' => 'application/json',
         ];
@@ -266,35 +228,9 @@ class MoloniApi
             unset($data['variables']);
         }
 
-        try {
-            $request = self::$client->post(
-                Domains::MOLONI_API,
-                [
-                    'headers' => $headers,
-                    'body' => json_encode($data),
-                ]
-            );
+        $body = GuzzleWrapper::post(Domains::MOLONI_API, $headers, $data);
 
-            if ($request !== null) {
-                $json = $request->getBody()->getContents();
-
-                $response = json_decode($json, true);
-            }
-
-            return $response ?? [];
-        } catch (BadResponseException $e) {
-            try {
-                $response = $e->getResponse() ? $e->getResponse()->json() : [];
-            } catch (ParseException $e) {
-                $response = [
-                    'type' => 'exception:ParseException',
-                    'message' => $e->getMessage(),
-                    'response' => $e->getResponse(),
-                ];
-            }
-
-            throw new MoloniApiException('Request error', [], ['data' => $data, 'response' => $response]);
-        }
+        return empty($body) ? [] : $body;
     }
 
     /**
@@ -309,61 +245,13 @@ class MoloniApi
      */
     public static function postWithFile(?array $operations = [], ?string $map = '', ?array $files = []): array
     {
-        if (!self::$client) {
-            self::initClient();
-        }
-
         if (isset($operations['variables']) && !isset($operations['variables']['companyId'])) {
             $operations['variables']['companyId'] = self::$app->getCompanyId();
         }
 
-        try {
-            $response = [];
-            $request = self::$client->createRequest('POST', Domains::MOLONI_API);
-            $postBody = $request->getBody();
+        $response = GuzzleWrapper::postWithFile($operations, $map, $files, self::$app->getAccessToken());
 
-            if (!empty($operations)) {
-                $postBody->setField('operations', json_encode($operations));
-            }
-
-            if (!empty($map)) {
-                $postBody->setField('map', $map);
-            }
-
-            if (!empty($files)) {
-                foreach ($files as $idx => $file) {
-                    if (!file_exists($file)) {
-                        continue;
-                    }
-
-                    $rawImage = fopen($file, 'rb');
-
-                    if (!empty($rawImage)) {
-                        $postBody->addFile(new PostFile((string)$idx, $rawImage));
-                    }
-                }
-            }
-
-            $request->addHeader('Authorization', 'bearer ' . self::$app->getAccessToken());
-
-            $request = self::$client->send($request);
-
-            if ($request !== null) {
-                $json = $request->getBody()->getContents();
-
-                $response = json_decode($json, true);
-            }
-
-            return $response;
-        } catch (BadResponseException $e) {
-            try {
-                $response = $e->getResponse() ? $e->getResponse()->json() : [];
-            } catch (ParseException $e) {
-                $response = [];
-            }
-
-            throw new MoloniApiException('Request error', [], ['data' => $operations, 'response' => $response]);
-        }
+        return $response ?? [];
     }
 
     //          Verifications          //
