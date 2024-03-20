@@ -37,6 +37,10 @@ use Moloni\Traits\AttributesTrait;
 use Product;
 use StockAvailable;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class VerifyProductForList
 {
     use AttributesTrait;

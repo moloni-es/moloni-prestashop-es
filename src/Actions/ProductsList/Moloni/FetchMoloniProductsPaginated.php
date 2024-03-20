@@ -31,6 +31,10 @@ use Moloni\Api\MoloniApiClient;
 use Moloni\Traits\AttributesTrait;
 use Moloni\Exceptions\MoloniApiException;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class FetchMoloniProductsPaginated
 {
     use AttributesTrait;

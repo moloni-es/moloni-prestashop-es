@@ -33,6 +33,10 @@ use Moloni\Api\MoloniApiClient;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Repository\ProductsRepository;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class FetchPrestashopProductsPaginated
 {
     private $repository;
