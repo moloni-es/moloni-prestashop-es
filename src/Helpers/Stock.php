@@ -26,6 +26,10 @@ declare(strict_types=1);
 
 namespace Moloni\Helpers;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class Stock
 {
     public static function getMoloniStock(array $moloniProduct, ?int $warehouseId = 0): float

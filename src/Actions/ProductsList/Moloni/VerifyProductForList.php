@@ -37,6 +37,10 @@ use Moloni\Enums\Domains;
 use Moloni\Traits\AttributesTrait;
 use Moloni\Builders\PrestashopProduct\Helpers\Combinations\FindOrCreateCombination;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class VerifyProductForList
 {
     use AttributesTrait;

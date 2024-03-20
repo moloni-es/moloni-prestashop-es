@@ -56,7 +56,6 @@ class RegistrationFormDataProvider implements FormDataProviderInterface
 
     public function setData(array $data): void
     {
-        return;
     }
 
     /**
