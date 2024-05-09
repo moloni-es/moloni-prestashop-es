@@ -223,7 +223,6 @@ class PrestashopProductWithCombinations implements BuilderInterface
             ->setName()
             ->setDescription()
             ->setIdentifications()
-            ->setCategories()
             ->setHasStock()
             ->setWarehouseId()
             ->setStock()
@@ -348,6 +347,7 @@ class PrestashopProductWithCombinations implements BuilderInterface
     public function insert(): void
     {
         $this
+            ->setCategories()
             ->setTaxRulesGroupId()
             ->fillPrestaProduct();
 
@@ -377,7 +377,9 @@ class PrestashopProductWithCombinations implements BuilderInterface
      */
     public function update(): void
     {
-        $this->fillPrestaProduct();
+        $this
+            ->setCategories()
+            ->fillPrestaProduct();
 
         try {
             $this->prestashopProduct->save();
@@ -498,6 +500,10 @@ class PrestashopProductWithCombinations implements BuilderInterface
      */
     public function setCategories(): PrestashopProductWithCombinations
     {
+        if (!empty($this->categories)) {
+            return $this;
+        }
+
         $categoryId = $this->moloniProduct['productCategory']['productCategoryId'] ?? 0;
 
         if ($categoryId > 0 && $this->shouldSyncCategories()) {
