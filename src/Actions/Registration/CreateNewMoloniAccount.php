@@ -35,8 +35,6 @@ if (!defined('_PS_VERSION_')) {
 
 class CreateNewMoloniAccount
 {
-    private $agentKey = '6ui8qs7jn3';
-
     private $formData;
 
     /**
@@ -59,7 +57,6 @@ class CreateNewMoloniAccount
     private function handle(): void
     {
         $props = [
-            'agent' => $this->agentKey,
             'administratorName' => $this->formData['username'],
             'administratorEmail' => $this->formData['email'],
             'administratorPwd' => $this->formData['password'],
