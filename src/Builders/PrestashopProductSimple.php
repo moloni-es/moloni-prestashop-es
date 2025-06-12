@@ -210,7 +210,6 @@ class PrestashopProductSimple implements BuilderInterface
             ->setName()
             ->setDescription()
             ->setIdentifications()
-            ->setCategories()
             ->setHasStock()
             ->setWarehouseId()
             ->setStock()
@@ -321,6 +320,7 @@ class PrestashopProductSimple implements BuilderInterface
     public function insert(): void
     {
         $this
+            ->setCategories()
             ->setTaxRulesGroupId()
             ->fillPrestaProduct();
 
@@ -350,7 +350,9 @@ class PrestashopProductSimple implements BuilderInterface
      */
     public function update(): void
     {
-        $this->fillPrestaProduct();
+        $this
+            ->setCategories()
+            ->fillPrestaProduct();
 
         try {
             $this->prestashopProduct->save();
@@ -469,6 +471,10 @@ class PrestashopProductSimple implements BuilderInterface
      */
     public function setCategories(): PrestashopProductSimple
     {
+        if (!empty($this->categories)) {
+            return $this;
+        }
+
         $categoryId = $this->moloniProduct['productCategory']['productCategoryId'] ?? 0;
 
         if ($categoryId > 0 && $this->shouldSyncCategories()) {

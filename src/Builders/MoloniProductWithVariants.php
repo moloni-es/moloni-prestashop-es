@@ -236,7 +236,6 @@ class MoloniProductWithVariants implements BuilderInterface
             ->setVisibility()
             ->setName()
             ->setSummary()
-            ->setCategory()
             ->setHasStock()
             ->setPrice()
             ->setType()
@@ -413,6 +412,8 @@ class MoloniProductWithVariants implements BuilderInterface
      */
     public function insert(): MoloniProductWithVariants
     {
+        $this->setCategory();
+
         $props = $this->toArray();
 
         try {
@@ -453,7 +454,9 @@ class MoloniProductWithVariants implements BuilderInterface
      */
     public function update(): MoloniProductWithVariants
     {
-        $this->beforeUpdate();
+        $this
+            ->setCategory()
+            ->beforeUpdate();
 
         $props = $this->toArray();
 
@@ -752,6 +755,10 @@ class MoloniProductWithVariants implements BuilderInterface
      */
     public function setCategory(): MoloniProductWithVariants
     {
+        if (!empty($this->category)) {
+            return $this;
+        }
+
         if (!$this->shouldSyncCategories()) {
             return $this;
         }
