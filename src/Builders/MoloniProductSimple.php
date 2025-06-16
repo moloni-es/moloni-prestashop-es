@@ -224,7 +224,6 @@ class MoloniProductSimple implements BuilderInterface
             ->setVisibility()
             ->setName()
             ->setSummary()
-            ->setCategory()
             ->setHasStock()
             ->setStock()
             ->setPrice()
@@ -360,6 +359,8 @@ class MoloniProductSimple implements BuilderInterface
      */
     public function insert(): MoloniProductSimple
     {
+        $this->setCategory();
+
         $props = $this->toArray();
 
         try {
@@ -397,7 +398,9 @@ class MoloniProductSimple implements BuilderInterface
      */
     public function update(): MoloniProductSimple
     {
-        $this->beforeUpdate();
+        $this
+            ->setCategory()
+            ->beforeUpdate();
 
         $props = $this->toArray();
 
@@ -692,6 +695,10 @@ class MoloniProductSimple implements BuilderInterface
      */
     public function setCategory(): MoloniProductSimple
     {
+        if (!empty($this->category)) {
+            return $this;
+        }
+
         if (!$this->shouldSyncCategories()) {
             return $this;
         }
