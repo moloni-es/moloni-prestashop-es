@@ -1,0 +1,18 @@
+mutation simplifiedInvoiceUpdate($companyId: Int!,$data: SimplifiedInvoiceUpdate!) {
+  simplifiedInvoiceUpdate(companyId: $companyId,data: $data) {
+    data {
+      documentId
+      status
+      currencyExchangeTotalValue
+      products {
+        documentProductId
+        productId
+      }
+    }
+    errors {
+      field
+      msg
+    }
+  }
+}
+

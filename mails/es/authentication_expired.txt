@@ -2,6 +2,10 @@
 
 Hola,
 
-La autenticación Moloni caducó
+Estás recibiendo este e-mail porque ha habido un error en la obtención de nuevos tokens de autentificación Moloni en tu plugin de Prestashop.
 
-Por favor, inserte sus credenciales de nuevo.
+Por favor, accede al plugin Moloni España dentro del panel de administración de tu tienda Prestashop y confirma el estado de autentificación de tu cuenta.
+
+Si la autenticación ha caducado, por favor, vuelva a realizar el proceso de autenticación.
+
+Si tienes más preguntas o dudas, ponte en contacto con nuestro servicio de atención al cliente.

@@ -1,0 +1,10 @@
+ 
+
+Olá,
+
+Erro no documento Moloni
+
+Ocorreu um erro ao criar um documento Moloni.
+Consulte os ‘logs’ do plugin para obter mais informações.
+
+ID do pedido: {order_id}

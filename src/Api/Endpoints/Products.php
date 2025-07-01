@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -43,22 +44,7 @@ class Products extends Endpoint
      */
     public function queryProduct(?array $variables = []): array
     {
-        $query = 'query product($companyId: Int!,$productId: Int!)
-        {
-            product(companyId: $companyId,productId: $productId)
-            {
-                data
-                {
-                    ' . $this->getProductSegment() . '
-                    ' . $this->getVariantSegment() . '
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = $this->loadQuery('product');
 
         return $this->simplePost($query, $variables);
     }
@@ -74,31 +60,7 @@ class Products extends Endpoint
      */
     public function queryProducts(?array $variables = [], ?bool $singlePage = false): array
     {
-        $query = 'query products($companyId: Int!,$options: ProductOptions)
-                {
-                    products(companyId: $companyId,options: $options)
-                    {
-                        data
-                        {
-                            ' . $this->getProductSegment() . ' 
-                            ' . $this->getVariantSegment() . '                   
-                        }
-                        options
-                        {
-                            pagination
-                            {
-                                page
-                                qty
-                                count
-                            }
-                        }
-                        errors
-                        {
-                            field
-                            msg
-                        }
-                    }
-                }';
+        $query = $this->loadQuery('products');
 
         if ($singlePage === true) {
             return $this->simplePost($query, $variables);
@@ -118,21 +80,7 @@ class Products extends Endpoint
      */
     public function mutationProductCreate(?array $variables = []): array
     {
-        $query = 'mutation productCreate($companyId: Int!,$data: ProductInsert!)
-                {
-                    productCreate(companyId: $companyId,data: $data) 
-                    {
-                        data
-                        {
-                            ' . $this->getProductSegment() . '   
-                            ' . $this->getVariantSegment() . '
-                        }
-                        errors{
-                            field
-                            msg
-                        }
-                    }
-                }';
+        $query = $this->loadMutation('productCreate');
 
         return $this->simplePost($query, $variables);
     }
@@ -148,162 +96,8 @@ class Products extends Endpoint
      */
     public function mutationProductUpdate(?array $variables = []): array
     {
-        $query = 'mutation productUpdate($companyId: Int!,$data: ProductUpdate!)
-                {
-                    productUpdate(companyId: $companyId ,data: $data)
-                    {
-                        data
-                        {
-                            ' . $this->getProductSegment() . '  
-                            ' . $this->getVariantSegment() . '  
-                        }
-                        errors
-                        {
-                            field
-                            msg
-                        }
-                    }
-                }';
+        $query = $this->loadMutation('productUpdate');
 
         return $this->simplePost($query, $variables);
-    }
-
-    //          PRIVATES          //
-
-    /**
-     * Product part of query
-     *
-     * @return string
-     */
-    private function getProductSegment(): string
-    {
-        return '
-            visible
-            name
-            productId
-            type
-            reference
-            summary
-            price
-            priceWithTaxes
-            hasStock
-            stock
-            img
-            deletable
-            identifications
-            {
-                type
-                favorite
-                text
-            }
-            measurementUnit
-            {
-                measurementUnitId
-                name
-            }   
-            warehouse
-            {
-                warehouseId
-            }
-            warehouses
-            {
-                warehouseId
-                stock
-                minStock
-            }
-            productCategory{
-                name
-                productCategoryId
-            }
-            parent
-            {
-                productId
-                name
-            }
-            propertyGroup
-            {
-                propertyGroupId
-                name
-                properties
-                {
-                    propertyId
-                    name
-                    ordering
-                    values
-                    {
-                        propertyValueId
-                        code
-                        value
-                    }
-                }
-            }
-            taxes
-            {
-                tax
-                {
-                    taxId
-                    value
-                    name
-                    fiscalZone
-                }
-                value
-                ordering
-            }
-        ';
-    }
-
-    /**
-     * Variant part of query
-     *
-     * @return string
-     */
-    private function getVariantSegment(): string
-    {
-        return '
-        variants
-        {
-            visible
-            productId
-            name
-            reference
-            summary
-            price
-            img
-            priceWithTaxes
-            hasStock
-            stock
-            deletable
-            warehouse
-            {
-                warehouseId
-            }
-            warehouses
-            {
-                warehouseId
-                stock
-                minStock
-            }
-            identifications
-            {
-                type
-                favorite
-                text
-            } 
-            propertyPairs
-            {
-                propertyId
-                propertyValueId
-                property
-                {
-                    name
-                }
-                propertyValue
-                {
-                    code
-                    value
-                }
-            }
-        }
-        ';
     }
 }

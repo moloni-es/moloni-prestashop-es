@@ -1,4 +1,4 @@
-{% extends '@Modules/molonies/views/templates/admin/Layout.twig' %}
+{% extends view_dir ~ 'Layout.twig' %}
 
 {% block plugin_content %}
     <div class="card">
@@ -9,17 +9,17 @@
         <div class="card-block overflow-auto">
             <table class="table table-striped table-bordered">
                 {# Table header #}
-                {% include '@Modules/molonies/views/templates/admin/logs/blocks/TableHeader.twig' %}
+                {% include view_dir ~ 'logs/blocks/TableHeader.twig' %}
 
                 {# Table body #}
-                {% include '@Modules/molonies/views/templates/admin/logs/blocks/TableBody.twig' %}
+                {% include view_dir ~ 'logs/blocks/TableBody.twig' %}
             </table>
 
             {# Delete Overlay #}
-            {% include '@Modules/molonies/views/templates/admin/logs/overlays/DeleteLogs.twig' %}
+            {% include view_dir ~ 'logs/overlays/DeleteLogs.twig' %}
 
             {# Paginator #}
-            {% include '@Modules/molonies/views/templates/admin/components/Paginator.twig' %}
+            {% include view_dir ~ 'components/Paginator.twig' %}
         </div>
 
         <div class="card-footer">

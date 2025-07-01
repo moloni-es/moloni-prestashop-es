@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -24,10 +25,9 @@
 
 namespace Moloni\Builders\PrestashopProduct\Helpers\Combinations;
 
+use Moloni\Builders\PrestashopProduct\ProductCombination;
 use Moloni\Enums\Boolean;
 use Moloni\Tools\ProductAssociations;
-use Product;
-use Moloni\Builders\PrestashopProduct\ProductCombination;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -43,15 +43,14 @@ class CreateMappingsAfterPrestaProductCreateOrUpdate
      * Construct
      *
      * @param array $moloniProduct
-     * @param Product $prestashopProduct
+     * @param \Product $prestashopProduct
      * @param ProductCombination[] $combinationBuilders
      */
     public function __construct(
-        array   $moloniProduct,
-        Product $prestashopProduct,
-        array   $combinationBuilders
-    )
-    {
+        array $moloniProduct,
+        \Product $prestashopProduct,
+        array $combinationBuilders,
+    ) {
         $this->moloniProduct = $moloniProduct;
         $this->prestashopProduct = $prestashopProduct;
         $this->combinationBuilders = $combinationBuilders;
@@ -67,7 +66,7 @@ class CreateMappingsAfterPrestaProductCreateOrUpdate
         ProductAssociations::deleteByPrestashopId($this->prestashopProduct->id);
         ProductAssociations::deleteByMoloniId($moloniParentId);
 
-        foreach($this->combinationBuilders as $combinationBuilder) {
+        foreach ($this->combinationBuilders as $combinationBuilder) {
             ProductAssociations::add(
                 $moloniParentId,
                 $moloniParentReference,

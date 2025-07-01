@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2023 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -37,11 +38,11 @@ class Stock
         $stock = 0.0;
 
         if ($warehouseId === 1) {
-            $stock = (float)($moloniProduct['stock'] ?? 0);
+            $stock = (float) ($moloniProduct['stock'] ?? 0);
         } else {
             foreach ($moloniProduct['warehouses'] as $warehouse) {
-                if ((int)$warehouse['warehouseId'] === $warehouseId) {
-                    $stock = (float)$warehouse['stock'];
+                if ((int) $warehouse['warehouseId'] === $warehouseId) {
+                    $stock = (float) $warehouse['stock'];
 
                     break;
                 }

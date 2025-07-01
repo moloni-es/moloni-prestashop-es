@@ -16,10 +16,9 @@ services:
       - '@moloni.settings.form_data_provider'
 
   moloni.settings.form_data_provider:
-    class: 'Moloni\Form\Settings\SettingsFormDataProvider'
+    class: Moloni\Form\Settings\SettingsFormDataProvider
     arguments:
-      - '@translator'
-      - '@moloni.repository.settings'
+      - '@moloni.context'
       - '@=service("prestashop.adapter.legacy.context").getLanguage().id'
 
   moloni.settings.form_type:
@@ -32,34 +31,6 @@ services:
       - { name: form.type }
     arguments:
       - '@moloni.settings.form_data_provider'
-
-  # Registration
-
-  moloni.registration.form:
-    class: Moloni\Form\Registration\RegistrationFormHandler
-    public: true
-    autowire: true
-    autoconfigure: false
-    arguments:
-      - '@form.factory'
-      - '@prestashop.core.hook.dispatcher'
-      - '@moloni.registration.form_data_provider'
-
-  moloni.registration.form_data_provider:
-    class: Moloni\Form\Registration\RegistrationFormDataProvider
-    arguments:
-      - '@translator'
-
-  moloni.registration.form_type:
-    class: Moloni\Form\Registration\RegistrationFormType
-    parent: 'form.type.translatable.aware'
-    public: true
-    autowire: true
-    autoconfigure: false
-    tags:
-      - { name: form.type }
-    arguments:
-      - '@moloni.registration.form_data_provider'
 
   # Login
 

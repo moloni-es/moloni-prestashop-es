@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -24,8 +25,9 @@
 
 namespace Moloni\Tools;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Moloni\Entity\MoloniProductAssociations;
+use Moloni\MoloniContext;
 use Moloni\Repository\MoloniProductAssociationsRepository;
 
 if (!defined('_PS_VERSION_')) {
@@ -42,16 +44,25 @@ class ProductAssociations
     private static $associationRepository;
 
     /**
+     * Moloni context
+     *
+     * @var MoloniContext
+     */
+    protected static $context;
+
+    /**
      * Construct
      *
-     * @param EntityManager $entityManager
+     * @param EntityManagerInterface $entityManager
+     * @param MoloniContext $context
      */
-    public function __construct(EntityManager $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, MoloniContext $context)
     {
         /** @var MoloniProductAssociationsRepository $repository */
         $repository = $entityManager->getRepository(MoloniProductAssociations::class);
 
         self::$associationRepository = $repository;
+        self::$context = $context;
     }
 
     //          RETRIEVES          //

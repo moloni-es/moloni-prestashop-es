@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -43,36 +44,7 @@ class Currencies extends Endpoint
      */
     public function queryCurrencies(?array $variables = []): array
     {
-        $query = 'query currencies($options: CurrencyOptions)
-        {
-            currencies(options: $options) 
-            {
-                errors
-                {
-                    field
-                    msg
-                }
-                data
-                {
-                    currencyId
-                    symbol
-                    symbolPosition
-                    numberDecimalPlaces
-                    iso4217
-                    largeCurrency
-                    description
-                }
-                options
-                {
-                    pagination
-                    {
-                        page
-                        qty
-                        count
-                    }
-                }
-            }
-        }';
+        $query = $this->loadQuery('currencies');
 
         return $this->paginatedPost($query, $variables, 'currencies');
     }
@@ -88,42 +60,7 @@ class Currencies extends Endpoint
      */
     public function queryCurrencyExchanges(?array $variables = []): array
     {
-        $query = 'query currencyExchanges($options: CurrencyExchangeOptions)
-        {
-            currencyExchanges(options: $options)
-            {
-                data
-                {
-                    currencyExchangeId
-                    name
-                    exchange
-                    from
-                    {
-                        currencyId
-                        iso4217
-                    }
-                    to
-                    {
-                        currencyId
-                        iso4217
-                    }
-                }
-                options
-                {
-                    pagination
-                    {
-                        page
-                        qty
-                        count
-                    }
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = $this->loadQuery('currencyExchanges');
 
         return $this->paginatedPost($query, $variables, 'currencyExchanges');
     }

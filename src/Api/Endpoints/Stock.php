@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -43,22 +44,7 @@ class Stock extends Endpoint
      */
     public function mutationStockMovementManualEntryCreate(?array $variables = []): array
     {
-        $query = 'mutation stockMovementManualEntryCreate($companyId: Int!,$data: StockMovementManualInsert!)
-                {
-                    stockMovementManualEntryCreate(companyId: $companyId,data: $data)
-                    {
-                        data{
-                            stockMovementId
-                            type
-                            direction
-                            qty
-                        }
-                        errors{
-                            field
-                            msg
-                        }
-                    }
-                }';
+        $query = $this->loadMutation('stockMovementManualEntryCreate');
 
         return $this->simplePost($query, $variables);
     }
@@ -74,22 +60,7 @@ class Stock extends Endpoint
      */
     public function mutationStockMovementManualExitCreate(?array $variables = []): array
     {
-        $query = 'mutation stockMovementManualExitCreate($companyId: Int!,$data: StockMovementManualInsert!)
-                {
-                    stockMovementManualExitCreate(companyId: $companyId,data: $data)
-                    {
-                        data{
-                            stockMovementId
-                            type
-                            direction
-                            qty
-                        }
-                        errors{
-                            field
-                            msg
-                        }
-                    }
-                }';
+        $query = $this->loadMutation('stockMovementManualExitCreate');
 
         return $this->simplePost($query, $variables);
     }

@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -25,7 +26,6 @@
 namespace Moloni\Builders\MoloniProduct;
 
 use Combination;
-use Configuration;
 use Image;
 use Moloni\Builders\MoloniProduct\Helpers\UpdateMoloniProductStock;
 use Moloni\Builders\MoloniProduct\Helpers\Variants\FindVariant;
@@ -37,8 +37,6 @@ use Moloni\Exceptions\Product\MoloniProductException;
 use Moloni\Tools\Settings;
 use Moloni\Traits\LogsTrait;
 use Product;
-use Shop;
-use StockAvailable;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -65,7 +63,7 @@ class ProductVariant
     /**
      * Combination
      *
-     * @var Combination|null
+     * @var \Combination|null
      */
     protected $prestashopCombination;
 
@@ -146,7 +144,6 @@ class ProductVariant
      */
     protected $image = [];
 
-
     /**
      * Fields that will be synced
      *
@@ -157,18 +154,18 @@ class ProductVariant
     /**
      * Constructor
      *
-     * @param Combination $prestashopCombination
+     * @param \Combination $prestashopCombination
      * @param string|null $parentName
      * @param array|null $moloniParentProduct
      * @param array|null $propertyPairs
      * @param array|null $syncFields
      */
     public function __construct(
-        Combination $prestashopCombination,
+        \Combination $prestashopCombination,
         ?string $parentName = '',
         ?array $moloniParentProduct = [],
         ?array $propertyPairs = [],
-        ?array $syncFields = null
+        ?array $syncFields = null,
     ) {
         $this->prestashopCombination = $prestashopCombination;
 
@@ -269,11 +266,7 @@ class ProductVariant
                 $this->shouldWriteLogs()
             );
         } catch (MoloniApiException $e) {
-            throw new MoloniProductException(
-                'Error creating stock movement ({0})',
-                ['{0}' => $this->reference],
-                $e->getData()
-            );
+            throw new MoloniProductException('Error creating stock movement ({0})', ['{0}' => $this->reference], $e->getData());
         }
 
         return $this;
@@ -426,7 +419,7 @@ class ProductVariant
      */
     public function setPrice(): ProductVariant
     {
-        $this->price = Product::getPriceStatic(
+        $this->price = \Product::getPriceStatic(
             $this->prestashopCombination->id_product,
             false,
             $this->prestashopCombination->id
@@ -478,7 +471,7 @@ class ProductVariant
             return $this;
         }
 
-        $this->stock = StockAvailable::getQuantityAvailableByProduct(
+        $this->stock = \StockAvailable::getQuantityAvailableByProduct(
             $this->prestashopCombination->id_product,
             $this->prestashopCombination->id
         );
@@ -493,10 +486,10 @@ class ProductVariant
      */
     public function setImage(): ProductVariant
     {
-        $languageId = (int) Configuration::get('PS_LANG_DEFAULT');
-        $shopId = (int) Shop::getContextShopID();
+        $languageId = (int) \Configuration::get('PS_LANG_DEFAULT');
+        $shopId = (int) \Shop::getContextShopID();
 
-        $image = Image::getBestImageAttribute(
+        $image = \Image::getBestImageAttribute(
             $shopId,
             $languageId,
             $this->prestashopCombination->id_product,

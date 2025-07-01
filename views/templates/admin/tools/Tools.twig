@@ -1,4 +1,4 @@
-{% extends '@Modules/molonies/views/templates/admin/Layout.twig' %}
+{% extends view_dir ~ 'Layout.twig' %}
 
 {% block plugin_content %}
     <div class="card">
@@ -157,22 +157,22 @@
     </div>
 
     {# Import products Overlay #}
-    {% include '@Modules/molonies/views/templates/admin/tools/overlays/ProductImport.twig' %}
+    {% include view_dir ~ 'tools/overlays/ProductImport.twig' %}
 
     {# Import stocks Overlay #}
-    {% include '@Modules/molonies/views/templates/admin/tools/overlays/StocksImport.twig' %}
+    {% include view_dir ~ 'tools/overlays/StocksImport.twig' %}
 
     {# Export products Overlay #}
-    {% include '@Modules/molonies/views/templates/admin/tools/overlays/ProductExport.twig' %}
+    {% include view_dir ~ 'tools/overlays/ProductExport.twig' %}
 
     {# Export stocks Overlay #}
-    {% include '@Modules/molonies/views/templates/admin/tools/overlays/StocksExport.twig' %}
+    {% include view_dir ~ 'tools/overlays/StocksExport.twig' %}
 
     {# Logout Overlay #}
-    {% include '@Modules/molonies/views/templates/admin/tools/overlays/Logout.twig' %}
+    {% include view_dir ~ 'tools/overlays/Logout.twig' %}
 
     {# Action Overlay #}
-    {% include '@Modules/molonies/views/templates/admin/tools/overlays/ActionOverlay.twig' %}
+    {% include view_dir ~ 'tools/overlays/ActionOverlay.twig' %}
 {% endblock %}
 
 {% block javascripts %}

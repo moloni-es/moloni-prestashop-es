@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -24,9 +25,8 @@
 
 namespace Moloni\Builders\MoloniProduct\Helpers\Variants;
 
-use Moloni\Traits\ArrayTrait;
-use Moloni\Traits\StringTrait;
 use Moloni\Exceptions\Product\MoloniProductException;
+use Moloni\Traits\ArrayTrait;
 
 if (!defined('_PS_VERSION_')) {
     exit;

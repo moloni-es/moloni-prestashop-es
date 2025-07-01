@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -24,6 +25,7 @@
 
 namespace Moloni\Api;
 
+use Moloni\Api\Endpoints\BusinessAreas;
 use Moloni\Api\Endpoints\Categories;
 use Moloni\Api\Endpoints\Companies;
 use Moloni\Api\Endpoints\Countries;
@@ -40,7 +42,6 @@ use Moloni\Api\Endpoints\Documents\Receipt;
 use Moloni\Api\Endpoints\Documents\SimplifiedInvoice;
 use Moloni\Api\Endpoints\DocumentSets;
 use Moloni\Api\Endpoints\FiscalZone;
-use Moloni\Api\Endpoints\BusinessAreas;
 use Moloni\Api\Endpoints\GeographicZones;
 use Moloni\Api\Endpoints\Hooks;
 use Moloni\Api\Endpoints\Languages;
@@ -50,7 +51,6 @@ use Moloni\Api\Endpoints\PaymentMethods;
 use Moloni\Api\Endpoints\PriceClasses;
 use Moloni\Api\Endpoints\Products;
 use Moloni\Api\Endpoints\PropertyGroups;
-use Moloni\Api\Endpoints\Registration;
 use Moloni\Api\Endpoints\Stock;
 use Moloni\Api\Endpoints\Taxes;
 use Moloni\Api\Endpoints\Timezones;
@@ -187,10 +187,6 @@ class MoloniApiClient
      * @var PropertyGroups|null
      */
     private static $propertyGroups;
-    /**
-     * @var Registration|null
-     */
-    private static $registration;
 
     //         Documents         //
 
@@ -428,15 +424,6 @@ class MoloniApiClient
         }
 
         return self::$propertyGroups;
-    }
-
-    public static function registration(): Registration
-    {
-        if (!self::$registration) {
-            self::$registration = new Registration();
-        }
-
-        return self::$registration;
     }
 
     public static function stock(): Stock

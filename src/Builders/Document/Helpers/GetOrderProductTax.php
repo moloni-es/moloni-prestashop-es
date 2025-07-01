@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -24,9 +25,9 @@
 
 namespace Moloni\Builders\Document\Helpers;
 
-use Tax;
-use Moloni\Exceptions\MoloniException;
 use Moloni\Builders\Document\OrderProductTax;
+use Moloni\Exceptions\MoloniException;
+use Tax;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -58,7 +59,7 @@ class GetOrderProductTax
      */
     public function handle(): ?OrderProductTax
     {
-        $taxValue = (float)($this->orderProduct['tax_rate'] ?? 0);
+        $taxValue = (float) ($this->orderProduct['tax_rate'] ?? 0);
 
         if ($taxValue > 0) {
             $taxBuilder = new OrderProductTax($taxValue, $this->fiscalZone, 1);
@@ -72,9 +73,9 @@ class GetOrderProductTax
             return $taxBuilder;
         }
 
-        /** Fallback tax percentage calculation */
+        /* Fallback tax percentage calculation */
         if ($this->orderProduct['unit_price_tax_incl'] !== $this->orderProduct['unit_price_tax_excl']) {
-            $taxValue = (100 * ((float)$this->orderProduct['unit_price_tax_incl'] - (float)$this->orderProduct['unit_price_tax_excl'])) / (float)$this->orderProduct['unit_price_tax_excl'];
+            $taxValue = (100 * ((float) $this->orderProduct['unit_price_tax_incl'] - (float) $this->orderProduct['unit_price_tax_excl'])) / (float) $this->orderProduct['unit_price_tax_excl'];
 
             $roundOne = round($taxValue, 1);
 
@@ -98,7 +99,7 @@ class GetOrderProductTax
             $identifiers = [
                 '{0}' => $this->fiscalZone['code'],
                 '{1}' => $roundOne,
-                '{2}' => $roundZero
+                '{2}' => $roundZero,
             ];
             $data = [
                 'original' => $taxValue,

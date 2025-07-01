@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -29,13 +30,12 @@ namespace Moloni\Actions\ProductsList\Prestashop;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\PrestashopProduct\Helpers\Combinations\FindOrCreateCombination;
 use Moloni\Enums\Boolean;
-use Moloni\Enums\Domains;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Helpers\Stock;
+use Moloni\MoloniContext;
 use Moloni\Tools\Settings;
 use Moloni\Traits\AttributesTrait;
 use Product;
-use StockAvailable;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -56,7 +56,7 @@ class VerifyProductForList
     private $moloniProduct = [];
 
     /**
-     * @var Product
+     * @var \Product
      */
     private $prestaProduct;
 
@@ -78,17 +78,17 @@ class VerifyProductForList
     /**
      * Constructor
      *
-     * @param Product $prestaProduct
+     * @param \Product $prestaProduct
      * @param int $warehouseId
      * @param string $slug
      */
-    public function __construct(Product $prestaProduct, int $warehouseId, string $slug)
+    public function __construct(\Product $prestaProduct, int $warehouseId, string $slug)
     {
         $this->prestaProduct = $prestaProduct;
         $this->warehouseId = $warehouseId;
         $this->slug = $slug;
 
-        $this->productReferenceFallback = (int)Settings::get('productReferenceFallback');
+        $this->productReferenceFallback = (int) Settings::get('productReferenceFallback');
     }
 
     public function run(): void
@@ -121,15 +121,14 @@ class VerifyProductForList
             return;
         }
 
-        if ((int)$this->moloniProduct['visible'] === Boolean::NO) {
+        if ((int) $this->moloniProduct['visible'] === Boolean::NO) {
             $this->parsedProduct['notices'][] = [
                 'Product is invisible in Moloni. Cannot be used in document creation.',
             ];
         }
 
         $this->parsedProduct['moloni_id'] = $this->moloniProduct['productId'];
-        $this->parsedProduct['moloni_url'] = Domains::MOLONI_AC
-            . '/'
+        $this->parsedProduct['moloni_url'] = MoloniContext::instance()->configs()->getAcUrl()
             . $this->slug
             . '/productCategories/products/all/'
             . $this->moloniProduct['productId'];
@@ -170,13 +169,13 @@ class VerifyProductForList
 
             foreach ($this->moloniProduct['variants'] as $variant) {
                 /* Invisible products are skipped */
-                if ((int)$variant['visible'] === Boolean::NO) {
+                if ((int) $variant['visible'] === Boolean::NO) {
                     continue;
                 }
 
                 /** Find combination based on Moloni variant */
                 $combination = (new FindOrCreateCombination(
-                    (int)$variant['productId'],
+                    (int) $variant['productId'],
                     $this->prestaProduct,
                     $variant['reference'],
                     $this->getAttributes($variant)
@@ -205,7 +204,7 @@ class VerifyProductForList
     private function checkVariantStock($variant, $combinationId)
     {
         $moloniProductStock = Stock::getMoloniStock($variant, $this->warehouseId);
-        $prestashopStock = (float)StockAvailable::getQuantityAvailableByProduct(
+        $prestashopStock = (float) \StockAvailable::getQuantityAvailableByProduct(
             $this->prestaProduct->id,
             $combinationId
         );
@@ -222,7 +221,7 @@ class VerifyProductForList
 
     private function checkSimpleStock()
     {
-        $prestashopStock = (float)StockAvailable::getQuantityAvailableByProduct($this->prestaProduct->id);
+        $prestashopStock = (float) \StockAvailable::getQuantityAvailableByProduct($this->prestaProduct->id);
         $moloniProductStock = Stock::getMoloniStock($this->moloniProduct, $this->warehouseId);
 
         if ($prestashopStock !== $moloniProductStock) {

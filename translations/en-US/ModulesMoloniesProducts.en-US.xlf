@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="administration" source-language="en-US" target-language="en-US" datatype="plaintext">
+    <body>
+      <trans-unit id="bc6d316759019ced33237dad80bfd19f">
+        <source>Product reference fallback is active. (search by prestashop ID if reference is empty)</source>
+        <target>Product reference fallback is active. (search by prestashop ID if reference is empty)</target>
+        <note>Line: </note>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -24,12 +25,11 @@
 
 namespace Moloni\Actions\Exports;
 
-use Product;
-use Moloni\Tools\Logs;
-use Moloni\Tools\SyncLogs;
 use Moloni\Builders\MoloniProductSimple;
 use Moloni\Builders\MoloniProductWithVariants;
 use Moloni\Exceptions\Product\MoloniProductException;
+use Moloni\Tools\Logs;
+use Moloni\Tools\SyncLogs;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -41,7 +41,7 @@ class ExportProductsToMoloni extends ExportProducts
     {
         $start = ($this->page - 1) * $this->itemsPerPage;
 
-        $products = Product::getProducts(
+        $products = \Product::getProducts(
             $this->languageId,
             $start,
             $this->itemsPerPage,
@@ -56,15 +56,15 @@ class ExportProductsToMoloni extends ExportProducts
         foreach ($products as $productData) {
             if (empty($productData['reference'])) {
                 $this->errorProducts[] = [
-                    $productData['id_product'] => 'Product has no reference in Prestashop.'
+                    $productData['id_product'] => 'Product has no reference in Prestashop.',
                 ];
 
                 continue;
             }
 
-            SyncLogs::prestashopProductAddTimeout((int)$productData['id_product']);
+            SyncLogs::prestashopProductAddTimeout((int) $productData['id_product']);
 
-            $product = new Product($productData['id_product'], true, $this->languageId);
+            $product = new \Product($productData['id_product'], true, $this->languageId);
 
             try {
                 if ($product->product_type === 'combinations' && $product->hasCombinations()) {
@@ -80,12 +80,12 @@ class ExportProductsToMoloni extends ExportProducts
                     $this->syncedProducts[] = $product->reference;
                 } else {
                     $this->errorProducts[] = [
-                        $product->reference => 'Product already exists in Moloni'
+                        $product->reference => 'Product already exists in Moloni',
                     ];
                 }
             } catch (MoloniProductException $e) {
                 $this->errorProducts[] = [
-                    $product->reference => $e->getData()
+                    $product->reference => $e->getData(),
                 ];
             }
         }

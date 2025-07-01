@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -49,7 +50,7 @@ class WebhookDeleteAll
                     'field' => 'url',
                     'value' => $baseUrl . 'api/moloniresource/',
                 ],
-            ]
+            ],
         ];
 
         try {

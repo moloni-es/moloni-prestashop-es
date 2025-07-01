@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -24,13 +25,11 @@
 
 namespace Moloni\Exceptions\Product;
 
-use Exception;
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class MoloniProductException extends Exception
+class MoloniProductException extends \Exception
 {
     protected $data;
     protected $identifiers;

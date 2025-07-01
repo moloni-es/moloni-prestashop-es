@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -99,7 +100,7 @@ class TaxFromRate implements BuilderItemInterface
      * Constructor
      *
      * @param float $taxRate Order product tax line
-     * @param array|null  $fiscalZone Document fiscal zone
+     * @param array|null $fiscalZone Document fiscal zone
      * @param int|null $taxOrder Tax order
      */
     public function __construct(float $taxRate, ?array $fiscalZone, ?int $taxOrder = 1)
@@ -107,7 +108,7 @@ class TaxFromRate implements BuilderItemInterface
         if (empty($fiscalZone)) {
             $fiscalZone = [
                 'code' => 'ES',
-                'countryId' => Countries::SPAIN
+                'countryId' => Countries::SPAIN,
             ];
         }
 
@@ -140,7 +141,7 @@ class TaxFromRate implements BuilderItemInterface
                     'type' => $this->type,
                     'isDefault' => false,
                     'value' => $this->value,
-                ]
+                ],
             ];
 
             $fiscalZoneSettings = $this->getFiscalZoneTaxSettings();
@@ -156,16 +157,10 @@ class TaxFromRate implements BuilderItemInterface
             if ((int) $taxId > 0) {
                 $this->taxId = (int) $taxId;
             } else {
-                throw new MoloniException('Error creating tax: ({0} - {1})', [
-                    '{0}' => $this->name,
-                    '{1}' => $this->value,
-                ], ['params' => $params, 'response' => $mutation]);
+                throw new MoloniException('Error creating tax: ({0} - {1})', ['{0}' => $this->name, '{1}' => $this->value], ['params' => $params, 'response' => $mutation]);
             }
         } catch (MoloniApiException $e) {
-            throw new MoloniException('Error creating tax: ({0} - {1})', [
-                '{0}' => $this->name,
-                '{1}' => $this->value,
-            ], $e->getData());
+            throw new MoloniException('Error creating tax: ({0} - {1})', ['{0}' => $this->name, '{1}' => $this->value], $e->getData());
         }
 
         return $this;
@@ -292,7 +287,7 @@ class TaxFromRate implements BuilderItemInterface
     public function getFiscalZoneTaxSettings(): array
     {
         $variables = [
-            'fiscalZone' => $this->fiscalZone['code'] ?? ''
+            'fiscalZone' => $this->fiscalZone['code'] ?? '',
         ];
 
         try {
@@ -317,28 +312,28 @@ class TaxFromRate implements BuilderItemInterface
                     [
                         'field' => 'value',
                         'comparison' => 'eq',
-                        'value' => (string)$this->value
+                        'value' => (string) $this->value,
                     ],
                     [
                         'field' => 'flags',
                         'comparison' => 'eq',
-                        'value' => '0'
+                        'value' => '0',
                     ],
                     [
                         'field' => 'type',
                         'comparison' => 'eq',
-                        'value' => (string)$this->type
+                        'value' => (string) $this->type,
                     ],
                     [
                         'field' => 'fiscalZoneFinanceType',
                         'comparison' => 'eq',
-                        'value' => (string)$this->fiscalZoneType
-                    ]
+                        'value' => (string) $this->fiscalZoneType,
+                    ],
                 ],
                 'search' => [
                     'field' => 'fiscalZone',
-                    'value' => $this->fiscalZone['code']
-                ]
+                    'value' => $this->fiscalZone['code'],
+                ],
             ],
         ];
 

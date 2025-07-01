@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -24,7 +25,6 @@
 
 namespace Moloni\Builders\Document;
 
-use Order;
 use Address;
 use Customer;
 use Moloni\Api\MoloniApiClient;
@@ -34,6 +34,7 @@ use Moloni\Exceptions\Document\MoloniDocumentCustomerException;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Tools\Settings;
 use Moloni\Traits\CountryTrait;
+use Order;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -53,7 +54,7 @@ class OrderCustomer implements BuilderItemInterface
     /**
      * Customer VAT
      *
-     * @var string
+     * @var string|null
      */
     protected $vat;
 
@@ -130,21 +131,21 @@ class OrderCustomer implements BuilderItemInterface
     /**
      * Shopify order data
      *
-     * @var Order
+     * @var \Order
      */
     protected $order;
 
     /**
      * Shopify order data
      *
-     * @var Customer
+     * @var \Customer
      */
     protected $customer;
 
     /**
      * Order billing address
      *
-     * @var Address
+     * @var \Address
      */
     protected $billingAddress;
 
@@ -153,11 +154,11 @@ class OrderCustomer implements BuilderItemInterface
      *
      * @throws MoloniDocumentCustomerException
      */
-    public function __construct(Order $order)
+    public function __construct(\Order $order)
     {
         $this->order = $order;
         $this->customer = $order->getCustomer();
-        $this->billingAddress = new Address($order->id_address_invoice);
+        $this->billingAddress = new \Address($order->id_address_invoice);
 
         $this->init();
     }
@@ -248,8 +249,8 @@ class OrderCustomer implements BuilderItemInterface
 
             $costumerId = $mutation['data']['customerUpdate']['data']['customerId'] ?? 0;
 
-            if ((int)$costumerId > 0) {
-                $this->customerId = (int)$costumerId;
+            if ((int) $costumerId > 0) {
+                $this->customerId = (int) $costumerId;
             } else {
                 throw new MoloniDocumentCustomerException('Error updating customer ({0})', ['{0}' => $this->name], ['params' => $params, 'response' => $mutation]);
             }
@@ -320,14 +321,14 @@ class OrderCustomer implements BuilderItemInterface
     {
         try {
             ['countryId' => $countryId, 'languageId' => $languageId] = $this->getMoloniCountryById($this->billingAddress->id_country, $this->billingAddress->id_state);
-        } catch (MoloniAPIException $e) {
+        } catch (MoloniApiException $e) {
             throw new MoloniDocumentCustomerException('Error fetching countries', [], $e->getData());
         }
 
         $this->countryId = $countryId;
 
         if (!empty(Settings::get('clientLanguage'))) {
-            $this->languageId = (int)Settings::get('clientLanguage');
+            $this->languageId = (int) Settings::get('clientLanguage');
         } else {
             $this->languageId = $languageId;
         }
@@ -339,8 +340,6 @@ class OrderCustomer implements BuilderItemInterface
      * Sets customer VAT
      *
      * @return OrderCustomer
-     *
-     * @throws MoloniDocumentCustomerException
      */
     public function setVat(): OrderCustomer
     {
@@ -358,16 +357,29 @@ class OrderCustomer implements BuilderItemInterface
                 break;
         }
 
-        if ($this->countryId === Countries::SPAIN && !empty($vat)) {
-            $vat = ltrim($vat, 'ES');
-            $vat = strtoupper($vat);
+        $this->vat = $vat;
 
-            if (!\Moloni\Helpers\Customer::isVatEsValid($vat)) {
-                throw new MoloniDocumentCustomerException('Customer has invalid VAT for Spain.', [], ['vat' => $vat]);
-            }
+        if (empty($vat)) {
+            return $this;
         }
 
-        $this->vat = $vat;
+        if ($this->countryId === Countries::SPAIN) {
+            $vat = strtoupper($vat);
+
+            if (stripos($vat, 'ES') === 0) {
+                $vat = str_ireplace('ES', '', $vat);
+            }
+
+            $this->vat = \Moloni\Helpers\Customer::isVatEsValid($vat) ? $vat : null;
+        } elseif ($this->countryId === Countries::PORTUGAL) {
+            $vat = strtoupper($vat);
+
+            if (stripos($vat, 'PT') === 0) {
+                $vat = str_ireplace('PT', '', $vat);
+            }
+
+            $this->vat = \Moloni\Helpers\Customer::isVatPtValid($vat) ? $vat : null;
+        }
 
         return $this;
     }
@@ -403,7 +415,7 @@ class OrderCustomer implements BuilderItemInterface
                         'field' => 'number',
                         'comparison' => 'like',
                         'value' => $neddle,
-                    ]
+                    ],
                 ],
             ];
 
@@ -419,7 +431,7 @@ class OrderCustomer implements BuilderItemInterface
             throw new MoloniDocumentCustomerException('Error fetching customer next number', [], $e->getData());
         }
 
-        $this->number = (string)$number;
+        $this->number = (string) $number;
 
         return $this;
     }
@@ -490,7 +502,7 @@ class OrderCustomer implements BuilderItemInterface
         $address .= $this->billingAddress->address2;
 
         if (empty(trim($address))) {
-            $address = 'Desconocido';
+            $address = 'Desconhecido';
         }
 
         $this->address = $address;
@@ -508,7 +520,7 @@ class OrderCustomer implements BuilderItemInterface
         $city = $this->billingAddress->city;
 
         if (empty($city)) {
-            $city = 'Desconocido';
+            $city = 'Desconhecido';
         }
 
         $this->city = $city;
@@ -523,7 +535,7 @@ class OrderCustomer implements BuilderItemInterface
      */
     public function setZipCode(): OrderCustomer
     {
-        $this->zipCode = $this->billingAddress->postcode;
+        $this->zipCode = $this->billingAddress->postcode ?? '';
 
         return $this;
     }
@@ -554,9 +566,7 @@ class OrderCustomer implements BuilderItemInterface
                 $this->customerId = $query[0]['customerId'];
             }
         } catch (MoloniApiException $e) {
-            throw new MoloniDocumentCustomerException('Error fetching customer by VAT: ({0})', [
-                '{0}' => $this->vat,
-            ], $e->getData());
+            throw new MoloniDocumentCustomerException('Error fetching customer by VAT: ({0})', ['{0}' => $this->vat], $e->getData());
         }
     }
 
@@ -584,9 +594,7 @@ class OrderCustomer implements BuilderItemInterface
                 $this->customerId = $query[0]['customerId'];
             }
         } catch (MoloniApiException $e) {
-            throw new MoloniDocumentCustomerException('Error fetching customer by e-mail: ({0})', [
-                '{0}' => $this->email
-            ], $e->getData());
+            throw new MoloniDocumentCustomerException('Error fetching customer by e-mail: ({0})', ['{0}' => $this->email], $e->getData());
         }
     }
 }

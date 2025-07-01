@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -24,9 +25,7 @@
 
 namespace Moloni\Mails;
 
-use Configuration;
-use Mail;
-use Moloni\Enums\Domains;
+use Moloni\MoloniContext;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -36,22 +35,18 @@ class AuthenticationExpiredMail extends SendMail
 {
     public function handle(): void
     {
-        Mail::Send(
-            (int)(Configuration::get('PS_LANG_DEFAULT')), // defaut language id
-            'authentication_expired', // email template file to be use
+        \Mail::Send(
+            (int) \Configuration::get('PS_LANG_DEFAULT'), // default language id
+            'authentication_expired', // email template file to be used
             $this->subject, // email subject
-            [
-                '{moloni_url}' => Domains::MOLONI,
-                '{moloni_logo_url}' => $this->getLogoUrl(),
-                '{year}' => date("Y"),
-            ],
+            $this->getCommonVars(),
             $this->email, // receiver email address
-            NULL, //receiver name
-            NULL, //from email address
-            NULL,  //from name
-            NULL, //file attachment
-            NULL, //mode smtp
-            _PS_MODULE_DIR_ . 'molonies/mails' //custom template path
+            null, // receiver name
+            null, // from email address
+            null,  // from name
+            null, // file attachment
+            null, // mode smtp
+            MoloniContext::instance()->getModuleDir() . 'mails' // custom template path
         );
     }
 }

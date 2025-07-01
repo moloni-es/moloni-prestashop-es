@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -26,10 +27,11 @@ namespace Moloni\Controller\Admin;
 
 use Moloni\Entity\MoloniApp;
 use Moloni\Enums\MoloniRoutes;
+use Moloni\MoloniContext;
 use Moloni\Repository\MoloniAppRepository;
-use Moloni\Services\MoloniContext;
 use PrestaShopBundle\Controller\Admin\FrameworkBundleAdminController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -53,14 +55,37 @@ abstract class MoloniController extends FrameworkBundleAdminController implement
 
     //          Privates          //
 
+    protected function display(string $template, ?array $params = []): Response
+    {
+        $params = array_merge($params, $this->getDisplayParams());
+
+        return $this->render("{$params['view_dir']}{$template}", $params);
+    }
+
+    protected function displayView(string $template, ?array $params = []): string
+    {
+        $params = array_merge($params, $this->getDisplayParams());
+
+        return $this->renderView("{$params['view_dir']}{$template}", $params);
+    }
+
+    private function getDisplayParams(): array
+    {
+        return [
+            'configs' => $this->moloniContext->configs()->getAll(),
+            'img_path' => $this->moloniContext->getImgPath(),
+            'view_dir' => $this->moloniContext->getViewDir(),
+        ];
+    }
+
     /**
-     * Creates payload message to show user
+     * Creates a payload message to show user
      *
      * @param array $errors
      *
      * @return string
      */
-    private function getErrorPayload(array $errors): string
+    protected function getErrorPayload(array $errors): string
     {
         $msg = $this->trans('Click for more information', 'Modules.Molonies.Errors');
 
@@ -87,7 +112,7 @@ abstract class MoloniController extends FrameworkBundleAdminController implement
      *
      * @return void
      */
-    private function deleteApp(): void
+    protected function deleteApp(): void
     {
         /** @var MoloniAppRepository $repository */
         $repository = $this
@@ -101,7 +126,7 @@ abstract class MoloniController extends FrameworkBundleAdminController implement
     //          Messages          //
 
     /**
-     * Adds message to the user
+     * Adds a message to the user
      *
      * @param string $message
      * @param string $type
@@ -132,7 +157,7 @@ abstract class MoloniController extends FrameworkBundleAdminController implement
     }
 
     /**
-     * Adds warning message to the user
+     * Adds a warning message to the user
      *
      * @param string $message
      * @param array|null $error Error data
@@ -149,7 +174,7 @@ abstract class MoloniController extends FrameworkBundleAdminController implement
     }
 
     /**
-     * Adds error message to the user
+     * Adds an error message to the user
      *
      * @param string $message Error message
      * @param array|null $error Error data
@@ -177,18 +202,6 @@ abstract class MoloniController extends FrameworkBundleAdminController implement
         $this->deleteApp();
 
         return $this->redirectToRoute(MoloniRoutes::LOGIN);
-    }
-
-    /**
-     * Redirect to registration page
-     *
-     * @return RedirectResponse
-     */
-    public function redirectToRegistration(): RedirectResponse
-    {
-        $this->deleteApp();
-
-        return $this->redirectToRoute(MoloniRoutes::REGISTRATION);
     }
 
     /**
@@ -221,7 +234,7 @@ abstract class MoloniController extends FrameworkBundleAdminController implement
      *
      * @return RedirectResponse
      */
-    protected function redirectToAdminOrderPage(int $orderId): RedirectResponse
+    public function redirectToAdminOrderPage(int $orderId): RedirectResponse
     {
         $link = $this->getAdminLink('AdminOrders', ['vieworder' => '', 'id_order' => $orderId]);
 
@@ -236,7 +249,7 @@ abstract class MoloniController extends FrameworkBundleAdminController implement
      *
      * @return RedirectResponse
      */
-    protected function redirectToDocuments(?int $page = 1, ?array $filters = []): RedirectResponse
+    public function redirectToDocuments(?int $page = 1, ?array $filters = []): RedirectResponse
     {
         return $this->redirectToRoute(MoloniRoutes::DOCUMENTS, ['page' => $page, 'filters' => $filters]);
     }
@@ -246,7 +259,7 @@ abstract class MoloniController extends FrameworkBundleAdminController implement
      *
      * @return RedirectResponse
      */
-    protected function redirectToTools(): RedirectResponse
+    public function redirectToTools(): RedirectResponse
     {
         return $this->redirectToRoute(MoloniRoutes::TOOLS);
     }
@@ -258,7 +271,7 @@ abstract class MoloniController extends FrameworkBundleAdminController implement
      *
      * @return RedirectResponse
      */
-    protected function redirectToLogs(?array $filters = []): RedirectResponse
+    public function redirectToLogs(?array $filters = []): RedirectResponse
     {
         return $this->redirectToRoute(MoloniRoutes::LOGS, ['filters' => $filters]);
     }
@@ -268,7 +281,7 @@ abstract class MoloniController extends FrameworkBundleAdminController implement
      *
      * @return RedirectResponse
      */
-    protected function redirectToSettings(): RedirectResponse
+    public function redirectToSettings(): RedirectResponse
     {
         return $this->redirectToRoute(MoloniRoutes::SETTINGS);
     }

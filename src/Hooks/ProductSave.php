@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -24,7 +25,7 @@
 
 namespace Moloni\Hooks;
 
-use Configuration;
+use Moloni\Api\MoloniApi;
 use Moloni\Builders\MoloniProductSimple;
 use Moloni\Builders\MoloniProductWithVariants;
 use Moloni\Enums\Boolean;
@@ -32,7 +33,6 @@ use Moloni\Exceptions\Product\MoloniProductException;
 use Moloni\Tools\Logs;
 use Moloni\Tools\Settings;
 use Moloni\Tools\SyncLogs;
-use Product;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -57,7 +57,7 @@ class ProductSave extends AbstractHookAction
 
         try {
             SyncLogs::prestashopProductAddTimeout($this->productId);
-            $product = new Product($this->productId, true, Configuration::get('PS_LANG_DEFAULT'));
+            $product = new \Product($this->productId, true, \Configuration::get('PS_LANG_DEFAULT'));
 
             if ($product->product_type === 'combinations' && $product->hasCombinations()) {
                 $productBuilder = new MoloniProductWithVariants($product);
@@ -68,10 +68,10 @@ class ProductSave extends AbstractHookAction
             if ($productBuilder->getMoloniProductId() !== 0) {
                 SyncLogs::moloniProductAddTimeout($productBuilder->getMoloniProductId());
 
-                if ((int)Settings::get('updateProductsToMoloni') === Boolean::YES) {
+                if ((int) Settings::get('updateProductsToMoloni') === Boolean::YES) {
                     $productBuilder->update();
                 }
-            } elseif ((int)Settings::get('addProductsToMoloni') === Boolean::YES) {
+            } elseif ((int) Settings::get('addProductsToMoloni') === Boolean::YES) {
                 $productBuilder->insert();
             }
         } catch (MoloniProductException $e) {
@@ -88,8 +88,8 @@ class ProductSave extends AbstractHookAction
             return false;
         }
 
-        if ((int)Settings::get('addProductsToMoloni') === Boolean::NO &&
-            (int)Settings::get('updateProductsToMoloni') === Boolean::NO) {
+        if ((int) Settings::get('addProductsToMoloni') === Boolean::NO
+            && (int) Settings::get('updateProductsToMoloni') === Boolean::NO) {
             return false;
         }
 
@@ -97,6 +97,6 @@ class ProductSave extends AbstractHookAction
             return false;
         }
 
-        return $this->isAuthenticated();
+        return MoloniApi::hasValidAuthentication();
     }
 }

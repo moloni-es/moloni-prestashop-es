@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -87,7 +88,7 @@ class MoloniSyncLogsRepository extends EntityRepository
     {
         $findConditions = [
             'prestashopId' => $productId,
-            'typeId' => $logType
+            'typeId' => $logType,
         ];
 
         return $this->findOneBy($findConditions) !== null;

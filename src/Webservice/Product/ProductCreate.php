@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -86,7 +87,7 @@ class ProductCreate extends AbstractWebserviceAction
             return false;
         }
 
-        if ((int)Settings::get('addProductsToPrestashop') === Boolean::NO) {
+        if ((int) Settings::get('addProductsToPrestashop') === Boolean::NO) {
             return false;
         }
 

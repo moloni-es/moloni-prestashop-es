@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -43,24 +44,7 @@ class BusinessAreas extends Endpoint
      */
     public function queryBusinessAreas(?array $variables = []): array
     {
-        $query = 'query ($options: BusinessAreaOptions){
-          businessAreas(options: $options){
-            data{
-              businessAreaId
-              visible
-              ordering
-              img
-              title
-              abbreviation
-              translations{
-                businessAreaTranslationId
-                title
-                abbreviation
-                languageId
-              }
-            }
-          }
-        }';
+        $query = $this->loadQuery('businessAreas');
 
         return $this->simplePost($query, $variables);
     }

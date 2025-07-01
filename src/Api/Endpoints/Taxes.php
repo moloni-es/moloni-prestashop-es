@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -43,39 +44,7 @@ class Taxes extends Endpoint
      */
     public function queryTaxes(?array $variables = []): array
     {
-        $query = 'query taxes($companyId: Int!,$options: TaxOptions)
-                {
-                    taxes(companyId: $companyId,options: $options)
-                    {
-                        data
-                        {
-                            taxId
-                            name
-                            value
-                            type
-                            fiscalZone
-                            country
-                            {
-                                countryId
-                            }
-                            fiscalZoneFinanceType
-                        }
-                        options
-                        {
-                            pagination
-                            {
-                                page
-                                qty
-                                count
-                            }
-                        }
-                        errors
-                        {
-                            field
-                            msg
-                        }
-                    }
-                }';
+        $query = $this->loadQuery('taxes');
 
         return $this->paginatedPost($query, $variables, 'taxes');
     }
@@ -91,31 +60,7 @@ class Taxes extends Endpoint
      */
     public function queryTax(?array $variables = []): array
     {
-        $query = 'query tax($companyId: Int!,$taxId: Int!)
-                {
-                    tax(companyId: $companyId,taxId: $taxId)
-                    {
-                        data
-                        {
-                            taxId
-                            name
-                            value
-                            type
-                            fiscalZone
-                            country
-                            {
-                                countryId
-                            }
-                            fiscalZoneFinanceType
-                            fiscalZoneFinanceTypeMode
-                        }
-                        errors
-                        {
-                            field
-                            msg
-                        }
-                    }
-                }';
+        $query = $this->loadQuery('tax');
 
         return $this->simplePost($query, $variables);
     }
@@ -131,23 +76,7 @@ class Taxes extends Endpoint
      */
     public function mutationTaxCreate(?array $variables = []): array
     {
-        $query = 'mutation taxCreate($companyId: Int!,$data: TaxInsert!)
-                {
-                    taxCreate(companyId: $companyId,data: $data)
-                    {
-                        data
-                        {
-                            taxId
-                            name
-                            value
-                        }
-                        errors
-                        {
-                            field
-                            msg
-                        }
-                    }
-                }';
+        $query = $this->loadMutation('taxCreate');
 
         return $this->simplePost($query, $variables);
     }

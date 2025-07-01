@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -24,14 +25,11 @@
 
 namespace Moloni\Builders\MoloniProduct\Helpers\Variants;
 
-use Product;
-use Configuration;
-use Moloni\Enums\Boolean;
-use Moloni\Traits\StringTrait;
-use Moloni\Traits\ArrayTrait;
 use Moloni\Api\MoloniApiClient;
+use Moloni\Enums\Boolean;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\Product\MoloniProductException;
+use Moloni\Traits\ArrayTrait;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -46,10 +44,10 @@ class FindOrCreatePropertyGroup
      */
     private $prestashopCombinations;
 
-    public function __construct(Product $prestashopProduct)
+    public function __construct(\Product $prestashopProduct)
     {
         $this->prestashopCombinations = $this->preparePrestashopProductAttributes(
-            $prestashopProduct->getAttributesGroups(Configuration::get('PS_LANG_DEFAULT'))
+            $prestashopProduct->getAttributesGroups(\Configuration::get('PS_LANG_DEFAULT'))
         );
     }
 
@@ -82,7 +80,7 @@ class FindOrCreatePropertyGroup
                 foreach ($combinationGroups as $name => $attributes) {
                     foreach ($moloniPropertyGroup['properties'] as $property) {
                         if (strtolower($name) === strtolower($property['name'])) {
-                            $propertyGroupPropertiesMatchCount++;
+                            ++$propertyGroupPropertiesMatchCount;
                         }
                     }
                 }
@@ -108,8 +106,7 @@ class FindOrCreatePropertyGroup
          * If it was partial, we need to do a propertyGroup update to add the missing stuff
          * If it was 100% match, we can just return
          */
-
-        $bestPropertyGroupId = (int)$matches[0]['propertyGroupId'];
+        $bestPropertyGroupId = (int) $matches[0]['propertyGroupId'];
         $bestPropertyGroup = $this->findInPropertyGroup($moloniPropertyGroups, $bestPropertyGroupId);
 
         $propertyGroupForUpdate = [
@@ -156,8 +153,8 @@ class FindOrCreatePropertyGroup
                             ];
                         }
 
-                        // Property name doesn't exist
-                        // need to create property and the value
+                    // Property name doesn't exist
+                    // need to create property and the value
                     } else {
                         $updateNeeded = true;
 
@@ -173,8 +170,8 @@ class FindOrCreatePropertyGroup
                                     'value' => $attribute,
                                     'visible' => Boolean::YES,
                                     'ordering' => 1,
-                                ]
-                            ]
+                                ],
+                            ],
                         ];
                     }
                 }
@@ -191,14 +188,10 @@ class FindOrCreatePropertyGroup
                 $updatedGroup = $mutation['data']['propertyGroupUpdate']['data'] ?? [];
 
                 if (empty($updatedGroup)) {
-                    throw new MoloniProductException('Failed to update existing property group "{0}"', [
-                        '{0}' => $bestPropertyGroup['name'] ?? ''
-                    ], ['mutation' => $mutation, 'props' => $propertyGroupForUpdate]);
+                    throw new MoloniProductException('Failed to update existing property group "{0}"', ['{0}' => $bestPropertyGroup['name'] ?? ''], ['mutation' => $mutation, 'props' => $propertyGroupForUpdate]);
                 }
             } catch (MoloniApiException $e) {
-                throw new MoloniProductException('Failed to update existing property group "{0}"', [
-                    '{0}' => $bestPropertyGroup['name'] ?? ''
-                ], $e->getData());
+                throw new MoloniProductException('Failed to update existing property group "{0}"', ['{0}' => $bestPropertyGroup['name'] ?? ''], $e->getData());
             }
 
             return (new PrepareVariantPropertiesReturn($updatedGroup, $this->prestashopCombinations))->handle();
@@ -231,7 +224,7 @@ class FindOrCreatePropertyGroup
         $result = [];
 
         foreach ($productAttributes as $attribute) {
-            $combinationId = (int)$attribute['id_product_attribute'];
+            $combinationId = (int) $attribute['id_product_attribute'];
             $groupName = $attribute['group_name'];
             $attributeName = $attribute['attribute_name'];
 
@@ -293,7 +286,7 @@ class FindOrCreatePropertyGroup
     private function findInPropertyGroup(array $array, int $needle)
     {
         foreach ($array as $value) {
-            if ((int)$value['propertyGroupId'] === $needle) {
+            if ((int) $value['propertyGroupId'] === $needle) {
                 return $value;
             }
         }

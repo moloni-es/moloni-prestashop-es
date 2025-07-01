@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -24,9 +25,6 @@
 
 namespace Moloni\Builders\PrestashopProduct\Helpers;
 
-use Country;
-use TaxRulesGroup;
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -45,14 +43,14 @@ class FindTaxGroupFromMoloniTax
         $taxRulesGroupId = 0;
 
         $fiscalZone = $this->moloniTax['fiscalZone'] ?? 'ES';
-        $countryId = Country::getByIso($fiscalZone);
-        $value = (float)($this->moloniTax['value'] ?? 0);
+        $countryId = \Country::getByIso($fiscalZone);
+        $value = (float) ($this->moloniTax['value'] ?? 0);
 
-        $taxes = array_reverse(TaxRulesGroup::getAssociatedTaxRatesByIdCountry($countryId), true);
+        $taxes = array_reverse(\TaxRulesGroup::getAssociatedTaxRatesByIdCountry($countryId), true);
 
         foreach ($taxes as $id => $tax) {
-            if ($value === (float)$tax) {
-                $taxRuleGroupObject = new TaxRulesGroup($id);
+            if ($value === (float) $tax) {
+                $taxRuleGroupObject = new \TaxRulesGroup($id);
 
                 if (!empty($taxRuleGroupObject->deleted) || empty($taxRuleGroupObject->active)) {
                     continue;

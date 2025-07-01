@@ -1,0 +1,14 @@
+mutation customerCreate($companyId: Int!,$data: CustomerInsert!) {
+  customerCreate(companyId: $companyId,data: $data) {
+    data {
+      customerId
+      name
+      vat
+    }
+    errors {
+      field
+      msg
+    }
+  }
+}
+

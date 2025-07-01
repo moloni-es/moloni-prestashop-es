@@ -1,4 +1,4 @@
-{% extends '@Modules/molonies/views/templates/admin/Layout.twig' %}
+{% extends view_dir ~ 'Layout.twig' %}
 
 {% block plugin_content %}
     {% if productReferenceFallbackActive %}
@@ -17,14 +17,14 @@
         <div class="card-block overflow-auto">
             <table class="table table-striped table-bordered">
                 {# Table header #}
-                {% include '@Modules/molonies/views/templates/admin/products/prestashop/blocks/TableHeader.twig' %}
+                {% include view_dir ~ 'products/prestashop/blocks/TableHeader.twig' %}
 
                 {# Table body #}
-                {% include '@Modules/molonies/views/templates/admin/products/prestashop/blocks/TableBody.twig' %}
+                {% include view_dir ~ 'products/prestashop/blocks/TableBody.twig' %}
             </table>
 
             {# Paginator #}
-            {% include '@Modules/molonies/views/templates/admin/components/Paginator.twig' %}
+            {% include view_dir ~ 'components/Paginator.twig' %}
         </div>
 
         <div class="card-footer">

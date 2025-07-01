@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -24,14 +25,15 @@
 
 namespace Moloni\Api;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\ORMException;
+use Moloni\Configurations;
 use Moloni\Entity\MoloniApp;
-use Moloni\Enums\Domains;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\MoloniLoginException;
 use Moloni\Guzzle\GuzzleWrapper;
 use Moloni\Mails\AuthenticationExpiredMail;
+use Moloni\MoloniContext;
 use Moloni\Tools\Settings;
 
 if (!defined('_PS_VERSION_')) {
@@ -43,7 +45,7 @@ class MoloniApi
     /**
      * EntityManager
      *
-     * @var EntityManager
+     * @var EntityManagerInterface
      */
     private static $entityManager;
 
@@ -52,36 +54,25 @@ class MoloniApi
      */
     private static $app;
 
-    public function __construct(EntityManager $entityManager, ?MoloniApp $app)
+    /**
+     * @var Configurations
+     */
+    private static $configurations;
+
+    /**
+     * @var GuzzleWrapper
+     */
+    private static $guzzle;
+
+    public function __construct(EntityManagerInterface $entityManager, MoloniContext $context)
     {
-        self::$app = $app;
+        $configurations = $context->configs();
+
+        self::$app = $context->getApp();
         self::$entityManager = $entityManager;
-    }
+        self::$configurations = $configurations;
 
-    //          Gets          //
-
-    /**
-     * Get session
-     *
-     * @return MoloniApp|null
-     */
-    public static function getAppEntity(): ?MoloniApp
-    {
-        return self::$app;
-    }
-
-    /**
-     * Get logged company id
-     *
-     * @return int
-     */
-    public static function getCompanyId(): int
-    {
-        if (empty(self::$app)) {
-            return 0;
-        }
-
-        return self::$app->getCompanyId() ?? 0;
+        self::$guzzle = new GuzzleWrapper($configurations);
     }
 
     //          Requests          //
@@ -101,7 +92,7 @@ class MoloniApi
             throw new MoloniLoginException('Code missing');
         }
 
-        $url = Domains::MOLONI_API . '/auth/grant';
+        $url = self::$configurations->getApiUrl() . '/auth/grant';
         $headers = [
             'Content-Type' => 'application/json',
         ];
@@ -113,14 +104,15 @@ class MoloniApi
         ];
 
         try {
-            $body = GuzzleWrapper::post($url, $headers, $params);
+            $body = self::$guzzle->post($url, $headers, $params);
         } catch (MoloniApiException $e) {
-            throw new MoloniLoginException("The client credentials are invalid", [], $e->getData());
+            throw new MoloniLoginException('The client credentials are invalid', [], $e->getData());
         }
 
         if (empty($body)) {
             throw new MoloniLoginException('Request error');
         }
+
         if (!$body['accessToken'] || !$body['refreshToken']) {
             throw new MoloniLoginException('Error fetching tokens', [], ['response' => $body]);
         }
@@ -146,7 +138,7 @@ class MoloniApi
      */
     public static function refreshTokens(): bool
     {
-        $url = Domains::MOLONI_API . '/auth/grant';
+        $url = self::$configurations->getApiUrl() . '/auth/grant';
         $headers = [
             'Content-Type' => 'application/json',
         ];
@@ -158,7 +150,7 @@ class MoloniApi
         ];
 
         try {
-            $body = GuzzleWrapper::post($url, $headers, $params);
+            $body = self::$guzzle->post($url, $headers, $params);
 
             if (empty($body)) {
                 throw new MoloniLoginException('Request error');
@@ -228,7 +220,7 @@ class MoloniApi
             unset($data['variables']);
         }
 
-        $body = GuzzleWrapper::post(Domains::MOLONI_API, $headers, $data);
+        $body = self::$guzzle->post(self::$configurations->getApiUrl(), $headers, $data);
 
         return empty($body) ? [] : $body;
     }
@@ -239,6 +231,7 @@ class MoloniApi
      * @param array|null $operations
      * @param string|null $map
      * @param array|null $files
+     *
      * @return array
      *
      * @throws MoloniApiException
@@ -249,7 +242,7 @@ class MoloniApi
             $operations['variables']['companyId'] = self::$app->getCompanyId();
         }
 
-        $response = GuzzleWrapper::postWithFile($operations, $map, $files, self::$app->getAccessToken());
+        $response = self::$guzzle->postWithFile($operations, $map, $files, self::$app->getAccessToken());
 
         return $response ?? [];
     }

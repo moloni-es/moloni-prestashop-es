@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -25,7 +26,6 @@
 namespace Moloni\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Moloni\Entity\MoloniApp;
 
 if (!defined('_PS_VERSION_')) {
     exit;

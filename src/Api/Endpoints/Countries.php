@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -43,38 +44,7 @@ class Countries extends Endpoint
      */
     public function queryCountries(?array $variables = []): array
     {
-        $query = 'query countries($options: CountryOptions)
-        {
-            countries(options: $options)
-            {
-                data
-                {
-                    countryId
-                    iso3166_1
-                    title
-                    ordering
-                    language
-                    {
-                        languageId
-                        name
-                    }
-                }
-                options
-                {
-                    pagination
-                    {
-                        page
-                        qty
-                        count
-                    }
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = $this->loadQuery('countries');
 
         return $this->paginatedPost($query, $variables, 'countries');
     }
@@ -90,26 +60,7 @@ class Countries extends Endpoint
      */
     public function queryCountry(?array $variables = []): array
     {
-        $query = 'query country($countryId: Int!)
-        {
-            country(countryId: $countryId)
-            {
-                data
-                {
-                    countryId
-                    iso3166_1
-                    language
-                    {
-                        languageId
-                    }
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = $this->loadQuery('country');
 
         return $this->simplePost($query, $variables);
     }

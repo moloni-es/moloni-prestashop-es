@@ -1,0 +1,4 @@
+mutation purchaseOrderGetPDF($companyId: Int!,$documentId: Int!) {
+  purchaseOrderGetPDF(companyId: $companyId,documentId: $documentId)
+}
+

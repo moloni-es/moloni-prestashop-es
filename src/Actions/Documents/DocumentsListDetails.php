@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -24,12 +25,8 @@
 
 namespace Moloni\Actions\Documents;
 
-use Order;
-use Currency;
+use Moloni\Configurations;
 use Moloni\Enums\DocumentTypes;
-use Moloni\Enums\Domains;
-use PrestaShopDatabaseException;
-use PrestaShopException;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -39,11 +36,13 @@ class DocumentsListDetails
 {
     private $createdDocuments;
     private $company;
+    private $configurations;
 
-    public function __construct(?array $createdDocuments = [], ?array $company = [])
+    public function __construct(array $createdDocuments, array $company, Configurations $configurations)
     {
         $this->company = $company;
         $this->createdDocuments = $createdDocuments;
+        $this->configurations = $configurations;
     }
 
     public function handle(): array
@@ -53,11 +52,11 @@ class DocumentsListDetails
         }
 
         foreach ($this->createdDocuments as &$document) {
-            $orderId = (int)($document['order_id'] ?? 0);
+            $orderId = (int) ($document['order_id'] ?? 0);
 
             try {
-                $order = new Order($orderId);
-            } catch (PrestaShopDatabaseException|PrestaShopException $e) {
+                $order = new \Order($orderId);
+            } catch (\PrestaShopDatabaseException|\PrestaShopException $e) {
                 $order = null;
             }
 
@@ -66,7 +65,7 @@ class DocumentsListDetails
                 continue;
             }
 
-            $document['order_currency'] = (new Currency($order->id_currency))->symbol;
+            $document['order_currency'] = (new \Currency($order->id_currency))->symbol;
             $document['order_total'] = $order->total_paid_tax_incl;
             $document['order_email'] = $order->getCustomer()->email;
             $document['order_customer'] = $order->getCustomer()->firstname . ' ' . $order->getCustomer()->lastname;
@@ -84,7 +83,7 @@ class DocumentsListDetails
                 continue;
             }
 
-            $document['document_link'] = Domains::MOLONI_AC . '/' . $this->company['slug'] . '/' . $document['document_type'] . '/view/' . $document['document_id'];
+            $document['document_link'] = $this->configurations->getAcUrl() . $this->company['slug'] . '/' . $document['document_type'] . '/view/' . $document['document_id'];
 
             if (!empty($moloniDocument['pdfExport'])) {
                 $document['document_has_pdf'] = true;

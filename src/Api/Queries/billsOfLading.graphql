@@ -1,0 +1,18 @@
+query billsOfLading($companyId: Int!,$documentId: Int!) {
+  billsOfLading(companyId: $companyId,documentId: $documentId) {
+    errors {
+      field
+      msg
+    }
+    data {
+      documentId
+      number
+      totalValue
+      documentTotal
+      documentSetName
+      ourReference
+      pdfExport
+    }
+  }
+}
+

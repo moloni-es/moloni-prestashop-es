@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -24,7 +25,6 @@
 
 namespace Moloni\Builders;
 
-use Configuration;
 use Moloni\Builders\Interfaces\BuilderInterface;
 use Moloni\Builders\PrestashopProduct\Helpers\Combinations\CreateMappingsAfterPrestaProductCreateOrUpdate;
 use Moloni\Builders\PrestashopProduct\Helpers\Combinations\ProcessAttributesGroup;
@@ -42,7 +42,6 @@ use Moloni\Helpers\Warehouse;
 use Moloni\Tools\Logs;
 use Moloni\Tools\Settings;
 use Moloni\Traits\LogsTrait;
-use PrestaShopException;
 use Product;
 
 if (!defined('_PS_VERSION_')) {
@@ -65,7 +64,7 @@ class PrestashopProductWithCombinations implements BuilderInterface
     /**
      * Prestashop product
      *
-     * @var Product|null
+     * @var \Product|null
      */
     protected $prestashopProduct;
 
@@ -180,7 +179,6 @@ class PrestashopProductWithCombinations implements BuilderInterface
      * @var ProductCombination[]
      */
     protected $combinations;
-
 
     /**
      * Fields that will be synced
@@ -317,15 +315,15 @@ class PrestashopProductWithCombinations implements BuilderInterface
      */
     protected function fetchProductFromPresta(): PrestashopProductWithCombinations
     {
-        $productId = (int)Product::getIdByReference($this->reference);
+        $productId = (int) \Product::getIdByReference($this->reference);
 
         if ($productId > 0) {
-            $product = new Product($productId, true, Configuration::get('PS_LANG_DEFAULT'));
+            $product = new \Product($productId, true, \Configuration::get('PS_LANG_DEFAULT'));
         } else {
-            if ((int)Settings::get('productReferenceFallback') === Boolean::YES && is_numeric($this->reference)) {
-                $product = new Product((int)$this->reference, true, Configuration::get('PS_LANG_DEFAULT'));
+            if ((int) Settings::get('productReferenceFallback') === Boolean::YES && is_numeric($this->reference)) {
+                $product = new \Product((int) $this->reference, true, \Configuration::get('PS_LANG_DEFAULT'));
             } else {
-                $product = new Product();
+                $product = new \Product();
             }
         }
 
@@ -359,11 +357,8 @@ class PrestashopProductWithCombinations implements BuilderInterface
             }
 
             $this->afterSave();
-        } catch (PrestaShopException $e) {
-            throw new MoloniProductException('Error creating product ({0})', ['{0}' => $this->reference], [
-                'message' => $e->getMessage(),
-                'moloniProduct' => $this->moloniProduct
-            ]);
+        } catch (\PrestaShopException $e) {
+            throw new MoloniProductException('Error creating product ({0})', ['{0}' => $this->reference], ['message' => $e->getMessage(), 'moloniProduct' => $this->moloniProduct]);
         }
     }
 
@@ -389,11 +384,8 @@ class PrestashopProductWithCombinations implements BuilderInterface
             }
 
             $this->afterSave();
-        } catch (PrestaShopException $e) {
-            throw new MoloniProductException('Error updating product ({0})', ['{0}' => $this->reference], [
-                'message' => $e->getMessage(),
-                'moloniProduct' => $this->moloniProduct
-            ]);
+        } catch (\PrestaShopException $e) {
+            throw new MoloniProductException('Error updating product ({0})', ['{0}' => $this->reference], ['message' => $e->getMessage(), 'moloniProduct' => $this->moloniProduct]);
         }
     }
 
@@ -426,7 +418,7 @@ class PrestashopProductWithCombinations implements BuilderInterface
             return 0;
         }
 
-        return (int)$this->moloniProduct['productId'];
+        return (int) $this->moloniProduct['productId'];
     }
 
     /**
@@ -446,7 +438,7 @@ class PrestashopProductWithCombinations implements BuilderInterface
      */
     public function getPrestashopProductId(): int
     {
-        return (int)$this->prestashopProduct->id;
+        return (int) $this->prestashopProduct->id;
     }
 
     //          SETS          //
@@ -579,7 +571,7 @@ class PrestashopProductWithCombinations implements BuilderInterface
      */
     public function setPrice(): PrestashopProductWithCombinations
     {
-        $this->price = (float)($this->moloniProduct['price'] ?? 0);
+        $this->price = (float) ($this->moloniProduct['price'] ?? 0);
 
         return $this;
     }
@@ -601,7 +593,7 @@ class PrestashopProductWithCombinations implements BuilderInterface
             }
         }
 
-        $this->warehouseId = (int)$warehouseId;
+        $this->warehouseId = (int) $warehouseId;
 
         return $this;
     }
@@ -613,7 +605,7 @@ class PrestashopProductWithCombinations implements BuilderInterface
      */
     public function setHasStock(): PrestashopProductWithCombinations
     {
-        $this->hasStock = $this->moloniProduct['hasStock'] ?? (bool)Boolean::YES;
+        $this->hasStock = $this->moloniProduct['hasStock'] ?? (bool) Boolean::YES;
 
         return $this;
     }
@@ -662,7 +654,7 @@ class PrestashopProductWithCombinations implements BuilderInterface
         // Check if Moloni groups exist
         try {
             new ProcessAttributesGroup($this->moloniProduct['propertyGroup']);
-        } catch (PrestaShopException $e) {
+        } catch (\PrestaShopException $e) {
             throw new MoloniProductException('Error when creating product attributes', [], [$e->getMessage()]);
         }
 

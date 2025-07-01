@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -24,13 +25,8 @@
 
 namespace Moloni\Builders\PrestashopProduct\Helpers\Combinations;
 
-use Attribute;
-use AttributeGroup;
-use Configuration;
 use Moloni\Helpers\Version;
 use Moloni\Traits\AttributesTrait;
-use PrestaShopException;
-use ProductAttribute;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -46,12 +42,12 @@ class ProcessAttributesGroup
     /**
      * Constructor
      *
-     * @throws PrestaShopException
+     * @throws \PrestaShopException
      */
     public function __construct(array $moloniPropertyGroup)
     {
         $this->moloniPropertyGroup = $moloniPropertyGroup;
-        $this->languageId = Configuration::get('PS_LANG_DEFAULT');
+        $this->languageId = \Configuration::get('PS_LANG_DEFAULT');
 
         $this->handle();
     }
@@ -59,7 +55,7 @@ class ProcessAttributesGroup
     /**
      * Handler
      *
-     * @throws PrestaShopException
+     * @throws \PrestaShopException
      */
     public function handle(): void
     {
@@ -67,7 +63,7 @@ class ProcessAttributesGroup
             $groupId = $this->getAttributeGroupByName($group['name']);
 
             if (empty($groupId)) {
-                $groupObj = new AttributeGroup(null, $this->languageId);
+                $groupObj = new \AttributeGroup(null, $this->languageId);
                 $groupObj->name = $group['name'];
                 $groupObj->public_name = $group['name'];
                 $groupObj->group_type = 'select';
@@ -82,9 +78,9 @@ class ProcessAttributesGroup
 
                 if (empty($attributeId)) {
                     if (Version::isPrestashopNewVersion()) {
-                        $attributeObj = new ProductAttribute(null, $this->languageId);
+                        $attributeObj = new \ProductAttribute(null, $this->languageId);
                     } else {
-                        $attributeObj = new Attribute(null, $this->languageId);
+                        $attributeObj = new \Attribute(null, $this->languageId);
                     }
 
                     $attributeObj->name = $attribute['value'];

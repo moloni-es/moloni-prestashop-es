@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -25,8 +26,8 @@
 namespace Moloni\Actions\Documents;
 
 use Moloni\Api\MoloniApiClient;
+use Moloni\Configurations;
 use Moloni\Enums\DocumentTypes;
-use Moloni\Enums\Domains;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\MoloniException;
 
@@ -38,11 +39,13 @@ class DocumentsDownloadPdf
 {
     protected $documentId;
     protected $documentType;
+    protected $configurations;
 
-    public function __construct(int $documentId, string $documentType)
+    public function __construct(int $documentId, string $documentType, Configurations $configurations)
     {
         $this->documentId = $documentId;
         $this->documentType = $documentType;
+        $this->configurations = $configurations;
     }
 
     /**
@@ -55,7 +58,7 @@ class DocumentsDownloadPdf
         $token = $this->fetchToken();
 
         if (!empty($token)) {
-            $url = Domains::MOLONI_MEDIA_API . $token['path'] . '?jwt=' . $token['token'];
+            $url = $this->configurations->get('media_api_url') . $token['path'] . '?jwt=' . $token['token'];
         }
 
         return $url;
@@ -66,48 +69,26 @@ class DocumentsDownloadPdf
      */
     private function fetchToken(): array
     {
-        $query = [];
-        $variables = [
-            'documentId' =>  $this->documentId,
+        $variables = ['documentId' => $this->documentId];
+
+        $map = [
+            DocumentTypes::INVOICES => ['method' => [MoloniApiClient::invoice(), 'queryInvoiceGetPDFToken'], 'key' => 'invoiceGetPDFToken'],
+            DocumentTypes::RECEIPTS => ['method' => [MoloniApiClient::receipt(), 'queryReceiptGetPDFToken'], 'key' => 'receiptGetPDFToken'],
+            DocumentTypes::PRO_FORMA_INVOICES => ['method' => [MoloniApiClient::proFormaInvoice(), 'queryProFormaInvoiceGetPDFToken'], 'key' => 'proFormaInvoiceGetPDFToken'],
+            DocumentTypes::PURCHASE_ORDERS => ['method' => [MoloniApiClient::purchaseOrder(), 'queryPurchaseOrderGetPDFToken'], 'key' => 'purchaseOrderGetPDFToken'],
+            DocumentTypes::SIMPLIFIED_INVOICES => ['method' => [MoloniApiClient::simplifiedInvoice(), 'querySimplifiedInvoiceGetPDFToken'], 'key' => 'simplifiedInvoiceGetPDFToken'],
+            DocumentTypes::ESTIMATE => ['method' => [MoloniApiClient::estimate(), 'queryEstimateGetPDFToken'], 'key' => 'estimateGetPDFToken'],
+            DocumentTypes::BILLS_OF_LADING => ['method' => [MoloniApiClient::billsOfLading(), 'queryBillsOfLadingGetPDFToken'], 'key' => 'billsOfLadingGetPDFToken'],
         ];
 
         try {
-            switch ($this->documentType) {
-                case DocumentTypes::INVOICES:
-                    $query = MoloniApiClient::invoice()->queryInvoiceGetPDFToken($variables);
-                    $query = $query['data']['invoiceGetPDFToken']['data'] ?? [];
+            if (isset($map[$this->documentType])) {
+                $entry = $map[$this->documentType];
+                $result = call_user_func($entry['method'], $variables);
 
-                    break;
-                case DocumentTypes::RECEIPTS:
-                    $query = MoloniApiClient::receipt()->queryReceiptGetPDFToken($variables);
-                    $query = $query['data']['receiptGetPDFToken']['data'] ?? [];
-
-                    break;
-                case DocumentTypes::PRO_FORMA_INVOICES:
-                    $query = MoloniApiClient::proFormaInvoice()->queryProFormaInvoiceGetPDFToken($variables);
-                    $query = $query['data']['proFormaInvoiceGetPDFToken']['data'] ?? [];
-
-                    break;
-                case DocumentTypes::PURCHASE_ORDERS:
-                    $query = MoloniApiClient::purchaseOrder()->queryPurchaseOrderGetPDFToken($variables);
-                    $query = $query['data']['purchaseOrderGetPDFToken']['data'] ?? [];
-
-                    break;
-                case DocumentTypes::SIMPLIFIED_INVOICES:
-                    $query = MoloniApiClient::simplifiedInvoice()->querySimplifiedInvoiceGetPDFToken($variables);
-                    $query = $query['data']['simplifiedInvoiceGetPDFToken']['data'] ?? [];
-
-                    break;
-                case DocumentTypes::ESTIMATE:
-                    $query = MoloniApiClient::estimate()->queryEstimateGetPDFToken($variables);
-                    $query = $query['data']['estimateGetPDFToken']['data'] ?? [];
-
-                    break;
-                case DocumentTypes::BILLS_OF_LADING:
-                    $query = MoloniApiClient::billsOfLading()->queryBillsOfLadingGetPDFToken($variables);
-                    $query = $query['data']['billsOfLadingGetPDFToken']['data'] ?? [];
-
-                    break;
+                $query = $result['data'][$entry['key']]['data'] ?? [];
+            } else {
+                $query = [];
             }
         } catch (MoloniApiException $e) {
             throw new MoloniException('Error fetching pdf token', $e->getData());

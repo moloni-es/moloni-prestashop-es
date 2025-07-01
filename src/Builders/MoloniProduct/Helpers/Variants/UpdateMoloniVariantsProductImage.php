@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -24,8 +25,6 @@
 
 namespace Moloni\Builders\MoloniProduct\Helpers\Variants;
 
-use Image;
-use Configuration;
 use Moloni\Api\MoloniApi;
 use Moloni\Builders\MoloniProduct\ProductVariant;
 use Moloni\Enums\Boolean;
@@ -56,7 +55,7 @@ class UpdateMoloniVariantsProductImage
         $this->moloniProductMutated = $moloniProductMutated;
         $this->variantBuilders = $variantBuilders;
 
-        $this->languageId = Configuration::get('PS_LANG_DEFAULT');
+        $this->languageId = \Configuration::get('PS_LANG_DEFAULT');
 
         $this->handle();
     }
@@ -70,30 +69,30 @@ class UpdateMoloniVariantsProductImage
         $files = [];
         $counter = 0;
 
-        $image = new Image($this->coverImage['id_image'], $this->languageId);
-        $files[] = _PS_PROD_IMG_DIR_ . $image->getExistingImgPath() . "." . $image->image_format;
+        $image = new \Image($this->coverImage['id_image'], $this->languageId);
+        $files[] = _PS_PROD_IMG_DIR_ . $image->getExistingImgPath() . '.' . $image->image_format;
         $map = '{ "0": ["variables.data.img"]';
 
         $props = [
             'data' => [
-                'productId' => (int)$this->moloniProductMutated['productId'],
+                'productId' => (int) $this->moloniProductMutated['productId'],
                 'img' => '{' . $counter . '}',
                 'variants' => [],
-            ]
+            ],
         ];
 
-        $counter++;
+        ++$counter;
 
         foreach ($this->moloniProductMutated['variants'] as $idx => $variant) {
-            if ((int)$variant['visible'] === Boolean::YES) {
-                $builder = $this->findBuilderByVariantId((int)$variant['productId']);
+            if ((int) $variant['visible'] === Boolean::YES) {
+                $builder = $this->findBuilderByVariantId((int) $variant['productId']);
 
                 if ($builder) {
                     $variantImage = $builder->getImage();
 
                     if (!empty($variantImage)) {
-                        $image = new Image($variantImage['id_image'], $this->languageId);
-                        $files[] = _PS_PROD_IMG_DIR_ . $image->getExistingImgPath() . "." . $image->image_format;;
+                        $image = new \Image($variantImage['id_image'], $this->languageId);
+                        $files[] = _PS_PROD_IMG_DIR_ . $image->getExistingImgPath() . '.' . $image->image_format;
 
                         $map .= ', "' . $counter . '": ["variables.data.variants.' . $idx . '.img"]';
 
@@ -102,7 +101,7 @@ class UpdateMoloniVariantsProductImage
                             'img' => '{' . $counter . '}',
                         ];
 
-                        $counter++;
+                        ++$counter;
 
                         continue;
                     }
@@ -110,7 +109,7 @@ class UpdateMoloniVariantsProductImage
             }
 
             $props['data']['variants'][] = [
-                'productId' => $variant['productId']
+                'productId' => $variant['productId'],
             ];
         }
 
@@ -139,7 +138,7 @@ class UpdateMoloniVariantsProductImage
 
         $result = null;
 
-        foreach($this->variantBuilders as $builder) {
+        foreach ($this->variantBuilders as $builder) {
             $builderVariantId = $builder->getMoloniVariantId();
 
             if ($builderVariantId === $wantedVariantId) {

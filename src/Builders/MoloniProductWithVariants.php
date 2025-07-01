@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -24,12 +25,6 @@
 
 namespace Moloni\Builders;
 
-use Address;
-use Category;
-use Combination;
-use Configuration;
-use Country;
-use Image;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\Interfaces\BuilderInterface;
 use Moloni\Builders\MoloniProduct\Helpers\Variants\CreateMappingsAfterMoloniProductCreateOrUpdate;
@@ -42,6 +37,7 @@ use Moloni\Builders\MoloniProduct\ProductVariant;
 use Moloni\Enums\Boolean;
 use Moloni\Enums\Countries;
 use Moloni\Enums\ProductType;
+use Moloni\Enums\ProductTypeAT;
 use Moloni\Enums\ProductVisibility;
 use Moloni\Enums\SyncFields;
 use Moloni\Exceptions\MoloniApiException;
@@ -51,10 +47,8 @@ use Moloni\Exceptions\Product\MoloniProductException;
 use Moloni\Exceptions\Product\MoloniProductTaxException;
 use Moloni\Helpers\Warehouse;
 use Moloni\Tools\Logs;
-use Moloni\Tools\ProductAssociations;
 use Moloni\Tools\Settings;
 use Moloni\Traits\LogsTrait;
-use Product;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -93,6 +87,13 @@ class MoloniProductWithVariants implements BuilderInterface
      * @var int
      */
     protected $type;
+
+    /**
+     * Moloni AT product type
+     *
+     * @var string
+     */
+    protected $typeAT = '';
 
     /**
      * Product name
@@ -202,7 +203,7 @@ class MoloniProductWithVariants implements BuilderInterface
     /**
      * Prestashop product object
      *
-     * @var Product
+     * @var \Product
      */
     protected $prestashopProduct;
 
@@ -211,11 +212,11 @@ class MoloniProductWithVariants implements BuilderInterface
      *
      * @throws MoloniProductException
      */
-    public function __construct(Product $prestashopProduct, ?array $syncFields = null)
+    public function __construct(\Product $prestashopProduct)
     {
         $this->prestashopProduct = $prestashopProduct;
 
-        $this->syncFields = $syncFields ?? Settings::get('productSyncFields') ?? SyncFields::getDefaultFields();
+        $this->syncFields = Settings::get('productSyncFields') ?? SyncFields::getDefaultFields();
 
         $this->init();
     }
@@ -239,6 +240,7 @@ class MoloniProductWithVariants implements BuilderInterface
             ->setHasStock()
             ->setPrice()
             ->setType()
+            ->setTypeAT()
             ->setTax()
             ->setEcoTax()
             ->setWarehouseId()
@@ -262,6 +264,9 @@ class MoloniProductWithVariants implements BuilderInterface
             'type' => $this->type,
             'reference' => $this->reference,
             'measurementUnitId' => $this->measurementUnitId,
+            'productAT' => [
+                'productType' => $this->typeAT,
+            ],
             'variants' => [],
             'taxes' => [],
             'exemptionReason' => '',
@@ -380,14 +385,7 @@ class MoloniProductWithVariants implements BuilderInterface
     protected function beforeUpdate(): void
     {
         if (!$this->moloniProduct['deletable'] && empty($this->moloniProduct['variants']) && $this->productExists()) {
-            throw new MoloniProductException(
-                'Cannot update product in Moloni. Product types do not match',
-                null,
-                [
-                    'moloniProductId' => $this->getMoloniProductId(),
-                    'prestashopProductId' => $this->prestashopProduct->id
-                ]
-            );
+            throw new MoloniProductException('Cannot update product in Moloni. Product types do not match', null, ['moloniProductId' => $this->getMoloniProductId(), 'prestashopProductId' => $this->prestashopProduct->id]);
         }
     }
 
@@ -434,14 +432,10 @@ class MoloniProductWithVariants implements BuilderInterface
 
                 $this->afterSave();
             } else {
-                throw new MoloniProductException('Error creating product ({0})', ['{0}' => $this->reference], [
-                    'mutation' => $mutation,
-                    '$props' => $props
-                ]);
+                throw new MoloniProductException('Error creating product ({0})', ['{0}' => $this->reference], ['mutation' => $mutation, '$props' => $props]);
             }
         } catch (MoloniApiException $e) {
-            throw new MoloniProductException('Error creating product ({0})', ['{0}' => $this->reference], $e->getData()
-            );
+            throw new MoloniProductException('Error creating product ({0})', ['{0}' => $this->reference], $e->getData());
         }
 
         return $this;
@@ -479,17 +473,10 @@ class MoloniProductWithVariants implements BuilderInterface
 
                 $this->afterSave();
             } else {
-                throw new MoloniProductException('Error updating product ({0})', ['{0}' => $this->reference], [
-                    'mutation' => $mutation,
-                    'props' => $props,
-                ]);
+                throw new MoloniProductException('Error updating product ({0})', ['{0}' => $this->reference], ['mutation' => $mutation, 'props' => $props]);
             }
         } catch (MoloniApiException $e) {
-            throw new MoloniProductException(
-                'Error updating product ({0})',
-                ['{0}' => $this->reference],
-                $e->getData()
-            );
+            throw new MoloniProductException('Error updating product ({0})', ['{0}' => $this->reference], $e->getData());
         }
 
         return $this;
@@ -649,15 +636,25 @@ class MoloniProductWithVariants implements BuilderInterface
     }
 
     /**
+     * Set AT product type
+     *
+     * @return MoloniProductWithVariants
+     */
+    public function setTypeAT(): MoloniProductWithVariants
+    {
+        $this->typeAT = $this->moloniProduct['productAT']['productType'] ?? ProductTypeAT::GOODS;
+
+        return $this;
+    }
+
+    /**
      * Set has stock
      *
      * @return MoloniProductWithVariants
      */
     public function setHasStock(): MoloniProductWithVariants
     {
-        $hasStock = $this->moloniProduct['hasStock'] ?? (bool) Boolean::YES;
-
-        $this->hasStock = $hasStock;
+        $this->hasStock = $this->moloniProduct['hasStock'] ?? (bool) Boolean::YES;
 
         return $this;
     }
@@ -672,8 +669,8 @@ class MoloniProductWithVariants implements BuilderInterface
         try {
             $mutation = MoloniApiClient::companies()->queryCompany();
 
-            $address = new Address();
-            $address->id_country = Country::getByIso($mutation['fiscalZone']['fiscalZone'] ?? 'ES');
+            $address = new \Address();
+            $address->id_country = \Country::getByIso($mutation['fiscalZone']['fiscalZone'] ?? 'ES');
 
             $taxRate = (float) $this->prestashopProduct->getTaxesRate($address);
 
@@ -766,14 +763,14 @@ class MoloniProductWithVariants implements BuilderInterface
         $categoriesNames = [];
 
         if (!empty($this->prestashopProduct->id_category_default)) {
-            $languageId = (int)Configuration::get('PS_LANG_DEFAULT');
-            $rootCategoryId = (int)Category::getRootCategory()->id;
+            $languageId = (int) \Configuration::get('PS_LANG_DEFAULT');
+            $rootCategoryId = (int) \Category::getRootCategory()->id;
 
             $categoryId = $this->prestashopProduct->id_category_default;
             $failsafe = 0;
 
             do {
-                $categoryObj = new Category($categoryId, $languageId);
+                $categoryObj = new \Category($categoryId, $languageId);
 
                 // For some reason sometimes this comes empty
                 if (empty($categoryObj->name)) {
@@ -783,12 +780,12 @@ class MoloniProductWithVariants implements BuilderInterface
                 array_unshift($categoriesNames, $categoryObj->name);
 
                 // Skip root category
-                if ((int)$categoryObj->id_parent === $rootCategoryId) {
+                if ((int) $categoryObj->id_parent === $rootCategoryId) {
                     break;
                 }
 
                 // Next category is this category parent
-                $categoryId = (int)$categoryObj->id_parent;
+                $categoryId = (int) $categoryObj->id_parent;
 
                 ++$failsafe;
             } while ($failsafe < 100 && $categoryId > 0);
@@ -842,7 +839,7 @@ class MoloniProductWithVariants implements BuilderInterface
     public function setCoverImage(): MoloniProductWithVariants
     {
         /** @var array|null $coverImage */
-        $coverImage = Image::getCover($this->prestashopProduct->id);
+        $coverImage = \Image::getCover($this->prestashopProduct->id);
 
         $this->coverImage = $coverImage ?? [];
 
@@ -865,12 +862,12 @@ class MoloniProductWithVariants implements BuilderInterface
         }
 
         if (empty($targetId)) {
-            /**
+            /*
              * Find or create the most suitable group for this new product
              */
             $this->propertyGroup = (new FindOrCreatePropertyGroup($this->prestashopProduct))->handle();
         } else {
-            /**
+            /*
              * Product already exists, so it has property group assigned
              * So we need to get the property group and update it if needed
              */
@@ -890,9 +887,9 @@ class MoloniProductWithVariants implements BuilderInterface
         $prestashopCombinationsQuery = $this->prestashopProduct->getAttributeCombinations(null, false);
 
         foreach ($prestashopCombinationsQuery as $combinationQuery) {
-            $combination = new Combination(
+            $combination = new \Combination(
                 $combinationQuery['id_product_attribute'],
-                (int) Configuration::get('PS_LANG_DEFAULT')
+                (int) \Configuration::get('PS_LANG_DEFAULT')
             );
 
             $builder = new ProductVariant(
@@ -1013,9 +1010,7 @@ class MoloniProductWithVariants implements BuilderInterface
                 $this->moloniProduct = $moloniProduct;
             }
         } catch (MoloniApiException $e) {
-            throw new MoloniProductException('Error fetching product by ID: ({0})', [
-                '{0}' => $this->reference
-            ], $e->getData());
+            throw new MoloniProductException('Error fetching product by ID: ({0})', ['{0}' => $this->reference], $e->getData());
         }
 
         return $this;
@@ -1048,11 +1043,7 @@ class MoloniProductWithVariants implements BuilderInterface
                 $this->moloniProduct = $query[0];
             }
         } catch (MoloniApiException $e) {
-            throw new MoloniProductException(
-                'Error fetching product by reference: ({0})',
-                ['{0}' => $this->reference],
-                $e->getData()
-            );
+            throw new MoloniProductException('Error fetching product by reference: ({0})', ['{0}' => $this->reference], $e->getData());
         }
 
         return $this;

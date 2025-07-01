@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="administration" source-language="pt-PT" target-language="pt-PT" datatype="plaintext">
+    <body>
+      <trans-unit id="5811d9162f7a838934f757488d6cb918">
+        <source>Moloni Spain</source>
+        <target>Moloni Spain</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="77b0d2ce65bebd13e81e7f595bb4b05b">
+        <source>Moloni Dev</source>
+        <target>Moloni Dev</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="8ec1f1742b37d97f1e07ade4961d24cf">
+        <source>MoloniOn</source>
+        <target>MoloniOn</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="ae22059c109bd08cba6ddc9739a5f6d3">
+        <source>Automatic document creation with real time stock synchronization and powerful sales analysis.</source>
+        <target>Criação automática de documentos com sincronização de estoque em tempo real e análise de vendas poderosa.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="7442e29d7d53e549b78d93c46b8cdcfc">
+        <source>Orders</source>
+        <target>Encomendas</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="f28128b38efbc6134dc40751ee21fd29">
+        <source>Documents</source>
+        <target>Documentos</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="f4f70727dc34561dfde1a3c529b6205c">
+        <source>Settings</source>
+        <target>Definições</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="8625e1de7be14c39b1d14dc03d822497">
+        <source>Tools</source>
+        <target>Ferramentas</target>
+        <note>Line: </note>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

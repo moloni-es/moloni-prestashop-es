@@ -1,0 +1,14 @@
+mutation taxCreate($companyId: Int!,$data: TaxInsert!) {
+  taxCreate(companyId: $companyId,data: $data) {
+    data {
+      taxId
+      name
+      value
+    }
+    errors {
+      field
+      msg
+    }
+  }
+}
+

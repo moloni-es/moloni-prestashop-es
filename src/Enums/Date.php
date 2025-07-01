@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -30,7 +31,7 @@ if (!defined('_PS_VERSION_')) {
 
 class Date
 {
-    public const DATETIME_FORMAT = "Y-m-d H:i:s";
-    public const DATE_FORMAT = "Y-m-d";
-    public const TIMEZONE = "UTC";
+    public const DATETIME_FORMAT = 'Y-m-d H:i:s';
+    public const DATE_FORMAT = 'Y-m-d';
+    public const TIMEZONE = 'UTC';
 }

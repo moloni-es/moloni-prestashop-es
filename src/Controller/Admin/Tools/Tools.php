@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -24,7 +25,6 @@
 
 namespace Moloni\Controller\Admin\Tools;
 
-use Tools as PrestashopTools;
 use Moloni\Actions\Exports\ExportProductsToMoloni;
 use Moloni\Actions\Exports\ExportStocksToMoloni;
 use Moloni\Actions\Imports\ImportProductsFromMoloni;
@@ -38,6 +38,7 @@ use Moloni\Exceptions\MoloniException;
 use Moloni\Tools\Settings;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Tools as PrestashopTools;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -47,8 +48,8 @@ class Tools extends MoloniController
 {
     public function home(): Response
     {
-        return $this->render(
-            '@Modules/molonies/views/templates/admin/tools/Tools.twig',
+        return $this->display(
+            'tools/Tools.twig',
             [
                 'companyName' => Settings::get('companyName'),
                 'importProductsRoute' => MoloniRoutes::TOOLS_IMPORT_PRODUCTS,
@@ -66,13 +67,13 @@ class Tools extends MoloniController
 
     public function importProducts(): Response
     {
-        $page = (int)PrestashopTools::getValue('page', 1);
+        $page = (int) PrestashopTools::getValue('page', 1);
 
         $response = [
             'valid' => true,
             'post' => [
-                'page' => $page
-            ]
+                'page' => $page,
+            ],
         ];
 
         $tool = new ImportProductsFromMoloni($page);
@@ -80,8 +81,8 @@ class Tools extends MoloniController
 
         $response['hasMore'] = $tool->getHasMore();
 
-        $response['overlayContent'] = $this->renderView(
-            '@Modules/molonies/views/templates/admin/tools/overlays/blocks/ProductImportContent.twig',
+        $response['overlayContent'] = $this->displayView(
+            'tools/overlays/blocks/ProductImportContent.twig',
             [
                 'hasMore' => $tool->getHasMore(),
                 'totalResults' => $tool->getTotalResults(),
@@ -94,13 +95,13 @@ class Tools extends MoloniController
 
     public function importStocks(): Response
     {
-        $page = (int)PrestashopTools::getValue('page', 1);
+        $page = (int) PrestashopTools::getValue('page', 1);
 
         $response = [
             'valid' => true,
             'post' => [
-                'page' => $page
-            ]
+                'page' => $page,
+            ],
         ];
 
         $tool = new ImportStockChangesFromMoloni($page);
@@ -108,8 +109,8 @@ class Tools extends MoloniController
 
         $response['hasMore'] = $tool->getHasMore();
 
-        $response['overlayContent'] = $this->renderView(
-            '@Modules/molonies/views/templates/admin/tools/overlays/blocks/ProductImportContent.twig',
+        $response['overlayContent'] = $this->displayView(
+            'tools/overlays/blocks/ProductImportContent.twig',
             [
                 'hasMore' => $tool->getHasMore(),
                 'totalResults' => $tool->getTotalResults(),
@@ -122,13 +123,13 @@ class Tools extends MoloniController
 
     public function exportProducts(): Response
     {
-        $page = (int)PrestashopTools::getValue('page', 1);
+        $page = (int) PrestashopTools::getValue('page', 1);
 
         $response = [
             'valid' => true,
             'post' => [
-                'page' => $page
-            ]
+                'page' => $page,
+            ],
         ];
 
         $tool = new ExportProductsToMoloni($page, $this->getContextLangId());
@@ -136,8 +137,8 @@ class Tools extends MoloniController
 
         $response['hasMore'] = $tool->getHasMore();
 
-        $response['overlayContent'] = $this->renderView(
-            '@Modules/molonies/views/templates/admin/tools/overlays/blocks/ProductExportContent.twig',
+        $response['overlayContent'] = $this->displayView(
+            'tools/overlays/blocks/ProductExportContent.twig',
             [
                 'hasMore' => $tool->getHasMore(),
                 'processedProducts' => $tool->getProcessedProducts(),
@@ -149,13 +150,13 @@ class Tools extends MoloniController
 
     public function exportStocks(): Response
     {
-        $page = (int)PrestashopTools::getValue('page', 1);
+        $page = (int) PrestashopTools::getValue('page', 1);
 
         $response = [
             'valid' => true,
             'post' => [
-                'page' => $page
-            ]
+                'page' => $page,
+            ],
         ];
 
         $tool = new ExportStocksToMoloni($page, $this->getContextLangId());
@@ -163,8 +164,8 @@ class Tools extends MoloniController
 
         $response['hasMore'] = $tool->getHasMore();
 
-        $response['overlayContent'] = $this->renderView(
-            '@Modules/molonies/views/templates/admin/tools/overlays/blocks/ProductExportContent.twig',
+        $response['overlayContent'] = $this->displayView(
+            'tools/overlays/blocks/ProductExportContent.twig',
             [
                 'hasMore' => $tool->getHasMore(),
                 'processedProducts' => $tool->getProcessedProducts(),
@@ -180,15 +181,15 @@ class Tools extends MoloniController
             (new WebhookDeleteAll())->handle();
             $action = new WebhookCreate();
 
-            if ((int)Settings::get('syncStockToPrestashop') === Boolean::YES) {
+            if ((int) Settings::get('syncStockToPrestashop') === Boolean::YES) {
                 $action->handle('Product', 'stockChanged');
             }
 
-            if ((int)Settings::get('addProductsToPrestashop') === Boolean::YES) {
+            if ((int) Settings::get('addProductsToPrestashop') === Boolean::YES) {
                 $action->handle('Product', 'create');
             }
 
-            if ((int)Settings::get('updateProductsToPrestashop') === Boolean::YES) {
+            if ((int) Settings::get('updateProductsToPrestashop') === Boolean::YES) {
                 $action->handle('Product', 'update');
             }
 
@@ -204,6 +205,10 @@ class Tools extends MoloniController
 
     public function logout(): RedirectResponse
     {
+        if (empty($this->moloniContext->getCompanyId())) {
+            return $this->redirectToLogin();
+        }
+
         try {
             (new WebhookDeleteAll())->handle();
         } catch (MoloniException $e) {

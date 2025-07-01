@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -43,21 +44,7 @@ class Categories extends Endpoint
      */
     public function mutationProductCategoryCreate(?array $variables = []): array
     {
-        $query = 'mutation productCategoryCreate($companyId: Int!,$data: ProductCategoryInsert!)
-        {
-            productCategoryCreate(companyId: $companyId,data: $data)
-            {
-                data
-                {
-                    productCategoryId
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = $this->loadMutation('productCategoryCreate');
 
         return $this->simplePost($query, $variables);
     }
@@ -73,31 +60,7 @@ class Categories extends Endpoint
      */
     public function queryProductCategories(?array $variables = []): array
     {
-        $query = 'query productCategories($companyId: Int!,$options: ProductCategoryOptions)
-                {
-                    productCategories(companyId: $companyId,options: $options)
-                    {
-                        data
-                        {
-                            productCategoryId
-                            name
-                        }
-                        options
-                        {
-                            pagination
-                            {
-                                page
-                                qty
-                                count
-                            }
-                        }
-                        errors
-                        {
-                            field
-                            msg
-                        }
-                    }
-                }';
+        $query = $this->loadQuery('productCategories');
 
         return $this->paginatedPost($query, $variables, 'productCategories');
     }
@@ -113,29 +76,7 @@ class Categories extends Endpoint
      */
     public function queryProductCategory(?array $variables = []): array
     {
-        $query = 'query productCategory($companyId: Int!,$productCategoryId: Int!)
-        {
-            productCategory(companyId: $companyId,productCategoryId: $productCategoryId)
-            {
-                data
-                {
-                    name
-                    posVisible
-                    summary
-                    visible
-                    parent
-                    {
-                        productCategoryId
-                        name
-                    }
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = $this->loadQuery('productCategory');
 
         return $this->simplePost($query, $variables);
     }

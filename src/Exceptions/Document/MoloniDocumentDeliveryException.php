@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -30,5 +31,4 @@ if (!defined('_PS_VERSION_')) {
 
 class MoloniDocumentDeliveryException extends MoloniDocumentException
 {
-
 }

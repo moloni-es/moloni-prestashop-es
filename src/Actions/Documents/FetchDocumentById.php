@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -37,7 +38,6 @@ class FetchDocumentById
     private $documentId;
     private $documentType;
 
-
     public function __construct(int $documentId, string $documentType)
     {
         $this->documentId = $documentId;
@@ -49,7 +49,7 @@ class FetchDocumentById
         $document = [];
 
         $variables = [
-            'documentId' => $this->documentId
+            'documentId' => $this->documentId,
         ];
 
         try {

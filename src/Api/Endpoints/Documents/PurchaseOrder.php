@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -44,30 +45,7 @@ class PurchaseOrder extends Endpoint
      */
     public function queryPurchaseOrder(?array $variables = []): array
     {
-        $query = 'query purchaseOrder($companyId: Int!,$documentId: Int!,$options: PurchaseOrderOptionsSingle)
-                {
-                    purchaseOrder(companyId: $companyId,documentId: $documentId,options: $options)
-                    {
-                        data
-                        {
-                            documentId
-                            number
-                            ourReference
-                            yourReference
-                            entityVat
-                            entityNumber
-                            entityName
-                            documentSetName
-                            totalValue
-                            pdfExport
-                        }
-                        errors
-                        {
-                            field
-                            msg
-                        }
-                    }
-                }';
+        $query = $this->loadQuery('purchaseOrder');
 
         return $this->simplePost($query, $variables);
     }
@@ -83,38 +61,7 @@ class PurchaseOrder extends Endpoint
      */
     public function queryPurchaseOrders(?array $variables = []): array
     {
-        $query = 'query purchaseOrders($companyId: Int!,$options: PurchaseOrderOptions)
-                {
-                    purchaseOrders(companyId: $companyId,options: $options)
-                    {
-                        data
-                        {
-                            documentId
-                            number
-                            ourReference
-                            yourReference
-                            entityVat
-                            entityNumber
-                            entityName
-                            documentSetName
-                            totalValue
-                        }
-                        options
-                        {
-                            pagination
-                            {
-                                page
-                                qty
-                                count
-                            }
-                        }
-                        errors
-                        {
-                            field
-                            msg
-                        }
-                    }
-                }';
+        $query = $this->loadQuery('purchaseOrders');
 
         return $this->paginatedPost($query, $variables, 'purchaseOrders');
     }
@@ -130,23 +77,7 @@ class PurchaseOrder extends Endpoint
      */
     public function queryPurchaseOrderGetPDFToken(?array $variables = []): array
     {
-        $query = 'query purchaseOrderGetPDFToken($documentId: Int!)
-                {
-                    purchaseOrderGetPDFToken(documentId: $documentId)
-                    {
-                        data
-                        {
-                            token
-                            filename
-                            path
-                        }
-                        errors
-                        {
-                            field
-                            msg
-                        }
-                    }
-                }';
+        $query = $this->loadQuery('purchaseOrderGetPDFToken');
 
         return $this->simplePost($query, $variables);
     }
@@ -162,36 +93,7 @@ class PurchaseOrder extends Endpoint
      */
     public function mutationPurchaseOrderCreate(?array $variables = []): array
     {
-        $query = 'mutation purchaseOrderCreate($companyId: Int!,$data: 
-        PurchaseOrderInsert!,$options: PurchaseOrderMutateOptions)
-                {
-                    purchaseOrderCreate(companyId: $companyId,data: $data,options: $options)
-                    {
-                        data
-                        {
-                            documentId
-                            number
-                            ourReference
-                            yourReference
-                            entityVat
-                            entityNumber
-                            entityName
-                            documentSetName
-                            totalValue
-                            currencyExchangeTotalValue
-                            products
-                            {
-                                documentProductId
-                                productId
-                            }   
-                        }
-                        errors
-                        {
-                            field
-                            msg
-                        }
-                    }
-                }';
+        $query = $this->loadMutation('purchaseOrderCreate');
 
         return $this->simplePost($query, $variables);
     }
@@ -207,28 +109,7 @@ class PurchaseOrder extends Endpoint
      */
     public function mutationPurchaseOrderUpdate(?array $variables = []): array
     {
-        $query = 'mutation purchaseOrderUpdate($companyId: Int!,$data: PurchaseOrderUpdate!)
-        {
-            purchaseOrderUpdate(companyId: $companyId,data: $data)
-            {
-                data
-                {
-                    documentId
-                    status
-                    currencyExchangeTotalValue
-                    products
-                    {
-                        documentProductId
-                        productId
-                    }   
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = $this->loadMutation('purchaseOrderUpdate');
 
         return $this->simplePost($query, $variables);
     }
@@ -244,10 +125,7 @@ class PurchaseOrder extends Endpoint
      */
     public function mutationPurchaseOrderSendEmail(?array $variables = []): array
     {
-        $query = 'mutation purchaseOrderSendMail($companyId: Int!,$documents: [Int]!,$mailData: MailData)
-        {
-            purchaseOrderSendMail(companyId: $companyId,documents: $documents,mailData: $mailData)
-        }';
+        $query = $this->loadMutation('purchaseOrderSendMail');
 
         return $this->simplePost($query, $variables);
     }
@@ -263,10 +141,7 @@ class PurchaseOrder extends Endpoint
      */
     public function mutationPurchaseOrderGetPDF(?array $variables = []): array
     {
-        $query = 'mutation purchaseOrderGetPDF($companyId: Int!,$documentId: Int!)
-                {
-                    purchaseOrderGetPDF(companyId: $companyId,documentId: $documentId)
-                }';
+        $query = $this->loadMutation('purchaseOrderGetPDF');
 
         return $this->simplePost($query, $variables);
     }

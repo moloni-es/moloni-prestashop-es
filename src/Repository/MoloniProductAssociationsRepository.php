@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -24,9 +25,9 @@
 
 namespace Moloni\Repository;
 
-use Doctrine\ORM\ORMException;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Moloni\Entity\MoloniProductAssociations;
 
 if (!defined('_PS_VERSION_')) {

@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -26,7 +27,6 @@ namespace Moloni\Builders\PrestashopProduct\Helpers;
 
 use Moloni\Tools\Logs;
 use Moloni\Traits\LogsTrait;
-use StockAvailable;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -68,18 +68,18 @@ class UpdatePrestaProductStock
      */
     private function handle(): void
     {
-        $currentStock = (float)StockAvailable::getQuantityAvailableByProduct($this->prestaProductId, $this->attributeId);
+        $currentStock = (float) \StockAvailable::getQuantityAvailableByProduct($this->prestaProductId, $this->attributeId);
         $data = [];
 
         if ($this->newStock !== $currentStock) {
-            StockAvailable::setQuantity($this->prestaProductId, $this->attributeId, $this->newStock);
+            \StockAvailable::setQuantity($this->prestaProductId, $this->attributeId, $this->newStock);
 
             $msg = [
                 'Stock updated in Prestashop (old: {0} | new: {1}) ({2})', [
                     '{0}' => $currentStock,
                     '{1}' => $this->newStock,
                     '{2}' => $this->prestaProductReference,
-                ]
+                ],
             ];
         } else {
             $msg = ['Stock is already updated in Prestashop ({0})', ['{0}' => $this->prestaProductReference]];

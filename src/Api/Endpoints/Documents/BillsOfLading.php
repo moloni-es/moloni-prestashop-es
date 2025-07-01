@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -44,27 +45,7 @@ class BillsOfLading extends Endpoint
      */
     public function queryBillsOfLading(?array $variables = []): array
     {
-        $query = 'query billsOfLading($companyId: Int!,$documentId: Int!)
-        {
-            billsOfLading(companyId: $companyId,documentId: $documentId) 
-            {
-                errors
-                {
-                    field
-                    msg
-                }
-                data
-                {
-                    documentId
-                    number
-                    totalValue
-                    documentTotal
-                    documentSetName
-                    ourReference
-                    pdfExport
-                }
-            }
-        }';
+        $query = $this->loadQuery('billsOfLading');
 
         return $this->simplePost($query, $variables);
     }
@@ -80,23 +61,7 @@ class BillsOfLading extends Endpoint
      */
     public function queryBillsOfLadingGetPDFToken(?array $variables = []): array
     {
-        $query = 'query billsOfLadingGetPDFToken($documentId: Int!)
-        {
-            billsOfLadingGetPDFToken(documentId: $documentId)
-            {
-                data
-                {
-                    token
-                    filename
-                    path
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = $this->loadQuery('billsOfLadingGetPDFToken');
 
         return $this->simplePost($query, $variables);
     }
@@ -112,29 +77,7 @@ class BillsOfLading extends Endpoint
      */
     public function mutationBillsOfLadingCreate(?array $variables = []): array
     {
-        $query = 'mutation billsOfLadingCreate($companyId: Int!,$data: BillsOfLadingInsert!,
-        $options: BillsOfLadingMutateOptions){
-                billsOfLadingCreate(companyId: $companyId,data: $data,options: $options) {
-                    errors{
-                        field
-                        msg
-                    }
-                    data{
-                        documentId
-                        number
-                        totalValue
-                        documentTotal
-                        documentSetName
-                        ourReference
-                        currencyExchangeTotalValue
-                        products
-                        {
-                            documentProductId
-                            productId
-                        }
-                    }
-                }
-            }';
+        $query = $this->loadMutation('billsOfLadingCreate');
 
         return $this->simplePost($query, $variables);
     }
@@ -150,28 +93,7 @@ class BillsOfLading extends Endpoint
      */
     public function mutationBillsOfLadingUpdate(?array $variables = []): array
     {
-        $query = 'mutation billsOfLadingUpdate($companyId: Int!,$data: BillsOfLadingUpdate!)
-        {
-            billsOfLadingUpdate(companyId: $companyId,data: $data) 
-            {
-                errors
-                {
-                    field
-                    msg
-                }
-                data
-                {
-                    documentId
-                    status
-                    currencyExchangeTotalValue        
-                    products
-                    {
-                        documentProductId
-                        productId
-                    }
-                }
-            }
-        }';
+        $query = $this->loadMutation('billsOfLadingUpdate');
 
         return $this->simplePost($query, $variables);
     }
@@ -187,10 +109,7 @@ class BillsOfLading extends Endpoint
      */
     public function mutationBillsOfLadingGetPDF(?array $variables = []): array
     {
-        $query = 'mutation billsOfLadingGetPDF($companyId: Int!,$documentId: Int!)
-        {
-            billsOfLadingGetPDF(companyId: $companyId,documentId: $documentId)
-        }';
+        $query = $this->loadMutation('billsOfLadingGetPDF');
 
         return $this->simplePost($query, $variables);
     }
@@ -206,10 +125,7 @@ class BillsOfLading extends Endpoint
      */
     public function mutationBillsOfLadingSendEmail(?array $variables = []): array
     {
-        $query = 'mutation billsOfLadingSendMail($companyId: Int!,$documents: [Int]!,$mailData: MailData)
-        {
-            billsOfLadingSendMail(companyId: companyId,documents: $documents,mailData: $mailData)
-        }';
+        $query = $this->loadMutation('billsOfLadingSendMail');
 
         return $this->simplePost($query, $variables);
     }

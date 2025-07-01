@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -24,18 +25,13 @@
 
 namespace Moloni\Controller\Admin\Orders;
 
-use Tools;
-use Currency;
-use OrderState;
-use PrestaShopException;
-use PrestaShopDatabaseException;
 use Moloni\Actions\Orders\GetOrderListFilters;
 use Moloni\Actions\Orders\OrderCreateDocument;
 use Moloni\Actions\Orders\OrderDiscard;
 use Moloni\Controller\Admin\MoloniController;
+use Moloni\Enums\DocumentReference;
 use Moloni\Enums\DocumentTypes;
 use Moloni\Enums\MoloniRoutes;
-use Moloni\Enums\DocumentReference;
 use Moloni\Exceptions\Document\MoloniDocumentException;
 use Moloni\Exceptions\Document\MoloniDocumentWarning;
 use Moloni\Exceptions\MoloniException;
@@ -58,8 +54,8 @@ class Orders extends MoloniController
      */
     public function home(): Response
     {
-        $page = Tools::getValue('page', 1);
-        $filters = Tools::getValue('filters', []);
+        $page = \Tools::getValue('page', 1);
+        $filters = \Tools::getValue('filters', []);
 
         /** @var OrdersRepository $repository */
         $repository = $this->get('moloni.repository.orders');
@@ -71,18 +67,18 @@ class Orders extends MoloniController
         );
 
         foreach ($orders as &$order) {
-            $order['currency'] = (new Currency($order['id_currency']))->symbol;
+            $order['currency'] = (new \Currency($order['id_currency']))->symbol;
             $order['view_url'] = $this->getAdminLink('AdminOrders', [
                 'vieworder' => '',
                 'id_order' => $order['id_order'],
             ]);
         }
 
-        return $this->render(
-            '@Modules/molonies/views/templates/admin/orders/Orders.twig',
+        return $this->display(
+            'orders/Orders.twig',
             [
                 'orderArray' => $orders,
-                'orderStatesArray' => OrderState::getOrderStates($this->getContextLangId()),
+                'orderStatesArray' => \OrderState::getOrderStates($this->getContextLangId()),
                 'filters' => $filters,
                 'paginator' => $paginator,
                 'companyName' => Settings::get('companyName'),
@@ -102,12 +98,12 @@ class Orders extends MoloniController
      */
     public function create(): RedirectResponse
     {
-        $orderId = (int)Tools::getValue('order_id', 0);
-        $documentType = Tools::getValue('document_type', null);
-        $fromOrderPage = Tools::getValue('from_order_page', false);
+        $orderId = (int) \Tools::getValue('order_id', 0);
+        $documentType = \Tools::getValue('document_type', null);
+        $fromOrderPage = \Tools::getValue('from_order_page', false);
 
-        $page = (int)Tools::getValue('page', 1);
-        $filters = Tools::getValue('filters', []);
+        $page = (int) \Tools::getValue('page', 1);
+        $filters = \Tools::getValue('filters', []);
 
         try {
             $action = new OrderCreateDocument($orderId, $this->getDoctrine()->getManager());
@@ -148,7 +144,7 @@ class Orders extends MoloniController
             $msg .= $this->trans($e->getMessage(), 'Modules.Molonies.Errors', $e->getIdentifiers());
 
             $this->addErrorMessage($msg, $e->getData());
-        } catch (PrestaShopDatabaseException|PrestaShopException $e) {
+        } catch (\PrestaShopDatabaseException|\PrestaShopException $e) {
             $msg = $this->trans('Error fetching Prestashop order', 'Modules.Molonies.Errors');
             $this->addErrorMessage($msg);
         }
@@ -167,9 +163,9 @@ class Orders extends MoloniController
      */
     public function discard(): RedirectResponse
     {
-        $orderId = (int)Tools::getValue('orderId', 0);
-        $page = (int)Tools::getValue('page', 1);
-        $filters = Tools::getValue('filters', []);
+        $orderId = (int) \Tools::getValue('orderId', 0);
+        $page = (int) \Tools::getValue('page', 1);
+        $filters = \Tools::getValue('filters', []);
 
         try {
             $action = new OrderDiscard($orderId, $this->getDoctrine()->getManager());
@@ -182,7 +178,7 @@ class Orders extends MoloniController
         } catch (MoloniException $e) {
             $msg = $this->trans($e->getMessage(), 'Modules.Molonies.Errors', $e->getIdentifiers());
             $this->addErrorMessage($msg, $e->getData());
-        } catch (PrestaShopDatabaseException|PrestaShopException $e) {
+        } catch (\PrestaShopDatabaseException|\PrestaShopException $e) {
             $msg = $this->trans('Error fetching Prestashop order', 'Modules.Molonies.Errors');
             $this->addErrorMessage($msg);
         }

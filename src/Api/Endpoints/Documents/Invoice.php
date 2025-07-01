@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -44,30 +45,7 @@ class Invoice extends Endpoint
      */
     public function queryInvoice(?array $variables = []): array
     {
-        $query = 'query invoice($companyId: Int!,$documentId: Int!,$options: InvoiceOptionsSingle)
-                {
-                    invoice(companyId: $companyId,documentId: $documentId,options: $options)
-                    {
-                        data
-                        {
-                            documentId
-                            number
-                            ourReference
-                            yourReference
-                            entityVat
-                            entityNumber
-                            entityName
-                            documentSetName
-                            totalValue
-                            pdfExport
-                        }
-                        errors
-                        {
-                            field
-                            msg
-                        }
-                    }
-                }';
+        $query = $this->loadQuery('invoice');
 
         return $this->simplePost($query, $variables);
     }
@@ -83,38 +61,7 @@ class Invoice extends Endpoint
      */
     public function queryInvoices(?array $variables = []): array
     {
-        $query = 'query invoices($companyId: Int!,$options: InvoiceOptions)
-                {
-                    invoices(companyId: $companyId,options: $options)
-                    {
-                        data
-                        {
-                            documentId
-                            number
-                            ourReference
-                            yourReference
-                            entityVat
-                            entityNumber
-                            entityName
-                            documentSetName
-                            totalValue
-                        }
-                        options
-                        {
-                            pagination
-                            {
-                                page
-                                qty
-                                count
-                            }
-                        }                        
-                        errors
-                        {
-                            field
-                            msg
-                        }
-                    }
-                }';
+        $query = $this->loadQuery('invoices');
 
         return $this->paginatedPost($query, $variables, 'invoices');
     }
@@ -130,23 +77,7 @@ class Invoice extends Endpoint
      */
     public function queryInvoiceGetPDFToken(?array $variables = []): array
     {
-        $query = 'query invoiceGetPDFToken($documentId: Int!)
-                {
-                    invoiceGetPDFToken(documentId: $documentId)
-                    {
-                        data
-                        {
-                            token
-                            filename
-                            path
-                        }
-                        errors
-                        {
-                            field
-                            msg
-                        }
-                    }
-                }';
+        $query = $this->loadQuery('invoiceGetPDFToken');
 
         return $this->simplePost($query, $variables);
     }
@@ -162,28 +93,7 @@ class Invoice extends Endpoint
      */
     public function mutationInvoiceCreate(?array $variables = []): array
     {
-        $query = 'mutation invoiceCreate($companyId: Int!,$data: InvoiceInsert!,$options: InvoiceMutateOptions){
-                invoiceCreate(companyId: $companyId,data: $data,options: $options) {
-                    errors{
-                        field
-                        msg
-                    }
-                    data{
-                        documentId
-                        number
-                        totalValue
-                        documentTotal
-                        documentSetName
-                        ourReference
-                        currencyExchangeTotalValue
-                        products
-                        {
-                            documentProductId
-                            productId
-                        }  
-                    }
-                }
-            }';
+        $query = $this->loadMutation('invoiceCreate');
 
         return $this->simplePost($query, $variables);
     }
@@ -199,28 +109,7 @@ class Invoice extends Endpoint
      */
     public function mutationInvoiceUpdate(?array $variables = []): array
     {
-        $query = 'mutation invoiceUpdate($companyId: Int!,$data: InvoiceUpdate!)
-        {
-            invoiceUpdate(companyId: $companyId,data: $data) 
-            {
-                errors
-                {
-                    field
-                    msg
-                }
-                data
-                {
-                    documentId
-                    status         
-                    currencyExchangeTotalValue
-                    products
-                    {
-                        documentProductId
-                        productId
-                    }                     
-                }
-            }
-        }';
+        $query = $this->loadMutation('invoiceUpdate');
 
         return $this->simplePost($query, $variables);
     }
@@ -236,10 +125,7 @@ class Invoice extends Endpoint
      */
     public function mutationInvoiceGetPDF(?array $variables = []): array
     {
-        $query = 'mutation invoiceGetPDF($companyId: Int!,$documentId: Int!)
-                {
-                    invoiceGetPDF(companyId: $companyId,documentId: $documentId)
-                }';
+        $query = $this->loadMutation('invoiceGetPDF');
 
         return $this->simplePost($query, $variables);
     }
@@ -255,10 +141,7 @@ class Invoice extends Endpoint
      */
     public function mutationInvoiceSendEmail(?array $variables = []): array
     {
-        $query = 'mutation invoiceSendMail($companyId: Int!,$documents: [Int]!,$mailData: MailData)
-        {
-            invoiceSendMail(companyId: $companyId,documents: $documents,mailData: $mailData)
-        }';
+        $query = $this->loadMutation('invoiceSendMail');
 
         return $this->simplePost($query, $variables);
     }

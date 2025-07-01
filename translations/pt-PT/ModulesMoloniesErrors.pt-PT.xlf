@@ -1,0 +1,512 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="administration" source-language="pt-PT" target-language="pt-PT" datatype="plaintext">
+    <body>
+      <trans-unit id="ecf86ca60b1e74dba70847c917f9250a">
+        <source>Discarded order not found!</source>
+        <target>Encomenda descartada não encontrada!</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="2739902b9a94da0a9537256c2aa9c905">
+        <source>Error fetching pdf token</source>
+        <target>Erro ao obter o token do pdf</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="a61cb43682f5cca5e88ac9a0a0c4d8b9">
+        <source>ID is invalid</source>
+        <target>ID inválido</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="f5cddd80b6b6b6be80c8927826f4929c">
+        <source>Order does not exist!</source>
+        <target>A encomenda não existe!</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="d4a34e73bacffab7e6c2421167348c47">
+        <source>Error creating account</source>
+        <target>Erro ao criar conta</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="e036834b56871d936327aeeb9e85ceae">
+        <source>Data is not valid</source>
+        <target>Os dados não são válidos</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="ecb1ff277bc9cec7595557589a2a22fe">
+        <source>Error creating webservice key</source>
+        <target>Erro ao criar chave de webservice</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="8902cc49562dce939aaa2d7da9d4a52f">
+        <source>Error creating {0} hook</source>
+        <target>Erro ao criar hook {0}</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="ae3094b0ee59fb8f8e7c986ae66b643b">
+        <source>Error deleting hooks</source>
+        <target>Erro ao eliminar hooks</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="661a2c910f322ac1886cd81bec919251">
+        <source>Error paginating request</source>
+        <target>Erro ao paginar pedido</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="4ea0fb010d99af427a02917d05647cd1">
+        <source>Code missing</source>
+        <target>Código em falta</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="c64a39aa7cf3894c570a5300c2ac8a13">
+        <source>Request error</source>
+        <target>Erro no pedido</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="b3f8e497f5c57907960947a369ba283f">
+        <source>Error fetching tokens</source>
+        <target>Erro ao obter tokens</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="1140ce49382c35f8d1f0e60996a40632">
+        <source>The client credentials are invalid</source>
+        <target>As credenciais do cliente são inválidas</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="ea7c54deb6e56859891ecf182540cb1c">
+        <source>Error creating category</source>
+        <target>Erro ao criar categoria</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="9d321f1b99ce6d6729d38f97d907cea3">
+        <source>Error fetching categories</source>
+        <target>Erro ao obter categorias</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="7dbce59eceb68dad4839ae8ef82bd387">
+        <source>Error creating tax: ({0} - {1})</source>
+        <target>Erro ao criar imposto: ({0} - {1})</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="2e87836a9bb2b980d511da849c2a32cb">
+        <source>Error fetching taxes</source>
+        <target>Erro ao obter impostos</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="e094e7f8a50c799de7106c56c508b621">
+        <source>Error creating customer ({0})</source>
+        <target>Erro ao criar cliente ({0})</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="49d2f1e026c7f6036cf1fcc9ab1f463a">
+        <source>Error updating customer ({0})</source>
+        <target>Erro ao atualizar cliente ({0})</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="3c391bb3f8e062e2044a7d4cfd4f5d1c">
+        <source>Error fetching countries</source>
+        <target>Erro ao obter países</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="50ce34d6b34cfdacae01adb178730493">
+        <source>Error fetching customer next number</source>
+        <target>Erro ao obter o próximo número de cliente</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="53b0ac594294159ace6991963818aed0">
+        <source>Customer has invalid VAT for Spain.</source>
+        <target>O cliente tem NIF inválido para Espanha.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="835af7bcec552930247d6344c58e6e7b">
+        <source>Error fetching customer by VAT: ({0})</source>
+        <target>Erro ao obter cliente por NIF: ({0})</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="f7839a1d4a3db509392291fc30899212">
+        <source>Error fetching customer by e-mail: ({0})</source>
+        <target>Erro ao obter cliente por e-mail: ({0})</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="5b93a9809de4ef3be831288ccbf22e3c">
+        <source>Error creating delivery method: ({0})</source>
+        <target>Erro ao criar método de entrega: ({0})</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="a4c36d0f006ce29f4141f761c26926f0">
+        <source>Error getting load country</source>
+        <target>Erro ao obter país de carga</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="a91bf2051abdb5035d80d63e2bf80e4b">
+        <source>Error getting delivery country</source>
+        <target>Erro ao obter país de entrega</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="3dbb0b01767587f1ac410ba25c15eec7">
+        <source>Error fetching delivery methods</source>
+        <target>Erro ao obter métodos de entrega</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="7332d7a46589d730db85699022afe396">
+        <source>Error fetching payment methods</source>
+        <target>Erro ao obter métodos de pagamento</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="46adfef8937a4039690b99cabe5f6623">
+        <source>Error creating payment method: ({0})</source>
+        <target>Erro ao criar método de pagamento: ({0})</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="967665dc0fce4b4bc180caf4a78bdde4">
+        <source>Error fetching product by reference: ({0})</source>
+        <target>Erro ao obter produto por referência: ({0})</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="4276f45c59f5247976410586ef7042d9">
+        <source>Error creating shipping product</source>
+        <target>Erro ao criar produto de envio</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="7dc510b7bcc096ab355238159996832a">
+        <source>Shipping has no taxes applied. Please add an exemption reason in plugin settings.</source>
+        <target>O envio não tem impostos aplicados. Por favor adicione um motivo de isenção nas definições do plugin.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="d89d8e3d9e49fc18bfae2e6b25736aad">
+        <source>Error fetching shipping by reference: ({0})</source>
+        <target>Erro ao obter envio por referência: ({0})</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="780c691365ae283f108201b182bdf259">
+        <source>Error creating {0} attribute group</source>
+        <target>Erro ao criar grupo de atributos {0}</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="ff794edc6aaa62b9b41b57d9e32e2263">
+        <source>Error fetching property group</source>
+        <target>Erro ao obter grupo de propriedades</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="a95381a813e61e8cab619e663bc35cdb">
+        <source>Error fetching property groups</source>
+        <target>Erro ao obter grupos de propriedades</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="e2265d6bf961fd955a2d2fd7eb65fb5b">
+        <source>Failed to update existing property group "{0}"</source>
+        <target>Falha ao atualizar grupo de propriedades existente "{0}"</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="9be079fc09d3076c802147950c3540e8">
+        <source>Failed to find matching property name for "{0}".</source>
+        <target>Falha ao encontrar nome de propriedade correspondente para "{0}".</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="322f37aa78620ec81a816763160fe3d0">
+        <source>Error creating stock movement ({0})</source>
+        <target>Erro ao criar movimento de stock ({0})</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="cdd9eef3cdeea1f403567afa1ec22dcb">
+        <source>Cannot update product in Moloni. Product types do not match</source>
+        <target>Não é possível atualizar o produto na Moloni. Os tipos de produto não coincidem</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="d5e32e768f320b3275f5c018d80d0d55">
+        <source>Error creating product ({0})</source>
+        <target>Erro ao criar produto ({0})</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="8ca47ff049d61d643a0b84f1d8c806f4">
+        <source>Error updating product ({0})</source>
+        <target>Erro ao atualizar produto ({0})</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="fa4eecc0f2cf9aaafc6406533da2c586">
+        <source>Error fetching company data</source>
+        <target>Erro ao obter dados da empresa</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="ad9a4179a1cf78587319d3a40155d3eb">
+        <source>Company does not have a default warehouse, please select one</source>
+        <target>A empresa não tem armazém padrão, por favor selecione um</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="f28f7ad3dd61afca50c3cca1832f555a">
+        <source>Error fetching default company warehouse</source>
+        <target>Erro ao obter armazém padrão da empresa</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="b05f29a9281946093a135ef4db2a04d4">
+        <source>Error creating Prestashop category</source>
+        <target>Erro ao criar categoria Prestashop</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="5c554f349379f634743aeebf19b0d03e">
+        <source>Error getting product categories</source>
+        <target>Erro ao obter categorias de produto</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="f6ad13f18bedacdf1d2d76fc7511abb9">
+        <source>Error creating combination ({0})</source>
+        <target>Erro ao criar combinação ({0})</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="35d67081850ea5fc093c29448f38a32c">
+        <source>Error updating combination ({0})</source>
+        <target>Erro ao atualizar combinação ({0})</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="16ab54fc571ffa70e7f6190fc164b260">
+        <source>Error when creating product attributes</source>
+        <target>Erro ao criar atributos do produto</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="8b1e4c54293e841c3c6f2c9ef0762726">
+        <source>Could not fetch pdf link.</source>
+        <target>Não foi possível obter o link do pdf.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="6950aacc327f8fb7df1dcb6558f8e506">
+        <source>Code cannot be empty!</source>
+        <target>O código não pode estar vazio!</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="868bba144b611cc4b20e14bfb1da7cb7">
+        <source>You have no companies!!</source>
+        <target>Não tem empresas!!</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="205483ee01661c8acd2bb746ebce4221">
+        <source>Missing information in database</source>
+        <target>Informação em falta na base de dados</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="9789e322478c6f2d59e93d020808642a">
+        <source>An unexpected error occurred</source>
+        <target>Ocorreu um erro inesperado</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="a8245690e211475cb8dbda7d8308b0c1">
+        <source>Could not find product in Moloni ({0})</source>
+        <target>Não foi possível encontrar o produto na Moloni ({0})</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="1d3e6bc7e027606a1dbdf29906f69b92">
+        <source>Error fetching product by id ({0})</source>
+        <target>Erro ao obter produto por id ({0})</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="349c66d17db15705b91571855de43932">
+        <source>Could not close {0}, totals do not match</source>
+        <target>Não foi possível fechar {0}, os totais não coincidem</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="0c8d70bf558d2a4fa810c6cc5a8d7914">
+        <source>Created document not found</source>
+        <target>Documento criado não encontrado</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="2408a75dbe80747ae0a1e2584bc5679c">
+        <source>Moloni document not found</source>
+        <target>Documento Moloni não encontrado</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="3328846c311ff7af6907b9a6ee1b6a25">
+        <source>Error getting prestashop order</source>
+        <target>Erro ao obter encomenda do prestashop</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="eedd2d3edfd58263f8bd29bdea21f076">
+        <source>Error processing order ({0})</source>
+        <target>Erro ao processar encomenda ({0})</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="6d7e032e7adeb8c7c0f74ffba7c69184">
+        <source>Error updating Prestashop stock</source>
+        <target>Erro ao atualizar stock do Prestashop</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="1631abd0acb0ffd03a2be4f39b15bd79">
+        <source>Error saving Prestashop product</source>
+        <target>Erro ao guardar produto Prestashop</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="6e6578554df412f64b637c7cf1ef9d2e">
+        <source>Error saving Moloni product</source>
+        <target>Erro ao guardar produto Moloni</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="8f18afb308a8e7eaa71151bdcd8ebfd7">
+        <source>No document type selected. Please choose one in plugin settings.</source>
+        <target>Nenhum tipo de documento selecionado. Por favor escolha um nas definições do plugin.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="b1f1e0622d835195a43d0804ce9cfe37">
+        <source>Error closing {0} document</source>
+        <target>Erro ao fechar documento {0}</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="9b4f6a19af5a424464de590c0dc2b366">
+        <source>Error creating {0} document</source>
+        <target>Erro ao criar documento {0}</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="dc5cf1c8eff0ef689916b9c238100ac2">
+        <source>Error fetching document fiscal zone</source>
+        <target>Erro ao obter zona fiscal do documento</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="4c7e2ead96b52ab8e6eab9f2ea8023d3">
+        <source>Error occurred setting document dates</source>
+        <target>Erro ao definir datas do documento</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="e6a878b6ab2d83ad05f2ecb33eb8be12">
+        <source>Could not find exchange rate: ({0})</source>
+        <target>Não foi possível encontrar a taxa de câmbio: ({0})</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="c9bf8f4cd98868235189f398d5e75298">
+        <source>Error fetching exchange rate: ({0})</source>
+        <target>Erro ao obter taxa de câmbio: ({0})</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="cc836d382fcc1853451f59f8423429bc">
+        <source>Document type not found</source>
+        <target>Tipo de documento não encontrado</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="2aff3fcd10cee43bea6cfb417c29c9b9">
+        <source>Warning processing order ({0})</source>
+        <target>Aviso ao processar encomenda ({0})</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="8cd1d64ea3ee4a452b535a0202709e0b">
+        <source>Order already discarded or created!</source>
+        <target>Encomenda já descartada ou criada!</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="5787c28b9a287243fbdc6b33a536fe4b">
+        <source>Product with reference ({0}) is invisible in Moloni. Please change the product visibility.</source>
+        <target>Produto com referência ({0}) está invisível na Moloni. Por favor altere a visibilidade do produto.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="6adb7f2ed09247b8fe5412ea32c7e9b7">
+        <source>Product with reference ({0}) has no taxes applied. Please add an exemption reason in plugin settings.</source>
+        <target>Produto com referência ({0}) não tem impostos aplicados. Por favor adicione um motivo de isenção nas definições do plugin.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="a64c7136527063716106461061652181">
+        <source>Product already exists</source>
+        <target>O produto já existe</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="dfbe69c6d9568ecb0e65e7b32ed92a3a">
+        <source>Product not found</source>
+        <target>Produto não encontrado</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="baaad87516e6cf024ee1aac24034172f">
+        <source>Product types do not match.</source>
+        <target>Os tipos de produto não coincidem.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="88803846fca7049b69a92f16e479864b">
+        <source>Product without stock active in Moloni.</source>
+        <target>Produto sem stock ativo na Moloni.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="0bc4d32194eb1d78d4daab4b475e50e9">
+        <source>Product stock do not match (Moloni: {0}, Prestashop: {1}).</source>
+        <target>Stock do produto não coincide (Moloni: {0}, Prestashop: {1}).</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="b7aae0f90f41b45cf6b27d2aa544af65">
+        <source>Product combination stock do not match (Moloni: {0}, Prestashop: {1}).</source>
+        <target>Stock da combinação do produto não coincide (Moloni: {0}, Prestashop: {1}).</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="38dd3f5748c30826e8d86100335ab96a">
+        <source>Product does not have a reference set in Prestashop.</source>
+        <target>O produto não tem referência definida no Prestashop.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="8b37fa5b1c70534c680797f226b5328a">
+        <source>Combination not found ({0}).</source>
+        <target>Combinação não encontrada ({0}).</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="34766d5c990eccded6e02a2cacb507bc">
+        <source>Product does not exist in current Moloni company.</source>
+        <target>O produto não existe na empresa Moloni atual.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="fe13401e7c4d785d943292df287a91d4">
+        <source>Product does not exist in current Prestashop store.</source>
+        <target>O produto não existe na loja Prestashop atual.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="801c01c3577f2023467458851b093a4c">
+        <source>Product is invisible in Moloni. Cannot be used in document creation.</source>
+        <target>O produto está invisível na Moloni. Não pode ser usado na criação de documentos.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="af25aad0af958e6ced0ba8cfcb2a99cd">
+        <source>Error on hook "{0}"</source>
+        <target>Erro no hook "{0}"</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="4776874d3ab58b9d1fb4c386b97fea69">
+        <source>Error fetching fiscal zone tax settings</source>
+        <target>Erro ao obter definições de impostos da zona fiscal</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="6d8102dddebcfbf60d19f8a8e2b21dbe">
+        <source>Document set is not registered in AT</source>
+        <target>A série do documento não está registada na AT</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="1dde9f68f65790879230c4e697d2d24a">
+        <source>Error saving product image</source>
+        <target>Erro ao guardar imagem do produto</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="c2c69a078eccbd696192075d73abd8dd">
+        <source>Tax not found in Moloni. Please create the correct tax for {0} ({1} || {2})</source>
+        <target>Imposto não encontrado na Moloni. Por favor crie o imposto correto para {0} ({1} || {2})</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="43412e5b88dc9c0e67396e8ecc56475c">
+        <source>Error fetching documents list</source>
+        <target>Erro ao obter lista de documentos</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="62b5d95d6f1eb04022fe3c269b6bb15d">
+        <source>Error fetching Prestashop order</source>
+        <target>Erro ao obter encomenda Prestashop</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="cb1b164d9438d999056c79658de0d71c">
+        <source>Form is not valid!!</source>
+        <target>O formulário não é válido!!</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="67509542f3351ede1bd24dcdb31fb1df">
+        <source>Error fetching logs list</source>
+        <target>Erro ao obter lista de logs</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="3c3d541c3569616652fc8b09aaa2502a">
+        <source>Click for more information</source>
+        <target>Clique para mais informações</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="24909e87dc242b9dd539e10609b8b050">
+        <source>Order not found</source>
+        <target>Encomenda não encontrada</target>
+        <note>Line: </note>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

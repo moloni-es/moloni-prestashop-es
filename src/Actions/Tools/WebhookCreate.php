@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -24,12 +25,8 @@
 
 namespace Moloni\Actions\Tools;
 
-use Configuration;
-use Db;
-use WebserviceKey;
-use PrestaShopException;
-use Moloni\Enums\Boolean;
 use Moloni\Api\MoloniApiClient;
+use Moloni\Enums\Boolean;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\MoloniException;
 
@@ -50,14 +47,14 @@ class WebhookCreate
      */
     public function handle($model, $operation): void
     {
-        if ((int)Configuration::get('PS_WEBSERVICE') === Boolean::NO) {
+        if ((int) \Configuration::get('PS_WEBSERVICE') === Boolean::NO) {
             $this->enableWebServices();
         }
 
         if (empty($this->key)) {
             try {
                 $this->fillKey();
-            } catch (PrestaShopException $e) {
+            } catch (\PrestaShopException $e) {
                 throw new MoloniException('Error creating webservice key');
             }
         }
@@ -65,7 +62,7 @@ class WebhookCreate
         $props = [
             'model' => $model,
             'url' => $this->url,
-            'operation' => $operation
+            'operation' => $operation,
         ];
 
         try {
@@ -80,7 +77,7 @@ class WebhookCreate
      */
     private function enableWebServices(): void
     {
-        Configuration::updateValue('PS_WEBSERVICE', 1);
+        \Configuration::updateValue('PS_WEBSERVICE', 1);
     }
 
     private function setUrl(): void
@@ -91,7 +88,7 @@ class WebhookCreate
     }
 
     /**
-     * @throws PrestaShopException
+     * @throws \PrestaShopException
      */
     private function fillKey(): void
     {
@@ -110,10 +107,9 @@ class WebhookCreate
     {
         $key = '';
 
-        $dataBase = Db::getInstance();
-        $sql = 'SELECT * FROM ' . _DB_PREFIX_ . 'webservice_account WHERE description = "' . pSQL($this->description) .'"';
+        $dataBase = \Db::getInstance();
+        $sql = 'SELECT * FROM ' . _DB_PREFIX_ . 'webservice_account WHERE description = "' . pSQL($this->description) . '"';
         $query = $dataBase->getRow($sql);
-
 
         if ($query !== false) {
             $key = $query['key'];
@@ -123,13 +119,13 @@ class WebhookCreate
     }
 
     /**
-     * @throws PrestaShopException
+     * @throws \PrestaShopException
      */
     private function createWebserviceKey(): string
     {
-        $randKey = substr(str_shuffle(MD5(microtime())), 0, 32);
+        $randKey = substr(str_shuffle(md5(microtime())), 0, 32);
 
-        $apiAccess = new WebserviceKey();
+        $apiAccess = new \WebserviceKey();
         $apiAccess->key = $randKey;
         $apiAccess->description = $this->description;
         $apiAccess->save();
@@ -138,7 +134,7 @@ class WebhookCreate
             'moloniresource' => ['POST' => 1],
         ];
 
-        WebserviceKey::setPermissionForAccount($apiAccess->id, $permissions);
+        \WebserviceKey::setPermissionForAccount($apiAccess->id, $permissions);
 
         return $apiAccess->key;
     }

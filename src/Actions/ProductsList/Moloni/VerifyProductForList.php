@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -26,16 +27,13 @@ declare(strict_types=1);
 
 namespace Moloni\Actions\ProductsList\Moloni;
 
+use Combination;
+use Moloni\Builders\PrestashopProduct\Helpers\Combinations\FindOrCreateCombination;
 use Moloni\Enums\Boolean;
 use Moloni\Helpers\Stock;
+use Moloni\MoloniContext;
 use Moloni\Tools\Settings;
-use Product;
-use Combination;
-use Configuration;
-use StockAvailable;
-use Moloni\Enums\Domains;
 use Moloni\Traits\AttributesTrait;
-use Moloni\Builders\PrestashopProduct\Helpers\Combinations\FindOrCreateCombination;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -66,9 +64,9 @@ class VerifyProductForList
         $this->warehouseId = $warehouseId;
         $this->slug = $slug;
 
-        $this->psLanguageId = Configuration::get('PS_LANG_DEFAULT');
-        $this->psManagesStock = Configuration::get('PS_STOCK_MANAGEMENT');
-        $this->productReferenceFallback = (int)Settings::get('productReferenceFallback');
+        $this->psLanguageId = \Configuration::get('PS_LANG_DEFAULT');
+        $this->psManagesStock = \Configuration::get('PS_STOCK_MANAGEMENT');
+        $this->productReferenceFallback = (int) Settings::get('productReferenceFallback');
     }
 
     //         PUBLICS         //
@@ -78,7 +76,7 @@ class VerifyProductForList
         $this->parsedProduct = [
             'prestashop_id' => 0,
             'moloni_id' => $this->moloniProduct['productId'],
-            'moloni_url' => Domains::MOLONI_AC . '/' . $this->slug . '/productCategories/products/all/' . $this->moloniProduct['productId'],
+            'moloni_url' => MoloniContext::instance()->configs()->getAcUrl() . $this->slug . '/productCategories/products/all/' . $this->moloniProduct['productId'],
             'name' => $this->moloniProduct['name'],
             'reference' => $this->moloniProduct['reference'],
             'type' => empty($this->moloniProduct['variants']) ? 'Simple' : 'Variants',
@@ -140,16 +138,16 @@ class VerifyProductForList
             foreach ($this->moloniProduct['variants'] as $variant) {
                 /** Find combination based on Moloni variant */
                 $combination = (new FindOrCreateCombination(
-                    (int)$variant['productId'],
+                    (int) $variant['productId'],
                     $this->prestaProduct,
                     $variant['reference'],
                     $this->getAttributes($variant)
                 ))->handle();
 
-                /** Couldn´t match variant to any existing combination */
+                /* Couldn´t match variant to any existing combination */
                 if (empty($combination->id)) {
                     $this->parsedProduct['notices'][] = [
-                        'Combination not found ({0}).', ['{0}' => $variant['reference']]
+                        'Combination not found ({0}).', ['{0}' => $variant['reference']],
                     ];
 
                     continue;
@@ -166,15 +164,16 @@ class VerifyProductForList
 
     private function findByReference()
     {
-        $productId = (int)Product::getIdByReference($this->moloniProduct['reference']);
+        $productId = (int) \Product::getIdByReference($this->moloniProduct['reference']);
 
         if (!empty($productId)) {
-            $this->prestaProduct = new Product($productId, true, $this->psLanguageId);
+            $this->prestaProduct = new \Product($productId, true, $this->psLanguageId);
+
             return;
         }
 
         if ($this->productReferenceFallback === Boolean::YES && is_numeric($this->moloniProduct['reference'])) {
-            $tryAndMatch = new Product((int)$this->moloniProduct['reference'], true, $this->psLanguageId);
+            $tryAndMatch = new \Product((int) $this->moloniProduct['reference'], true, $this->psLanguageId);
 
             if (!empty($tryAndMatch->id)) {
                 $this->prestaProduct = $tryAndMatch;
@@ -182,22 +181,20 @@ class VerifyProductForList
         }
     }
 
-
     //         AUXILIARY         //
 
-
-    private function checkVariantStock(array $variant, Combination $combination)
+    private function checkVariantStock(array $variant, \Combination $combination)
     {
         $moloniProductStock = Stock::getMoloniStock($variant, $this->warehouseId);
-        $prestashopStock = (float)StockAvailable::getQuantityAvailableByProduct(
+        $prestashopStock = (float) \StockAvailable::getQuantityAvailableByProduct(
             $combination->id_product,
             $combination->id
         );
 
         if ($prestashopStock !== $moloniProductStock) {
             $this->parsedProduct['notices'][] = [
-                "Product combination stock do not match (Moloni: {0}, Prestashop: {1}).",
-                ['{0}' => $moloniProductStock, '{1}' => $prestashopStock]
+                'Product combination stock do not match (Moloni: {0}, Prestashop: {1}).',
+                ['{0}' => $moloniProductStock, '{1}' => $prestashopStock],
             ];
 
             $this->parsedProduct['uneven_stock'] = true;
@@ -206,13 +203,13 @@ class VerifyProductForList
 
     private function checkSimpleStock()
     {
-        $prestashopStock = (float)StockAvailable::getQuantityAvailableByProduct($this->prestaProduct->id);
+        $prestashopStock = (float) \StockAvailable::getQuantityAvailableByProduct($this->prestaProduct->id);
         $moloniProductStock = Stock::getMoloniStock($this->moloniProduct, $this->warehouseId);
 
         if ($prestashopStock !== $moloniProductStock) {
             $this->parsedProduct['notices'][] = [
-                "Product stock do not match (Moloni: {0}, Prestashop: {1}).",
-                ['{0}' => $moloniProductStock, '{1}' => $prestashopStock]
+                'Product stock do not match (Moloni: {0}, Prestashop: {1}).',
+                ['{0}' => $moloniProductStock, '{1}' => $prestashopStock],
             ];
 
             $this->parsedProduct['uneven_stock'] = true;

@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -24,14 +25,12 @@
 
 namespace Moloni\Actions\Orders;
 
-use Shop;
-use DateTime;
+use Moloni\Entity\MoloniOrderDocuments;
 use Moloni\Enums\DocumentIdentifiers;
 use Moloni\Enums\DocumentReference;
-use Moloni\Tools\Settings;
-use Moloni\Api\MoloniApi;
-use Moloni\Entity\MoloniOrderDocuments;
 use Moloni\Exceptions\MoloniException;
+use Moloni\MoloniContext;
+use Moloni\Tools\Settings;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -53,13 +52,13 @@ class OrderDiscard extends AbstractOrderAction
         }
 
         $document = new MoloniOrderDocuments();
-        $document->setShopId((int)Shop::getContextShopID());
+        $document->setShopId((int) \Shop::getContextShopID());
         $document->setDocumentId(DocumentIdentifiers::DISCARDED);
-        $document->setCompanyId(MoloniApi::getCompanyId());
+        $document->setCompanyId(MoloniContext::instance()->getCompanyId());
         $document->setDocumentType('');
         $document->setOrderId($this->orderId);
         $document->setOrderReference($this->getReference());
-        $document->setCreatedAt(new DateTime());
+        $document->setCreatedAt(new \DateTime());
 
         $this->entityManager->persist($document);
         $this->entityManager->flush();
@@ -69,7 +68,7 @@ class OrderDiscard extends AbstractOrderAction
     {
         switch (Settings::get('documentReference')) {
             case DocumentReference::ID:
-                $reference = (string)$this->order->id;
+                $reference = (string) $this->order->id;
                 break;
             case DocumentReference::REFERENCE:
             default:

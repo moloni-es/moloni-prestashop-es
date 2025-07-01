@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -24,11 +25,9 @@
 
 namespace Moloni\Actions\Orders;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
-use Order;
-use PrestaShopDatabaseException;
-use PrestaShopException;
+use Doctrine\Persistence\ObjectManager;
 use Moloni\Entity\MoloniOrderDocuments;
 use Moloni\Exceptions\MoloniException;
 use Moloni\Repository\MoloniOrderDocumentsRepository;
@@ -49,14 +48,14 @@ abstract class AbstractOrderAction
     /**
      * Order object
      *
-     * @var Order|null
+     * @var \Order|null
      */
     public $order;
 
     /**
      * Entity manager
      *
-     * @var EntityManager
+     * @var EntityManagerInterface
      */
     protected $entityManager;
 
@@ -71,20 +70,19 @@ abstract class AbstractOrderAction
      * Constructor
      *
      * @param int|string|null $orderId
-     * @param EntityManager $entityManager
+     * @param EntityManagerInterface|ObjectManager $entityManager
      *
      * @throws MoloniException
-     * @throws PrestaShopDatabaseException
-     * @throws PrestaShopException
+     * @throws \PrestaShopDatabaseException
+     * @throws \PrestaShopException
      */
-    public function __construct($orderId, EntityManager $entityManager)
+    public function __construct($orderId, $entityManager)
     {
         if (!is_numeric($orderId) || $orderId < 0) {
-
             throw new MoloniException('ID is invalid');
         }
 
-        $order = new Order($orderId);
+        $order = new \Order($orderId);
 
         if (empty($order->id)) {
             throw new MoloniException('Order does not exist!');
@@ -98,7 +96,7 @@ abstract class AbstractOrderAction
 
     //          Gets          //
 
-    public function getOrder(): ?Order
+    public function getOrder(): ?\Order
     {
         return $this->order;
     }

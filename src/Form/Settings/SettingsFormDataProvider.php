@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -26,29 +27,23 @@ declare(strict_types=1);
 
 namespace Moloni\Form\Settings;
 
-use Shop;
-use Store;
-use DateTime;
-use OrderState;
-use Configuration;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
-use Moloni\Api\MoloniApi;
 use Moloni\Api\MoloniApiClient;
+use Moloni\Entity\MoloniSettings;
 use Moloni\Enums\Boolean;
+use Moloni\Enums\DocumentReference;
 use Moloni\Enums\DocumentStatus;
 use Moloni\Enums\DocumentTypes;
 use Moloni\Enums\FiscalZone;
 use Moloni\Enums\Languages;
-use Moloni\Enums\SyncFields;
 use Moloni\Enums\LoadAddress;
-use Moloni\Enums\DocumentReference;
 use Moloni\Enums\ProductInformation;
+use Moloni\Enums\SyncFields;
 use Moloni\Exceptions\MoloniApiException;
-use Moloni\Repository\MoloniSettingsRepository;
+use Moloni\MoloniContext;
 use Moloni\Tools\Settings;
 use PrestaShop\PrestaShop\Core\Form\FormDataProviderInterface;
-use Symfony\Component\Translation\TranslatorInterface;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -58,6 +53,7 @@ class SettingsFormDataProvider implements FormDataProviderInterface
 {
     private $translator;
     private $languageId;
+    private $companyId;
 
     private $settingsRepository;
 
@@ -76,16 +72,16 @@ class SettingsFormDataProvider implements FormDataProviderInterface
     private $syncFields = [];
     private $addresses = [];
     private $customerLanguage = [];
+    private $exemptionReasons = [];
     private $companyName = '';
 
-    public function __construct(
-        TranslatorInterface $translator,
-        MoloniSettingsRepository $settingsRepository,
-        $languageId
-    ) {
-        $this->translator = $translator;
+    public function __construct(MoloniContext $context, int $languageId)
+    {
+        $this->translator = $context->iTranslator();
+        $this->settingsRepository = $context->iEntityManager()->getRepository(MoloniSettings::class);
+
         $this->languageId = $languageId;
-        $this->settingsRepository = $settingsRepository;
+        $this->companyId = $context->getCompanyId();
     }
 
     public function getData(): array
@@ -96,7 +92,7 @@ class SettingsFormDataProvider implements FormDataProviderInterface
             if (empty($settings['orderDateCreated'])) {
                 $settings['orderDateCreated'] = null;
             } else {
-                $settings['orderDateCreated'] = new DateTime($settings['orderDateCreated']);
+                $settings['orderDateCreated'] = new \DateTime($settings['orderDateCreated']);
             }
         }
 
@@ -119,10 +115,9 @@ class SettingsFormDataProvider implements FormDataProviderInterface
      */
     public function setData(array $data): array
     {
-        $shopId = (int)Shop::getContextShopID();
-        $companyId = MoloniApi::getCompanyId();
+        $shopId = (int) \Shop::getContextShopID();
 
-        $this->settingsRepository->saveSettings($data, $shopId, $companyId);
+        $this->settingsRepository->saveSettings($data, $shopId, $this->companyId);
 
         return $data;
     }
@@ -130,13 +125,13 @@ class SettingsFormDataProvider implements FormDataProviderInterface
     private function getPaidStatusIds(): array
     {
         $ids = [];
-        $languageId = (int)Configuration::get('PS_LANG_DEFAULT');
+        $languageId = (int) \Configuration::get('PS_LANG_DEFAULT');
 
-        $states = OrderState::getOrderStates($languageId);
+        $states = \OrderState::getOrderStates($languageId);
 
         foreach ($states as $state) {
-            if ((int)$state['paid'] === 1) {
-                $ids[] = (int)$state['id_order_state'];
+            if ((int) $state['paid'] === 1) {
+                $ids[] = (int) $state['id_order_state'];
             }
         }
 
@@ -158,11 +153,17 @@ class SettingsFormDataProvider implements FormDataProviderInterface
         $documentSetsQuery = MoloniApiClient::documentSets()->queryDocumentSets();
         $countriesQuery = MoloniApiClient::countries()->queryCountries([
             'options' => [
-                'defaultLanguageId' => Languages::ES
-            ]
+                'defaultLanguageId' => Languages::EN,
+            ],
         ]);
-        $storesQuery = Store::getStores($this->languageId);
-        $orderStatusQuery = OrderState::getOrderStates($this->languageId);
+        $storesQuery = \Store::getStores($this->languageId);
+        $orderStatusQuery = \OrderState::getOrderStates($this->languageId);
+
+        $this->companyName = $companyQuery['name'];
+
+        foreach ($companyQuery['fiscalZone']['exemption']['reasons'] ?? [] as $reason) {
+            $this->exemptionReasons["{$reason['code']} - {$reason['name']}"] = $reason['code'];
+        }
 
         foreach ($orderStatusQuery as $states) {
             $this->orderStatus[$states['name']] = $states['id_order_state'];
@@ -233,11 +234,8 @@ class SettingsFormDataProvider implements FormDataProviderInterface
                 $this->trans('Portuguese', 'Modules.Molonies.Settings') => Languages::PT,
                 $this->trans('Spanish', 'Modules.Molonies.Settings') => Languages::ES,
                 $this->trans('English', 'Modules.Molonies.Settings') => Languages::EN,
-            ]
+            ],
         ];
-
-
-        $this->companyName = $companyQuery['name'];
 
         if (!empty($this->stores)) {
             $this->addresses[$this->trans('Stores', 'Modules.Molonies.Settings')] = $this->stores;
@@ -253,6 +251,7 @@ class SettingsFormDataProvider implements FormDataProviderInterface
      * @param string $domain
      *
      * @return string
+     *
      * @noinspection PhpSameParameterValueInspection
      */
     private function trans(string $string, string $domain): string
@@ -386,5 +385,13 @@ class SettingsFormDataProvider implements FormDataProviderInterface
     public function getCustomerLanguage(): array
     {
         return $this->customerLanguage;
+    }
+
+    /**
+     * @return array
+     */
+    public function getExemptionReasons(): array
+    {
+        return $this->exemptionReasons;
     }
 }

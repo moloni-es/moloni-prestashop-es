@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -34,7 +35,6 @@ use Moloni\Exceptions\MoloniApiException;
 use Moloni\Tools\Settings;
 use Moloni\Traits\CountryTrait;
 use Order;
-use Store;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -124,21 +124,21 @@ class OrderDelivery implements BuilderItemInterface
     /**
      * Shopify order data
      *
-     * @var Order
+     * @var \Order
      */
     protected $order;
 
     /**
      * Destination address
      *
-     * @var Address
+     * @var \Address
      */
     protected $deliveryAddress;
 
     /**
      * Order carrier
      *
-     * @var Carrier
+     * @var \Carrier
      */
     protected $orderCarrier;
 
@@ -154,13 +154,13 @@ class OrderDelivery implements BuilderItemInterface
      *
      * @throws MoloniDocumentDeliveryException
      */
-    public function __construct(Order $order, array $company)
+    public function __construct(\Order $order, array $company)
     {
         $this->order = $order;
         $this->company = $company;
 
-        $this->deliveryAddress = new Address($order->id_address_delivery);
-        $this->orderCarrier = new Carrier($order->id_carrier);
+        $this->deliveryAddress = new \Address($order->id_address_delivery);
+        $this->orderCarrier = new \Carrier($order->id_carrier);
 
         $this->init();
     }
@@ -213,17 +213,10 @@ class OrderDelivery implements BuilderItemInterface
             if ((int) $deliveryMethodId > 0) {
                 $this->deliveryMethodId = (int) $deliveryMethodId;
             } else {
-                throw new MoloniDocumentDeliveryException('Error creating delivery method: ({0})', [
-                    '{0}' => $this->name,
-                ], [
-                    'params' => $params,
-                    'response' => $mutation,
-                ]);
+                throw new MoloniDocumentDeliveryException('Error creating delivery method: ({0})', ['{0}' => $this->name], ['params' => $params, 'response' => $mutation]);
             }
         } catch (MoloniApiException $e) {
-            throw new MoloniDocumentDeliveryException('Error creating delivery method: ({0})', [
-                '{0}' => $this->name
-            ], $e->getData());
+            throw new MoloniDocumentDeliveryException('Error creating delivery method: ({0})', ['{0}' => $this->name], $e->getData());
         }
 
         return $this;
@@ -294,20 +287,20 @@ class OrderDelivery implements BuilderItemInterface
      */
     protected function setLoadAddress(): OrderDelivery
     {
-        $loadAddressSetting = (int)(Settings::get('loadAddress') ?? LoadAddress::MOLONI);
+        $loadAddressSetting = (int) (Settings::get('loadAddress') ?? LoadAddress::MOLONI);
 
         if ($loadAddressSetting === LoadAddress::CUSTOM) {
             $this->loadAddress = Settings::get('customloadAddressAddress');
             $this->loadZipCode = Settings::get('customloadAddressZipCode');
             $this->loadCity = Settings::get('customloadAddressCity');
-            $this->loadCountry = (int)Settings::get('customloadAddressCountry');
+            $this->loadCountry = (int) Settings::get('customloadAddressCountry');
         } elseif ($loadAddressSetting === LoadAddress::MOLONI) {
             $this->loadAddress = $this->company['address'];
             $this->loadZipCode = $this->company['zipCode'];
             $this->loadCity = $this->company['city'];
             $this->loadCountry = $this->company['country']['countryId'];
         } elseif ($loadAddressSetting > 0) {
-            $store = new Store($loadAddressSetting);
+            $store = new \Store($loadAddressSetting);
 
             try {
                 ['countryId' => $countryId] = $this->getMoloniCountryById($store->id_country, $store->id_state);
@@ -346,7 +339,7 @@ class OrderDelivery implements BuilderItemInterface
             ['countryId' => $countryId] = $this->getMoloniCountryById($this->deliveryAddress->id_country, $this->deliveryAddress->id_state);
 
             $this->destinationCountry = $countryId;
-        } catch (MoloniAPIException $e) {
+        } catch (MoloniApiException $e) {
             throw new MoloniDocumentDeliveryException('Error getting delivery country', [], $e->getData());
         }
 

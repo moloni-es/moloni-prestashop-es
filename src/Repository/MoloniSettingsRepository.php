@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -36,11 +37,15 @@ if (!defined('_PS_VERSION_')) {
 
 class MoloniSettingsRepository extends EntityRepository
 {
-    private $arraySettings = ['productSyncFields' , 'orderStatusToShow'];
+    private $arraySettings = ['productSyncFields', 'orderStatusToShow'];
 
     public function getSettings(?int $companyId = 0): array
     {
         $settings = [];
+
+        if ($companyId === 0) {
+            return $settings;
+        }
 
         /**
          * @var MoloniSettings[] $settingsQuery
@@ -60,7 +65,7 @@ class MoloniSettingsRepository extends EntityRepository
     /**
      * Save settings
      *
-     * @param array $submitData Submited data
+     * @param array $submitData Submitted data
      * @param int $shopId Shop id
      * @param int $companyId Company id
      *
@@ -123,14 +128,14 @@ class MoloniSettingsRepository extends EntityRepository
                 return $tempValue;
             }
 
-            /** Depretaced stuff */
+            /** Deprecated stuff */
             $tempValue = unserialize($value, ['allowed_classes' => false]);
 
             if (is_array($tempValue)) {
                 return $tempValue;
             }
 
-            /** Better safe than sorry */
+            /* Better safe than sorry */
             return [];
         }
 

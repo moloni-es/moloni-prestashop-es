@@ -1,6 +1,6 @@
 moloni_es_debug_home:
   path: /
-  methods: [GET,POST]
+  methods: [ GET,POST ]
   defaults:
     _controller: 'Moloni\Controller\Admin\Debug\Debug::home'
     _legacy_controller: 'Moloni'
@@ -8,7 +8,7 @@ moloni_es_debug_home:
 
 moloni_es_debug_multipurpose:
   path: /multipurpose
-  methods: [GET,POST]
+  methods: [ GET,POST ]
   defaults:
     _controller: 'Moloni\Controller\Admin\Debug\Debug::multipurpose'
     _legacy_controller: 'Moloni'
@@ -16,7 +16,7 @@ moloni_es_debug_multipurpose:
 
 moloni_es_debug_delete_order_document:
   path: /deleteOrderDocument
-  methods: [GET,POST]
+  methods: [ GET,POST ]
   defaults:
     _controller: 'Moloni\Controller\Admin\Debug\Debug::deleteOrderDocument'
     _legacy_controller: 'Moloni'
@@ -24,7 +24,7 @@ moloni_es_debug_delete_order_document:
 
 moloni_es_debug_update_stock_from_moloni:
   path: /updateStockFromMoloni
-  methods: [GET,POST]
+  methods: [ GET,POST ]
   defaults:
     _controller: 'Moloni\Controller\Admin\Debug\Debug::updateStockFromMoloni'
     _legacy_controller: 'Moloni'
@@ -32,7 +32,7 @@ moloni_es_debug_update_stock_from_moloni:
 
 moloni_es_debug_update_product_from_moloni:
   path: /updateProductFromMoloni
-  methods: [GET,POST]
+  methods: [ GET,POST ]
   defaults:
     _controller: 'Moloni\Controller\Admin\Debug\Debug::updateProductFromMoloni'
     _legacy_controller: 'Moloni'
@@ -48,7 +48,7 @@ moloni_es_debug_insert_product_from_moloni:
 
 moloni_es_debug_update_stock_from_prestashop:
   path: /updateStockFromPrestashop
-  methods: [GET,POST]
+  methods: [ GET,POST ]
   defaults:
     _controller: 'Moloni\Controller\Admin\Debug\Debug::updateStockFromPrestashop'
     _legacy_controller: 'Moloni'
@@ -56,7 +56,7 @@ moloni_es_debug_update_stock_from_prestashop:
 
 moloni_es_debug_update_product_from_prestashop:
   path: /updateProductFromPrestashop
-  methods: [GET,POST]
+  methods: [ GET,POST ]
   defaults:
     _controller: 'Moloni\Controller\Admin\Debug\Debug::updateProductFromPrestashop'
     _legacy_controller: 'Moloni'

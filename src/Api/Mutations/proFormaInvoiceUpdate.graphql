@@ -1,0 +1,18 @@
+mutation proFormaInvoiceUpdate($companyId: Int!,$data: ProFormaInvoiceUpdate!) {
+  proFormaInvoiceUpdate(companyId: $companyId,data: $data) {
+    data {
+      documentId
+      status
+      currencyExchangeTotalValue
+      products {
+        documentProductId
+        productId
+      }
+    }
+    errors {
+      field
+      msg
+    }
+  }
+}
+

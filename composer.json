@@ -1,6 +1,6 @@
 {
-  "name": "moloni/molonies",
-  "description": "Module for Prestashop integration",
+  "name": "molonies/prestashop",
+  "description": "Module for Prestashop integration with Moloni Spain",
   "type": "prestashop-module",
   "license": "OSL-3.0",
   "authors": [
@@ -17,10 +17,13 @@
     ],
     "auto-header": "php vendor/bin/header-stamp --license=.dev/assets/license.txt --exclude=composer.json,vendor,node_modules",
     "auto-phpcs": "vendor/bin/php-cs-fixer fix",
+    "install-dev": "composer install",
+    "install-prod": "composer install --no-dev --optimize-autoloader",
     "build": [
       "@auto-index",
       "@auto-header",
-      "@auto-phpcs"
+      "@auto-phpcs",
+      "php builder.php"
     ]
   },
   "minimum-stability": "stable",

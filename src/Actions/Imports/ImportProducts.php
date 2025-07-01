@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -68,7 +69,7 @@ abstract class ImportProducts
 
         $percentage = (($this->page * $this->itemsPerPage) / $this->totalResults) * 100;
 
-        return (int)$percentage;
+        return (int) $percentage;
     }
 
     public function getHasMore(): bool

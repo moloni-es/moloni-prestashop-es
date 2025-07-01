@@ -1,7 +1,31 @@
 <?php
 
+/**
+ * 2025 - Moloni.com
+ *
+ * NOTICE OF LICENSE
+ *
+ * This file is licenced under the Software License Agreement.
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * You must not modify, adapt or create derivative works of this source code
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+ * versions in the future. If you wish to customize PrestaShop for your
+ * needs please refer to http://www.prestashop.com for more information.
+ *
+ * @author    Moloni
+ * @copyright Moloni
+ * @license   https://creativecommons.org/licenses/by-nd/4.0/
+ *
+ * @noinspection PhpMultipleClassDeclarationsInspection
+ */
+
 namespace Moloni\Guzzle;
 
+use Moloni\Configurations;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Helpers\Version;
 
@@ -14,14 +38,14 @@ class GuzzleWrapper
     /**
      * @var GuzzleInterface|null
      */
-    private static $guzzleClient;
+    private $guzzleClient;
 
-    private static function startGuzzleClient()
+    public function __construct(Configurations $configurations)
     {
         if (Version::isPrestashopNewVersion()) {
-            self::$guzzleClient = new Guzzle6();
+            $this->guzzleClient = new Guzzle6($configurations);
         } else {
-            self::$guzzleClient = new Guzzle5();
+            $this->guzzleClient = new Guzzle5($configurations);
         }
     }
 
@@ -36,17 +60,13 @@ class GuzzleWrapper
      *
      * @throws MoloniApiException
      */
-    public static function post(string $url, ?array $headers = [], ?array $body = [])
+    public function post(string $url, ?array $headers = [], ?array $body = [])
     {
-        if (!self::$guzzleClient) {
-            self::startGuzzleClient();
-        }
-
-        return self::$guzzleClient->post($url, $headers, $body);
+        return $this->guzzleClient->post($url, $headers, $body);
     }
 
     /**
-     * Make authenticated post request with file
+     * Make authenticated post-request with a file
      *
      * @param array|null $operations
      * @param string|null $map
@@ -57,12 +77,8 @@ class GuzzleWrapper
      *
      * @throws MoloniApiException
      */
-    public static function postWithFile(?array $operations = [], ?string $map = '', ?array $files = [], ?string $accessToken = '')
+    public function postWithFile(?array $operations = [], ?string $map = '', ?array $files = [], ?string $accessToken = '')
     {
-        if (!self::$guzzleClient) {
-            self::startGuzzleClient();
-        }
-
-        return self::$guzzleClient->postWithFile($operations, $map, $files, $accessToken);
+        return $this->guzzleClient->postWithFile($operations, $map, $files, $accessToken);
     }
 }

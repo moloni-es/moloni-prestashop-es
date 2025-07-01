@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -43,23 +44,7 @@ class Customers extends Endpoint
      */
     public function mutationCustomerCreate(?array $variables = []): array
     {
-        $query = 'mutation customerCreate($companyId: Int!,$data: CustomerInsert!)
-        {
-            customerCreate(companyId: $companyId,data: $data)
-            {
-                data
-                {
-                    customerId
-                    name
-                    vat
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = $this->loadMutation('customerCreate');
 
         return $this->simplePost($query, $variables);
     }
@@ -75,23 +60,7 @@ class Customers extends Endpoint
      */
     public function mutationCustomerUpdate(?array $variables = []): array
     {
-        $query = 'mutation customerUpdate($companyId: Int!,$data: CustomerUpdate!)
-        {
-            customerUpdate(companyId: $companyId,data: $data)
-            {
-                data
-                {
-                    customerId
-                    name
-                    vat
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = $this->loadMutation('customerUpdate');
 
         return $this->simplePost($query, $variables);
     }
@@ -107,29 +76,7 @@ class Customers extends Endpoint
      */
     public function queryCustomer(?array $variables = []): array
     {
-        $query = 'query customer($companyId: Int!,$customerId: Int!,$options: CustomerOptionsSingle)
-        {
-            customer(companyId: $companyId,customerId: $customerId,options: $options)
-            {
-                data
-                {
-                    customerId
-                    name
-                    discount
-                    documentSet
-                    {
-                        documentSetId
-                        name
-                    }
-                    vat
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = $this->loadQuery('customer');
 
         return $this->simplePost($query, $variables);
     }
@@ -145,47 +92,7 @@ class Customers extends Endpoint
      */
     public function queryCustomers(?array $variables = []): array
     {
-        $query = 'query customers($companyId: Int!,$options: CustomerOptions)
-        {
-            customers(companyId: $companyId,options: $options)
-            {
-                data
-                {
-                    customerId
-                    name
-                    number
-                    discount
-                    documentSet
-                    {
-                        documentSetId
-                        name
-                    }
-                    country
-                    {
-                        countryId
-                    }
-                    language
-                    {
-                        languageId
-                    }
-                    vat
-                }
-                options
-                {
-                    pagination
-                    {
-                        page
-                        qty
-                        count
-                    }
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = $this->loadQuery('customers');
 
         return $this->paginatedPost($query, $variables, 'customers');
     }
@@ -201,18 +108,7 @@ class Customers extends Endpoint
      */
     public function queryCustomerNextNumber(?array $variables = []): array
     {
-        $query = 'query customerNextNumber($companyId: Int!, $options: GetNextCustomerNumberOptions)
-        {
-            customerNextNumber(companyId: $companyId, options: $options)
-            {
-                data
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = $this->loadQuery('customerNextNumber');
 
         return $this->simplePost($query, $variables);
     }

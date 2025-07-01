@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -24,7 +25,6 @@
 
 namespace Moloni\Builders\Document;
 
-use Order;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\Interfaces\BuilderItemInterface;
 use Moloni\Enums\Boolean;
@@ -34,6 +34,7 @@ use Moloni\Exceptions\Document\MoloniDocumentShippingTaxException;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\MoloniException;
 use Moloni\Tools\Settings;
+use Order;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -142,7 +143,7 @@ class OrderShipping implements BuilderItemInterface
     /**
      * Order data
      *
-     * @var Order
+     * @var \Order
      */
     protected $order;
 
@@ -156,12 +157,12 @@ class OrderShipping implements BuilderItemInterface
     /**
      * Constructor
      *
-     * @param Order $order
+     * @param \Order $order
      * @param array $fiscalZone
      *
      * @throws MoloniDocumentShippingTaxException
      */
-    public function __construct(Order $order, array $fiscalZone)
+    public function __construct(\Order $order, array $fiscalZone)
     {
         $this->order = $order;
         $this->orderShipping = $order->getShipping()[0] ?? [];
@@ -247,9 +248,7 @@ class OrderShipping implements BuilderItemInterface
             if ($productId > 0) {
                 $this->productId = $productId;
             } else {
-                throw new MoloniDocumentShippingException('Error creating shipping product', [], [
-                    'mutation' => $mutation
-                ]);
+                throw new MoloniDocumentShippingException('Error creating shipping product', [], ['mutation' => $mutation]);
             }
         } catch (MoloniApiException $e) {
             throw new MoloniDocumentShippingException('Error creating shipping product', [], $e->getData());
@@ -300,15 +299,7 @@ class OrderShipping implements BuilderItemInterface
     protected function afterSearch(): OrderShipping
     {
         if (!empty($this->moloniProduct) && $this->moloniProduct['visible'] === Boolean::NO) {
-            throw new MoloniDocumentShippingException(
-                'Product with reference ({0}) is invisible in Moloni. Please change the product visibility.',
-                [
-                    '{0}' => $this->reference
-                ],
-                [
-                    'product' => $this->moloniProduct
-                ]
-            );
+            throw new MoloniDocumentShippingException('Product with reference ({0}) is invisible in Moloni. Please change the product visibility.', ['{0}' => $this->reference], ['product' => $this->moloniProduct]);
         }
 
         return $this;
@@ -384,8 +375,8 @@ class OrderShipping implements BuilderItemInterface
      */
     public function setPrice(): OrderShipping
     {
-        $this->price = (float)($this->orderShipping['shipping_cost_tax_excl'] ?? 0);
-        $this->priceWithTaxes = (float)($this->orderShipping['shipping_cost_tax_incl'] ?? 0);
+        $this->price = (float) ($this->orderShipping['shipping_cost_tax_excl'] ?? 0);
+        $this->priceWithTaxes = (float) ($this->orderShipping['shipping_cost_tax_incl'] ?? 0);
 
         return $this;
     }
@@ -413,7 +404,7 @@ class OrderShipping implements BuilderItemInterface
         $cartRules = $this->order->getCartRules();
 
         foreach ($cartRules as $cartRule) {
-            if ((int)$cartRule['free_shipping'] === 1) {
+            if ((int) $cartRule['free_shipping'] === 1) {
                 $discount = 100;
 
                 break;
@@ -444,7 +435,7 @@ class OrderShipping implements BuilderItemInterface
      */
     public function setTaxes(): OrderShipping
     {
-        $taxRate = (float)$this->order->carrier_tax_rate;
+        $taxRate = (float) $this->order->carrier_tax_rate;
 
         if ($taxRate > 0) {
             $taxBuilder = new OrderShippingTax($taxRate, $this->ficalZone, 1);
@@ -484,7 +475,7 @@ class OrderShipping implements BuilderItemInterface
      */
     public function setMeasurementUnit(): OrderShipping
     {
-        $this->measurementUnit = (int)(Settings::get('measurementUnit') ?? 0);
+        $this->measurementUnit = (int) (Settings::get('measurementUnit') ?? 0);
 
         return $this;
     }
@@ -520,13 +511,13 @@ class OrderShipping implements BuilderItemInterface
                     [
                         'field' => 'visible',
                         'comparison' => 'in',
-                        'value' => '[0, 1]'
+                        'value' => '[0, 1]',
                     ],
                     [
                         'field' => 'reference',
                         'comparison' => 'eq',
-                        'value' => $this->reference
-                    ]
+                        'value' => $this->reference,
+                    ],
                 ],
             ],
         ];
@@ -536,7 +527,7 @@ class OrderShipping implements BuilderItemInterface
                 ->queryProducts($variables);
 
             if (!empty($query)) {
-                $this->productId = (int)$query[0]['productId'];
+                $this->productId = (int) $query[0]['productId'];
             }
         } catch (MoloniApiException $e) {
             throw new MoloniDocumentShippingException('Error fetching shipping by reference: ({0})', ['{0}' => $this->reference], $e->getData());

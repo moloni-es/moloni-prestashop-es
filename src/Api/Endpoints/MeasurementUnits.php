@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -43,32 +44,7 @@ class MeasurementUnits extends Endpoint
      */
     public function queryMeasurementUnits(?array $variables = []): array
     {
-        $query = 'query measurementUnits($companyId: Int!,$options: MeasurementUnitOptions)
-                {
-                    measurementUnits(companyId: $companyId,options: $options)
-                    {
-                        data
-                        {
-                            measurementUnitId
-                            name
-                            abbreviation
-                        }
-                        options
-                        {
-                            pagination
-                            {
-                                page
-                                qty
-                                count
-                            }
-                        }
-                        errors
-                        {
-                            field
-                            msg
-                        }
-                    }
-                }';
+        $query = $this->loadQuery('measurementUnits');
 
         return $this->paginatedPost($query, $variables, 'measurementUnits');
     }
@@ -84,21 +60,7 @@ class MeasurementUnits extends Endpoint
      */
     public function mutationMeasurementUnitCreate(?array $variables = []): array
     {
-        $query = 'mutation measurementUnitCreate($companyId: Int!,$data: MeasurementUnitInsert!)
-                {
-                    measurementUnitCreate(companyId: $companyId,data: $data)
-                    {
-                        data
-                        {
-                            measurementUnitId
-                        }
-                        errors
-                        {
-                            field
-                            msg
-                        }
-                    }
-                }';
+        $query = $this->loadMutation('measurementUnitCreate');
 
         return $this->simplePost($query, $variables);
     }

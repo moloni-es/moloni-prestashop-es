@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -43,32 +44,7 @@ class Hooks extends Endpoint
      */
     public function queryHooks(?array $variables = []): array
     {
-        $query = 'query hooks($companyId: Int!,$options: HookOptions)
-        {
-            hooks(companyId: $companyId,options: $options)
-            {
-                data
-                {
-                    hookId
-                    url
-                    name
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-                options
-                {
-                    pagination
-                    {
-                        page
-                        qty
-                        count
-                    }
-                }
-            }
-        }';
+        $query = $this->loadQuery('hooks');
 
         return $this->paginatedPost($query, $variables, 'hooks');
     }
@@ -84,23 +60,7 @@ class Hooks extends Endpoint
      */
     public function mutationHookCreate(?array $variables = []): array
     {
-        $query = 'mutation hookCreate($companyId: Int!,$data: HookInsert!)
-        {
-            hookCreate(companyId: $companyId,data: $data)
-            {
-                data
-                {
-                    hookId
-                    url
-                    name
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = $this->loadMutation('hookCreate');
 
         return $this->simplePost($query, $variables);
     }
@@ -116,20 +76,7 @@ class Hooks extends Endpoint
      */
     public function mutationHookDelete(?array $variables = []): array
     {
-        $query = 'mutation hookDelete($companyId: Int!,$hookId: [String!]!)
-        {
-            hookDelete(companyId: $companyId,hookId: $hookId)
-            {
-                status
-                deletedCount
-                elementsCount
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = $this->loadMutation('hookDelete');
 
         return $this->simplePost($query, $variables);
     }

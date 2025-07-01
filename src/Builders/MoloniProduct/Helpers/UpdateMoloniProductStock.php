@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -63,7 +64,7 @@ class UpdateMoloniProductStock
         float $newStock,
         array $moloniProductWarehouses,
         string $reference,
-        ?bool $writeLogs = true
+        ?bool $writeLogs = true,
     ) {
         $this->moloniProductId = $moloniProductId;
         $this->warehouseId = $warehouseId;
@@ -92,7 +93,7 @@ class UpdateMoloniProductStock
             }
         }
 
-        if ((float)$moloniStock === $this->newStock) {
+        if ((float) $moloniStock === $this->newStock) {
             if ($this->shouldWriteLogs()) {
                 Logs::addStockLog(
                     ['Stock is already updated in Moloni ({0})', ['{0}' => $this->reference]],
@@ -125,8 +126,8 @@ class UpdateMoloniProductStock
 
         if ($this->shouldWriteLogs()) {
             if (
-                isset($mutation['data']['stockMovementManualEntryCreate']['data']['stockMovementId']) ||
-                isset($mutation['data']['stockMovementManualExitCreate']['data']['stockMovementId'])
+                isset($mutation['data']['stockMovementManualEntryCreate']['data']['stockMovementId'])
+                || isset($mutation['data']['stockMovementManualExitCreate']['data']['stockMovementId'])
             ) {
                 $message = [
                     'Stock updated in Moloni (old: {0} | new: {1}) ({2})',
@@ -134,14 +135,14 @@ class UpdateMoloniProductStock
                         '{0}' => $moloniStock,
                         '{1}' => $this->newStock,
                         '{2}' => $this->reference,
-                    ]
+                    ],
                 ];
             } else {
                 $message = [
                     'Something went wrong updating stock ({0})',
                     [
                         '{0}' => $this->reference,
-                    ]
+                    ],
                 ];
             }
 

@@ -1,12 +1,35 @@
 <?php
 
+/**
+ * 2025 - Moloni.com
+ *
+ * NOTICE OF LICENSE
+ *
+ * This file is licenced under the Software License Agreement.
+ * With the purchase or the installation of the software in your application
+ * you accept the licence agreement.
+ *
+ * You must not modify, adapt or create derivative works of this source code
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+ * versions in the future. If you wish to customize PrestaShop for your
+ * needs please refer to http://www.prestashop.com for more information.
+ *
+ * @author    Moloni
+ * @copyright Moloni
+ * @license   https://creativecommons.org/licenses/by-nd/4.0/
+ *
+ * @noinspection PhpMultipleClassDeclarationsInspection
+ */
+
 namespace Moloni\Guzzle;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Exception\ParseException;
 use GuzzleHttp\Post\PostFile;
-use Moloni\Enums\Domains;
+use Moloni\Configurations;
 use Moloni\Exceptions\MoloniApiException;
 
 if (!defined('_PS_VERSION_')) {
@@ -15,8 +38,10 @@ if (!defined('_PS_VERSION_')) {
 
 class Guzzle5 extends GuzzleAbstract implements GuzzleInterface
 {
-    public function __construct()
+    public function __construct(Configurations $configurations)
     {
+        parent::__construct($configurations);
+
         $headers = ['User-Agent' => $this->userAgent];
 
         $this->client = new Client();
@@ -54,7 +79,7 @@ class Guzzle5 extends GuzzleAbstract implements GuzzleInterface
     public function postWithFile(?array $operations = [], ?string $map = '', ?array $files = [], ?string $accessToken = '')
     {
         try {
-            $request = $this->client->createRequest('POST', Domains::MOLONI_API);
+            $request = $this->client->createRequest('POST', $this->apiUrl);
             $postBody = $request->getBody();
 
             if (!empty($operations)) {
@@ -74,7 +99,7 @@ class Guzzle5 extends GuzzleAbstract implements GuzzleInterface
                     $rawImage = fopen($file, 'rb');
 
                     if (!empty($rawImage)) {
-                        $postBody->addFile(new PostFile((string)$idx, $rawImage));
+                        $postBody->addFile(new PostFile((string) $idx, $rawImage));
                     }
                 }
             }

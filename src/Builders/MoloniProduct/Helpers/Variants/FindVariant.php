@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -24,8 +25,8 @@
 
 namespace Moloni\Builders\MoloniProduct\Helpers\Variants;
 
-use Moloni\Tools\ProductAssociations;
 use Moloni\Entity\MoloniProductAssociations;
+use Moloni\Tools\ProductAssociations;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -77,7 +78,7 @@ class FindVariant
         $variant = [];
 
         foreach ($this->allMoloniParentVariants as $parentVariant) {
-            if ((int)$parentVariant['productId'] === $needle) {
+            if ((int) $parentVariant['productId'] === $needle) {
                 $variant = $parentVariant;
 
                 break;
@@ -115,8 +116,8 @@ class FindVariant
                 $found = false;
 
                 foreach ($parentVariant['propertyPairs'] as $parentVariantPropertyPairs) {
-                    if ($propertyPair['propertyId'] === $parentVariantPropertyPairs['propertyId'] &&
-                        $propertyPair['propertyValueId'] === $parentVariantPropertyPairs['propertyValueId']) {
+                    if ($propertyPair['propertyId'] === $parentVariantPropertyPairs['propertyId']
+                        && $propertyPair['propertyValueId'] === $parentVariantPropertyPairs['propertyValueId']) {
                         $found = true;
 
                         break;

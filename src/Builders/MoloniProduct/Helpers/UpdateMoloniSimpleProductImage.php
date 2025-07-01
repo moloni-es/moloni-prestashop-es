@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -24,8 +25,6 @@
 
 namespace Moloni\Builders\MoloniProduct\Helpers;
 
-use Image;
-use Configuration;
 use Moloni\Api\MoloniApi;
 use Moloni\Exceptions\MoloniApiException;
 
@@ -51,7 +50,7 @@ class UpdateMoloniSimpleProductImage
         $this->coverImage = $coverImage;
         $this->moloniProductId = $moloniProductId;
 
-        $this->languageId = Configuration::get('PS_LANG_DEFAULT');
+        $this->languageId = \Configuration::get('PS_LANG_DEFAULT');
 
         $this->handle();
     }
@@ -62,16 +61,16 @@ class UpdateMoloniSimpleProductImage
             return;
         }
 
-        $image = new Image($this->coverImage['id_image'], $this->languageId);
+        $image = new \Image($this->coverImage['id_image'], $this->languageId);
 
         $props = [
             'data' => [
                 'productId' => $this->moloniProductId,
-                'img' => '{0}'
-            ]
+                'img' => '{0}',
+            ],
         ];
 
-        $file = _PS_PROD_IMG_DIR_ . $image->getExistingImgPath() . "." . $image->image_format;
+        $file = _PS_PROD_IMG_DIR_ . $image->getExistingImgPath() . '.' . $image->image_format;
 
         try {
             $operations = ['query' => $this->getMutation(), 'variables' => $props];

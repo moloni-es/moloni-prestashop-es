@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -43,23 +44,7 @@ class PriceClasses extends Endpoint
      */
     public function queryPriceClass(?array $variables = []): array
     {
-        $query = 'query priceClass($companyId: Int!,$priceClassId: Int!)
-        {
-            priceClass(companyId: $companyId,priceClassId: $priceClassId)
-            {
-                data
-                {
-                    priceClassId
-                    visible
-                    name
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = $this->loadQuery('priceClass');
 
         return $this->simplePost($query, $variables);
     }
@@ -75,23 +60,7 @@ class PriceClasses extends Endpoint
      */
     public function queryPriceClasses(?array $variables = []): array
     {
-        $query = 'query priceClasses($companyId: Int!,$options: PriceClassOptions)
-        {
-            priceClasses(companyId: $companyId,options: $options)
-            {
-                data
-                {
-                    priceClassId
-                    visible
-                    name
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = $this->loadQuery('priceClasses');
 
         return $this->paginatedPost($query, $variables, 'priceClasses');
     }
@@ -107,23 +76,7 @@ class PriceClasses extends Endpoint
      */
     public function mutationPriceClassCreate(?array $variables = []): array
     {
-        $query = 'mutation priceClassCreate($companyId: Int!,$data: PriceClassInsert!)
-        {
-            priceClassCreate(companyId: $companyId,data: $data)
-            {
-                data
-                {
-                    priceClassId
-                    visible
-                    name
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = $this->loadMutation('priceClassCreate');
 
         return $this->simplePost($query, $variables);
     }

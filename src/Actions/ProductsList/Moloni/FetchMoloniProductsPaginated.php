@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2023 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -26,10 +27,10 @@ declare(strict_types=1);
 
 namespace Moloni\Actions\ProductsList\Moloni;
 
-use Moloni\Tools\Settings;
 use Moloni\Api\MoloniApiClient;
-use Moloni\Traits\AttributesTrait;
 use Moloni\Exceptions\MoloniApiException;
+use Moloni\Tools\Settings;
+use Moloni\Traits\AttributesTrait;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -56,7 +57,7 @@ class FetchMoloniProductsPaginated
         $this->page = $page;
         $this->filters = $filters;
 
-        $this->warehouseId = (int)Settings::get('syncStockToPrestashopWarehouse');
+        $this->warehouseId = (int) Settings::get('syncStockToPrestashopWarehouse');
     }
 
     //         PUBLICS         //
@@ -102,14 +103,14 @@ class FetchMoloniProductsPaginated
                     [
                         'field' => 'visible',
                         'comparison' => 'eq',
-                        'value' => '1'
-                    ]
+                        'value' => '1',
+                    ],
                 ],
                 'pagination' => [
                     'page' => $this->page,
                     'qty' => $this->itemsPerPage,
-                ]
-            ]
+                ],
+            ],
         ];
 
         if (!empty($this->filters['name'])) {
@@ -130,7 +131,7 @@ class FetchMoloniProductsPaginated
         try {
             $query = MoloniApiClient::products()->queryProducts($props, true);
 
-            $this->totalResults = (int)($query['data']['products']['options']['pagination']['count'] ?? 0);
+            $this->totalResults = (int) ($query['data']['products']['options']['pagination']['count'] ?? 0);
             $this->totalProducts = $query['data']['products']['data'] ?? [];
         } catch (MoloniApiException $e) {
             $this->totalResults = 0;

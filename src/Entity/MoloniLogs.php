@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -25,7 +26,6 @@
 namespace Moloni\Entity;
 
 use DateTime;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 if (!defined('_PS_VERSION_')) {
@@ -42,7 +42,9 @@ class MoloniLogs
      * @var int
      *
      * @ORM\Id
+     *
      * @ORM\Column(name="id", type="integer")
+     *
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
@@ -90,7 +92,7 @@ class MoloniLogs
     private $extra;
 
     /**
-     * @var DateTime
+     * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
      */
@@ -201,17 +203,17 @@ class MoloniLogs
     }
 
     /**
-     * @return DateTime
+     * @return \DateTime
      */
-    public function getCreatedAt(): DateTime
+    public function getCreatedAt(): \DateTime
     {
         return $this->createdAt;
     }
 
     /**
-     * @param DateTime $createdAt
+     * @param \DateTime $createdAt
      */
-    public function setCreatedAt(DateTime $createdAt): void
+    public function setCreatedAt(\DateTime $createdAt): void
     {
         $this->createdAt = $createdAt;
     }

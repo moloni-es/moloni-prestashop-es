@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -41,28 +42,7 @@ class Companies extends Endpoint
      */
     public function queryMe(): array
     {
-        $query = 'query {
-            me { 
-                data {
-                    language
-                    {
-                        languageId
-                        name
-                    }
-                    userCompanies 
-                    {
-                        company 
-                        { 
-                            companyId 
-                        } 
-                    }
-                } 
-                errors 
-                { field 
-                msg 
-                }
-            }
-        }';
+        $query = $this->loadQuery('me');
 
         return $this->simplePost($query, []);
     }
@@ -78,49 +58,7 @@ class Companies extends Endpoint
      */
     public function queryCompany(?array $variables = []): array
     {
-        $query = 'query company($companyId: Int!,$options: CompanyOptionsSingle){ 
-            company(companyId: $companyId,options: $options) { 
-                data { 
-                    companyId
-                    name
-                    email
-                    address
-                    city
-                    zipCode
-                    slug
-                    img1
-                    vat
-                    documentCalculationsMode
-                    currency
-                    {
-                        currencyId
-                        iso4217
-                    }
-                    fiscalZone
-                    {
-                        fiscalZone
-                        fiscalZoneFinanceTypes
-                        {
-                            id
-                            name
-                        }
-                    }
-                    country
-                    {
-                        countryId
-                        iso3166_1
-                        title
-                    }
-                }
-                options{
-                    defaultLanguageId
-                }
-                errors 
-                { field 
-                msg 
-                }
-            }
-        }';
+        $query = $this->loadQuery('company');
 
         return $this->simplePost($query, $variables)['data']['company']['data'] ?? [];
     }

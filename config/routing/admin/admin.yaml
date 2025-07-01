@@ -1,7 +1,3 @@
-moloni_es_registration:
-  resource: "registration/registration.yaml"
-  prefix: /registration
-
 moloni_es_login:
   resource: "login/login.yaml"
   prefix: /login

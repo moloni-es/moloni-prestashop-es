@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -75,7 +76,6 @@ abstract class ExportProducts
     {
         return (($this->page - 1) * $this->itemsPerPage) + $this->totalResults;
     }
-
 
     public function getErrorProducts(): array
     {

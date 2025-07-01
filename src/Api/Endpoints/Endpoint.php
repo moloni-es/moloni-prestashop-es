@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -26,6 +27,7 @@ namespace Moloni\Api\Endpoints;
 
 use Moloni\Api\MoloniApi;
 use Moloni\Exceptions\MoloniApiException;
+use Moloni\MoloniContext;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -34,11 +36,76 @@ if (!defined('_PS_VERSION_')) {
 abstract class Endpoint
 {
     /**
-     * Requests cache
+     * Save a request cache
      *
      * @var array
      */
-    protected $cache = [];
+    protected $responseCache = [];
+
+    /**
+     * Save a query to reduce I/O operations
+     *
+     * @var array
+     */
+    protected $operationsCache = [];
+
+    //          Loadings          //
+
+    /**
+     * Load the query from a file
+     *
+     * @throws MoloniApiException
+     */
+    protected function loadQuery(string $queryName): string
+    {
+        if (isset($this->responseCache[$queryName]) && !empty($this->responseCache[$queryName])) {
+            return $this->responseCache[$queryName];
+        }
+
+        return $this->loadFromFile('Queries', $queryName);
+    }
+
+    /**
+     * Load mutation from a file
+     *
+     * @throws MoloniApiException
+     */
+    protected function loadMutation(string $mutationName): string
+    {
+        if (isset($this->responseCache[$mutationName]) && !empty($this->responseCache[$mutationName])) {
+            return $this->responseCache[$mutationName];
+        }
+
+        return $this->loadFromFile('Mutations', $mutationName);
+    }
+
+    /**
+     * Load mutation or query from a file
+     *
+     * @throws MoloniApiException
+     */
+    private function loadFromFile($folder, $name): string
+    {
+        $path = MoloniContext::instance()->getModuleDir() . "src/API/$folder/$name.graphql";
+
+        if (!file_exists($path)) {
+            throw new MoloniApiException("Query/Mutation file not found: $path");
+        }
+
+        $contents = file_get_contents($path);
+
+        if ($contents === false) {
+            $error = error_get_last();
+
+            throw new MoloniApiException("Query/Mutation file failed to read: {$error['message']}");
+        }
+
+        $this->operationsCache[$name] = $contents;
+
+        return $contents;
+    }
+
+    //          Requests          //
 
     /**
      * Make a simple request
@@ -53,8 +120,8 @@ abstract class Endpoint
     protected function simplePost(string $query, ?array $variables): array
     {
         return MoloniApi::post([
-           'query' => $query,
-           'variables' => $variables,
+            'query' => $query,
+            'variables' => $variables,
         ]);
     }
 

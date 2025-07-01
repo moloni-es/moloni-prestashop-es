@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -24,12 +25,11 @@
 
 namespace Moloni\Builders\MoloniProduct\Helpers\Variants;
 
-use Moloni\Enums\Boolean;
-use Moloni\Traits\ArrayTrait;
-use Moloni\Traits\StringTrait;
 use Moloni\Api\MoloniApiClient;
+use Moloni\Enums\Boolean;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\Product\MoloniProductException;
+use Moloni\Traits\ArrayTrait;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -85,7 +85,7 @@ class CreateEntirePropertyGroup
                             'name' => $groupName,
                             'ordering' => count($propsForInsert) + 1,
                             'values' => [
-                                $newValue
+                                $newValue,
                             ],
                             'visible' => Boolean::YES,
                         ];
@@ -95,8 +95,8 @@ class CreateEntirePropertyGroup
         }
 
         // Loop like crazy trying to find a free group name
-        for ($idx = 1; $idx <= 1000; $idx++) {
-            $newGroupName = "Prestashop-" . str_pad($idx, 3, '0', STR_PAD_LEFT);
+        for ($idx = 1; $idx <= 1000; ++$idx) {
+            $newGroupName = 'Prestashop-' . str_pad($idx, 3, '0', STR_PAD_LEFT);
 
             if ($this->findInName($this->moloniPropertyGroups, $newGroupName) === false) {
                 break;
@@ -108,7 +108,7 @@ class CreateEntirePropertyGroup
                 'name' => $newGroupName,
                 'properties' => $propsForInsert,
                 'visible' => Boolean::YES,
-            ]
+            ],
         ];
 
         try {
@@ -118,18 +118,10 @@ class CreateEntirePropertyGroup
             $mutationData = $mutation['data']['propertyGroupCreate']['data'] ?? [];
 
             if (empty($mutationData)) {
-                throw new MoloniProductException(
-                    'Error creating {0} attribute group',
-                    ['{0}' => $newGroupName],
-                    ['mutation' => $mutation]
-                );
+                throw new MoloniProductException('Error creating {0} attribute group', ['{0}' => $newGroupName], ['mutation' => $mutation]);
             }
         } catch (MoloniApiException $e) {
-            throw new MoloniProductException(
-                'Error creating {0} attribute group',
-                ['{0}' => $newGroupName],
-                $e->getData()
-            );
+            throw new MoloniProductException('Error creating {0} attribute group', ['{0}' => $newGroupName], $e->getData());
         }
 
         return (new PrepareVariantPropertiesReturn($mutationData, $this->prestashopCombinations))->handle();

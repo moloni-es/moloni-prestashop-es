@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -27,12 +28,8 @@ namespace Moloni\Hooks;
 use Moloni\Api\MoloniApi;
 use Moloni\Entity\MoloniOrderDocuments;
 use Moloni\Enums\MoloniRoutes;
+use Moloni\MoloniContext;
 use Moloni\Repository\MoloniOrderDocumentsRepository;
-use PrestaShopBundle\Translation\Translator;
-use PrestaShopBundle\Translation\TranslatorInterface;
-use Symfony\Bundle\FrameworkBundle\Routing\Router;
-use Doctrine\Persistence\ManagerRegistry;
-use Doctrine\Common\Persistence\ManagerRegistry as LegacyManagerRegistry;
 use PrestaShop\PrestaShop\Core\Exception\TypeException;
 use PrestaShopBundle\Controller\Admin\Sell\Order\ActionsBarButton;
 use PrestaShopBundle\Controller\Admin\Sell\Order\ActionsBarButtonsCollection;
@@ -50,10 +47,12 @@ class AdminOrderButtons extends AbstractHookAction
      * @var int
      */
     private $orderId;
+
     /**
      * @var ActionsBarButtonsCollection
      */
     private $actionBar;
+
     /**
      * @var MoloniOrderDocumentsRepository
      */
@@ -63,20 +62,20 @@ class AdminOrderButtons extends AbstractHookAction
      * Construct
      *
      * @param array $params
-     * @param Router $router
-     * @param ManagerRegistry|object|LegacyManagerRegistry $doctrine
-     * @param TranslatorInterface|Translator $translator
+     * @param MoloniContext $moloniContext
      *
      * @throws TypeException
      */
-    public function __construct(array &$params, Router $router, $doctrine, $translator)
+    public function __construct(array $params, MoloniContext $moloniContext)
     {
-        $this->router = $router;
-        $this->translator = $translator;
+        $this->router = $moloniContext->iRouter();
+        $this->translator = $moloniContext->iTranslator();
 
         $this->actionBar = $params['actions_bar_buttons_collection'];
-        $this->orderId = (int)$params['id_order'];
-        $this->moloniDocumentsRepository = $doctrine->getRepository(MoloniOrderDocuments::class);
+        $this->orderId = (int) $params['id_order'];
+        $this->moloniDocumentsRepository = $moloniContext
+            ->iEntityManager()
+            ->getRepository(MoloniOrderDocuments::class);
 
         $this->handle();
     }
@@ -112,7 +111,7 @@ class AdminOrderButtons extends AbstractHookAction
     private function addViewButton(int $documentId): void
     {
         $href = $this->router->generate(MoloniRoutes::DOCUMENTS_VIEW, [
-            'document_id' => $documentId
+            'document_id' => $documentId,
         ]);
 
         $title = $this->getMoloniLogo();
@@ -122,7 +121,7 @@ class AdminOrderButtons extends AbstractHookAction
             new ActionsBarButton(
                 'btn-secondary',
                 [
-                    'href' => $href, 'target' => '_blank'
+                    'href' => $href, 'target' => '_blank',
                 ],
                 $title
             )
@@ -148,7 +147,7 @@ class AdminOrderButtons extends AbstractHookAction
             new ActionsBarButton(
                 'btn-secondary',
                 [
-                    'href' => $href
+                    'href' => $href,
                 ],
                 $title
             )
@@ -162,6 +161,6 @@ class AdminOrderButtons extends AbstractHookAction
 
     private function shouldExecuteHandle(): bool
     {
-        return $this->isAuthenticated() && MoloniApi::hasValidCompany();
+        return MoloniApi::hasValidAuthentication() && MoloniApi::hasValidCompany();
     }
 }

@@ -1,0 +1,19 @@
+query {
+  me {
+    data {
+      language {
+        languageId
+        name
+      }
+      userCompanies {
+        userCompanyId
+        companyId
+        userId
+      }
+    }
+    errors {
+      field
+      msg
+    }
+  }
+}

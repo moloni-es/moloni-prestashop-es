@@ -1,0 +1,18 @@
+query receipt($companyId: Int!,$documentId: Int!,$options: ReceiptOptionsSingle) {
+  receipt(companyId: $companyId,documentId: $documentId,options: $options) {
+    data {
+      documentId
+      number
+      entityVat
+      entityNumber
+      entityName
+      documentSetName
+      pdfExport
+    }
+    errors {
+      field
+      msg
+    }
+  }
+}
+

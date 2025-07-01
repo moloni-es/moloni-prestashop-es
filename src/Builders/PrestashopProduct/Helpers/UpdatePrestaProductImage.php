@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -24,10 +25,7 @@
 
 namespace Moloni\Builders\PrestashopProduct\Helpers;
 
-use Image;
 use Moloni\Tools\Logs;
-use PrestaShopDatabaseException;
-use PrestaShopException;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -53,19 +51,19 @@ class UpdatePrestaProductImage extends PrestaImage
         }
 
         /** @var array|null $coverImage */
-        $coverImage = Image::getCover($this->prestashopProductId);
+        $coverImage = \Image::getCover($this->prestashopProductId);
 
         if (!empty($coverImage)) {
-            $image = new Image($coverImage['id_image'], $this->languageId);
+            $image = new \Image($coverImage['id_image'], $this->languageId);
             $image->deleteImage();
         } else {
-            $image = new Image(null, $this->languageId);
+            $image = new \Image(null, $this->languageId);
             $image->cover = true;
             $image->id_product = $this->prestashopProductId;
 
             try {
                 $image->save();
-            } catch (PrestaShopException $e) {
+            } catch (\PrestaShopException $e) {
                 Logs::addErrorLog('Error saving product image', [
                     'message' => $e->getMessage(),
                     'moloniImagePath' => $this->moloniImagePath,
@@ -78,7 +76,7 @@ class UpdatePrestaProductImage extends PrestaImage
 
         try {
             $this->saveImage($image);
-        } catch (PrestaShopDatabaseException $e) {
+        } catch (\PrestaShopDatabaseException $e) {
             Logs::addErrorLog('Error saving product image', [
                 'message' => $e->getMessage(),
                 'moloniImagePath' => $this->moloniImagePath,

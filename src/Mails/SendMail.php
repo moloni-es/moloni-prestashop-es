@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -23,6 +24,8 @@
  */
 
 namespace Moloni\Mails;
+
+use Moloni\MoloniContext;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -48,8 +51,12 @@ abstract class SendMail
         $this->subject = 'Prestashop - Moloni plugin';
     }
 
-    protected function getLogoUrl(): string
+    protected function getCommonVars(): array
     {
-        return (new \Link())->getBaseLink() . '/modules/molonies/views/img/moloni_logo_white.png';
+        return [
+            '{moloni_url}' => MoloniContext::instance()->configs()->get('home_page'),
+            '{moloni_logo_url}' => MoloniContext::instance()->getImgPath() . 'logo_white.png',
+            '{year}' => date('Y'),
+        ];
     }
 }

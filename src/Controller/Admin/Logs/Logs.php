@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -26,8 +27,6 @@ declare(strict_types=1);
 
 namespace Moloni\Controller\Admin\Logs;
 
-use Exception;
-use Tools;
 use Moloni\Actions\Tools\LogsListDetails;
 use Moloni\Controller\Admin\MoloniController;
 use Moloni\Entity\MoloniLogs;
@@ -46,8 +45,9 @@ class Logs extends MoloniController
 {
     public function home(): Response
     {
-        $page = (int)Tools::getValue('page', 1);
-        $filters = Tools::getValue('filters', []);
+        $page = (int) \Tools::getValue('page', 1);
+
+        $filters = \Tools::getValue('filters', []);
 
         $logs = $paginator = [];
 
@@ -58,8 +58,9 @@ class Logs extends MoloniController
             ->getRepository(MoloniLogs::class);
 
         try {
-            ['logs' => $logs, 'paginator' => $paginator] = $moloniLogsRepository->getAllPaginated($page, $filters);
-        } catch (Exception $e) {
+            ['logs' => $logs, 'paginator' => $paginator] =
+                $moloniLogsRepository->getAllPaginated($page, array_merge($filters, ['company_id' => $this->moloniContext->getCompanyId()]));
+        } catch (\Exception $e) {
             $msg = $this->trans('Error fetching logs list', 'Modules.Molonies.Errors');
 
             $this->addErrorMessage($msg);
@@ -67,8 +68,8 @@ class Logs extends MoloniController
 
         $logs = (new LogsListDetails($logs))->handle();
 
-        return $this->render(
-            '@Modules/molonies/views/templates/admin/logs/Logs.twig',
+        return $this->display(
+            'logs/Logs.twig',
             [
                 'logsArray' => $logs,
                 'logsLevelsArray' => LogLevel::getLogLevels(),

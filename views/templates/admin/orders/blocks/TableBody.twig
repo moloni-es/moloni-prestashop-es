@@ -59,7 +59,7 @@
     <tr>
         <td colspan="8">
             {# Empty state #}
-            {% include '@Modules/molonies/views/templates/admin/components/EmptyState.twig' with {'empty_state_text': 'All your documents are already converted into documents!'|trans({}, 'Modules.Molonies.Common') }%}
+            {% include view_dir ~ 'components/EmptyState.twig' with {'empty_state_text': 'All your documents are already converted into documents!'|trans({}, 'Modules.Molonies.Common') }%}
         </td>
     </tr>
 {% endif %}

@@ -1,8 +1,8 @@
-{% extends '@PrestaShop/Admin/layout.html.twig' %}
+{% extends view_dir ~ 'Layout.twig' %}
 
-{% block content %}
+{% block plugin_content %}
     {# Messages #}
-    {% include '@Modules/molonies/views/templates/admin/debug/blocks/Messages.twig' %}
+    {% include view_dir ~ 'debug/blocks/Messages.twig' %}
 
     {# Actions #}
     <div class="card">

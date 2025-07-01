@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -43,22 +44,7 @@ class DeliveryMethods extends Endpoint
      */
     public function mutationDeliveryMethodCreate(?array $variables = []): array
     {
-        $query = 'mutation deliveryMethodCreate($companyId: Int!,$data: DeliveryMethodInsert!)
-        {
-            deliveryMethodCreate(companyId: $companyId,data: $data) 
-            {
-                errors
-                {
-                    field
-                    msg
-                }
-                data
-                {
-                    deliveryMethodId
-                    name
-                }
-            }
-        }';
+        $query = $this->loadMutation('deliveryMethodCreate');
 
         return $this->simplePost($query, $variables);
     }
@@ -74,32 +60,7 @@ class DeliveryMethods extends Endpoint
      */
     public function queryDeliveryMethods(?array $variables = []): array
     {
-        $query = 'query deliveryMethods($companyId: Int!,$options: DeliveryMethodOptions)
-        {
-            deliveryMethods(companyId: $companyId,options: $options) 
-            {
-                errors
-                {
-                    field
-                    msg
-                }
-                data
-                {
-                    deliveryMethodId
-                    name
-                    isDefault
-                }
-                options
-                {
-                    pagination
-                    {
-                        page
-                        qty
-                        count
-                    }
-                }
-            }
-        }';
+        $query = $this->loadQuery('deliveryMethods');
 
         return $this->paginatedPost($query, $variables, 'deliveryMethods');
     }

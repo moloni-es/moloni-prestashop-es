@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -32,7 +33,7 @@ class StockSync
 {
     public const IGNORED_REFERENCES = [
         'envio',
-        'envío'
+        'envío',
     ];
 
     public static function isIgnoredReference(string $reference): bool

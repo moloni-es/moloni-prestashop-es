@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -28,7 +29,6 @@ use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\Interfaces\BuilderItemInterface;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\MoloniException;
-use Moloni\Exceptions\Product\MoloniProductCategoryException;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -110,7 +110,7 @@ class CategoryFromName implements BuilderItemInterface
             $params = [
                 'data' => [
                     'name' => $this->name,
-                ]
+                ],
             ];
 
             if ($this->parentId !== null && $this->parentId > 0) {
@@ -121,7 +121,7 @@ class CategoryFromName implements BuilderItemInterface
 
             $productCategoryId = $mutation['data']['productCategoryCreate']['data']['productCategoryId'] ?? 0;
 
-            if ((int)$productCategoryId > 0) {
+            if ((int) $productCategoryId > 0) {
                 $this->productCategoryId = (int) $productCategoryId;
             } else {
                 throw new MoloniException('Error creating category', [], ['params' => $params, 'response' => $mutation]);
@@ -169,7 +169,7 @@ class CategoryFromName implements BuilderItemInterface
                 'filter' => [
                     'field' => 'parentId',
                     'comparison' => 'eq',
-                    'value' => $this->parentId > 0 ? (string)$this->parentId : null,
+                    'value' => $this->parentId > 0 ? (string) $this->parentId : null,
                 ],
                 'search' => [
                     'field' => 'name',

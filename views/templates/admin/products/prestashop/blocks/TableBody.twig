@@ -3,13 +3,13 @@
 {% if productsArray %}
     {% for product in productsArray %}
         {# Row #}
-        {% include '@Modules/molonies/views/templates/admin/products/prestashop/blocks/TableBodyRow.twig' %}
+        {% include view_dir ~ 'products/prestashop/blocks/TableBodyRow.twig' %}
     {% endfor %}
 {% else %}
     <tr>
         <td colspan="100%">
             {# Empty state #}
-            {% include '@Modules/molonies/views/templates/admin/components/EmptyState.twig' with {'empty_state_text': 'No information to show!'|trans({}, 'Modules.Molonies.Common')} %}
+            {% include view_dir ~ 'components/EmptyState.twig' with {'empty_state_text': 'No information to show!'|trans({}, 'Modules.Molonies.Common')} %}
         </td>
     </tr>
 {% endif %}

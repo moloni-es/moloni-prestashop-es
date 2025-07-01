@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -44,30 +45,7 @@ class Estimate extends Endpoint
      */
     public function queryEstimate(?array $variables = []): array
     {
-        $query = 'query estimate($companyId: Int!,$documentId: Int!,$options: EstimateOptionsSingle)
-        {
-            estimate(companyId: $companyId,documentId: $documentId,options: $options)
-            {
-                data
-                {
-                    documentId
-                    number
-                    ourReference
-                    yourReference
-                    entityVat
-                    entityNumber
-                    entityName
-                    documentSetName
-                    totalValue
-                    pdfExport
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = $this->loadQuery('estimate');
 
         return $this->simplePost($query, $variables);
     }
@@ -83,38 +61,7 @@ class Estimate extends Endpoint
      */
     public function queryEstimates(?array $variables = []): array
     {
-        $query = 'query estimates($companyId: Int!,$options: EstimateOptions)
-        {
-            estimates(companyId: $companyId,options: $options)
-            {
-                data
-                {
-                    documentId
-                    number
-                    ourReference
-                    yourReference
-                    entityVat
-                    entityNumber
-                    entityName
-                    documentSetName
-                    totalValue
-                }
-                options
-                {
-                    pagination
-                    {
-                        page
-                        qty
-                        count
-                    }
-                }                        
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = $this->loadQuery('estimates');
 
         return $this->paginatedPost($query, $variables, 'estimates');
     }
@@ -130,23 +77,7 @@ class Estimate extends Endpoint
      */
     public function queryEstimateGetPDFToken(?array $variables = []): array
     {
-        $query = 'query estimateGetPDFToken($documentId: Int!)
-        {
-            estimateGetPDFToken(documentId: $documentId)
-            {
-                data
-                {
-                    token
-                    filename
-                    path
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = $this->loadQuery('estimateGetPDFToken');
 
         return $this->simplePost($query, $variables);
     }
@@ -162,28 +93,7 @@ class Estimate extends Endpoint
      */
     public function mutationEstimateCreate(?array $variables = []): array
     {
-        $query = 'mutation estimateCreate($companyId: Int!,$data: EstimateInsert!,$options: EstimateMutateOptions){
-            estimateCreate(companyId: $companyId,data: $data,options: $options) {
-                errors{
-                    field
-                    msg
-                }
-                data{
-                    documentId
-                    number
-                    totalValue
-                    documentTotal
-                    documentSetName
-                    ourReference
-                    currencyExchangeTotalValue
-                    products
-                    {
-                        documentProductId
-                        productId
-                    }
-                }
-            }
-        }';
+        $query = $this->loadMutation('estimateCreate');
 
         return $this->simplePost($query, $variables);
     }
@@ -199,28 +109,7 @@ class Estimate extends Endpoint
      */
     public function mutationEstimateUpdate(?array $variables = []): array
     {
-        $query = 'mutation estimateUpdate($companyId: Int!,$data: EstimateUpdate!)
-        {
-            estimateUpdate(companyId: $companyId,data: $data) 
-            {
-                errors
-                {
-                    field
-                    msg
-                }
-                data
-                {
-                    documentId
-                    status
-                    currencyExchangeTotalValue
-                    products
-                    {
-                        documentProductId
-                        productId
-                    }                              
-                }
-            }
-        }';
+        $query = $this->loadMutation('estimateUpdate');
 
         return $this->simplePost($query, $variables);
     }
@@ -236,10 +125,7 @@ class Estimate extends Endpoint
      */
     public function mutationEstimateGetPDF(?array $variables = []): array
     {
-        $query = 'mutation estimateGetPDF($companyId: Int!,$documentId: Int!)
-        {
-            estimateGetPDF(companyId: $companyId,documentId: $documentId)
-        }';
+        $query = $this->loadMutation('estimateGetPDF');
 
         return $this->simplePost($query, $variables);
     }
@@ -255,10 +141,7 @@ class Estimate extends Endpoint
      */
     public function mutationEstimateSendMail(?array $variables = []): array
     {
-        $query = 'mutation estimateSendMail($companyId: Int!,$documents: [Int]!,$mailData: MailData)
-        {
-            estimateSendMail(companyId: $companyId,documents: $documents,mailData: $mailData)
-        }';
+        $query = $this->loadMutation('estimateSendMail');
 
         return $this->simplePost($query, $variables);
     }

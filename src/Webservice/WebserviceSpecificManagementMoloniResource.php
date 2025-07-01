@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -18,7 +19,8 @@
  * @author    Moloni
  * @copyright Moloni
  * @license   https://creativecommons.org/licenses/by-nd/4.0/
- * @noinspection PhpIllegalPsrClassPathInspection
+ *
+ * @noinspection PhpMultipleClassDeclarationsInspection
  */
 
 use Moloni\Webservice\Product\ProductCreate;
@@ -44,6 +46,7 @@ class WebserviceSpecificManagementMoloniResource implements WebserviceSpecificMa
      * Interface method
      *
      * @param WebserviceOutputBuilderCore|WebserviceOutputBuilder $obj
+     *
      * @return $this
      */
     public function setObjectOutput($obj): WebserviceSpecificManagementMoloniResource
@@ -102,13 +105,13 @@ class WebserviceSpecificManagementMoloniResource implements WebserviceSpecificMa
 
         switch ($request['operation']) {
             case 'create':
-                (new ProductCreate((int)$request['productId']))->handle();
+                (new ProductCreate((int) $request['productId']))->handle();
                 break;
             case 'update':
-                (new ProductUpdate((int)$request['productId']))->handle();
+                (new ProductUpdate((int) $request['productId']))->handle();
                 break;
             case 'stockChanged':
-                (new ProductStockChange((int)$request['productId']))->handle();
+                (new ProductStockChange((int) $request['productId']))->handle();
                 break;
         }
 

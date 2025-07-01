@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -26,13 +27,13 @@ declare(strict_types=1);
 
 namespace Moloni\Tools;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Moloni\Entity\MoloniSyncLogs;
 use Moloni\Enums\SyncLogsType;
+use Moloni\MoloniContext;
 use Moloni\Repository\MoloniSyncLogsRepository;
-use Shop;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -43,7 +44,7 @@ class SyncLogs
     /**
      * Entity manager
      *
-     * @var EntityManager
+     * @var EntityManagerInterface
      */
     private static $entityManager;
 
@@ -55,6 +56,13 @@ class SyncLogs
     private static $syncLogsRepository;
 
     /**
+     * Moloni context
+     *
+     * @var MoloniContext
+     */
+    protected static $context;
+
+    /**
      * Time interval where product is blocked
      *
      * @var int
@@ -64,12 +72,14 @@ class SyncLogs
     /**
      * Construct
      *
-     * @param EntityManager $entityManager
+     * @param EntityManagerInterface $entityManager
+     * @param MoloniContext $context
      */
-    public function __construct(EntityManager $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, MoloniContext $context)
     {
         self::$entityManager = $entityManager;
         self::$syncLogsRepository = $entityManager->getRepository(MoloniSyncLogs::class);
+        self::$context = $context;
 
         try {
             self::$syncLogsRepository->removeExpiredDelays(self::$syncDelay);
@@ -174,16 +184,14 @@ class SyncLogs
     private static function addTimeout(
         ?int $moloniId = 0,
         ?int $prestashopId = 0,
-        int $type = SyncLogsType::PRODUCT
+        ?int $type = SyncLogsType::PRODUCT,
     ): void {
-        $shopId = (int)(Shop::getContextShopID() ?? 0);
-
         $syncLog = new MoloniSyncLogs();
         $syncLog->setMoloniId($moloniId);
         $syncLog->setPrestashopId($prestashopId);
-        $syncLog->setShopId($shopId);
+        $syncLog->setShopId((int) (\Shop::getContextShopID() ?? 0));
         $syncLog->setTypeId($type);
-        $syncLog->setSyncDate((string)time());
+        $syncLog->setSyncDate((string) time());
 
         try {
             self::$entityManager->persist($syncLog);

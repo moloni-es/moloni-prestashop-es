@@ -1,0 +1,18 @@
+mutation billsOfLadingUpdate($companyId: Int!,$data: BillsOfLadingUpdate!) {
+  billsOfLadingUpdate(companyId: $companyId,data: $data) {
+    errors {
+      field
+      msg
+    }
+    data {
+      documentId
+      status
+      currencyExchangeTotalValue
+      products {
+        documentProductId
+        productId
+      }
+    }
+  }
+}
+

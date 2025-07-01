@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -24,15 +25,9 @@
 
 namespace Moloni\Builders\PrestashopProduct\Helpers;
 
-use Configuration;
 use Image;
-use ImageManager;
-use ImageType;
-use Moloni\Enums\Domains;
+use Moloni\MoloniContext;
 use PrestaShop\PrestaShop\Adapter\Import\ImageCopier;
-use PrestaShopDatabaseException;
-use Shop;
-use Tools;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -45,38 +40,39 @@ abstract class PrestaImage
 
     public function __construct(string $moloniImagePath)
     {
-        $this->languageId = Configuration::get('PS_LANG_DEFAULT');
+        $this->languageId = \Configuration::get('PS_LANG_DEFAULT');
         $this->moloniImagePath = $moloniImagePath;
     }
 
     /**
      * * Adapetd from Prestashop *
      *
-     * @param Image $image
+     * @param \Image $image
      *
      * @return void
      *
-     * @throws PrestaShopDatabaseException
-     * @see \PrestaShop\PrestaShop\Adapter\Import\ImageCopier::copyImg
+     * @throws \PrestaShopDatabaseException
+     *
+     * @see ImageCopier::copyImg
      */
-    protected function saveImage(Image $image): void
+    protected function saveImage(\Image $image): void
     {
-        $imageUrl = Domains::MOLONI_MEDIA_API . $this->moloniImagePath;
+        $imageUrl = MoloniContext::instance()->configs()->get('media_api_url') . $this->moloniImagePath;
         $imageUrl = urldecode(trim($imageUrl));
 
-        $tmpDir = Configuration::get('_PS_TMP_IMG_DIR_');
+        $tmpDir = \Configuration::get('_PS_TMP_IMG_DIR_');
         $tmpFile = tempnam($tmpDir, 'ps_import');
 
         if (empty($tmpFile)) {
-            $tmpFile = tempnam("/tmp", 'ps_import');
+            $tmpFile = tempnam('/tmp', 'ps_import');
         }
 
         $path = $image->getPathForCreation();
 
         $origTmpfile = $tmpFile;
 
-        if (Tools::copy($imageUrl, $tmpFile)) {
-            if (!ImageManager::checkImageMemoryLimit($tmpFile)) {
+        if (\Tools::copy($imageUrl, $tmpFile)) {
+            if (!\ImageManager::checkImageMemoryLimit($tmpFile)) {
                 @unlink($tmpFile);
 
                 return;
@@ -86,7 +82,7 @@ abstract class PrestaImage
             $sourceWidth = $sourceHeight = 0;
             $error = 0;
 
-            ImageManager::resize(
+            \ImageManager::resize(
                 $tmpFile,
                 $path . '.jpg',
                 null,
@@ -101,7 +97,7 @@ abstract class PrestaImage
                 $sourceHeight
             );
 
-            $imagesTypes = ImageType::getImagesTypes('products', true);
+            $imagesTypes = \ImageType::getImagesTypes('products', true);
 
             $pathInfos = [];
             $pathInfos[] = [$targetWidth, $targetHeight, $path . '.jpg'];
@@ -109,7 +105,7 @@ abstract class PrestaImage
             foreach ($imagesTypes as $imageType) {
                 $tmpFile = $this->getBestPath($imageType['width'], $imageType['height'], $pathInfos);
 
-                if (ImageManager::resize(
+                if (\ImageManager::resize(
                     $tmpFile,
                     $path . '-' . stripslashes($imageType['name']) . '.jpg',
                     $imageType['width'],
@@ -128,13 +124,13 @@ abstract class PrestaImage
                         $pathInfos[] = [$targetWidth, $targetHeight, $path . '-' . stripslashes($imageType['name']) . '.jpg'];
                     }
 
-                    $file = $tmpDir . 'product_mini_' . (int)$image->id . '.jpg';
+                    $file = $tmpDir . 'product_mini_' . (int) $image->id . '.jpg';
 
                     if (is_file($file)) {
                         unlink($file);
                     }
 
-                    $file = $tmpDir . 'product_mini_' . (int)$image->id . '_' . (int)Shop::getContextShopID() . '.jpg';
+                    $file = $tmpDir . 'product_mini_' . (int) $image->id . '_' . (int) \Shop::getContextShopID() . '.jpg';
 
                     if (is_file($file)) {
                         unlink($file);
@@ -158,7 +154,8 @@ abstract class PrestaImage
      * @param array $pathInfos
      *
      * @return string
-     * @see \PrestaShop\PrestaShop\Adapter\Import\ImageCopier::getBestPath
+     *
+     * @see ImageCopier::getBestPath
      */
     protected function getBestPath(int $targetWidth, int $targetHeight, array $pathInfos): string
     {

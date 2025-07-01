@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -24,13 +25,11 @@
 
 namespace Moloni\Builders\MoloniProduct\Helpers\Variants;
 
-use Configuration;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Enums\Boolean;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\Product\MoloniProductException;
 use Moloni\Traits\ArrayTrait;
-use Product;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -50,10 +49,10 @@ class GetOrUpdatePropertyGroup
      */
     private $propertyGroupId;
 
-    public function __construct(Product $prestashopProduct, string $propertyGroupId)
+    public function __construct(\Product $prestashopProduct, string $propertyGroupId)
     {
         $this->prestashopCombinations = $this->preparePrestashopProductAttributes(
-            $prestashopProduct->getAttributesGroups(Configuration::get('PS_LANG_DEFAULT'))
+            $prestashopProduct->getAttributesGroups(\Configuration::get('PS_LANG_DEFAULT'))
         );
         $this->propertyGroupId = $propertyGroupId;
     }
@@ -68,7 +67,7 @@ class GetOrUpdatePropertyGroup
         }
 
         $queryParams = [
-            'propertyGroupId' => $this->propertyGroupId
+            'propertyGroupId' => $this->propertyGroupId,
         ];
 
         try {
@@ -78,7 +77,7 @@ class GetOrUpdatePropertyGroup
             throw new MoloniProductException('Error fetching property group', [], $e->getData());
         }
 
-        /** Propery group is not found, exit process immediately */
+        /* Propery group is not found, exit process immediately */
         if (empty($moloniPropertyGroup)) {
             throw new MoloniProductException('Error fetching property group', [], $queryParams);
         }

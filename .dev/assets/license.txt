@@ -1,5 +1,5 @@
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -17,4 +17,6 @@
  * @author    Moloni
  * @copyright Moloni
  * @license   https://creativecommons.org/licenses/by-nd/4.0/
+ *
+ * @noinspection PhpMultipleClassDeclarationsInspection
  */

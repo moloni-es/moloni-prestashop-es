@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -24,10 +25,9 @@
 
 namespace Moloni\Builders\MoloniProduct\Helpers\Variants;
 
-use Product;
+use Moloni\Builders\MoloniProduct\ProductVariant;
 use Moloni\Enums\Boolean;
 use Moloni\Tools\ProductAssociations;
-use Moloni\Builders\MoloniProduct\ProductVariant;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -43,15 +43,14 @@ class CreateMappingsAfterMoloniProductCreateOrUpdate
      * Construct
      *
      * @param array $moloniProductMutated
-     * @param Product $prestashopProduct
+     * @param \Product $prestashopProduct
      * @param ProductVariant[] $variantsBuilders
      */
     public function __construct(
-        Product $prestashopProduct,
-        array   $moloniProductMutated,
-        array   $variantsBuilders
-    )
-    {
+        \Product $prestashopProduct,
+        array $moloniProductMutated,
+        array $variantsBuilders,
+    ) {
         $this->prestashopProduct = $prestashopProduct;
 
         $this->moloniProductMutated = $moloniProductMutated;

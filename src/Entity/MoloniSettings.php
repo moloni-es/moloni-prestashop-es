@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -24,7 +25,6 @@
 
 namespace Moloni\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 if (!defined('_PS_VERSION_')) {
@@ -41,7 +41,9 @@ class MoloniSettings
      * @var int
      *
      * @ORM\Id
+     *
      * @ORM\Column(name="id", type="integer")
+     *
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
@@ -52,7 +54,6 @@ class MoloniSettings
      * @ORM\Column(name="company_id", type="integer")
      */
     private $companyId;
-
 
     /**
      * @var int

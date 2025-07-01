@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -24,25 +25,21 @@
 
 namespace Moloni\Controller\Admin\Debug;
 
-use Country;
-use TaxRulesGroup;
-use Tools;
-use Product;
-use Configuration;
-use Moloni\Tools\SyncLogs;
-use Moloni\Enums\MoloniRoutes;
 use Moloni\Api\MoloniApiClient;
-use Moloni\Tools\ProductAssociations;
-use Moloni\Entity\MoloniOrderDocuments;
-use Moloni\Entity\MoloniProductAssociations;
-use Moloni\Controller\Admin\MoloniController;
 use Moloni\Builders\MoloniProductSimple;
 use Moloni\Builders\MoloniProductWithVariants;
 use Moloni\Builders\PrestashopProductSimple;
 use Moloni\Builders\PrestashopProductWithCombinations;
+use Moloni\Controller\Admin\MoloniController;
+use Moloni\Entity\MoloniOrderDocuments;
+use Moloni\Entity\MoloniProductAssociations;
+use Moloni\Enums\MoloniRoutes;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\Product\MoloniProductException;
 use Moloni\Repository\MoloniOrderDocumentsRepository;
+use Moloni\Tools\ProductAssociations;
+use Moloni\Tools\SyncLogs;
+use Product;
 use Symfony\Component\HttpFoundation\Response;
 
 if (!defined('_PS_VERSION_')) {
@@ -60,8 +57,8 @@ class Debug extends MoloniController
      */
     public function home(?array $data = []): Response
     {
-        return $this->render(
-            '@Modules/molonies/views/templates/admin/debug/Debug.twig',
+        return $this->display(
+            'debug/Debug.twig',
             [
                 'multipurpose' => MoloniRoutes::DEBUG_MULTIPURPOSE,
                 'deleteOrderDocument' => MoloniRoutes::DEBUG_DELETE_ORDER_DOCUMENT,
@@ -88,13 +85,13 @@ class Debug extends MoloniController
         $taxRulesGroupId = 0;
 
         $fiscalZone = 'es';
-        $countryId = Country::getByIso($fiscalZone);
+        $countryId = \Country::getByIso($fiscalZone);
         $value = 21.0;
 
-        $taxes = array_reverse(TaxRulesGroup::getAssociatedTaxRatesByIdCountry($countryId), true);
+        $taxes = array_reverse(\TaxRulesGroup::getAssociatedTaxRatesByIdCountry($countryId), true);
 
         foreach ($taxes as $id => $tax) {
-            if ($value === (float)$tax) {
+            if ($value === (float) $tax) {
                 $taxRulesGroupId = $id;
 
                 break;
@@ -122,7 +119,7 @@ class Debug extends MoloniController
      */
     public function deleteOrderDocument(): Response
     {
-        $orderId = (int)Tools::getValue('order_id', 0);
+        $orderId = (int) \Tools::getValue('order_id', 0);
 
         /** @var MoloniOrderDocumentsRepository $repository */
         $repository = $this
@@ -134,7 +131,7 @@ class Debug extends MoloniController
 
         $response = [
             'valid' => 1,
-            'result' => 'Done :)'
+            'result' => 'Done :)',
         ];
 
         return $this->home($response);
@@ -145,7 +142,7 @@ class Debug extends MoloniController
      */
     public function updateStockFromMoloni(): Response
     {
-        $productId = (int) Tools::getValue('product_id', 0);
+        $productId = (int) \Tools::getValue('product_id', 0);
 
         $variables = [
             'productId' => $productId,
@@ -196,7 +193,7 @@ class Debug extends MoloniController
      */
     public function updateProductFromMoloni(): Response
     {
-        $productId = (int) Tools::getValue('product_id', 0);
+        $productId = (int) \Tools::getValue('product_id', 0);
 
         $variables = [
             'productId' => $productId,
@@ -249,7 +246,7 @@ class Debug extends MoloniController
      */
     public function insertProductFromMoloni(): Response
     {
-        $productId = (int) Tools::getValue('product_id', 0);
+        $productId = (int) \Tools::getValue('product_id', 0);
 
         $variables = [
             'productId' => $productId,
@@ -300,12 +297,12 @@ class Debug extends MoloniController
      */
     public function updateStockFromPrestashop(): Response
     {
-        $productId = (int) Tools::getValue('product_id', 0);
+        $productId = (int) \Tools::getValue('product_id', 0);
 
         SyncLogs::prestashopProductAddTimeout($productId);
 
         try {
-            $product = new Product($productId, true, Configuration::get('PS_LANG_DEFAULT'));
+            $product = new \Product($productId, true, \Configuration::get('PS_LANG_DEFAULT'));
 
             if (empty($product->id)) {
                 throw new MoloniProductException('Product not found', null, [$productId]);
@@ -347,12 +344,12 @@ class Debug extends MoloniController
      */
     public function updateProductFromPrestashop(): Response
     {
-        $productId = (int) Tools::getValue('product_id', 0);
+        $productId = (int) \Tools::getValue('product_id', 0);
 
         SyncLogs::prestashopProductAddTimeout($productId);
 
         try {
-            $product = new Product($productId, true, Configuration::get('PS_LANG_DEFAULT'));
+            $product = new \Product($productId, true, \Configuration::get('PS_LANG_DEFAULT'));
 
             if (empty($product->id)) {
                 throw new MoloniProductException('Product not found', null, [$productId]);
@@ -394,12 +391,12 @@ class Debug extends MoloniController
      */
     public function insertProductFromPrestashop(): Response
     {
-        $productId = (int) Tools::getValue('product_id', 0);
+        $productId = (int) \Tools::getValue('product_id', 0);
 
         SyncLogs::prestashopProductAddTimeout($productId);
 
         try {
-            $product = new Product($productId, true, Configuration::get('PS_LANG_DEFAULT'));
+            $product = new \Product($productId, true, \Configuration::get('PS_LANG_DEFAULT'));
 
             if (empty($product->id)) {
                 throw new MoloniProductException('Product not found', null, [$productId]);
@@ -438,8 +435,8 @@ class Debug extends MoloniController
     public function dumpProductAssociations(): Response
     {
         $results = [];
-        $productId = (int)Tools::getValue('product_id', 0);
-        $type = Tools::getValue('type_id', '');
+        $productId = (int) \Tools::getValue('product_id', 0);
+        $type = \Tools::getValue('type_id', '');
 
         switch ($type) {
             case 'MOLONI_PRODUCT':

@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -40,7 +41,9 @@ class MoloniSyncLogs
      * @var int
      *
      * @ORM\Id
+     *
      * @ORM\Column(name="id", type="integer")
+     *
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;

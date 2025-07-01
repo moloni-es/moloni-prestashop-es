@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -43,28 +44,7 @@ class DocumentSets extends Endpoint
      */
     public function queryDocumentSets(?array $variables = []): array
     {
-        $query = 'query documentSets($companyId: Int!,$options: DocumentSetOptions){
-            documentSets(companyId: $companyId, options: $options) {
-                errors{
-                    field
-                    msg
-                }
-                options
-                {
-                    pagination
-                    {
-                        page
-                        qty
-                        count
-                    }
-                }
-                data{
-                    documentSetId
-                    name
-                    isDefault
-                }
-            }
-        }';
+        $query = $this->loadQuery('documentSets');
 
         return $this->paginatedPost($query, $variables, 'documentSets');
     }

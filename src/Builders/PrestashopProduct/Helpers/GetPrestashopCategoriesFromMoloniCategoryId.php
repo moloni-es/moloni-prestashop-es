@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -24,13 +25,10 @@
 
 namespace Moloni\Builders\PrestashopProduct\Helpers;
 
-use Tools;
 use Category;
-use Configuration;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\Product\MoloniProductCategoryException;
-use PrestaShopException;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -52,28 +50,25 @@ class GetPrestashopCategoriesFromMoloniCategoryId
      */
     public function handle(): array
     {
-        $parentId = Category::getRootCategory()->id;
-        $languageId = (int)Configuration::get('PS_LANG_DEFAULT');
+        $parentId = \Category::getRootCategory()->id;
+        $languageId = (int) \Configuration::get('PS_LANG_DEFAULT');
 
         $prestashopCategoryIds = [$parentId];
         $moloniCategoriesNames = $this->getMoloniCategoryTree();
 
         foreach ($moloniCategoriesNames as $moloniCategoryName) {
-            $query = Category::searchByNameAndParentCategoryId($languageId, $moloniCategoryName, $parentId);
+            $query = \Category::searchByNameAndParentCategoryId($languageId, $moloniCategoryName, $parentId);
 
             if (empty($query)) {
-                $category = new Category();
+                $category = new \Category();
                 $category->name = [$languageId => $moloniCategoryName];
                 $category->id_parent = $parentId;
-                $category->link_rewrite = [$languageId => Tools::str2url($moloniCategoryName)];
+                $category->link_rewrite = [$languageId => \Tools::str2url($moloniCategoryName)];
 
                 try {
                     $category->save();
-                } catch (PrestaShopException $e) {
-                    throw new MoloniProductCategoryException('Error creating Prestashop category', [], [
-                        'name' => $moloniCategoryName,
-                        'parentId' => $parentId,
-                    ]);
+                } catch (\PrestaShopException $e) {
+                    throw new MoloniProductCategoryException('Error creating Prestashop category', [], ['name' => $moloniCategoryName, 'parentId' => $parentId]);
                 }
 
                 array_unshift($prestashopCategoryIds, $category->id);
@@ -103,15 +98,15 @@ class GetPrestashopCategoriesFromMoloniCategoryId
         do {
             $query = $this->getById($categoryId);
 
-            array_unshift($productCategoriesNames, $query['name']); //order needs to be inverted
+            array_unshift($productCategoriesNames, $query['name']); // order needs to be inverted
 
             if ($query['parent'] === null) {
                 break;
             }
 
-            $categoryId = (int)$query['parent']['productCategoryId'];
+            $categoryId = (int) $query['parent']['productCategoryId'];
 
-            $failsafe++;
+            ++$failsafe;
         } while ($failsafe < 100);
 
         return $productCategoriesNames;
@@ -125,7 +120,7 @@ class GetPrestashopCategoriesFromMoloniCategoryId
     private function getById($categoryId): array
     {
         $variables = [
-            'productCategoryId' => $categoryId
+            'productCategoryId' => $categoryId,
         ];
 
         try {

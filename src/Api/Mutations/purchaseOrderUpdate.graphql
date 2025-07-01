@@ -1,0 +1,18 @@
+mutation purchaseOrderUpdate($companyId: Int!,$data: PurchaseOrderUpdate!) {
+  purchaseOrderUpdate(companyId: $companyId,data: $data) {
+    data {
+      documentId
+      status
+      currencyExchangeTotalValue
+      products {
+        documentProductId
+        productId
+      }
+    }
+    errors {
+      field
+      msg
+    }
+  }
+}
+

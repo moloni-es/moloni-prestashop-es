@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -32,7 +33,6 @@ if (!defined('_PS_VERSION_')) {
 
 class DummyTranslations
 {
-
     private $translator;
 
     /**
@@ -142,6 +142,7 @@ class DummyTranslations
         $this->translator->trans('Product is invisible in Moloni. Cannot be used in document creation.', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Error on hook "{0}"', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Error fetching fiscal zone tax settings', [], 'Modules.Molonies.Errors');
+        $this->translator->trans('Document set is not registered in AT', [], 'Modules.Molonies.Errors');
 
         $this->translator->trans('Error saving product image', [], 'Modules.Molonies.Errors');
         $this->translator->trans('Tax not found in Moloni. Please create the correct tax for {0} ({1} || {2})', [], 'Modules.Molonies.Errors');
@@ -206,6 +207,7 @@ class DummyTranslations
     public function admin(): void
     {
         $this->translator->trans('Moloni Spain', [], 'Modules.Molonies.Admin');
+        $this->translator->trans('Automatic document creation with real time stock synchronization and powerful sales analysis.', [], 'Modules.Molonies.Admin');
         $this->translator->trans('Orders', [], 'Modules.Molonies.Admin');
         $this->translator->trans('Documents', [], 'Modules.Molonies.Admin');
         $this->translator->trans('Settings', [], 'Modules.Molonies.Admin');

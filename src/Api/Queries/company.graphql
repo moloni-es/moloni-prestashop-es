@@ -1,0 +1,49 @@
+query company($companyId: Int!,$options: CompanyOptionsSingle) {
+  company(companyId: $companyId,options: $options) {
+    data {
+      companyId
+      name
+      email
+      address
+      city
+      zipCode
+      slug
+      img1
+      vat
+      documentCalculationsMode
+      currency {
+        currencyId
+        iso4217
+      }
+      fiscalZone {
+        fiscalZone
+        fiscalZoneFinanceTypes {
+          id
+          name
+        }
+        exemption
+        {
+          type
+          reasons
+          {
+            code
+            name
+          }
+        }
+      }
+      country {
+        countryId
+        iso3166_1
+        title
+      }
+    }
+    options {
+      defaultLanguageId
+    }
+    errors {
+      field
+      msg
+    }
+  }
+}
+

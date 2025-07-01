@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -24,23 +25,18 @@
 
 namespace Moloni\Controller\Admin\Documents;
 
-use Tools;
-use Exception;
-use PrestaShopException;
-use PrestaShopDatabaseException;
-use Moloni\Enums\DocumentTypes;
-use Moloni\Actions\Documents\FetchDocumentById;
-use Moloni\Enums\Domains;
-use Moloni\Tools\Settings;
-use Moloni\Actions\Orders\OrderRestoreDiscard;
 use Moloni\Actions\Documents\DocumentsDownloadPdf;
 use Moloni\Actions\Documents\DocumentsListDetails;
+use Moloni\Actions\Documents\FetchDocumentById;
+use Moloni\Actions\Orders\OrderRestoreDiscard;
+use Moloni\Api\MoloniApiClient;
 use Moloni\Controller\Admin\MoloniController;
 use Moloni\Entity\MoloniOrderDocuments;
-use Moloni\Api\MoloniApiClient;
+use Moloni\Enums\DocumentTypes;
 use Moloni\Enums\MoloniRoutes;
 use Moloni\Exceptions\MoloniException;
 use Moloni\Repository\MoloniOrderDocumentsRepository;
+use Moloni\Tools\Settings;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -57,8 +53,10 @@ class Documents extends MoloniController
      */
     public function home(): Response
     {
-        $page = Tools::getValue('page', 1);
-        $filters = Tools::getValue('filters', []);
+        $page = \Tools::getValue('page', 1);
+
+        $filters = \Tools::getValue('filters', []);
+
         $documents = $paginator = [];
 
         /** @var MoloniOrderDocumentsRepository $moloniDocumentRepository */
@@ -68,18 +66,19 @@ class Documents extends MoloniController
             ->getRepository(MoloniOrderDocuments::class);
 
         try {
-            ['documents' => $createdDocuments, 'paginator' => $paginator] = $moloniDocumentRepository->getAllPaginated($page, $filters);
+            ['documents' => $createdDocuments, 'paginator' => $paginator] =
+                $moloniDocumentRepository->getAllPaginated($page, array_merge($filters, ['company_id' => $this->moloniContext->getCompanyId()]));
 
             $company = MoloniApiClient::companies()->queryCompany();
-            $documents = (new DocumentsListDetails($createdDocuments, $company))->handle();
-        } catch (Exception $e) {
+            $documents = (new DocumentsListDetails($createdDocuments, $company, $this->moloniContext->configs()))->handle();
+        } catch (\Exception $e) {
             $msg = $this->trans('Error fetching documents list', 'Modules.Molonies.Errors');
 
             $this->addErrorMessage($msg);
         }
 
-        return $this->render(
-            '@Modules/molonies/views/templates/admin/documents/Documents.twig',
+        return $this->display(
+            'documents/Documents.twig',
             [
                 'documentArray' => $documents,
                 'documentTypeArray' => DocumentTypes::getDocumentsTypes(),
@@ -100,7 +99,7 @@ class Documents extends MoloniController
      */
     public function view(): RedirectResponse
     {
-        $documentId = (int)Tools::getValue('document_id', 0);
+        $documentId = (int) \Tools::getValue('document_id', 0);
 
         /** @var MoloniOrderDocuments|null $document */
         $document = $this->getDoctrine()
@@ -120,7 +119,7 @@ class Documents extends MoloniController
 
             $company = MoloniApiClient::companies()->queryCompany();
 
-            $link = Domains::MOLONI_AC . '/' . $company['slug'] . '/' . $document->getDocumentType() . '/view/' . $document->getDocumentId();
+            $link = $this->moloniContext->configs()->getAcUrl() . $company['slug'] . '/' . $document->getDocumentType() . '/view/' . $document->getDocumentId();
 
             return $this->redirect($link);
         } catch (MoloniException $e) {
@@ -139,15 +138,15 @@ class Documents extends MoloniController
      */
     public function download(): RedirectResponse
     {
-        $documentId = (int)Tools::getValue('document_id', 0);
-        $documentType = Tools::getValue('document_type', '');
+        $documentId = (int) \Tools::getValue('document_id', 0);
+        $documentType = \Tools::getValue('document_type', '');
 
         try {
             if (!is_numeric($documentId) || $documentId <= 0) {
                 throw new MoloniException('ID is invalid');
             }
 
-            $url = (new DocumentsDownloadPdf($documentId, $documentType))->handle();
+            $url = (new DocumentsDownloadPdf($documentId, $documentType, $this->moloniContext->configs()))->handle();
 
             if (empty($url)) {
                 throw new MoloniException('Could not fetch pdf link.', [], ['result' => $url]);
@@ -170,22 +169,22 @@ class Documents extends MoloniController
      */
     public function restore(): RedirectResponse
     {
-        $orderId = (int)Tools::getValue('order_id', 0);
-        $page = (int)Tools::getValue('page', 1);
-        $filters = Tools::getValue('filters', []);
+        $orderId = (int) \Tools::getValue('order_id', 0);
+        $page = (int) \Tools::getValue('page', 1);
+        $filters = \Tools::getValue('filters', []);
 
         try {
             $action = new OrderRestoreDiscard($orderId, $this->getDoctrine()->getManager());
             $action->handle();
 
             $msg = $this->trans('Order restored with success.', 'Modules.Molonies.Common');
-            $msg .= "(" . $action->getOrder()->reference . ")";
+            $msg .= '(' . $action->getOrder()->reference . ')';
 
             $this->addSuccessMessage($msg);
         } catch (MoloniException $e) {
             $msg = $this->trans($e->getMessage(), 'Modules.Molonies.Errors', $e->getIdentifiers());
             $this->addErrorMessage($msg, $e->getData());
-        } catch (PrestaShopDatabaseException|PrestaShopException $e) {
+        } catch (\PrestaShopDatabaseException|\PrestaShopException $e) {
             $msg = $this->trans('Error fetching Prestashop order', 'Modules.Molonies.Errors');
             $this->addErrorMessage($msg);
         }

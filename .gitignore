@@ -2,7 +2,7 @@
 .dev/node_modules
 /vendor/
 /logs/
-/views/css/
-/views/js/
+views/css/app.css
+views/js/app.js
 /.php_cs.cache
 /.php-cs-fixer.cache

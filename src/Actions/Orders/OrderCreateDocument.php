@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -59,13 +60,9 @@ class OrderCreateDocument extends AbstractOrderAction
         $documentType = $documentType ?? Settings::get('documentType') ?? '';
 
         $existingOrderDocument = $this->documentRepository->findOneBy(['orderId' => $this->orderId]);
+
         if ($existingOrderDocument) {
-            throw new MoloniException(
-                'Order already discarded or created!',
-                $this->orderId,
-                $existingOrderDocument->toArray(),
-                false
-            );
+            throw new MoloniException('Order already discarded or created!', $this->orderId, $existingOrderDocument->toArray(), false);
         }
 
         $company = MoloniApiClient::companies()->queryCompany();
@@ -121,7 +118,6 @@ class OrderCreateDocument extends AbstractOrderAction
                 ->setSendEmail()
                 ->createDocument()
                 ->addLog();
-
         } else {
             $builder
                 ->createDocument()
@@ -131,6 +127,6 @@ class OrderCreateDocument extends AbstractOrderAction
 
     private function shouldCreateBillOfLading(string $documentType): bool
     {
-        return (int)Settings::get('billOfLading') === Boolean::YES && $documentType !== DocumentTypes::BILLS_OF_LADING;
+        return (int) Settings::get('billOfLading') === Boolean::YES && $documentType !== DocumentTypes::BILLS_OF_LADING;
     }
 }

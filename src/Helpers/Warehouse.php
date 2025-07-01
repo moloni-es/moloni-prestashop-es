@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2023 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -51,9 +52,10 @@ class Warehouse
             $query = MoloniApiClient::warehouses()->queryWarehouses($params);
 
             if (!empty($query)) {
-                return (int)$query[0]['warehouseId'];
+                return (int) $query[0]['warehouseId'];
             }
-        } catch (MoloniApiException $e) {}
+        } catch (MoloniApiException $e) {
+        }
 
         return 0;
     }

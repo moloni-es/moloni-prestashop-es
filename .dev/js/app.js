@@ -4,7 +4,6 @@ import Documents from './pages/documents'
 import Tools from './pages/tools'
 import Logs from './pages/logs'
 import Login from './pages/login'
-import Registration from './pages/registration'
 import PrestashopProducts from "./pages/prestashopProducts";
 import MoloniProducts from "./pages/moloniProducts";
 
@@ -17,7 +16,6 @@ $(document).ready(() => {
     window.moloni.Tools = new Tools();
     window.moloni.Logs = new Logs();
     window.moloni.Login = new Login();
-    window.moloni.Registration = new Registration();
     window.moloni.PrestashopProducts = new PrestashopProducts();
     window.moloni.MoloniProducts = new MoloniProducts();
 });

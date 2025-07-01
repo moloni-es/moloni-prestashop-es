@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -24,7 +25,6 @@
 
 namespace Moloni\Builders;
 
-use Configuration;
 use Moloni\Builders\Interfaces\BuilderInterface;
 use Moloni\Builders\PrestashopProduct\Helpers\FindTaxGroupFromMoloniTax;
 use Moloni\Builders\PrestashopProduct\Helpers\GetPrestashopCategoriesFromMoloniCategoryId;
@@ -40,7 +40,6 @@ use Moloni\Helpers\Warehouse;
 use Moloni\Tools\Logs;
 use Moloni\Tools\Settings;
 use Moloni\Traits\LogsTrait;
-use PrestaShopException;
 use Product;
 
 if (!defined('_PS_VERSION_')) {
@@ -61,7 +60,7 @@ class PrestashopProductSimple implements BuilderInterface
     /**
      * Prestashop product
      *
-     * @var Product|null
+     * @var \Product|null
      */
     protected $prestashopProduct;
 
@@ -169,7 +168,6 @@ class PrestashopProductSimple implements BuilderInterface
      * @var string
      */
     protected $imagePath = '';
-
 
     /**
      * Fields that will be synced
@@ -290,15 +288,15 @@ class PrestashopProductSimple implements BuilderInterface
      */
     protected function fetchProductFromPresta(): PrestashopProductSimple
     {
-        $productId = (int)Product::getIdByReference($this->reference);
+        $productId = (int) \Product::getIdByReference($this->reference);
 
         if ($productId > 0) {
-            $product = new Product($productId, true, Configuration::get('PS_LANG_DEFAULT'));
+            $product = new \Product($productId, true, \Configuration::get('PS_LANG_DEFAULT'));
         } else {
-            if ((int)Settings::get('productReferenceFallback') === Boolean::YES && is_numeric($this->reference)) {
-                $product = new Product((int)$this->reference, true, Configuration::get('PS_LANG_DEFAULT'));
+            if ((int) Settings::get('productReferenceFallback') === Boolean::YES && is_numeric($this->reference)) {
+                $product = new \Product((int) $this->reference, true, \Configuration::get('PS_LANG_DEFAULT'));
             } else {
-                $product = new Product();
+                $product = new \Product();
             }
         }
 
@@ -332,11 +330,8 @@ class PrestashopProductSimple implements BuilderInterface
             }
 
             $this->afterSave();
-        } catch (PrestaShopException $e) {
-            throw new MoloniProductException('Error creating product ({0})', ['{0}' => $this->reference], [
-                'message' => $e->getMessage(),
-                'moloniProduct' => $this->moloniProduct
-            ]);
+        } catch (\PrestaShopException $e) {
+            throw new MoloniProductException('Error creating product ({0})', ['{0}' => $this->reference], ['message' => $e->getMessage(), 'moloniProduct' => $this->moloniProduct]);
         }
     }
 
@@ -362,11 +357,8 @@ class PrestashopProductSimple implements BuilderInterface
             }
 
             $this->afterSave();
-        } catch (PrestaShopException $e) {
-            throw new MoloniProductException('Error updating product ({0})', ['{0}' => $this->reference], [
-                'message' => $e->getMessage(),
-                'moloniProduct' => $this->moloniProduct
-            ]);
+        } catch (\PrestaShopException $e) {
+            throw new MoloniProductException('Error updating product ({0})', ['{0}' => $this->reference], ['message' => $e->getMessage(), 'moloniProduct' => $this->moloniProduct]);
         }
     }
 
@@ -397,7 +389,7 @@ class PrestashopProductSimple implements BuilderInterface
             return 0;
         }
 
-        return (int)$this->moloniProduct['productId'];
+        return (int) $this->moloniProduct['productId'];
     }
 
     /**
@@ -417,7 +409,7 @@ class PrestashopProductSimple implements BuilderInterface
      */
     public function getPrestashopProductId(): int
     {
-        return (int)$this->prestashopProduct->id;
+        return (int) $this->prestashopProduct->id;
     }
 
     //          SETS          //
@@ -538,7 +530,7 @@ class PrestashopProductSimple implements BuilderInterface
      */
     public function setPrice(): PrestashopProductSimple
     {
-        $this->price = (float)($this->moloniProduct['price'] ?? 0);
+        $this->price = (float) ($this->moloniProduct['price'] ?? 0);
 
         return $this;
     }
@@ -560,7 +552,7 @@ class PrestashopProductSimple implements BuilderInterface
             }
         }
 
-        $this->warehouseId = (int)$warehouseId;
+        $this->warehouseId = (int) $warehouseId;
 
         return $this;
     }
@@ -572,7 +564,7 @@ class PrestashopProductSimple implements BuilderInterface
      */
     public function setHasStock(): PrestashopProductSimple
     {
-        $this->hasStock = $this->moloniProduct['hasStock'] ?? (bool)Boolean::YES;
+        $this->hasStock = $this->moloniProduct['hasStock'] ?? (bool) Boolean::YES;
 
         return $this;
     }

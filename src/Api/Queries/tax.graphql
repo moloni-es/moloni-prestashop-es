@@ -1,0 +1,21 @@
+query tax($companyId: Int!,$taxId: Int!) {
+  tax(companyId: $companyId,taxId: $taxId) {
+    data {
+      taxId
+      name
+      value
+      type
+      fiscalZone
+      country {
+        countryId
+      }
+      fiscalZoneFinanceType
+      fiscalZoneFinanceTypeMode
+    }
+    errors {
+      field
+      msg
+    }
+  }
+}
+

@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -43,24 +44,7 @@ class Languages extends Endpoint
      */
     public function queryLanguage(?array $variables = []): array
     {
-        $query = 'query language($languageId: Int!)
-        {
-            language(languageId: $languageId)
-            {
-                data
-                {
-                    languageId
-                    name
-                    iso3166
-                    flag
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = $this->loadQuery('language');
 
         return $this->simplePost($query, $variables);
     }
@@ -76,33 +60,7 @@ class Languages extends Endpoint
      */
     public function queryLanguages(?array $variables = []): array
     {
-        $query = 'query languages($options: LanguageOptions)
-        {
-            languages(options: $options)
-            {
-                data
-                {
-                    languageId
-                    name
-                    iso3166
-                    flag
-                }
-                options
-                {
-                    pagination
-                    {
-                        page
-                        qty
-                        count
-                    }
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = $this->loadQuery('languages');
 
         return $this->paginatedPost($query, $variables, 'languages');
     }

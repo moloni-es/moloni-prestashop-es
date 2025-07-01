@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -37,7 +38,7 @@ trait StringTrait
 
     private function cleanCodeString(string $string): string
     {
-        //Remove end and start spacing
+        // Remove end and start spacing
         $string = trim($string);
 
         // All chars upper case
@@ -66,4 +67,3 @@ trait StringTrait
         return preg_replace('/[^A-Za-z0-9\-]/', '', $string);
     }
 }
-

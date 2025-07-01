@@ -1,56 +1,52 @@
-{% extends '@Modules/molonies/views/templates/admin/Layout.twig' %}
+{% extends view_dir ~ 'Layout.twig' %}
 
 {% block plugin_content %}
     <div class="d-flex justify-content-center align-items-center">
         <div class="card moloni-login--card">
             {{ form_start(form) }}
-                <div class="moloni-login--block">
-                    <div class="moloni-login--image">
-                        <a href="https://www.moloni.es/"  target="_blank">
-                            <img src="{{ constant('_MODULE_DIR_') }}molonies/views/img/moloni_logo_colors.svg" alt="Logo" width="140px" height="24px">
-                        </a>
-                    </div>
-                </div>
-                <div class="moloni-login--block">
-                    <div class="form-group">
-                        {{ form_label(form.clientID) }}
-                        {{ form_widget(form.clientID) }}
-                    </div>
-                    <div class="form-group">
-                        {{ form_label(form.clientSecret) }}
-                        {{ form_widget(form.clientSecret) }}
-                    </div>
-                    <div>
-                        {{ form_errors(form) }}
-                    </div>
-                </div>
-                <div class="moloni-login--block">
-                    {{ form_widget(form.connect) }}
-
-                    <div class="moloni-login-divider moloni-login-divider--holder">
-                        <div class="moloni-login-divider--divider"></div>
-                        <div class="moloni-login-divider--text">
-                            {{ "I don't have an account yet."|trans({}, 'Modules.Molonies.Common') }}
-                        </div>
-                        <div class="moloni-login-divider--divider"></div>
-                    </div>
-                    <a class="btn btn-secondary moloni-login--button" href="{{ path(registration_route) }}">
-                        {{ 'Create account'|trans({}, 'Modules.Molonies.Common') }}
+            <div class="moloni-login--block">
+                <div class="moloni-login--image">
+                    <a href="https://www.moloni.es/" target="_blank">
+                        <img src="{{ img_path }}logo_colors.svg" alt="Logo" width="140px" height="24px">
                     </a>
                 </div>
+            </div>
+            <div class="moloni-login--block">
+                <div class="form-group">
+                    {{ form_label(form.clientID) }}
+                    {{ form_widget(form.clientID) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.clientSecret) }}
+                    {{ form_widget(form.clientSecret) }}
+                </div>
+                <div>
+                    {{ form_errors(form) }}
+                </div>
+            </div>
+            <div class="moloni-login--block">
+                {{ form_widget(form.connect) }}
+
+                <div class="moloni-login-divider moloni-login-divider--holder">
+                    <div class="moloni-login-divider--divider"></div>
+                    <div class="moloni-login-divider--text">
+                        {{ "I don't have an account yet."|trans({}, 'Modules.Molonies.Common') }}
+                    </div>
+                    <div class="moloni-login-divider--divider"></div>
+                </div>
+                <a class="btn btn-secondary moloni-login--button" href="{{ configs.register_page }}" target="_blank">
+                    {{ 'Create account'|trans({}, 'Modules.Molonies.Common') }}
+                </a>
+            </div>
             {{ form_end(form) }}
         </div>
     </div>
 {% endblock %}
 
 {% block javascripts %}
-<script>
-    $(document).ready(function () {
-        window.moloni.Login.startObservers();
-
-        {% if has_old_tables %}
-            window.moloni.Login.disableLogin();
-        {% endif %}
-    });
-</script>
+    <script>
+        $(document).ready(function () {
+            window.moloni.Login.startObservers();
+        });
+    </script>
 {% endblock %}

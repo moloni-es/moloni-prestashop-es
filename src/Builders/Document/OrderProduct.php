@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -26,20 +27,17 @@ declare(strict_types=1);
 
 namespace Moloni\Builders\Document;
 
-use Product;
-use Configuration;
 use Moloni\Api\MoloniApiClient;
-use Moloni\Traits\DiscountsTrait;
-use Moloni\Entity\MoloniProductAssociations;
 use Moloni\Builders\Document\Helpers\GetOrderProductTax;
 use Moloni\Builders\Interfaces\BuilderItemInterface;
-use Moloni\Builders\MoloniProductSimple;
-use Moloni\Builders\MoloniProductWithVariants;
 use Moloni\Builders\MoloniProduct\Helpers\Variants\FindVariant;
 use Moloni\Builders\MoloniProduct\Helpers\Variants\GetOrUpdatePropertyGroup;
+use Moloni\Builders\MoloniProductSimple;
+use Moloni\Builders\MoloniProductWithVariants;
+use Moloni\Entity\MoloniProductAssociations;
 use Moloni\Enums\Boolean;
-use Moloni\Enums\ProductType;
 use Moloni\Enums\ProductInformation;
+use Moloni\Enums\ProductType;
 use Moloni\Exceptions\Document\MoloniDocumentProductException;
 use Moloni\Exceptions\Document\MoloniDocumentProductTaxException;
 use Moloni\Exceptions\MoloniApiException;
@@ -48,6 +46,8 @@ use Moloni\Exceptions\Product\MoloniProductException;
 use Moloni\Tools\ProductAssociations;
 use Moloni\Tools\Settings;
 use Moloni\Tools\SyncLogs;
+use Moloni\Traits\DiscountsTrait;
+use Product;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -77,13 +77,6 @@ class OrderProduct implements BuilderItemInterface
      * @var int
      */
     protected $warehouseId;
-
-    /**
-     * Moloni product type
-     *
-     * @var int
-     */
-    protected $type;
 
     /**
      * Product name
@@ -229,10 +222,10 @@ class OrderProduct implements BuilderItemInterface
      */
     public function insert(): void
     {
-        SyncLogs::prestashopProductAddTimeout((int)$this->orderProduct['product_id']);
+        SyncLogs::prestashopProductAddTimeout((int) $this->orderProduct['product_id']);
 
         try {
-            $product = new Product($this->orderProduct['product_id'], true, Configuration::get('PS_LANG_DEFAULT'));
+            $product = new \Product($this->orderProduct['product_id'], true, \Configuration::get('PS_LANG_DEFAULT'));
 
             if ($product->product_type === 'combinations' && $product->hasCombinations()) {
                 $productBuilder = new MoloniProductWithVariants($product);
@@ -248,7 +241,7 @@ class OrderProduct implements BuilderItemInterface
         // Has variants, we need id of variant alone
         if ($productBuilder instanceof MoloniProductWithVariants) {
             /** @var MoloniProductAssociations $association */
-            $association = ProductAssociations::findByPrestashopCombinationId((int)$this->orderProduct['product_attribute_id']);
+            $association = ProductAssociations::findByPrestashopCombinationId((int) $this->orderProduct['product_attribute_id']);
 
             $this->productId = $association->getMlVariantId();
         } else {
@@ -265,9 +258,9 @@ class OrderProduct implements BuilderItemInterface
      */
     public function search(): OrderProduct
     {
-        if ((int)$this->orderProduct['product_attribute_id'] > 0) {
+        if ((int) $this->orderProduct['product_attribute_id'] > 0) {
             /** @var MoloniProductAssociations|null $moloniVariantId */
-            $moloniVariantId = ProductAssociations::findByPrestashopCombinationId((int)$this->orderProduct['product_attribute_id']);
+            $moloniVariantId = ProductAssociations::findByPrestashopCombinationId((int) $this->orderProduct['product_attribute_id']);
 
             if ($moloniVariantId !== null) {
                 $this->getById($moloniVariantId->getMlVariantId());
@@ -301,8 +294,7 @@ class OrderProduct implements BuilderItemInterface
             ->setQuantity()
             ->setWarehouseId()
             ->setTaxes()
-            ->setPrice()
-            ->setType();
+            ->setPrice();
 
         return $this;
     }
@@ -315,15 +307,7 @@ class OrderProduct implements BuilderItemInterface
     protected function afterSearch(): OrderProduct
     {
         if (!empty($this->moloniProduct) && $this->moloniProduct['visible'] === Boolean::NO) {
-            throw new MoloniDocumentProductException(
-                'Product with reference ({0}) is invisible in Moloni. Please change the product visibility.',
-                [
-                    '{0}' => $this->reference
-                ],
-                [
-                    'product' => $this->moloniProduct
-                ]
-            );
+            throw new MoloniDocumentProductException('Product with reference ({0}) is invisible in Moloni. Please change the product visibility.', ['{0}' => $this->reference], ['product' => $this->moloniProduct]);
         }
 
         return $this;
@@ -336,7 +320,7 @@ class OrderProduct implements BuilderItemInterface
      */
     protected function addTimeout(): void
     {
-        if ((int)Settings::get('syncStockToPrestashop') === Boolean::YES) {
+        if ((int) Settings::get('syncStockToPrestashop') === Boolean::YES) {
             SyncLogs::moloniProductAddTimeout($this->productId);
         }
     }
@@ -365,7 +349,7 @@ class OrderProduct implements BuilderItemInterface
         $reference = $this->orderProduct['product_reference'];
 
         if (empty($reference)) {
-            $reference = (string)$this->orderProduct['product_id'];
+            $reference = (string) $this->orderProduct['product_id'];
         }
 
         $this->reference = $reference;
@@ -403,20 +387,8 @@ class OrderProduct implements BuilderItemInterface
      */
     public function setPrice(): OrderProduct
     {
-        $this->price = (float)($this->orderProduct['unit_price_tax_excl'] ?? 0);
-        $this->priceWithTaxes = (float)($this->orderProduct['unit_price_tax_incl'] ?? 0);
-
-        return $this;
-    }
-
-    /**
-     * Define type
-     *
-     * @return OrderProduct
-     */
-    public function setType(): OrderProduct
-    {
-        $this->type = ProductType::PRODUCT;
+        $this->price = (float) ($this->orderProduct['unit_price_tax_excl'] ?? 0);
+        $this->priceWithTaxes = (float) ($this->orderProduct['unit_price_tax_incl'] ?? 0);
 
         return $this;
     }
@@ -428,7 +400,7 @@ class OrderProduct implements BuilderItemInterface
      */
     public function setQuantity(): OrderProduct
     {
-        $this->quantity = (int)($this->orderProduct['product_quantity'] ?? 1);
+        $this->quantity = (int) ($this->orderProduct['product_quantity'] ?? 1);
 
         return $this;
     }
@@ -452,11 +424,7 @@ class OrderProduct implements BuilderItemInterface
             $exemption = Settings::get('exemptionReasonProduct');
 
             if (empty($exemption)) {
-                throw new MoloniDocumentProductTaxException(
-                    'Product with reference ({0}) has no taxes applied. Please add an exemption reason in plugin settings.',
-                    ['{0}' => $this->reference],
-                    ['order_product' => $this->orderProduct]
-                );
+                throw new MoloniDocumentProductTaxException('Product with reference ({0}) has no taxes applied. Please add an exemption reason in plugin settings.', ['{0}' => $this->reference], ['order_product' => $this->orderProduct]);
             }
 
             $this->exemptionReason = $exemption;
@@ -491,16 +459,16 @@ class OrderProduct implements BuilderItemInterface
         $discount = 0;
         $price = $this->price;
 
-        if ((float)$this->orderProduct['reduction_percent'] > 0) {
-            $discount = (float)$this->orderProduct['reduction_percent'];
+        if ((float) $this->orderProduct['reduction_percent'] > 0) {
+            $discount = (float) $this->orderProduct['reduction_percent'];
 
             // This types of discounts are already discounted from the product, so we need to add them to price
             $price = $this->calculateOriginalPrice($price, $discount);
-        } elseif ((float)$this->orderProduct['reduction_amount_tax_excl'] > 0) {
+        } elseif ((float) $this->orderProduct['reduction_amount_tax_excl'] > 0) {
             // This types of discounts are already discounted from the product, so we need to add them to price
-            $price = (float)$this->orderProduct['product_price'] + (float)$this->orderProduct['reduction_amount_tax_excl'];
+            $price = (float) $this->orderProduct['product_price'] + (float) $this->orderProduct['reduction_amount_tax_excl'];
 
-            $discount = $this->calculateDiscountPercentage($price, (float)$this->orderProduct['reduction_amount_tax_excl']);
+            $discount = $this->calculateDiscountPercentage($price, (float) $this->orderProduct['reduction_amount_tax_excl']);
         }
 
         if ($cuponDiscountsPercentage > 0) {
@@ -550,7 +518,7 @@ class OrderProduct implements BuilderItemInterface
     protected function getById(int $productId): OrderProduct
     {
         $variables = [
-            'productId' => $productId
+            'productId' => $productId,
         ];
 
         try {
@@ -559,13 +527,11 @@ class OrderProduct implements BuilderItemInterface
             $moloniProduct = $query['data']['product']['data'] ?? [];
 
             if (!empty($moloniProduct)) {
-                $this->productId = (int)$moloniProduct['productId'];
+                $this->productId = (int) $moloniProduct['productId'];
                 $this->moloniProduct = $moloniProduct;
             }
         } catch (MoloniApiException $e) {
-            throw new MoloniDocumentProductException('Error fetching product by ID: ({0})', [
-                '{0}' => $this->reference
-            ], $e->getData());
+            throw new MoloniDocumentProductException('Error fetching product by ID: ({0})', ['{0}' => $this->reference], $e->getData());
         }
 
         return $this;
@@ -586,15 +552,15 @@ class OrderProduct implements BuilderItemInterface
                     [
                         'field' => 'visible',
                         'comparison' => 'in',
-                        'value' => '[0, 1]'
+                        'value' => '[0, 1]',
                     ],
                     [
                         'field' => 'reference',
                         'comparison' => 'eq',
-                        'value' => $this->reference
-                    ]
+                        'value' => $this->reference,
+                    ],
                 ],
-                'includeVariants' => true
+                'includeVariants' => true,
             ],
         ];
 
@@ -603,13 +569,11 @@ class OrderProduct implements BuilderItemInterface
                 ->queryProducts($variables);
 
             if (!empty($query)) {
-                $this->productId = (int)$query[0]['productId'];
+                $this->productId = (int) $query[0]['productId'];
                 $this->moloniProduct = $query[0];
             }
         } catch (MoloniApiException $e) {
-            throw new MoloniDocumentProductException('Error fetching product by reference: ({0})', [
-                '{0}' => $this->reference
-            ], $e->getData());
+            throw new MoloniDocumentProductException('Error fetching product by reference: ({0})', ['{0}' => $this->reference], $e->getData());
         }
 
         return $this;
@@ -625,8 +589,8 @@ class OrderProduct implements BuilderItemInterface
     protected function getByProductParent(): OrderProduct
     {
         /** Let's try to find Moloni product by parent */
-        $combinationId = (int)$this->orderProduct['product_attribute_id'];
-        $psParent = new Product((int)$this->orderProduct['product_id'], true, Configuration::get('PS_LANG_DEFAULT'));
+        $combinationId = (int) $this->orderProduct['product_attribute_id'];
+        $psParent = new \Product((int) $this->orderProduct['product_id'], true, \Configuration::get('PS_LANG_DEFAULT'));
         $reference = empty($psParent->reference) ? $psParent->id : $psParent->reference;
 
         $variables = [
@@ -635,36 +599,34 @@ class OrderProduct implements BuilderItemInterface
                     [
                         'field' => 'visible',
                         'comparison' => 'in',
-                        'value' => '[0, 1]'
+                        'value' => '[0, 1]',
                     ],
                     [
                         'field' => 'reference',
                         'comparison' => 'eq',
-                        'value' => $reference
-                    ]
+                        'value' => $reference,
+                    ],
                 ],
-                'includeVariants' => false
+                'includeVariants' => false,
             ],
         ];
 
         try {
             $query = MoloniApiClient::products()->queryProducts($variables);
         } catch (MoloniApiException $e) {
-            throw new MoloniDocumentProductException('Error fetching product by reference: ({0})', [
-                '{0}' => $reference
-            ], $e->getData());
+            throw new MoloniDocumentProductException('Error fetching product by reference: ({0})', ['{0}' => $reference], $e->getData());
         }
 
-        /** Product really does not exist, can return */
+        /* Product really does not exist, can return */
         if (empty($query)) {
             return $this;
         }
 
         $mlProduct = $query[0];
 
-        /** For some reason the prodcut is simple in Moloni, use that one */
+        /* For some reason the prodcut is simple in Moloni, use that one */
         if (empty($mlProduct['variants'])) {
-            $this->productId = (int)$mlProduct['productId'];
+            $this->productId = (int) $mlProduct['productId'];
             $this->moloniProduct = $mlProduct;
 
             return $this;
@@ -685,7 +647,7 @@ class OrderProduct implements BuilderItemInterface
             $propertyGroup['variants'][$combinationId] ?? []
         ))->handle();
 
-        /** Variant already exists in Moloni, use that one */
+        /* Variant already exists in Moloni, use that one */
         if (!empty($variant)) {
             $this->productId = $variant['productId'];
             $this->moloniProduct = $variant;
@@ -693,8 +655,8 @@ class OrderProduct implements BuilderItemInterface
             return $this;
         }
 
-        SyncLogs::moloniProductAddTimeout((int)$mlProduct['productId']);
-        SyncLogs::prestashopProductAddTimeout((int)$psParent->id);
+        SyncLogs::moloniProductAddTimeout((int) $mlProduct['productId']);
+        SyncLogs::prestashopProductAddTimeout((int) $psParent->id);
 
         try {
             $productBuilder = new MoloniProductWithVariants($psParent);

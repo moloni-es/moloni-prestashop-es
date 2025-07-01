@@ -3,59 +3,52 @@ services:
     class: Moloni\Controller\Admin\Debug\Debug
     tags: ['controller.service_arguments']
     arguments:
-      - '@moloni.services.context'
+      - '@moloni.context'
 
   Moloni\Controller\Admin\Documents\Documents:
     class: Moloni\Controller\Admin\Documents\Documents
     tags: ['controller.service_arguments']
     arguments:
-      - '@moloni.services.context'
+      - '@moloni.context'
 
   Moloni\Controller\Admin\Login\Login:
     class: Moloni\Controller\Admin\Login\Login
     tags: ['controller.service_arguments']
     arguments:
-      - '@moloni.services.context'
+      - '@moloni.context'
 
   Moloni\Controller\Admin\Logs\Logs:
     class: Moloni\Controller\Admin\Logs\Logs
     tags: ['controller.service_arguments']
     arguments:
-      - '@moloni.services.context'
+      - '@moloni.context'
 
   Moloni\Controller\Admin\Orders\Orders:
     class: Moloni\Controller\Admin\Orders\Orders
     tags: ['controller.service_arguments']
     arguments:
-      - '@moloni.services.context'
+      - '@moloni.context'
 
   Moloni\Controller\Admin\Products\MoloniProducts:
     class: Moloni\Controller\Admin\Products\MoloniProducts
     tags: ['controller.service_arguments']
     arguments:
-      - '@moloni.services.context'
+      - '@moloni.context'
 
   Moloni\Controller\Admin\Products\PrestashopProducts:
     class: Moloni\Controller\Admin\Products\PrestashopProducts
     tags: ['controller.service_arguments']
     arguments:
-      - '@moloni.services.context'
-
-
-  Moloni\Controller\Admin\Registration\Registration:
-    class: Moloni\Controller\Admin\Registration\Registration
-    tags: ['controller.service_arguments']
-    arguments:
-      - '@moloni.services.context'
+      - '@moloni.context'
 
   Moloni\Controller\Admin\Settings\Settings:
     class: Moloni\Controller\Admin\Settings\Settings
     tags: ['controller.service_arguments']
     arguments:
-      - '@moloni.services.context'
+      - '@moloni.context'
 
   Moloni\Controller\Admin\Tools\Tools:
     class: Moloni\Controller\Admin\Tools\Tools
     tags: ['controller.service_arguments']
     arguments:
-      - '@moloni.services.context'
+      - '@moloni.context'

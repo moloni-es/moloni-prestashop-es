@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -25,9 +26,9 @@
 namespace Moloni\EventListener;
 
 use Moloni\Api\MoloniApi;
-use Moloni\Enums\MoloniRoutes;
 use Moloni\Controller\Admin\MoloniController;
 use Moloni\Controller\Admin\MoloniControllerInterface;
+use Moloni\Enums\MoloniRoutes;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 

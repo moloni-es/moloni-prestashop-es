@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -24,7 +25,6 @@
 
 namespace Moloni\Traits;
 
-use State;
 use Country;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Enums\Countries;
@@ -44,11 +44,11 @@ trait CountryTrait
      */
     public function getMoloniCountryById(?int $prestashopCountryId = 0, ?int $prestashopStateId = 0): array
     {
-        $countryIso = Country::getIsoById($prestashopCountryId) ?? '';
+        $countryIso = \Country::getIsoById($prestashopCountryId) ?? '';
 
-        $default = ['countryId' => Countries::SPAIN, 'languageId' => Languages::ES, 'code' => strtoupper($countryIso)];
+        $default = ['countryId' => Countries::SPAIN, 'languageId' => Languages::EN, 'code' => strtoupper($countryIso)];
 
-        /** Early return */
+        /* Early return */
         if (empty($countryIso)) {
             return $default;
         }
@@ -62,48 +62,48 @@ trait CountryTrait
                 'order' => [
                     [
                         'field' => 'ordering',
-                        'sort' => 'ASC'
-                    ]
+                        'sort' => 'ASC',
+                    ],
                 ],
-                'defaultLanguageId' => Languages::EN
+                'defaultLanguageId' => Languages::EN,
             ],
         ];
 
         $targetCountries = MoloniApiClient::countries()->queryCountries($variables);
 
-        /** Early return */
+        /* Early return */
         if (empty($targetCountries)) {
             return $default;
         }
 
-        /** Return the only one found */
+        /* Return the only one found */
         if (count($targetCountries) === 1) {
             return [
                 'countryId' => $targetCountries[0]['countryId'],
                 'languageId' => $targetCountries[0]['language']['languageId'],
-                'code' => strtoupper($countryIso)
+                'code' => strtoupper($countryIso),
             ];
         }
 
-        $state = State::getNameById($prestashopStateId) ?? '';
+        $state = \State::getNameById($prestashopStateId) ?? '';
         $state = strtolower($state);
 
-        /** Try to find the best match */
+        /* Try to find the best match */
         foreach ($targetCountries as $targetCountry) {
             if ($state === strtolower($targetCountry['title'])) {
                 return [
                     'countryId' => $targetCountry['countryId'],
                     'languageId' => $targetCountry['language']['languageId'],
-                    'code' => strtoupper($countryIso)
+                    'code' => strtoupper($countryIso),
                 ];
             }
         }
 
-        /** Fallback */
+        /* Fallback */
         return [
             'countryId' => $targetCountries[0]['countryId'],
             'languageId' => $targetCountries[0]['language']['languageId'],
-            'code' => strtoupper($countryIso)
+            'code' => strtoupper($countryIso),
         ];
     }
 }

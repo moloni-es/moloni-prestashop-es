@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -44,30 +45,7 @@ class ProFormaInvoice extends Endpoint
      */
     public function queryProFormaInvoice(?array $variables = []): array
     {
-        $query = 'query proFormaInvoice($companyId: Int!,$documentId: Int!,$options: ProFormaInvoiceOptionsSingle)
-                {
-                    proFormaInvoice(companyId: $companyId,documentId: $documentId,options: $options)
-                    {
-                        data
-                        {
-                            documentId
-                            number
-                            ourReference
-                            yourReference
-                            entityVat
-                            entityNumber
-                            entityName
-                            documentSetName
-                            totalValue
-                            pdfExport
-                        }
-                        errors
-                        {
-                            field
-                            msg
-                        }
-                    }
-                }';
+        $query = $this->loadQuery('proFormaInvoice');
 
         return $this->simplePost($query, $variables);
     }
@@ -83,38 +61,7 @@ class ProFormaInvoice extends Endpoint
      */
     public function queryProFormaInvoices(?array $variables = []): array
     {
-        $query = 'query proFormaInvoices($companyId: Int!,$options: ProFormaInvoiceOptions)
-                {
-                    proFormaInvoices(companyId: $companyId,options: $options)
-                    {
-                        data
-                        {
-                            documentId
-                            number
-                            ourReference
-                            yourReference
-                            entityVat
-                            entityNumber
-                            entityName
-                            documentSetName
-                            totalValue
-                        }
-                        options
-                        {
-                            pagination
-                            {
-                                page
-                                qty
-                                count
-                            }
-                        }
-                        errors
-                        {
-                            field
-                            msg
-                        }
-                    }
-                }';
+        $query = $this->loadQuery('proFormaInvoices');
 
         return $this->paginatedPost($query, $variables, 'proFormaInvoices');
     }
@@ -130,23 +77,7 @@ class ProFormaInvoice extends Endpoint
      */
     public function queryProFormaInvoiceGetPDFToken(?array $variables = []): array
     {
-        $query = 'query proFormaInvoiceGetPDFToken($documentId: Int!)
-                {
-                    proFormaInvoiceGetPDFToken(documentId: $documentId)
-                    {
-                        data
-                        {
-                            token
-                            filename
-                            path
-                        }
-                        errors
-                        {
-                            field
-                            msg
-                        }
-                    }
-                }';
+        $query = $this->loadQuery('proFormaInvoiceGetPDFToken');
 
         return $this->simplePost($query, $variables);
     }
@@ -162,36 +93,7 @@ class ProFormaInvoice extends Endpoint
      */
     public function mutationProFormaInvoiceCreate(?array $variables = []): array
     {
-        $query = 'mutation proFormaInvoiceCreate($companyId: Int!,$data: 
-        ProFormaInvoiceInsert!,$options: ProFormaInvoiceMutateOptions)
-                {
-                    proFormaInvoiceCreate(companyId: $companyId,data: $data,options: $options)
-                    {
-                        data
-                        {
-                            documentId
-                            number
-                            ourReference
-                            yourReference
-                            entityVat
-                            entityNumber
-                            entityName
-                            documentSetName
-                            totalValue
-                            currencyExchangeTotalValue
-                            products
-                            {
-                                documentProductId
-                                productId
-                            }    
-                        }
-                        errors
-                        {
-                            field
-                            msg
-                        }
-                    }
-                }';
+        $query = $this->loadMutation('proFormaInvoiceCreate');
 
         return $this->simplePost($query, $variables);
     }
@@ -207,28 +109,7 @@ class ProFormaInvoice extends Endpoint
      */
     public function mutationProFormaInvoiceUpdate(?array $variables = []): array
     {
-        $query = 'mutation proFormaInvoiceUpdate($companyId: Int!,$data: ProFormaInvoiceUpdate!)
-        {
-            proFormaInvoiceUpdate(companyId: $companyId,data: $data)
-            {
-                data
-                {
-                    documentId
-                    status
-                    currencyExchangeTotalValue
-                    products
-                    {
-                        documentProductId
-                        productId
-                    }   
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = $this->loadMutation('proFormaInvoiceUpdate');
 
         return $this->simplePost($query, $variables);
     }
@@ -244,10 +125,7 @@ class ProFormaInvoice extends Endpoint
      */
     public function mutationProFormaInvoiceGetPDF(?array $variables = []): array
     {
-        $query = 'mutation proFormaInvoiceGetPDF($companyId: Int!,$documentId: Int!)
-                {
-                    proFormaInvoiceGetPDF(companyId: $companyId,documentId: $documentId)
-                }';
+        $query = $this->loadMutation('proFormaInvoiceGetPDF');
 
         return $this->simplePost($query, $variables);
     }
@@ -263,10 +141,7 @@ class ProFormaInvoice extends Endpoint
      */
     public function mutationProFormaInvoiceSendEmail(?array $variables = []): array
     {
-        $query = 'mutation proFormaInvoiceSendMail($companyId: Int!,$documents: [Int]!,$mailData: MailData)
-        {
-            proFormaInvoiceSendMail(companyId: $companyId,documents: $documents,mailData: $mailData)
-        }';
+        $query = $this->loadMutation('proFormaInvoiceSendMail');
 
         return $this->simplePost($query, $variables);
     }

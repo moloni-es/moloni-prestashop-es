@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -43,45 +44,7 @@ class Timezones extends Endpoint
      */
     public function queryTimezones(?array $variables = []): array
     {
-        $query = 'query timezones($options: TimezoneOptions)
-        {
-            timezones(options: $options) 
-            {
-                errors
-                {
-                    field
-                    msg
-                }
-                options
-                {
-                    pagination
-                    {
-                        page
-                        qty
-                        count
-                    }
-                }
-                data{
-                    timezoneId
-                    name
-                    visible
-                    ordering
-                    tzName
-                    offset
-                    country
-                    {
-                           countryId
-                           iso3166_1
-                           title
-                           language
-                           {
-                                    languageId
-                                    name
-                           } 
-                    }
-                }
-            }
-        }';
+        $query = $this->loadQuery('timezones');
 
         return $this->paginatedPost($query, $variables, 'timezones');
     }

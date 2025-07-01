@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -26,7 +27,7 @@ declare(strict_types=1);
 
 namespace Moloni\Hooks;
 
-use Configuration;
+use Moloni\Api\MoloniApi;
 use Moloni\Builders\MoloniProductSimple;
 use Moloni\Builders\MoloniProductWithVariants;
 use Moloni\Enums\Boolean;
@@ -63,7 +64,7 @@ class ProductStockUpdate extends AbstractHookAction
 
         try {
             SyncLogs::prestashopProductAddTimeout($this->productId);
-            $product = new Product($this->productId, true, Configuration::get('PS_LANG_DEFAULT'));
+            $product = new \Product($this->productId, true, \Configuration::get('PS_LANG_DEFAULT'));
 
             if ($product->product_type === 'combinations' && $product->hasCombinations()) {
                 if (!$this->variantId) {
@@ -98,12 +99,12 @@ class ProductStockUpdate extends AbstractHookAction
             return false;
         }
 
-        if ((int)Settings::get('addProductsToMoloni') === Boolean::NO &&
-            (int)Settings::get('updateProductsToMoloni') === Boolean::NO) {
+        if ((int) Settings::get('addProductsToMoloni') === Boolean::NO
+            && (int) Settings::get('updateProductsToMoloni') === Boolean::NO) {
             return false;
         }
 
-        if ((int)Settings::get('syncStockToMoloni') === Boolean::NO) {
+        if ((int) Settings::get('syncStockToMoloni') === Boolean::NO) {
             return false;
         }
 
@@ -111,6 +112,6 @@ class ProductStockUpdate extends AbstractHookAction
             return false;
         }
 
-        return $this->isAuthenticated();
+        return MoloniApi::hasValidAuthentication();
     }
 }

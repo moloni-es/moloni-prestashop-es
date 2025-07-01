@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -46,7 +47,7 @@ class ProductStockChange extends AbstractWebserviceAction
         }
 
         try {
-            /**
+            /*
              *  Moloni triggers webhooks before stock movements are persisted
              *  This delay gives us some leeway to mitigate this kind of issues
              */
@@ -89,7 +90,7 @@ class ProductStockChange extends AbstractWebserviceAction
             return false;
         }
 
-        if ((int)Settings::get('syncStockToPrestashop') === Boolean::NO) {
+        if ((int) Settings::get('syncStockToPrestashop') === Boolean::NO) {
             return false;
         }
 

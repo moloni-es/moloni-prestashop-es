@@ -1,0 +1,21 @@
+query hooks($companyId: Int!,$options: HookOptions) {
+  hooks(companyId: $companyId,options: $options) {
+    data {
+      hookId
+      url
+      name
+    }
+    errors {
+      field
+      msg
+    }
+    options {
+      pagination {
+        page
+        qty
+        count
+      }
+    }
+  }
+}
+

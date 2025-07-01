@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -53,7 +54,7 @@ abstract class AbstractWebserviceAction
     protected function fetchProductFromMoloni($productId): array
     {
         $variables = [
-            'productId' => $productId
+            'productId' => $productId,
         ];
 
         try {
@@ -62,10 +63,7 @@ abstract class AbstractWebserviceAction
             $moloniProduct = $query['data']['product']['data'] ?? [];
 
             if (empty($moloniProduct)) {
-                throw new MoloniProductException('Could not find product in Moloni ({0})', ['{0}' => $productId], [
-                    'variables' => $variables,
-                    'query' => $query,
-                ]);
+                throw new MoloniProductException('Could not find product in Moloni ({0})', ['{0}' => $productId], ['variables' => $variables, 'query' => $query]);
             }
         } catch (MoloniApiException $e) {
             throw new MoloniProductException('Error fetching product by id ({0})', ['{0}' => $productId], $e->getData());

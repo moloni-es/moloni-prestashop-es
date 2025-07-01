@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -26,7 +27,6 @@ namespace Moloni\Controller\Admin\Settings;
 
 use Moloni\Controller\Admin\MoloniController;
 use Moloni\Tools\Settings as SettingsTools;
-use PrestaShop\PrestaShop\Core\Form\FormHandlerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -57,14 +57,15 @@ class Settings extends MoloniController
                         'Modules.Molonies.Settings'
                     )
                 );
+
                 return $this->redirectToSettings();
             }
 
             $this->flashErrors($errors);
         }
 
-        return $this->render(
-            '@Modules/molonies/views/templates/admin/settings/Settings.twig',
+        return $this->display(
+            'settings/Settings.twig',
             [
                 'form' => $settingsForm->createView(),
                 'companyName' => SettingsTools::get('companyName'),

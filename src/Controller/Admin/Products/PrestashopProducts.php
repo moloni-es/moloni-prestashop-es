@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -26,7 +27,6 @@ declare(strict_types=1);
 
 namespace Moloni\Controller\Admin\Products;
 
-use Configuration;
 use Moloni\Actions\ProductsList\Prestashop\FetchPrestashopProductsPaginated;
 use Moloni\Actions\ProductsList\Prestashop\VerifyProductForList;
 use Moloni\Api\MoloniApiClient;
@@ -40,9 +40,7 @@ use Moloni\Helpers\Warehouse;
 use Moloni\Repository\ProductsRepository;
 use Moloni\Tools\Settings;
 use Moloni\Tools\SyncLogs;
-use Product;
 use Symfony\Component\HttpFoundation\Response;
-use Tools;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -52,8 +50,8 @@ class PrestashopProducts extends MoloniController
 {
     public function home(): Response
     {
-        $page = (int)Tools::getValue('page', 1);
-        $filters = Tools::getValue('filters', []);
+        $page = (int) \Tools::getValue('page', 1);
+        $filters = \Tools::getValue('filters', []);
 
         /** @var ProductsRepository $repository */
         $repository = $this->get('moloni.repository.products');
@@ -62,14 +60,14 @@ class PrestashopProducts extends MoloniController
         $service->setFilters($filters);
         $service->run();
 
-        return $this->render(
-            '@Modules/molonies/views/templates/admin/products/prestashop/Products.twig',
+        return $this->display(
+            'products/prestashop/Products.twig',
             [
                 'productsArray' => $service->getProducts(),
                 'filters' => $filters,
                 'paginator' => $service->getPaginator(),
                 'companyName' => Settings::get('companyName'),
-                'productReferenceFallbackActive' => (int)Settings::get('productReferenceFallback'),
+                'productReferenceFallbackActive' => (int) Settings::get('productReferenceFallback'),
                 'exportStockRoute' => MoloniRoutes::PRESTASHOP_PRODUCTS_EXPORT_STOCK,
                 'exportProductRoute' => MoloniRoutes::PRESTASHOP_PRODUCTS_EXPORT_PRODUCT,
                 'toolsRoute' => MoloniRoutes::TOOLS,
@@ -80,12 +78,12 @@ class PrestashopProducts extends MoloniController
 
     public function exportStock(): Response
     {
-        $productId = (int)Tools::getValue('product_id', 0);
+        $productId = (int) \Tools::getValue('product_id', 0);
 
         SyncLogs::prestashopProductAddTimeout($productId);
 
         try {
-            $product = new Product($productId, true, Configuration::get('PS_LANG_DEFAULT'));
+            $product = new \Product($productId, true, \Configuration::get('PS_LANG_DEFAULT'));
 
             if (empty($product->id)) {
                 throw new MoloniProductException('Product not found', null, [$productId]);
@@ -118,12 +116,12 @@ class PrestashopProducts extends MoloniController
 
     public function exportProduct(): Response
     {
-        $productId = (int)Tools::getValue('product_id', 0);
+        $productId = (int) \Tools::getValue('product_id', 0);
 
         SyncLogs::prestashopProductAddTimeout($productId);
 
         try {
-            $product = new Product($productId, true, Configuration::get('PS_LANG_DEFAULT'));
+            $product = new \Product($productId, true, \Configuration::get('PS_LANG_DEFAULT'));
 
             if (empty($product->id)) {
                 throw new MoloniProductException('Product not found', null, [$productId]);
@@ -156,7 +154,7 @@ class PrestashopProducts extends MoloniController
 
     private function getWarehouse(): int
     {
-        $warehouseId = (int)Settings::get('syncStockToMoloniWarehouse');
+        $warehouseId = (int) Settings::get('syncStockToMoloniWarehouse');
 
         if ($warehouseId > 1) {
             return $warehouseId;
@@ -175,7 +173,7 @@ class PrestashopProducts extends MoloniController
 
         $warehouseId = $this->getWarehouse();
 
-        $ps = new Product($prestaProductId, false, $this->getContextLangId());
+        $ps = new \Product($prestaProductId, false, $this->getContextLangId());
 
         $service = new VerifyProductForList($ps, $warehouseId, $slug);
         $service->run();
@@ -184,8 +182,8 @@ class PrestashopProducts extends MoloniController
             'valid' => 1,
             'message' => '',
             'result' => '',
-            'productRow' => $this->renderView(
-                '@Modules/molonies/views/templates/admin/products/prestashop/blocks/TableBodyRow.twig',
+            'productRow' => $this->displayView(
+                'products/prestashop/blocks/TableBodyRow.twig',
                 [
                     'product' => $service->getParsedProduct(),
                 ]

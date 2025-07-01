@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -43,29 +44,7 @@ class MaturityDates extends Endpoint
      */
     public function queryMaturityDates(?array $variables = []): array
     {
-        $query = 'query maturityDates($companyId: Int!,$options: MaturityDateOptions){
-            maturityDates(companyId: $companyId, options: $options) {
-                errors{
-                    field
-                    msg
-                }
-                options
-                {
-                    pagination
-                    {
-                        page
-                        qty
-                        count
-                    }
-                }
-                data{
-                    maturityDateId
-                    name
-                    days
-                    discount
-                }
-            }
-        }';
+        $query = $this->loadQuery('maturityDates');
 
         return $this->paginatedPost($query, $variables, 'maturityDates');
     }

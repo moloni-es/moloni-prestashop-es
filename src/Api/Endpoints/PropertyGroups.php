@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -43,30 +44,7 @@ class PropertyGroups extends Endpoint
      */
     public function queryPropertyGroups(?array $variables = []): array
     {
-        $query = 'query propertyGroups($companyId: Int!,$options: PropertyGroupOptions)
-        {
-            propertyGroups(companyId: $companyId,options: $options) 
-            {
-                data
-                {
-                    ' . $this->getCommonSegment() . '
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-                options
-                {
-                    pagination
-                    {
-                        page
-                        qty
-                        count
-                    }
-                }
-            }
-        }';
+        $query = $this->loadQuery('propertyGroups');
 
         return $this->paginatedPost($query, $variables, 'propertyGroups');
     }
@@ -82,21 +60,7 @@ class PropertyGroups extends Endpoint
      */
     public function queryPropertyGroup(?array $variables = []): array
     {
-        $query = 'query propertyGroup($companyId: Int!,$propertyGroupId: String!)
-        {
-            propertyGroup(companyId: $companyId,propertyGroupId: $propertyGroupId)
-            {
-                data
-                {
-                    ' . $this->getCommonSegment() . '
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = $this->loadQuery('propertyGroup');
 
         return $this->simplePost($query, $variables);
     }
@@ -112,21 +76,7 @@ class PropertyGroups extends Endpoint
      */
     public function mutationPropertyGroupUpdate(?array $variables = []): array
     {
-        $query = 'mutation propertyGroupUpdate($companyId: Int!,$data: PropertyGroupUpdate!)
-        {
-            propertyGroupUpdate(companyId: $companyId,data: $data)
-            {
-                data
-                {
-                    ' . $this->getCommonSegment() . '
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = $this->loadMutation('propertyGroupUpdate');
 
         return $this->simplePost($query, $variables);
     }
@@ -142,54 +92,8 @@ class PropertyGroups extends Endpoint
      */
     public function mutationPropertyGroupCreate(?array $variables = []): array
     {
-        $query = 'mutation propertyGroupCreate($companyId: Int!,$data: PropertyGroupInsert!)
-        {
-            propertyGroupCreate(companyId: $companyId,data: $data)
-            {
-                data
-                {
-                    ' . $this->getCommonSegment() . '
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = $this->loadMutation('propertyGroupCreate');
 
         return $this->simplePost($query, $variables);
-    }
-
-    /**
-     * Common segments for all queries and mutations
-     *
-     * @return string
-     */
-    private function getCommonSegment(): string
-    {
-        return '
-            propertyGroupId
-            name
-            visible
-            deletable
-            properties
-            {
-                propertyId
-                name
-                visible
-                ordering
-                deletable
-                values
-                {
-                   propertyValueId
-                   code
-                   value
-                   visible
-                   ordering
-                   deletable
-                }
-            }
-        ';
     }
 }

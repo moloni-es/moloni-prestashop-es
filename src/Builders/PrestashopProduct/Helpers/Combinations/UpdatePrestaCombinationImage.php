@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -24,13 +25,8 @@
 
 namespace Moloni\Builders\PrestashopProduct\Helpers\Combinations;
 
-use Shop;
-use Image;
-use Combination;
-use PrestaShopException;
-use PrestaShopDatabaseException;
-use Moloni\Tools\Logs;
 use Moloni\Builders\PrestashopProduct\Helpers\PrestaImage;
+use Moloni\Tools\Logs;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -40,7 +36,7 @@ class UpdatePrestaCombinationImage extends PrestaImage
 {
     protected $prestashopCombination;
 
-    public function __construct(Combination $prestashopCombination, string $moloniImagePath)
+    public function __construct(\Combination $prestashopCombination, string $moloniImagePath)
     {
         parent::__construct($moloniImagePath);
 
@@ -55,20 +51,20 @@ class UpdatePrestaCombinationImage extends PrestaImage
             return;
         }
 
-        $shopId = (int)Shop::getContextShopID();
-        $combinationImage = Image::getBestImageAttribute($shopId, $this->languageId, $this->prestashopCombination->id_product, $this->prestashopCombination->id);
+        $shopId = (int) \Shop::getContextShopID();
+        $combinationImage = \Image::getBestImageAttribute($shopId, $this->languageId, $this->prestashopCombination->id_product, $this->prestashopCombination->id);
 
         if (!empty($combinationImage)) {
-            $image = new Image((int)$combinationImage['id_image'], $this->languageId);
+            $image = new \Image((int) $combinationImage['id_image'], $this->languageId);
             $image->deleteImage(true);
         } else {
-            $image = new Image(null, $this->languageId);
+            $image = new \Image(null, $this->languageId);
             $image->cover = false;
             $image->id_product = $this->prestashopCombination->id_product;
 
             try {
                 $image->save();
-            } catch (PrestaShopException $e) {
+            } catch (\PrestaShopException $e) {
                 Logs::addErrorLog('Error saving product image', [
                     'message' => $e->getMessage(),
                     'moloniImagePath' => $this->moloniImagePath,
@@ -83,13 +79,12 @@ class UpdatePrestaCombinationImage extends PrestaImage
 
         try {
             $this->saveImage($image);
-        } catch (PrestaShopDatabaseException $e) {
+        } catch (\PrestaShopDatabaseException $e) {
             Logs::addErrorLog('Error saving product image', [
                 'message' => $e->getMessage(),
                 'moloniImagePath' => $this->moloniImagePath,
                 'prestashopCombination' => $this->prestashopCombination,
             ]);
-
 
             return;
         }

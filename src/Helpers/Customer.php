@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2023 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -47,14 +48,14 @@ class Customer
             $evenA = 0;
 
             for ($i = 2; $i <= 6; $i += 2) {
-                $evenA += (int)($vat[$i]);
+                $evenA += (int) $vat[$i];
             }
 
             $oddB = 0;
             $temp = 0;
 
             for ($i = 1; $i <= 7; $i += 2) {
-                $temp = (2 * (int)($vat[$i]));
+                $temp = (2 * (int) $vat[$i]);
 
                 if ($temp > 9) {
                     $temp = 1 + ($temp - 10);
@@ -68,7 +69,7 @@ class Customer
             $finalRelationD = ($unitiesE === 0 ? 0 : 10 - $unitiesE);
 
             if (in_array($vat[0], $controlMustBeNumeric)) {
-                if ((int)($vat[8]) === $finalRelationD) {
+                if ((int) $vat[8] === $finalRelationD) {
                     return true;
                 }
 
@@ -84,7 +85,7 @@ class Customer
             }
 
             if (in_array($vat[0], $controlIsUndefined)) {
-                if ((int)$vat[8] === $finalRelationD || $vat[8] === $relationArray[$finalRelationD]) {
+                if ((int) $vat[8] === $finalRelationD || $vat[8] === $relationArray[$finalRelationD]) {
                     return true;
                 }
 
@@ -98,7 +99,7 @@ class Customer
             $firstNumbers = substr($vat, 0, -1);
             $relationString = 'TRWAGMYFPDXBNJZSQVHLCKE';
 
-            if ($vat[8] === $relationString[(int)$firstNumbers % 23]) {
+            if ($vat[8] === $relationString[(int) $firstNumbers % 23]) {
                 return true;
             }
 
@@ -111,7 +112,7 @@ class Customer
 
             if ($vat[0] === 'X') {
                 $relativeNumber = '0';
-            } else if ($vat[0] === 'Y') {
+            } elseif ($vat[0] === 'Y') {
                 $relativeNumber = '1';
             } else {
                 $relativeNumber = '2';
@@ -121,7 +122,7 @@ class Customer
             $firstNumbers = substr($relativeVat, 0, -1);
             $relationString = 'TRWAGMYFPDXBNJZSQVHLCKE';
 
-            if ($vat[8] === $relationString[(int)$firstNumbers % 23]) {
+            if ($vat[8] === $relationString[(int) $firstNumbers % 23]) {
                 return true;
             }
 
@@ -134,5 +135,28 @@ class Customer
         }
 
         return false;
+    }
+
+    public static function isVatPtValid(?string  $vat = ''): bool
+    {
+        if (preg_match('/^[123456789]\d{8}$/', $vat)) {
+            $sum = 0;
+
+            for ($i = 0; $i < 9; $i++) {
+                $sum += (int)$vat[$i] * (10 - ($i + 1));
+            }
+
+            if (((int)$vat[8] === 0) && ($sum % 11) !== 0) {
+                $sum += 10;
+            }
+
+            if (($sum % 11) !== 0) {
+                return false;
+            }
+        } else {
+            return false;
+        }
+
+        return true;
     }
 }

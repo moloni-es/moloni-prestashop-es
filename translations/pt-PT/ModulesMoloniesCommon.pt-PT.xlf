@@ -1,0 +1,527 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="administration" source-language="pt-PT" target-language="pt-PT" datatype="plaintext">
+    <body>
+      <trans-unit id="466eadd40b3c10580e3ab4e8061161ce">
+        <source>Invoice</source>
+        <target>Fatura</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="d6d7c5a3f130174a472f0768c912a796">
+        <source>Receipt</source>
+        <target>Recibo</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="75a19f56f1a64cbc25e3e7eb7938c48d">
+        <source>Invoice + Receipt</source>
+        <target>Fatura + Recibo</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="56ea0ee77c2c6efe0131dfeea01705f5">
+        <source>Purchase Order</source>
+        <target>Encomenda de Compra</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="62cf105626c8a1597d3585d2f2b87bcf">
+        <source>Pro Forma Invoice</source>
+        <target>Fatura Proforma</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="1954f6efb99d0bf2ce2d1f142d494626">
+        <source>Simplified invoice</source>
+        <target>Fatura Simplificada</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="822bead6c149ffacbe7a12c44c3958ed">
+        <source>Budget</source>
+        <target>Orçamento</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="2aa1320f04e187f0a7d9f826ad43bd1a">
+        <source>Bills of lading</source>
+        <target>Guias de transporte</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="902b0d55fddef6f8d651fe1035b7d4bd">
+        <source>Error</source>
+        <target>Erro</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="0eaadb4fcb48a0a0ed7bc9868be9fbaa">
+        <source>Warning</source>
+        <target>Aviso</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="a82be0f551b8708bc08eb33cd9ded0cf">
+        <source>Information</source>
+        <target>Informação</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="1cb0070b30d2288bb6748c4cf44895b7">
+        <source>Stock is already updated in Moloni ({0})</source>
+        <target>O stock já está atualizado na Moloni ({0})</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="7418fbf6a8a117ef97266493c410961a">
+        <source>Stock updated in Moloni (old: {0} | new: {1}) ({2})</source>
+        <target>Stock atualizado na Moloni (antigo: {0} | novo: {1}) ({2})</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="9a9cb9d14334ec96f35e0bdc8eb525e7">
+        <source>Products export. Part {0}</source>
+        <target>Exportação de produtos. Parte {0}</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="ced84c9a54692024e73fb0260c3e6613">
+        <source>Products stock export. Part {0}</source>
+        <target>Exportação de stock de produtos. Parte {0}</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="6c10efb6dcf6ccaa9f8d83574a48514a">
+        <source>Products import. Part {0}</source>
+        <target>Importação de produtos. Parte {0}</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="ea508e4830d16b81d591685a0f005004">
+        <source>Products stock import. Part {0}</source>
+        <target>Importação de stock de produtos. Parte {0}</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="71abcb3d07f6595b87d917d4d8021d8f">
+        <source>{0} document created with success ({1})</source>
+        <target>Documento {0} criado com sucesso ({1})</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="e7e1975a8fc5bf31c6825cc17012bed0">
+        <source>Product created in Moloni ({0})</source>
+        <target>Produto criado na Moloni ({0})</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="c4772f5ca50a8deacd6bfa0721b4f2c5">
+        <source>Product updated in Moloni ({0})</source>
+        <target>Produto atualizado na Moloni ({0})</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="2606994c7949fc2980fda6b734f44d82">
+        <source>Stock is already updated in Prestashop ({0})</source>
+        <target>O stock já está atualizado no Prestashop ({0})</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="18a2527d5b4470491f431187ebb31a17">
+        <source>Stock updated in Prestashop (old: {0} | new: {1}) ({2})</source>
+        <target>Stock atualizado no Prestashop (antigo: {0} | novo: {1}) ({2})</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="e008166577c8bd4838acea9caea04f69">
+        <source>Something went wrong updating stock ({0})</source>
+        <target>Algo correu mal ao atualizar o stock ({0})</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="71bdae89e1ae75d851471e4efa1aa5ab">
+        <source>Combination created in Prestashop ({0})</source>
+        <target>Combinação criada no Prestashop ({0})</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="a86d26862ce556c48c24e5f5af3206ed">
+        <source>Combination updated in Prestashop ({0})</source>
+        <target>Combinação atualizada no Prestashop ({0})</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="689c7ed64b9b1e835eec7c25c664484b">
+        <source>Product created in Prestashop ({0})</source>
+        <target>Produto criado no Prestashop ({0})</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="bfb13a46e4e52b06828e5ec9f2613a16">
+        <source>Product updated in Prestashop ({0})</source>
+        <target>Produto atualizado no Prestashop ({0})</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="b9208b03bcc9eb4a336258dcdcb66207">
+        <source>Combinations</source>
+        <target>Combinações</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="1fbb1e3943c2c6c560247ac8f9289780">
+        <source>Simple</source>
+        <target>Simples</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="3cdde9f08aa2ed20b962b648d5d1934d">
+        <source>Order restored with success.</source>
+        <target>Encomenda restaurada com sucesso.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="0e3ddcff7b4b131d6748fdd816e6cce9">
+        <source>Company selected successfully</source>
+        <target>Empresa selecionada com sucesso</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="49d8305929013b44243a63f064091e6e">
+        <source>Older logs deleted</source>
+        <target>Registos antigos eliminados</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="8157b101f74d46bfcdb88cb0946e3825">
+        <source>Document created successfully. ({0})</source>
+        <target>Documento criado com sucesso. ({0})</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="b341ab21c44305cdbc7ad20a96ee2b38">
+        <source>Order discarded with success.</source>
+        <target>Encomenda eliminada com sucesso.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="2cd5f4dedebdbb0dd22c07d403b150fd">
+        <source>Webhooks reinstall was successful</source>
+        <target>A reinstalação dos webhooks foi bem-sucedida</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="76525f0f34b48475e5ca33f71d296f3b">
+        <source>Client ID</source>
+        <target>ID do Cliente</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="734082edf44417dd19cc65943aa65c36">
+        <source>Client Secret</source>
+        <target>Segredo do Cliente</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="49ab28040dfa07f53544970c6d147e1e">
+        <source>Connect</source>
+        <target>Conectar</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="f6858ff3741dc1c7ad8a2cd0fcea8b6d">
+        <source>View document</source>
+        <target>Ver documento</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="0c8ae58cc7e14e01f92e34ccfbd45f2e">
+        <source>Create document</source>
+        <target>Criar documento</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="4bd9ef088a14b5f6fd9ef86e6f33037f">
+        <source>Need help?</source>
+        <target>Precisa de ajuda?</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="237c9acb1e8d54011876aeb93045e445">
+        <source>Check our tutorials</source>
+        <target>Veja os nossos tutoriais</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="df27933c064013f2abe6ebebf0e98635">
+        <source>Created documents</source>
+        <target>Documentos criados</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="e129ae480280e47ef82fc7702f8321ba">
+        <source>Refresh list</source>
+        <target>Atualizar lista</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="9d4ed2062ba34a07f92b48d2a2dff92d">
+        <source>Document not found</source>
+        <target>Documento não encontrado</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="1477772fd3936b7943bd02dade7915f3">
+        <source>Discarted</source>
+        <target>Eliminado</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="0eceeb45861f9585dd7a97a3e36f85c6">
+        <source>Created</source>
+        <target>Criado</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="f1a5f71a34119fe63d7e8ac495e821e6">
+        <source>Revert discard</source>
+        <target>Reverter eliminação</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="cb8fe83175bea4ba19d633b1dc6ea656">
+        <source>View order</source>
+        <target>Ver encomenda</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="8098187879fc75422fe2d1f351f22003">
+        <source>Download pdf</source>
+        <target>Descarregar pdf</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="edb839a8aee1d27847a44f758fb4a9e5">
+        <source>No information to show!</source>
+        <target>Sem informação para mostrar!</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="44749712dbec183e983dcd78a7736c41">
+        <source>Date</source>
+        <target>Data</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="208a23b4a66a2500d7f1e5868af58e3b">
+        <source>Document type</source>
+        <target>Tipo de documento</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="63d5049791d9d79d86e9a108b0a999ca">
+        <source>Reference</source>
+        <target>Referência</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="ce26601dac0dea138b7295f02b7620a7">
+        <source>Customer</source>
+        <target>Cliente</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="1e884e3078d9978e216a027ecd57fb34">
+        <source>E-mail</source>
+        <target>Email</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="b2f40690858b404ed10e62bdf422c704">
+        <source>Amount</source>
+        <target>Montante</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="ec53a8c4f07baed5d8825072c89799be">
+        <source>Status</source>
+        <target>Estado</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="06df33001c1d7187fdd81ea1f5b277aa">
+        <source>Actions</source>
+        <target>Ações</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="d56b081f1e66fdf5130276c68d528780">
+        <source>Search reference</source>
+        <target>Pesquisar referência</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="13348442cc6a27032d2b4aa28b75a5d3">
+        <source>Search</source>
+        <target>Pesquisar</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="526d688f37a86d3c3f27d0c5016eb71d">
+        <source>Reset</source>
+        <target>Reiniciar</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="dd7bf230fde8d4836917806aff6a6b27">
+        <source>Address</source>
+        <target>Morada</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="a9b7a641560149f47f445b699a8c190c">
+        <source>Zip-Code</source>
+        <target>Código Postal</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="59716c97497eb9694541f7c3d37b1a4d">
+        <source>Country</source>
+        <target>País</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="bfc1c6031e1fbadc9f486c6b93c34c01">
+        <source>Vat</source>
+        <target>Contribuinte</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="f92a5a7c1a5f017b5056a5568e53812b">
+        <source>Select this company</source>
+        <target>Selecionar esta empresa</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="0b61d890295cd01b669ad9d9269fa286">
+        <source>Your account does not have access to any eligible company.</source>
+        <target>A sua conta não tem acesso a nenhuma empresa elegível.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="5904c3e30447e5bb0c4d25fd6a07e434">
+        <source>Please confirm that your account has access to an active company with a plan that allows you to access the plugins.</source>
+        <target>Por favor confirme que a sua conta tem acesso a uma empresa ativa com um plano que permite o acesso aos plugins.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="7112c932d53a451a6aa64e5e9386efa2">
+        <source>Learn more about our plans at:</source>
+        <target>Saiba mais sobre os nossos planos em:</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="463e58c1d35fb5a4a8d717c99a60d257">
+        <source>Back to login</source>
+        <target>Voltar ao login</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="4c89a4828cdeb4b0e246d7a5f6057d11">
+        <source>I don't have an account yet.</source>
+        <target>Não tenho uma conta ainda.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="42369faa6a6b243aac58683f3874bf99">
+        <source>Create account</source>
+        <target>Criar conta</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="b2d37ae1cedf42ff874289b721860af2">
+        <source>Logs</source>
+        <target>Registos</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="54d7076cace9b517b32961b35e2efadd">
+        <source>Delete older logs</source>
+        <target>Eliminar registos antigos</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="22b653bd8d2edcebb9e0036b4ac79262">
+        <source>Go back</source>
+        <target>Voltar</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="27ce7f8b5623b2e2df568d64cf051607">
+        <source>Stock</source>
+        <target>Stock</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="a603905470e2a5b8c13e96b579ef0dba">
+        <source>Debug</source>
+        <target>Debug</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="a1fa27779242b4902f7ae3bdd5c6d508">
+        <source>Type</source>
+        <target>Tipo</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="4c2a8fe7eaf24721cc7a9f0175115bd4">
+        <source>Message</source>
+        <target>Mensagem</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="00f4e5788aab6d3546bb433842dbbefc">
+        <source>Payload</source>
+        <target>Payload</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="fb47fb1676de5b5b9c19acccf5b9e63b">
+        <source>This action will delete all logs with more than one week.</source>
+        <target>Esta ação irá eliminar todos os registos com mais de uma semana.</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="50b0c23ed36ab3724d19072fa3538c97">
+        <source>Do you wish to continue?</source>
+        <target>Deseja continuar?</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="ea4788705e6873b424c65e91c2846b19">
+        <source>Cancel</source>
+        <target>Cancelar</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="f2a6c498fb90ee345d997f888fce3b18">
+        <source>Delete</source>
+        <target>Eliminar</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="b5b43fbb08ca83a35afc2d3aafe25cfa">
+        <source>Log payload</source>
+        <target>Registo de payload</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="d3d2e617335f08df83599665eef8a418">
+        <source>Close</source>
+        <target>Fechar</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="b429b01543ebc27e45fb0447c8828be2">
+        <source>Pending orders</source>
+        <target>Encomendas pendentes</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="9dd4d069db3578f505d7516d90541420">
+        <source>Discard order</source>
+        <target>Eliminar encomenda</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="c4d0532a2ff3843d9523ab5a5d58f12b">
+        <source>All your documents are already converted into documents!</source>
+        <target>Todos os seus documentos já estão convertidos em documentos!</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="4f67fe16b274bf31a67539fbedb8f8d3">
+        <source>Document Type</source>
+        <target>Tipo de Documento</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="6861d21ea3a14378d5fab68eb542c76f">
+        <source>Search customer</source>
+        <target>Pesquisar cliente</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="8f536f5dd951b1c30c5908b58fd89887">
+        <source>Search e-mail</source>
+        <target>Pesquisar email</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="b5a098d431b0cd6eb34ffe29e462fabd">
+        <source>Moloni products</source>
+        <target>Produtos Moloni</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="06fb4f46f4c78a0fa56e60259036cab1">
+        <source>View in Moloni</source>
+        <target>Ver em Moloni</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="ddbd0f07634b3a8c6a49d7de9b8804b2">
+        <source>View in Prestashop</source>
+        <target>Ver em Prestashop</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="2930a9c4565a5775fd6ee195aedc1c89">
+        <source>Import product to Prestashop</source>
+        <target>Importar produto para Prestashop</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="af9354230fe709410bc3fd21fde0354b">
+        <source>Import stock to Prestashop</source>
+        <target>Importar stock para Prestashop</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="49ee3087348e8d44e1feda1917443987">
+        <source>Name</source>
+        <target>Nome</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="d254861f20bb59d58db872722e57ba9c">
+        <source>Notices</source>
+        <target>Avisos</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="a15e9d627362cb8837d0b910bc53a55e">
+        <source>Search by name</source>
+        <target>Pesquisar por nome</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="05e39040555dcd57e52c5979ba604161">
+        <source>Prestashop products</source>
+        <target>Produtos Prestashop</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="2f80fac2e1a1973252afda7ff15f131e">
+        <source>Export product to Moloni</source>
+        <target>Exportar produto para Moloni</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="1d9424f8b1443e38cc8a398f594ba9da">
+        <source>Export stock to Moloni</source>
+        <target>Exportar stock para Moloni</target>
+        <note>Line: </note>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2023 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -26,20 +27,18 @@ declare(strict_types=1);
 
 namespace Moloni\Controller\Admin\Products;
 
-use Moloni\Helpers\Warehouse;
-use Tools;
+use Moloni\Actions\ProductsList\Moloni\FetchMoloniProductsPaginated;
 use Moloni\Actions\ProductsList\Moloni\VerifyProductForList;
-use Symfony\Component\HttpFoundation\Response;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\PrestashopProductSimple;
 use Moloni\Builders\PrestashopProductWithCombinations;
+use Moloni\Controller\Admin\MoloniController;
+use Moloni\Enums\MoloniRoutes;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\Product\MoloniProductException;
-use Moloni\Tools\SyncLogs;
 use Moloni\Tools\Settings;
-use Moloni\Enums\MoloniRoutes;
-use Moloni\Controller\Admin\MoloniController;
-use Moloni\Actions\ProductsList\Moloni\FetchMoloniProductsPaginated;
+use Moloni\Tools\SyncLogs;
+use Symfony\Component\HttpFoundation\Response;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -49,20 +48,20 @@ class MoloniProducts extends MoloniController
 {
     public function home(): Response
     {
-        $page = (int)Tools::getValue('page', 1);
-        $filters = Tools::getValue('filters', []);
+        $page = (int) \Tools::getValue('page', 1);
+        $filters = \Tools::getValue('filters', []);
 
         $service = new FetchMoloniProductsPaginated($page, $filters);
         $service->run();
 
-        return $this->render(
-            '@Modules/molonies/views/templates/admin/products/moloni/Products.twig',
+        return $this->display(
+            'products/moloni/Products.twig',
             [
                 'productsArray' => $service->getProducts(),
                 'filters' => $filters,
                 'paginator' => $service->getPaginator(),
                 'companyName' => Settings::get('companyName'),
-                'productReferenceFallbackActive' => (int)Settings::get('productReferenceFallback'),
+                'productReferenceFallbackActive' => (int) Settings::get('productReferenceFallback'),
                 'importStockRoute' => MoloniRoutes::MOLONI_PRODUCTS_IMPORT_STOCK,
                 'importProductRoute' => MoloniRoutes::MOLONI_PRODUCTS_IMPORT_PRODUCT,
                 'toolsRoute' => MoloniRoutes::TOOLS,
@@ -73,7 +72,7 @@ class MoloniProducts extends MoloniController
 
     public function importStock(): Response
     {
-        $productId = (int)Tools::getValue('product_id', 0);
+        $productId = (int) \Tools::getValue('product_id', 0);
 
         $variables = [
             'productId' => $productId,
@@ -107,7 +106,7 @@ class MoloniProducts extends MoloniController
             }
 
             $response = $this->getCommonResponse($moloniProduct);
-        } catch (MoloniProductException | MoloniApiException $e) {
+        } catch (MoloniProductException|MoloniApiException $e) {
             $response = [
                 'valid' => 0,
                 'message' => $this->trans($e->getMessage(), 'Modules.Molonies.Errors'),
@@ -121,7 +120,7 @@ class MoloniProducts extends MoloniController
 
     public function importProduct(): Response
     {
-        $productId = (int)Tools::getValue('product_id', 0);
+        $productId = (int) \Tools::getValue('product_id', 0);
 
         $variables = [
             'productId' => $productId,
@@ -153,7 +152,7 @@ class MoloniProducts extends MoloniController
             }
 
             $response = $this->getCommonResponse($moloniProduct);
-        } catch (MoloniProductException | MoloniApiException $e) {
+        } catch (MoloniProductException|MoloniApiException $e) {
             $response = [
                 'valid' => 0,
                 'message' => $this->trans($e->getMessage(), 'Modules.Molonies.Errors'),
@@ -173,7 +172,7 @@ class MoloniProducts extends MoloniController
             $slug = '';
         }
 
-        $warehouseId = (int)Settings::get('syncStockToPrestashopWarehouse');
+        $warehouseId = (int) Settings::get('syncStockToPrestashopWarehouse');
 
         $service = new VerifyProductForList($moloniProduct, $warehouseId, $slug);
         $service->run();
@@ -182,12 +181,12 @@ class MoloniProducts extends MoloniController
             'valid' => 1,
             'message' => '',
             'result' => '',
-            'productRow' => $this->renderView(
-                '@Modules/molonies/views/templates/admin/products/moloni/blocks/TableBodyRow.twig',
+            'productRow' => $this->displayView(
+                'products/moloni/blocks/TableBodyRow.twig',
                 [
                     'product' => $service->getParsedProduct(),
                 ]
-            )
+            ),
         ];
     }
 }

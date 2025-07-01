@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -25,9 +26,6 @@
 namespace Moloni\Traits;
 
 use Attribute;
-use ProductAttribute;
-use Configuration;
-use AttributeGroup;
 use Moloni\Helpers\Version;
 
 if (!defined('_PS_VERSION_')) {
@@ -51,17 +49,17 @@ trait AttributesTrait
     {
         if (empty($this->cacheAttribute)) {
             if (Version::isPrestashopNewVersion()) {
-                $this->cacheAttribute = ProductAttribute::getAttributes(Configuration::get('PS_LANG_DEFAULT'));
+                $this->cacheAttribute = \ProductAttribute::getAttributes(\Configuration::get('PS_LANG_DEFAULT'));
             } else {
-                $this->cacheAttribute = Attribute::getAttributes(Configuration::get('PS_LANG_DEFAULT'));
+                $this->cacheAttribute = \Attribute::getAttributes(\Configuration::get('PS_LANG_DEFAULT'));
             }
         }
 
         $idAttribute = 0;
 
         foreach ($this->cacheAttribute as $attribute) {
-            if ($attribute['name'] === $name && (int)$attribute['id_attribute_group'] === $groupId) {
-                $idAttribute = (int)$attribute['id_attribute'];
+            if ($attribute['name'] === $name && (int) $attribute['id_attribute_group'] === $groupId) {
+                $idAttribute = (int) $attribute['id_attribute'];
 
                 break;
             }
@@ -80,14 +78,14 @@ trait AttributesTrait
     private function getAttributeGroupByName(string $name): int
     {
         if (empty($this->cacheGroup)) {
-            $this->cacheGroup = AttributeGroup::getAttributesGroups(Configuration::get('PS_LANG_DEFAULT'));
+            $this->cacheGroup = \AttributeGroup::getAttributesGroups(\Configuration::get('PS_LANG_DEFAULT'));
         }
 
         $idGroup = 0;
 
         foreach ($this->cacheGroup as $group) {
             if ($group['name'] === $name) {
-                $idGroup = (int)$group['id_attribute_group'];
+                $idGroup = (int) $group['id_attribute_group'];
 
                 break;
             }

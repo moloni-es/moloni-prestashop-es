@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2023 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -26,12 +27,11 @@ declare(strict_types=1);
 
 namespace Moloni\Actions\ProductsList\Prestashop;
 
-use Moloni\Helpers\Warehouse;
-use Product;
-use Moloni\Tools\Settings;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Exceptions\MoloniApiException;
+use Moloni\Helpers\Warehouse;
 use Moloni\Repository\ProductsRepository;
+use Moloni\Tools\Settings;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -78,7 +78,7 @@ class FetchPrestashopProductsPaginated
         $this->fetchProducts();
 
         foreach ($this->totalProducts as $product) {
-            $ps = new Product($product['id_product'], false, $this->psLanguageId);
+            $ps = new \Product($product['id_product'], false, $this->psLanguageId);
 
             $service = new VerifyProductForList($ps, $this->warehouseId, $slug);
             $service->run();
@@ -91,7 +91,7 @@ class FetchPrestashopProductsPaginated
 
     private function getWarehouse(): int
     {
-        $warehouseId = (int)Settings::get('syncStockToMoloniWarehouse');
+        $warehouseId = (int) Settings::get('syncStockToMoloniWarehouse');
 
         if ($warehouseId > 1) {
             return $warehouseId;

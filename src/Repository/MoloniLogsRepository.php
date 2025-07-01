@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -24,12 +25,9 @@
 
 namespace Moloni\Repository;
 
-use DateTime;
-use Doctrine\ORM\QueryBuilder;
-use Exception;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
-use Moloni\Api\MoloniApi;
 use Moloni\Entity\MoloniSyncLogs;
 
 if (!defined('_PS_VERSION_')) {
@@ -39,7 +37,7 @@ if (!defined('_PS_VERSION_')) {
 class MoloniLogsRepository extends EntityRepository
 {
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public function getAllPaginated(?int $page = 1, ?array $filters = []): array
     {
@@ -96,7 +94,7 @@ class MoloniLogsRepository extends EntityRepository
         $this->createQueryBuilder('l')
             ->delete()
             ->where('l.createdAt < :created_at')
-            ->setParameter('created_at', new DateTime('@' . strtotime("-1 week")))
+            ->setParameter('created_at', new \DateTime('@' . strtotime('-1 week')))
             ->getQuery()
             ->getResult();
     }
@@ -111,19 +109,21 @@ class MoloniLogsRepository extends EntityRepository
      */
     private function applyFilters(QueryBuilder $query, array $filters): void
     {
-        $query
-            ->where('l.companyId = :company_id')
-            ->setParameter('company_id', MoloniApi::getCompanyId());
+        if (!empty($filters['company_id'])) {
+            $query
+                ->where('l.companyId = :company_id')
+                ->setParameter('company_id', $filters['company_id']);
+        }
 
         if (!empty($filters['created_date'])) {
             try {
-                $from = new DateTime($filters['created_date'] . " 00:00:00");
-                $to = new DateTime($filters['created_date'] . " 23:59:59");
+                $from = new \DateTime($filters['created_date'] . ' 00:00:00');
+                $to = new \DateTime($filters['created_date'] . ' 23:59:59');
                 $query
                     ->andWhere('l.createdAt BETWEEN :from AND :to')
                     ->setParameter('from', $from)
                     ->setParameter('to', $to);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 // catch nothing
             }
         }

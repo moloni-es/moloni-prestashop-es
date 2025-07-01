@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -24,11 +25,8 @@
 
 namespace Moloni\Builders\PrestashopProduct\Helpers\Combinations;
 
-use Combination;
-use Configuration;
 use Moloni\Entity\MoloniProductAssociations;
 use Moloni\Tools\ProductAssociations;
-use Product;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -41,7 +39,7 @@ class FindOrCreateCombination
     private $combinationReference;
     private $attributes;
 
-    public function __construct(int $moloniVariantId, Product $prestashopProduct, string $combinationReference, ?array $attributes = [])
+    public function __construct(int $moloniVariantId, \Product $prestashopProduct, string $combinationReference, ?array $attributes = [])
     {
         $this->moloniVariantId = $moloniVariantId;
         $this->prestashopProduct = $prestashopProduct;
@@ -49,14 +47,14 @@ class FindOrCreateCombination
         $this->attributes = $attributes;
     }
 
-    public function handle(): Combination
+    public function handle(): \Combination
     {
         /** @var MoloniProductAssociations|null $association */
         $association = ProductAssociations::findByMoloniVariantId($this->moloniVariantId);
 
         // If found some association
         if ($association !== null) {
-            $combination = new Combination($association->getPsCombinationId());
+            $combination = new \Combination($association->getPsCombinationId());
 
             // If combinations still exists
             if (!empty($combination->id)) {
@@ -65,20 +63,20 @@ class FindOrCreateCombination
         }
 
         // Find by reference
-        $combinationId = (int)Combination::getIdByReference($this->prestashopProduct->id, $this->combinationReference);
+        $combinationId = (int) \Combination::getIdByReference($this->prestashopProduct->id, $this->combinationReference);
 
         if ($combinationId > 0) {
-            return new Combination($combinationId);
+            return new \Combination($combinationId);
         }
 
         $existingCombinations = $this->prestashopProduct->getAttributeCombinations();
 
         // Find by attribute match
         if (!empty($existingCombinations)) {
-            $languageId = (int)Configuration::get('PS_LANG_DEFAULT');
+            $languageId = (int) \Configuration::get('PS_LANG_DEFAULT');
 
             foreach ($existingCombinations as $existingCombination) {
-                $auxCombination = new Combination($existingCombination['id_product_attribute']);
+                $auxCombination = new \Combination($existingCombination['id_product_attribute']);
                 $auxCombinationAttributes = $auxCombination->getAttributesName($languageId);
 
                 // Attributes cound do not match, continue search
@@ -90,7 +88,7 @@ class FindOrCreateCombination
                     $found = false;
 
                     foreach ($auxCombinationAttributes as $auxAttribute) {
-                        if ($attribute === (int)$auxAttribute['id_attribute']) {
+                        if ($attribute === (int) $auxAttribute['id_attribute']) {
                             $found = true;
 
                             break;
@@ -107,6 +105,6 @@ class FindOrCreateCombination
             }
         }
 
-        return new Combination();
+        return new \Combination();
     }
 }

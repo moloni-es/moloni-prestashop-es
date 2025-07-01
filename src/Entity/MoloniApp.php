@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -26,7 +27,6 @@ declare(strict_types=1);
 
 namespace Moloni\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 if (!defined('_PS_VERSION_')) {
@@ -43,7 +43,9 @@ class MoloniApp
      * @var int
      *
      * @ORM\Id
+     *
      * @ORM\Column(name="id", type="integer")
+     *
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
@@ -104,7 +106,7 @@ class MoloniApp
      */
     public function isValidAccessToken(): bool
     {
-        return strtotime('+40 minutes', (int)($this->getAccessTime() ?? 0)) > time();
+        return strtotime('+40 minutes', (int) ($this->getAccessTime() ?? 0)) > time();
     }
 
     /**
@@ -114,7 +116,7 @@ class MoloniApp
      */
     public function isValidRefreshToken(): bool
     {
-        return strtotime('+13 days', (int)($this->getAccessTime() ?? 0)) > time();
+        return strtotime('+13 days', (int) ($this->getAccessTime() ?? 0)) > time();
     }
 
     /**
@@ -130,7 +132,7 @@ class MoloniApp
      */
     public function getAccessTime(): ?int
     {
-        return (int)$this->accessTime;
+        return (int) $this->accessTime;
     }
 
     /**

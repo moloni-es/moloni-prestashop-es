@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -27,7 +28,6 @@ namespace Moloni\Actions\Imports;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\PrestashopProductSimple;
 use Moloni\Builders\PrestashopProductWithCombinations;
-use Moloni\Enums\StockSync;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\Product\MoloniProductException;
 use Moloni\Tools\Logs;
@@ -55,8 +55,8 @@ class ImportStockChangesFromMoloni extends ImportProducts
                 'pagination' => [
                     'page' => $this->page,
                     'qty' => $this->itemsPerPage,
-                ]
-            ]
+                ],
+            ],
         ];
 
         try {
@@ -65,12 +65,12 @@ class ImportStockChangesFromMoloni extends ImportProducts
             return;
         }
 
-        $this->totalResults = (int)($query['data']['products']['options']['pagination']['count'] ?? 0);
+        $this->totalResults = (int) ($query['data']['products']['options']['pagination']['count'] ?? 0);
 
         $data = $query['data']['products']['data'] ?? [];
 
         foreach ($data as $product) {
-            SyncLogs::moloniProductAddTimeout((int)$product['productId']);
+            SyncLogs::moloniProductAddTimeout((int) $product['productId']);
 
             try {
                 if (empty($product['variants'])) {
@@ -88,12 +88,12 @@ class ImportStockChangesFromMoloni extends ImportProducts
                     $this->syncedProducts[] = $product['reference'];
                 } else {
                     $this->errorProducts[] = [
-                        $product['reference'] => 'Product does not exist in Prestashop'
+                        $product['reference'] => 'Product does not exist in Prestashop',
                     ];
                 }
             } catch (MoloniProductException $e) {
                 $this->errorProducts[] = [
-                    $product['reference'] => $e->getData()
+                    $product['reference'] => $e->getData(),
                 ];
             }
         }

@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -44,29 +45,7 @@ class CreditNote extends Endpoint
      */
     public function queryCreditNote(?array $variables = []): array
     {
-        $query = 'query creditNote($companyId: Int!,$documentId: Int!,$options: CreditNoteOptionsSingle)
-                {
-                    creditNote(companyId: $companyId,documentId: $documentId,options: $options)
-                    {
-                        data
-                        {
-                            documentId
-                            number
-                            ourReference
-                            yourReference
-                            entityVat
-                            entityNumber
-                            entityName
-                            documentSetName
-                            totalValue
-                        }
-                        errors
-                        {
-                            field
-                            msg
-                        }
-                    }
-                }';
+        $query = $this->loadQuery('creditNote');
 
         return $this->simplePost($query, $variables);
     }
@@ -82,38 +61,7 @@ class CreditNote extends Endpoint
      */
     public function queryCreditNotes(?array $variables = []): array
     {
-        $query = 'query creditNotes($companyId: Int!,$options: CreditNoteOptions)
-                {
-                    creditNotes(companyId: $companyId,options: $options)
-                    {
-                        data
-                        {
-                            documentId
-                            number
-                            ourReference
-                            yourReference
-                            entityVat
-                            entityNumber
-                            entityName
-                            documentSetName
-                            totalValue
-                        }
-                        options
-                        {
-                            pagination
-                            {
-                                page
-                                qty
-                                count
-                            }
-                        }                    
-                        errors
-                        {
-                            field
-                            msg
-                        }
-                    }
-                }';
+        $query = $this->loadQuery('creditNotes');
 
         return $this->paginatedPost($query, $variables, 'creditNotes');
     }
@@ -129,23 +77,7 @@ class CreditNote extends Endpoint
      */
     public function queryCreditNoteGetPDFToken(?array $variables = []): array
     {
-        $query = 'query creditNoteGetPDFToken($documentId: Int!)
-                {
-                    creditNoteGetPDFToken(documentId: $documentId)
-                    {
-                        data
-                        {
-                            token
-                            filename
-                            path
-                        }
-                        errors
-                        {
-                            field
-                            msg
-                        }
-                    }
-                }';
+        $query = $this->loadQuery('creditNoteGetPDFToken');
 
         return $this->simplePost($query, $variables);
     }
@@ -161,34 +93,7 @@ class CreditNote extends Endpoint
      */
     public function mutationCreditNoteCreate(?array $variables = []): array
     {
-        $query = 'mutation creditNoteCreate($companyId: Int!,$data: CreditNoteInsert!,$options:CreditNoteMutateOptions)
-                {
-                    creditNoteCreate(companyId: $companyId,data: $data,options: $options)
-                    {
-                        data
-                        {
-                            documentId
-                            number
-                            ourReference
-                            yourReference
-                            entityVat
-                            entityNumber
-                            entityName
-                            documentSetName
-                            totalValue
-                            products
-                            {
-                                documentProductId
-                                productId
-                            }
-                        }
-                        errors
-                        {
-                            field
-                            msg
-                        }
-                    }
-                }';
+        $query = $this->loadMutation('creditNoteCreate');
 
         return $this->simplePost($query, $variables);
     }
@@ -204,10 +109,7 @@ class CreditNote extends Endpoint
      */
     public function mutationCreditNoteGetPDF(?array $variables = []): array
     {
-        $query = 'mutation creditNoteGetPDF($companyId: Int!,$documentId: Int!)
-                {
-                    creditNoteGetPDF(companyId: $companyId,documentId: $documentId)
-                }';
+        $query = $this->loadMutation('creditNoteGetPDF');
 
         return $this->simplePost($query, $variables);
     }

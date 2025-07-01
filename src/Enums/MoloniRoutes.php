@@ -36,9 +36,6 @@ class MoloniRoutes
     public const LOGIN_COMPANY_SELECT = 'moloni_es_login_company_select';
     public const LOGIN_COMPANY_SUBMIT = 'moloni_es_login_company_submit';
 
-    public const REGISTRATION = 'moloni_es_registration_home';
-    public const REGISTRATION_VERIFY_FORM = 'moloni_es_registration_verify_form';
-
     public const ORDERS = 'moloni_es_orders_home';
     public const ORDERS_CREATE = 'moloni_es_orders_create';
     public const ORDERS_DISCARD = 'moloni_es_orders_discard';
@@ -129,8 +126,6 @@ class MoloniRoutes
         self::LOGIN,
         self::LOGIN_SUBMIT,
         self::LOGIN_RETRIEVE_CODE,
-        self::REGISTRATION,
-        self::REGISTRATION_VERIFY_FORM,
     ];
 
     public static function isFullyAuthenticatedRoute(string $route): bool

@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -26,13 +27,11 @@ declare(strict_types=1);
 
 namespace Moloni\Exceptions;
 
-use Exception;
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class MoloniException extends Exception
+class MoloniException extends \Exception
 {
     protected $data;
     protected $identifiers;
@@ -64,7 +63,7 @@ class MoloniException extends Exception
         return $this->identifiers ?? [];
     }
 
-    public function shoudCreateLog(): bool
+    public function shouldCreateLog(): bool
     {
         return $this->shouldCreateLog;
     }

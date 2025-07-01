@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -24,13 +25,13 @@
 
 namespace Moloni\Actions\Imports;
 
-use Moloni\Enums\StockSync;
-use Moloni\Tools\Logs;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\PrestashopProductSimple;
 use Moloni\Builders\PrestashopProductWithCombinations;
+use Moloni\Enums\StockSync;
 use Moloni\Exceptions\MoloniApiException;
 use Moloni\Exceptions\Product\MoloniProductException;
+use Moloni\Tools\Logs;
 use Moloni\Tools\SyncLogs;
 
 if (!defined('_PS_VERSION_')) {
@@ -50,8 +51,8 @@ class ImportProductsFromMoloni extends ImportProducts
                 'pagination' => [
                     'page' => $this->page,
                     'qty' => $this->itemsPerPage,
-                ]
-            ]
+                ],
+            ],
         ];
 
         try {
@@ -60,7 +61,7 @@ class ImportProductsFromMoloni extends ImportProducts
             return;
         }
 
-        $this->totalResults = (int)($query['data']['products']['options']['pagination']['count'] ?? 0);
+        $this->totalResults = (int) ($query['data']['products']['options']['pagination']['count'] ?? 0);
 
         $data = $query['data']['products']['data'] ?? [];
 
@@ -69,7 +70,7 @@ class ImportProductsFromMoloni extends ImportProducts
                 continue;
             }
 
-            SyncLogs::moloniProductAddTimeout((int)$product['productId']);
+            SyncLogs::moloniProductAddTimeout((int) $product['productId']);
 
             try {
                 if (empty($product['variants'])) {
@@ -89,14 +90,14 @@ class ImportProductsFromMoloni extends ImportProducts
                     $this->syncedProducts[] = $product['reference'];
                 } else {
                     $this->errorProducts[] = [
-                        $product['reference'] => 'Product already exists in Prestashop'
+                        $product['reference'] => 'Product already exists in Prestashop',
                     ];
                 }
             } catch (MoloniProductException $e) {
                 $this->errorProducts[] = [
                     $product['reference'] => [
-                        'errorDump' => $e->getData()
-                    ]
+                        'errorDump' => $e->getData(),
+                    ],
                 ];
             }
         }

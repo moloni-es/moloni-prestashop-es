@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -33,7 +34,7 @@ class Settings
     /**
      * Settings
      *
-     * @var null|array array form: [label => value]
+     * @var array|null array form: [label => value]
      */
     private static $settings;
 

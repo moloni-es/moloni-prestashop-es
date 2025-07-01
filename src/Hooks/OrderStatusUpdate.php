@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -24,8 +25,9 @@
 
 namespace Moloni\Hooks;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Moloni\Actions\Orders\OrderCreateDocument;
+use Moloni\Api\MoloniApi;
 use Moloni\Enums\Boolean;
 use Moloni\Enums\DocumentReference;
 use Moloni\Exceptions\Document\MoloniDocumentException;
@@ -33,11 +35,9 @@ use Moloni\Exceptions\Document\MoloniDocumentWarning;
 use Moloni\Exceptions\MoloniException;
 use Moloni\Mails\DocumentErrorMail;
 use Moloni\Mails\DocumentWarningMail;
+use Moloni\MoloniContext;
 use Moloni\Tools\Logs;
 use Moloni\Tools\Settings;
-use OrderState;
-use PrestaShopDatabaseException;
-use PrestaShopException;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -49,13 +49,16 @@ class OrderStatusUpdate extends AbstractHookAction
 
     private $newOrderStatus;
 
+    /**
+     * @var EntityManagerInterface
+     */
     private $entityManager;
 
-    public function __construct(int $orderId, OrderState $newOrderStatus, EntityManager $entityManager)
+    public function __construct(int $orderId, \OrderState $newOrderStatus, MoloniContext $moloniContext)
     {
         $this->orderId = $orderId;
         $this->newOrderStatus = $newOrderStatus;
-        $this->entityManager = $entityManager;
+        $this->entityManager = $moloniContext->iEntityManager();
 
         $this->handle();
     }
@@ -87,8 +90,8 @@ class OrderStatusUpdate extends AbstractHookAction
                 $e->getData(),
                 $this->orderId
             );
-        } catch (MoloniDocumentException | MoloniException $e) {
-            if ($e->shoudCreateLog()) {
+        } catch (MoloniDocumentException|MoloniException $e) {
+            if ($e->shouldCreateLog()) {
                 if (!empty(Settings::get('alertEmail'))) {
                     (new DocumentErrorMail(Settings::get('alertEmail'), ['order_id' => $this->orderId]))->handle();
                 }
@@ -107,7 +110,7 @@ class OrderStatusUpdate extends AbstractHookAction
                     $this->orderId
                 );
             }
-        } catch (PrestaShopDatabaseException | PrestaShopException $e) {
+        } catch (\PrestaShopDatabaseException|\PrestaShopException $e) {
             Logs::addErrorLog('Error getting prestashop order', ['message' => $e->getMessage()], $this->orderId);
         }
     }
@@ -118,20 +121,20 @@ class OrderStatusUpdate extends AbstractHookAction
             return false;
         }
 
-        if ((int)Settings::get('automaticDocuments') === Boolean::NO) {
+        if ((int) Settings::get('automaticDocuments') === Boolean::NO) {
             return false;
         }
 
         $orderStatusToShow = Settings::get('orderStatusToShow');
 
         if ($orderStatusToShow === null) {
-            if ((int)$this->newOrderStatus->paid === Boolean::NO) {
+            if ((int) $this->newOrderStatus->paid === Boolean::NO) {
                 return false;
             }
         } elseif (!in_array($this->newOrderStatus->id, $orderStatusToShow, false)) {
             return false;
         }
 
-        return $this->isAuthenticated();
+        return MoloniApi::hasValidAuthentication();
     }
 }

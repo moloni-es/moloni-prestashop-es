@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -43,28 +44,7 @@ class Warehouses extends Endpoint
      */
     public function queryWarehouses(?array $variables = []): array
     {
-        $query = 'query warehouses($companyId: Int!,$options: WarehouseOptions){
-            warehouses(companyId: $companyId, options: $options) {
-                errors{
-                    field
-                    msg
-                }
-                options
-                {
-                    pagination
-                    {
-                        page
-                        qty
-                        count
-                    }
-                }
-                data{
-                    warehouseId
-                    name
-                    number
-                }
-            }
-        }';
+        $query = $this->loadQuery('warehouses');
 
         return $this->paginatedPost($query, $variables, 'warehouses');
     }

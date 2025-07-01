@@ -1,0 +1,14 @@
+mutation priceClassCreate($companyId: Int!,$data: PriceClassInsert!) {
+  priceClassCreate(companyId: $companyId,data: $data) {
+    data {
+      priceClassId
+      visible
+      name
+    }
+    errors {
+      field
+      msg
+    }
+  }
+}
+

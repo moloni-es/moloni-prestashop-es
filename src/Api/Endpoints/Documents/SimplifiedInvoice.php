@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -44,30 +45,7 @@ class SimplifiedInvoice extends Endpoint
      */
     public function querySimplifiedInvoice(?array $variables = []): array
     {
-        $query = 'query simplifiedInvoice($companyId: Int!,$documentId: Int!,$options: SimplifiedInvoiceOptionsSingle)
-                {
-                    simplifiedInvoice(companyId: $companyId,documentId: $documentId,options: $options)
-                    {
-                        data
-                        {
-                            documentId
-                            number
-                            ourReference
-                            yourReference
-                            entityVat
-                            entityNumber
-                            entityName
-                            documentSetName
-                            totalValue
-                            pdfExport
-                        }
-                        errors
-                        {
-                            field
-                            msg
-                        }
-                    }
-                }';
+        $query = $this->loadQuery('simplifiedInvoice');
 
         return $this->simplePost($query, $variables);
     }
@@ -83,38 +61,7 @@ class SimplifiedInvoice extends Endpoint
      */
     public function querySimplifiedInvoices(?array $variables = []): array
     {
-        $query = 'query simplifiedInvoices($companyId: Int!,$options: SimplifiedInvoiceOptions)
-                {
-                    simplifiedInvoices(companyId: $companyId,options: $options)
-                    {
-                        data
-                        {
-                            documentId
-                            number
-                            ourReference
-                            yourReference
-                            entityVat
-                            entityNumber
-                            entityName
-                            documentSetName
-                            totalValue
-                        }
-                        options
-                        {
-                            pagination
-                            {
-                                page
-                                qty
-                                count
-                            }
-                        }
-                        errors
-                        {
-                            field
-                            msg
-                        }
-                    }
-                }';
+        $query = $this->loadQuery('simplifiedInvoices');
 
         return $this->paginatedPost($query, $variables, 'simplifiedInvoices');
     }
@@ -130,23 +77,7 @@ class SimplifiedInvoice extends Endpoint
      */
     public function querySimplifiedInvoiceGetPDFToken(?array $variables = []): array
     {
-        $query = 'query simplifiedInvoiceGetPDFToken($documentId: Int!)
-                {
-                    simplifiedInvoiceGetPDFToken(documentId: $documentId)
-                    {
-                        data
-                        {
-                            token
-                            filename
-                            path
-                        }
-                        errors
-                        {
-                            field
-                            msg
-                        }
-                    }
-                }';
+        $query = $this->loadQuery('simplifiedInvoiceGetPDFToken');
 
         return $this->simplePost($query, $variables);
     }
@@ -162,36 +93,7 @@ class SimplifiedInvoice extends Endpoint
      */
     public function mutationSimplifiedInvoiceCreate(?array $variables = []): array
     {
-        $query = 'mutation simplifiedInvoiceCreate($companyId: Int!,$data: 
-        SimplifiedInvoiceInsert!,$options: SimplifiedInvoiceMutateOptions)
-                {
-                    simplifiedInvoiceCreate(companyId: $companyId,data: $data,options: $options)
-                    {
-                        data
-                        {
-                            documentId
-                            number
-                            ourReference
-                            yourReference
-                            entityVat
-                            entityNumber
-                            entityName
-                            documentSetName
-                            totalValue
-                            currencyExchangeTotalValue
-                            products
-                            {
-                                documentProductId
-                                productId
-                            }
-                        }
-                        errors
-                        {
-                            field
-                            msg
-                        }
-                    }
-                }';
+        $query = $this->loadMutation('simplifiedInvoiceCreate');
 
         return $this->simplePost($query, $variables);
     }
@@ -207,28 +109,7 @@ class SimplifiedInvoice extends Endpoint
      */
     public function mutationSimplifiedInvoiceUpdate(?array $variables = []): array
     {
-        $query = 'mutation simplifiedInvoiceUpdate($companyId: Int!,$data: SimplifiedInvoiceUpdate!)
-        {
-            simplifiedInvoiceUpdate(companyId: $companyId,data: $data)
-            {
-                data
-                {
-                    documentId
-                    status
-                    currencyExchangeTotalValue
-                    products
-                    {
-                        documentProductId
-                        productId
-                    }
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = $this->loadMutation('simplifiedInvoiceUpdate');
 
         return $this->simplePost($query, $variables);
     }
@@ -244,10 +125,7 @@ class SimplifiedInvoice extends Endpoint
      */
     public function mutationSimplifiedInvoiceGetPDF(?array $variables = []): array
     {
-        $query = 'mutation simplifiedInvoiceGetPDF($companyId: Int!,$documentId: Int!)
-                {
-                    simplifiedInvoiceGetPDF(companyId: $companyId,documentId: $documentId)
-                }';
+        $query = $this->loadMutation('simplifiedInvoiceGetPDF');
 
         return $this->simplePost($query, $variables);
     }
@@ -263,10 +141,7 @@ class SimplifiedInvoice extends Endpoint
      */
     public function mutationSimplifiedInvoiceSendEmail(?array $variables = []): array
     {
-        $query = 'mutation simplifiedInvoiceSendMail($companyId: Int!,$documents: [Int]!,$mailData: MailData)
-        {
-            simplifiedInvoiceSendMail(companyId: $companyId,documents: $documents,mailData: $mailData)
-        }';
+        $query = $this->loadMutation('simplifiedInvoiceSendMail');
 
         return $this->simplePost($query, $variables);
     }

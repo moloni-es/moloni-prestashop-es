@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -24,12 +25,11 @@
 
 namespace Moloni\Actions\Exports;
 
-use Product;
-use Moloni\Tools\Logs;
-use Moloni\Tools\SyncLogs;
 use Moloni\Builders\MoloniProductSimple;
 use Moloni\Builders\MoloniProductWithVariants;
 use Moloni\Exceptions\Product\MoloniProductException;
+use Moloni\Tools\Logs;
+use Moloni\Tools\SyncLogs;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -41,7 +41,7 @@ class ExportStocksToMoloni extends ExportProducts
     {
         $start = ($this->page - 1) * $this->itemsPerPage;
 
-        $products = Product::getProducts($this->languageId, $start, $this->itemsPerPage, 'id_product', 'DESC', false, true);
+        $products = \Product::getProducts($this->languageId, $start, $this->itemsPerPage, 'id_product', 'DESC', false, true);
 
         $this->totalResults = count($products);
 
@@ -50,9 +50,9 @@ class ExportStocksToMoloni extends ExportProducts
                 continue;
             }
 
-            SyncLogs::prestashopProductAddTimeout((int)$productData['id_product']);
+            SyncLogs::prestashopProductAddTimeout((int) $productData['id_product']);
 
-            $product = new Product($productData['id_product'], true, $this->languageId);
+            $product = new \Product($productData['id_product'], true, $this->languageId);
 
             try {
                 if ($product->product_type === 'combinations' && $product->hasCombinations()) {
@@ -70,12 +70,12 @@ class ExportStocksToMoloni extends ExportProducts
                     $this->syncedProducts[] = $product->reference;
                 } else {
                     $this->errorProducts[] = [
-                        $product->reference => 'Product does not exist in Moloni'
+                        $product->reference => 'Product does not exist in Moloni',
                     ];
                 }
             } catch (MoloniProductException $e) {
                 $this->errorProducts[] = [
-                    $product->reference => $e->getData()
+                    $product->reference => $e->getData(),
                 ];
             }
         }

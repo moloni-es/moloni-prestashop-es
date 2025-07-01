@@ -1,0 +1,43 @@
+services:
+  mysql:
+    container_name: es-mysql
+    image: mysql:5.7
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: prestashop
+    networks:
+      - prestashop_network
+    volumes:
+      - database:/var/lib/mysql
+    ports:
+      - 3306:3306
+  prestashop:
+    container_name: es-prestashop
+    image: prestashop/prestashop:latest
+    restart: unless-stopped
+    depends_on:
+      - mysql
+    ports:
+      - 8080:80
+    environment:
+      DB_SERVER: es-mysql
+      DB_NAME: prestashop
+      DB_USER: root
+      DB_PASSWD: admin
+      ADMIN_MAIL: user@moloni.com
+      ADMIN_PASSWD: 123456789
+      PS_DEV_MODE: 1
+      PS_FOLDER_ADMIN: administration
+      PS_INSTALL_AUTO: 1
+      PS_DOMAIN: localhost:8080
+    networks:
+      - prestashop_network
+    volumes:
+      - ./molonies:/var/www/html/modules/molonies
+      - site:/var/www/html
+networks:
+    prestashop_network:
+volumes:
+  site:
+  database:

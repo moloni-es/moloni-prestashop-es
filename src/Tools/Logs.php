@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -24,13 +25,11 @@
 
 namespace Moloni\Tools;
 
-use Shop;
-use DateTime;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\ORMException;
-use Moloni\Api\MoloniApi;
 use Moloni\Entity\MoloniLogs;
 use Moloni\Enums\LogLevel;
+use Moloni\MoloniContext;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -41,18 +40,27 @@ class Logs
     /**
      * Entity manager
      *
-     * @var EntityManager
+     * @var EntityManagerInterface
      */
     private static $entityManager;
 
     /**
+     * Moloni context
+     *
+     * @var MoloniContext
+     */
+    private static $context;
+
+    /**
      * Construct
      *
-     * @param EntityManager $entityManager
+     * @param EntityManagerInterface $entityManager
+     * @param MoloniContext $context
      */
-    public function __construct(EntityManager $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, MoloniContext $context)
     {
         self::$entityManager = $entityManager;
+        self::$context = $context;
     }
 
     /**
@@ -149,17 +157,14 @@ class Logs
                 break;
         }
 
-        $companyId = MoloniApi::getCompanyId();
-        $shopId = (int)Shop::getContextShopID();
-
         $log = new MoloniLogs();
-        $log->setShopId($shopId);
+        $log->setShopId((int)\Shop::getContextShopID());
         $log->setOrderId($orderId);
-        $log->setCompanyId($companyId);
+        $log->setCompanyId(self::$context->getCompanyId());
         $log->setLevel($level);
         $log->setExtra(json_encode($data));
         $log->setMessage(json_encode($message));
-        $log->setCreatedAt(new DateTime());
+        $log->setCreatedAt(new \DateTime());
 
         try {
             self::$entityManager->persist($log);

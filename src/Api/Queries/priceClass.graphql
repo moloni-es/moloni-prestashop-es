@@ -1,0 +1,14 @@
+query priceClass($companyId: Int!,$priceClassId: Int!) {
+  priceClass(companyId: $companyId,priceClassId: $priceClassId) {
+    data {
+      priceClassId
+      visible
+      name
+    }
+    errors {
+      field
+      msg
+    }
+  }
+}
+

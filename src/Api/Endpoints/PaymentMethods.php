@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -43,20 +44,7 @@ class PaymentMethods extends Endpoint
      */
     public function queryPaymentMethod(?array $variables = []): array
     {
-        $query = 'query paymentMethod($companyId: Int!,$paymentMethodId: Int!){
-                paymentMethod(companyId: $companyId,paymentMethodId: $paymentMethodId) {
-                    errors{
-                        field
-                        msg
-                    }
-                    data{
-                        paymentMethodId
-                        name
-                        type
-                        commission
-                    }
-                }
-            }';
+        $query = $this->loadQuery('paymentMethod');
 
         return $this->simplePost($query, $variables);
     }
@@ -72,29 +60,7 @@ class PaymentMethods extends Endpoint
      */
     public function queryPaymentMethods(?array $variables = []): array
     {
-        $query = 'query paymentMethods($companyId: Int!,$options: PaymentMethodOptions){
-            paymentMethods(companyId: $companyId, options: $options) {
-                errors{
-                    field
-                    msg
-                }
-                options
-                {
-                    pagination
-                    {
-                        page
-                        qty
-                        count
-                    }
-                }
-                data{
-                    paymentMethodId
-                    name
-                    type
-                    commission
-                }
-            }
-        }';
+        $query = $this->loadQuery('paymentMethods');
 
         return $this->paginatedPost($query, $variables, 'paymentMethods');
     }
@@ -110,22 +76,7 @@ class PaymentMethods extends Endpoint
      */
     public function mutationPaymentMethodCreate(?array $variables = []): array
     {
-        $query = 'mutation paymentMethodCreate($companyId: Int!,$data: PaymentMethodInsert!)
-        {
-            paymentMethodCreate(companyId: $companyId,data: $data)
-            {
-                data
-                {
-                    paymentMethodId
-                    name
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = $this->loadMutation('paymentMethodCreate');
 
         return $this->simplePost($query, $variables);
     }

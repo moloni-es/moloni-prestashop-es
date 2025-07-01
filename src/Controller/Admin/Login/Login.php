@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -24,14 +25,10 @@
 
 namespace Moloni\Controller\Admin\Login;
 
-use Shop;
-use Tools;
 use Moloni\Api\MoloniApi;
 use Moloni\Api\MoloniApiClient;
-use Moloni\Actions\Helpers\HasOldPluginTables;
 use Moloni\Controller\Admin\MoloniController;
 use Moloni\Entity\MoloniApp;
-use Moloni\Enums\Domains;
 use Moloni\Enums\Languages;
 use Moloni\Enums\MoloniRoutes;
 use Moloni\Exceptions\MoloniException;
@@ -51,25 +48,12 @@ class Login extends MoloniController
     public function home(): Response
     {
         $form = $this->createForm(LoginFormType::class, null, [
-            'url' => $this->generateUrl(MoloniRoutes::LOGIN_SUBMIT)
+            'url' => $this->generateUrl(MoloniRoutes::LOGIN_SUBMIT),
         ]);
 
-        $hasOldTables = (new HasOldPluginTables())->handle();
-
-        if ($hasOldTables) {
-            $msg = $this->trans('Error found in plugin tables, please contact customer support.', 'Modules.Molonies.Errors');
-
-            $this->addErrorMessage($msg);
-        }
-
-        return $this->render(
-            '@Modules/molonies/views/templates/admin/login/Login.twig',
-            [
-                'form' => $form->createView(),
-                'registration_route' => MoloniRoutes::REGISTRATION,
-                'has_old_tables' => $hasOldTables,
-            ]
-        );
+        return $this->display('login/Login.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 
     public function submit(Request $request): RedirectResponse
@@ -85,12 +69,10 @@ class Login extends MoloniController
             return $this->redirectToLogin();
         }
 
-        /** @var MoloniAppRepository $appRepository */
-        $appRepository = $this
-            ->getDoctrine()
-            ->getManager()
-            ->getRepository(MoloniApp::class);
+        $entityManager = $this->getDoctrine()->getManager();
 
+        /** @var MoloniAppRepository $appRepository */
+        $appRepository = $entityManager->getRepository(MoloniApp::class);
         $appRepository->deleteApp();
 
         $formData = $form->getData();
@@ -102,21 +84,18 @@ class Login extends MoloniController
         $moloniApp->setClientId($clientId);
         $moloniApp->setClientSecret($clientSecret);
         $moloniApp->setCompanyId(0);
-        $moloniApp->setAccessToken("");
-        $moloniApp->setRefreshToken("");
-        $moloniApp->setShopId(Shop::getContextShopID() ?? 0);
+        $moloniApp->setAccessToken('');
+        $moloniApp->setRefreshToken('');
+        $moloniApp->setShopId(\Shop::getContextShopID() ?? 0);
         $moloniApp->setAccessTime(0);
 
-        $entityManager = $this
-            ->getDoctrine()
-            ->getManager();
         $entityManager->persist($moloniApp);
         $entityManager->flush();
 
         $redirectUri = defined('_PS_BASE_URL_SSL_') ? _PS_BASE_URL_SSL_ : '';
         $redirectUri .= $this->generateUrl(MoloniRoutes::LOGIN_RETRIEVE_CODE, [], UrlGeneratorInterface::ABSOLUTE_URL);
 
-        $url = Domains::MOLONI_API;
+        $url = $this->moloniContext->configs()->getApiUrl();
         $url .= "/auth/authorize?apiClientId=$clientId&redirectUri=$redirectUri";
 
         return $this->redirect($url);
@@ -124,7 +103,7 @@ class Login extends MoloniController
 
     public function retrieveCode(): RedirectResponse
     {
-        $code = Tools::getValue('code', '');
+        $code = \Tools::getValue('code', '');
 
         try {
             if (empty($code)) {
@@ -158,15 +137,15 @@ class Login extends MoloniController
             }
 
             foreach ($queryCompanies as $company) {
-                if (!isset($company['company']['companyId'])) {
+                if (!isset($company['companyId'])) {
                     continue;
                 }
 
                 $variables = [
-                    'companyId' => $company['company']['companyId'],
+                    'companyId' => $company['companyId'],
                     'options' => [
-                        'defaultLanguageId' => $queryLanguageId
-                    ]
+                        'defaultLanguageId' => $queryLanguageId,
+                    ],
                 ];
 
                 $userCompanyInfo = MoloniApiClient::companies()->queryCompany($variables);
@@ -182,15 +161,12 @@ class Login extends MoloniController
             return $this->redirectToLogin();
         }
 
-        return $this->render(
-            '@Modules/molonies/views/templates/admin/login/Companies.twig',
+        return $this->display(
+            'login/Companies.twig',
             [
                 'companies' => $companies,
                 'submit_route' => MoloniRoutes::LOGIN_COMPANY_SUBMIT,
                 'logoutRoute' => MoloniRoutes::TOOLS_LOGOUT,
-                'default_img' => _MODULE_DIR_ . 'molonies/views/img/companyDefault.png',
-                'no_companies' => _MODULE_DIR_ . 'molonies/views/img/no_companies.svg',
-                'media_api_url' => Domains::MOLONI_MEDIA_API,
             ]
         );
     }
@@ -202,7 +178,7 @@ class Login extends MoloniController
                 throw new MoloniException('ID is invalid');
             }
 
-            $moloniApp = MoloniApi::getAppEntity();
+            $moloniApp = $this->moloniContext->getApp();
 
             if (!$moloniApp) {
                 throw new MoloniException('Missing information in database');

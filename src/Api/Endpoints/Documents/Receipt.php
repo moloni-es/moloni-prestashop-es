@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -44,28 +45,7 @@ class Receipt extends Endpoint
      */
     public function queryReceipt(?array $variables = []): array
     {
-        $query = 'query receipt($companyId: Int!,$documentId: Int!,$options: ReceiptOptionsSingle)
-                {
-                    receipt(companyId: $companyId,documentId: $documentId,options: $options)
-                    {
-                        data
-                        {
-                            documentId
-                            number
-                            entityVat
-                            entityNumber
-                            entityName
-                            documentSetName
-                            totalValue
-                            pdfExport
-                        }
-                        errors
-                        {
-                            field
-                            msg
-                        }
-                    }
-                }';
+        $query = $this->loadQuery('receipt');
 
         return $this->simplePost($query, $variables);
     }
@@ -81,38 +61,7 @@ class Receipt extends Endpoint
      */
     public function queryReceipts(?array $variables = []): array
     {
-        $query = 'query receipts($companyId: Int!,$options: ReceiptOptions)
-                {
-                    receipts(companyId: $companyId,options: $options)
-                    {
-                        data
-                        {
-                            documentId
-                            number
-                            ourReference
-                            yourReference
-                            entityVat
-                            entityNumber
-                            entityName
-                            documentSetName
-                            totalValue
-                        }
-                        options
-                        {
-                            pagination
-                            {
-                                page
-                                qty
-                                count
-                            }
-                        }                        
-                        errors
-                        {
-                            field
-                            msg
-                        }
-                    }
-                }';
+        $query = $this->loadQuery('receipts');
 
         return $this->paginatedPost($query, $variables, 'receipts');
     }
@@ -128,23 +77,7 @@ class Receipt extends Endpoint
      */
     public function queryReceiptGetPDFToken(?array $variables = []): array
     {
-        $query = 'query receiptGetPDFToken($documentId: Int!)
-                {
-                    receiptGetPDFToken(documentId: $documentId)
-                    {
-                        data
-                        {
-                            token
-                            filename
-                            path
-                        }
-                        errors
-                        {
-                            field
-                            msg
-                        }
-                    }
-                }';
+        $query = $this->loadQuery('receiptGetPDFToken');
 
         return $this->simplePost($query, $variables);
     }
@@ -160,10 +93,7 @@ class Receipt extends Endpoint
      */
     public function mutationReceiptGetPDF(?array $variables = []): array
     {
-        $query = 'mutation receiptGetPDF($companyId: Int!,$documentId: Int!)
-                {
-                    receiptGetPDF(companyId: $companyId,documentId: $documentId)
-                }';
+        $query = $this->loadMutation('receiptGetPDF');
 
         return $this->simplePost($query, $variables);
     }
@@ -179,28 +109,7 @@ class Receipt extends Endpoint
      */
     public function mutationReceiptCreate(?array $variables = []): array
     {
-        $query = 'mutation receiptCreate($companyId: Int!,$data: ReceiptInsert!,$options: ReceiptMutateOptions)
-                {
-                    receiptCreate(companyId: $companyId,data: $data,options: $options)
-                    {
-                        data
-                        {
-                            documentId
-                            number
-                            entityVat
-                            entityNumber
-                            entityName
-                            documentSetName
-                            totalValue
-                            currencyExchangeTotalValue
-                        }
-                        errors
-                        {
-                            field
-                            msg
-                        }
-                    }
-                }';
+        $query = $this->loadMutation('receiptCreate');
 
         return $this->simplePost($query, $variables);
     }
@@ -216,23 +125,7 @@ class Receipt extends Endpoint
      */
     public function mutationReceiptUpdate(?array $variables = []): array
     {
-        $query = 'mutation receiptUpdate($companyId: Int!,$data: ReceiptUpdate!)
-        {
-            receiptUpdate(companyId: $companyId,data: $data)
-            {
-                data
-                {
-                    documentId
-                    status
-                    currencyExchangeTotalValue
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = $this->loadMutation('receiptUpdate');
 
         return $this->simplePost($query, $variables);
     }
@@ -248,10 +141,7 @@ class Receipt extends Endpoint
      */
     public function mutationReceiptSendEmail(?array $variables = []): array
     {
-        $query = 'mutation receiptSendMail($companyId: Int!,$documents: [Int]!,$mailData: MailData)
-        {
-            receiptSendMail(companyId: $companyId,documents: $documents,mailData: $mailData)
-        }';
+        $query = $this->loadMutation('receiptSendMail');
 
         return $this->simplePost($query, $variables);
     }

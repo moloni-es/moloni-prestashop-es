@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -38,7 +39,6 @@ use Moloni\Tools\Logs;
 use Moloni\Tools\Settings;
 use Moloni\Traits\AttributesTrait;
 use Moloni\Traits\LogsTrait;
-use PrestaShopException;
 use Product;
 
 if (!defined('_PS_VERSION_')) {
@@ -67,14 +67,14 @@ class ProductCombination implements BuilderInterface
     /**
      * Prestashop product
      *
-     * @var Product|null
+     * @var \Product|null
      */
     protected $prestashopProduct;
 
     /**
      * Prestashop combination
      *
-     * @var Combination|null
+     * @var \Combination|null
      */
     protected $prestashopCombination;
 
@@ -165,12 +165,12 @@ class ProductCombination implements BuilderInterface
     /**
      * Constructor
      *
-     * @param Product $prestashopProduct
+     * @param \Product $prestashopProduct
      * @param array $moloniParent
      * @param array $moloniVariant
      * @param array|null $syncFields
      */
-    public function __construct(Product $prestashopProduct, array $moloniParent, array $moloniVariant, ?array $syncFields = null)
+    public function __construct(\Product $prestashopProduct, array $moloniParent, array $moloniVariant, ?array $syncFields = null)
     {
         $this->moloniVariant = $moloniVariant;
         $this->moloniParent = $moloniParent;
@@ -239,7 +239,7 @@ class ProductCombination implements BuilderInterface
         if ($this->parentExists()) {
             $combination = (new FindOrCreateCombination($this->getMoloniVariantId(), $this->prestashopProduct, $this->reference, $this->attributes))->handle();
         } else {
-            $combination = new Combination();
+            $combination = new \Combination();
         }
 
         $this->prestashopCombination = $combination;
@@ -295,11 +295,8 @@ class ProductCombination implements BuilderInterface
 
             $this->afterInsert();
             $this->afterSave();
-        } catch (PrestaShopException $e) {
-            throw new MoloniProductCombinationException('Error creating combination ({0})', ['{0}' => $this->reference], [
-                'message' => $e->getMessage(),
-                'moloniVariant' => $this->moloniVariant
-            ]);
+        } catch (\PrestaShopException $e) {
+            throw new MoloniProductCombinationException('Error creating combination ({0})', ['{0}' => $this->reference], ['message' => $e->getMessage(), 'moloniVariant' => $this->moloniVariant]);
         }
     }
 
@@ -322,11 +319,8 @@ class ProductCombination implements BuilderInterface
             }
 
             $this->afterSave();
-        } catch (PrestaShopException $e) {
-            throw new MoloniProductCombinationException('Error updating combination ({0})', ['{0}' => $this->reference], [
-                'message' => $e->getMessage(),
-                'moloniVariant' => $this->moloniVariant
-            ]);
+        } catch (\PrestaShopException $e) {
+            throw new MoloniProductCombinationException('Error updating combination ({0})', ['{0}' => $this->reference], ['message' => $e->getMessage(), 'moloniVariant' => $this->moloniVariant]);
         }
     }
 
@@ -373,7 +367,7 @@ class ProductCombination implements BuilderInterface
     /**
      * Get Prestashop combination
      */
-    public function getCombination(): ?Combination
+    public function getCombination(): ?\Combination
     {
         return $this->prestashopCombination;
     }
@@ -481,7 +475,7 @@ class ProductCombination implements BuilderInterface
             $warehouseId = Warehouse::getCompanyDefaultWarehouse();
         }
 
-        $this->warehouseId = (int)$warehouseId;
+        $this->warehouseId = (int) $warehouseId;
 
         return $this;
     }

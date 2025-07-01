@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 2022 - Moloni.com
+ * 2025 - Moloni.com
  *
  * NOTICE OF LICENSE
  *
@@ -24,11 +25,11 @@
 
 namespace Moloni\Builders\Document;
 
-use OrderPayment as PrestashopOrderPayment;
 use Moloni\Api\MoloniApiClient;
 use Moloni\Builders\Interfaces\BuilderItemInterface;
 use Moloni\Exceptions\Document\MoloniDocumentPaymentException;
 use Moloni\Exceptions\MoloniApiException;
+use OrderPayment as PrestashopOrderPayment;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -103,7 +104,7 @@ class OrderPayment implements BuilderItemInterface
             'paymentMethodId' => $this->paymentMethodId,
             'paymentMethodName' => $this->name,
             'value' => $this->value,
-            'date' => $this->paymentTime
+            'date' => $this->paymentTime,
         ];
 
         if (!empty($this->exchangeRate)) {
@@ -136,17 +137,10 @@ class OrderPayment implements BuilderItemInterface
             if ((int) $paymentMethodId > 0) {
                 $this->paymentMethodId = (int) $paymentMethodId;
             } else {
-                throw new MoloniDocumentPaymentException('Error creating payment method: ({0})', [
-                    '{0}' => $this->name
-                ], [
-                    'params' => $params,
-                    'response' => $mutation,
-                ]);
+                throw new MoloniDocumentPaymentException('Error creating payment method: ({0})', ['{0}' => $this->name], ['params' => $params, 'response' => $mutation]);
             }
         } catch (MoloniApiException $e) {
-            throw new MoloniDocumentPaymentException('Error creating payment method: ({0})', [
-                '{0}' => $this->name
-            ], $e->getData());
+            throw new MoloniDocumentPaymentException('Error creating payment method: ({0})', ['{0}' => $this->name], $e->getData());
         }
 
         return $this;
@@ -213,7 +207,7 @@ class OrderPayment implements BuilderItemInterface
         $name = $this->orderPayment->payment_method;
 
         if (empty($name)) {
-            $name = 'Método de pago';
+            $name = 'Método de pagamento';
         }
 
         $this->name = $name;
@@ -228,7 +222,7 @@ class OrderPayment implements BuilderItemInterface
      */
     public function setValue(): OrderPayment
     {
-        $this->value = (float)($this->orderPayment->amount ?? 0);
+        $this->value = (float) ($this->orderPayment->amount ?? 0);
 
         return $this;
     }
