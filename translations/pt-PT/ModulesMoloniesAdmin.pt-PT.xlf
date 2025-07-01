@@ -4,17 +4,7 @@
     <body>
       <trans-unit id="5811d9162f7a838934f757488d6cb918">
         <source>Moloni Spain</source>
-        <target>Moloni Spain</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="77b0d2ce65bebd13e81e7f595bb4b05b">
-        <source>Moloni Dev</source>
-        <target>Moloni Dev</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="8ec1f1742b37d97f1e07ade4961d24cf">
-        <source>MoloniOn</source>
-        <target>MoloniOn</target>
+        <target>Moloni Espanha</target>
         <note>Line: </note>
       </trans-unit>
       <trans-unit id="ae22059c109bd08cba6ddc9739a5f6d3">

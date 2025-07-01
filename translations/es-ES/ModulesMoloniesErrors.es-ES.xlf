@@ -462,6 +462,11 @@
         <target>Error al obtener la configuración de impuestos de la zona fiscal</target>
         <note>Line: </note>
       </trans-unit>
+      <trans-unit id="6d8102dddebcfbf60d19f8a8e2b21dbe">
+        <source>Document set is not registered in AT</source>
+        <target>El derie de documentos no está registrado en AT</target>
+        <note>Line: </note>
+      </trans-unit>
       <trans-unit id="1dde9f68f65790879230c4e697d2d24a">
         <source>Error saving product image</source>
         <target>Error al guardar la imagen del producto</target>
@@ -472,76 +477,6 @@
         <target>Impuesto no escontrado en Moloni. Cree el impuesto correcto {0} ({1} || {2})</target>
         <note>Line: </note>
       </trans-unit>
-      <trans-unit id="0511ee0d41117aa7b4abaaf102aa513d">
-        <source>This field is required</source>
-        <target>Este campo es obligatorio</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="127013ec52b4e0a737a6d6836801cd47">
-        <source>E-mail is not valid</source>
-        <target>El e-mail no es válido</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="44b57473df30719bdaed6b4f3de9c810">
-        <source>VAT is not valid</source>
-        <target>Número de Identificación Fiscal no es válido</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="cfe6062038419f74c7d9e8b3a0150645">
-        <source>Slug has to have 4 or more characters</source>
-        <target>El slug tiene que tener 4 o más caracteres</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="23c440347e23570650575fce2456eb95">
-        <source>Slug is not valid</source>
-        <target>Slug no es válido</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="03ec9ea94e6d19081854251cfc940f9d">
-        <source>Password cannot be empty</source>
-        <target>La contraseña no puede estar vacía</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="3c5469d2ee89eddc561ce8b330d7950b">
-        <source>Password has to have 6 or more characters</source>
-        <target>La contraseña debe tener 6 o más caracteres</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="100e2b65a6bbd95e849c913e51984362">
-        <source>Password cannot have more than 16 characters</source>
-        <target>La contraseña no puede tener más de 16 caracteres</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="14c0acf57a4ea3f9dfaf6936402db705">
-        <source>Password needs to have at least one uppercase letter</source>
-        <target>La contraseña debe tener al menos una letra mayúscula</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="123de69b14f834c90fba3a5c9f72f5a6">
-        <source>Password needs to have at least one lowercase letter</source>
-        <target>La contraseña debe tener al menos una letra minúscula</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="934c3e644fde8e4878d4426ec02596c4">
-        <source>Password needs to have at least one symbol</source>
-        <target>La contraseña debe tener al menos un símbolo</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="5951f98d6d1931ec81292e820ba9dd7e">
-        <source>Password needs to have at least one number</source>
-        <target>La contraseña debe tener al menos un número</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="d65cd21c25016a7d5e5b580c0cac02c7">
-        <source>Password should not contain any white space</source>
-        <target>La contraseña no debe contener espacios en blanco</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="867cee98fdd724e7d5bc87f61ce657bc">
-        <source>Passwords do not match</source>
-        <target>Las contraseñas no coinciden</target>
-        <note>Line: </note>
-      </trans-unit>
       <trans-unit id="43412e5b88dc9c0e67396e8ecc56475c">
         <source>Error fetching documents list</source>
         <target>Error al obtener de la lista de documentos</target>
@@ -550,11 +485,6 @@
       <trans-unit id="62b5d95d6f1eb04022fe3c269b6bb15d">
         <source>Error fetching Prestashop order</source>
         <target>Error al recuperar un pedido en Prestashop</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="8ba4357de0367107b1b58e31bf1d0933">
-        <source>Error found in plugin tables, please contact customer support.</source>
-        <target>Se ha encontrado un error en las tablas de datos del plugin, por favor, contacta con el servicio de atención al cliente.</target>
         <note>Line: </note>
       </trans-unit>
       <trans-unit id="cb1b164d9438d999056c79658de0d71c">

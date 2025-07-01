@@ -172,11 +172,6 @@
         <target>Pedido descartado con éxito.</target>
         <note>Line: </note>
       </trans-unit>
-      <trans-unit id="3ad4e878c2e8d330d1369eba18ad30dd">
-        <source>A confirmation email has been sent to your email address.</source>
-        <target>Se ha enviado un correo electrónico de confirmación a tu dirección de correo electrónico.</target>
-        <note>Line: </note>
-      </trans-unit>
       <trans-unit id="2cd5f4dedebdbb0dd22c07d403b150fd">
         <source>Webhooks reinstall was successful</source>
         <target>La reinstalación de Webhooks se ha realizado con éxito</target>
@@ -195,11 +190,6 @@
       <trans-unit id="49ab28040dfa07f53544970c6d147e1e">
         <source>Connect</source>
         <target>Conectar</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="6311ae17c1ee52b36e68aaf4ad066387">
-        <source>Other</source>
-        <target>Otros</target>
         <note>Line: </note>
       </trans-unit>
       <trans-unit id="f6858ff3741dc1c7ad8a2cd0fcea8b6d">
@@ -335,6 +325,11 @@
       <trans-unit id="59716c97497eb9694541f7c3d37b1a4d">
         <source>Country</source>
         <target>País</target>
+        <note>Line: </note>
+      </trans-unit>
+      <trans-unit id="bfc1c6031e1fbadc9f486c6b93c34c01">
+        <source>Vat</source>
+        <target>NIF</target>
         <note>Line: </note>
       </trans-unit>
       <trans-unit id="f92a5a7c1a5f017b5056a5568e53812b">

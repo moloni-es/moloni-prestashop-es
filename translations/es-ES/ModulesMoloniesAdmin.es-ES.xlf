@@ -7,6 +7,11 @@
         <target>Moloni España</target>
         <note>Line: </note>
       </trans-unit>
+      <trans-unit id="ae22059c109bd08cba6ddc9739a5f6d3">
+        <source>Automatic document creation with real time stock synchronization and powerful sales analysis.</source>
+        <target>Creación automática de documentos con sincronización de stock en tiempo real y potente análisis de ventas.</target>
+        <note>Line: </note>
+      </trans-unit>
       <trans-unit id="7442e29d7d53e549b78d93c46b8cdcfc">
         <source>Orders</source>
         <target>Pedidos pendientes</target>
@@ -25,16 +30,6 @@
       <trans-unit id="8625e1de7be14c39b1d14dc03d822497">
         <source>Tools</source>
         <target>Herramientas</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="ce2b5243877d49672ef09ae84e15b0d8">
-        <source>Error loading installation files!</source>
-        <target>Error al cargar los archivos de instalación.</target>
-        <note>Line: </note>
-      </trans-unit>
-      <trans-unit id="a94c16ec47e3e79d886e909ddab8e3f0">
-        <source>Error executing operation from %s!</source>
-        <target>¡Error al ejecutar la operación de %s!</target>
         <note>Line: </note>
       </trans-unit>
     </body>

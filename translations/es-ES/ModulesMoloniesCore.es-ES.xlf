@@ -9,11 +9,11 @@
       </trans-unit>
       <trans-unit id="ae22059c109bd08cba6ddc9739a5f6d3">
         <source>Automatic document creation with real time stock synchronization and powerful sales analysis.</source>
-        <target>Creación automática de documentos con sincronización de existencias en tiempo real y potente análisis de ventas.</target>
+        <target>Creación automática de documentos con sincronización de stock en tiempo real y potente análisis de ventas.</target>
         <note>Line: </note>
       </trans-unit>
-      <trans-unit id="3a5b822a7c35cadd36379e837f03353a">
-        <source>Are you sure you want to unnistall this module?</source>
+      <trans-unit id="bb8956c67b82c7444a80c6b2433dd8b4">
+        <source>Are you sure you want to uninstall this module?</source>
         <target>¿Está seguro de que desea desinstalar este módulo?</target>
         <note>Line: </note>
       </trans-unit>
