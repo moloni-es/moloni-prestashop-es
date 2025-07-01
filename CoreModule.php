@@ -210,8 +210,8 @@ class CoreModule extends Module
         }
 
         return [
-            'molonionresource' => [
-                'description' => 'MoloniOn sync resource',
+            'moloniresource' => [
+                'description' => 'Moloni Spain sync resource',
                 'specific_management' => true,
             ],
         ];
