@@ -1,7 +1,8 @@
 .idea
 .dev/node_modules
-/vendor/
-/logs/
+vendor/
+logs/
+build/
 views/css/app.css
 views/js/app.js
 /.php_cs.cache
