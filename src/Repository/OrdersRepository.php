@@ -61,7 +61,7 @@ class OrdersRepository
         $paginatorQuery = $paginatorQuery
             ->addSelect('COUNT(*)')
             ->from($this->databasePrefix . 'orders', 'o')
-            ->leftJoin('o', $this->databasePrefix . 'moloni_on_order_documents', 'md', 'o.id_order = md.order_id')
+            ->leftJoin('o', $this->databasePrefix . 'moloni_order_documents', 'md', 'o.id_order = md.order_id')
             ->leftJoin('o', $this->databasePrefix . 'customer', 'c', 'o.id_customer = c.id_customer')
             ->where('md.id is null');
 
@@ -81,7 +81,7 @@ class OrdersRepository
             ->addSelect('osl.name as state_name')
             ->addSelect('md.document_id as document_id')
             ->from($this->databasePrefix . 'orders', 'o')
-            ->leftJoin('o', $this->databasePrefix . 'moloni_on_order_documents', 'md', 'o.id_order = md.order_id')
+            ->leftJoin('o', $this->databasePrefix . 'moloni_order_documents', 'md', 'o.id_order = md.order_id')
             ->leftJoin('o', $this->databasePrefix . 'customer', 'c', 'o.id_customer = c.id_customer')
             ->leftJoin('o', $this->databasePrefix . 'order_state_lang', 'osl', 'o.current_state = osl.id_order_state AND osl.id_lang = :languague_id')
             ->setParameter('languague_id', $langId)
