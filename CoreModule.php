@@ -29,21 +29,23 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use Moloni\Exceptions\MoloniException;
+use Moloni\Activators\Install;
+use Moloni\Activators\Remove;
+use Moloni\Enums\MoloniRoutes;
 use Moloni\Hooks\AdminOrderButtons;
 use Moloni\Hooks\OrderStatusUpdate;
 use Moloni\Hooks\ProductSave;
 use Moloni\Hooks\ProductStockUpdate;
-use Moloni\Install\Installer;
 use Moloni\MoloniContext;
 use Moloni\Tools\SyncLogs;
-use PrestaShopBundle\Translation\TranslatorInterface;
-use Symfony\Bundle\FrameworkBundle\Routing\Router;
 
 include_once __DIR__ . '/src/Webservice/WebserviceSpecificManagementMoloniResource.php';
 
 class CoreModule extends Module
 {
+    /** @var bool */
+    protected $openForHookQuantityUpdate = false;
+
     /**
      * Plugin settings shortcut
      *
@@ -51,7 +53,15 @@ class CoreModule extends Module
      */
     public function getContent(): void
     {
-        Tools::redirectAdmin($this->context->link->getAdminLink('MoloniSettings'));
+        try {
+            $router = $this->get('router');
+        } catch (Exception $e) {
+            return;
+        }
+
+        $url = $router->generate(MoloniRoutes::SETTINGS);
+
+        Tools::redirectAdmin($url);
     }
 
     /**
@@ -71,11 +81,11 @@ class CoreModule extends Module
      */
     public function install(): bool
     {
-        /** @url https://devdocs.prestashop-project.org/8/modules/creation/tutorial/#the-install-method */
         if (Shop::isFeatureActive()) {
             try {
-                Shop::setContext(Shop::CONTEXT_ALL);
-            } catch (PrestaShopException $e) {}
+                Shop::setContext(ShopCore::CONTEXT_ALL);
+            } catch (PrestaShopException $e) {
+            }
         }
 
         if (!parent::install()) {
@@ -83,9 +93,8 @@ class CoreModule extends Module
         }
 
         try {
-            if (!(new Installer($this))->install()) {
-                return false;
-            }
+            $service = new Install($this);
+            $service->install();
         } catch (Exception $exception) {
             $this->_errors[] = $exception->getMessage();
 
@@ -107,9 +116,8 @@ class CoreModule extends Module
         }
 
         try {
-            if (!(new Installer($this))->uninstall()) {
-                return false;
-            }
+            $service = new Remove($this);
+            $service->uninstall();
         } catch (Exception $exception) {
             $this->_errors[] = $exception->getMessage();
 
@@ -133,9 +141,8 @@ class CoreModule extends Module
         }
 
         try {
-            if (!(new Installer($this))->enable()) {
-                return false;
-            }
+            $service = new Install($this);
+            $service->enable();
         } catch (Exception $exception) {
             $this->_errors[] = $exception->getMessage();
 
@@ -159,9 +166,8 @@ class CoreModule extends Module
         }
 
         try {
-            if (!(new Installer($this))->disable()) {
-                return false;
-            }
+            $service = new Remove($this);
+            $service->disable();
         } catch (Exception $exception) {
             $this->_errors[] = $exception->getMessage();
 
@@ -180,12 +186,14 @@ class CoreModule extends Module
     {
         $action = $this->context->controller->php_self ?? '';
 
-        $this->context->controller->addCSS($this->_path . 'views/css/moloni-icons.css');
+        $this->context->controller->addCSS("{$this->_path}views/css/moloni-icons.css");
 
-        if (strpos($action, 'Moloni') === 0) {
-            $this->context->controller->addJS($this->_path . 'views/js/app.js?v=' . $this->version);
-            $this->context->controller->addCSS($this->_path . 'views/css/app.css');
+        if (strpos($action, 'Moloni') !== 0) {
+            return;
         }
+
+        $this->context->controller->addJS("{$this->_path}views/js/app.js?v={$this->version}");
+        $this->context->controller->addCSS("{$this->_path}views/css/app.css?v={$this->version}");
     }
 
     /**
@@ -196,14 +204,14 @@ class CoreModule extends Module
     public function hookAddWebserviceResources(): array
     {
         try {
-            $this->initContext();
+            $this->getContext();
         } catch (Exception $e) {
             // catch nothing
         }
 
         return [
-            'moloniresource' => [
-                'description' => 'Moloni Spain sync resource',
+            'molonionresource' => [
+                'description' => 'MoloniOn sync resource',
                 'specific_management' => true,
             ],
         ];
@@ -211,14 +219,18 @@ class CoreModule extends Module
 
     public function hookActionAdminProductsControllerSaveBefore(): void
     {
-        $productId = (int)$_POST['id_product'];
-        if ($productId > 0) {
-            try {
-                $this->initContext();
-                SyncLogs::prestashopProductRemoveTimeout($productId);
-            } catch (Exception $e) {
-                // Do nothing
-            }
+        $productId = (int) $_POST['id_product'];
+
+        if ($productId <= 0) {
+            return;
+        }
+
+        try {
+            $this->getContext();
+
+            SyncLogs::prestashopProductRemoveTimeout($productId);
+        } catch (Exception $e) {
+            // Do nothing
         }
     }
 
@@ -232,8 +244,10 @@ class CoreModule extends Module
     public function hookActionProductAdd(array $params): void
     {
         try {
-            $this->initContext();
+            $this->getContext();
+
             new ProductSave($params['id_product']);
+
             $this->openForHookQuantityUpdate = true;
         } catch (Exception $e) {
             // Do nothing
@@ -250,8 +264,10 @@ class CoreModule extends Module
     public function hookActionProductUpdate(array $params): void
     {
         try {
-            $this->initContext();
+            $this->getContext();
+
             new ProductSave($params['id_product']);
+
             $this->openForHookQuantityUpdate = true;
         } catch (Exception $e) {
             // Do nothing
@@ -260,16 +276,18 @@ class CoreModule extends Module
 
     public function hookActionUpdateQuantity($params): bool
     {
-        try {
-            if ($this->openForHookQuantityUpdate) {
-                $this->initContext();
+        if (!$this->openForHookQuantityUpdate) {
+            return true;
+        }
 
-                new ProductStockUpdate(
-                    (int)$params['id_product'],
-                    (int)$params['id_product_attribute'],
-                    (float)$params['quantity']
-                );
-            }
+        try {
+            $this->getContext();
+
+            new ProductStockUpdate(
+                (int) $params['id_product'],
+                (int) $params['id_product_attribute'],
+                (float) $params['quantity']
+            );
         } catch (Exception $e) {
             // Do nothing
         }
@@ -287,14 +305,17 @@ class CoreModule extends Module
     public function hookActionOrderStatusUpdate(array $params): void
     {
         try {
-            $this->initContext();
-
-            $doctrine = $this->getDoctrine();
-
-            new OrderStatusUpdate($params['id_order'], $params['newOrderStatus'], $doctrine->getManager());
+            /** @var MoloniContext|false $context */
+            $context = $this->getContext();
         } catch (Exception $e) {
             // Do nothing
         }
+
+        if (!$context) {
+            return;
+        }
+
+        new OrderStatusUpdate($params['id_order'], $params['newOrderStatus'], $context);
     }
 
     /**
@@ -303,14 +324,14 @@ class CoreModule extends Module
     public function hookActionGetAdminOrderButtons($params): void
     {
         try {
-            $this->initContext();
+            /** @var MoloniContext|false $context */
+            $context = $this->getContext();
 
-            /** @var TranslatorInterface $translator */
-            $translator = $this->getTranslator();
-            $doctrine = $this->getDoctrine();
-            $router = $this->getRouter();
+            if (!$context) {
+                return;
+            }
 
-            new AdminOrderButtons($params, $router, $doctrine, $translator);
+            new AdminOrderButtons($params, $context);
         } catch (Exception $e) {
             // Do nothing
         }
@@ -321,61 +342,13 @@ class CoreModule extends Module
     /**
      * Init Moloni plugin context for in hooks
      *
-     * @throws Exception
-     */
-    protected function initContext(): void
-    {
-        $doctrine = $this->getDoctrine();
-
-        if (empty($doctrine)) {
-            throw new MoloniException('Error loading doctrine');
-        }
-
-        new MoloniContext($doctrine->getManager());
-    }
-
-
-    /**
-     * Get doctrine
-     *
-     * @return Router
+     * @return false|object
      *
      * @throws Exception
      */
-    protected function getRouter()
+    protected function getContext()
     {
-        /** @var Router|false $router */
-        $router = $this->get('router');
-
-        if (empty($router)) {
-            $router = $this->getContainer()->get('router');
-        }
-
-        if (empty($router)) {
-            throw new MoloniException('Error loading router');
-        }
-
-        return $router;
-    }
-
-    /**
-     * Get router
-     *
-     * @throws Exception
-     */
-    protected function getDoctrine(): object
-    {
-        $doctrine = $this->get('doctrine');
-
-        if (empty($doctrine)) {
-            $doctrine = $this->getContainer()->get('doctrine');
-        }
-
-        if (empty($doctrine)) {
-            throw new MoloniException('Error loading doctrine');
-        }
-
-        return $doctrine;
+        return $this->get('moloni.context');
     }
 
     /**
